@@ -1,0 +1,14 @@
+/OxidePatcher/bin
+/OxidePatcher/obj
+/Oxide.Core/bin
+/Oxide.Core/obj
+/Oxide.Tests/bin
+/Oxide.Tests/obj
+/Oxide.Lua/bin
+/Oxide.Lua/obj
+/Oxide.Ext.Lua/bin
+/Oxide.Ext.Lua/obj
+Oxide.Ext.Rust/bin/
+Oxide.Ext.Rust/obj/
+Oxide.Ext.Unity/bin/
+Oxide.Ext.Unity/obj/

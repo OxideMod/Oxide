@@ -1,0 +1,15 @@
+{
+	"ExtensionDirectory": 	"RustDedicated_Data\\Managed",
+	
+	"PluginDirectory":		"plugins",
+	"ConfigDirectory":		"config",
+	"DataDirectory":		"data",
+	"LogDirectory":			"logs",
+	
+	"InstanceCommandLines":
+	[
+		"{oxide.directory}",
+		"server\\{server.identity}\\oxide",
+		"server"
+	]
+}
