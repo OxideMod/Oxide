@@ -13,7 +13,7 @@ Extensions
 When loading, Oxide 2 scans the binary folder for dll extensions.
 
 Extension filenames are formatted as follows:  
-Oxide.Ext.<name>.dll
+Oxide.Ext.Name.dll
 
 Current extensions are listed below.
 
@@ -34,12 +34,12 @@ Installation for Rust Server Users
  1. Clone the git repo locally
  2. Open the solution in visual studio (2013 is recommended, should work on earlier versions)
  3. You will probably get a missing project error, don't worry about that
- 4a. Go into the project properties for Oxide.Core, go to "Build Events", and change the "Post-build event command line" to point at your server directory
- 4b. Alternatively, just remove the build even completely by making it blank, though you'll need to copy dlls manually if you do this
- 4c. Do the same for the other projects (apart from Oxide.Tests)
+ 4. Go into the project properties for Oxide.Core, go to "Build Events", and change the "Post-build event command line" to point at your server directory
+	Alternatively, just remove the build even completely by making it blank, though you'll need to copy dlls manually if you do this
+	Do the same for the other projects (apart from Oxide.Tests)
  5. Compile everything. If you get errors, it probably means you're missing .net framework or you didn't change the build events in step 4 properly
  6. Navigate to the "Dependencies" folder. Copy lua52.dll next to RustDedicated.exe. Copy KeraLua.dll, KopiLua.dll and NLua.dll into RustDedicated_Data/Managed, they should sit next to Oxide.Core.dll and the extensions
  7. Copy oxide.root.json next to RustDedicated.exe
- 8. Extract the patched Rust dlls into the right place (see the forum thread)
+ 8. Navigate to the "Patched" folder and copy the dlls into RustDedicated_Data/Managed. Overwrite the existing ones.
  9. Launch the server like you do normally. If everything goes well, there will be a block of Oxide output in the console and no red
  10. Once the server has launched once, a folder called "oxide" will be created in your server instance directory. This will hold your "plugins", "data", "logs" and "config" folders.
