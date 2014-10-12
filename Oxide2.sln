@@ -1,10 +1,7 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Patcher", "OxidePatcher\Oxide.Patcher.csproj", "{66ED76BE-D14B-4BDA-87FA-6254A28D58E1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Core", "Oxide.Core\Oxide.Core.csproj", "{67F65F5D-A62A-4752-849D-BFF30D828107}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Tests", "Oxide.Tests\Oxide.Tests.csproj", "{04DC61C2-E138-4D67-BFA1-50208DFA6B75}"
@@ -21,10 +18,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{66ED76BE-D14B-4BDA-87FA-6254A28D58E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66ED76BE-D14B-4BDA-87FA-6254A28D58E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66ED76BE-D14B-4BDA-87FA-6254A28D58E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66ED76BE-D14B-4BDA-87FA-6254A28D58E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{67F65F5D-A62A-4752-849D-BFF30D828107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{67F65F5D-A62A-4752-849D-BFF30D828107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67F65F5D-A62A-4752-849D-BFF30D828107}.Release|Any CPU.ActiveCfg = Release|Any CPU

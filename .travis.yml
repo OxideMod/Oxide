@@ -1,0 +1,20 @@
+# Source language (using C since .NET and C# are not supported yet)
+language: c
+
+# Install dependencies needed to compile .NET and C#
+before_script:
+  - curl http://download.mono-project.com/repo/xamarin.gpg | sudo apt-key add -
+  - echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee -a /etc/apt/sources.list
+  - echo "deb http://download.mono-project.com/repo/debian wheezy-libtiff-compat main" | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get update -qq
+  - sudo apt-get install mono-devel mono-dmcs mono-gmcs
+
+# Run the XBuild project file
+script: xbuild Oxide2.sln /p:Configuration=Release
+
+# Notification services
+notifications:
+  # Disable build status email notifications, until the issue with forks is fixed
+  email: false
+  # IRC notification
+  irc: "chat.freenode.net#rustoxide"
