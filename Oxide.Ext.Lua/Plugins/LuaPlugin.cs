@@ -106,14 +106,14 @@ namespace Oxide.Lua.Plugins
             if (pluginfunc == null) throw new Exception("LoadString returned null for some reason");
             LuaEnvironment.NewTable("PLUGIN");
             Table = LuaEnvironment["PLUGIN"] as LuaTable;
+            Table["Name"] = Name;
+            Name = Path.GetFileNameWithoutExtension(Filename);
             pluginfunc.Call();
 
             // Read plugin attributes
-            if (Table["Name"] == null || !(Table["Name"] is string)) throw new Exception("Plugin is missing name");
             if (Table["Title"] == null || !(Table["Title"] is string)) throw new Exception("Plugin is missing title");
             if (Table["Author"] == null || !(Table["Author"] is string)) throw new Exception("Plugin is missing author");
             if (Table["Version"] == null || !(Table["Version"] is VersionNumber)) throw new Exception("Plugin is missing version");
-            Name = (string)Table["Name"];
             Title = (string)Table["Title"];
             Author = (string)Table["Author"];
             Version = (VersionNumber)Table["Version"];

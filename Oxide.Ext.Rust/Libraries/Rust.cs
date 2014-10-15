@@ -17,6 +17,26 @@ namespace Oxide.Rust.Libraries
         /// </summary>
         public override bool IsGlobal { get { return false; } }
 
+        /// <summary>
+        /// Returns the UserID for the specified connection as a string
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDFromConnection")]
+        public string UserIDFromConnection(Network.Connection connection)
+        {
+            return connection.userid.ToString();
+        }
 
+        /// <summary>
+        /// Returns the UserID for the specified player as a string
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDFromPlayer")]
+        public string UserIDFromPlayer(BasePlayer player)
+        {
+            return player.userID.ToString();
+        }
     }
 }

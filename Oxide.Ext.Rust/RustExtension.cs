@@ -26,7 +26,7 @@ namespace Oxide.Rust
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "thomasfn"; } }
+        public override string Author { get { return "Oxide Team"; } }
 
         /// <summary>
         /// Initialises a new instance of the RustExtension class

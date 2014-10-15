@@ -41,6 +41,10 @@ namespace Oxide.Core
         // Various configs
         private OxideConfig rootconfig;
 
+        // Various libraries
+        private Global libglobal;
+        private Timer libtimer;
+
         /// <summary>
         /// The current Oxide version
         /// </summary>
@@ -95,7 +99,10 @@ namespace Oxide.Core
             extensionmanager = new ExtensionManager(rootlogger);
 
             // Register core libraries
-            extensionmanager.RegisterLibrary("Global", new Global());
+            libglobal = new Global();
+            extensionmanager.RegisterLibrary("Global", libglobal);
+            libtimer = new Timer();
+            extensionmanager.RegisterLibrary("Timer", libtimer);
 
             // Load all extensions
             rootlogger.Write(LogType.Info, "Loading extensions...");
@@ -282,6 +289,9 @@ namespace Oxide.Core
                 case "OnTick": // Called every tick
                     // Update plugin change watchers
                     UpdatePluginWatchers();
+
+                    // Update libraries
+                    libtimer.Update();
 
                     // Forward the call to the plugin manager
                     break;
