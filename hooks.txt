@@ -1,0 +1,105 @@
+Hooks currently in Oxide 2 for Rust:
+
+== OnInitLogging() ==
+	- Called from Assembly-CSharp/Bootstrap.StartupShared
+	- No return behaviour
+	- Used internally by Oxide to start Unity logging
+
+== OnTick() ==
+	- Called from Assembly-CSharp/ServerMgr.DoTick
+	- No return behaviour
+	- Called every tick (defined by the tickrate of the server?)
+	
+== ModifyTags(string oldtags) ==
+	- Called from Assembly-CSharp/ServerMgr.UpdateServerInformation
+	- Returning a string overrides the tags with new ones
+	- Used by RustCore and abstracted into BuildServerTags
+	
+== BuildServerTags(IList<string> tags) ==
+	- Called from RustCore.ModifyTags
+	- No return behaviour
+	- Add tags to the list, they will be concat'd at the end
+
+== OnRunCommand(Facepunch/ConsoleSystem.Arg arg) ==
+	- Called from Facepunch/ConsoleSystem.Run, Facepunch/ConsoleSystem.RunUnrestricted and Facepunch/ConsoleSystem.ClientRun
+	- Return true to override Rust's command handling system
+	- Useful for intercepting commands before they get to their intended target (like chat.say)
+	- Used by RustCore to implement chat commands
+	
+== OnUserApprove(Facepunch/Network.Connection connection) ==
+	- Called from Assembly-CSharp/ConnectionAuth.OnNewConnection
+	- Returning a non-null value overrides default behaviour, plugin should call Reject if it does this
+	- Used by RustCore and abstracted into CanClientLogin
+	
+== CanClientLogin(Facepunch/Network.Connection connection) ==
+	- Called from RustCore.OnUserApprove
+	- Returning true will allow the connection, returning nothing will by default allow the connection, returning anything else will reject it with an error message
+	- Returning a string will use the string as the error message
+	
+== OnFindSpawnPoint() ==
+	- Called from Assembly-CSharp/ServerMgr
+	- Return a Assembly-CSharp/BasePlayer.SpawnPoint object to use that spawnpoint
+	- Useful for controlling player spawnpoints (like making all spawns occur in a set area)
+
+== OnPlayerConnected(Facepunch/Network.Message packet) ==
+	- Called from Assembly-CSharp/ServerMgr
+	- No return behaviour
+	- Is called before the player object is created, but after the player has been approved to join the game
+	- Can get the connection from packet.connection
+	
+== OnPlayerSpawn(Assembly-CSharp/BasePlayer player, Facepunch/Network.Connection connection) ==
+	- Called soon after OnPlayerConnected, or when the player has died and respawns, or when the player is waking up
+	- No return behaviour
+	- Is called right after the player object (the BasePlayer instance) has been created
+
+== OnRunPlayerMetabolism(Assembly-CSharp/PlayerMetabolism metabolism) ==
+	- Called before a metabolism update occurs for the specified player
+	- Returning true cancels the update
+	- Metabolism update consists of managing the player's temperature, health etc
+	- You can use this to turn off or change certain aspects of the metabolism, either by editing values before returning, or taking complete control of the method
+	- Access the player object using metabolism:GetComponent("BasePlayer")
+	
+== OnPlayerDisconnected(Assembly-CSharp/BasePlayer player) ==
+	- Called from Assembly-CSharp/ServerMgr
+	- No return behaviour
+	- Is called before the player object is created, but after the player has been approved to join the game
+	
+== OnPlayerAttack(Assembly-CSharp/BasePlayer attacker, Assembly-CSharp/HitInfo hitinfo) ==
+	- Called from Assembly-CSharp/BasePlayer
+	- Returning true cancels the attack
+	- Useful for modifying an attack before it goes out
+	- hitinfo.HitEntity should be the entity that this attack would hit
+
+== OnItemAddedToContainer(Assembly-CSharp/ItemContainer container, Assembly-CSharp/Item item) ==
+	- Called from Assembly-CSharp/ItemContainer
+	- No return behaviour
+	- Is called right after an item was added to a container
+	- An entire stack has to be created, not just adding more wood to a wood stack for example
+	
+== OnItemRemovedFromContainer(Assembly-CSharp/ItemContainer container, Assembly-CSharp/Item item) ==
+	- Called from Assembly-CSharp/ItemContainer
+	- No return behaviour
+	- Is called right after an item was removed from a container
+	- The entire stack has to be removed for this to be called, not just a little bit
+
+== OnEntityAttacked(UnityEngine/MonoBehaviour entity, Assembly-CSharp/HitInfo hitinfo) ==
+	- Called from multiple places, each entity's attack handler basically
+	- Returning non-null value overrides default server behaviour (useful for godmode etc)
+	- Alternatively, modify the hitinfo object to change the damage
+	- It should be ok to set the damage to 0, but if you don't return non-null, the player's client will receive a damage indicator (if entity is a BasePlayer)
+	- hitinfo has all kinds of useful things in it, such as hitinfo.Weapon, hitinfo.damageAmount or hitinfo.damageType
+	- Currently implemented for: BasePlayer, BaseAnimal
+	
+Plugin specific hooks:
+
+== Init() ==
+	- Called when the plugin is being loaded
+	- Other plugins may or may not be present, dependant on load order
+	- Other plugins WILL have been executed though, so globals exposed by them will be present
+	
+== LoadDefaultConfig() ==
+	- Called when the config for the plugin should be initialised
+	- Only called if the config file does not already exist
+	
+== Unload() ==
+	- Called when the plugin is being unloaded
