@@ -224,7 +224,19 @@ namespace Oxide.Lua.Plugins
         protected override object OnCallHook(string hookname, object[] args)
         {
             // Call it
-            return CallFunction(hookname, args);
+            try
+            {
+                return CallFunction(hookname, args);
+            }
+            catch (NLua.Exceptions.LuaScriptException luaex)
+            {
+                if (luaex.IsNetException)
+                {
+                    // TODO: Throw a better exception?
+                    
+                }
+                throw;
+            }
         }
 
         #region Lua CallFunction Hack

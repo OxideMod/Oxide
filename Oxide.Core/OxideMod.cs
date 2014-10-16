@@ -46,6 +46,11 @@ namespace Oxide.Core
         private Timer libtimer;
 
         /// <summary>
+        /// Gets the data file system
+        /// </summary>
+        public DataFileSystem DataFileSystem { get; private set; }
+
+        /// <summary>
         /// The current Oxide version
         /// </summary>
         public static readonly VersionNumber Version = new VersionNumber(2, 0, 0);
@@ -103,6 +108,9 @@ namespace Oxide.Core
             extensionmanager.RegisterLibrary("Global", libglobal);
             libtimer = new Timer();
             extensionmanager.RegisterLibrary("Timer", libtimer);
+
+            // Initialise other things
+            DataFileSystem = new DataFileSystem(datadir);
 
             // Load all extensions
             rootlogger.Write(LogType.Info, "Loading extensions...");

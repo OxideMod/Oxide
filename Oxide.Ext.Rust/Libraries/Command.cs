@@ -110,6 +110,9 @@ namespace Oxide.Rust.Libraries
 
             // Add to collections
             chatcommands.Add(cmd.Name, cmd);
+
+            // Hook the unload event
+            plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
         }
 
         /// <summary>
@@ -186,7 +189,7 @@ namespace Oxide.Rust.Libraries
                 
             }
 
-            // Find all console commands that belong to the plugin
+            // Find all chat commands that belong to the plugin
             HashSet<ChatCommand> chatcommands_toremove = new HashSet<ChatCommand>(chatcommands.Values.Where((c) => c.Plugin == sender));
             foreach (ChatCommand cmd in chatcommands_toremove)
             {

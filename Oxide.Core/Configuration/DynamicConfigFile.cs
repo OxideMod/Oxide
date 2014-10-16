@@ -24,7 +24,7 @@ namespace Oxide.Core.Configuration
         }
 
         /// <summary>
-        /// Loads this config file from the specified file
+        /// Loads this config from the specified file
         /// </summary>
         /// <param name="filename"></param>
         public override void Load(string filename)
@@ -49,7 +49,15 @@ namespace Oxide.Core.Configuration
         }
 
         /// <summary>
-        /// Gets or sets a setting on this config file by key
+        /// Clears this config
+        /// </summary>
+        public void Clear()
+        {
+            keyvalues.Clear();
+        }
+
+        /// <summary>
+        /// Gets or sets a setting on this config by key
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>

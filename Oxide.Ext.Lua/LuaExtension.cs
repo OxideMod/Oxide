@@ -283,6 +283,8 @@ namespace Oxide.Lua
         {
             // Bind Lua specific libraries
             LoadLibrary(new LuaGlobal(Manager.Logger), "_G");
+            LuaEnvironment.NewTable("datafile");
+            LoadLibrary(new LuaDatafile(LuaEnvironment), "datafile");
 
             // Bind any libraries to lua
             foreach (string name in Manager.GetLibraries())

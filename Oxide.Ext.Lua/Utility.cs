@@ -57,6 +57,7 @@ namespace Oxide.Lua
         /// <param name="table"></param>
         public static void SetConfigFromTable(DynamicConfigFile config, LuaTable table)
         {
+            config.Clear();
             foreach (object key in table.Keys)
             {
                 string keystr = key as string;

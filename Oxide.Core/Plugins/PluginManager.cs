@@ -142,7 +142,16 @@ namespace Oxide.Core.Plugins
             for (int i = 0; i < sublist.Count; i++)
             {
                 // Call the hook
-                object value = sublist[i].CallHook(hookname, args);
+                Plugin plugin = sublist[i];
+                object value = null;
+                try
+                {
+                    value = sublist[i].CallHook(hookname, args);
+                }
+                catch (Exception ex)
+                {
+                    Logger.WriteException(string.Format("Failed to call hook '{0}' on plugin '{1}'", hookname, plugin), ex);
+                }
                 if (value != null)
                 {
                     values[i] = value;
