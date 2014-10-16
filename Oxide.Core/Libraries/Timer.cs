@@ -140,8 +140,9 @@ namespace Oxide.Core.Libraries
                     toremove.Add(timer);
                 }
             }
-            foreach (TimerInstance timer in toremove)
-                alltimers.Remove(timer);
+            if (toremove != null)
+                foreach (TimerInstance timer in toremove)
+                    alltimers.Remove(timer);
         }
 
         /// <summary>
