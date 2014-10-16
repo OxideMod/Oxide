@@ -265,10 +265,25 @@ namespace Oxide.Rust.Plugins
         {
             List<string> arglist = new List<string>();
             StringBuilder sb = new StringBuilder();
+            bool inlongarg = false;
             for (int i = 0; i < argstr.Length; i++)
             {
                 char c = argstr[i];
-                if (char.IsWhiteSpace(c))
+                if (c == '"')
+                {
+                    if (inlongarg)
+                    {
+                        string arg = sb.ToString().Trim();
+                        if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
+                        sb = new StringBuilder();
+                        inlongarg = false;
+                    }
+                    else
+                    {
+                        inlongarg = true;
+                    }
+                }
+                else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
                     string arg = sb.ToString().Trim();
                     if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
