@@ -38,7 +38,6 @@ namespace Oxide.Core
         {
             string file = name.Replace('\\', '_');
             file = file.Replace('/', '_');
-            file = file.Replace('.', '_');
             file = file.Replace(':', '_');
             file = file.Replace(',', '_');
             return file;
