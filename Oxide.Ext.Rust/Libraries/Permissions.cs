@@ -185,7 +185,7 @@ namespace Oxide.Rust.Libraries
             Dictionary<string, object> grouplist = new Dictionary<string, object>();
             Dictionary<string, object> userlist = new Dictionary<string, object>();
             datafile["groups"] = grouplist;
-            datafile["users"] = grouplist;
+            datafile["users"] = userlist;
             foreach (var pair in groupdata)
             {
                 grouplist.Add(pair.Key, new Dictionary<string, object>()
