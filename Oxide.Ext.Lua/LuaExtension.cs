@@ -240,7 +240,11 @@ namespace Oxide.Lua
             string nspace = Utility.GetNamespace(type);
             
             if (string.IsNullOrEmpty(nspace)) return true;
-            if (nspace == "System" && type.IsValueType) return true;
+            if (nspace == "System")
+            {
+                 if (type.IsValueType) return true;
+                 if (type.Name == "string" || type.Name == "String") return true;
+            }
             foreach (string whitelist in whitelistnamespaces)
                 if (nspace.StartsWith(whitelist)) return true;
             foreach (string blacklist in blacklistnamespaces)

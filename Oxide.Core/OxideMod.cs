@@ -44,6 +44,8 @@ namespace Oxide.Core
         // Various libraries
         private Global libglobal;
         private Timer libtimer;
+        private Time libtime;
+        private Libraries.Plugins libplugins;
 
         /// <summary>
         /// Gets the data file system
@@ -108,6 +110,10 @@ namespace Oxide.Core
             extensionmanager.RegisterLibrary("Global", libglobal);
             libtimer = new Timer();
             extensionmanager.RegisterLibrary("Timer", libtimer);
+            libtime = new Time();
+            extensionmanager.RegisterLibrary("Time", libtime);
+            libplugins = new Libraries.Plugins(pluginmanager);
+            extensionmanager.RegisterLibrary("Plugins", libplugins);
 
             // Initialise other things
             DataFileSystem = new DataFileSystem(datadir);

@@ -48,7 +48,10 @@
     <Compile Include="Interface.cs" />
     <Compile Include="Libraries\Global.cs" />
     <Compile Include="Libraries\Library.cs" />
+    <Compile Include="Libraries\Plugins.cs" />
+    <Compile Include="Libraries\Time.cs" />
     <Compile Include="Libraries\Timer.cs" />
+    <Compile Include="Libraries\Utility.cs" />
     <Compile Include="Logging\CompoundLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\RotatingFileLogger.cs" />
