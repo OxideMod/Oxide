@@ -46,6 +46,7 @@ namespace Oxide.Core
         private Timer libtimer;
         private Time libtime;
         private Libraries.Plugins libplugins;
+        private WebRequests libwebrequests;
 
         /// <summary>
         /// Gets the data file system
@@ -114,6 +115,8 @@ namespace Oxide.Core
             extensionmanager.RegisterLibrary("Time", libtime);
             libplugins = new Libraries.Plugins(pluginmanager);
             extensionmanager.RegisterLibrary("Plugins", libplugins);
+            libwebrequests = new WebRequests();
+            extensionmanager.RegisterLibrary("WebRequests", libwebrequests);
 
             // Initialise other things
             DataFileSystem = new DataFileSystem(datadir);
@@ -306,6 +309,7 @@ namespace Oxide.Core
 
                     // Update libraries
                     libtimer.Update();
+                    libwebrequests.Update();
 
                     // Forward the call to the plugin manager
                     break;

@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Libraries\LuaDatafile.cs" />
     <Compile Include="Libraries\LuaGlobal.cs" />
+    <Compile Include="Libraries\LuaUtil.cs" />
     <Compile Include="LuaExtension.cs" />
     <Compile Include="Plugins\LuaPlugin.cs" />
     <Compile Include="Plugins\LuaPluginLoader.cs" />

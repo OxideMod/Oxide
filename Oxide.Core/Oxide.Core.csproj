@@ -51,7 +51,7 @@
     <Compile Include="Libraries\Plugins.cs" />
     <Compile Include="Libraries\Time.cs" />
     <Compile Include="Libraries\Timer.cs" />
-    <Compile Include="Libraries\Utility.cs" />
+    <Compile Include="Libraries\WebRequests.cs" />
     <Compile Include="Logging\CompoundLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\RotatingFileLogger.cs" />

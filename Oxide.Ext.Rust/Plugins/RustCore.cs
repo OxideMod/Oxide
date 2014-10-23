@@ -308,6 +308,16 @@ namespace Oxide.Rust.Plugins
             args = arglist.ToArray();
         }
 
+        /// <summary>
+        /// Called when the player has been initialised
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerInit")]
+        private void OnPlayerInit(BasePlayer player)
+        {
+
+        }
+
 
         
     }

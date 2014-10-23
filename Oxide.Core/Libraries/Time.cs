@@ -23,7 +23,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("GetUnixTimestamp")]
         public uint GetUnixTimestamp()
         {
-            return (uint)DateTime.Now.Subtract(epoch).TotalSeconds;
+            return (uint)DateTime.UtcNow.Subtract(epoch).TotalSeconds;
         }
 
         /// <summary>

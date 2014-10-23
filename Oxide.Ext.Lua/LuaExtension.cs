@@ -48,6 +48,7 @@ namespace Oxide.Lua
         // Utility
         private LuaFunction setmetatable;
         private LuaTable overloadselectormeta;
+        private LuaTable typetablemeta;
 
         // The plugin change watcher
         private FSWatcher watcher;
@@ -100,9 +101,27 @@ namespace Oxide.Lua
             setmetatable = LuaEnvironment["setmetatable"] as LuaFunction;
 
             // Create metatables
+            Type mytype = GetType();
             LuaEnvironment.NewTable("tmp");
             overloadselectormeta = LuaEnvironment["tmp"] as LuaTable;
-            //LuaEnvironment.RegisterFunction("tmp.__index", GetType().GetMethod("FindOverload", BindingFlags.Public | BindingFlags.Static));
+            //LuaEnvironment.RegisterFunction("tmp.__index", mytype.GetMethod("FindOverload", BindingFlags.Public | BindingFlags.Static));
+            LuaEnvironment.NewTable("tmp"); 
+            // Ideally I'd like for this to be implemented C# side, but using C#-bound methods as metamethods seems dodgy
+            LuaEnvironment.LoadString(
+@"function tmp:__index( key )
+    local sftbl = rawget( self, '_sftbl' )
+    local field = sftbl[ key ]
+    if (field) then return field:GetValue( nil ) end
+end
+function tmp:__newindex( key, value )
+    local sftbl = rawget( self, '_sftbl' )
+    local field = sftbl[ key ]
+    if (field) then field:SetValue( nil, value ) end
+end
+", "LuaExtension").Call();
+            //LuaEnvironment.RegisterFunction("tmp.__index", mytype.GetMethod("ReadStaticProperty", BindingFlags.NonPublic | BindingFlags.Static));
+            //LuaEnvironment.RegisterFunction("tmp.__newindex", mytype.GetMethod("WriteStaticProperty", BindingFlags.NonPublic | BindingFlags.Static));
+            typetablemeta = LuaEnvironment["tmp"] as LuaTable;
             LuaEnvironment["tmp"] = null;
 
             // Bind all namespaces and types
@@ -165,7 +184,6 @@ namespace Oxide.Lua
             LuaEnvironment.NewTable("tmp");
             LuaTable tmp = LuaEnvironment["tmp"] as LuaTable;
             
-
             // Set the type field
             tmp["_type"] = type;
 
@@ -193,6 +211,20 @@ namespace Oxide.Lua
                     processed.Add(method.Name);
                 }
             }
+
+            // Make the public static field table
+            LuaEnvironment.NewTable("sftbl");
+            LuaTable sftbl = LuaEnvironment["sftbl"] as LuaTable;
+            LuaEnvironment["sftbl"] = null;
+            tmp["_sftbl"] = sftbl;
+            FieldInfo[] fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
+            foreach (FieldInfo field in fields)
+            {
+                sftbl[field.Name] = field;
+            }
+
+            // Setup metamethod
+            setmetatable.Call(tmp, typetablemeta);
 
             // Return it
             LuaEnvironment["tmp"] = null;
@@ -226,6 +258,60 @@ namespace Oxide.Lua
             // tbl.methodarray has an array of methods to search though
             // key should be a table of types defining the signature of the method to find
             return null;
+        }
+
+        /// <summary>
+        /// The __index metamethod of the type table
+        /// </summary>
+        /// <param name="tbl"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private static object ReadStaticProperty(LuaTable tbl, object key)
+        {
+            Interface.GetMod().RootLogger.Write(LogType.Warning, "__index ReadStaticProperty {0}", key);
+            string keystr = key as string;
+            if (keystr == null) return null;
+            if (keystr == "_sftbl") return null;
+            LuaTable sftbl = tbl["_sftbl"] as LuaTable;
+            if (sftbl == null)
+            {
+                Interface.GetMod().RootLogger.Write(LogType.Warning, "Tried to access _sftbl on type table when reading but it doesn't exist!");
+                return null;
+            }
+            object prop = sftbl[keystr];
+            if (prop == null) return null;
+            FieldInfo field = prop as FieldInfo;
+            if (field != null)
+            {
+                return field.GetValue(null);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The __newindex metamethod of the type table
+        /// </summary>
+        /// <param name="tbl"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        private static void WriteStaticProperty(LuaTable tbl, object key, object value)
+        {
+            string keystr = key as string;
+            if (keystr == null) return;
+            if (keystr == "_sftbl") return;
+            LuaTable sftbl = tbl["_sftbl"] as LuaTable;
+            if (sftbl == null)
+            {
+                Interface.GetMod().RootLogger.Write(LogType.Warning, "Tried to access _sftbl on type table when writing but it doesn't exist!");
+                return;
+            }
+            object prop = sftbl[keystr];
+            if (prop == null) return;
+            FieldInfo field = prop as FieldInfo;
+            if (field != null)
+            {
+                field.SetValue(null, value);
+            }
         }
 
         /// <summary>
@@ -289,6 +375,9 @@ namespace Oxide.Lua
             LoadLibrary(new LuaGlobal(Manager.Logger), "_G");
             LuaEnvironment.NewTable("datafile");
             LoadLibrary(new LuaDatafile(LuaEnvironment), "datafile");
+            if (LuaEnvironment["util"] == null)
+                LuaEnvironment.NewTable("util");
+            LoadLibrary(new LuaUtil(), "util");
 
             // Bind any libraries to lua
             foreach (string name in Manager.GetLibraries())
@@ -297,7 +386,7 @@ namespace Oxide.Lua
                 Library lib = Manager.GetLibrary(name);
                 if (lib.IsGlobal)
                     path = "_G";
-                else
+                else if (LuaEnvironment[path] == null)
                     LuaEnvironment.NewTable(path);
                 LoadLibrary(lib, path);
             }

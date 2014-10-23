@@ -48,9 +48,10 @@ Hooks currently in Oxide 2 for Rust:
 	- Can get the connection from packet.connection
 	
 == OnPlayerSpawn(Assembly-CSharp/BasePlayer player, Facepunch/Network.Connection connection) ==
-	- Called soon after OnPlayerConnected, or when the player has died and respawns, or when the player is waking up
+	- Called when the player spawns (specifically when they click the "Respawn" button)
 	- No return behaviour
-	- Is called right after the player object (the BasePlayer instance) has been created
+	- ONLY called when the player is transitioning from dead to not-dead, so not when they're waking up
+	- This means it's possible for a player to connect and disconnect from a server without OnPlayerSpawn ever triggering for them
 
 == OnRunPlayerMetabolism(Assembly-CSharp/PlayerMetabolism metabolism) ==
 	- Called before a metabolism update occurs for the specified player
@@ -88,6 +89,23 @@ Hooks currently in Oxide 2 for Rust:
 	- Alternatively, modify the hitinfo object to change the damage
 	- It should be ok to set the damage to 0, but if you don't return non-null, the player's client will receive a damage indicator (if entity is a BasePlayer)
 	- hitinfo has all kinds of useful things in it, such as hitinfo.Weapon, hitinfo.damageAmount or hitinfo.damageType
+	- Currently implemented for: BasePlayer, BaseAnimal
+	
+== OnEntitySpawned(UnityEngine/MonoBehaviour entity) ==
+	- Called from Assembly-CSharp/BaseNetworkable
+	- No return behaviour
+	- Called when any networked entity is spawned (including trees)
+	
+== OnPlayerInit(UnityEngine/BasePlayer player) ==
+	- Called from Assembly-CSharp/BasePlayer
+	- No return behaviour
+	- Called when the player is initialising (after they've connected, before they wake up)
+	
+== OnEntityDeath(UnityEngine/MonoBehaviour entity, Assembly-CSharp/HitInfo hitinfo) ==
+	- Called from multiple places, each entity's death handler basically
+	- No return behaviour
+	- hitinfo might be null, check it before use
+	- Editing hitinfo probably has no effect
 	- Currently implemented for: BasePlayer, BaseAnimal
 	
 Plugin specific hooks:
