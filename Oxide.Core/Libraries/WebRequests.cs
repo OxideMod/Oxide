@@ -289,7 +289,7 @@ namespace Oxide.Core.Libraries
                     request.Process();
                     lock (syncroot) completequeue.Enqueue(request);
                 }
-                lock (syncroot) if (waitingqueue.Count > 0) workevent.WaitOne();
+                lock (syncroot) if (waitingqueue.Count > 0) workevent.Set();
             }
         }
 

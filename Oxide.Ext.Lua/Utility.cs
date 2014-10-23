@@ -21,21 +21,14 @@ namespace Oxide.Lua
         public static bool IsArray(this LuaTable table, out int count)
         {
             count = 0;
-            HashSet<double> numberkeys = new HashSet<double>();
             foreach (object key in table.Keys)
             {
                 if (!(key is double)) return false;
-                numberkeys.Add((double)key);
+                double numkey = (double)key;
+                if (Math.Floor(numkey) != numkey) return false;
+                if (numkey < 1.0) return false;
+                if (numkey > count) count = (int)numkey;
             }
-            double lowest = numberkeys.Min();
-            double highest = numberkeys.Max();
-            if (lowest != 1.0) return false;
-            if (Math.Floor(highest) != highest) return false;
-            int range = (int)(highest - lowest) + 1;
-            if (numberkeys.Count != range) return false;
-            for (int i = 1; i < highest; i++)
-                if (!numberkeys.Contains((double)i)) return false;
-            count = range;
             return true;
         }
 
@@ -98,7 +91,11 @@ namespace Oxide.Lua
                     List<object> list = new List<object>();
                     for (int i = 0; i < count; i++)
                     {
-                        list.Add(TranslateLuaItemToConfigItem(table[(double)(i + 1)]));
+                        object luaobj = table[(double)(i + 1)];
+                        if (luaobj != null)
+                            list.Add(TranslateLuaItemToConfigItem(luaobj));
+                        else
+                            list.Add(null);
                     }
                     return list;
                 }

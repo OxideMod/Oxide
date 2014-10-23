@@ -187,44 +187,56 @@ end
             // Set the type field
             tmp["_type"] = type;
 
-            // Bind all public static methods
-            MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
-            HashSet<string> processed = new HashSet<string>();
-            foreach (MethodInfo method in methods)
+            // Is it an enum?
+            if (type.IsEnum)
             {
-                if (!processed.Contains(method.Name))
+                // Set all enum fields
+                foreach (object value in Enum.GetValues(type))
                 {
-                    // We need to check if this method is overloaded
-                    MethodInfo[] overloads = methods.Where((m) => m.Name == method.Name).ToArray();
-                    if (overloads.Length == 1)
-                    {
-                        // It's not, simply bind it
-                        LuaEnvironment.RegisterFunction(string.Format("tmp.{0}", method.Name), method);
-                    }
-                    else
-                    {
-                        // It is, "overloads" holds all our method overloads
-                        tmp[method.Name] = CreateOverloadSelector(overloads);
-                    }
-
-                    // Processed
-                    processed.Add(method.Name);
+                    tmp[Enum.GetName(type, value)] = value;
                 }
             }
-
-            // Make the public static field table
-            LuaEnvironment.NewTable("sftbl");
-            LuaTable sftbl = LuaEnvironment["sftbl"] as LuaTable;
-            LuaEnvironment["sftbl"] = null;
-            tmp["_sftbl"] = sftbl;
-            FieldInfo[] fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
-            foreach (FieldInfo field in fields)
+            else
             {
-                sftbl[field.Name] = field;
-            }
+                // Bind all public static methods
+                MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
+                HashSet<string> processed = new HashSet<string>();
+                foreach (MethodInfo method in methods)
+                {
+                    if (!processed.Contains(method.Name))
+                    {
+                        // We need to check if this method is overloaded
+                        MethodInfo[] overloads = methods.Where((m) => m.Name == method.Name).ToArray();
+                        if (overloads.Length == 1)
+                        {
+                            // It's not, simply bind it
+                            LuaEnvironment.RegisterFunction(string.Format("tmp.{0}", method.Name), method);
+                        }
+                        else
+                        {
+                            // It is, "overloads" holds all our method overloads
+                            tmp[method.Name] = CreateOverloadSelector(overloads);
+                        }
 
-            // Setup metamethod
-            setmetatable.Call(tmp, typetablemeta);
+                        // Processed
+                        processed.Add(method.Name);
+                    }
+                }
+
+                // Make the public static field table
+                LuaEnvironment.NewTable("sftbl");
+                LuaTable sftbl = LuaEnvironment["sftbl"] as LuaTable;
+                LuaEnvironment["sftbl"] = null;
+                tmp["_sftbl"] = sftbl;
+                FieldInfo[] fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
+                foreach (FieldInfo field in fields)
+                {
+                    sftbl[field.Name] = field;
+                }
+
+                // Setup metamethod
+                setmetatable.Call(tmp, typetablemeta);
+            }
 
             // Return it
             LuaEnvironment["tmp"] = null;

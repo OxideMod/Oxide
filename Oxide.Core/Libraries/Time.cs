@@ -27,13 +27,13 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
-        /// Returns DateTime.Now
+        /// Returns DateTime.UtcNow
         /// </summary>
         /// <returns></returns>
         [LibraryFunction("GetCurrentTime")]
         public DateTime GetCurrentTime()
         {
-            return DateTime.Now;
+            return DateTime.UtcNow;
         }
     }
 }
