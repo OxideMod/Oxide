@@ -46,6 +46,11 @@ namespace Oxide.Core.Plugins
         public bool HasConfig { get; protected set; }
 
         /// <summary>
+        /// Gets the object associated with this plugin
+        /// </summary>
+        public virtual object Object { get { return this; } }
+
+        /// <summary>
         /// Gets the total CPU time spent in this plugin in seconds
         /// </summary>
         public float TimeSpent

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Oxide.Core.Plugins;
 
@@ -48,6 +49,16 @@ namespace Oxide.Core.Libraries
         public object CallHook(string hookname, object[] args)
         {
             return Interface.CallHook(hookname, args);
+        }
+
+        /// <summary>
+        /// Gets an array of all currently loaded plugins
+        /// </summary>
+        /// <returns></returns>
+        [LibraryFunction("GetAll")]
+        public Plugin[] GetAll()
+        {
+            return PluginManager.GetPlugins().ToArray();
         }
     }
 }

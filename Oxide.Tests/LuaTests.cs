@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
 
 using Oxide.Core;
 using Oxide.Core.Configuration;
@@ -111,6 +113,31 @@ namespace Oxide.Tests
                     }
                 }
             }
+        }
+
+        [TestMethod]
+        public void TestEmptyTableInConfig()
+        {
+            Lua lua = new Lua();
+
+            lua.LoadString("TeleportData = { AdminTP = {}, Test = 3, ABC=4 }", "test").Call();
+
+            LuaTable tdata = lua["TeleportData"] as LuaTable;
+            DynamicConfigFile cfgfile = new DynamicConfigFile();
+            Utility.SetConfigFromTable(cfgfile, tdata);
+
+            Assert.AreEqual(3, cfgfile["Test"], "Failed TeleportData.Test");
+            Assert.AreEqual(4, cfgfile["ABC"], "Failed TeleportData.ABC");
+
+            //Assert.IsInstanceOfType(cfgfile["AdminTP"], typeof(List<string, object>), "Failed TeleportData.AdminTP");
+
+            string tmp = Path.GetTempFileName();
+            cfgfile.Save(tmp);
+
+            string text = File.ReadAllText(tmp);
+            File.Delete(tmp);
+
+
         }
 
         [TestMethod]

@@ -29,6 +29,11 @@ namespace Oxide.Lua.Plugins
         public LuaTable Table { get; private set; }
 
         /// <summary>
+        /// Gets the object associated with this plugin
+        /// </summary>
+        public override object Object { get { return Table; } }
+
+        /// <summary>
         /// Gets the filename of this plugin
         /// </summary>
         public string Filename { get; private set; }

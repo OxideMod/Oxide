@@ -333,10 +333,12 @@ end
         /// <returns></returns>
         internal bool AllowTypeAccess(Type type)
         {
+            // Special case: allow access to Oxide.Core.OxideMod
+            if (type.FullName == "Oxide.Core.OxideMod") return true;
+
             // Respect the whitelist and blacklist
             // The only exception is to allow all value types directly under System
             string nspace = Utility.GetNamespace(type);
-            
             if (string.IsNullOrEmpty(nspace)) return true;
             if (nspace == "System")
             {
