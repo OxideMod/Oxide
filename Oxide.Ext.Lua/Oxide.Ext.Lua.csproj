@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Facepunch">
+      <HintPath>..\Dependencies\Facepunch.dll</HintPath>
+    </Reference>
     <Reference Include="NLua">
       <HintPath>..\Dependencies\NLua.dll</HintPath>
     </Reference>
