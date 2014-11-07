@@ -29,7 +29,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     echo -e "Archiving and compressing target files..."
     cd $HOME/temp
     mkdir -p $HOME/snapshots/${RUST_VERSION}
-    zip -vr9 $HOME/snapshots/${RUST_VERSION}/oxide-2_b${TRAVIS_BUILD_NUMBER}-`date +%Y%d%m`.zip .
+    zip -vr9 $HOME/snapshots/${RUST_VERSION}/oxide-2_b${TRAVIS_BUILD_NUMBER}-`date +%Y%m%d`.zip .
 
     echo -e "Adding, committing, and pushing to snapshots branch..."
     cd $HOME/snapshots
