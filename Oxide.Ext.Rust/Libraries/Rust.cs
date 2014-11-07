@@ -51,13 +51,43 @@ namespace Oxide.Rust.Libraries
         {
             if (message != null)
             {
-                ConsoleSystem.Broadcast("chat.add " + name + " " + message.QuoteSafe());
+                ConsoleSystem.Broadcast("chat.add " + name.QuoteSafe() + " " + message.QuoteSafe());
             }
             else
             {
                 message = name;
                 ConsoleSystem.Broadcast("chat.add SERVER " + message.QuoteSafe());
             }
+        }
+
+        /// <summary>
+        /// Sends a chat message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        [LibraryFunction("SendChatMessage")]
+        public void SendChatMessage(BasePlayer player, string name, string message = null)
+        {
+            if (message != null)
+            {
+                player.SendConsoleCommand("chat.add " + name.QuoteSafe() + " " + message.QuoteSafe());
+            }
+            else
+            {
+                message = name;
+                player.SendConsoleCommand("chat.add SERVER " + message.QuoteSafe());
+            }
+        }
+
+        /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="str"></param>
+        [LibraryFunction("QuoteSafe")]
+        public string QuoteSafe(string str)
+        {
+            return str.QuoteSafe();
         }
     }
 }
