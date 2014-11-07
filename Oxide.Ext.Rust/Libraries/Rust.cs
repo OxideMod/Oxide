@@ -5,6 +5,8 @@ using System.Linq;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
+using UnityEngine;
+
 namespace Oxide.Rust.Libraries
 {
     /// <summary>
@@ -37,6 +39,25 @@ namespace Oxide.Rust.Libraries
         public string UserIDFromPlayer(BasePlayer player)
         {
             return player.userID.ToString();
+        }
+
+        /// <summary>
+        /// Broadcasts a chat message
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        [LibraryFunction("BroadcastChat")]
+        public void BroadcastChat(string name, string message = null)
+        {
+            if (message != null)
+            {
+                ConsoleSystem.Broadcast("chat.add " + name + " " + message.QuoteSafe());
+            }
+            else
+            {
+                message = name;
+                ConsoleSystem.Broadcast("chat.add SERVER " + message.QuoteSafe());
+            }
         }
     }
 }

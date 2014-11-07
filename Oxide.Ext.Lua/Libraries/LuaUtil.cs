@@ -7,6 +7,8 @@ using Oxide.Core.Configuration;
 
 using NLua;
 
+using UnityEngine;
+
 namespace Oxide.Lua.Libraries
 {
     /// <summary>
@@ -69,6 +71,16 @@ namespace Oxide.Lua.Libraries
             }
             array[index] = converted;
             return true;
+        }
+
+        /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="str"></param>
+        [LibraryFunction("QuoteSafe")]
+        public string QuoteSafe(string str)
+        {
+            return str.QuoteSafe();
         }
     }
 }
