@@ -24,12 +24,12 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     cp -vf oxide.root.json $HOME/temp/oxide.root.json
 
     RUST_VERSION=`cat Patched/version.txt`
-    echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION, built on `date +%Y%d%m` via Travis-CI" >> $HOME/temp/version.txt
+    echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" >> $HOME/temp/version.txt
 
     echo -e "Archiving and compressing target files..."
     cd $HOME/temp
     mkdir -p $HOME/snapshots/${RUST_VERSION}
-    zip -vr9 $HOME/snapshots/${RUST_VERSION}/oxide-2_b${TRAVIS_BUILD_NUMBER}-`date +%Y%m%d`.zip .
+    zip -vr9 $HOME/snapshots/${RUST_VERSION}/oxide-2_b${TRAVIS_BUILD_NUMBER}-${RUST_VERSION}.zip .
 
     echo -e "Adding, committing, and pushing to snapshots branch..."
     cd $HOME/snapshots
