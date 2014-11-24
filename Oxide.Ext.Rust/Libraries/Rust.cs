@@ -27,7 +27,7 @@ namespace Oxide.Rust.Libraries
         {
             return connection.userid.ToString();
         }
-
+    
         /// <summary>
         /// Returns the UserID for the specified player as a string
         /// </summary>
@@ -37,6 +37,23 @@ namespace Oxide.Rust.Libraries
         public string UserIDFromPlayer(BasePlayer player)
         {
             return player.userID.ToString();
+        }
+        
+        [LibraryFunction("UserIDsFromBuildingPrivledge")]
+        public List UserIDsFromBuildingPrivledge(BuildingPrivlidge buildingpriv)
+        {
+            List<string> list = new List<string>();
+            foreach (ProtoBuf.PlayerNameID eid in buildingpriv.authorizedPlayers)
+            {
+                list.Add(eid.userid.ToString());
+            }
+            return (List) list;
+        }
+        
+        [LibraryFunction("UserIDFromDeployedItem")]
+        public string UserIDFromDeployedItem(DeployedItem DeployedItem)
+        {
+            return DeployedItem.deployerUserID.ToString();
         }
     }
 }
