@@ -29,6 +29,33 @@ namespace Oxide.Rust.Libraries
         }
 
         /// <summary>
+        /// Returns the UserIDs for the specified building privilege as an array
+        /// </summary>
+        /// <param name="privilege"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDsFromBuildingPrivilege")]
+        public Array UserIDsFromBuildingPrivlidge(BuildingPrivlidge buildingpriv)
+        {
+            List<string> list = new List<string>();
+            foreach (ProtoBuf.PlayerNameID eid in buildingpriv.authorizedPlayers)
+            {
+                list.Add(eid.userid.ToString());
+            }
+            return list.ToArray();
+        }
+
+        /// <summary>
+        /// Returns the UserID for the specified deployed item as a string
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDFromDeployedItem")]
+        public string UserIDFromDeployedItem(DeployedItem DeployedItem)
+        {
+            return DeployedItem.deployerUserID.ToString();
+        }
+
+        /// <summary>
         /// Returns the UserID for the specified player as a string
         /// </summary>
         /// <param name="connection"></param>
