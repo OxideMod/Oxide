@@ -5,6 +5,8 @@ using System.Linq;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
+using UnityEngine;
+
 namespace Oxide.Rust.Libraries
 {
     /// <summary>
@@ -64,6 +66,55 @@ namespace Oxide.Rust.Libraries
         public string UserIDFromPlayer(BasePlayer player)
         {
             return player.userID.ToString();
+        }
+
+        /// <summary>
+        /// Broadcasts a chat message
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        [LibraryFunction("BroadcastChat")]
+        public void BroadcastChat(string name, string message = null)
+        {
+            if (message != null)
+            {
+                ConsoleSystem.Broadcast("chat.add " + name.QuoteSafe() + " " + message.QuoteSafe() + " 1.0");
+            }
+            else
+            {
+                message = name;
+                ConsoleSystem.Broadcast("chat.add \"SERVER\" " + message.QuoteSafe() + " 1.0");
+            }
+        }
+
+        /// <summary>
+        /// Sends a chat message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        [LibraryFunction("SendChatMessage")]
+        public void SendChatMessage(BasePlayer player, string name, string message = null)
+        {
+            if (message != null)
+            {
+                player.SendConsoleCommand("chat.add " + name.QuoteSafe() + " " + message.QuoteSafe() + " 1.0");
+            }
+            else
+            {
+                message = name;
+                player.SendConsoleCommand("chat.add \"SERVER\" " + message.QuoteSafe() + " 1.0");
+            }
+        }
+
+        /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="str"></param>
+        [LibraryFunction("QuoteSafe")]
+        public string QuoteSafe(string str)
+        {
+            return str.QuoteSafe();
         }
     }
 }
