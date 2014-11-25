@@ -28,6 +28,21 @@ namespace Oxide.Rust.Libraries
             return connection.userid.ToString();
         }
 
+        [LibraryFunction("UserIDsFromBuildingPrivilege")]
++        public Array UserIDsFromBuildingPrivilege(BuildingPrivlidge buildingpriv)
++        {
++            List<string> list = new List<string>();
++            foreach (ProtoBuf.PlayerNameID eid in buildingpriv.authorizedPlayers)
++            {
++                list.Add(eid.userid.ToString());
++            }
++            return list.ToArray();
++        }
++        [LibraryFunction("UserIDFromDeployedItem")]
++        public string UserIDFromDeployedItem(DeployedItem DeployedItem)
++        {
++            return DeployedItem.deployerUserID.ToString();
++        }
         /// <summary>
         /// Returns the UserID for the specified player as a string
         /// </summary>
