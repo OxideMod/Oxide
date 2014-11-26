@@ -17,7 +17,6 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     cp -vf Dependencies/lua52.dll $HOME/temp/lua52.dll
     cp -vf Dependencies/KeraLua.dll $HOME/temp/RustDedicated_Data/Managed/KeraLua.dll
     cp -vf Dependencies/KopiLua.dll $HOME/temp/RustDedicated_Data/Managed/KopiLua.dll
-    cp -vf Dependencies/Newtonsoft.Json.dll $HOME/temp/RustDedicated_Data/Managed/Newtonsoft.Json.dll
     cp -vf Dependencies/NLua.dll $HOME/temp/RustDedicated_Data/Managed/NLua.dll
     cp -vf Patched/Assembly-CSharp.dll $HOME/temp/RustDedicated_Data/Managed/Assembly-CSharp.dll
     cp -vf Patched/Facepunch.dll $HOME/temp/RustDedicated_Data/Managed/Facepunch.dll
