@@ -1,38 +1,37 @@
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    echo -e "Changing directory to $HOME and configuring git"
-    cd $HOME
-    git config --global user.email "travis@travis-ci.org"
-    git config --global user.name "Travis"
+#!/bin/bash
 
-    echo -e "Cloning snapshots branch using token..."
-    git clone --quiet --branch=snapshots https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git snapshots > /dev/null
+function die_with() { echo "$*" >&2; exit 1; }
 
-    echo -e "Copying target files to temp directory..."
-    mkdir -p $HOME/temp/RustDedicated_Data/Managed
-    cd $HOME/build/$TRAVIS_REPO_SLUG
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll $HOME/temp/RustDedicated_Data/Managed/Oxide.Core.dll
-    cp -vf Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll $HOME/temp/RustDedicated_Data/Managed/Oxide.Ext.Lua.dll
-    cp -vf Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll $HOME/temp/RustDedicated_Data/Managed/Oxide.Ext.Rust.dll
-    cp -vf Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll $HOME/temp/RustDedicated_Data/Managed/Oxide.Ext.Unity.dll
-    cp -vf Dependencies/lua52.dll $HOME/temp/lua52.dll
-    cp -vf Dependencies/KeraLua.dll $HOME/temp/RustDedicated_Data/Managed/KeraLua.dll
-    cp -vf Dependencies/KopiLua.dll $HOME/temp/RustDedicated_Data/Managed/KopiLua.dll
-    cp -vf Dependencies/NLua.dll $HOME/temp/RustDedicated_Data/Managed/NLua.dll
-    cp -vf Patched/Assembly-CSharp.dll $HOME/temp/RustDedicated_Data/Managed/Assembly-CSharp.dll
-    cp -vf Patched/Facepunch.dll $HOME/temp/RustDedicated_Data/Managed/Facepunch.dll
-    cp -vf oxide.root.json $HOME/temp/oxide.root.json
+echo "Checking if commit is a pull request"
+if [ $TRAVIS_PULL_REQUEST == true ]; then die_with "Skipping deployment for pull request!"; fi
 
-    RUST_VERSION=`cat Patched/version.txt`
-    echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" >> $HOME/temp/version.txt
+echo "Configuring git credentials"
+git config --global user.email "travis@travis-ci.org" && git config --global user.name "Travis" || die_with "Failed to configure git credentials!"
 
-    echo -e "Archiving and compressing target files..."
-    cd $HOME/temp
-    mkdir -p $HOME/snapshots/${RUST_VERSION}
-    zip -vr9 $HOME/snapshots/${RUST_VERSION}/oxide-2_b${TRAVIS_BUILD_NUMBER}-${RUST_VERSION}.zip .
+echo "Changing directory to $HOME and configuring git"
+cd $HOME || die_with "Failed to change to home directory!"
 
-    echo -e "Adding, committing, and pushing to snapshots branch..."
-    cd $HOME/snapshots
-    git add -vf .
-    git commit -m "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION"
-    git push -q origin snapshots > /dev/null
-fi
+echo "Cloning snapshots branch using token"
+git clone -q --branch=snapshots https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git snapshots >/dev/null || die_with "Failed to clone existing snapshots branch!"
+
+echo "Copying target files to temp directory"
+mkdir -p $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to create RustDedicated_Data/Managed directories!"
+cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to build directory!"
+cp -f Oxide.Core/bin/Release/Oxide.Core.dll Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy Oxide DLLs!"
+cp -f Dependencies/KeraLua.dll Dependencies/KopiLua.dll Dependencies/NLua.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
+cp -f Patched/Assembly-CSharp.dll Patched/Facepunch.dll $HOME/temp/RustDedicated_Data || die_with "Failed to copy patched Rust server files!"
+cp -f oxide.root.json Dependencies/lua52.dll $HOME/temp || die_with "Failed to copy oxide.root.json and lua52.dll!"
+
+RUST_VERSION=`cat Patched/version.txt` && echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" >>$HOME/temp/version.txt || die_with "Failed to update version file!"
+
+echo "Archiving and compressing target files"
+cd $HOME/temp || die_with "Failed to change to temp directory!"
+mkdir -p $HOME/snapshots/$RUST_VERSION || die_with "Failed to create snapshot version directory!"
+zip -vr9 $HOME/snapshots/$RUST_VERSION/oxide-2_b$TRAVIS_BUILD_NUMBER-$RUST_VERSION.zip . || die_with "Failed to archive snapshot files!"
+
+echo "Adding, committing, and pushing to snapshots branch"
+cd $HOME/snapshots || die_with "Failed to change to snapshots directory!"
+git add -f . && git commit -m "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" || die_with "Failed to add and commit files with git!"
+git push -qf origin snapshots >/dev/null || die_with "Failed to push snapshot to GitHub!"
+
+echo "Release cycle completed. Project is now at version $RUST_VERSION. Happy developing!"
