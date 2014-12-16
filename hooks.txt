@@ -114,9 +114,26 @@ Hooks currently in Oxide 2 for Rust:
 	- Currently implemented for: BasePlayer, BaseAnimal
 
 == OnEntityBuilt(Assembly-CSharp/BasePlayer player, UnityEngine/GameObject gameobject)
-	- Assembly-CSharp/Item.Modules.Planner
+	- Called from Assembly-CSharp/Item.Modules.Planner
 	- No return behaviour
 	- Called when any structure is built (walls, ceilings, stairs, etc)
+
+== OnEntityDeath(UnityEngine/MonoBehaviour entity, Assembly-CSharp/HitInfo hitinfo) ==
+	- Called from multiple places, each entity's death handler basically
+	- No return behaviour
+	- hitinfo might be null, check it before use
+	- Editing hitinfo probably has no effect
+	- Currently implemented for: BasePlayer, BaseAnimal
+
+== OnEntityEnter(Assembly-CSharp/TriggerBase triggerbase, Assembly-CSharp/BaseEntity entity)
+	- Called from Assembly-CSharp/TriggerBase
+	- No return behaviour
+	- Called when an entity enters an area/zone (building privilege zone, water area, radiation zone, hurt zone, etc)
+
+== OnEntityLeave(Assembly-CSharp/TriggerBase triggerbase, Assembly-CSharp/BaseEntity entity)
+	- Called from Assembly-CSharp/TriggerBase
+	- No return behaviour
+	- Called when an entity leaves an area/zone (building privilege zone, water area, radiation zone, hurt zone, etc)
 
 == OnEntitySpawned(UnityEngine/MonoBehaviour entity) ==
 	- Called from Assembly-CSharp/BaseNetworkable
@@ -146,13 +163,6 @@ Hooks currently in Oxide 2 for Rust:
 	- Called from Assembly-CSharp/PlayerLoot
 	- No return behaviour
 	- Called when the player starts looting an item
-
-== OnEntityDeath(UnityEngine/MonoBehaviour entity, Assembly-CSharp/HitInfo hitinfo) ==
-	- Called from multiple places, each entity's death handler basically
-	- No return behaviour
-	- hitinfo might be null, check it before use
-	- Editing hitinfo probably has no effect
-	- Currently implemented for: BasePlayer, BaseAnimal
 
 Plugin specific hooks:
 
