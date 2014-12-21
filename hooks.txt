@@ -19,6 +19,11 @@ Hooks currently in Oxide 2 for Rust:
 	- Called from RustCore.ModifyTags
 	- No return behaviour
 	- Add tags to the list, they will be concat'd at the end
+    
+== OnServerInitialized() ==
+	- Called from Assembly-CSharp/ServerMgr
+	- No return behaviour
+	- Is called after the server startup has been completed and is awaiting connections
 
 == OnRunCommand(Facepunch/ConsoleSystem.Arg arg) ==
 	- Called from Facepunch/ConsoleSystem.Run, Facepunch/ConsoleSystem.RunUnrestricted and Facepunch/ConsoleSystem.ClientRun
