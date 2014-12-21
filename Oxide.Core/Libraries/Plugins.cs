@@ -40,6 +40,18 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
+        /// Returns the object of a loaded plugin with the specified name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [LibraryFunction("Find")]
+        public object Find(string name)
+        {
+            Plugin plugin = PluginManager.GetPlugin(name);
+            return plugin != null ? plugin.Object : null;
+        }
+
+        /// <summary>
         /// Calls the specified hook
         /// </summary>
         /// <param name="name"></param>

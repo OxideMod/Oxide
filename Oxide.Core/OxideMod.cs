@@ -277,6 +277,8 @@ namespace Oxide.Core
         {
             if (!UnloadPlugin(name)) return false;
             LoadPlugin(name);
+            Plugin plugin = pluginmanager.GetPlugin(name);
+            plugin.CallHook("OnServerInitialized", null);
             return true;
         }
 
