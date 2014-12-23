@@ -140,7 +140,7 @@ Hooks currently in Oxide 2 for Rust:
 	- No return behaviour
 	- Called when an entity leaves an area/zone (building privilege zone, water area, radiation zone, hurt zone, etc)
 
-== OnEntitySpawned(UnityEngine/MonoBehaviour entity) ==
+== OnEntitySpawn(UnityEngine/MonoBehaviour entity) ==
 	- Called from Assembly-CSharp/BaseNetworkable
 	- No return behaviour
 	- Called when any networked entity is spawned (including trees)
