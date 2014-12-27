@@ -169,7 +169,7 @@ Hooks currently in Oxide 2 for Rust:
 	- No return behaviour
 	- Called when the player starts looting an item
 
-== OnDoHealthCreep(Assembly-CSharp/BuildingBlock block)
+== OnBuildingBlockRemoved(Assembly-CSharp/BuildingBlock block)
 	- Called from Assembly-CSharp/BuildingBlock.DoHealthCreep
 	- No return behaviour
 	- Called when the health of a building block reaches 0 and is removed
