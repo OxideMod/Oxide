@@ -169,6 +169,11 @@ Hooks currently in Oxide 2 for Rust:
 	- No return behaviour
 	- Called when the player starts looting an item
 
+== OnBuildingBlockDemolished(Assembly-CSharp/BuildingBlock block)
+	- Called from Assembly-CSharp/BuildingBlock.DoHealthCreep
+	- No return behaviour
+	- Called when the Building Block is Demolished
+
 Plugin specific hooks:
 
 == Init() ==
