@@ -102,7 +102,19 @@ namespace Oxide.Core.Libraries
                 if (ctime >= nextrep)
                 {
                     nextrep += Delay;
-                    Callback();
+                    try
+                    {
+                        Callback();
+                    }
+                    catch (Exception ex)
+                    {
+                        Destroy();
+                        if (Owner != null)
+                            Interface.GetMod().RootLogger.WriteException(string.Format("Failed to run a timer from {0}.lua.", Owner.Name), ex);
+                        else
+                            Interface.GetMod().RootLogger.WriteException("Failed to run a timer.", ex);
+                    }
+
                     if (Repetitions > 0)
                     {
                         Repetitions--;
