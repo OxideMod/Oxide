@@ -18,6 +18,9 @@ namespace Oxide.Rust.Plugins
         // The logger
         private Logger logger;
 
+        // The pluginmanager
+        private PluginManager pluginmanager;
+
         /// <summary>
         /// Initialises a new instance of the RustCore class
         /// </summary>
@@ -33,6 +36,8 @@ namespace Oxide.Rust.Plugins
             // Get logger
             logger = Interface.GetMod().RootLogger;
             
+            // Get the pluginmanager
+            pluginmanager = Interface.GetMod().RootPluginManager;
         }
 
         /// <summary>
@@ -83,6 +88,8 @@ namespace Oxide.Rust.Plugins
 
             // Load
             Interface.GetMod().LoadPlugin(name);
+            Plugin plugin = pluginmanager.GetPlugin(name);
+            plugin.CallHook("OnServerInitialized", null);
         }
 
         /// <summary>
