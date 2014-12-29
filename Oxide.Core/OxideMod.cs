@@ -29,6 +29,11 @@ namespace Oxide.Core
         // The plugin manager
         private PluginManager pluginmanager;
 
+        /// <summary>
+        /// Gets the main pluginmanager
+        /// </summary>
+        public PluginManager RootPluginManager { get { return pluginmanager; } }
+
         // The extension manager
         private ExtensionManager extensionmanager;
 
