@@ -148,7 +148,7 @@ namespace Oxide.Core.Libraries
                 {
                     ResponseText = ex.Message;
                     ResponseCode = 0;
-                    Interface.GetMod().RootLogger.WriteException("Web request produced exception (Url: {0})", ex);
+                    Interface.GetMod().RootLogger.WriteException(String.Format("Web request produced exception (Url: {0})", URL), ex);
                 }
 
                 // Done
@@ -224,7 +224,7 @@ namespace Oxide.Core.Libraries
                 {
                     ResponseText = ex.Message;
                     ResponseCode = 0;
-                    Interface.GetMod().RootLogger.WriteException("Web request produced exception (Url: {0})", ex);
+                    Interface.GetMod().RootLogger.WriteException(String.Format("Web request produced exception (Url: {0})", URL), ex);
                 }
 
                 // Done
@@ -286,7 +286,15 @@ namespace Oxide.Core.Libraries
                 lock (syncroot) if (waitingqueue.Count > 0) request = waitingqueue.Dequeue();
                 if (request != null)
                 {
-                    request.Process();
+                    try
+                    {
+                        request.Process();
+                    }
+                    catch (Exception ex)
+                    {
+                        Interface.GetMod().RootLogger.WriteException("Web request produced exception", ex);
+                    }
+                    
                     lock (syncroot) completequeue.Enqueue(request);
                 }
                 lock (syncroot) if (waitingqueue.Count > 0) workevent.Set();
