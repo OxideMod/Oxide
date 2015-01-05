@@ -77,14 +77,14 @@ Hooks currently in Oxide 2 for Rust:
 	- hitinfo.HitEntity should be the entity that this attack would hit
 
 == OnItemCraft(Assembly-CSharp/ItemCraftTask item)
-	-Called from Assembly-CSharp/ItemCrafter
-	-Return a Assembly-CSharp/ItemCraftTask object to modify behaviour
-	-Is called right after an item has started crafting
+	- Called from Assembly-CSharp/ItemCrafter
+	- Return a Assembly-CSharp/ItemCraftTask object to modify behaviour
+	- Is called right after an item has started crafting
 
 == OnItemDeployed(Assembly-CSharp/BasePlayer player, Assembly-CSharp/BaseEntity deployeditem, UnityEngine/Ray ray)
-	-Assembly-CSharp/Item.Modules.Deploy
-	-No return behaviour
-	-Is called right after an item has been deployed
+	- Assembly-CSharp/Item.Modules.Deploy
+	- No return behaviour
+	- Is called right after an item has been deployed
 
 == OnItemAddedToContainer(Assembly-CSharp/ItemContainer container, Assembly-CSharp/Item item) ==
 	- Called from Assembly-CSharp/ItemContainer
@@ -99,16 +99,16 @@ Hooks currently in Oxide 2 for Rust:
 	- The entire stack has to be removed for this to be called, not just a little bit
 
 == CanOpenDoor(Assembly-CSharp/BasePlayer player, Assembly-CSharp/BaseLock door)
-	-Called from Assembly-CSharp/BaseLock
-	-Returning true will allow door usage, nothing will by default will allow door usage, returning anything else will reject door usage
+	- Called from Assembly-CSharp/BaseLock
+	- Returning true will allow door usage, nothing will by default will allow door usage, returning anything else will reject door usage
 
 == CanOpenDoor(Assembly-CSharp/BasePlayer player, Assembly-CSharp/CodeLock code)
-	-Called from Assembly-CSharp/CodeLock
-	-Returning true will allow door code usage, nothing will by default will allow door code usage, returning anything else will reject door code usage
+	- Called from Assembly-CSharp/CodeLock
+	- Returning true will allow door code usage, nothing will by default will allow door code usage, returning anything else will reject door code usage
 
 == CanOpenDoor(Assembly-CSharp/BasePlayer player, Assembly-CSharp/KeyLock key)
-	-Called from Assembly-CSharp/KeyLock
-	-Returning true will allow door key usage, nothing will by default will allow door key usage, returning anything else will reject door key usage
+	- Called from Assembly-CSharp/KeyLock
+	- Returning true will allow door key usage, nothing will by default will allow door key usage, returning anything else will reject door key usage
 
 == OnEntityAttacked(UnityEngine/MonoBehaviour entity, Assembly-CSharp/HitInfo hitinfo) ==
 	- Called from multiple places, each entity's attack handler basically
