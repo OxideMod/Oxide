@@ -81,8 +81,8 @@ Hooks currently in Oxide 2 for Rust:
 	- Return a Assembly-CSharp/ItemCraftTask object to modify behaviour
 	- Is called right after an item has started crafting
 
-== OnItemDeployed(Assembly-CSharp/BasePlayer player, Assembly-CSharp/BaseEntity deployeditem, UnityEngine/Ray ray)
-	- Assembly-CSharp/Item.Modules.Deploy
+== OnItemDeployed(Assembly-CSharp/Deployer deployer, Assembly-CSharp/BaseEntity deployedentity)
+	- Assembly-CSharp/Deployer
 	- No return behaviour
 	- Is called right after an item has been deployed
 
