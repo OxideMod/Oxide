@@ -140,7 +140,7 @@ namespace Oxide.Core.Plugins
             }
             catch (Exception ex)
             {
-                RaiseError(ex.Message + Environment.NewLine + ex.StackTrace);
+                RaiseError(ex);
                 return null;
             }
             finally
@@ -166,6 +166,15 @@ namespace Oxide.Core.Plugins
         {
             if (OnError != null)
                 OnError(this, message);
+        }
+
+        /// <summary>
+        /// Raises an error on this plugin
+        /// </summary>
+        /// <param name="ex"></param>
+        protected virtual void RaiseError(Exception ex)
+        {
+            RaiseError(ex.Message + Environment.NewLine + ex.StackTrace);
         }
 
         #region Config

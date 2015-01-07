@@ -229,18 +229,24 @@ namespace Oxide.Lua.Plugins
         protected override object OnCallHook(string hookname, object[] args)
         {
             // Call it
-            try
+            return CallFunction(hookname, args);
+        }
+
+        /// <summary>
+        /// Raises an error on this plugin
+        /// </summary>
+        /// <param name="ex"></param>
+        protected override void RaiseError(Exception ex)
+        {
+            var luaex = ex as NLua.Exceptions.LuaScriptException;
+            if (luaex != null)
             {
-                return CallFunction(hookname, args);
+                var outEx = luaex.IsNetException ? ex.InnerException : ex;
+                RaiseError(ex.Source + outEx.Message + Environment.NewLine + outEx.StackTrace);
             }
-            catch (NLua.Exceptions.LuaScriptException luaex)
+            else
             {
-                if (luaex.IsNetException)
-                {
-                    // TODO: Throw a better exception?
-                    
-                }
-                throw;
+                base.RaiseError(ex);
             }
         }
 
