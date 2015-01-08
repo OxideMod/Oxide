@@ -28,6 +28,7 @@ echo "Archiving and compressing target files"
 cd $HOME/temp || die_with "Failed to change to temp directory!"
 mkdir -p $HOME/snapshots/$RUST_VERSION || die_with "Failed to create snapshot version directory!"
 zip -vr9 $HOME/snapshots/$RUST_VERSION/oxide-2_b$TRAVIS_BUILD_NUMBER-$RUST_VERSION.zip . || die_with "Failed to archive snapshot files!"
+cp -f $HOME/snapshots/$RUST_VERSION/oxide-2_b$TRAVIS_BUILD_NUMBER-$RUST_VERSION.zip $HOME/snapshots/latest.zip || die_with "Failed to create latest archive copy!"
 
 echo "Adding, committing, and pushing to snapshots branch"
 cd $HOME/snapshots || die_with "Failed to change to snapshots directory!"
