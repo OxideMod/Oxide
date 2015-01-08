@@ -34,4 +34,4 @@ cd $HOME/snapshots || die_with "Failed to change to snapshots directory!"
 git add -f . && git commit -m "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" || die_with "Failed to add and commit files with git!"
 git push -qf origin snapshots >/dev/null || die_with "Failed to push snapshot to GitHub!"
 
-echo "Release cycle completed. Project is now at version $RUST_VERSION. Happy developing!"
+echo "Deployment cycle completed. Project is now at version $RUST_VERSION. Happy developing!"
