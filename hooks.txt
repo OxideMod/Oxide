@@ -98,6 +98,11 @@ Hooks currently in Oxide 2 for Rust:
 	- Is called right after an item was removed from a container
 	- The entire stack has to be removed for this to be called, not just a little bit
 
+== OnGather(Assembly-CSharp/ResourceDispenser dispenser, Assembly-CSharp/BaseEntity entity, Assembly-CSharp/Item item)
+	- Assembly-CSharp/ResourceDispenser
+	- No return behaviour
+	- Is called before the player is given items from a resource
+
 == CanOpenDoor(Assembly-CSharp/BasePlayer player, Assembly-CSharp/BaseLock door)
 	- Called from Assembly-CSharp/BaseLock
 	- Returning true will allow door usage, nothing will by default will allow door usage, returning anything else will reject door usage
