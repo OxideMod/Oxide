@@ -77,7 +77,7 @@ namespace Oxide.Core.Plugins
         public event PluginManagerEvent OnAddedToManager, OnRemovedFromManager;
 
         // Used to measure time spent in this plugin
-        private Stopwatch timer;
+        private readonly Stopwatch timer;
 
         // The depth of hook call nesting
         protected int nestcount;
@@ -85,7 +85,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Initialises an empty version of the Plugin class
         /// </summary>
-        public Plugin()
+        protected Plugin()
         {
             Name = "baseplugin";
             Title = "Base Plugin";

@@ -130,7 +130,7 @@ namespace Oxide.Core.Libraries
         public override bool IsGlobal { get { return false; } }
 
 
-        private HashSet<TimerInstance> alltimers;
+        private readonly HashSet<TimerInstance> alltimers;
 
         public Timer()
         {
@@ -142,25 +142,14 @@ namespace Oxide.Core.Libraries
         /// </summary>
         public void Update()
         {
-            HashSet<TimerInstance> toremove = null;
-            foreach (TimerInstance timer in alltimers)
-            {
-                timer.Update();
-                if (timer.Destroyed)
-                {
-                    if (toremove == null) toremove = new HashSet<TimerInstance>();
-                    toremove.Add(timer);
-                }
-            }
-            if (toremove != null)
-                foreach (TimerInstance timer in toremove)
-                    alltimers.Remove(timer);
+            alltimers.RemoveWhere(timer => { timer.Update(); return timer.Destroyed; });   
         }
 
         /// <summary>
         /// Creates a timer that fires once
         /// </summary>
         /// <param name="delay"></param>
+        /// <param name="callback"></param>
         /// <param name="owner"></param>
         /// <returns></returns>
         [LibraryFunction("Once")]
@@ -175,6 +164,8 @@ namespace Oxide.Core.Libraries
         /// Creates a timer that fires many times
         /// </summary>
         /// <param name="delay"></param>
+        /// <param name="reps"></param>
+        /// <param name="callback"></param>
         /// <param name="owner"></param>
         /// <returns></returns>
         [LibraryFunction("Repeat")]
@@ -188,8 +179,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Creates a timer that fires once next frame
         /// </summary>
-        /// <param name="delay"></param>
-        /// <param name="owner"></param>
+        /// <param name="callback"></param>
         /// <returns></returns>
         [LibraryFunction("NextFrame")]
         public TimerInstance NextFrame(Action callback)

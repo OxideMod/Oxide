@@ -13,10 +13,10 @@ namespace Oxide.Core.Plugins
     public sealed class PluginManager
     {
         // All loaded plugins
-        private IDictionary<string, Plugin> loadedplugins;
+        private readonly IDictionary<string, Plugin> loadedplugins;
 
         // All hook subscriptions
-        private IDictionary<string, IList<Plugin>> hooksubscriptions;
+        private readonly IDictionary<string, IList<Plugin>> hooksubscriptions;
 
         /// <summary>
         /// Gets the logger to which this plugin manager writes
@@ -146,7 +146,7 @@ namespace Oxide.Core.Plugins
                 object value = null;
                 try
                 {
-                    value = sublist[i].CallHook(hookname, args);
+                    value = plugin.CallHook(hookname, args);
                 }
                 catch (Exception ex)
                 {
@@ -166,7 +166,6 @@ namespace Oxide.Core.Plugins
 
             // Notify log of hook conflict
             string[] conflictplugins = new string[returncount];
-            string finalplugin = null;
             int j = 0;
             for (int i = 0; i < returncount; i++)
             {
@@ -174,7 +173,6 @@ namespace Oxide.Core.Plugins
                 {
                     string name = sublist[i].Name;
                     conflictplugins[j++] = name;
-                    finalplugin = name;
                 }
             }
             Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflictplugins));

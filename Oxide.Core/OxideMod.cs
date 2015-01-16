@@ -107,8 +107,7 @@ namespace Oxide.Core
             rootlogger.Write(LogType.Info, "Loading Oxide core...");
 
             // Create the managers
-            pluginmanager = new PluginManager(rootlogger);
-            pluginmanager.ConfigPath = configdir;
+            pluginmanager = new PluginManager(rootlogger) {ConfigPath = configdir};
             extensionmanager = new ExtensionManager(rootlogger);
 
             // Register core libraries
@@ -140,7 +139,11 @@ namespace Oxide.Core
 
             // Hook all watchers
             foreach (PluginChangeWatcher watcher in extensionmanager.GetPluginChangeWatchers())
+            {
                 watcher.OnPluginSourceChanged += watcher_OnPluginSourceChanged;
+                watcher.OnPluginAdded += watcher_OnPluginAdded;
+                watcher.OnPluginRemoved += watcher_OnPluginRemoved;
+            }
         }
 
         /// <summary>
@@ -271,6 +274,7 @@ namespace Oxide.Core
 
             // Unload it
             pluginmanager.RemovePlugin(plugin);
+            rootlogger.Write(LogType.Info, "Unloaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
             return true;
         }
 
@@ -323,8 +327,7 @@ namespace Oxide.Core
             }
 
             // Forward the call to the plugin manager
-            object retval = pluginmanager.CallHook(hookname, args);
-            return retval;
+            return pluginmanager.CallHook(hookname, args);
         }
 
         #region Plugin Change Watchers
@@ -341,11 +344,31 @@ namespace Oxide.Core
         /// <summary>
         /// Called when a plugin watcher has reported a change in a plugin source
         /// </summary>
-        /// <param name="plugin"></param>
-        private void watcher_OnPluginSourceChanged(Plugin plugin)
+        /// <param name="name"></param>
+        private void watcher_OnPluginSourceChanged(string name)
         {
             // Reload the plugin
-            ReloadPlugin(plugin.Name);
+            ReloadPlugin(name);
+        }
+
+        /// <summary>
+        /// Called when a plugin watcher has reported a change in a plugin source
+        /// </summary>
+        /// <param name="name"></param>
+        private void watcher_OnPluginAdded(string name)
+        {
+            // Load the plugin
+            LoadPlugin(name);
+        }
+
+        /// <summary>
+        /// Called when a plugin watcher has reported a change in a plugin source
+        /// </summary>
+        /// <param name="name"></param>
+        private void watcher_OnPluginRemoved(string name)
+        {
+            // Unload the plugin
+            UnloadPlugin(name);
         }
 
         #endregion

@@ -18,7 +18,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Loads a plugin given the specified name
         /// </summary>
-        /// <param name="manager"></param>
+        /// <param name="directory"></param>
         /// <param name="name"></param>
         /// <returns></returns>
         public abstract Plugin Load(string directory, string name);
