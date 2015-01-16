@@ -41,7 +41,7 @@ namespace Oxide.Lua.Plugins
         {
             // For now, we will only load single-file plugins
             // In the future, we might want to accept multi-file plugins
-            // This might include zip files or folders that contain a number of lua files making up 1 plugin
+            // This might include zip files or folders that contain a number of .lua files making up one plugin
             foreach (string file in Directory.GetFiles(directory, "*.lua"))
                 yield return Path.GetFileNameWithoutExtension(file);
         }

@@ -63,7 +63,7 @@ namespace Oxide.Lua
         }
 
         /// <summary>
-        /// Translates a single object from its Lua form to it's C# form for use in a config file
+        /// Translates a single object from its Lua form to its C# form for use in a config file
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -139,7 +139,7 @@ namespace Oxide.Lua
         }
 
         /// <summary>
-        /// Translates a single object from it's C# form to it's Lua form
+        /// Translates a single object from its C# form to its Lua form
         /// </summary>
         /// <param name="lua"></param>
         /// <param name="item"></param>
