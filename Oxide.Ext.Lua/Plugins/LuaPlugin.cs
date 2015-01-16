@@ -198,7 +198,7 @@ namespace Oxide.Lua.Plugins
                 Subscribe(key);
 
             // Add us to the watcher
-            watcher.AddMapping(Filename, this);
+            watcher.AddMapping(Name);
 
             // Let the plugin know that it's loading
             CallFunction("Init", null);
@@ -214,7 +214,7 @@ namespace Oxide.Lua.Plugins
             CallFunction("Unload", null);
 
             // Remove us from the watcher
-            watcher.RemoveMappings(this);
+            watcher.RemoveMapping(Name);
 
             // Call base
             base.HandleRemovedFromManager(manager);
