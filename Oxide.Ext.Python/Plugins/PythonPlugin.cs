@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 using IronPython.Runtime;
-using IronPython.Runtime.Operations;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
@@ -222,7 +221,7 @@ namespace Oxide.Ext.Python.Plugins
         protected override object OnCallHook(string hookname, object[] args)
         {
             // Call it
-            return args == null ? CallFunction(hookname) : CallFunction(hookname, args);
+            return CallFunction(hookname, args);
         }
 
         /// <summary>
@@ -240,11 +239,11 @@ namespace Oxide.Ext.Python.Plugins
         /// <param name="name"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        private object CallFunction(string name, params object[] args)
+        private object CallFunction(string name, object[] args)
         {
             object func;
             if (!Globals.Contains(name) || !PythonEngine.Operations.TryGetMember(Class, name, out func) || !PythonEngine.Operations.IsCallable(func)) return null;
-            return PythonEngine.Operations.InvokeMember(Class, name, args);
+            return PythonEngine.Operations.InvokeMember(Class, name, args ?? new object[]{});
         }
     }
 }
