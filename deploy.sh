@@ -15,12 +15,13 @@ echo "Cloning snapshots branch using token"
 git clone -q --branch=snapshots https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git snapshots >/dev/null || die_with "Failed to clone existing snapshots branch!"
 
 echo "Copying target files to temp directory"
-mkdir -p $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to create RustDedicated_Data/Managed directories!"
+mkdir -p $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to create directories!"
 cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to build directory!"
-cp -f Oxide.Core/bin/Release/Oxide.Core.dll Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy Oxide DLLs!"
-cp -f Dependencies/KeraLua.dll Dependencies/KopiLua.dll Dependencies/NLua.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
+cp -f Oxide.Core/bin/Release/Oxide.Core.dll Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy Oxide, Rust, and Unity DLLs!"
+cp -f Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy plugin extension DLLs!"
+cp -f Dependencies/IronPython.dll Dependencies/Jint.dll Dependencies/KeraLua.dll Dependencies/Microsoft.Dynamic.dll Dependencies/Microsoft.Scripting.Core.dll Dependencies/Microsoft.Scripting.dll Dependencies/NLua.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
 cp -f Patched/Assembly-CSharp.dll Patched/Facepunch.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy patched Rust server files!"
-cp -f oxide.root.json Dependencies/lua52.dll $HOME/temp || die_with "Failed to copy oxide.root.json and lua52.dll!"
+cp -f oxide.root.json Dependencies/lua51.dll Dependencies/lua52.dll $HOME/temp || die_with "Failed to copy oxide.root.json, lua51.dll, and lua52.dll!"
 
 RUST_VERSION=`cat Patched/version.txt` && echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" >>$HOME/temp/version.txt || die_with "Failed to update version file!"
 

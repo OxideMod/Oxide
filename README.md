@@ -17,14 +17,14 @@ Oxide.Ext.Name.dll
 
 Current extensions are listed below:
 
- * Oxide.Ext.Unity - Provides support for Unity games
- * Oxide.Ext.Rust - Provides support for the Rust server
  * Oxide.Ext.Lua - Allows Lua plugins to be loaded
+ * Oxide.Ext.Python - Allows Python plugins to be loaded
+ * Oxide.Ext.JavaScript - Allows JavaScript plugins to be loaded
+ * Oxide.Ext.Rust - Provides support for the Rust Experimental server
+ * Oxide.Ext.Unity - Provides support for Unity games
 
 As an example to what kind of extensions may be used in the future, here is a non-exhaustive list of possibilities:
 
- * Oxide.Ext.Py - Allows python plugins to be loaded
- * Oxide.Ext.JS - Allows JavaScript plugins to be loaded
  * Oxide.Ext.MySQL - Allows plugins to access a MySQL database
  * Oxide.Ext.WebServer - Allows the server or modded game to also host a web server
 
@@ -32,7 +32,7 @@ Installation for Rust Server Users
 ----------------------------------
 
  1. Clone the git repository locally.
- 2. Open the solution in visual studio (2013 is recommended, but it should work on earlier versions).
+ 2. Open the solution in Visual Studio (2013 is recommended, but it should work on earlier versions).
  3. You will probably get a missing project error, don't worry about that.
  4. Go into the project properties for Oxide.Core, go to "Build Events", and change the "Post-build event command line" to point at your server directory.
 	Alternatively, just remove the build even completely by making it blank, though you'll need to copy DLLs manually if you do this.
