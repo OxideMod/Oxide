@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
+using NLua;
+
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
 using Oxide.Core.Configuration;
-
-using NLua;
 
 namespace Oxide.Lua.Plugins
 {
@@ -111,8 +111,8 @@ namespace Oxide.Lua.Plugins
             if (pluginfunc == null) throw new Exception("LoadString returned null for some reason");
             LuaEnvironment.NewTable("PLUGIN");
             Table = LuaEnvironment["PLUGIN"] as LuaTable;
-            Table["Name"] = Name;
             Name = Path.GetFileNameWithoutExtension(Filename);
+            Table["Name"] = Name;
             pluginfunc.Call();
 
             // Read plugin attributes
@@ -292,7 +292,6 @@ namespace Oxide.Lua.Plugins
             }
         }
 
-
         #endregion
 
         /// <summary>
@@ -318,7 +317,5 @@ namespace Oxide.Lua.Plugins
             }
             return CallLuaFunction(func, realargs);
         }
-
-        
     }
 }
