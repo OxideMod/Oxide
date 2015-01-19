@@ -2,6 +2,8 @@
 using System.Text;
 using System.Collections.Generic;
 
+using Rust;
+
 using Oxide.Core;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
@@ -11,7 +13,7 @@ using Oxide.Rust.Libraries;
 namespace Oxide.Rust.Plugins
 {
     /// <summary>
-    /// The core rust plugin
+    /// The core Rust plugin
     /// </summary>
     public class RustCore : CSPlugin
     {
@@ -62,16 +64,14 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
             cmdlib.AddConsoleCommand("oxide.unload", this, "cmdUnload");
             cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
+            cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
+            cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
         }
-
-
 
         /// <summary>
         /// Called when the "oxide.load" command has been executed
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="cmd"></param>
-        /// <param name="args"></param>
+        /// <param name="arg"></param>
         [HookMethod("cmdLoad")]
         private void cmdLoad(ConsoleSystem.Arg arg)
         {
@@ -95,9 +95,7 @@ namespace Oxide.Rust.Plugins
         /// <summary>
         /// Called when the "oxide.unload" command has been executed
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="cmd"></param>
-        /// <param name="args"></param>
+        /// <param name="arg"></param>
         [HookMethod("cmdUnload")]
         private void cmdUnload(ConsoleSystem.Arg arg)
         {
@@ -123,11 +121,10 @@ namespace Oxide.Rust.Plugins
             }
         }
 
+        /// <summary>
         /// Called when the "oxide.reload" command has been executed
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="cmd"></param>
-        /// <param name="args"></param>
+        /// <param name="arg"></param>
         [HookMethod("cmdReload")]
         private void cmdReload(ConsoleSystem.Arg arg)
         {
@@ -146,6 +143,26 @@ namespace Oxide.Rust.Plugins
             if (!Interface.GetMod().ReloadPlugin(name))
             {
                 arg.ReplyWith(string.Format("Plugin '{0}' not found!", name));
+            }
+        }
+
+        /// <summary>
+        /// Called when the "version" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("cmdVersion")]
+        private void cmdVersion(ConsoleSystem.Arg arg)
+        {
+            // Get the Rust network protocol version
+            string protocol = Protocol.network.ToString();
+
+            // Get the Oxide Core version
+            string oxide = OxideMod.Version.ToString();
+
+            // Show the versions
+            if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
+            {
+                arg.ReplyWith("Oxide Version: " + oxide + ", Rust Protocol: " + protocol);
             }
         }
 
@@ -297,7 +314,9 @@ namespace Oxide.Rust.Plugins
                     sb = new StringBuilder();
                 }
                 else
+                {
                     sb.Append(c);
+                }
             }
             if (sb.Length > 0)
             {
@@ -324,8 +343,5 @@ namespace Oxide.Rust.Plugins
         {
 
         }
-
-
-        
     }
 }
