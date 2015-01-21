@@ -88,7 +88,7 @@ namespace Oxide.Lua
             // Create the Lua environment
             LuaEnvironment = new NLua.Lua();
 
-            // Remove useless or potentially malicious libraries/functions
+            // Filter useless or potentially malicious libraries/functions
             LuaEnvironment["os"] = null;
             LuaEnvironment["io"] = null;
             LuaEnvironment["require"] = null;

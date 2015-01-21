@@ -357,7 +357,7 @@ namespace Oxide.Core.Libraries
                     else
                     {
                         // When can this happen? Did the webrequest fail?
-                        // Should we fire a seperate error callback or something?
+                        // Should we fire a separate error callback or something?
                         webrequest.Callback(0, null);
                     }
                 }

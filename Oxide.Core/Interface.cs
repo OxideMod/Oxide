@@ -3,11 +3,11 @@
 namespace Oxide.Core
 {
     /// <summary>
-    /// The interface class through which patched dlls interact with Oxide
+    /// The interface class through which patched DLLs interact with Oxide
     /// </summary>
     public static class Interface
     {
-        // The main oxide mod
+        // The main Oxide mod
         private static OxideMod oxide;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public static object CallHook(string hookname, object[] args)
         {
-            // Call into oxide core
+            // Call into Oxide core
             return oxide.CallHook(hookname, args);
         }
 

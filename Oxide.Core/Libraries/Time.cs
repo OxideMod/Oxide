@@ -17,7 +17,7 @@ namespace Oxide.Core.Libraries
         private static readonly DateTime epoch = new DateTime(1970, 1, 1);
 
         /// <summary>
-        /// Returns a unix timestamp for the current time
+        /// Returns a Unix timestamp for the current time
         /// </summary>
         /// <returns></returns>
         [LibraryFunction("GetUnixTimestamp")]

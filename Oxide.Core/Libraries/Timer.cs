@@ -129,7 +129,6 @@ namespace Oxide.Core.Libraries
         /// </summary>
         public override bool IsGlobal { get { return false; } }
 
-
         private readonly HashSet<TimerInstance> alltimers;
 
         public Timer()

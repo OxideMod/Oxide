@@ -1,7 +1,8 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Oxide.Core;
 using Oxide.Core.Configuration;
@@ -136,8 +137,6 @@ namespace Oxide.Tests
 
             string text = File.ReadAllText(tmp);
             File.Delete(tmp);
-
-
         }
 
         [TestMethod]

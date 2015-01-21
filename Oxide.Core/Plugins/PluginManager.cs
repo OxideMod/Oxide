@@ -178,7 +178,5 @@ namespace Oxide.Core.Plugins
             Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflictplugins));
             return finalvalue;
         }
-
-        
     }
 }
