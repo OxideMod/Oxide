@@ -96,7 +96,7 @@ namespace Oxide.Lua
             LuaEnvironment["package"] = null;
             LuaEnvironment["luanet"] = null;
             LuaEnvironment["load"] = null;
-
+            LuaEnvironment["BindingFlags"] = System.Reflection.BindingFlags;
             // Read util methods
             setmetatable = LuaEnvironment["setmetatable"] as LuaFunction;
 
