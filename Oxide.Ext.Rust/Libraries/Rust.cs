@@ -108,6 +108,22 @@ namespace Oxide.Rust.Libraries
         }
 
         /// <summary>
+        /// Force client to teleport to position
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="destination"></param>
+        [LibraryFunction("ForcePlayerPosition")]
+        public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
+        {
+            player.transform.position.x = x
+            player.transform.position.y = y
+            player.transform.position.z = z
+            object[] objArray1 = new object[] { player.transform.position };
+            player.ClientRPC(null, player, "ForcePositionTo", objArray1);
+            player.TransformChanged()
+        }
+       
+        /// <summary>
         /// Converts a string into a quote safe string
         /// </summary>
         /// <param name="str"></param>
