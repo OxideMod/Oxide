@@ -106,7 +106,23 @@ namespace Oxide.Rust.Libraries
                 player.SendConsoleCommand("chat.add \"SERVER\" " + message.QuoteSafe() + " 1.0");
             }
         }
-
+        
+        /// <summary>
+        /// Force client to teleport to position
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="destination"></param>
+        [LibraryFunction("ForcePlayerPosition")]
+        public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
+        {
+            var position = player.transform.position;
+            position.x = x;
+            position.y = y;
+            position.z = z;
+            player.ClientRPC(null, player, "ForcePositionTo", new object[] { position });
+            player.TransformChanged();
+        }
+        
         /// <summary>
         /// Converts a string into a quote safe string
         /// </summary>
