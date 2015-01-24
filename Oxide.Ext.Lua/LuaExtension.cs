@@ -42,8 +42,8 @@ namespace Oxide.Lua
         public NLua.Lua LuaEnvironment { get; private set; }
 
         // Blacklist and whitelist
-        private static readonly string[] blacklistnamespaces = new string[] { "System", "Oxide", "NLua", "KeraLua", "Microsoft", "Mono", "Windows", "POSIX" };
-        private static readonly string[] whitelistnamespaces = new string[] { "System.Collections" };
+        private static readonly string[] WhitelistAssemblies = { "Oxide.Core", "System", "DestMath", "RustBuild", "protobuf-net", "Facepunch", "Assembly-CSharp", "UnityEngine" };
+        private static readonly string[] WhitelistNamespaces = { "System.Collections", "Facepunch", "UnityEngine", "Rust", "ProtoBuf", "Dest", "Network", "PVT" };
 
         // Utility
         private LuaFunction setmetatable;
@@ -126,6 +126,7 @@ end
 
             // Bind all namespaces and types
             foreach (Type type in AppDomain.CurrentDomain.GetAssemblies()
+                .Where(AllowAssemblyAccess)
                 .SelectMany((a) => a.GetTypes())
                 .Where(AllowTypeAccess))
             {
@@ -327,6 +328,16 @@ end
         }
 
         /// <summary>
+        /// Returns if the specified assembly should be loaded or not
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        internal bool AllowAssemblyAccess(Assembly assembly)
+        {
+            return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
+        }
+
+        /// <summary>
         /// Returns if the specified type should be bound to Lua or not
         /// </summary>
         /// <param name="type"></param>
@@ -345,11 +356,9 @@ end
                  if (type.IsValueType) return true;
                  if (type.Name == "string" || type.Name == "String") return true;
             }
-            foreach (string whitelist in whitelistnamespaces)
+            foreach (string whitelist in WhitelistNamespaces)
                 if (nspace.StartsWith(whitelist)) return true;
-            foreach (string blacklist in blacklistnamespaces)
-                if (nspace.StartsWith(blacklist)) return false;
-            return true;
+            return false;
         }
 
         /// <summary>

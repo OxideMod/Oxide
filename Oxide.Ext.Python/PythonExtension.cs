@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 
 using IronPython.Hosting;
+using IronPython.Runtime;
 using Microsoft.Scripting.Hosting;
 
 using Oxide.Core;
@@ -48,6 +49,12 @@ namespace Oxide.Ext.Python
         // The plugin loader
         private PythonPluginLoader loader;
 
+        // Whitelist
+        private static readonly string[] WhitelistAssemblies = { "Oxide.Core", "System", "DestMath", "RustBuild", "protobuf-net", "Facepunch", "Assembly-CSharp", "UnityEngine" };
+        private static readonly string[] WhitelistNamespaces = { "System.Collections", "Facepunch", "UnityEngine", "Rust", "ProtoBuf", "Dest", "Network", "PVT" };
+
+        delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple);
+
         /// <summary>
         /// Initialises a new instance of the PythonExtension class
         /// </summary>
@@ -80,11 +87,38 @@ namespace Oxide.Ext.Python
             PythonEngine = IronPython.Hosting.Python.CreateEngine();
 
             // Bind all namespaces and types
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess))
             {
-                //todo filter?
                 PythonEngine.Runtime.LoadAssembly(assembly);
             }
+
+            PythonEngine.GetBuiltinModule().SetVariable("__import__", new ImportDelegate(DoImport));
+            PythonEngine.GetBuiltinModule().RemoveVariable("execfile");
+            PythonEngine.GetBuiltinModule().RemoveVariable("exit");
+            PythonEngine.GetBuiltinModule().RemoveVariable("file");
+            PythonEngine.GetBuiltinModule().RemoveVariable("input");
+            PythonEngine.GetBuiltinModule().RemoveVariable("open");
+            PythonEngine.GetBuiltinModule().RemoveVariable("raw_input");
+            PythonEngine.GetBuiltinModule().RemoveVariable("reload");
+        }
+
+        private object DoImport(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple)
+        {
+            if (WhitelistNamespaces.Any(moduleName.StartsWith))
+            {
+                return IronPython.Modules.Builtin.__import__(context, moduleName);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns if the specified assembly should be loaded or not
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        internal bool AllowAssemblyAccess(Assembly assembly)
+        {
+            return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
         }
 
         /// <summary>

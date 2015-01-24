@@ -4,7 +4,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 using Jint;
+using Jint.Native;
 using Jint.Native.Object;
+using Jint.Runtime;
 using Jint.Runtime.Descriptors;
 using Jint.Runtime.Interop;
 
@@ -50,6 +52,9 @@ namespace Oxide.Ext.JavaScript
         // The plugin loader
         private JavaScriptPluginLoader loader;
 
+        private static readonly string[] WhitelistAssemblies = { "Oxide.Core", "System", "DestMath", "RustBuild", "protobuf-net", "Facepunch", "Assembly-CSharp", "UnityEngine" };
+        private static readonly string[] WhitelistNamespaces = { "System.Collections", "Facepunch", "UnityEngine", "Rust", "ProtoBuf", "Dest", "Network", "PVT" };
+
         /// <summary>
         /// Initialises a new instance of the JavaScript class
         /// </summary>
@@ -79,13 +84,26 @@ namespace Oxide.Ext.JavaScript
         private void InitialiseJavaScript()
         {
             // Create the JavaScript engine
-            JavaScriptEngine = new Engine(cfg => cfg.AllowClr(AppDomain.CurrentDomain.GetAssemblies()));
-
-            // Bind all namespaces and types
-            //foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            JavaScriptEngine = new Engine(cfg => cfg.AllowClr(AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess).ToArray()));
+            JavaScriptEngine.Global.FastSetProperty("importNamespace", new PropertyDescriptor(new ClrFunctionInstance(JavaScriptEngine, (thisObj, arguments) =>
             {
-                //filter only allowed assemblies?
-            }
+                var nspace = TypeConverter.ToString(arguments.At(0));
+                if (WhitelistNamespaces.Any(nspace.StartsWith))
+                {
+                    return new NamespaceReference(JavaScriptEngine, nspace);
+                }
+                return JsValue.Null;
+            }), false, false, false));
+        }
+
+        /// <summary>
+        /// Returns if the specified assembly should be loaded or not
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        internal bool AllowAssemblyAccess(Assembly assembly)
+        {
+            return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
         }
 
         /// <summary>
