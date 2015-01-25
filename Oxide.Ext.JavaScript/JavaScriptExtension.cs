@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -52,8 +52,8 @@ namespace Oxide.Ext.JavaScript
         // The plugin loader
         private JavaScriptPluginLoader loader;
 
-        private static readonly string[] WhitelistAssemblies = { "Oxide.Core", "System", "DestMath", "RustBuild", "protobuf-net", "Facepunch", "Assembly-CSharp", "UnityEngine" };
-        private static readonly string[] WhitelistNamespaces = { "System.Collections", "Facepunch", "UnityEngine", "Rust", "ProtoBuf", "Dest", "Network", "PVT" };
+        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
+        private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
 
         /// <summary>
         /// Initialises a new instance of the JavaScript class
