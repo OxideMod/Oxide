@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Linq;
 
 using Oxide.Core.Libraries;
@@ -105,6 +106,30 @@ namespace Oxide.Rust.Libraries
                 message = name;
                 player.SendConsoleCommand("chat.add \"SERVER\" " + message.QuoteSafe() + " 1.0");
             }
+        }
+
+        /// <summary>
+        /// Force Player Position (teleportation)
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        [LibraryFunction("ForcePlayerPosition")]
+        public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
+        {
+            player.transform.position = new UnityEngine.Vector3(x, y, z);
+            player.ClientRPC(null, player, "ForcePositionTo", new object[] { player.transform.position });
+            player.TransformChanged();
+        }
+
+        /// <summary>
+        /// Get private bindingflag, good to get private methods, fields and properties
+        /// </summary>
+        [LibraryFunction("PrivateBindingFlag")]
+        public BindingFlags PrivateBindingFlag()
+        {
+            return (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
         }
 
         /// <summary>
