@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Linq;
 
 using Oxide.Core.Libraries;
@@ -107,6 +108,32 @@ namespace Oxide.Rust.Libraries
             }
         }
 
+        /// <summary>
+        /// Force client to teleport to position
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="destination"></param>
+        [LibraryFunction("ForcePlayerPosition")]
+        public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
+        {
+            var position = player.transform.position;
+            position.x = x;
+            position.y = y;
+            position.z = z;
+            player.transform.position = position;
+            player.ClientRPC(null, player, "ForcePositionTo", new object[] { position });
+            player.TransformChanged();
+        }
+        
+        /// <summary>
+        /// Get a private bindingflag
+        /// </summary>
+        [LibraryFunction("PrivateBindingFlag")]
+        public BindingFlags PrivateBindingFlag()
+        {
+            return BindingFlags.NonPublic;
+        }
+        
         /// <summary>
         /// Converts a string into a quote safe string
         /// </summary>
