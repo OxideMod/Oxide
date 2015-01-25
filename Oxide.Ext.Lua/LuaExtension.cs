@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -136,6 +136,8 @@ end
                 // Bind the type
                 nspacetable[type.Name] = CreateTypeTable(type);
             }
+            LuaEnvironment.NewTable("BindingFlags");
+            LuaEnvironment["BindingFlags"] = CreateTypeTable(typeof(System.Reflection.BindingFlags));
         }
 
         /// <summary>
