@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -42,8 +42,8 @@ namespace Oxide.Lua
         public NLua.Lua LuaEnvironment { get; private set; }
 
         // Blacklist and whitelist
-        private static readonly string[] WhitelistAssemblies = { "Oxide.Core", "System", "DestMath", "RustBuild", "protobuf-net", "Facepunch", "Assembly-CSharp", "UnityEngine" };
-        private static readonly string[] WhitelistNamespaces = { "System.Collections", "Facepunch", "UnityEngine", "Rust", "ProtoBuf", "Dest", "Network", "PVT" };
+        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
+        private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
 
         // Utility
         private LuaFunction setmetatable;
@@ -105,7 +105,7 @@ namespace Oxide.Lua
             LuaEnvironment.NewTable("tmp");
             overloadselectormeta = LuaEnvironment["tmp"] as LuaTable;
             //LuaEnvironment.RegisterFunction("tmp.__index", mytype.GetMethod("FindOverload", BindingFlags.Public | BindingFlags.Static));
-            LuaEnvironment.NewTable("tmp"); 
+            LuaEnvironment.NewTable("tmp");
             // Ideally I'd like for this to be implemented C# side, but using C#-bound methods as metamethods seems dodgy
             LuaEnvironment.LoadString(
 @"function tmp:__index( key )
@@ -186,7 +186,7 @@ end
             // Make the table
             LuaEnvironment.NewTable("tmp");
             LuaTable tmp = LuaEnvironment["tmp"] as LuaTable;
-            
+
             // Set the type field
             tmp["_type"] = type;
 
@@ -355,8 +355,7 @@ end
             if (string.IsNullOrEmpty(nspace)) return true;
             if (nspace == "System")
             {
-                 if (type.IsValueType) return true;
-                 if (type.Name == "string" || type.Name == "String") return true;
+                if (type.IsValueType || type.Name == "String") return true;
             }
             foreach (string whitelist in WhitelistNamespaces)
                 if (nspace.StartsWith(whitelist)) return true;
@@ -387,7 +386,6 @@ end
             watcher = new FSWatcher(plugindir, "*.lua");
             Manager.RegisterPluginChangeWatcher(watcher);
             loader.Watcher = watcher;
-            
         }
 
         /// <summary>
@@ -416,7 +414,5 @@ end
                 LoadLibrary(lib, path);
             }
         }
-
-
     }
 }
