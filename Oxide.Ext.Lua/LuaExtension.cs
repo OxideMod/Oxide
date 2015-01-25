@@ -136,6 +136,8 @@ end
                 // Bind the type
                 nspacetable[type.Name] = CreateTypeTable(type);
             }
+            LuaEnvironment.NewTable("BindingFlags");
+            LuaEnvironment["BindingFlags"] = CreateTypeTable(typeof(System.Reflection.BindingFlags));
         }
 
         /// <summary>
