@@ -52,7 +52,7 @@ namespace Oxide.Ext.JavaScript
         // The plugin loader
         private JavaScriptPluginLoader loader;
 
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
+        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
 
         /// <summary>

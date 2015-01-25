@@ -42,7 +42,7 @@ namespace Oxide.Lua
         public NLua.Lua LuaEnvironment { get; private set; }
 
         // Blacklist and whitelist
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
+        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
 
         // Utility
@@ -353,8 +353,7 @@ end
             if (string.IsNullOrEmpty(nspace)) return true;
             if (nspace == "System")
             {
-                 if (type.IsValueType) return true;
-                 if (type.Name == "string" || type.Name == "String") return true;
+                if (type.IsValueType || type.Name == "String") return true;
             }
             foreach (string whitelist in WhitelistNamespaces)
                 if (nspace.StartsWith(whitelist)) return true;
