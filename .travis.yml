@@ -23,7 +23,7 @@ notifications:
   # Disable build status email notifications, until the issue with forks is fixed
   email: false
   # IRC notification
-  irc: "chat.freenode.net#rustoxide"
+  irc: "chat.freenode.net#rustexp"
 
 # Environmental system variables
 env:
