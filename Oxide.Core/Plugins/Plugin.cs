@@ -138,9 +138,10 @@ namespace Oxide.Core.Plugins
             {
                 return OnCallHook(hookname, args);
             }
-            catch (Exception ex)
+            catch (Exception outer_ex)
             {
-                RaiseError(ex);
+                var ex = outer_ex.InnerException == null ? outer_ex : outer_ex.InnerException;
+                RaiseError(string.Format("{0} while calling {1}: {2}{3}{4}", ex.GetType().Name, hookname, ex.Message, Environment.NewLine, ex.StackTrace));
                 return null;
             }
             finally
@@ -162,7 +163,7 @@ namespace Oxide.Core.Plugins
         /// Raises an error on this plugin
         /// </summary>
         /// <param name="message"></param>
-        protected void RaiseError(string message)
+        public void RaiseError(string message)
         {
             if (OnError != null)
                 OnError(this, message);
@@ -207,7 +208,9 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Populates the config with default settings
         /// </summary>
-        protected abstract void LoadDefaultConfig();
+        protected virtual void LoadDefaultConfig()
+        {
+        }
 
         /// <summary>
         /// Saves the config file for this plugin

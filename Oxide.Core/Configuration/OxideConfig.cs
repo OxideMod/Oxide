@@ -37,6 +37,11 @@ namespace Oxide.Core.Configuration
         public string LogDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets the directory to find temporary files (relative to the instance path)
+        /// </summary>
+        public string TempDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the command line arguments to search for the instance directory
         /// </summary>
         public string[] InstanceCommandLines { get; set; }

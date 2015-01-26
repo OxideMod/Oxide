@@ -41,7 +41,13 @@ namespace Oxide.Core
         private CommandLine commandline;
 
         // Various directories
-        private string extdir, instancedir, plugindir, datadir, logdir, configdir;
+        public string ExtensionDirectory { get; private set; }
+        public string InstanceDirectory { get; private set; }
+        public string PluginDirectory { get; private set; }
+        public string ConfigDirectory { get; private set; }
+        public string DataDirectory { get; private set; }
+        public string LogDirectory { get; private set; }
+        public string TempDirectory { get; private set; }
 
         // Various configs
         private OxideConfig rootconfig;
@@ -52,6 +58,10 @@ namespace Oxide.Core
         private Time libtime;
         private Libraries.Plugins libplugins;
         private WebRequests libwebrequests;
+
+        // Thread safe NextTick callback queue
+        private List<Action> NextTickQueue = new List<Action>();
+        private object NextTickLock = new object();
 
         /// <summary>
         /// Gets the data file system
@@ -82,32 +92,34 @@ namespace Oxide.Core
                 rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
                 if (string.IsNullOrEmpty(varname) || commandline.HasVariable(varname))
                 {
-                    instancedir = Path.Combine(Environment.CurrentDirectory, string.Format(format, commandline.GetVariable(varname)));
+                    InstanceDirectory = Path.Combine(Environment.CurrentDirectory, string.Format(format, commandline.GetVariable(varname)));
                     break;
                 }
             }
-            if (instancedir == null) throw new Exception("Could not identify instance directory");
-            extdir = Path.Combine(Environment.CurrentDirectory, rootconfig.ExtensionDirectory);
-            plugindir = Path.Combine(instancedir, rootconfig.PluginDirectory);
-            datadir = Path.Combine(instancedir, rootconfig.DataDirectory);
-            logdir = Path.Combine(instancedir, rootconfig.LogDirectory);
-            configdir = Path.Combine(instancedir, rootconfig.ConfigDirectory);
-            if (!Directory.Exists(extdir)) throw new Exception("Could not identify extension directory");
-            if (!Directory.Exists(instancedir)) Directory.CreateDirectory(instancedir);
-            if (!Directory.Exists(plugindir)) Directory.CreateDirectory(plugindir);
-            if (!Directory.Exists(datadir)) Directory.CreateDirectory(datadir);
-            if (!Directory.Exists(logdir)) Directory.CreateDirectory(logdir);
-            if (!Directory.Exists(configdir)) Directory.CreateDirectory(configdir);
+            if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
+            ExtensionDirectory = Path.Combine(Environment.CurrentDirectory, rootconfig.ExtensionDirectory);
+            PluginDirectory = Path.Combine(InstanceDirectory, rootconfig.PluginDirectory);
+            DataDirectory = Path.Combine(InstanceDirectory, rootconfig.DataDirectory);
+            LogDirectory = Path.Combine(InstanceDirectory, rootconfig.LogDirectory);
+            ConfigDirectory = Path.Combine(InstanceDirectory, rootconfig.ConfigDirectory);
+            TempDirectory = Path.Combine(InstanceDirectory, rootconfig.TempDirectory);
+            if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
+            if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
+            if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
+            if (!Directory.Exists(DataDirectory)) Directory.CreateDirectory(DataDirectory);
+            if (!Directory.Exists(LogDirectory)) Directory.CreateDirectory(LogDirectory);
+            if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
+            if (!Directory.Exists(TempDirectory)) Directory.CreateDirectory(TempDirectory);
 
             // Create the loggers
             filelogger = new RotatingFileLogger();
-            filelogger.Directory = logdir;
+            filelogger.Directory = LogDirectory;
             rootlogger = new CompoundLogger();
             rootlogger.AddLogger(filelogger);
             rootlogger.Write(LogType.Info, "Loading Oxide core...");
 
             // Create the managers
-            pluginmanager = new PluginManager(rootlogger) {ConfigPath = configdir};
+            pluginmanager = new PluginManager(rootlogger) { ConfigPath = ConfigDirectory };
             extensionmanager = new ExtensionManager(rootlogger);
 
             // Register core libraries
@@ -123,15 +135,15 @@ namespace Oxide.Core
             extensionmanager.RegisterLibrary("WebRequests", libwebrequests);
 
             // Initialise other things
-            DataFileSystem = new DataFileSystem(datadir);
+            DataFileSystem = new DataFileSystem(DataDirectory);
 
             // Load all extensions
             rootlogger.Write(LogType.Info, "Loading extensions...");
-            extensionmanager.LoadAllExtensions(extdir);
+            extensionmanager.LoadAllExtensions(ExtensionDirectory);
 
             // Load all watchers
             foreach (Extension ext in extensionmanager.GetAllExtensions())
-                ext.LoadPluginWatchers(plugindir);
+                ext.LoadPluginWatchers(PluginDirectory);
 
             // Load all plugins
             rootlogger.Write(LogType.Info, "Loading plugins...");
@@ -156,6 +168,17 @@ namespace Oxide.Core
             return extensionmanager.GetLibrary(name) as T;
         }
 
+        /// <summary>
+        /// Logs a formatted message to the root logger
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public void LogInfo(string format, params object[] args)
+        {
+            rootlogger.Write(LogType.Info, format, args);
+        }
+        
         #region Plugin Management
 
         /// <summary>
@@ -166,7 +189,7 @@ namespace Oxide.Core
             // Get all plugin loaders, scan the plugin directory and load all reported plugins
             HashSet<Plugin> plugins = new HashSet<Plugin>();
             foreach (PluginLoader loader in extensionmanager.GetPluginLoaders())
-                foreach (string name in loader.ScanDirectory(plugindir))
+                foreach (string name in loader.ScanDirectory(PluginDirectory))
                 {
                     // Check if the plugin is already loaded
                     if (pluginmanager.GetPlugin(name) == null)
@@ -174,7 +197,8 @@ namespace Oxide.Core
                         // Load it and watch for errors
                         try
                         {
-                            Plugin plugin = loader.Load(plugindir, name);
+                            Plugin plugin = loader.Load(PluginDirectory, name);
+                            if (plugin == null) continue; // async load
                             plugin.OnError += plugin_OnError;
                             rootlogger.Write(LogType.Info, "Loaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
                             plugins.Add(plugin);
@@ -187,6 +211,18 @@ namespace Oxide.Core
                         }
                     }
                 }
+
+            foreach (PluginLoader loader in extensionmanager.GetPluginLoaders())
+            {
+                var loading_plugin_count = loader.LoadingPlugins.Count;
+                if (loading_plugin_count < 1) continue;
+                while (loader.LoadingPlugins.Count > 0)
+                {
+                    System.Threading.Thread.Sleep(25);
+                    Interface.GetMod().CallHook("OnTick", new object[] { });
+                }
+            }
+
 
             // Init all successfully loaded plugins
             foreach (Plugin plugin in plugins)
@@ -222,7 +258,7 @@ namespace Oxide.Core
             if (pluginmanager.GetPlugin(name) != null) return;
 
             // Find all plugin loaders that lay claim to the name
-            HashSet<PluginLoader> loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where((l) => l.ScanDirectory(plugindir).Contains(name)));
+            HashSet<PluginLoader> loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where((l) => l.ScanDirectory(PluginDirectory).Contains(name)));
             if (loaders.Count == 0)
             {
                 rootlogger.Write(LogType.Error, "Failed to load plugin '{0}' (no source found)", name);
@@ -239,26 +275,33 @@ namespace Oxide.Core
             Plugin plugin;
             try
             {
-                plugin = loader.Load(plugindir, name);
-                plugin.OnError += plugin_OnError;
-                rootlogger.Write(LogType.Info, "Loaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
+                plugin = loader.Load(PluginDirectory, name);
+                if (plugin == null) return; // async load
+                PluginLoaded(plugin);
             }
             catch (Exception ex)
             {
                 rootlogger.Write(LogType.Error, "Failed to load plugin {0} ({1})", name, ex.Message);
                 rootlogger.Write(LogType.Debug, ex.StackTrace);
                 return;
-            }
+            }            
+        }
 
-            // Initialise it
+        public bool PluginLoaded(Plugin plugin)
+        {
+            plugin.OnError += plugin_OnError;
+            rootlogger.Write(LogType.Info, "Loaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
             {
                 pluginmanager.AddPlugin(plugin);
+                CallHook("OnPluginLoaded", new object[] { plugin });
+                return true;
             }
             catch (Exception ex)
             {
                 rootlogger.Write(LogType.Error, "Failed to initialise plugin {0} ({1})", plugin.Name, ex.Message);
                 rootlogger.Write(LogType.Debug, ex.StackTrace);
+                return false;
             }
         }
 
@@ -274,6 +317,8 @@ namespace Oxide.Core
 
             // Unload it
             pluginmanager.RemovePlugin(plugin);
+
+            CallHook("OnPluginUnloaded", new object[] { plugin });
             rootlogger.Write(LogType.Info, "Unloaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
             return true;
         }
@@ -284,7 +329,13 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public bool ReloadPlugin(string name)
         {
-            if (!UnloadPlugin(name)) return false;
+            var loader = extensionmanager.GetPluginLoaders().Single(l => l.ScanDirectory(PluginDirectory).Contains(name));
+            if (loader != null)
+            {
+                loader.Reload(PluginDirectory, name);
+                return true;
+            }
+            UnloadPlugin(name);
             LoadPlugin(name);
             Plugin plugin = pluginmanager.GetPlugin(name);
             plugin.CallHook("OnServerInitialized", null);
@@ -302,7 +353,7 @@ namespace Oxide.Core
         }
 
         #endregion
-
+        
         /// <summary>
         /// Calls a hook
         /// </summary>
@@ -315,6 +366,23 @@ namespace Oxide.Core
             switch (hookname)
             {
                 case "OnTick": // Called every tick
+                    if (NextTickQueue.Count > 0)
+                        lock (NextTickLock)
+                        {
+                            foreach (var callback in NextTickQueue)
+                            {
+                                try
+                                {
+                                    callback();
+                                }
+                                catch (Exception ex)
+                                {
+                                    rootlogger.Write(LogType.Error, "Exception while calling NextTick callback: {0}", ex.ToString());
+                                }
+                            }
+                            NextTickQueue.Clear();
+                        }
+
                     // Update plugin change watchers
                     UpdatePluginWatchers();
 
@@ -328,6 +396,16 @@ namespace Oxide.Core
 
             // Forward the call to the plugin manager
             return pluginmanager.CallHook(hookname, args);
+        }
+
+        /// <summary>
+        /// Queue a callback to be called in the next server tick
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public void NextTick(Action callback)
+        {
+            lock (NextTickLock) NextTickQueue.Add(callback);
         }
 
         #region Plugin Change Watchers

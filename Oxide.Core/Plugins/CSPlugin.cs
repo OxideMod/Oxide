@@ -31,7 +31,7 @@ namespace Oxide.Core.Plugins
     public abstract class CSPlugin : Plugin
     {
         // All hooked methods
-        private IDictionary<string, MethodInfo> hooks;
+        protected IDictionary<string, MethodInfo> hooks;
 
         /// <summary>
         /// Initialises a new instance of the CSPlugin class
