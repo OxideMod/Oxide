@@ -5,6 +5,7 @@
 	"ConfigDirectory":		"config",
 	"DataDirectory":		"data",
 	"LogDirectory":			"logs",
+	"TempDirectory":		"temp",
 	
 	"InstanceCommandLines":
 	[
