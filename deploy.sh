@@ -27,9 +27,9 @@ $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy core and exten
 
 cd Dependencies || die_with "Failed to change to dependencies directory!"
 cp -f IronPython.dll Jint.dll *Lua.dll Microsoft.Dynamic.dll Microsoft.Scripting*.dll Mono.*.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
-cp -f Patched/Assembly-CSharp.dll Patched/Facepunch.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy patched Rust server files!"
 
 cd ../ || die_with "Failed to change to project home!"
+cp -f Patched/Assembly-CSharp.dll Patched/Facepunch.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy patched Rust server files!"
 cp -f oxide.root.json Dependencies/lua5*.dll $HOME/temp || die_with "Failed to copy config file and lua DLLs!"
 
 RUST_VERSION=`cat Patched/version.txt` && echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" >>$HOME/temp/version.txt || die_with "Failed to update version file!"
