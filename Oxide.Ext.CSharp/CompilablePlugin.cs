@@ -37,12 +37,13 @@ namespace Oxide.Plugins
             Directory = directory;
             Name = name;
             ScriptPath = string.Format("{0}\\{1}.cs", Directory, Name);
-            if (File.Exists(ScriptPath)) LastModifiedAt = File.GetLastWriteTime(ScriptPath);
+            CheckLastModificationTime();
         }
 
         public void Compile(Action<bool> callback)
         {
-            if (LastCompiledAt == File.GetLastWriteTime(ScriptPath))
+            CheckLastModificationTime();
+            if (LastCompiledAt == LastModifiedAt)
             {
                 //Interface.GetMod().LogInfo("Plugin is already compiled: {0}", Name);
                 callback(true);
@@ -63,8 +64,8 @@ namespace Oxide.Plugins
                 else
                 {
                     Interface.GetMod().LogInfo("{0} plugin failed to compile! Exit code: {1}", Name, compiler.ExitCode);
-                    Interface.GetMod().LogInfo(compiler.StdOutput);
-                    if (compiler.ErrOutput.Length > 0) Interface.GetMod().LogInfo(compiler.ErrOutput);
+                    Interface.GetMod().LogInfo(compiler.StdOutput.ToString());
+                    if (compiler.ErrOutput.Length > 0) Interface.GetMod().LogInfo(compiler.ErrOutput.ToString());
                 }
                 callback(compiled);
                 compiler = null;
@@ -83,15 +84,20 @@ namespace Oxide.Plugins
                 //Interface.GetMod().LogInfo("Patching {0} took {1}ms", Name, Math.Round((UnityEngine.Time.realtimeSinceStartup - started_at) * 1000f));
 
                 var assembly = Assembly.LoadFrom(assembly_path);
-                var namespaced_class = "Oxide.Plugins." + Name;
 
-                var type = assembly.GetType(namespaced_class);
+                var type = assembly.GetType("Oxide.Plugins." + Name);
                 if (type == null)
-                    throw new Exception("Unable to find plugin class: " + namespaced_class);
+                {
+                    Interface.GetMod().LogInfo("Unable to resolve plugin: {0} (plugin class name does not match file name)", Name);
+                    return;
+                }
 
                 var plugin = Activator.CreateInstance(type) as CSharpPlugin;
                 if (plugin == null)
-                    throw new Exception(string.Format("Plugin assembly failed to load: {0} (version {1})", Name, version));
+                {
+                    Interface.GetMod().LogInfo("Plugin assembly failed to load: {0} (version {1})", Name, version);
+                    return;
+                }
 
                 plugin.SetPluginInfo(Name, ScriptPath);
                 plugin.Watcher = Extension.Watcher;
@@ -120,13 +126,13 @@ namespace Oxide.Plugins
 
         public void LoadAssembly(Action<bool> callback)
         {
-            LoadAssembly(LastGoodVersion > 0 ? LastGoodVersion : 1, callback);
+            LoadAssembly(CompilationCount, callback);
         }
 
         public void OnCompilerStarted()
         {
             //Interface.GetMod().LogInfo("Compiling plugin: {0}", Name);
-            LastCompiledAt = File.GetLastWriteTime(ScriptPath);
+            LastCompiledAt = LastModifiedAt;
             CompilationCount++;
         }
 
@@ -251,6 +257,19 @@ namespace Oxide.Plugins
                     Interface.GetMod().NextTick(() => Interface.GetMod().LogInfo("Exception while patching {0} assembly: {1}", Name, ex.ToString()));
                 }
             });
+        }
+
+        private void CheckLastModificationTime()
+        {
+            if (!File.Exists(ScriptPath)) return;
+            try
+            {
+                LastModifiedAt = File.GetLastWriteTime(ScriptPath);
+            }
+            catch (IOException ex)
+            {
+                Interface.GetMod().LogInfo("IOException while checking plugin: {0}", Name);
+            }
         }
     }
 }

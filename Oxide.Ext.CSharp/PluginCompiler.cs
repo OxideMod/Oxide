@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
+using System.Reflection;
 
 using Oxide.Core;
 
@@ -12,8 +16,8 @@ namespace Oxide.Plugins
     {
         public static string BinaryPath;
 
-        public string StdOutput;
-        public string ErrOutput;
+        public StringBuilder StdOutput;
+        public StringBuilder ErrOutput;
         public int ExitCode;
 
         private CompilablePlugin plugin;
@@ -42,31 +46,68 @@ namespace Oxide.Plugins
 
             plugin.OnCompilerStarted();
 
-            string options = "/t:library";
+            BuildReferences();
+        }
+
+        public float Duration
+        {
+            get { return endedAt - startedAt; }
+        }
+
+        private void BuildReferences()
+        {
+            string[] source_lines;
+
+            try
+            {
+                source_lines = File.ReadAllLines(plugin.ScriptPath);
+            }
+            catch (IOException ex)
+            {
+                Interface.GetMod().LogInfo("IOException while reading {0} script: {1}", plugin.Name, ex.Message);
+                Interface.GetMod().NextTick(BuildReferences);
+                return;
+            }
 
             // Include references made by the CSharpPlugins project
-            foreach (var reference_name in CSharpPluginLoader.ProjectReferences)
-                if (reference_name != "mscorlib" && reference_name != "System" && !reference_name.StartsWith("System."))
-                    options = string.Format("{0} /r:{1}\\RustDedicated_Data\\Managed\\{2}.dll", options, Directory.GetCurrentDirectory(), reference_name);
+            var references = new HashSet<string>(CSharpPluginLoader.ProjectReferences);
 
             // Include references defined by magic comments in script
-            foreach (var line in File.ReadAllLines(plugin.ScriptPath))
+            foreach (var line in source_lines)
             {
                 var match = Regex.Match(line, @"^//\s?Reference:\s?(\S+)$", RegexOptions.IgnoreCase);
                 if (!match.Success) break;
 
-                var path = string.Format("{0}\\RustDedicated_Data\\Managed\\{1}.dll", Directory.GetCurrentDirectory(), match.Groups[1].Value);
+                var assembly_name = match.Groups[1].Value;
+
+                var path = string.Format("{0}\\RustDedicated_Data\\Managed\\{1}.dll", Directory.GetCurrentDirectory(), assembly_name);
                 if (!File.Exists(path))
                 {
-                    Interface.GetMod().LogInfo("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, match.Groups[1].Value);
+                    Interface.GetMod().LogInfo("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
                     continue;
                 }
 
-                options = string.Format("{0} /r:{1}", options, path);
+                references.Add(assembly_name);
+
+                // Include references made by the referenced assembly
+                foreach (var reference in Assembly.Load(assembly_name).GetReferencedAssemblies())
+                    references.Add(reference.Name);
             }
 
-            var arguments = string.Format("{0} /out:{1}\\{2}_{3}.dll {4}", options, Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount, plugin.ScriptPath);
-            var start_info = new ProcessStartInfo(BinaryPath, arguments)
+            SpawnCompiler(references);
+        }
+
+        private void SpawnCompiler(HashSet<string> references)
+        {
+            var arguments = new StringBuilder("/t:library");
+
+            foreach (var reference_name in references)
+                if (reference_name != "mscorlib" && reference_name != "System" && !reference_name.StartsWith("System."))
+                    arguments.AppendFormat(@" /r:{0}\RustDedicated_Data\Managed\{1}.dll", Directory.GetCurrentDirectory(), reference_name);
+            
+            arguments.AppendFormat(" /out:{0}\\{1}_{2}.dll {3}", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount, plugin.ScriptPath);
+
+            var start_info = new ProcessStartInfo(BinaryPath, arguments.ToString())
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -77,8 +118,8 @@ namespace Oxide.Plugins
             process = new Process { StartInfo = start_info, EnableRaisingEvents = true };
 
             startedAt = UnityEngine.Time.realtimeSinceStartup;
-            StdOutput = "";
-            ErrOutput = "";
+            StdOutput = new StringBuilder("");
+            ErrOutput = new StringBuilder("");
 
             process.OutputDataReceived += OnStdOutput;
             process.ErrorDataReceived += OnErrorOutput;
@@ -102,21 +143,16 @@ namespace Oxide.Plugins
             });
         }
 
-        public float Duration
-        {
-            get { return endedAt - startedAt; }
-        }
-
         private void OnStdOutput(object sender, DataReceivedEventArgs e)
         {
             var process = sender as Process;
-            StdOutput += e.Data;
+            StdOutput.Append(e.Data);
         }
 
         private void OnErrorOutput(object sender, DataReceivedEventArgs e)
         {
             var process = sender as Process;
-            ErrOutput += e.Data;
+            ErrOutput.Append(e.Data);
         }
 
         private void OnExited(object sender, EventArgs e)

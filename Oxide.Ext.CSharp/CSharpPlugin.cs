@@ -6,7 +6,6 @@ using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
 using Oxide.Core.Libraries;
-using Oxide.Rust.Libraries;
 
 using UnityEngine;
 
@@ -16,20 +15,20 @@ namespace Oxide.Plugins
     /// Allows configuration of plugin info using an attribute above the plugin class
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public class Info : Attribute
+    public class InfoAttribute : Attribute
     {
         public string Title { get; private set; }
         public string Author { get; private set; }
         public VersionNumber Version { get; private set; }
 
-        public Info(string title, string author, string version)
+        public InfoAttribute(string title, string author, string version)
         {
             Title = title;
             Author = author;
             setVersion(version);
         }
 
-        public Info(string title, string author, double version)
+        public InfoAttribute(string title, string author, double version)
         {
             Title = title;
             Author = author;
@@ -53,11 +52,11 @@ namespace Oxide.Plugins
     /// Indicates that the specified method should be a handler for a console command
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class ConsoleCommand : Attribute
+    public class ConsoleCommandAttribute : Attribute
     {
         public string Command { get; private set; }
 
-        public ConsoleCommand(string command)
+        public ConsoleCommandAttribute(string command)
         {
             Command = command.Contains('.') ? command : ("global." + command);
         }
@@ -67,11 +66,11 @@ namespace Oxide.Plugins
     /// Indicates that the specified method should be a handler for a chat command
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class ChatCommand : Attribute
+    public class ChatCommandAttribute : Attribute
     {
         public string Command { get; private set; }
 
-        public ChatCommand(string command)
+        public ChatCommandAttribute(string command)
         {
             Command = command;
         }
@@ -86,9 +85,6 @@ namespace Oxide.Plugins
 
         public FSWatcher Watcher;
 
-        protected Command cmd;
-        protected Permissions permissions;
-
         public CSharpPlugin() : base()
         {
             foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
@@ -98,15 +94,15 @@ namespace Oxide.Plugins
             }
         }
 
-        public void SetPluginInfo(string name, string path)
+        public virtual void SetPluginInfo(string name, string path)
         {
             Name = name;
             Filename = path;
 
-            var info_attributes = GetType().GetCustomAttributes(typeof(Info), true);
+            var info_attributes = GetType().GetCustomAttributes(typeof(InfoAttribute), true);
             if (info_attributes.Length > 0)
             {
-                var info = info_attributes[0] as Info;
+                var info = info_attributes[0] as InfoAttribute;
                 Title = info.Title;
                 Author = info.Author;
                 Version = info.Version;
@@ -114,9 +110,6 @@ namespace Oxide.Plugins
 
             var method = GetType().GetMethod("LoadDefaultConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             HasConfig = method.DeclaringType != typeof(Plugin);
-
-            cmd = Interface.GetMod().GetLibrary<Command>("Command");
-            permissions = Interface.GetMod().GetLibrary<Permissions>("Permissions");
         }
 
         public override void HandleAddedToManager(PluginManager manager)
@@ -124,24 +117,6 @@ namespace Oxide.Plugins
             base.HandleAddedToManager(manager);
 
             if (Filename != null) Watcher.AddMapping(Name);
-
-            foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
-            {
-                var attributes = method.GetCustomAttributes(typeof(ConsoleCommand), true);
-                if (attributes.Length > 0)
-                {
-                    var attribute = attributes[0] as ConsoleCommand;
-                    cmd.AddConsoleCommand(attribute.Command, this, method.Name);
-                    continue;
-                }
-
-                attributes = method.GetCustomAttributes(typeof(ChatCommand), true);
-                if (attributes.Length > 0)
-                {
-                    var attribute = attributes[0] as ChatCommand;
-                    cmd.AddChatCommand(attribute.Command, this, method.Name);
-                }
-            }
 
             CallHook("Loaded", null);
         }
@@ -153,106 +128,6 @@ namespace Oxide.Plugins
             Watcher.RemoveMapping(Name);
 
             base.HandleRemovedFromManager(manager);
-        }
-
-        /// <summary>
-        /// Print a message to a players console log
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="format"></param>
-        /// <param name="params"></param>
-        protected void PrintToConsole(BasePlayer player, string format, params object[] args)
-        {
-            player.SendConsoleCommand("echo " + string.Format(format, args));
-        }
-
-        /// <summary>
-        /// Print a message to a players chat log
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="format"></param>
-        /// <param name="params"></param>
-        protected void PrintToChat(BasePlayer player, string format, params object[] args)
-        {
-            player.SendConsoleCommand("chat.add \"Oxide\" " + StringExtensions.QuoteSafe(string.Format(format, args)));
-        }
-
-        /// <summary>
-        /// Send a reply message in response to a console command
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="format"></param>
-        /// <param name="params"></param>
-        protected void SendReply(ConsoleSystem.Arg arg, string format, params string[] args)
-        {
-            var message = string.Format(format, args);
-
-            if (arg.connection != null)
-            {
-                var player = arg.connection.player as BasePlayer;
-                if (player != null)
-                {
-                    player.SendConsoleCommand("echo " + message);
-                    return;
-                }
-            }
-
-            Puts(message);
-        }
-
-        /// <summary>
-        /// Send a reply message in response to a chat command
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="format"></param>
-        /// <param name="params"></param>
-        protected void SendReply(BasePlayer player, string format, params string[] args)
-        {
-            PrintToChat(player, format, args);
-        }
-
-        /// <summary>
-        /// Send a warning message in response to a console command
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="format"></param>
-        /// <param name="params"></param>
-        protected void SendWarning(ConsoleSystem.Arg arg, string format, params string[] args)
-        {
-            var message = string.Format(format, args);
-
-            if (arg.connection != null)
-            {
-                var player = arg.connection.player as BasePlayer;
-                if (player != null)
-                {
-                    player.SendConsoleCommand("echo " + message);
-                }
-            }
-
-            Debug.LogWarning(message);
-        }
-
-        /// <summary>
-        /// Send an error message in response to a console command
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="format"></param>
-        /// <param name="params"></param>
-        protected void SendError(ConsoleSystem.Arg arg, string format, params string[] args)
-        {
-            var message = string.Format(format, args);
-
-            if (arg.connection != null)
-            {
-                var player = arg.connection.player as BasePlayer;
-                if (player != null)
-                {
-                    player.SendConsoleCommand("echo " + message);
-                }
-            }
-
-            Debug.LogError(message);
         }
 
         /// <summary>
