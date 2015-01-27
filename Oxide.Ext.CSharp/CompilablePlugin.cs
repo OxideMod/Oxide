@@ -78,7 +78,7 @@ namespace Oxide.Plugins
             var started_at = UnityEngine.Time.realtimeSinceStartup;
             var assembly_path = string.Format("{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, Name, version);
 
-            PatchAssembly(assembly_path, () =>
+            PatchAssembly(version, () =>
             {
                 //Interface.GetMod().LogInfo("Patching {0} took {1}ms", Name, Math.Round((UnityEngine.Time.realtimeSinceStartup - started_at) * 1000f));
 
@@ -130,7 +130,7 @@ namespace Oxide.Plugins
             CompilationCount++;
         }
 
-        private void PatchAssembly(string path, Action callback)
+        private void PatchAssembly(int version, Action callback)
         {
             if (isPatching)
             {
@@ -138,12 +138,14 @@ namespace Oxide.Plugins
                 return;
             }
 
-            if (AppDomain.CurrentDomain.GetAssemblies().Any(assembly => assembly.Location == path))
+            if (version == LastGoodVersion)
             {
                 //Interface.GetMod().LogInfo("Plugin assembly has already been patched: {0}", Name);
                 callback();
                 return;
             }
+
+            var path = string.Format("{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, Name, version);
 
             //Interface.GetMod().LogInfo("Patching plugin assembly: {0}", Name);
             isPatching = true;
