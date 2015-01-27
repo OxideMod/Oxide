@@ -71,37 +71,6 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
         }
 
-        [HookMethod("OnConsoleWindowInitialize")]
-        private object OnConsoleWindowInitialize(Windows.ConsoleWindow window)
-        {
-            logger.Write(LogType.Info, "[Oxide] Creating new console window");
-
-            var ConsoleWindow = window.GetType();
-            var FreeConsole = ConsoleWindow.GetMethod("FreeConsole", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-            var AllocConsole = ConsoleWindow.GetMethod("AllocConsole", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-            var GetStdHandle = ConsoleWindow.GetMethod("GetStdHandle", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-
-            FreeConsole.Invoke(null, new object[] { });
-            AllocConsole.Invoke(null, new object[] { });
-            FreeConsole.Invoke(null, new object[] { });
-            AllocConsole.Invoke(null, new object[] { });
-
-            ConsoleWindow.GetField("oldOutput", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(window, Console.Out);
-
-            try
-            {
-                var handle = (IntPtr)GetStdHandle.Invoke(null, new object[] { -11 });
-                var stream = new System.IO.FileStream(new Microsoft.Win32.SafeHandles.SafeFileHandle(handle, true), System.IO.FileAccess.Write);
-                Console.SetOut(new System.IO.StreamWriter(stream, Encoding.ASCII) { AutoFlush = true });
-            }
-            catch (Exception exception)
-            {
-                logger.Write(LogType.Error, "Couldn't redirect output: " + exception.Message);
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Called when the server is first initialized
         /// </summary>
@@ -243,8 +212,8 @@ namespace Oxide.Rust.Plugins
         private void BuildServerTags(IList<string> taglist)
         {
             // Add modded and oxide
-            //taglist.Add("modded");
-            //taglist.Add("oxide");
+            taglist.Add("modded");
+            taglist.Add("oxide");
         }
 
         /// <summary>
@@ -319,9 +288,7 @@ namespace Oxide.Rust.Plugins
                     {
                         if (!cmdlib.HandleChatCommand(ply, cmd, args))
                         {
-                            UnityEngine.Debug.Log(string.Format("{0} used unknown command: {1}", ply.displayName, argstr));
-                            ply.SendConsoleCommand(string.Format("chat.add \"Oxide\" \"Unknown command '{0}' (type /commands to list all commands)\"", argstr));
-                            //return null; // Default behavior
+                            ply.SendConsoleCommand(string.Format("chat.add \"SERVER\" \"Unknown command '{0}'!\"", cmd));
                         }
                     }
 

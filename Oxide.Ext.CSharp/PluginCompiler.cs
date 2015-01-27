@@ -80,7 +80,7 @@ namespace Oxide.Plugins
 
                 var assembly_name = match.Groups[1].Value;
 
-                var path = string.Format("{0}\\RustDedicated_Data\\Managed\\{1}.dll", Directory.GetCurrentDirectory(), assembly_name);
+                var path = string.Format("{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, assembly_name);
                 if (!File.Exists(path))
                 {
                     Interface.GetMod().LogInfo("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
@@ -103,7 +103,7 @@ namespace Oxide.Plugins
 
             foreach (var reference_name in references)
                 if (reference_name != "mscorlib" && reference_name != "System" && !reference_name.StartsWith("System."))
-                    arguments.AppendFormat(@" /r:{0}\RustDedicated_Data\Managed\{1}.dll", Directory.GetCurrentDirectory(), reference_name);
+                    arguments.AppendFormat(" /r:{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, reference_name);
             
             arguments.AppendFormat(" /out:{0}\\{1}_{2}.dll {3}", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount, plugin.ScriptPath);
 
