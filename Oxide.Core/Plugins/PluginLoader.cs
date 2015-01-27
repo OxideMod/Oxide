@@ -36,6 +36,8 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public virtual void Reload(string directory, string name)
         {
+            Interface.GetMod().UnloadPlugin(name);
+            Interface.GetMod().LoadPlugin(name);
         }
     }
 }
