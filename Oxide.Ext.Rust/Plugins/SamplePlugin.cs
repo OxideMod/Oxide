@@ -1,11 +1,19 @@
-﻿namespace Oxide.Plugins
+﻿// Reference: Oxide.Ext.Rust
+
+namespace Oxide.Plugins
 {
     [Info("Sample Plugin", "bawNg", 0.1)]
-    class SamplePlugin : CSharpPlugin
+    class SamplePlugin : RustPlugin
     {
         void Loaded()
         {
-            Puts("Hello from SamplePlugin");
+            
+        }
+
+        void OnPlayerInit(BasePlayer new_player)
+        {
+            foreach (var player in BasePlayer.activePlayerList)
+                PrintToChat(player, "{0} has connected", new_player.displayName);
         }
 
         [ConsoleCommand("sample")]

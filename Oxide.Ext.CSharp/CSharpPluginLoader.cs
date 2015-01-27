@@ -68,7 +68,10 @@ namespace Oxide.Plugins
             plugin.Compile(compiled =>
             {
                 // Load the plugin assembly if it was successfully compiled
-                if (compiled) plugin.LoadAssembly((loaded) => LoadingPlugins.Remove(name));
+                if (compiled)
+                    plugin.LoadAssembly(loaded => LoadingPlugins.Remove(name));
+                else
+                    LoadingPlugins.Remove(name);
             });
 
             return null;
