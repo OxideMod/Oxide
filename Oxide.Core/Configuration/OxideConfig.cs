@@ -47,6 +47,18 @@ namespace Oxide.Core.Configuration
         public string[] InstanceCommandLines { get; set; }
 
         /// <summary>
+        /// Sets defaults for oxide configuration
+        /// </summary>
+        public OxideConfig()
+        {
+            PluginDirectory = "plugins";
+            ConfigDirectory = "config";
+            DataDirectory = "data";
+            LogDirectory = "logs";
+            TempDirectory = "temp";
+        }
+
+        /// <summary>
         /// Gets argument data for the specified index
         /// </summary>
         /// <param name="index"></param>
