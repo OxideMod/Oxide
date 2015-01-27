@@ -18,7 +18,14 @@ mkdir -p $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to create dir
 
 echo "Copying target files to temp directory"
 cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to build directory!"
-cp -f Oxide.Core/bin/Release/Oxide.Core.dll Oxide.Ext.*/bin/Release/Oxide.Ext.*.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
+cp -f Oxide.Core/bin/Release/Oxide.Core.dll \
+Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
+Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
+Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
+Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
+Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll \
+Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
+$HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
 
 cd Dependencies || die_with "Failed to change to dependencies directory!"
 cp -f IronPython.dll Jint.dll *Lua.dll Microsoft.Dynamic.dll Microsoft.Scripting*.dll Mono.*.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
