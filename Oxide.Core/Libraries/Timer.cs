@@ -56,7 +56,7 @@ namespace Oxide.Core.Libraries
             public Plugin Owner { get; private set; }
 
             // The next rep time
-            private float nextrep;
+            public float nextrep;
 
             /// <summary>
             /// Initialises a new instance of the TimerInstance class
