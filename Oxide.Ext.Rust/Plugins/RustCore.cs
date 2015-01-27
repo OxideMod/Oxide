@@ -23,6 +23,9 @@ namespace Oxide.Rust.Plugins
         // The pluginmanager
         private PluginManager pluginmanager;
 
+        // Track when the server has been initialized
+        private bool ServerInitialized;
+
         /// <summary>
         /// Initialises a new instance of the RustCore class
         /// </summary>
@@ -66,6 +69,26 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
             cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
             cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
+        }
+
+        /// <summary>
+        /// Called when the server is first initialized
+        /// </summary>
+        [HookMethod("OnServerInitialized")]
+        private void OnServerInitialized()
+        {
+            if (ServerInitialized) return;
+            ServerInitialized = true;
+        }
+
+        /// <summary>
+        /// Called when another plugin has been loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (ServerInitialized) plugin.CallHook("OnServerInitialized", null);
         }
 
         /// <summary>
