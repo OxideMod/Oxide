@@ -28,7 +28,7 @@ namespace Oxide.Unity
         public override string Author { get { return "Oxide Team"; } }
 
         /// <summary>
-        /// Initialises a new instance of the RustExtension class
+        /// Initialises a new instance of the UnityExtension class
         /// </summary>
         /// <param name="manager"></param>
         public UnityExtension(ExtensionManager manager)
@@ -47,7 +47,7 @@ namespace Oxide.Unity
             Manager.RegisterPluginLoader(new UnityPluginLoader());
 
             // Register our libraries
-            
+
         }
 
         /// <summary>
@@ -67,7 +67,5 @@ namespace Oxide.Unity
         {
 
         }
-
-
     }
 }

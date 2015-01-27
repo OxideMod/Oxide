@@ -7,7 +7,7 @@ using Oxide.Core.Plugins;
 namespace Oxide.Unity.Plugins
 {
     /// <summary>
-    /// Responsible for loading rust specific plugins
+    /// Responsible for loading Unity specific plugins
     /// </summary>
     public class UnityPluginLoader : PluginLoader
     {
