@@ -8,10 +8,10 @@ before_script:
   - echo "deb http://download.mono-project.com/repo/debian wheezy-libtiff-compat main" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
   - sudo apt-get install mono-devel mono-dmcs mono-gmcs
-  - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" $TRAVIS_BUILD_DIR/Oxide.Core/OxideMod.cs
+  - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
 
 # Run the XBuild project file
-script: xbuild Oxide2.sln /p:Configuration=Release
+script: xbuild Oxide.sln /p:Configuration=Release
 
 # Perform after compilation/test success
 after_success:
