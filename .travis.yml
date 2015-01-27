@@ -16,7 +16,7 @@ script: xbuild Oxide2.sln /p:Configuration=Release
 # Perform after compilation/test success
 after_success:
   # Set execute permissions and run deployment script
-  - "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == RustOxide/Oxide-2 ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
+  #- "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == RustOxide/Oxide-2 ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
 
 # Notification services
 notifications:
