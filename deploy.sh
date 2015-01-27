@@ -8,16 +8,14 @@ if [ $TRAVIS_PULL_REQUEST == true ]; then die_with "Skipping deployment for pull
 echo "Configuring git credentials"
 git config --global user.email "travis@travis-ci.org" && git config --global user.name "Travis" || die_with "Failed to configure git credentials!"
 
-echo "Changing directory to $HOME and configuring git"
-cd $HOME || die_with "Failed to change to home directory!"
-
 echo "Cloning snapshots branch using token"
-git clone -q --branch=snapshots https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git snapshots >/dev/null || die_with "Failed to clone existing snapshots branch!"
+git clone -q --branch=snapshots https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git $HOME/snapshots >/dev/null || die_with "Failed to clone existing snapshots branch!"
 
+echo "Changing directory to $HOME creating directories"
+cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
 mkdir -p $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to create directories!"
 
 echo "Copying target files to temp directory"
-cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to build directory!"
 cp -f Oxide.Core/bin/Release/Oxide.Core.dll \
 Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
 Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
@@ -30,9 +28,11 @@ $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy core and exten
 cd Dependencies || die_with "Failed to change to dependencies directory!"
 cp -f IronPython.dll Jint.dll *Lua.dll Microsoft.Dynamic.dll Microsoft.Scripting*.dll Mono.*.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
 cp -f Patched/Assembly-CSharp.dll Patched/Facepunch.dll $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy patched Rust server files!"
+
+cd ../ || die_with "Failed to change to project home!"
 cp -f oxide.root.json Dependencies/lua5*.dll $HOME/temp || die_with "Failed to copy config file and lua DLLs!"
 
-RUST_VERSION=`cat ../Patched/version.txt` && echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" >>$HOME/temp/version.txt || die_with "Failed to update version file!"
+RUST_VERSION=`cat Patched/version.txt` && echo "Oxide 2 build $TRAVIS_BUILD_NUMBER for Rust server $RUST_VERSION" >>$HOME/temp/version.txt || die_with "Failed to update version file!"
 
 echo "Archiving and compressing target files"
 cd $HOME/temp || die_with "Failed to change to temp directory!"
