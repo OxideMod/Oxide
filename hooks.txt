@@ -150,7 +150,7 @@ Hooks currently in Oxide 2 for Rust:
 	- No return behaviour
 	- Called when any networked entity is spawned (including trees)
 
-== OnPlayerInit(UnityEngine/BasePlayer player) ==
+== OnPlayerInit(Assembly-CSharp/BasePlayer player) ==
 	- Called from Assembly-CSharp/BasePlayer
 	- No return behaviour
 	- Called when the player is initialising (after they've connected, before they wake up)
