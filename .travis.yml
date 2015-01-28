@@ -5,7 +5,7 @@ before_script:
   - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
 
 # Build the project
-solution: Oxide.sln /p:Configuration=Release
+solution: Oxide.sln
 
 # Perform after compilation/test success
 after_success:
