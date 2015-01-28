@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Text.RegularExpressions;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -17,6 +17,7 @@ namespace Oxide.Plugins
         public CSharpExtension Extension;
         public string Name;
         public string Directory;
+        public string ScriptName;
         public string ScriptPath;
         public DateTime LastModifiedAt;
         public DateTime LastCompiledAt;
@@ -35,8 +36,9 @@ namespace Oxide.Plugins
         {
             Extension = extension;
             Directory = directory;
-            Name = name;
-            ScriptPath = string.Format("{0}\\{1}.cs", Directory, Name);
+            ScriptName = name;
+            Name = Regex.Replace(Regex.Replace(ScriptName, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
+            ScriptPath = string.Format("{0}\\{1}.cs", Directory, ScriptName);
             CheckLastModificationTime();
         }
 
@@ -51,7 +53,7 @@ namespace Oxide.Plugins
             }
             if (compiler != null)
             {
-                Interface.GetMod().LogInfo("Plugin compilation is already in progress: {0}", Name);
+                Interface.GetMod().LogInfo("Plugin compilation is already in progress: {0}", ScriptName);
                 return;
             }
             compiler = new PluginCompiler(this);
@@ -59,11 +61,11 @@ namespace Oxide.Plugins
             {
                 if (compiled)
                 {
-                    Interface.GetMod().LogInfo("{0} plugin was compiled successfully in {1}ms", Name, Math.Round(compiler.Duration * 1000f));
+                    Interface.GetMod().LogInfo("{0} plugin was compiled successfully in {1}ms", ScriptName, Math.Round(compiler.Duration * 1000f));
                 }
                 else
                 {
-                    Interface.GetMod().LogInfo("{0} plugin failed to compile! Exit code: {1}", Name, compiler.ExitCode);
+                    Interface.GetMod().LogInfo("{0} plugin failed to compile! Exit code: {1}", ScriptName, compiler.ExitCode);
                     Interface.GetMod().LogInfo(compiler.StdOutput.ToString());
                     if (compiler.ErrOutput.Length > 0) Interface.GetMod().LogInfo(compiler.ErrOutput.ToString());
                 }
@@ -88,18 +90,18 @@ namespace Oxide.Plugins
                 var type = assembly.GetType("Oxide.Plugins." + Name);
                 if (type == null)
                 {
-                    Interface.GetMod().LogInfo("Unable to resolve plugin: {0} (plugin class name does not match file name)", Name);
+                    Interface.GetMod().LogInfo("Unable to find main plugin class: {0}", Name);
                     return;
                 }
 
                 var plugin = Activator.CreateInstance(type) as CSharpPlugin;
                 if (plugin == null)
                 {
-                    Interface.GetMod().LogInfo("Plugin assembly failed to load: {0} (version {1})", Name, version);
+                    Interface.GetMod().LogInfo("Plugin assembly failed to load: {0} (version {1})", ScriptName, version);
                     return;
                 }
 
-                plugin.SetPluginInfo(Name, ScriptPath);
+                plugin.SetPluginInfo(ScriptName, ScriptPath);
                 plugin.Watcher = Extension.Watcher;
                 
                 if (Interface.GetMod().PluginLoaded(plugin))
@@ -112,12 +114,12 @@ namespace Oxide.Plugins
                     // Plugin failed to be initialized
                     if (LastGoodVersion > 0)
                     {
-                        Interface.GetMod().LogInfo("Rolling back plugin to version {0}: {1}", LastGoodVersion, Name);
+                        Interface.GetMod().LogInfo("Rolling back plugin to version {0}: {1}", LastGoodVersion, ScriptName);
                         LoadAssembly(LastGoodVersion, null);
                     }
                     else
                     {
-                        Interface.GetMod().LogInfo("No previous version to rollback plugin: {0}", Name);
+                        Interface.GetMod().LogInfo("No previous version to rollback plugin: {0}", ScriptName);
                     }
                     if (callback != null) callback(false);
                 }
@@ -140,7 +142,7 @@ namespace Oxide.Plugins
         {
             if (isPatching)
             {
-                Interface.GetMod().LogInfo("Already patching plugin assembly: {0} (ignoring)", Name);
+                Interface.GetMod().LogInfo("Already patching plugin assembly: {0} (ignoring)", ScriptName);
                 return;
             }
 
@@ -254,7 +256,7 @@ namespace Oxide.Plugins
                 catch (Exception ex)
                 {
                     isPatching = false;
-                    Interface.GetMod().NextTick(() => Interface.GetMod().LogInfo("Exception while patching {0} assembly: {1}", Name, ex.ToString()));
+                    Interface.GetMod().NextTick(() => Interface.GetMod().LogInfo("Exception while patching {0} assembly: {1}", ScriptName, ex.ToString()));
                 }
             });
         }
@@ -268,7 +270,7 @@ namespace Oxide.Plugins
             }
             catch (IOException ex)
             {
-                Interface.GetMod().LogInfo("IOException while checking plugin: {0}", Name);
+                Interface.GetMod().LogInfo("IOException while checking plugin: {0}", ScriptName);
             }
         }
     }
