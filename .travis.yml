@@ -1,18 +1,14 @@
 language: csharp
 
 # Add build number to version
-before_script:
-  - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
+before_script: sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
 
 # Build the project
 solution: Oxide.sln
 
-# Perform after compilation/test success
-after_success:
-  # Set execute permissions and run deployment script
-  #- "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
+# Run deployment script
+after_success: [[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh
 
-# Notification services
 notifications:
   # Disable build status email notifications, until the issue with forks is fixed
   email: false
