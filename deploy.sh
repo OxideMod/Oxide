@@ -39,6 +39,6 @@ zip -vr9 $HOME/snapshots/Oxide/Oxide.zip . || die_with "Failed to archive snapsh
 echo "Adding, committing, and pushing to snapshots branch"
 cd $HOME/snapshots || die_with "Failed to change to snapshots directory!"
 git add -f . && git commit -m "Oxide 2.0.$TRAVIS_BUILD_NUMBER" || die_with "Failed to add and commit files with git!"
-git push -qf origin snapshots >/dev/null || die_with "Failed to push snapshot to GitHub!"
+git push -qf origin master >/dev/null || die_with "Failed to push snapshot to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"
