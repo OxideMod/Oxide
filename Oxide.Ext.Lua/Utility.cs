@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
+using System.Reflection;
 using NLua;
 
 using Oxide.Core.Configuration;
@@ -192,11 +191,35 @@ namespace Oxide.Lua
         /// <returns></returns>
         public static string GetNamespace(Type type)
         {
-            //string name = type.FullName;
-            //if (!name.Contains('.')) return string.Empty;
-            //int nameindex = name.LastIndexOf('.');
-            //return name.Substring(0, nameindex);
-            return type.Namespace == null ? string.Empty : type.Namespace;
+            return type.Namespace ?? string.Empty;
+        }
+
+        public static IEnumerable<Type> GetAllTypesFromAssembly(Assembly asm)
+        {
+            foreach (var module in asm.GetModules())
+            {
+                Type[] moduleTypes;
+                try
+                {
+                    moduleTypes = module.GetTypes();
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    moduleTypes = e.Types;
+                }
+                catch (Exception)
+                {
+                    moduleTypes = new Type[0];
+                }
+
+                foreach (var type in moduleTypes)
+                {
+                    if (type != null)
+                    {
+                        yield return type;
+                    }
+                }
+            }
         }
     }
 }
