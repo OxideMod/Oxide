@@ -210,6 +210,8 @@ namespace Oxide.Core.Plugins
         /// </summary>
         protected virtual void LoadDefaultConfig()
         {
+            // Call LoadDefaultConfig if it was defined as a private hook
+            CallHook("LoadDefaultConfig", null);
         }
 
         /// <summary>

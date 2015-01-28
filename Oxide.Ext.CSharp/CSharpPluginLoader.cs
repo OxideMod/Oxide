@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Reflection;
 
@@ -25,10 +26,10 @@ namespace Oxide.Plugins
             ProjectReferences.Add("Oxide.Ext.CSharp");
 
             // Check if compatible compiler is installed
-            PluginCompiler.BinaryPath = Environment.GetEnvironmentVariable("systemroot") + "\\Microsoft.NET\\Framework64\\v3.5\\csc.exe";
+            PluginCompiler.BinaryPath = Environment.GetEnvironmentVariable("systemroot") + @"\Microsoft.NET\Framework64\v3.5\csc.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
             {
-                Interface.GetMod().LogInfo("Error: Cannot compile C# plugins. Unable to find csc.exe! Have you installed .Net v3.5 x64?");
+                Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find csc.exe! Have you installed .Net v3.5 x64?");
                 PluginCompiler.BinaryPath = null;
                 return;
             }
@@ -99,11 +100,12 @@ namespace Oxide.Plugins
 
         private CompilablePlugin GetCompilablePlugin(CSharpExtension extension, string directory, string name)
         {
+            var class_name = Regex.Replace(Regex.Replace(name, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
             CompilablePlugin plugin;
-            if (!plugins.TryGetValue(name, out plugin))
+            if (!plugins.TryGetValue(class_name, out plugin))
             {
                 plugin = new CompilablePlugin(extension, directory, name);
-                plugins[name] = plugin;
+                plugins[class_name] = plugin;
             }
             return plugin;
         }
