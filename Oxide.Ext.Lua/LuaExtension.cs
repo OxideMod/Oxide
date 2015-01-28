@@ -69,7 +69,6 @@ namespace Oxide.Lua
         /// <summary>
         /// Loads this extension
         /// </summary>
-        /// <param name="manager"></param>
         public override void Load()
         {
             // Setup Lua instance
@@ -101,7 +100,7 @@ namespace Oxide.Lua
             setmetatable = LuaEnvironment["setmetatable"] as LuaFunction;
 
             // Create metatables
-            Type mytype = GetType();
+            //Type mytype = GetType();
             LuaEnvironment.NewTable("tmp");
             overloadselectormeta = LuaEnvironment["tmp"] as LuaTable;
             //LuaEnvironment.RegisterFunction("tmp.__index", mytype.GetMethod("FindOverload", BindingFlags.Public | BindingFlags.Static));
@@ -125,9 +124,9 @@ end
             LuaEnvironment["tmp"] = null;
 
             // Bind all namespaces and types
-            foreach (Type type in AppDomain.CurrentDomain.GetAssemblies()
+            foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
                 .Where(AllowAssemblyAccess)
-                .SelectMany((a) => a.GetTypes())
+                .SelectMany(Utility.GetAllTypesFromAssembly)
                 .Where(AllowTypeAccess))
             {
                 // Get the namespace table
