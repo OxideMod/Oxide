@@ -1,4 +1,4 @@
-Oxide 2 [![Build Status](https://travis-ci.org/RustOxide/Oxide-2.png)](https://travis-ci.org/RustOxide/Oxide-2)
+Oxide 2 [![Build Status](https://travis-ci.org/OxideMod/Oxide.png)](https://travis-ci.org/OxideMod/Oxide)
 =======
 
 Oxide 2 is a complete rewrite of the popular, original Oxide mod for the game Rust. Oxide 2 has a focus on modularity and extensibility. The core is highly abstracted and loosely coupled, and could be used to mod any game that uses .NET such as 7 Days to Die, The Forest, Space Engineers, and more.
@@ -25,7 +25,7 @@ As an example to what kind of extensions may be used in the future, here is a no
  * Oxide.Ext.MySQL - Allows plugins to access a MySQL database
  * Oxide.Ext.WebServer - Allows the server or modded game to also host a web server
 
-Building from source
+Building from Source
 --------------------
 
  1. Clone the git repository locally.
