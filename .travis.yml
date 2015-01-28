@@ -1,32 +1,26 @@
-# Source language (using C since .NET and C# are not supported yet)
-language: c
+language: csharp
 
-# Install dependencies needed to compile .NET and C#
+# Add build number to version
 before_script:
-  - curl http://download.mono-project.com/repo/xamarin.gpg | sudo apt-key add -
-  - echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee -a /etc/apt/sources.list
-  - echo "deb http://download.mono-project.com/repo/debian wheezy-libtiff-compat main" | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get update -qq
-  - sudo apt-get install mono-devel mono-dmcs mono-gmcs
   - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
 
-# Run the XBuild project file
-script: xbuild Oxide.sln /p:Configuration=Release
+# Build the project
+solution: Oxide.sln /p:Configuration=Release
 
 # Perform after compilation/test success
 after_success:
   # Set execute permissions and run deployment script
-  #- "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == RustOxide/Oxide-2 ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
+  #- "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
 
 # Notification services
 notifications:
   # Disable build status email notifications, until the issue with forks is fixed
   email: false
   # IRC notification
-  irc: "chat.freenode.net#rustoxide"
+  irc: "chat.freenode.net#oxidemod"
 
 # Environmental system variables
 env:
   global:
     # Super secure, encrypted variables! Ssssh!
-    - secure: "aAc/ocxEkRIsezzqu/0F4SOzD3dQDpj79l9K/7XsqeQdSMKYEUTLocREQWsIKZzIiGIa40U/12+ZEFZOP13aekcW2Us3pfFsyHcffSiEYD3a/DhId3Kku79yXs2QI2LYwgDyvQzDBmFzyT1CRZ23PFaddhFUVRzqRbswqa66Ygs="
+    - secure: "wa0dK10HZo+JHGoOCM6kluBCoaxZx9a/sdRDw8YgykeEeksMFacNZLZkkcRgg4lXSntMtLs5SVH/dWFWDcQPXzPioq1SqzeZs8jT+iaeHli5PIOe5WbyXsgWQJaTrzK4aSP2WdAB4v43ghrGhW7un/sMW9lWLQa0+Tm8540jKEI="
