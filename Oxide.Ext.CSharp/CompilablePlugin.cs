@@ -29,7 +29,7 @@ namespace Oxide.Plugins
         private bool isPatching = false;
 
         private string[] blacklistedNamespaces = {
-            "System.IO", "System.Diagnostics", "System.Threading", "System.Reflection.Assembly", "System.Runtime.InteropServices", "System.Net",
+            "System.IO", "System.Diagnostics", "System.Threading", "System.Reflection.Assembly", "System.Runtime.InteropServices", "System.Net", "System.Xml",
             "Mono.Cecil"
         };
 
