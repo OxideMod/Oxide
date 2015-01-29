@@ -9,14 +9,14 @@ echo "Configuring git credentials"
 git config --global user.email "travis@travis-ci.org" && git config --global user.name "Travis" || die_with "Failed to configure git credentials!"
 
 echo "Cloning snapshots branch using token"
-git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/snapshots >/dev/null || die_with "Failed to clone existing snapshots branch!"
+git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/Snapshots >/dev/null || die_with "Failed to clone snapshots repo!"
 
 function bundle_rust {
     cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
     mkdir -p $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
-    cp -f Oxide.Core/bin/Release/Oxide.Core.dll \
+    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
     Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
     Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
     Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
@@ -24,7 +24,7 @@ function bundle_rust {
     Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -f Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
+    cp -vf Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.Python/Dependencies/IronPython.dll \
@@ -37,7 +37,8 @@ function bundle_rust {
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_rust || die_with "Failed to change to temp directory!"
-    zip -vFS9 $HOME/snapshots/Rust/OxideRust.zip . || die_with "Failed to bundle snapshot files!"
+    rm -f $HOME/Snapshots/Rust/OxideRust.zip || die_with "Failed to remove old bundle!"
+    zip -vr9 $HOME/Snapshots/Rust/OxideRust.zip . || die_with "Failed to bundle snapshot files!"
 } || die_with "Failed to create Rust bundle!"
 
 function bundle_7dtd {
@@ -45,33 +46,34 @@ function bundle_7dtd {
     mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
-    cp -f Oxide.Core/bin/Release/Oxide.Core.dll \
+    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
     Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
     Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
     Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
     Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -f Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
+    cp -vf Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.Python/Dependencies/IronPython.dll \
     Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
     Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -f Oxide.Ext.SevenDaysToDie/Patched/oxide.root.json \
+    cp -vf Oxide.Ext.SevenDaysToDie/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
     $HOME/temp_7dtd || die_with "Failed to copy config file and Lua DLLs!"
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_7dtd || die_with "Failed to change to temp directory!"
-    zip -vFS9 $HOME/snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
+    rm -f $HOME/Snapshots/7DaysToDie/Oxide7DaysToDie.zip || die_with "Failed to remove old bundle!"
+    zip -vr9 $HOME/Snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
 } || die_with "Failed to create 7 Days to Die bundle!"
 
 bundle_rust; bundle_7dtd
 
 echo "Adding, committing, and pushing to snapshots"
-cd $HOME/snapshots || die_with "Failed to change to snapshots directory!"
+cd $HOME/Snapshots || die_with "Failed to change to snapshots directory!"
 git add -f . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER" || die_with "Failed to add and commit files!"
 git push -qf origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
 
