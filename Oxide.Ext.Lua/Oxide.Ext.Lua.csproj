@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLua">
-      <HintPath>..\Dependencies\NLua.dll</HintPath>
+      <HintPath>Dependencies\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

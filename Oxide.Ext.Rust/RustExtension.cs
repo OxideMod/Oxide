@@ -3,21 +3,20 @@
 using Oxide.Core;
 using Oxide.Core.Extensions;
 
-using Oxide.Unity.Plugins;
+using Oxide.Rust.Plugins;
+using Oxide.Rust.Libraries;
 
-using UnityEngine;
-
-namespace Oxide.Unity
+namespace Oxide.Rust
 {
     /// <summary>
     /// The extension class that represents this extension
     /// </summary>
-    public class UnityExtension : Extension
+    public class RustExtension : Extension
     {
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "Unity"; } }
+        public override string Name { get { return "Rust"; } }
 
         /// <summary>
         /// Gets the version of this extension
@@ -29,13 +28,11 @@ namespace Oxide.Unity
         /// </summary>
         public override string Author { get { return "Oxide Team"; } }
 
-        private GameObject gameObject;
-
         /// <summary>
-        /// Initialises a new instance of the UnityExtension class
+        /// Initialises a new instance of the RustExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public UnityExtension(ExtensionManager manager)
+        public RustExtension(ExtensionManager manager)
             : base(manager)
         {
 
@@ -48,14 +45,11 @@ namespace Oxide.Unity
         public override void Load()
         {
             // Register our loader
-            Manager.RegisterPluginLoader(new UnityPluginLoader());
+            Manager.RegisterPluginLoader(new RustPluginLoader());
 
             // Register our libraries
-
-            // Register our MonoBehaviour
-            gameObject = new GameObject("Oxide.Ext.Unity");
-            UnityEngine.Object.DontDestroyOnLoad(gameObject);
-            gameObject.AddComponent<UnityScript>();
+            Manager.RegisterLibrary("Command", new Command());
+            Manager.RegisterLibrary("Rust", new Rust.Libraries.Rust());
         }
 
         /// <summary>

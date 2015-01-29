@@ -1,0 +1,99 @@
+{
+  "Name": "7 Days to Die",
+  "TargetDirectory": "D:\\Servers\\Game\\7DaysToDie\\Latest\\7DaysToDie_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "HookTypeName": "Initialise Oxide",
+            "Name": "InitOxide",
+            "HookName": "OnInitialization",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "GameStartupHelper",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Init",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "5Iix6I2RLpeIAmd+cA+FDpO5NFFWiwh9E74fVNOjVzs="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConnectionManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "OnServerInitialized",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "GBd1SlgCkTPNQbOQNhpXc4YYXtdlY7i8LF2sS4/iQNY="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConnectionManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "OnPlayerConnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "wBBvjwsAT19/GWKzCvZ8rlAy9lyk/QCoiayyQL5NYQY="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConnectionManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "OnPlayerDisconnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "jDuwhPhr3EB7VzfT4z/T8Yd05RzO6w4SyfLFlF9+S3k="
+          }
+        }
+      ]
+    }
+  ]
+}

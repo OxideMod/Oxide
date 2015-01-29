@@ -103,7 +103,7 @@ namespace Oxide.Plugins
 
                 plugin.SetPluginInfo(ScriptName, ScriptPath);
                 plugin.Watcher = Extension.Watcher;
-                
+
                 if (Interface.GetMod().PluginLoaded(plugin))
                 {
                     LastGoodVersion = CompilationCount;
@@ -287,7 +287,7 @@ namespace Oxide.Plugins
             }
             catch (IOException ex)
             {
-                Interface.GetMod().LogInfo("IOException while checking plugin: {0}", ScriptName);
+                Interface.GetMod().LogInfo("IOException while checking plugin: {0}", ScriptName, ex.ToString());
             }
         }
     }

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function die_with() { echo "$*" >&2; exit 1; }
+function die_with { echo "$*" >&2; exit 1; }
 
 echo "Checking if commit is a pull request"
 if [ $TRAVIS_PULL_REQUEST == true ]; then die_with "Skipping deployment for pull request!"; fi
@@ -13,32 +13,66 @@ git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/snaps
 
 cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
 
-mkdir -p $HOME/temp/RustDedicated_Data/Managed || die_with "Failed to create directories!"
+function bundle_rust {
+    mkdir -p $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to create directory structure!"
 
-echo "Copying target files to temp directory"
-cp -f Oxide.Core/bin/Release/Oxide.Core.dll \
-Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
-$HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
+    echo "Copying target files to temp directory"
+    cp -f Oxide.Core/bin/Release/Oxide.Core.dll \
+    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
+    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
+    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
+    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
+    Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll \
+    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
+    $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
+    cp -f Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
+    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
+    Oxide.Ext.Lua/Dependencies/*Lua.dll \
+    Oxide.Ext.Python/Dependencies/IronPython.dll \
+    Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
+    Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
+    $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
+    cp -f Oxide.Ext.Rust/Patched/oxide.root.json \
+    Oxide.Ext.Lua/Dependencies/lua5*.dll \
+    $HOME/temp_rust || die_with "Failed to copy config file and Lua DLLs!"
 
-cd Dependencies || die_with "Failed to change to dependencies directory!"
-cp -f IronPython.dll Jint.dll *Lua.dll Microsoft.Dynamic.dll Microsoft.Scripting*.dll Mono.*.dll \
-$HOME/temp/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
+    echo "Bundling and compressing target files"
+    cd $HOME/temp_rust || die_with "Failed to change to temp directory!"
+    zip -vr9 $HOME/snapshots/Rust/OxideRust.zip . || die_with "Failed to bundle snapshot files!"
+} || die_with "Failed to create Rust bundle!"
 
-cd ../ || die_with "Failed to change to project home!"
-cp -f Dependencies/lua5*.dll $HOME/temp || die_with "Failed to copy config file and Lua DLLs!"
+function bundle_7dtd {
+    mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to create directory structure!"
 
-echo "Archiving and compressing target files"
-cd $HOME/temp || die_with "Failed to change to temp directory!"
-mkdir -p $HOME/snapshots/Oxide || die_with "Failed to create snapshot version directory!"
-zip -vr9 $HOME/snapshots/Oxide/Oxide.zip . || die_with "Failed to archive snapshot files!"
+    echo "Copying target files to temp directory"
+    cp -f Oxide.Core/bin/Release/Oxide.Core.dll \
+    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
+    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
+    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
+    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
+    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
+    $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
+    cp -f Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
+    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
+    Oxide.Ext.Lua/Dependencies/*Lua.dll \
+    Oxide.Ext.Python/Dependencies/IronPython.dll \
+    Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
+    Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
+    $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
+    cp -f Oxide.Ext.SevenDaysToDie/Patched/oxide.root.json \
+    Oxide.Ext.Lua/Dependencies/lua5*.dll \
+    $HOME/temp_7dtd || die_with "Failed to copy config file and Lua DLLs!"
 
-echo "Adding, committing, and pushing to snapshots branch"
+    echo "Bundling and compressing target files"
+    cd $HOME/temp_7dtd || die_with "Failed to change to temp directory!"
+    zip -vr9 $HOME/snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
+} || die_with "Failed to create 7 Days to Die bundle!"
+
+bundle_rust; bundle_7dtd
+
+echo "Adding, committing, and pushing to snapshots"
 cd $HOME/snapshots || die_with "Failed to change to snapshots directory!"
-git add -f . && git commit -m "Oxide 2.0.$TRAVIS_BUILD_NUMBER" || die_with "Failed to add and commit files with git!"
-git push -qf origin master >/dev/null || die_with "Failed to push snapshot to GitHub!"
+git add -f . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER" || die_with "Failed to add and commit files!"
+git push -qf origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"

@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLua">
-      <HintPath>..\Dependencies\NLua.dll</HintPath>
+      <HintPath>..\Oxide.Ext.Lua\Dependencies\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -44,14 +44,14 @@
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
       <ItemGroup>
         <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-          <HintPath>..\Dependencies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+          <HintPath>Dependencies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
         </Reference>
       </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
         <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <HintPath>..\Dependencies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
+          <HintPath>Dependencies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
         </Reference>
       </ItemGroup>
     </Otherwise>
