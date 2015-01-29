@@ -178,7 +178,6 @@ namespace Oxide.Plugins
                                 {
                                     method.Attributes &= ~Mono.Cecil.MethodAttributes.PInvokeImpl;
                                     var body = new Mono.Cecil.Cil.MethodBody(method);
-                                    body.Instructions.Add(Instruction.Create(OpCodes.Nop));
                                     body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "PInvoke access is restricted"));
                                     body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
                                     body.Instructions.Add(Instruction.Create(OpCodes.Throw));
@@ -194,13 +193,14 @@ namespace Oxide.Plugins
                                         if (variable.VariableType.FullName.StartsWith(namespace_name))
                                         {
                                             var body = new Mono.Cecil.Cil.MethodBody(method);
-                                            body.Instructions.Add(Instruction.Create(OpCodes.Nop));
                                             body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "System access is restricted"));
                                             body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
                                             body.Instructions.Add(Instruction.Create(OpCodes.Throw));
                                             method.Body = body;
                                             replaced_method = true;
+                                            break;
                                         }
+                                    if (replaced_method) break;
                                 }
                                 if (replaced_method) continue;
 

@@ -324,7 +324,7 @@ namespace Oxide.Core
             if (plugin == null) return false;
 
             // Let the plugin loader know that this plugin is being unloaded
-            var loader = extensionmanager.GetPluginLoaders().Single(l => l.ScanDirectory(PluginDirectory).Contains(name));
+            var loader = extensionmanager.GetPluginLoaders().SingleOrDefault(l => l.ScanDirectory(PluginDirectory).Contains(name));
             if (loader != null) loader.Unloading(plugin);
 
             // Unload it
@@ -343,7 +343,7 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public bool ReloadPlugin(string name)
         {
-            var loader = extensionmanager.GetPluginLoaders().Single(l => l.ScanDirectory(PluginDirectory).Contains(name));
+            var loader = extensionmanager.GetPluginLoaders().SingleOrDefault(l => l.ScanDirectory(PluginDirectory).Contains(name));
             if (loader != null)
             {
                 loader.Reload(PluginDirectory, name);
