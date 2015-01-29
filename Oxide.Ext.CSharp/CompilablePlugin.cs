@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Linq;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -31,6 +32,8 @@ namespace Oxide.Plugins
             "System.IO", "System.Diagnostics", "System.Threading", "System.Reflection.Assembly", "System.Runtime.InteropServices", "System.Net",
             "Mono.Cecil"
         };
+
+        private string[] whitelistedNamespaces = { "System.IO.MemoryStream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags" };
 
         public CompilablePlugin(CSharpExtension extension, string directory, string name)
         {
@@ -178,7 +181,7 @@ namespace Oxide.Plugins
                                 {
                                     method.Attributes &= ~Mono.Cecil.MethodAttributes.PInvokeImpl;
                                     var body = new Mono.Cecil.Cil.MethodBody(method);
-                                    body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "PInvoke access is restricted"));
+                                    body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "PInvoke access is restricted, you are not allowed to use PInvoke"));
                                     body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
                                     body.Instructions.Add(Instruction.Create(OpCodes.Throw));
                                     method.Body = body;
@@ -192,8 +195,9 @@ namespace Oxide.Plugins
                                     foreach (var namespace_name in blacklistedNamespaces)
                                         if (variable.VariableType.FullName.StartsWith(namespace_name))
                                         {
+                                            if (whitelistedNamespaces.Any(name => variable.VariableType.FullName.StartsWith(name))) continue;
                                             var body = new Mono.Cecil.Cil.MethodBody(method);
-                                            body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "System access is restricted"));
+                                            body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + variable.VariableType.FullName));
                                             body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
                                             body.Instructions.Add(Instruction.Create(OpCodes.Throw));
                                             method.Body = body;
@@ -217,7 +221,8 @@ namespace Oxide.Plugins
                                         foreach (var namespace_name in blacklistedNamespaces)
                                             if (token.StartsWith(namespace_name))
                                             {
-                                                instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted");
+                                                if (whitelistedNamespaces.Any(name => token.StartsWith(name))) continue;
+                                                instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + token);
                                                 instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, security_exception));
                                                 instructions.Insert(i, Instruction.Create(OpCodes.Throw));
                                                 changed_method = true;
@@ -231,10 +236,12 @@ namespace Oxide.Plugins
                                         foreach (var namespace_name in blacklistedNamespaces)
                                             if (full_namespace.StartsWith(namespace_name))
                                             {
+                                                if (whitelistedNamespaces.Any(name => full_namespace.StartsWith(name))) continue;
+
                                                 for (var n = 0; n < method.Parameters.Count; n++)
                                                     instructions.Insert(i++, Instruction.Create(OpCodes.Pop));
 
-                                                instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted");
+                                                instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + full_namespace);
                                                 instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, security_exception));
                                                 instructions.Insert(i, Instruction.Create(OpCodes.Throw));
 
