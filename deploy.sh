@@ -52,7 +52,7 @@ function bundle_7dtd {
     cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
     Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
     Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
+    #Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
     Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
