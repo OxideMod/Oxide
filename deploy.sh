@@ -11,9 +11,8 @@ git config --global user.email "travis@travis-ci.org" && git config --global use
 echo "Cloning snapshots branch using token"
 git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/snapshots >/dev/null || die_with "Failed to clone existing snapshots branch!"
 
-cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
-
 function bundle_rust {
+    cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
     mkdir -p $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
@@ -38,10 +37,11 @@ function bundle_rust {
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_rust || die_with "Failed to change to temp directory!"
-    zip -vr9 $HOME/snapshots/Rust/OxideRust.zip . || die_with "Failed to bundle snapshot files!"
+    zip -vFS9 $HOME/snapshots/Rust/OxideRust.zip . || die_with "Failed to bundle snapshot files!"
 } || die_with "Failed to create Rust bundle!"
 
 function bundle_7dtd {
+    cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
     mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
@@ -65,7 +65,7 @@ function bundle_7dtd {
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_7dtd || die_with "Failed to change to temp directory!"
-    zip -vr9 $HOME/snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
+    zip -vFS9 $HOME/snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
 } || die_with "Failed to create 7 Days to Die bundle!"
 
 bundle_rust; bundle_7dtd
