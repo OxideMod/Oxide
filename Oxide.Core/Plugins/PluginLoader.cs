@@ -39,5 +39,14 @@ namespace Oxide.Core.Plugins
             Interface.GetMod().UnloadPlugin(name);
             Interface.GetMod().LoadPlugin(name);
         }
+
+        /// <summary>
+        /// Called when a plugin which was loaded by this loader is being unloaded by the plugin manager
+        /// </summary>
+        /// <param name="plugin"></param>
+        public virtual void Unloading(Plugin plugin)
+        {
+
+        }
     }
 }
