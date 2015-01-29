@@ -73,7 +73,7 @@ namespace Oxide.Plugins
         /// <param name="arg"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendReply(ConsoleSystem.Arg arg, string format, params string[] args)
+        protected void SendReply(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
 
@@ -96,7 +96,7 @@ namespace Oxide.Plugins
         /// <param name="player"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendReply(BasePlayer player, string format, params string[] args)
+        protected void SendReply(BasePlayer player, string format, params object[] args)
         {
             PrintToChat(player, format, args);
         }
@@ -107,7 +107,7 @@ namespace Oxide.Plugins
         /// <param name="arg"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendWarning(ConsoleSystem.Arg arg, string format, params string[] args)
+        protected void SendWarning(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
 
@@ -130,7 +130,7 @@ namespace Oxide.Plugins
         /// <param name="arg"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendError(ConsoleSystem.Arg arg, string format, params string[] args)
+        protected void SendError(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
 

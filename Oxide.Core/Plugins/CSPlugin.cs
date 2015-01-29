@@ -67,7 +67,7 @@ namespace Oxide.Core.Plugins
                 Subscribe(hookname);
 
             // Let the plugin know that it's loading
-            OnCallHook("Init", null);
+            CallHook("Init", null);
         }
 
         /// <summary>

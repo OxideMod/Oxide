@@ -74,7 +74,7 @@ namespace Oxide.Plugins
             });
         }
 
-        public void LoadAssembly(int version, Action<bool> callback)
+        public void LoadAssembly(int version, Action<CSharpPlugin> callback)
         {
             //Interface.GetMod().LogInfo("Loading plugin: {0}_{1}", Name, version);
 
@@ -107,7 +107,7 @@ namespace Oxide.Plugins
                 if (Interface.GetMod().PluginLoaded(plugin))
                 {
                     LastGoodVersion = CompilationCount;
-                    if (callback != null) callback(true);
+                    if (callback != null) callback(plugin);
                 }
                 else
                 {
@@ -121,12 +121,12 @@ namespace Oxide.Plugins
                     {
                         Interface.GetMod().LogInfo("No previous version to rollback plugin: {0}", ScriptName);
                     }
-                    if (callback != null) callback(false);
+                    if (callback != null) callback(null);
                 }
             });
         }
 
-        public void LoadAssembly(Action<bool> callback)
+        public void LoadAssembly(Action<CSharpPlugin> callback)
         {
             LoadAssembly(CompilationCount, callback);
         }

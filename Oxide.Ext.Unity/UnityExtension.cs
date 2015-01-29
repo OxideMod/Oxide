@@ -2,8 +2,9 @@
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
 using Oxide.Unity.Plugins;
+
+using UnityEngine;
 
 namespace Oxide.Unity
 {
@@ -27,6 +28,8 @@ namespace Oxide.Unity
         /// </summary>
         public override string Author { get { return "Oxide Team"; } }
 
+        private GameObject gameObject;
+
         /// <summary>
         /// Initialises a new instance of the RustExtension class
         /// </summary>
@@ -47,7 +50,11 @@ namespace Oxide.Unity
             Manager.RegisterPluginLoader(new UnityPluginLoader());
 
             // Register our libraries
-            
+
+            // Register our MonoBehaviour
+            gameObject = new GameObject("Oxide.Ext.Unity");
+            UnityEngine.Object.DontDestroyOnLoad(gameObject);
+            gameObject.AddComponent<UnityScript>();
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ namespace Oxide.Plugins
     public class CSharpPluginLoader : PluginLoader
     {
         public static List<string> ProjectReferences;
+        public List<CSharpPlugin> LoadedPlugins = new List<CSharpPlugin>();
 
         private CSharpExtension extension;
         private Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
@@ -65,12 +66,16 @@ namespace Oxide.Plugins
             // Let the Oxide core know that this plugin will be loading asynchronously
             LoadingPlugins.Add(name);
 
-            var plugin = GetCompilablePlugin(extension, directory, name);
-            plugin.Compile(compiled =>
+            var compilable_plugin = GetCompilablePlugin(extension, directory, name);
+            compilable_plugin.Compile(compiled =>
             {
                 // Load the plugin assembly if it was successfully compiled
                 if (compiled)
-                    plugin.LoadAssembly(loaded => LoadingPlugins.Remove(name));
+                    compilable_plugin.LoadAssembly(plugin =>
+                    {
+                        LoadingPlugins.Remove(name);
+                        if (plugin != null) LoadedPlugins.Add(plugin);
+                    });
                 else
                     LoadingPlugins.Remove(name);
             });
@@ -96,6 +101,16 @@ namespace Oxide.Plugins
                 Interface.GetMod().UnloadPlugin(name);
                 Interface.GetMod().LoadPlugin(name);
             });
+        }
+
+        /// <summary>
+        /// Called when the plugin manager is unloading a plugin that was loaded by this plugin loader
+        /// </summary>
+        /// <param name="plugin"></param>
+        public override void Unloading(Plugin plugin_base)
+        {
+            var plugin = plugin_base as CSharpPlugin;
+            LoadedPlugins.Remove(plugin);
         }
 
         private CompilablePlugin GetCompilablePlugin(CSharpExtension extension, string directory, string name)
