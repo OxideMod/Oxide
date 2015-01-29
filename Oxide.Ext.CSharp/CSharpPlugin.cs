@@ -82,13 +82,18 @@ namespace Oxide.Plugins
     public abstract class CSharpPlugin : CSPlugin
     {
         public string Filename;
-
         public FSWatcher Watcher;
+
+        public bool HookedOnFrame
+        {
+            get; private set;
+        }
 
         public CSharpPlugin() : base()
         {
             foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
             {
+                if (method.Name == "OnFrame") HookedOnFrame = true;
                 // Assume all private instance methods could be hooks
                 if (!hooks.ContainsKey(method.Name)) hooks[method.Name] = method;
             }
@@ -124,6 +129,7 @@ namespace Oxide.Plugins
         public override void HandleRemovedFromManager(PluginManager manager)
         {
             CallHook("Unloaded", null);
+            CallHook("Unload", null);
 
             Watcher.RemoveMapping(Name);
 

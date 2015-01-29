@@ -60,8 +60,12 @@ namespace Oxide.Core
         private WebRequests libwebrequests;
 
         // Thread safe NextTick callback queue
-        private List<Action> NextTickQueue = new List<Action>();
-        private object NextTickLock = new object();
+        private List<Action> nextTickQueue = new List<Action>();
+        private object nextTickLock = new object();
+
+        // Allow extensions to register a method to be called every frame
+        private Action onFrame;
+        private bool isInitialized = false;
 
         /// <summary>
         /// Gets the data file system
@@ -216,10 +220,12 @@ namespace Oxide.Core
             {
                 var loading_plugin_count = loader.LoadingPlugins.Count;
                 if (loading_plugin_count < 1) continue;
+                // Wait until all async plugins have finished loading
                 while (loader.LoadingPlugins.Count > 0)
                 {
                     System.Threading.Thread.Sleep(25);
-                    Interface.GetMod().CallHook("OnTick", new object[] { });
+                    // Process any NextTick callbacks which other threads may have queued
+                    OnFrame();
                 }
             }
 
@@ -238,6 +244,8 @@ namespace Oxide.Core
                     rootlogger.WriteException(string.Format("Failed to initialise plugin {0}", plugin.Name), ex);
                 }
             }
+
+            isInitialized = true;
         }
 
         /// <summary>
@@ -315,10 +323,16 @@ namespace Oxide.Core
             Plugin plugin = pluginmanager.GetPlugin(name);
             if (plugin == null) return false;
 
+            // Let the plugin loader know that this plugin is being unloaded
+            var loader = extensionmanager.GetPluginLoaders().Single(l => l.ScanDirectory(PluginDirectory).Contains(name));
+            if (loader != null) loader.Unloading(plugin);
+
             // Unload it
             pluginmanager.RemovePlugin(plugin);
 
+            // Let other plugins know that this plugin has been unloaded
             CallHook("OnPluginUnloaded", new object[] { plugin });
+
             rootlogger.Write(LogType.Info, "Unloaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
             return true;
         }
@@ -360,50 +374,63 @@ namespace Oxide.Core
         /// <returns></returns>
         public object CallHook(string hookname, object[] args)
         {
-            // Check for special hooks
-            switch (hookname)
-            {
-                case "OnTick": // Called every tick
-                    if (NextTickQueue.Count > 0)
-                        lock (NextTickLock)
-                        {
-                            foreach (var callback in NextTickQueue)
-                            {
-                                try
-                                {
-                                    callback();
-                                }
-                                catch (Exception ex)
-                                {
-                                    rootlogger.Write(LogType.Error, "Exception while calling NextTick callback: {0}", ex.ToString());
-                                }
-                            }
-                            NextTickQueue.Clear();
-                        }
-
-                    // Update plugin change watchers
-                    UpdatePluginWatchers();
-
-                    // Update libraries
-                    libtimer.Update();
-                    libwebrequests.Update();
-
-                    // Forward the call to the plugin manager
-                    break;
-            }
-
             // Forward the call to the plugin manager
             return pluginmanager.CallHook(hookname, args);
         }
 
         /// <summary>
-        /// Queue a callback to be called in the next server tick
+        /// Queue a callback to be called in the next server frame
         /// </summary>
         /// <param name="callback"></param>
-        /// <returns></returns>
         public void NextTick(Action callback)
         {
-            lock (NextTickLock) NextTickQueue.Add(callback);
+            lock (nextTickLock) nextTickQueue.Add(callback);
+        }
+
+        /// <summary>
+        /// Register a callback which will be called every server frame
+        /// </summary>
+        /// <param name="callback"></param>
+        public void OnFrame(Action callback)
+        {
+            onFrame += callback;
+        }
+
+        /// <summary>
+        /// Called every server frame, implemented by an engine-specific extension
+        /// </summary>
+        public void OnFrame()
+        {
+            // Call any callbacks queued for this frame
+            if (nextTickQueue.Count > 0)
+                lock (nextTickLock)
+                {
+                    for (var i = 0; i < nextTickQueue.Count; i++)
+                    {
+                        try
+                        {
+                            nextTickQueue[i]();
+                        }
+                        catch (Exception ex)
+                        {
+                            rootlogger.Write(LogType.Error, "Exception while calling NextTick callback: {0}", ex.ToString());
+                        }
+                    }
+                    nextTickQueue.Clear();
+                }
+
+            // Update libraries
+            libtimer.Update();
+            libwebrequests.Update();
+
+            // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
+            if (!isInitialized) return;
+
+            // Update plugin change watchers
+            UpdatePluginWatchers();
+
+            // Update extensions
+            onFrame();
         }
 
         #region Plugin Change Watchers

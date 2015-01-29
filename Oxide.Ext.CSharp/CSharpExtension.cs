@@ -48,6 +48,8 @@ namespace Oxide.Plugins
             // Register our loader
             loader = new CSharpPluginLoader(this);
             Manager.RegisterPluginLoader(loader);
+            // Register engine frame callback
+            Interface.GetMod().OnFrame(OnFrame);
         }
 
         /// <summary>
@@ -68,6 +70,15 @@ namespace Oxide.Plugins
         public override void OnModLoad()
         {
 
+        }
+
+        /// <summary>
+        /// Called by engine every server frame
+        /// </summary>
+        private void OnFrame()
+        {
+            foreach (var plugin in loader.LoadedPlugins)
+                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", null);
         }
     }
 }
