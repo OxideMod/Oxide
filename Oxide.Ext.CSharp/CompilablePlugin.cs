@@ -187,6 +187,23 @@ namespace Oxide.Plugins
                             }
                             else
                             {
+                                var replaced_method = false;
+                                foreach (var variable in method.Body.Variables)
+                                {
+                                    foreach (var namespace_name in blacklistedNamespaces)
+                                        if (variable.VariableType.FullName.StartsWith(namespace_name))
+                                        {
+                                            var body = new Mono.Cecil.Cil.MethodBody(method);
+                                            body.Instructions.Add(Instruction.Create(OpCodes.Nop));
+                                            body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "System access is restricted"));
+                                            body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
+                                            body.Instructions.Add(Instruction.Create(OpCodes.Throw));
+                                            method.Body = body;
+                                            replaced_method = true;
+                                        }
+                                }
+                                if (replaced_method) continue;
+
                                 instructions = method.Body.Instructions;
 
                                 var i = 0;
