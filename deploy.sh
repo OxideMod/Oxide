@@ -31,6 +31,9 @@ function bundle_rust {
     Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
     Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
+    cp -f Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
+    Oxide.Ext.Rust/Patched/Facepunch.dll \
+    $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
     cp -f Oxide.Ext.Rust/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
     $HOME/temp_rust || die_with "Failed to copy config file and Lua DLLs!"
@@ -60,6 +63,8 @@ function bundle_7dtd {
     Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
     Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
+    cp -f Oxide.Ext.SevenDaysToDie/Patched/Assembly-CSharp.dll \
+    $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDaysToDie/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
     $HOME/temp_7dtd || die_with "Failed to copy config file and Lua DLLs!"
