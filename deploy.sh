@@ -9,7 +9,7 @@ echo "Configuring git credentials"
 git config --global user.email "travis@travis-ci.org" && git config --global user.name "Travis" || die_with "Failed to configure git credentials!"
 
 echo "Cloning snapshots branch using token"
-git clone -q https://$GITHUB_TOKEN@github.com/strykes/Snapshots.git $HOME/Snapshots >/dev/null || die_with "Failed to clone snapshots repo!"
+git clone -q https://a4c487065a53f0562ac35c1a5edf3c12c610bff4@github.com/strykes/Snapshots.git $HOME/Snapshots >/dev/null || die_with "Failed to clone snapshots repo!"
 
 function bundle_rust {
     cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
