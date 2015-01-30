@@ -41,6 +41,7 @@
     <Compile Include="JavaScriptExtension.cs" />
     <Compile Include="Libraries\JavaScriptGlobal.cs" />
     <Compile Include="Libraries\JavaScriptDatafile.cs" />
+    <Compile Include="Libraries\JavaScriptWebRequests.cs" />
     <Compile Include="Plugins\JavaScriptPluginLoader.cs" />
     <Compile Include="Plugins\JavaScriptPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
