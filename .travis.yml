@@ -20,4 +20,3 @@ env:
   global:
     # Super secure, encrypted variables! Ssssh!
     - secure: "odNwsbGlhK5y0RZyPcQDSMhRyefKqlL7wkxaiv9CdmjUoCQ14ZPuDxcY90B+tIlLUg3H/ZhqoDTlHZQIYbmKhxgXJ06e2Cqev/cEyyI9rMxSylvpNtKQbJZeBmmeQ5G9nmk5EOIvVVqG+nVl9qtreuQn6vWlGulm6Bx96TJA1Mw="
-    - secure: "AAAAB3NzaC1yc2EAAAADAQABAAAAgQCvWe74qv4gMKXX4HKqGcJZdLAZcsp+hK3vpjVimGZaMCK3Ud7i5+zdXoSc5sO4Dk9q8unwyo9sNnNRkc1vU1ZSvm5c6MnckFERjXq7fIhTOfy6qCO8krRp1up1s0yX/RjTbTXKHRbX4N9ULIQXNx/erQXw+MB/1yQNZ3n14AKsnQ=="
