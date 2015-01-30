@@ -9,7 +9,6 @@ using Jint;
 using Jint.Native;
 using Jint.Native.Error;
 using Jint.Native.Object;
-using Jint.Parser;
 using Jint.Runtime;
 using Jint.Runtime.Interop;
 
@@ -128,8 +127,7 @@ namespace Oxide.Ext.JavaScript.Plugins
             // Load the plugin
             string code = File.ReadAllText(Filename);
             Name = Path.GetFileNameWithoutExtension(Filename);
-            var program = new JavaScriptParser().Parse(code);
-            JavaScriptEngine.Execute(program);
+            JavaScriptEngine.Execute(code);
             if (JavaScriptEngine.GetValue(Name).TryCast<ObjectInstance>() == null) throw new Exception("Plugin is missing main object");
             Class = JavaScriptEngine.GetValue(Name).AsObject();
             if (!Class.HasProperty("Name"))
