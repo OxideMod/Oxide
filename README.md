@@ -1,4 +1,4 @@
-Oxide 2 [![Build Status](https://travis-ci.org/OxideMod/Oxide.png)](https://travis-ci.org/OxideMod/Oxide)
+Oxide 2 [![Build Status](https://travis-ci.org/strykes/Oxide.png)](https://travis-ci.org/strykes/Oxide)
 =======
 
 Oxide 2 is a complete rewrite of the popular, original Oxide mod for the game Rust. Oxide 2 has a focus on modularity and extensibility. The core is highly abstracted and loosely coupled, and could be used to mod any game that uses .NET such as 7 Days to Die, The Forest, Space Engineers, and more.
