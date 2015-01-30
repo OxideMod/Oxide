@@ -82,4 +82,3 @@ git add -f . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER" || die_with "Fa
 git push -qf origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"
-
