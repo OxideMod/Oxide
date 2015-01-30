@@ -7,16 +7,18 @@ before_script: sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUI
 solution: Oxide.sln
 
 # Run deployment script
-after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
+after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == strykes/Oxide-2 ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
 
 notifications:
   # Disable build status email notifications, until the issue with forks is fixed
   email: false
   # IRC notification
-  irc: "chat.freenode.net#oxidemod"
+  irc: "chat.freenode.net#rustexp"
 
 # Environmental system variables
 env:
   global:
     # Super secure, encrypted variables! Ssssh!
     - secure: "kSoJS+nEC76WI0rQC/FLnq0mlbC5Y6dx6//mF4VLfCPVKB16pZ8bFQCybrXhb6oVRjOcKTGFbMV2SgdHcwhpec8yJ8dP4hR81n6xNSY1Y5S/V0KQ6QUehUgoz0xClr6VgVMnTY19kjGBX4Zol3W5LYIZJbx5C1h3TD8yy8RvirM="
+
+
