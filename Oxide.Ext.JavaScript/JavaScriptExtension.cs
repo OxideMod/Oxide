@@ -88,7 +88,7 @@ namespace Oxide.Ext.JavaScript
             JavaScriptEngine.Global.FastSetProperty("importNamespace", new PropertyDescriptor(new ClrFunctionInstance(JavaScriptEngine, (thisObj, arguments) =>
             {
                 var nspace = TypeConverter.ToString(arguments.At(0));
-                if (WhitelistNamespaces.Any(nspace.StartsWith))
+                if (string.IsNullOrEmpty(nspace) || WhitelistNamespaces.Any(nspace.StartsWith))
                 {
                     return new NamespaceReference(JavaScriptEngine, nspace);
                 }
@@ -179,6 +179,7 @@ namespace Oxide.Ext.JavaScript
             // Bind JavaScript specific libraries
             LoadLibrary(new JavaScriptGlobal(Manager.Logger), "");
             LoadLibrary(new JavaScriptDatafile(JavaScriptEngine), "data");
+            LoadLibrary(new JavaScriptWebRequests(), "webrequests");
 
             // Bind any libraries to JavaScript
             foreach (string name in Manager.GetLibraries())
