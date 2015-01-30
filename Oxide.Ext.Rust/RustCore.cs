@@ -288,7 +288,7 @@ namespace Oxide.Rust.Plugins
                     {
                         if (!cmdlib.HandleChatCommand(ply, cmd, args))
                         {
-                            ply.SendConsoleCommand(string.Format("chat.add \"SERVER\" \"Unknown command '{0}'!\"", cmd));
+                            ply.SendConsoleCommand("chat.add", new object[] { 0, "SERVER", string.Format("Unknown command {0}",cmd) });
                         }
                     }
 
