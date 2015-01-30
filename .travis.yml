@@ -7,7 +7,7 @@ before_script: sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUI
 solution: Oxide.sln
 
 # Run deployment script
-after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == strykes/Oxide-2 ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
+after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == strykes/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
 
 notifications:
   # Disable build status email notifications, until the issue with forks is fixed
