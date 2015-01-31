@@ -52,7 +52,7 @@ namespace Oxide.Ext.JavaScript
         // The plugin loader
         private JavaScriptPluginLoader loader;
 
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
+        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Oxide.Ext.JavaScript
             JavaScriptEngine.Global.FastSetProperty("importNamespace", new PropertyDescriptor(new ClrFunctionInstance(JavaScriptEngine, (thisObj, arguments) =>
             {
                 var nspace = TypeConverter.ToString(arguments.At(0));
-                if (string.IsNullOrEmpty(nspace) || WhitelistNamespaces.Any(nspace.StartsWith))
+                if (string.IsNullOrEmpty(nspace) || WhitelistNamespaces.Any(nspace.StartsWith) || nspace.Equals("System"))
                 {
                     return new NamespaceReference(JavaScriptEngine, nspace);
                 }
