@@ -34,6 +34,9 @@
     <Reference Include="Jint">
       <HintPath>Dependencies\Jint.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Scripting.Core">
+      <HintPath>Dependencies\Microsoft.Scripting.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -42,6 +45,7 @@
     <Compile Include="Libraries\JavaScriptGlobal.cs" />
     <Compile Include="Libraries\JavaScriptDatafile.cs" />
     <Compile Include="Libraries\JavaScriptWebRequests.cs" />
+    <Compile Include="LibraryWrapper.cs" />
     <Compile Include="Plugins\JavaScriptPluginLoader.cs" />
     <Compile Include="Plugins\JavaScriptPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
