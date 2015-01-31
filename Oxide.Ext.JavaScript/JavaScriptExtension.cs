@@ -113,7 +113,6 @@ namespace Oxide.Ext.JavaScript
         /// <param name="path"></param>
         public void LoadLibrary(Library library, string path)
         {
-            //JavaScriptEngine.Global.FastAddProperty("System", new NamespaceReference(JavaScriptEngine, "System"), false, false, false);
             ObjectInstance scope = null;
             if (library.IsGlobal)
             {
@@ -121,8 +120,10 @@ namespace Oxide.Ext.JavaScript
             }
             else if (JavaScriptEngine.Global.GetProperty(path) == PropertyDescriptor.Undefined)
             {
-                scope = new ObjectInstance(JavaScriptEngine) { Extensible = true };
-                JavaScriptEngine.Global.FastAddProperty(path, scope, true, false, true);
+                JavaScriptEngine.Global.FastAddProperty(path, new LibraryWrapper(JavaScriptEngine, library) { Extensible = true }, true, false, true);
+                return;
+                //scope = new ObjectInstance(JavaScriptEngine) { Extensible = true };
+                //JavaScriptEngine.Global.FastAddProperty(path, scope, true, false, true);
             }
             else
             {
@@ -179,13 +180,15 @@ namespace Oxide.Ext.JavaScript
             // Bind JavaScript specific libraries
             LoadLibrary(new JavaScriptGlobal(Manager.Logger), "");
             LoadLibrary(new JavaScriptDatafile(JavaScriptEngine), "data");
-            LoadLibrary(new JavaScriptWebRequests(), "webrequests");
 
             // Bind any libraries to JavaScript
             foreach (string name in Manager.GetLibraries())
             {
                 LoadLibrary(Manager.GetLibrary(name), name.ToLowerInvariant());
             }
+
+            //extension to webrequests
+            LoadLibrary(new JavaScriptWebRequests(), "webrequests");
         }
     }
 }
