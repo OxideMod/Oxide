@@ -6,6 +6,7 @@ using System.Text;
 
 using IronPython.Hosting;
 using IronPython.Runtime;
+
 using Microsoft.Scripting.Hosting;
 
 using Oxide.Core;
@@ -50,7 +51,7 @@ namespace Oxide.Ext.Python
         private PythonPluginLoader loader;
 
         // Whitelist
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "UnityEngine" };
+        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
 
         delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple);
@@ -104,7 +105,7 @@ namespace Oxide.Ext.Python
 
         private object DoImport(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple)
         {
-            if (WhitelistNamespaces.Any(moduleName.StartsWith))
+            if (WhitelistNamespaces.Any(moduleName.StartsWith) || moduleName.Equals("System"))
             {
                 return IronPython.Modules.Builtin.__import__(context, moduleName);
             }
@@ -170,6 +171,7 @@ namespace Oxide.Ext.Python
             watcher = new FSWatcher(plugindir, "*.py");
             Manager.RegisterPluginChangeWatcher(watcher);
             loader.Watcher = watcher;
+            
         }
 
         /// <summary>
