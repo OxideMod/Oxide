@@ -105,15 +105,16 @@ namespace Oxide.Plugins
 
         private void SpawnCompiler(HashSet<string> references)
         {
-            var arguments = new StringBuilder("/t:library");
+            var arguments = new List<string> { "/t:library" };
 
             foreach (var reference_name in references)
                 if (reference_name != "mscorlib" && reference_name != "System" && !reference_name.StartsWith("System."))
-                    arguments.AppendFormat(" /r:{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, reference_name);
-            
-            arguments.AppendFormat(" /out:{0}\\{1}_{2}.dll {3}", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount, plugin.ScriptPath);
+                    arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, reference_name));
 
-            var start_info = new ProcessStartInfo(BinaryPath, arguments.ToString())
+            arguments.Add(string.Format("/out:{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount));
+            arguments.Add(plugin.ScriptPath);
+
+            var start_info = new ProcessStartInfo(BinaryPath, EscapeArguments(arguments.ToArray()))
             {
                 CreateNoWindow = true,
                 UseShellExecute = false,
@@ -124,8 +125,8 @@ namespace Oxide.Plugins
             process = new Process { StartInfo = start_info, EnableRaisingEvents = true };
 
             startedAt = UnityEngine.Time.realtimeSinceStartup;
-            StdOutput = new StringBuilder("");
-            ErrOutput = new StringBuilder("");
+            StdOutput = new StringBuilder();
+            ErrOutput = new StringBuilder();
 
             process.OutputDataReceived += OnStdOutput;
             process.ErrorDataReceived += OnErrorOutput;
@@ -166,6 +167,40 @@ namespace Oxide.Plugins
             endedAt = UnityEngine.Time.realtimeSinceStartup;
             ExitCode = process.ExitCode;
             Interface.GetMod().NextTick(() => callback(ExitCode == 0));
+        }
+
+        /// <summary>
+        /// Quotes all arguments that contain whitespace, or begin with a quote and returns a single argument string
+        /// </summary>
+        /// <param name="args">A list of strings for arguments, may not contain null, '\0', '\r', or '\n'</param>
+        /// <returns>A string containing the combined list of escaped/quoted strings</returns>
+        /// <exception cref="System.ArgumentNullException">Raised when one of the arguments is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Raised if an argument contains '\0', '\r', or '\n'</exception>
+        private string EscapeArguments(params string[] args)
+        {
+            var arguments = new StringBuilder();
+            var invalid_char = new Regex("[\x00\x0a\x0d]");  // these can not be escaped
+            var needs_quotes = new Regex(@"\s|""");          // contains whitespace or two quote characters
+            var escape_quote = new Regex(@"(\\*)(""|$)");    // one or more '\' followed with a quote or end of string
+            for (int i = 0; args != null && i < args.Length; i++)
+            {
+                if (args[i] == null) throw new ArgumentNullException("args[" + i + "]");
+                if (invalid_char.IsMatch(args[i])) throw new ArgumentOutOfRangeException("args[" + i + "]");
+                if (args[i] == String.Empty)
+                    arguments.Append("\"\"");
+                else if (!needs_quotes.IsMatch(args[i]))
+                    arguments.Append(args[i]);
+                else
+                {
+                    arguments.Append('"');
+                    arguments.Append(escape_quote.Replace(args[i], m =>
+                        m.Groups[1].Value + m.Groups[1].Value + (m.Groups[2].Value == "\"" ? "\\\"" : ""))
+                    );
+                    arguments.Append('"');
+                }
+                if (i + 1 < args.Length) arguments.Append(' ');
+            }
+            return arguments.ToString();
         }
     }
 }
