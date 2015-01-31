@@ -896,10 +896,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 6,
             "ReturnBehaviour": 1,
             "ArgumentBehaviour": 4,
-            "ArgumentString": "a0",
+            "ArgumentString": "l0",
             "HookTypeName": "Simple",
             "Name": "ConsoleSystem/Run_Unrestricted",
             "HookName": "OnRunCommand",
