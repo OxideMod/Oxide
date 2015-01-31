@@ -79,12 +79,12 @@ namespace Oxide.Rust.Libraries
         {
             if (message != null)
             {
-                ConsoleSystem.Broadcast("chat.add " + name.QuoteSafe() + " " + message.QuoteSafe() + " 1.0");
+                ConsoleSystem.Broadcast("chat.add", 0, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
             }
             else
             {
                 message = name;
-                ConsoleSystem.Broadcast("chat.add \"SERVER\" " + message.QuoteSafe() + " 1.0");
+                ConsoleSystem.Broadcast("chat.add", 0, message, 1.0);
             }
         }
 
@@ -99,12 +99,12 @@ namespace Oxide.Rust.Libraries
         {
             if (message != null)
             {
-                player.SendConsoleCommand("chat.add " + name.QuoteSafe() + " " + message.QuoteSafe() + " 1.0");
+                player.SendConsoleCommand("chat.add", 0, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
             }
             else
             {
                 message = name;
-                player.SendConsoleCommand("chat.add \"SERVER\" " + message.QuoteSafe() + " 1.0");
+                player.SendConsoleCommand("chat.add", 0, message, 1.0);
             }
         }
 
