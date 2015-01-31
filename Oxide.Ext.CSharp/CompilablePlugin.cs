@@ -29,12 +29,14 @@ namespace Oxide.Plugins
         private bool isPatching = false;
 
         private string[] blacklistedNamespaces = {
-            "System.IO", "System.Diagnostics", "System.Threading", "System.Reflection.Assembly", "System.Runtime.InteropServices", "System.Net", "System.Xml",
-            "Mono.Cecil"
+            "System.IO", "System.Net", "System.Xml", "System.Reflection.Assembly", "System.Reflection.Emit", "System.Threading",
+            "System.Runtime.InteropServices", "System.Diagnostics", "System.Security", "Mono.CSharp", "Mono.Cecil"
         };
 
-        private string[] whitelistedNamespaces = { "System.IO.MemoryStream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags" };
-
+        private string[] whitelistedNamespaces = {
+            "System.IO.MemoryStream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags"
+        };
+        
         public CompilablePlugin(CSharpExtension extension, string directory, string name)
         {
             Extension = extension;
@@ -72,8 +74,8 @@ namespace Oxide.Plugins
                     Interface.GetMod().LogInfo(compiler.StdOutput.ToString());
                     if (compiler.ErrOutput.Length > 0) Interface.GetMod().LogInfo(compiler.ErrOutput.ToString());
                 }
-                callback(compiled);
                 compiler = null;
+                callback(compiled);
             });
         }
 

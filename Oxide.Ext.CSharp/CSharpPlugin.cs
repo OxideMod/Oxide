@@ -79,7 +79,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Base class which all dynamic CSharp plugins must inherit
     /// </summary>
-    public abstract class CSharpPlugin : CSPlugin
+    public abstract partial class CSharpPlugin : CSPlugin
     {
         public string Filename;
         public FSWatcher Watcher;
@@ -93,8 +93,10 @@ namespace Oxide.Plugins
         {
             foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
             {
+                var info_attributes = GetType().GetCustomAttributes(typeof(HookMethod), true);
+                if (info_attributes.Length > 0) continue;
                 if (method.Name == "OnFrame") HookedOnFrame = true;
-                // Assume all private instance methods could be hooks
+                // Assume all private instance methods which are not explicitly hooked could be hooks
                 if (!hooks.ContainsKey(method.Name)) hooks[method.Name] = method;
             }
         }

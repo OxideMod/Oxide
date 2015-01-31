@@ -25,6 +25,7 @@ namespace Oxide.Plugins
         private Process process;
         private float startedAt;
         private float endedAt;
+        private bool waitingForAccess;
 
         public PluginCompiler(CompilablePlugin plugin)
         {
@@ -61,10 +62,15 @@ namespace Oxide.Plugins
             try
             {
                 source_lines = File.ReadAllLines(plugin.ScriptPath);
+                waitingForAccess = false;
             }
             catch (IOException ex)
             {
-                Interface.GetMod().LogInfo("IOException while reading {0} script: {1}", plugin.Name, ex.Message);
+                if (!waitingForAccess)
+                {
+                    waitingForAccess = true;
+                    Interface.GetMod().LogInfo("Waiting for another application to stop using script: {0}", plugin.Name);
+                }                
                 Interface.GetMod().NextTick(BuildReferences);
                 return;
             }

@@ -54,7 +54,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintToConsole(BasePlayer player, string format, params object[] args)
         {
-            player.SendConsoleCommand("echo " + string.Format(format, args));
+            player.SendConsoleCommand("echo " + string.Format(format, args), new object[] { });
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintToChat(BasePlayer player, string format, params object[] args)
         {
-            player.SendConsoleCommand("chat.add \"Oxide\" " + StringExtensions.QuoteSafe(string.Format(format, args)));
+            player.SendConsoleCommand("chat.add", 0, string.Format(format, args), 1.0);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Oxide.Plugins
         /// <param name="arg"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendReply(ConsoleSystem.Arg arg, string format, params string[] args)
+        protected void SendReply(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
 
@@ -83,7 +83,7 @@ namespace Oxide.Plugins
                 var player = arg.connection.player as BasePlayer;
                 if (player != null)
                 {
-                    player.SendConsoleCommand("echo " + message);
+                    player.SendConsoleCommand("echo ", message);
                     return;
                 }
             }
@@ -97,7 +97,7 @@ namespace Oxide.Plugins
         /// <param name="player"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendReply(BasePlayer player, string format, params string[] args)
+        protected void SendReply(BasePlayer player, string format, params object[] args)
         {
             PrintToChat(player, format, args);
         }
@@ -108,7 +108,7 @@ namespace Oxide.Plugins
         /// <param name="arg"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendWarning(ConsoleSystem.Arg arg, string format, params string[] args)
+        protected void SendWarning(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
 
@@ -117,7 +117,7 @@ namespace Oxide.Plugins
                 var player = arg.connection.player as BasePlayer;
                 if (player != null)
                 {
-                    player.SendConsoleCommand("echo " + message);
+                    player.SendConsoleCommand("echo ", message);
                     return;
                 }
             }
@@ -131,7 +131,7 @@ namespace Oxide.Plugins
         /// <param name="arg"></param>
         /// <param name="format"></param>
         /// <param name="params"></param>
-        protected void SendError(ConsoleSystem.Arg arg, string format, params string[] args)
+        protected void SendError(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
 
@@ -140,12 +140,27 @@ namespace Oxide.Plugins
                 var player = arg.connection.player as BasePlayer;
                 if (player != null)
                 {
-                    player.SendConsoleCommand("echo " + message);
+                    player.SendConsoleCommand("echo ", message);
                     return;
                 }
             }
 
             Debug.LogError(message);
+        }
+
+        protected void QueueWorkerThread(Action<object> callback)
+        {
+            System.Threading.ThreadPool.QueueUserWorkItem(context =>
+            {
+                try
+                {
+                    callback(context);
+                }
+                catch (Exception ex)
+                {
+                    RaiseError("Exception in " + Name + " plugin worker thread: " + ex.ToString());
+                }
+            });
         }
     }
 }
