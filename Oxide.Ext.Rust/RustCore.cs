@@ -252,7 +252,7 @@ namespace Oxide.Rust.Plugins
         /// <param name="wantsfeedback"></param>
         /// <returns></returns>
         [HookMethod("OnRunCommand")]
-        private object OnRunCommand(ConsoleSystem.Arg arg, bool wantsfeedback)
+        private object OnRunCommand(ConsoleSystem.Arg arg)
         {
             // Sanity checks
             if (arg == null) return null;
@@ -288,7 +288,7 @@ namespace Oxide.Rust.Plugins
                     {
                         if (!cmdlib.HandleChatCommand(ply, cmd, args))
                         {
-                            ply.SendConsoleCommand(string.Format("chat.add \"SERVER\" \"Unknown command '{0}'!\"", cmd));
+                            ply.SendConsoleCommand("chat.add", 0, string.Format("Unknown command '{0}'!", cmd));
                         }
                     }
 
