@@ -154,8 +154,8 @@ namespace Oxide.Core.Extensions
                 extensions.Add(extension);
                 extension.Load();
 
-                // Log
-                Logger.Write(LogType.Info, "Loaded extension {0} version {1} by {2}", extension.Name, extension.Version, extension.Author);
+                // Log extension loaded
+                Logger.Write(LogType.Info, "Loaded extension {0} v{1} by {2}", extension.Name, extension.Version, extension.Author);
             }
             catch (Exception ex)
             {

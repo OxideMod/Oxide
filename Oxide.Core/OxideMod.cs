@@ -120,7 +120,9 @@ namespace Oxide.Core
             filelogger.Directory = LogDirectory;
             rootlogger = new CompoundLogger();
             rootlogger.AddLogger(filelogger);
-            rootlogger.Write(LogType.Info, "Loading Oxide core...");
+
+            // Log Oxide core loading
+            rootlogger.Write(LogType.Info, "Loading Oxide core v{0}...", Version);
 
             // Create the managers
             pluginmanager = new PluginManager(rootlogger) { ConfigPath = ConfigDirectory };
@@ -202,9 +204,9 @@ namespace Oxide.Core
                         try
                         {
                             Plugin plugin = loader.Load(PluginDirectory, name);
-                            if (plugin == null) continue; // async load
+                            if (plugin == null) continue; // Async load
                             plugin.OnError += plugin_OnError;
-                            rootlogger.Write(LogType.Info, "Loaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
+                            rootlogger.Write(LogType.Info, "Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
                             plugins.Add(plugin);
                         }
                         catch (Exception ex)
@@ -298,7 +300,8 @@ namespace Oxide.Core
         public bool PluginLoaded(Plugin plugin)
         {
             plugin.OnError += plugin_OnError;
-            rootlogger.Write(LogType.Info, "Loaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
+            // Log plugin loaded
+            rootlogger.Write(LogType.Info, "Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
             {
                 pluginmanager.AddPlugin(plugin);
