@@ -336,7 +336,7 @@ namespace Oxide.Core
             // Let other plugins know that this plugin has been unloaded
             CallHook("OnPluginUnloaded", new object[] { plugin });
 
-            rootlogger.Write(LogType.Info, "Unloaded plugin {0} (v{1}) by {2}", plugin.Title, plugin.Version, plugin.Author);
+            rootlogger.Write(LogType.Info, "Unloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             return true;
         }
 

@@ -70,21 +70,33 @@ namespace Oxide.Rust.Libraries
         }
 
         /// <summary>
+        /// Runs a server command
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [LibraryFunction("RunServerCommand")]
+        public void RunServerCommand(string command, params object[] args)
+        {
+            ConsoleSystem.Run.Server.Normal(command, args);
+        }
+
+        /// <summary>
         /// Broadcasts a chat message
         /// </summary>
         /// <param name="name"></param>
         /// <param name="message"></param>
+        /// <param name="userid"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null)
+        public void BroadcastChat(string name, string message = null, string userid = "0")
         {
             if (message != null)
             {
-                ConsoleSystem.Broadcast("chat.add", 0, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
+                ConsoleSystem.Broadcast("chat.add", userid, string.Format("<color=orange>{0}</color>  {1}", name, message), 1.0);
             }
             else
             {
                 message = name;
-                ConsoleSystem.Broadcast("chat.add", 0, message, 1.0);
+                ConsoleSystem.Broadcast("chat.add", userid, message, 1.0);
             }
         }
 
@@ -94,17 +106,18 @@ namespace Oxide.Rust.Libraries
         /// <param name="player"></param>
         /// <param name="name"></param>
         /// <param name="message"></param>
+        /// <param name="userid"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(BasePlayer player, string name, string message = null)
+        public void SendChatMessage(BasePlayer player, string name, string message = null, string userid = "0")
         {
             if (message != null)
             {
-                player.SendConsoleCommand("chat.add", 0, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
+                player.SendConsoleCommand("chat.add", userid, string.Format("<color=orange>{0}</color>  {1}", name, message), 1.0);
             }
             else
             {
                 message = name;
-                player.SendConsoleCommand("chat.add", 0, message, 1.0);
+                player.SendConsoleCommand("chat.add", userid, message, 1.0);
             }
         }
 
