@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 using Jint;
@@ -9,6 +8,8 @@ using Jint.Native.Object;
 using Jint.Runtime;
 using Jint.Runtime.Descriptors;
 using Jint.Runtime.Interop;
+
+using Microsoft.Scripting.Ast;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
