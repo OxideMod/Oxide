@@ -45,16 +45,15 @@ namespace Oxide.Core.Libraries
         /// <param name="name"></param>
         /// <returns></returns>
         [LibraryFunction("Find")]
-        public object Find(string name)
+        public Plugin Find(string name)
         {
-            Plugin plugin = PluginManager.GetPlugin(name);
-            return plugin != null ? plugin.Object : null;
+            return PluginManager.GetPlugin(name);
         }
 
         /// <summary>
         /// Calls the specified hook
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
         [LibraryFunction("CallHook")]
