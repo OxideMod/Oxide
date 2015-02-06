@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 using Newtonsoft.Json;
@@ -13,14 +11,20 @@ namespace Oxide.Core.Configuration
     /// </summary>
     public class DynamicConfigFile : ConfigFile, IEnumerable<KeyValuePair<string, object>>
     {
-        private Dictionary<string, object> keyvalues;
+        private Dictionary<string, object> _keyvalues;
+        private readonly JsonSerializerSettings _settings;
+        private readonly string _chroot;
 
         /// <summary>
         /// Initialises a new instance of the DynamicConfigFile class
         /// </summary>
         public DynamicConfigFile()
         {
-            keyvalues = new Dictionary<string, object>();
+            _keyvalues = new Dictionary<string, object>();
+            var converter = new KeyValuesConverter();
+            _settings = new JsonSerializerSettings();
+            _settings.Converters.Add(converter);
+            _chroot = Interface.GetMod().InstanceDirectory;
         }
 
         /// <summary>
@@ -29,11 +33,9 @@ namespace Oxide.Core.Configuration
         /// <param name="filename"></param>
         public override void Load(string filename)
         {
+            CheckPath(filename);
             string source = File.ReadAllText(filename);
-            KeyValuesConverter converter = new KeyValuesConverter();
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.Converters.Add(converter);
-            keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(source, settings);
+            _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(source, _settings);
         }
 
         /// <summary>
@@ -42,10 +44,19 @@ namespace Oxide.Core.Configuration
         /// <param name="filename"></param>
         public override void Save(string filename)
         {
-            KeyValuesConverter converter = new KeyValuesConverter();
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.Converters.Add(converter);
-            File.WriteAllText(filename, JsonConvert.SerializeObject(keyvalues, Formatting.Indented, settings));
+            CheckPath(filename);
+            File.WriteAllText(filename, JsonConvert.SerializeObject(_keyvalues, Formatting.Indented, _settings));
+        }
+
+        /// <summary>
+        /// Check if file path is in chroot directory
+        /// </summary>
+        /// <param name="filename"></param>
+        private void CheckPath(string filename)
+        {
+            string path = Path.GetFullPath(filename);
+            if (!path.StartsWith(_chroot, StringComparison.Ordinal))
+                throw new Exception("Only access to oxide directory!");
         }
 
         /// <summary>
@@ -53,7 +64,7 @@ namespace Oxide.Core.Configuration
         /// </summary>
         public void Clear()
         {
-            keyvalues.Clear();
+            _keyvalues.Clear();
         }
 
         /// <summary>
@@ -66,14 +77,14 @@ namespace Oxide.Core.Configuration
             get
             {
                 object val;
-                if (keyvalues.TryGetValue(key, out val))
+                if (_keyvalues.TryGetValue(key, out val))
                     return val;
                 else
                     return null;
             }
             set
             {
-                keyvalues[key] = value;
+                _keyvalues[key] = value;
             }
         }
 
@@ -81,12 +92,12 @@ namespace Oxide.Core.Configuration
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
-            return keyvalues.GetEnumerator();
+            return _keyvalues.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return keyvalues.GetEnumerator();
+            return _keyvalues.GetEnumerator();
         }
 
         #endregion
