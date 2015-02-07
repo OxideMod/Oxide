@@ -125,6 +125,7 @@ namespace Oxide.Lua.Plugins
             if (Table["HasConfig"] is bool) HasConfig = (bool)Table["HasConfig"];
 
             // Set attributes
+            Table["Object"] = this;
             Table["Plugin"] = this;
 
             // Get all functions and hook them
