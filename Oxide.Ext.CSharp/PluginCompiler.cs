@@ -138,7 +138,7 @@ namespace Oxide.Plugins
 
             ThreadPool.QueueUserWorkItem((_) =>
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(30000);
                 if (!process.HasExited)
                 {
                     Interface.GetMod().NextTick(() =>
