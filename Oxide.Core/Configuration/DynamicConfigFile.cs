@@ -155,7 +155,6 @@ namespace Oxide.Core.Configuration
                         case JsonToken.Boolean:
                         case JsonToken.Bytes:
                         case JsonToken.Date:
-                        case JsonToken.Null:
                             dict[propname] = reader.Value;
                             break;
                         case JsonToken.Integer:
@@ -193,7 +192,6 @@ namespace Oxide.Core.Configuration
                         case JsonToken.Boolean:
                         case JsonToken.Bytes:
                         case JsonToken.Date:
-                        case JsonToken.Null:
                             list.Add(reader.Value);
                             break;
                         case JsonToken.Integer:
