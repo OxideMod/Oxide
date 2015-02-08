@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Oxide.Core.Configuration;
+using Newtonsoft.Json;
 
 namespace Oxide.Core
 {
@@ -92,6 +93,31 @@ namespace Oxide.Core
             // Save it
             datafile.Save(filename);
         }
+        
+        public T ReadObject<T>(string name)
+        {
+            string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
+            T CustomObject = default(T);
+            if (File.Exists(filename) == false)
+            {
+                throw new FileNotFoundException(string.Format("File not found : {0}",filename));
+            }
+            try
+            {
+                CustomObject = JsonConvert.DeserializeObject<T>(File.ReadAllText(filename).ToString());
+            }
+            catch (JsonSerializationException)
+            {
+                throw new JsonSerializationException(string.Format("Deserialization error on : {0}",filename));
+            }
+            return CustomObject;
+        }
 
+        public void WriteObject<T>(string name, T Object)
+        {
+            string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
+            string JsonText = JsonConvert.SerializeObject(Object,Formatting.Indented);
+            File.WriteAllText(filename, JsonText);
+        }
     }
 }
