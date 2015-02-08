@@ -57,7 +57,7 @@ namespace Oxide.Core.Libraries
         /// <param name="args"></param>
         /// <returns></returns>
         [LibraryFunction("CallHook")]
-        public object CallHook(string hookname, object[] args)
+        public object CallHook(string hookname, params object[] args)
         {
             return Interface.CallHook(hookname, args);
         }
