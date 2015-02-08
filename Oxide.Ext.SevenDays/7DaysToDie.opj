@@ -26,9 +26,9 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 6,
             "ReturnBehaviour": 0,
-            "ArgumentBehaviour": 0,
+            "ArgumentBehaviour": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnServerInitialized",
@@ -91,6 +91,99 @@
               ]
             },
             "MSILHash": "jDuwhPhr3EB7VzfT4z/T8Yd05RzO6w4SyfLFlF9+S3k="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnEntityDeath",
+            "HookName": "OnEntityDeath",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BH2AA",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnEntityDeath",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "/bzYa5/p2UxkF4Ib2v2+sUgPDz3pK2x61a5nknkt6V4="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 678,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Awake",
+            "HookName": "OnGameManagerAwake",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "LcydcDPDOq2tY5f8hRgzeHjwevu4DtE7jQoeg4glG9o="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 25,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "891AA",
+            "HookName": "OnClientDisconnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConnectionManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "891AA",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "t40nAlnGmDNPwivlIqXOSxaOZ/SE0SS2y+EgyU7g2T8="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 28,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "12AA1",
+            "HookName": "OnClientConnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "12AA1",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ClientInfo"
+              ]
+            },
+            "MSILHash": "2nyZE89DljIlAFbzDxkBHjfLE6eXSRS36VjvZYsqbc0="
           }
         }
       ]
