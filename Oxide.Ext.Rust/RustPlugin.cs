@@ -147,20 +147,5 @@ namespace Oxide.Plugins
 
             Debug.LogError(message);
         }
-
-        protected void QueueWorkerThread(Action<object> callback)
-        {
-            System.Threading.ThreadPool.QueueUserWorkItem(context =>
-            {
-                try
-                {
-                    callback(context);
-                }
-                catch (Exception ex)
-                {
-                    RaiseError("Exception in " + Name + " plugin worker thread: " + ex.ToString());
-                }
-            });
-        }
     }
 }

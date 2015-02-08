@@ -36,6 +36,11 @@ namespace Oxide.Core.Plugins
         public VersionNumber Version { get; protected set; }
 
         /// <summary>
+        /// Gets the resource ID associated with this plugin
+        /// </summary>
+        public int ResourceId { get; protected set; }
+
+        /// <summary>
         /// Gets the plugin manager responsible for this plugin
         /// </summary>
         public PluginManager Manager { get; private set; }

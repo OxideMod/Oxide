@@ -20,19 +20,20 @@ namespace Oxide.Plugins
         public string Title { get; private set; }
         public string Author { get; private set; }
         public VersionNumber Version { get; private set; }
+        public int ResourceId { get; set; }
 
-        public InfoAttribute(string title, string author, string version)
+        public InfoAttribute(string Title, string Author, string Version)
         {
-            Title = title;
-            Author = author;
-            setVersion(version);
+            this.Title = Title;
+            this.Author = Author;
+            setVersion(Version);
         }
 
-        public InfoAttribute(string title, string author, double version)
+        public InfoAttribute(string Title, string Author, double Version)
         {
-            Title = title;
-            Author = author;
-            setVersion(version.ToString());
+            this.Title = Title;
+            this.Author = Author;
+            setVersion(Version.ToString());
         }
 
         private void setVersion(string version)
@@ -113,6 +114,7 @@ namespace Oxide.Plugins
                 Title = info.Title;
                 Author = info.Author;
                 Version = info.Version;
+                ResourceId = info.ResourceId;
             }
 
             var method = GetType().GetMethod("LoadDefaultConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -175,6 +177,25 @@ namespace Oxide.Plugins
         protected void NextTick(Action callback)
         {
             Interface.GetMod().NextTick(callback);
+        }
+
+        /// <summary>
+        /// Queues a callback to be called from a thread pool worker thread
+        /// </summary>
+        /// <param name="callback"></param>
+        protected void QueueWorkerThread(Action<object> callback)
+        {
+            System.Threading.ThreadPool.QueueUserWorkItem(context =>
+            {
+                try
+                {
+                    callback(context);
+                }
+                catch (Exception ex)
+                {
+                    RaiseError("Exception in " + Name + " plugin worker thread: " + ex.ToString());
+                }
+            });
         }
     }
 }
