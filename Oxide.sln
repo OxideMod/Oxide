@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.Python", "Oxide.E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.Rust", "Oxide.Ext.Rust\Oxide.Ext.Rust.csproj", "{87568E26-BF3C-4A14-A3C4-8B74616D6FA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.SevenDays", "Oxide.Ext.Rust\Oxide.Ext.SevenDays.csproj", "{6A987A21-D407-41C6-AD9F-E5D3DF22D617}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.SevenDays", "Oxide.Ext.SevenDays\Oxide.Ext.SevenDays.csproj", "{6A987A21-D407-41C6-AD9F-E5D3DF22D617}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.Unity", "Oxide.Ext.Unity\Oxide.Ext.Unity.csproj", "{52C26C5B-23E5-48A2-B403-5FF5C898E91A}"
 EndProject
