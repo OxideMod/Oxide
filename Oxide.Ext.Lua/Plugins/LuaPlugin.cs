@@ -122,7 +122,7 @@ namespace Oxide.Lua.Plugins
             Title = (string)Table["Title"];
             Author = (string)Table["Author"];
             Version = (VersionNumber)Table["Version"];
-            if (Table["Title"] is int) ResourceId = (int)Table["ResourceId"];
+            if (Table["ResourceId"] is int) ResourceId = (int)Table["ResourceId"];
             if (Table["HasConfig"] is bool) HasConfig = (bool)Table["HasConfig"];
 
             // Set attributes
