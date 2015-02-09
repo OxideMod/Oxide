@@ -133,7 +133,7 @@ end
                 LuaTable nspacetable = GetNamespaceTable(Utility.GetNamespace(type));
 
                 // Bind the type
-                nspacetable[type.Name] = CreateTypeTable(type);
+                nspacetable[Utility.GetTypeName(type)] = CreateTypeTable(type);
             }
         }
 
