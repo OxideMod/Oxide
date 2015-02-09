@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+
 using NLua;
 
 using Oxide.Core.Configuration;
@@ -194,6 +195,23 @@ namespace Oxide.Lua
             return type.Namespace ?? string.Empty;
         }
 
+        /// <summary>
+        /// Gets the full type name of the specified type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string GetTypeName(Type type)
+        {
+            if (type.IsNested)
+                return GetTypeName(type.DeclaringType) + "+" + type.Name;
+            return type.Name;
+        }
+
+        /// <summary>
+        /// Gets all types of an assembly
+        /// </summary>
+        /// <param name="asm"></param>
+        /// <returns></returns>
         public static IEnumerable<Type> GetAllTypesFromAssembly(Assembly asm)
         {
             foreach (var module in asm.GetModules())
