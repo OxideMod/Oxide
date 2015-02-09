@@ -1,11 +1,7 @@
-﻿using System;
-
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Extensions;
 
 using Oxide.SevenDays.Plugins;
-
-using UnityEngine;
 
 namespace Oxide.SevenDays
 {
@@ -47,6 +43,9 @@ namespace Oxide.SevenDays
         {
             // Register our loader
             Manager.RegisterPluginLoader(new SevenDaysPluginLoader());
+
+            // Register our libraries
+            Manager.RegisterLibrary("SevenDays", new SevenDays.Libraries.SevenDays());
         }
 
         /// <summary>

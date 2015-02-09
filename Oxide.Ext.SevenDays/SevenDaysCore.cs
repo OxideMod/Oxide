@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Plugins;
 
 namespace Oxide.SevenDays.Plugins
