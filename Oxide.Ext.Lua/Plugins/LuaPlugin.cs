@@ -2,14 +2,12 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 
 using NLua;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
-using Oxide.Core.Configuration;
 
 namespace Oxide.Lua.Plugins
 {

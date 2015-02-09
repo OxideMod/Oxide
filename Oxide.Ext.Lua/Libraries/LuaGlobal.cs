@@ -1,6 +1,4 @@
-﻿using System;
-
-using Oxide.Core.Libraries;
+﻿using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 
 namespace Oxide.Lua.Libraries

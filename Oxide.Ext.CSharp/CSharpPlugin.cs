@@ -5,9 +5,6 @@ using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
-using Oxide.Core.Libraries;
-
-using UnityEngine;
 
 namespace Oxide.Plugins
 {

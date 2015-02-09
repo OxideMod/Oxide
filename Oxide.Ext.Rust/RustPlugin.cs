@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;

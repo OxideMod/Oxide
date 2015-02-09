@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 
 using Oxide.Core;
-using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 
 using Oxide.Unity.Logging;

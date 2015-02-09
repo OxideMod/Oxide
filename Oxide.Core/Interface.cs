@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Oxide.Core
+﻿namespace Oxide.Core
 {
     /// <summary>
     /// The interface class through which patched DLLs interact with Oxide

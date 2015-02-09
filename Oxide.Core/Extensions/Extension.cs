@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Oxide.Core.Extensions
+﻿namespace Oxide.Core.Extensions
 {
     /// <summary>
     /// Represents a single binary extension
