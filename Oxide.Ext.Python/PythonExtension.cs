@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -53,6 +54,7 @@ namespace Oxide.Ext.Python
         // Whitelist
         private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
+        private List<string> _allowedTypes;
 
         delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple);
 
@@ -87,11 +89,15 @@ namespace Oxide.Ext.Python
             // Create the Python engine
             PythonEngine = IronPython.Hosting.Python.CreateEngine();
 
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess);
             // Bind all namespaces and types
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess))
+            foreach (var assembly in assemblies)
             {
                 PythonEngine.Runtime.LoadAssembly(assembly);
             }
+
+            _allowedTypes = assemblies.SelectMany(Utility.GetAllTypesFromAssembly)
+                .Where(t => string.IsNullOrEmpty(Utility.GetNamespace(t))).Select(t => t.Name).ToList();
 
             PythonEngine.GetBuiltinModule().SetVariable("__import__", new ImportDelegate(DoImport));
             PythonEngine.GetBuiltinModule().RemoveVariable("execfile");
@@ -105,7 +111,7 @@ namespace Oxide.Ext.Python
 
         private object DoImport(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple)
         {
-            if (WhitelistNamespaces.Any(moduleName.StartsWith) || moduleName.Equals("System"))
+            if (WhitelistNamespaces.Any(moduleName.StartsWith) || moduleName.Equals("System") || _allowedTypes.Contains(moduleName))
             {
                 return IronPython.Modules.Builtin.__import__(context, moduleName);
             }
