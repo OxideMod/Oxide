@@ -128,7 +128,7 @@ namespace Oxide.Core.Plugins
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallHook(string hookname, object[] args)
+        public object CallHook(string hookname, params object[] args)
         {
             // Locate the sublist
             IList<Plugin> sublist;

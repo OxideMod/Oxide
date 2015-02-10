@@ -838,6 +838,54 @@
             },
             "MSILHash": "5R453GjfieVqpi6y2sUYcBebViLCVaPe7rOinUlysc0="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 1,
+            "ArgumentBehaviour": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "DoAttackShared",
+            "HookName": "OnMeleeAttack",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BaseMelee",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoAttackShared",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "DF3zYVHdhBTDyBAfAy9Xi4oaFYvbcOxKwFyFh2DZ3nc="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 1,
+            "ArgumentBehaviour": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "SharedProjectileAttack",
+            "HookName": "OnProjectileAttack",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SharedProjectileAttack",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "Z9h072wR7R5514zMgFOTwwdOEdOXyt5k6qEIleq29Es="
+          }
         }
       ]
     },

@@ -366,5 +366,16 @@ namespace Oxide.Rust.Plugins
         {
 
         }
+
+        /// <summary>
+        /// Called when the player has been melee attacked
+        /// </summary>
+        /// <param name="basemelee"></param>
+        /// <param name="hit"></param>
+        [HookMethod("OnMeleeAttack")]
+        private object OnMeleeAttack(BaseMelee melee, HitInfo hitinfo)
+        {
+            return Interface.CallHook("OnPlayerAttack", melee.ownerPlayer, hitinfo);
+        }
     }
 }
