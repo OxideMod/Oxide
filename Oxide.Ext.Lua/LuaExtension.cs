@@ -133,7 +133,10 @@ end
                 LuaTable nspacetable = GetNamespaceTable(Utility.GetNamespace(type));
 
                 // Bind the type
-                nspacetable[Utility.GetTypeName(type)] = CreateTypeTable(type);
+                if (type.IsNested)
+                    nspacetable[Utility.GetTypeName(type)] = CreateTypeTable(type);
+                else
+                    nspacetable[type.Name] = CreateTypeTable(type);
             }
         }
 
@@ -233,6 +236,10 @@ end
                 {
                     sftbl[field.Name] = field;
                 }
+
+                // Bind all nested types
+                foreach (var nested in type.GetNestedTypes())
+                    tmp[nested.Name] = CreateTypeTable(nested);
 
                 // Setup metamethod
                 setmetatable.Call(tmp, typetablemeta);
