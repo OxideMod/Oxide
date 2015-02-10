@@ -143,10 +143,10 @@ namespace Oxide.Core.Plugins
             {
                 return OnCallHook(hookname, args);
             }
-            catch (Exception outer_ex)
+            catch (Exception ex)
             {
-                var ex = outer_ex.InnerException == null ? outer_ex : outer_ex.InnerException;
-                RaiseError(string.Format("{0} while calling {1}: {2}{3}{4}", ex.GetType().Name, hookname, ex.Message, Environment.NewLine, ex.StackTrace));
+                RaiseError(string.Format("{0} while calling {1}:", ex.GetType().Name, hookname));
+                RaiseError(ex);
                 return null;
             }
             finally
