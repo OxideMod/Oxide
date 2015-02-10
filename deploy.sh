@@ -63,6 +63,8 @@ function bundle_7dtd {
     Oxide.Ext.Python/Dependencies/IronPython.dll \
     Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
     Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
+    Oxide.Ext.SevenDays/Dependencies/System.Runtime.Serialization.dll \
+    Oxide.Ext.SevenDays/Dependencies/System.Xml.Linq.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -f Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
