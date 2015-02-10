@@ -128,7 +128,7 @@ namespace Oxide.Ext.Python.Plugins
             // Read plugin attributes
             if (!PythonEngine.Operations.ContainsMember(Class, "Title") || PythonEngine.Operations.GetMember<string>(Class, "Title") == null) throw new Exception("Plugin is missing title");
             if (!PythonEngine.Operations.ContainsMember(Class, "Author") || PythonEngine.Operations.GetMember<string>(Class, "Author") == null) throw new Exception("Plugin is missing author");
-            if (!PythonEngine.Operations.ContainsMember(Class, "Version") || PythonEngine.Operations.GetMember<VersionNumber>(Class, "Version") == null) throw new Exception("Plugin is missing version");
+            if (!PythonEngine.Operations.ContainsMember(Class, "Version") || PythonEngine.Operations.GetMember(Class, "Version").GetType() != typeof(VersionNumber)) throw new Exception("Plugin is missing version");
             Title = PythonEngine.Operations.GetMember<string>(Class, "Title");
             Author = PythonEngine.Operations.GetMember<string>(Class, "Author");
             Version = PythonEngine.Operations.GetMember<VersionNumber>(Class, "Version");
