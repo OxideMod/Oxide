@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using IronPython.Runtime;
+
 using Microsoft.Scripting.Hosting;
 
 using Oxide.Core.Configuration;
@@ -13,6 +15,7 @@ namespace Oxide.Ext.Python
     /// </summary>
     public static class Utility
     {
+
         /// <summary>
         /// Copies and translates the contents of the specified dictionary into the specified config file
         /// </summary>
@@ -33,7 +36,7 @@ namespace Oxide.Ext.Python
         }
 
         /// <summary>
-        /// Translates a single object from its Python form to its C# form for use in a config file
+        /// Translates a single object from its Python form to it's C# form for use in a config file
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -89,7 +92,7 @@ namespace Oxide.Ext.Python
         }
 
         /// <summary>
-        /// Translates a single object from its C# form to its Lua form
+        /// Translates a single object from it's C# form to it's Lua form
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -126,6 +129,39 @@ namespace Oxide.Ext.Python
         public static string GetNamespace(Type type)
         {
             return type.Namespace ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets all types of an assembly
+        /// </summary>
+        /// <param name="asm"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetAllTypesFromAssembly(Assembly asm)
+        {
+            foreach (var module in asm.GetModules())
+            {
+                Type[] moduleTypes;
+                try
+                {
+                    moduleTypes = module.GetTypes();
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    moduleTypes = e.Types;
+                }
+                catch (Exception)
+                {
+                    moduleTypes = new Type[0];
+                }
+
+                foreach (var type in moduleTypes)
+                {
+                    if (type != null)
+                    {
+                        yield return type;
+                    }
+                }
+            }
         }
     }
 }
