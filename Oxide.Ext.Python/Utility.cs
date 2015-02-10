@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using IronPython.Runtime;
 using Microsoft.Scripting.Hosting;
@@ -126,6 +127,39 @@ namespace Oxide.Ext.Python
         public static string GetNamespace(Type type)
         {
             return type.Namespace ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets all types of an assembly
+        /// </summary>
+        /// <param name="asm"></param>
+        /// <returns></returns>
+        public static IEnumerable<Type> GetAllTypesFromAssembly(Assembly asm)
+        {
+            foreach (var module in asm.GetModules())
+            {
+                Type[] moduleTypes;
+                try
+                {
+                    moduleTypes = module.GetTypes();
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    moduleTypes = e.Types;
+                }
+                catch (Exception)
+                {
+                    moduleTypes = new Type[0];
+                }
+
+                foreach (var type in moduleTypes)
+                {
+                    if (type != null)
+                    {
+                        yield return type;
+                    }
+                }
+            }
         }
     }
 }
