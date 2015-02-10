@@ -30,7 +30,7 @@ namespace Oxide.Plugins
             PluginCompiler.BinaryPath = Environment.GetEnvironmentVariable("systemroot") + @"\Microsoft.NET\Framework64\v3.5\csc.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
             {
-                Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find csc.exe! Have you installed .Net v3.5 x64?");
+                Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find csc.exe! Have you installed .NET v3.5 x64?");
                 PluginCompiler.BinaryPath = null;
                 return;
             }
@@ -42,6 +42,7 @@ namespace Oxide.Plugins
         
         public override IEnumerable<string> ScanDirectory(string directory)
         {
+            if (PluginCompiler.BinaryPath == null) yield break;
             //yield return "CSharpCore";
             foreach (string file in Directory.GetFiles(directory, "*.cs"))
                 yield return Path.GetFileNameWithoutExtension(file);
