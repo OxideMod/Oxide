@@ -249,8 +249,8 @@ namespace Oxide.Ext.JavaScript.Plugins
             if (jintEx != null)
             {
                 var obj = jintEx.Error.ToObject() as ErrorInstance;
-                if (obj != null) RaiseError(TypeConverter.ToString(obj.Get("name")) + TypeConverter.ToString(obj.Get("message")));
-                else base.RaiseError(ex);
+                if (obj != null) RaiseError(string.Format("Line: {0} Column: {1} {2}: {3}", jintEx.LineNumber, jintEx.Column, obj.Get("name").AsString(), obj.Get("message").AsString()));
+                else RaiseError(string.Format("Line: {0} Column: {1} {2}: {3}", jintEx.LineNumber, jintEx.Column, jintEx.Message, jintEx.StackTrace)); ;
             }
             else
             {
