@@ -872,7 +872,7 @@
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "SharedProjectileAttack",
-            "HookName": "OnProjectileAttack",
+            "HookName": "OnPlayerAttack",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "BasePlayer",
             "Flagged": false,
