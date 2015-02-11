@@ -123,12 +123,14 @@ end
             typetablemeta = LuaEnvironment["tmp"] as LuaTable;
             LuaEnvironment["tmp"] = null;
 
+            //var filter = new Regex(@"^[\dA-Z]{5}$|\$|\<|\>", RegexOptions.Compiled);
             // Bind all namespaces and types
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
                 .Where(AllowAssemblyAccess)
                 .SelectMany(Utility.GetAllTypesFromAssembly)
                 .Where(AllowTypeAccess))
             {
+                //if (filter.IsMatch(type.Name)) continue;
                 // Get the namespace table
                 LuaTable nspacetable = GetNamespaceTable(Utility.GetNamespace(type));
 
@@ -194,9 +196,10 @@ end
             if (type.IsEnum)
             {
                 // Set all enum fields
-                foreach (object value in Enum.GetValues(type))
+                var fields = type.GetFields().Where(x => x.IsLiteral);
+                foreach (var value in fields)
                 {
-                    tmp[Enum.GetName(type, value)] = value;
+                    tmp[value.Name] = value.GetValue(null);
                 }
             }
             else
