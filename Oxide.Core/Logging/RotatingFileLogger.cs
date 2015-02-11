@@ -8,12 +8,6 @@ namespace Oxide.Core.Logging
     /// </summary>
     public sealed class RotatingFileLogger : ThreadedLogger
     {
-        private struct LogMessage
-        {
-            public LogType Type;
-            public string Message;
-        }
-
         /// <summary>
         /// Gets the directory to write log files to
         /// </summary>

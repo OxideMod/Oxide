@@ -7,10 +7,7 @@ using Oxide.Core.Configuration;
 
 using Utility = Oxide.Lua.Utility;
 
-struct TestStruct
-{
-    public int x;
-}
+struct TestStruct {}
 
 namespace Oxide.Tests
 {
