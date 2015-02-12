@@ -23,6 +23,7 @@ function bundle_rust {
     Oxide.Ext.MySql/bin/x64/Release/Oxide.Ext.MySql.dll \
     Oxide.Ext.Python/bin/x64/Release/Oxide.Ext.Python.dll \
     Oxide.Ext.Rust/bin/x64/Release/Oxide.Ext.Rust.dll \
+    Oxide.Ext.SQLite/bin/x64/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
@@ -58,6 +59,7 @@ function bundle_7dtd {
     Oxide.Ext.MySql/bin/x64/Release/Oxide.Ext.MySql.dll \
     Oxide.Ext.Python/bin/x64/Release/Oxide.Ext.Python.dll \
     Oxide.Ext.SevenDays/bin/x64/Release/Oxide.Ext.SevenDays.dll \
+    Oxide.Ext.SQLite/bin/x64/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Core/Dependencies/*.dll \
