@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -54,9 +55,11 @@ namespace Oxide.Ext.Python
         // Whitelist
         private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
+        private static readonly string[] WhitelistModules = { "__future__", "binascii", "hashlib", "math", "random", "re", "time", "types", "warnings" };
+        private static readonly Dictionary<string, string[]> WhitelistParts = new Dictionary<string, string[]> { { "os", new [] { "urandom" } } };
         private List<string> _allowedTypes;
 
-        delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple);
+        delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple fromlist);
 
         /// <summary>
         /// Initialises a new instance of the PythonExtension class
@@ -98,6 +101,11 @@ namespace Oxide.Ext.Python
 
             _allowedTypes = assemblies.SelectMany(Utility.GetAllTypesFromAssembly)
                 .Where(t => string.IsNullOrEmpty(Utility.GetNamespace(t))).Select(t => t.Name).ToList();
+
+            var paths = PythonEngine.GetSearchPaths();
+            paths.Add(Path.Combine(Interface.GetMod().InstanceDirectory, "Lib"));
+            PythonEngine.SetSearchPaths(paths);
+
             PythonEngine.GetBuiltinModule().SetVariable("__import__", new ImportDelegate(DoImport));
             PythonEngine.GetBuiltinModule().RemoveVariable("execfile");
             PythonEngine.GetBuiltinModule().RemoveVariable("exit");
@@ -108,13 +116,23 @@ namespace Oxide.Ext.Python
             PythonEngine.GetBuiltinModule().RemoveVariable("reload");
         }
 
-        private object DoImport(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple tuple)
+        private object DoImport(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple fromlist)
         {
-            if (WhitelistNamespaces.Any(moduleName.StartsWith) || moduleName.Equals("System") || _allowedTypes.Contains(moduleName))
+            if (CheckModule(moduleName, fromlist))
             {
-                return IronPython.Modules.Builtin.__import__(context, moduleName);
+                return IronPython.Modules.Builtin.__import__(context, moduleName, globals, locals, fromlist, -1);
             }
-            return null;
+            throw new ImportException("Import of module " + moduleName + " not allowed");
+        }
+
+        private bool CheckModule(string moduleName, PythonTuple fromlist)
+        {
+            if (WhitelistNamespaces.Any(moduleName.StartsWith)) return true;
+            if (moduleName.Equals("System")) return true;
+            if (_allowedTypes.Contains(moduleName)) return true;
+            if (WhitelistModules.Contains(moduleName)) return true;
+            string[] parts;
+            return WhitelistParts.TryGetValue(moduleName, out parts) && fromlist.All(@from => parts.Contains(@from));
         }
 
         /// <summary>
