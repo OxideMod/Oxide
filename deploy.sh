@@ -16,20 +16,22 @@ function bundle_rust {
     mkdir -p $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll \
-    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
+    cp -vf Oxide.Core/bin/x64/Release/Oxide.Core.dll \
+    Oxide.Ext.CSharp/bin/x64/Release/Oxide.Ext.CSharp.dll \
+    Oxide.Ext.JavaScript/bin/x64/Release/Oxide.Ext.JavaScript.dll \
+    Oxide.Ext.Lua/bin/x64/Release/Oxide.Ext.Lua.dll \
+    Oxide.Ext.MySql/bin/x64/Release/Oxide.Ext.MySql.dll \
+    Oxide.Ext.Python/bin/x64/Release/Oxide.Ext.Python.dll \
+    Oxide.Ext.Rust/bin/x64/Release/Oxide.Ext.Rust.dll \
+    Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
-    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
+    Oxide.Ext.JavaScript/Dependencies/*.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
-    Oxide.Ext.Python/Dependencies/IronPython.dll \
-    Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
-    Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
+    Oxide.Ext.MySql/Dependencies/*.dll \
+    Oxide.Ext.Python/Dependencies/*.dll \
+    Oxide.Ext.SevenDays/Dependencies/System.*.dll \
+    Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -f Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
     Oxide.Ext.Rust/Patched/Facepunch.dll \
@@ -49,23 +51,23 @@ function bundle_7dtd {
     mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.SevenDays/bin/Release/Oxide.Ext.SevenDays.dll \
-    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
+    cp -vf Oxide.Core/bin/x64/Release/Oxide.Core.dll \
+    Oxide.Ext.CSharp/bin/x64/Release/Oxide.Ext.CSharp.dll \
+    Oxide.Ext.JavaScript/bin/x64/Release/Oxide.Ext.JavaScript.dll \
+    Oxide.Ext.Lua/bin/x64/Release/Oxide.Ext.Lua.dll \
+    Oxide.Ext.MySql/bin/x64/Release/Oxide.Ext.MySql.dll \
+    Oxide.Ext.Python/bin/x64/Release/Oxide.Ext.Python.dll \
+    Oxide.Ext.SevenDays/bin/x64/Release/Oxide.Ext.SevenDays.dll \
+    Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
+    cp -vf Oxide.Core/Dependencies/*.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
-    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
+    Oxide.Ext.JavaScript/Dependencies/*.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
-    Oxide.Ext.Python/Dependencies/IronPython.dll \
-    Oxide.Ext.Python/Dependencies/Microsoft.Dynamic.dll \
-    Oxide.Ext.Python/Dependencies/Microsoft.Scripting*.dll \
-    Oxide.Ext.SevenDays/Dependencies/System.Runtime.Serialization.dll \
-    Oxide.Ext.SevenDays/Dependencies/System.Xml.Linq.dll \
+    Oxide.Ext.MySql/Dependencies/*.dll \
+    Oxide.Ext.Python/Dependencies/*.dll \
+    Oxide.Ext.SevenDays/Dependencies/System.*.dll \
+    Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -f Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
