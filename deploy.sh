@@ -26,17 +26,17 @@ function bundle_rust {
     Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
-    Oxide.Ext.JavaScript/Dependencies/*.dll \
+    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
     Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -f Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
+    cp -vf Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
     Oxide.Ext.Rust/Patched/Facepunch.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
-    cp -f Oxide.Ext.Rust/Patched/oxide.root.json \
+    cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
     $HOME/temp_rust || die_with "Failed to copy config file and Lua DLLs!"
 
@@ -62,14 +62,14 @@ function bundle_7dtd {
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Core/Dependencies/*.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.*.dll \
-    Oxide.Ext.JavaScript/Dependencies/*.dll \
+    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
     Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -f Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
+    cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
