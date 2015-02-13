@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using MySql.Data.MySqlClient;
-
 using Oxide.Core.Libraries;
 
 namespace Oxide.Ext.MySql.Libraries
@@ -13,9 +11,9 @@ namespace Oxide.Ext.MySql.Libraries
         public override bool IsGlobal { get { return false; } }
 
         [LibraryFunction("OpenDb")]
-        public MySqlConnection OpenDb(string host, int port, string database, string user, string password)
+        public Connection OpenDb(string host, int port, string database, string user, string password)
         {
-            return new MySqlConnection(string.Format("Server={0};Port={1};Database={2};User={3};Password={4};Pooling=false;CharSet=utf8;", host, port, database, user, password));
+            return new Connection(string.Format("Server={0};Port={1};Database={2};User={3};Password={4};Pooling=false;CharSet=utf8;", host, port, database, user, password));
         }
 
         [LibraryFunction("NewSql")]
@@ -25,18 +23,17 @@ namespace Oxide.Ext.MySql.Libraries
         }
 
         [LibraryFunction("Query")]
-        public IEnumerable<Dictionary<string, object>> Query(Sql sql, MySqlConnection db)
+        public IEnumerable<Dictionary<string, object>> Query(Sql sql, Connection db)
         {
             try
             {
-                db.Open();
-                using (var cmd = db.CreateCommand())
+                db.Con.Open();
+                using (var cmd = db.Con.CreateCommand())
                 {
                     cmd.CommandText = sql.SQL;
                     Sql.AddParams(cmd, sql.Arguments, "@");
                     using (var dataReader = cmd.ExecuteReader())
                     {
-                        //var list = new List<Dictionary<string, object>>();
                         while (dataReader.Read())
                         {
                             var dict = new Dictionary<string, object>();
@@ -45,25 +42,23 @@ namespace Oxide.Ext.MySql.Libraries
                                 dict.Add(dataReader.GetName(i), dataReader.GetValue(i));
                             }
                             yield return dict;
-                            //list.Add(dict);
                         }
-                        //return list;
                     }
                 }
             }
             finally
             {
-                db.Close();
+                db.Con.Close();
             }
         }
 
         [LibraryFunction("ExecuteNonQuery")]
-        public int ExecuteNonQuery(Sql sql, MySqlConnection db)
+        public int ExecuteNonQuery(Sql sql, Connection db)
         {
             try
             {
-                db.Open();
-                using (var cmd = db.CreateCommand())
+                db.Con.Open();
+                using (var cmd = db.Con.CreateCommand())
                 {
                     cmd.CommandText = sql.SQL;
                     Sql.AddParams(cmd, sql.Arguments, "@");
@@ -72,34 +67,34 @@ namespace Oxide.Ext.MySql.Libraries
             }
             finally
             {
-                db.Close();
+                db.Con.Close();
             }
         }
 
         [LibraryFunction("Insert")]
-        public int Insert(Sql sql, MySqlConnection db)
+        public int Insert(Sql sql, Connection db)
         {
             return ExecuteNonQuery(sql, db);
         }
 
         [LibraryFunction("Update")]
-        public int Update(Sql sql, MySqlConnection db)
+        public int Update(Sql sql, Connection db)
         {
             return ExecuteNonQuery(sql, db);
         }
 
         [LibraryFunction("Delete")]
-        public int Delete(Sql sql, MySqlConnection db)
+        public int Delete(Sql sql, Connection db)
         {
             return ExecuteNonQuery(sql, db);
         }
 
-        public T ExecuteScalar<T>(Sql sql, MySqlConnection db)
+        public T ExecuteScalar<T>(Sql sql, Connection db)
         {
             try
             {
-                db.Open();
-                using (var cmd = db.CreateCommand())
+                db.Con.Open();
+                using (var cmd = db.Con.CreateCommand())
                 {
                     cmd.CommandText = sql.SQL;
                     Sql.AddParams(cmd, sql.Arguments, "@");
@@ -109,24 +104,24 @@ namespace Oxide.Ext.MySql.Libraries
             }
             finally
             {
-                db.Close();
+                db.Con.Close();
             }
         }
 
         [LibraryFunction("ExecuteScalar")]
-        public string ExecuteScalar(Sql sql, MySqlConnection db)
+        public string ExecuteScalar(Sql sql, Connection db)
         {
             return ExecuteScalar<string>(sql, db);
         }
 
         [LibraryFunction("First")]
-        public Dictionary<string, object> First(Sql sql, MySqlConnection db)
+        public Dictionary<string, object> First(Sql sql, Connection db)
         {
             return Query(sql, db).First();
         }
 
         [LibraryFunction("FirstOrDefault")]
-        public Dictionary<string, object> FirstOrDefault(Sql sql, MySqlConnection db)
+        public Dictionary<string, object> FirstOrDefault(Sql sql, Connection db)
         {
             return Query(sql, db).FirstOrDefault();
         }

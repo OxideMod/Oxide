@@ -11,12 +11,22 @@ namespace Oxide.Ext.SQLite.Libraries
 {
     public class SQLite : Library
     {
+        private readonly string _dataDirectory;
+
         public override bool IsGlobal { get { return false; } }
 
-        [LibraryFunction("NewDb")]
-        public SQLiteConnection NewDb(string file)
+        public SQLite()
         {
-            return new SQLiteConnection(string.Format("Data Source={0};Version=3;", Path.Combine(Interface.GetMod().DataDirectory, file)));
+            _dataDirectory = Interface.GetMod().DataDirectory;
+        }
+
+        [LibraryFunction("OpenDb")]
+        public SQLiteConnection OpenDb(string file)
+        {
+            var filename = Path.Combine(_dataDirectory, file);
+            if (!filename.StartsWith(_dataDirectory, StringComparison.Ordinal))
+                throw new Exception("Only access to oxide directory!");
+            return new SQLiteConnection(string.Format("Data Source={0};Version=3;", filename));
         }
 
         [LibraryFunction("NewSql")]
