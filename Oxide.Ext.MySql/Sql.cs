@@ -11,6 +11,7 @@ namespace Oxide.Ext.MySql
     // Simple helper class for building SQL statements
     public class Sql
     {
+        private static readonly Regex Filter = new Regex(@"LOAD\s*DATA|INTO\s*(OUTFILE|DUMPFILE)|LOAD_FILE", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex RxParams = new Regex(@"(?<!@)@\w+", RegexOptions.Compiled);
         private readonly object[] _args;
         private readonly string _sql;
@@ -61,7 +62,10 @@ namespace Oxide.Ext.MySql
             var sb = new StringBuilder();
             var args = new List<object>();
             Build(sb, args, null);
-            _sqlFinal = sb.ToString();
+            var tmpFinal = sb.ToString();
+            if (Filter.IsMatch(tmpFinal))
+                throw new Exception("Commands LOAD DATA, LOAD_FILE, OUTFILE, DUMPFILE not allowed.");
+            _sqlFinal = tmpFinal;
             _argsFinal = args.ToArray();
         }
 
