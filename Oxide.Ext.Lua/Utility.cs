@@ -114,6 +114,22 @@ namespace Oxide.Lua
                 return null;
         }
 
+        private static void CreateFullPath(string fullPath, LuaTable tbl, NLua.Lua lua)
+        {
+            var path = fullPath.Split('.');
+            for (var i = 0; i < path.Length - 1; i++)
+            {
+                if (tbl[path[i]] == null)
+                {
+                    lua.NewTable("tmp");
+                    var table = (LuaTable) lua["tmp"];
+                    tbl[path[i]] = table;
+                    lua["tmp"] = null;
+                    tbl = table;
+                }
+            }
+        }
+
         /// <summary>
         /// Copies and translates the contents of the specified config file into the specified table
         /// </summary>
@@ -130,6 +146,7 @@ namespace Oxide.Lua
             // Loop each item in config
             foreach (var pair in config)
             {
+                CreateFullPath(pair.Key, tbl, lua);
                 // Translate and set on table
                 tbl[pair.Key] = TranslateConfigItemToLuaItem(lua, pair.Value);
             }
@@ -176,6 +193,7 @@ namespace Oxide.Lua
                 Dictionary<string, object> dict = item as Dictionary<string, object>;
                 foreach (var pair in dict)
                 {
+                    CreateFullPath(pair.Key, tbl, lua);
                     tbl[pair.Key] = TranslateConfigItemToLuaItem(lua, pair.Value);
                 }
 
