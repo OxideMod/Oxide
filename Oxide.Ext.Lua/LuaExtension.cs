@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using NLua;
 
@@ -63,7 +64,15 @@ namespace Oxide.Lua
         public LuaExtension(ExtensionManager manager)
             : base(manager)
         {
-
+            ExceptionHandler.RegisterType(typeof(NLua.Exceptions.LuaScriptException), ex =>
+            {
+                var luaex = (NLua.Exceptions.LuaScriptException) ex;
+                var outEx = luaex.IsNetException ? luaex.InnerException : luaex;
+                var match = Regex.Match(string.IsNullOrEmpty(luaex.Source) ? luaex.Message : luaex.Source, @"\[string ""(.+)""\]:(\d+): ");
+                if (match.Success)
+                    return string.Format("File: {0} Line: {1} {2}:{3}{4}", match.Groups[1], match.Groups[2], outEx.Message.Replace(match.Groups[0].Value, ""), Environment.NewLine, outEx.StackTrace);
+                return string.Format("{0}{1}:{2}{3}", luaex.Source, outEx.Message, Environment.NewLine, outEx.StackTrace);
+            });
         }
 
         /// <summary>

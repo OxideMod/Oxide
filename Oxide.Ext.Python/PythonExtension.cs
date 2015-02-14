@@ -9,6 +9,7 @@ using IronPython.Hosting;
 using IronPython.Runtime;
 using IronPython.Runtime.Exceptions;
 
+using Microsoft.Scripting;
 using Microsoft.Scripting.Ast;
 using Microsoft.Scripting.Hosting;
 
@@ -69,7 +70,13 @@ namespace Oxide.Ext.Python
         public PythonExtension(ExtensionManager manager)
             : base(manager)
         {
-
+            var assem = AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == "IronPython");
+            var types = Utility.GetAllTypesFromAssembly(assem).Where(t => t.IsSubclassOf(typeof (Exception)));
+            foreach (var type in types)
+            {
+                ExceptionHandler.RegisterType(type, ex => PythonEngine.GetService<ExceptionOperations>().FormatException(ex));
+            }
+            ExceptionHandler.RegisterType(typeof(SyntaxErrorException), ex => PythonEngine.GetService<ExceptionOperations>().FormatException(ex));
         }
 
         /// <summary>

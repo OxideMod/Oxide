@@ -232,24 +232,6 @@ namespace Oxide.Lua.Plugins
             return CallFunction(hookname, args);
         }
 
-        /// <summary>
-        /// Raises an error on this plugin
-        /// </summary>
-        /// <param name="ex"></param>
-        protected override void RaiseError(Exception ex)
-        {
-            var luaex = ex as NLua.Exceptions.LuaScriptException;
-            if (luaex != null)
-            {
-                var outEx = luaex.IsNetException ? ex.InnerException : ex;
-                RaiseError(ex.Source + outEx.Message + Environment.NewLine + outEx.StackTrace);
-            }
-            else
-            {
-                base.RaiseError(ex);
-            }
-        }
-
         #region Lua CallFunction Hack
 
         // An empty object array

@@ -7,9 +7,8 @@ using System.Reflection;
 
 using Jint;
 using Jint.Native;
-using Jint.Native.Error;
 using Jint.Native.Object;
-using Jint.Runtime;
+using Jint.Parser;
 using Jint.Runtime.Interop;
 
 using Oxide.Core;
@@ -127,7 +126,7 @@ namespace Oxide.Ext.JavaScript.Plugins
             // Load the plugin
             string code = File.ReadAllText(Filename);
             Name = Path.GetFileNameWithoutExtension(Filename);
-            JavaScriptEngine.Execute(code);
+            JavaScriptEngine.Execute(code, new ParserOptions { Source = Path.GetFileName(Filename) });
             if (JavaScriptEngine.GetValue(Name).TryCast<ObjectInstance>() == null) throw new Exception("Plugin is missing main object");
             Class = JavaScriptEngine.GetValue(Name).AsObject();
             if (!Class.HasProperty("Name"))
@@ -241,21 +240,6 @@ namespace Oxide.Ext.JavaScript.Plugins
         {
             // Call it
             return CallFunction(hookname, args);
-        }
-
-        protected override void RaiseError(Exception ex)
-        {
-            var jintEx = ex as JavaScriptException;
-            if (jintEx != null)
-            {
-                var obj = jintEx.Error.ToObject() as ErrorInstance;
-                if (obj != null) RaiseError(string.Format("Line: {0} Column: {1} {2}: {3}", jintEx.LineNumber, jintEx.Column, obj.Get("name").AsString(), obj.Get("message").AsString()));
-                else RaiseError(string.Format("Line: {0} Column: {1} {2}: {3}", jintEx.LineNumber, jintEx.Column, jintEx.Message, jintEx.StackTrace)); ;
-            }
-            else
-            {
-                base.RaiseError(ex);
-            }
         }
 
         /// <summary>

@@ -118,7 +118,7 @@ namespace Oxide.Ext.Python.Plugins
             string code = File.ReadAllText(Filename);
             Name = Path.GetFileNameWithoutExtension(Filename);
             Scope = PythonEngine.CreateScope();
-            var source = PythonEngine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);
+            var source = PythonEngine.CreateScriptSourceFromString(code, Path.GetFileName(Filename), SourceCodeKind.Statements);
             var compiled = source.Compile();
             compiled.Execute(Scope);
             if (!Scope.ContainsVariable(Name)) throw new Exception("Plugin is missing main class");
@@ -223,15 +223,6 @@ namespace Oxide.Ext.Python.Plugins
         {
             // Call it
             return CallFunction(hookname, args);
-        }
-
-        /// <summary>
-        /// Raises an error on this plugin
-        /// </summary>
-        /// <param name="ex"></param>
-        protected override void RaiseError(Exception ex)
-        {
-            RaiseError(PythonEngine.GetService<ExceptionOperations>().FormatException(ex));
         }
 
         /// <summary>
