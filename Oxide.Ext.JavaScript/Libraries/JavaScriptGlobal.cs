@@ -34,7 +34,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         [LibraryFunction("print")]
         public void Print(object message)
         {
-            Logger.Write(LogType.Info, message.ToString());
+            Logger.Write(LogType.Info, message != null ? message.ToString() : "null");
         }
     }
 }

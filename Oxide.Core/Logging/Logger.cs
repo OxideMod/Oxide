@@ -95,6 +95,12 @@ namespace Oxide.Core.Logging
         /// <param name="ex"></param>
         public virtual void WriteException(string message, Exception ex)
         {
+            var formatted = ExceptionHandler.FormatException(ex);
+            if (formatted != null)
+            {
+                Write(LogType.Error, string.Format("{0}{1}{2}", message, Environment.NewLine, formatted));
+                return;
+            }
             while (ex.InnerException != null) ex = ex.InnerException;
             Write(LogType.Error, string.Format("{0} ({1}: {2})", message, ex.GetType().Name, ex.Message));
             Write(LogType.Debug, "{0}", ex.StackTrace);

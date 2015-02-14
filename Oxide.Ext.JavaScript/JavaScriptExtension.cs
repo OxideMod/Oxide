@@ -4,7 +4,9 @@ using System.Reflection;
 
 using Jint;
 using Jint.Native;
+using Jint.Native.Error;
 using Jint.Native.Object;
+using Jint.Parser;
 using Jint.Runtime;
 using Jint.Runtime.Descriptors;
 using Jint.Runtime.Interop;
@@ -63,7 +65,18 @@ namespace Oxide.Ext.JavaScript
         public JavaScriptExtension(ExtensionManager manager)
             : base(manager)
         {
-
+            ExceptionHandler.RegisterType(typeof(JavaScriptException), ex =>
+            {
+                var jintEx = (JavaScriptException) ex;
+                var obj = jintEx.Error.ToObject() as ErrorInstance;
+                if (obj != null) return string.Format("File: {0} Line: {1} Column: {2} {3} {4}:{5}{6}", jintEx.Location.Source, jintEx.LineNumber, jintEx.Column, obj.Get("name").AsString(), obj.Get("message").AsString(), Environment.NewLine, jintEx.StackTrace);
+                return string.Format("File: {0} Line: {1} Column: {2} {3}:{4}{5}", jintEx.Location.Source, jintEx.LineNumber, jintEx.Column, jintEx.Message, Environment.NewLine, jintEx.StackTrace);
+            });
+            ExceptionHandler.RegisterType(typeof(ParserException), ex =>
+            {
+                var parserEx = (ParserException)ex;
+                return string.Format("File: {0} Line: {1} Column: {2} {3}:{4}{5}", parserEx.Source, parserEx.LineNumber, parserEx.Column, parserEx.Description, Environment.NewLine, parserEx.StackTrace);
+            });
         }
 
         /// <summary>

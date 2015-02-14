@@ -211,8 +211,6 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
-                            //rootlogger.Write(LogType.Error, "Failed to load plugin {0} ({1})", name, ex.Message);
-                            //rootlogger.Write(LogType.Debug, ex.StackTrace);
                             rootlogger.WriteException(string.Format("Failed to load plugin {0}", name), ex);
                         }
                     }
@@ -241,8 +239,6 @@ namespace Oxide.Core
                 }
                 catch (Exception ex)
                 {
-                    //rootlogger.Write(LogType.Error, "Failed to initialise plugin {0} ({1})", plugin.Name, ex.Message);
-                    //rootlogger.Write(LogType.Debug, ex.StackTrace);
                     rootlogger.WriteException(string.Format("Failed to initialise plugin {0}", plugin.Name), ex);
                 }
             }
@@ -291,8 +287,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                rootlogger.Write(LogType.Error, "Failed to load plugin {0} ({1})", name, ex.Message);
-                rootlogger.Write(LogType.Debug, ex.StackTrace);
+                rootlogger.WriteException(string.Format("Failed to load plugin {0}:", name), ex);
                 return;
             }            
         }
@@ -310,8 +305,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                rootlogger.Write(LogType.Error, "Failed to initialise plugin {0} ({1})", plugin.Name, ex.Message);
-                rootlogger.Write(LogType.Debug, ex.StackTrace);
+                rootlogger.WriteException(string.Format("Failed to initialise plugin {0}", plugin.Name), ex);
                 return false;
             }
         }
