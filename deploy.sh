@@ -32,14 +32,15 @@ function bundle_rust {
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
-    Oxide.Ext.SQLite/Dependencies/*.dll \
+    Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
     Oxide.Ext.Rust/Patched/Facepunch.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
-    $HOME/temp_rust || die_with "Failed to copy config file and Lua DLLs!"
+    Oxide.Ext.SQLite/Dependencies/sqlite3.dll \
+    $HOME/temp_rust || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_rust || die_with "Failed to change to temp directory!"
@@ -69,13 +70,14 @@ function bundle_7dtd {
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
-    Oxide.Ext.SQLite/Dependencies/*.dll \
+    Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
-    $HOME/temp_7dtd || die_with "Failed to copy config file and Lua DLLs!"
+    Oxide.Ext.SQLite/Dependencies/sqlite3.dll \
+    $HOME/temp_7dtd || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_7dtd || die_with "Failed to change to temp directory!"
