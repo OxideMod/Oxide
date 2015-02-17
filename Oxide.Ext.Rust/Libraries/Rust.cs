@@ -46,17 +46,6 @@ namespace Oxide.Rust.Libraries
         }
 
         /// <summary>
-        /// Returns the UserID for the specified deployed item as a string
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        [LibraryFunction("UserIDFromDeployedItem")]
-        public string UserIDFromDeployedItem(DeployedItem DeployedItem)
-        {
-            return DeployedItem.deployerUserID.ToString();
-        }
-
-        /// <summary>
         /// Returns the UserID for the specified player as a string
         /// </summary>
         /// <param name="connection"></param>
