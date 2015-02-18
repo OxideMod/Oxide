@@ -131,32 +131,33 @@ namespace Oxide.Core.Plugins
         public object CallHook(string hookname, params object[] args)
         {
             // Locate the sublist
-            IList<Plugin> sublist;
-            if (!hooksubscriptions.TryGetValue(hookname, out sublist)) return null;
-            if (sublist.Count == 0) return null;
+            IList<Plugin> plugins;
+            if (!hooksubscriptions.TryGetValue(hookname, out plugins)) return null;
+
+            int subscriptions = plugins.Count;
+            if (subscriptions == 0) return null;
 
             // Loop each item
-            object[] values = new object[sublist.Count];
+            object[] values = new object[subscriptions];
             int returncount = 0;
             object finalvalue = null;
-            for (int i = 0; i < sublist.Count; i++)
+            for (int i = 0; i < subscriptions; i++)
             {
+                Plugin plugin = plugins[i];
                 // Call the hook
-                Plugin plugin = sublist[i];
-                object value = null;
                 try
                 {
-                    value = plugin.CallHook(hookname, args);
+                    object value = plugin.CallHook(hookname, args);
+                    if (value != null)
+                    {
+                        values[i] = value;
+                        finalvalue = value;
+                        returncount++;
+                    }
                 }
                 catch (Exception ex)
                 {
                     Logger.WriteException(string.Format("Failed to call hook '{0}' on plugin '{1}'", hookname, plugin), ex);
-                }
-                if (value != null)
-                {
-                    values[i] = value;
-                    finalvalue = value;
-                    returncount++;
                 }
             }
 
@@ -165,17 +166,14 @@ namespace Oxide.Core.Plugins
             if (returncount == 1) return finalvalue;
 
             // Notify log of hook conflict
-            string[] conflictplugins = new string[returncount];
+            string[] conflicts = new string[returncount];
             int j = 0;
-            for (int i = 0; i < returncount; i++)
+            for (int i = 0; i < subscriptions; i++)
             {
-                if (values[i] != null)
-                {
-                    string name = sublist[i].Name;
-                    conflictplugins[j++] = name;
-                }
+                if (values[i] == null) continue;
+                conflicts[j++] = plugins[i].Name;
             }
-            Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflictplugins));
+            Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
             return finalvalue;
         }
     }
