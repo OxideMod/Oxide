@@ -960,6 +960,28 @@
             },
             "MSILHash": "4YhzGHYyXEyoGNxLrp5G5YHWZS4LbyXL9qBc9dENySA="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 3,
+            "ArgumentBehaviour": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "UseOneItem",
+            "HookName": "OnItemUse",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Item",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UseOneItem",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "goBb3GJtrD+2nYIYO9w5/VtRp66rmkN9y03hV0vbCss="
+          }
         }
       ]
     },
