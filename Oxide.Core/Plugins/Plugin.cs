@@ -15,6 +15,16 @@ namespace Oxide.Core.Plugins
     /// </summary>
     public abstract class Plugin
     {
+        public static implicit operator bool(Plugin plugin)
+        {
+            return plugin != null;
+        }
+
+        public static bool operator !(Plugin plugin)
+        {
+            return !(bool)plugin;
+        }
+
         /// <summary>
         /// Gets the internal name of this plugin
         /// </summary>
