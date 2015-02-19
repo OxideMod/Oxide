@@ -970,7 +970,7 @@
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "UseOneItem",
-            "HookName": "OnItemUse",
+            "HookName": "OnConsumableUse",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "Item",
             "Flagged": false,
