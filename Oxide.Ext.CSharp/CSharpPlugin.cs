@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -47,6 +48,24 @@ namespace Oxide.Plugins
     }
 
     /// <summary>
+    /// Indicates that the specified field should be a reference to another plugin when it is loaded
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    public class PluginReferenceAttribute : Attribute
+    {
+        public string Name { get; private set; }
+
+        public PluginReferenceAttribute()
+        {
+        }
+
+        public PluginReferenceAttribute(string name)
+        {
+            Name = name;
+        }
+    }
+
+    /// <summary>
     /// Indicates that the specified method should be a handler for a console command
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
@@ -82,6 +101,11 @@ namespace Oxide.Plugins
         public string Filename;
         public FSWatcher Watcher;
 
+        protected Core.Libraries.Plugins plugins = Interface.GetMod().GetLibrary<Core.Libraries.Plugins>("Plugins");
+        protected PluginTimers timer;
+
+        private Dictionary<string, FieldInfo> pluginReferences = new Dictionary<string, FieldInfo>();
+
         public bool HookedOnFrame
         {
             get; private set;
@@ -89,9 +113,21 @@ namespace Oxide.Plugins
 
         public CSharpPlugin() : base()
         {
-            foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+            timer = new PluginTimers(this);
+
+            var type = GetType();
+            foreach (var field in type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
             {
-                var info_attributes = GetType().GetCustomAttributes(typeof(HookMethod), true);
+                var reference_attributes = field.GetCustomAttributes(typeof(PluginReferenceAttribute), true);
+                if (reference_attributes.Length > 0)
+                {
+                    var plugin_reference = reference_attributes[0] as PluginReferenceAttribute;
+                    pluginReferences[plugin_reference.Name ?? field.Name] = field;
+                }
+            }
+            foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                var info_attributes = method.GetCustomAttributes(typeof(HookMethod), true);
                 if (info_attributes.Length > 0) continue;
                 if (method.Name == "OnFrame") HookedOnFrame = true;
                 // Assume all private instance methods which are not explicitly hooked could be hooks
@@ -124,6 +160,9 @@ namespace Oxide.Plugins
 
             if (Filename != null) Watcher.AddMapping(Name);
 
+            foreach (var name in pluginReferences.Keys)
+                pluginReferences[name].SetValue(this, manager.GetPlugin(name));
+
             CallHook("Loaded", null);
         }
 
@@ -134,7 +173,26 @@ namespace Oxide.Plugins
 
             Watcher.RemoveMapping(Name);
 
+            foreach (var name in pluginReferences.Keys)
+                pluginReferences[name].SetValue(this, null);
+
             base.HandleRemovedFromManager(manager);
+        }
+
+        [HookMethod("OnPluginLoaded")]
+        void base_OnPluginLoaded(Plugin plugin)
+        {
+            FieldInfo field;
+            if (pluginReferences.TryGetValue(plugin.Name, out field))
+                field.SetValue(this, plugin);
+        }
+
+        [HookMethod("OnPluginUnloaded")]
+        void base_OnPluginUnloaded(Plugin plugin)
+        {
+            FieldInfo field;
+            if (pluginReferences.TryGetValue(plugin.Name, out field))
+                field.SetValue(this, null);
         }
 
         /// <summary>
