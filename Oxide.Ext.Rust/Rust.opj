@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Wdw8X/WHg3nEkjon8rSpv5pRwHYnfDBo7fU08U1IJ6E="
+            "MSILHash": "aw9+yGcJFKovKZOpI7i22yTjs7Wmz0BB7vpij9RlWsE="
           }
         },
         {
@@ -87,13 +87,13 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "RRb9h8OLtJJNsOVgfxisXh6ysTvbdikkcEcOrkQ5Ef0="
+            "MSILHash": "71tSE6dA9WyIdqdgdI0/VLx2m4OTDHujMT+IUhtYzyc="
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 119,
+            "InjectionIndex": 122,
             "ReturnBehaviour": 1,
             "ArgumentBehaviour": 4,
             "ArgumentString": "a0",
@@ -112,7 +112,7 @@
                 "ProtoBuf.Connect"
               ]
             },
-            "MSILHash": "RClhLedXMovJ69nLMm2sif2pjcmKnPPSTQt36xXE76A="
+            "MSILHash": "jw+WWZKUbwT67l4x1nIP+tQgxmQRRhDicra3u04b1cM="
           }
         },
         {
@@ -136,7 +136,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "KGwBAlTIBHsVSBJMFwPszCmGiLWJO7nGQri+z9fvZ6U="
+            "MSILHash": "Bb2I5NlVTTyvhWXmIjzagaE/a3YFVMiEIbkuZOi5mhU="
           }
         },
         {
@@ -181,30 +181,6 @@
               "Parameters": []
             },
             "MSILHash": "joN6zO+OGx8+AtQZakzgUZfV7rSTW3RLPuCZRR8jo/A="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehaviour": 1,
-            "ArgumentBehaviour": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "PlayerMetabolism_RunMetabolism",
-            "HookName": "OnRunPlayerMetabolism",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "PlayerMetabolism",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "RunMetabolism",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Single"
-              ]
-            },
-            "MSILHash": "JWh+oLyUimL+9O6vTwjupLFjk2IvtwUuBbH1+zaLF7c="
           }
         },
         {
@@ -354,7 +330,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 68,
+            "InjectionIndex": 62,
             "ReturnBehaviour": 0,
             "ArgumentBehaviour": 1,
             "ArgumentString": null,
@@ -372,7 +348,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "xd2AxDWZDBt+VMtukP5N8nBRTDduEYkar7wF6+zwtAc="
+            "MSILHash": "bLIRN0XgbNii8PJdwX3L8DOfyhNuf/9WXob+8WfSY28="
           }
         },
         {
@@ -566,7 +542,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "eu/cIT9TwTuSPF14mBlVzooJQZBXLgiLU6TLOtKG29E="
+            "MSILHash": "uw0rlBxEpX4GW6adObbSZEyFfh19p1VnqRkWG44zEos="
           }
         },
         {
@@ -811,13 +787,13 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "9IuE9dZulI9pwBZmuAGPxxPJ5m5KRcKpdVb0umwNt84="
+            "MSILHash": "dR09eOigsooEXNjvOjJL4NPc9kRyP+P4+Kpi/KSTSNg="
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 108,
+            "InjectionIndex": 91,
             "ReturnBehaviour": 0,
             "ArgumentBehaviour": 0,
             "ArgumentString": null,
@@ -837,7 +813,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "szokeFoffFteMpgPSiXT6mOdKPtmXP1/DIGYCOx0H6Q="
+            "MSILHash": "wpMrk1rwPVVLzeN5VhKXs1oM+Cos7wsw9kzpAn2cl0w="
           }
         },
         {
@@ -982,12 +958,7 @@
             },
             "MSILHash": "goBb3GJtrD+2nYIYO9w5/VtRp66rmkN9y03hV0vbCss="
           }
-        }
-      ]
-    },
-    {
-      "AssemblyName": "Facepunch",
-      "Hooks": [
+        },
         {
           "Type": "Simple",
           "Hook": {
@@ -998,7 +969,7 @@
             "HookTypeName": "Simple",
             "Name": "ConsoleSystem/Run_Internal",
             "HookName": "OnRunCommand",
-            "AssemblyName": "Facepunch",
+            "AssemblyName": "Assembly-CSharp",
             "TypeName": "ConsoleSystem/Run",
             "Flagged": false,
             "Signature": {
@@ -1010,7 +981,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "DYpQxNu053YOVdvCLVY3UBG73JFOUlVspBr+1DhoEq4="
+            "MSILHash": "EBolryqINdacZD11xRCiyuZ1Rz1R8GnMyuURmuVFO7A="
           }
         },
         {
@@ -1023,7 +994,7 @@
             "HookTypeName": "Simple",
             "Name": "ConsoleSystem/Run_Unrestricted",
             "HookName": "OnRunCommand",
-            "AssemblyName": "Facepunch",
+            "AssemblyName": "Assembly-CSharp",
             "TypeName": "ConsoleSystem/Run",
             "Flagged": false,
             "Signature": {
@@ -1035,7 +1006,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "fQkSw6yGLA7rFCtgFBzCjMRUBiqRIo1b351VoZplz/c="
+            "MSILHash": "rLeEfY86Mgj96KRUI610QqyikDGKMaHF6VfP6e2FC+0="
           }
         },
         {
@@ -1048,7 +1019,7 @@
             "HookTypeName": "Simple",
             "Name": "ConsoleSystem/SystemRealm_Normal",
             "HookName": "OnRunCommand",
-            "AssemblyName": "Facepunch",
+            "AssemblyName": "Assembly-CSharp",
             "TypeName": "ConsoleSystem/SystemRealm",
             "Flagged": false,
             "Signature": {
@@ -1061,7 +1032,32 @@
                 "System.Object[]"
               ]
             },
-            "MSILHash": "J1CkCqyqGYVw+/fGhv5TrK3p0hoswQ8VpNdMl3QbeJM="
+            "MSILHash": "QY2pdgQtdPAyES8N3Tc8CqbGNeSSaPkHjYtRnKK7eFU="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 1,
+            "ArgumentBehaviour": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "RunMetabolism",
+            "HookName": "OnRunPlayerMetabolism",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "PlayerMetabolism",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "RunMetabolism",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseCombatEntity",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "Sfo8nTfmerveN1KOFd5uId2tOjpOJE8+9hlqiqnBLfE="
           }
         }
       ]

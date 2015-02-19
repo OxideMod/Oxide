@@ -35,7 +35,6 @@ function bundle_rust {
     Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
-    Oxide.Ext.Rust/Patched/Facepunch.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \

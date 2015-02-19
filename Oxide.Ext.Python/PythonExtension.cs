@@ -55,7 +55,7 @@ namespace Oxide.Ext.Python
         private PythonPluginLoader loader;
 
         // Whitelist
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "Facepunch", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
+        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
         private static readonly string[] WhitelistModules = { "__future__", "binascii", "hashlib", "math", "random", "re", "time", "types", "warnings" };
         private static readonly Dictionary<string, string[]> WhitelistParts = new Dictionary<string, string[]> { { "os", new [] { "urandom" } } };
