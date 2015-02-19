@@ -8,6 +8,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
+            "InjectionIndex": 0,
             "HookTypeName": "Initialise Oxide",
             "Name": "InitOxide",
             "HookName": "OnInitialization",
@@ -912,6 +913,52 @@
               ]
             },
             "MSILHash": "Z9h072wR7R5514zMgFOTwwdOEdOXyt5k6qEIleq29Es="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "quit",
+            "HookName": "OnServerQuit",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConsoleGlobal",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "quit",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ConsoleSystem/Arg"
+              ]
+            },
+            "MSILHash": "zfXaDfvEdOjoI1RSV9PH+c3zqHC9d+a5vmqF8dwOkxk="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "DoAutomatedSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "SaveRestore",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoAutomatedSave",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "4YhzGHYyXEyoGNxLrp5G5YHWZS4LbyXL9qBc9dENySA="
           }
         }
       ]
