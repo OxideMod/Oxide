@@ -18,13 +18,13 @@ namespace Oxide.Core.Plugins.Watchers
         public WatcherChangeTypes ChangeType { get; private set; }
 
         /// <summary>
-        /// Initialises a new instance of the FileChange class
+        /// Initializes a new instance of the FileChange class
         /// </summary>
         /// <param name="name"></param>
         /// <param name="changeType"></param>
         public FileChange(string name, WatcherChangeTypes changeType)
         {
-            // Initialise
+            // Initialize
             Name = name;
             ChangeType = changeType;
         }

@@ -14,13 +14,13 @@ namespace Oxide.Core.Logging
         private List<LogMessage> messagecache;
 
         /// <summary>
-        /// Initialises a new instance of the CompoundLogger class
+        /// Initializes a new instance of the CompoundLogger class
         /// </summary>
         /// <param name="loggers"></param>
         public CompoundLogger()
             : base(true)
         {
-            // Initialise
+            // Initialize
             subloggers = new HashSet<Logger>();
             messagecache = new List<LogMessage>();
         }

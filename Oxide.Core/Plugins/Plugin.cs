@@ -98,7 +98,7 @@ namespace Oxide.Core.Plugins
         protected int nestcount;
 
         /// <summary>
-        /// Initialises an empty version of the Plugin class
+        /// Initializes an empty version of the Plugin class
         /// </summary>
         protected Plugin()
         {

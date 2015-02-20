@@ -9,7 +9,7 @@
           "Type": "InitOxide",
           "Hook": {
             "InjectionIndex": 0,
-            "HookTypeName": "Initialise Oxide",
+            "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide",
             "HookName": "OnInitialization",
             "AssemblyName": "Assembly-CSharp",

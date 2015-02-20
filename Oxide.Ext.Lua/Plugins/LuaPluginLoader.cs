@@ -22,7 +22,7 @@ namespace Oxide.Lua.Plugins
         public FSWatcher Watcher { get; set; }
 
         /// <summary>
-        /// Initialises a new instance of the LuaPluginLoader class
+        /// Initializes a new instance of the LuaPluginLoader class
         /// </summary>
         /// <param name="lua"></param>
         public LuaPluginLoader(NLua.Lua lua)

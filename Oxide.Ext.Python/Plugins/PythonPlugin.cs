@@ -51,7 +51,7 @@ namespace Oxide.Ext.Python.Plugins
         private readonly FSWatcher watcher;
 
         /// <summary>
-        /// Initialises a new instance of the PythonPlugin class
+        /// Initializes a new instance of the PythonPlugin class
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="engine"></param>

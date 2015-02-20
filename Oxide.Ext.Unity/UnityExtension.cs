@@ -30,7 +30,7 @@ namespace Oxide.Unity
         private GameObject gameObject;
 
         /// <summary>
-        /// Initialises a new instance of the UnityExtension class
+        /// Initializes a new instance of the UnityExtension class
         /// </summary>
         /// <param name="manager"></param>
         public UnityExtension(ExtensionManager manager)

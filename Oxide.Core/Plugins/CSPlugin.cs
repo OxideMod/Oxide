@@ -16,7 +16,7 @@ namespace Oxide.Core.Plugins
         public string Name { get; private set; }
 
         /// <summary>
-        /// Initialises a new instance of the HookMethod class
+        /// Initializes a new instance of the HookMethod class
         /// </summary>
         /// <param name="name"></param>
         public HookMethod(string name)
@@ -34,11 +34,11 @@ namespace Oxide.Core.Plugins
         protected IDictionary<string, MethodInfo> hooks;
 
         /// <summary>
-        /// Initialises a new instance of the CSPlugin class
+        /// Initializes a new instance of the CSPlugin class
         /// </summary>
         public CSPlugin()
         {
-            // Initialise
+            // Initialize
             hooks = new Dictionary<string, MethodInfo>();
 
             // Find all hooks

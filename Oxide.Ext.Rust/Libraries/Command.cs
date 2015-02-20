@@ -43,11 +43,11 @@ namespace Oxide.Rust.Libraries
         private IDictionary<string, ChatCommand> chatcommands;
 
         /// <summary>
-        /// Initialises a new instance of the Command class
+        /// Initializes a new instance of the Command class
         /// </summary>
         public Command()
         {
-            // Initialise
+            // Initialize
             concommands = new List<ConsoleCommand>();
             chatcommands = new Dictionary<string, ChatCommand>();
         }

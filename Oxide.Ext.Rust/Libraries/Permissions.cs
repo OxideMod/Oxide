@@ -83,11 +83,11 @@ namespace Oxide.Rust.Libraries
         private DynamicConfigFile datafile;
 
         /// <summary>
-        /// Initialises a new instance of the Permissions library
+        /// Initializes a new instance of the Permissions library
         /// </summary>
         public Permissions()
         {
-            // Initialise
+            // Initialize
             permset = new Dictionary<Plugin, HashSet<string>>();
             allperms = new HashSet<string>();
 
@@ -101,7 +101,7 @@ namespace Oxide.Rust.Libraries
         /// </summary>
         private void LoadFromDatafile()
         {
-            // Initialise
+            // Initialize
             userdata = new Dictionary<UserIdentity, UserData>();
             groupdata = new Dictionary<string, GroupData>();
 

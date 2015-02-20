@@ -37,11 +37,11 @@ namespace Oxide.Core.Extensions
         private IList<PluginChangeWatcher> changewatchers;
 
         /// <summary>
-        /// Initialises a new instance of the ExtensionManager class
+        /// Initializes a new instance of the ExtensionManager class
         /// </summary>
         public ExtensionManager(CompoundLogger logger)
         {
-            // Initialise
+            // Initialize
             Logger = logger;
             extensions = new List<Extension>();
             pluginloaders = new List<PluginLoader>();

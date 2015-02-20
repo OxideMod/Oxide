@@ -10,7 +10,7 @@ namespace Oxide.Unity.Logging
     public sealed class UnityLogger : Logger
     {
         /// <summary>
-        /// Initialises a new instance of the UnityLogger class
+        /// Initializes a new instance of the UnityLogger class
         /// </summary>
         public UnityLogger()
             : base(true)

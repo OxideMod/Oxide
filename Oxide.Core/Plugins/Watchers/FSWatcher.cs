@@ -22,13 +22,13 @@ namespace Oxide.Core.Plugins.Watchers
         private Queue<FileChange> filechanges;
 
         /// <summary>
-        /// Initialises a new instance of the FSWatcher class
+        /// Initializes a new instance of the FSWatcher class
         /// </summary>
         /// <param name="directory"></param>
         /// <param name="filter"></param>
         public FSWatcher(string directory, string filter)
         {
-            // Initialise
+            // Initialize
             watchedplugins = new HashSet<string>();
             filechanges = new Queue<FileChange>();
             syncroot = new object();

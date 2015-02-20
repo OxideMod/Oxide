@@ -43,7 +43,7 @@ namespace Oxide.Lua.Plugins
         private FSWatcher watcher;
 
         /// <summary>
-        /// Initialises a new instance of the LuaPlugin class
+        /// Initializes a new instance of the LuaPlugin class
         /// </summary>
         /// <param name="filename"></param>
         internal LuaPlugin(string filename, NLua.Lua lua, FSWatcher watcher)
@@ -242,7 +242,7 @@ namespace Oxide.Lua.Plugins
 
         static LuaPlugin()
         {
-            // Initialise
+            // Initialize
             emptyargs = new object[0];
 
             // Load the method

@@ -28,7 +28,7 @@ namespace Oxide.Ext.Python.Libraries
         private readonly Dictionary<DynamicConfigFile, PythonDictionary> datafilemap;
 
         /// <summary>
-        /// Initialises a new instance of the PythonDatafile class
+        /// Initializes a new instance of the PythonDatafile class
         /// <param name="engine"></param>
         /// </summary>
         public PythonDatafile(ScriptEngine engine)

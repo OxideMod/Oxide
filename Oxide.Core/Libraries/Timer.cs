@@ -59,7 +59,7 @@ namespace Oxide.Core.Libraries
             private float nextrep;
 
             /// <summary>
-            /// Initialises a new instance of the TimerInstance class
+            /// Initializes a new instance of the TimerInstance class
             /// </summary>
             /// <param name="repetitions"></param>
             /// <param name="delay"></param>

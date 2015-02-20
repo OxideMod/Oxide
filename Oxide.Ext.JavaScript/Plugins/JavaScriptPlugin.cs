@@ -48,7 +48,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         private readonly FSWatcher watcher;
 
         /// <summary>
-        /// Initialises a new instance of the JavaScriptPlugin class
+        /// Initializes a new instance of the JavaScriptPlugin class
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="engine"></param>

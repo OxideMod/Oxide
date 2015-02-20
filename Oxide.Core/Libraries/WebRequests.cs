@@ -56,7 +56,7 @@ namespace Oxide.Core.Libraries
             public Plugin Owner { get; private set; }
 
             /// <summary>
-            /// Initialises a new instance of the WebrequestInstance class
+            /// Initializes a new instance of the WebrequestInstance class
             /// </summary>
             /// <param name="repetitions"></param>
             /// <param name="delay"></param>
@@ -99,7 +99,7 @@ namespace Oxide.Core.Libraries
         public class GetWebrequest : WebrequestInstance
         {
             /// <summary>
-            /// Initialises a new instance of the GetWebrequest class
+            /// Initializes a new instance of the GetWebrequest class
             /// </summary>
             /// <param name="repetitions"></param>
             /// <param name="delay"></param>
@@ -167,7 +167,7 @@ namespace Oxide.Core.Libraries
             public string PostData { get; private set;}
 
             /// <summary>
-            /// Initialises a new instance of the GetWebrequest class
+            /// Initializes a new instance of the GetWebrequest class
             /// </summary>
             /// <param name="repetitions"></param>
             /// <param name="delay"></param>
@@ -242,17 +242,17 @@ namespace Oxide.Core.Libraries
         private AutoResetEvent workevent;
 
         /// <summary>
-        /// Initialises a new instance of the WebRequests library
+        /// Initializes a new instance of the WebRequests library
         /// </summary>
         public WebRequests()
         {
-            // Initialise
+            // Initialize
             waitingqueue = new Queue<WebrequestInstance>();
             completequeue = new Queue<WebrequestInstance>();
             syncroot = new object();
             workevent = new AutoResetEvent(false);
 
-            // Initialise SSL
+            // Initialize SSL
             ServicePointManager.Expect100Continue = false;
             ServicePointManager.ServerCertificateValidationCallback = (object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain,
                                        System.Net.Security.SslPolicyErrors sslPolicyErrors) => { return true; };

@@ -26,11 +26,11 @@ namespace Oxide.Core.Logging
         private bool processmessagesimmediately;
 
         /// <summary>
-        /// Initialises a new instance of the Logger class
+        /// Initializes a new instance of the Logger class
         /// </summary>
         public Logger(bool processmessagesimmediately)
         {
-            // Initialise
+            // Initialize
             this.processmessagesimmediately = processmessagesimmediately;
             if (!processmessagesimmediately)
                 messagequeue = new Queue<LogMessage>();

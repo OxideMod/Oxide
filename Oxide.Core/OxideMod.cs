@@ -78,7 +78,7 @@ namespace Oxide.Core
         public static readonly VersionNumber Version = new VersionNumber(2, 0, 0);
 
         /// <summary>
-        /// Initialises a new instance of the OxideMod class
+        /// Initializes a new instance of the OxideMod class
         /// </summary>
         public void Load()
         {
@@ -140,7 +140,7 @@ namespace Oxide.Core
             libwebrequests = new WebRequests();
             extensionmanager.RegisterLibrary("WebRequests", libwebrequests);
 
-            // Initialise other things
+            // Initialize other things
             DataFileSystem = new DataFileSystem(DataDirectory);
 
             // Load all extensions
@@ -239,7 +239,7 @@ namespace Oxide.Core
                 }
                 catch (Exception ex)
                 {
-                    rootlogger.WriteException(string.Format("Failed to initialise plugin {0}", plugin.Name), ex);
+                    rootlogger.WriteException(string.Format("Failed to initialize plugin {0}", plugin.Name), ex);
                 }
             }
 
@@ -305,7 +305,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                rootlogger.WriteException(string.Format("Failed to initialise plugin {0}", plugin.Name), ex);
+                rootlogger.WriteException(string.Format("Failed to initialize plugin {0}", plugin.Name), ex);
                 return false;
             }
         }

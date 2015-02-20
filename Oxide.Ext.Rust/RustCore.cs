@@ -27,7 +27,7 @@ namespace Oxide.Rust.Plugins
         private bool ServerInitialized;
 
         /// <summary>
-        /// Initialises a new instance of the RustCore class
+        /// Initializes a new instance of the RustCore class
         /// </summary>
         public RustCore()
         {
@@ -298,7 +298,7 @@ namespace Oxide.Rust.Plugins
                 }
             }
 
-            // Default behaviour
+            // Default behavior
             return null;
         }
 
@@ -358,7 +358,7 @@ namespace Oxide.Rust.Plugins
         }
 
         /// <summary>
-        /// Called when the player has been initialised
+        /// Called when the player has been initialized
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("OnPlayerInit")]

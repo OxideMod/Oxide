@@ -58,7 +58,7 @@ namespace Oxide.Lua
         private LuaPluginLoader loader;
 
         /// <summary>
-        /// Initialises a new instance of the LuaExtension class
+        /// Initializes a new instance of the LuaExtension class
         /// </summary>
         /// <param name="manager"></param>
         public LuaExtension(ExtensionManager manager)
@@ -81,7 +81,7 @@ namespace Oxide.Lua
         public override void Load()
         {
             // Setup Lua instance
-            InitialiseLua();
+            InitializeLua();
 
             // Register the loader
             loader = new LuaPluginLoader(LuaEnvironment);
@@ -89,9 +89,9 @@ namespace Oxide.Lua
         }
 
         /// <summary>
-        /// Initialises the Lua environment
+        /// Initializes the Lua environment
         /// </summary>
-        private void InitialiseLua()
+        private void InitializeLua()
         {
             // Create the Lua environment
             LuaEnvironment = new NLua.Lua();

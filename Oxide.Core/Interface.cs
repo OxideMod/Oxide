@@ -9,9 +9,9 @@
         private static OxideMod oxide;
 
         /// <summary>
-        /// Initialises Oxide
+        /// Initializes Oxide
         /// </summary>
-        public static void Initialise()
+        public static void Initialize()
         {
             // Create if not already created
             if (oxide == null)

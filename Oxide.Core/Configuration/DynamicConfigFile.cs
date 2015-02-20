@@ -16,7 +16,7 @@ namespace Oxide.Core.Configuration
         private readonly string _chroot;
 
         /// <summary>
-        /// Initialises a new instance of the DynamicConfigFile class
+        /// Initializes a new instance of the DynamicConfigFile class
         /// </summary>
         public DynamicConfigFile()
         {

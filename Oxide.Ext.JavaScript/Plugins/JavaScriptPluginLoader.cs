@@ -24,7 +24,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         public FSWatcher Watcher { get; set; }
 
         /// <summary>
-        /// Initialises a new instance of the JavaScriptPluginLoader class
+        /// Initializes a new instance of the JavaScriptPluginLoader class
         /// </summary>
         /// <param name="engine"></param>
         public JavaScriptPluginLoader(Engine engine)

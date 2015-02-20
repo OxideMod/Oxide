@@ -59,7 +59,7 @@ namespace Oxide.Ext.JavaScript
         private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
 
         /// <summary>
-        /// Initialises a new instance of the JavaScript class
+        /// Initializes a new instance of the JavaScript class
         /// </summary>
         /// <param name="manager"></param>
         public JavaScriptExtension(ExtensionManager manager)
@@ -85,7 +85,7 @@ namespace Oxide.Ext.JavaScript
         public override void Load()
         {
             // Setup JavaScript instance
-            InitialiseJavaScript();
+            InitializeJavaScript();
 
             // Register the loader
             loader = new JavaScriptPluginLoader(JavaScriptEngine);
@@ -93,9 +93,9 @@ namespace Oxide.Ext.JavaScript
         }
 
         /// <summary>
-        /// Initialises the JavaScript engine
+        /// Initializes the JavaScript engine
         /// </summary>
-        private void InitialiseJavaScript()
+        private void InitializeJavaScript()
         {
             // Create the JavaScript engine
             JavaScriptEngine = new Engine(cfg => cfg.AllowClr(AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess).ToArray()));

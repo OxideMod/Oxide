@@ -9,7 +9,7 @@
         public ushort Major, Minor, Patch;
 
         /// <summary>
-        /// Initialises a new instance of the Version struct with the specified values
+        /// Initializes a new instance of the Version struct with the specified values
         /// </summary>
         /// <param name="major"></param>
         /// <param name="minor"></param>

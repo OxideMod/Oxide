@@ -24,7 +24,7 @@ namespace Oxide.Ext.Python.Plugins
         public FSWatcher Watcher { get; set; }
 
         /// <summary>
-        /// Initialises a new instance of the PythonPluginLoader class
+        /// Initializes a new instance of the PythonPluginLoader class
         /// </summary>
         /// <param name="engine"></param>
         public PythonPluginLoader(ScriptEngine engine)

@@ -21,7 +21,7 @@ namespace Oxide.Core
         private Dictionary<string, DynamicConfigFile> datafiles;
 
         /// <summary>
-        /// Initialises a new instance of the DataFileSystem class
+        /// Initializes a new instance of the DataFileSystem class
         /// </summary>
         /// <param name="directory"></param>
         public DataFileSystem(string directory)

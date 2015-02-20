@@ -19,7 +19,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         public Logger Logger { get; private set; }
 
         /// <summary>
-        /// Initialises a new instance of the JavaScriptGlobal library
+        /// Initializes a new instance of the JavaScriptGlobal library
         /// </summary>
         /// <param name="logger"></param>
         public JavaScriptGlobal(Logger logger)

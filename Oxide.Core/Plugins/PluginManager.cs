@@ -39,11 +39,11 @@ namespace Oxide.Core.Plugins
         public event PluginEvent OnPluginRemoved;
 
         /// <summary>
-        /// Initialises a new instance of the PluginManager class
+        /// Initializes a new instance of the PluginManager class
         /// </summary>
         public PluginManager(Logger logger)
         {
-            // Initialise
+            // Initialize
             loadedplugins = new Dictionary<string, Plugin>();
             hooksubscriptions = new Dictionary<string, IList<Plugin>>();
             Logger = logger;

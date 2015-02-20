@@ -28,7 +28,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         private readonly Dictionary<DynamicConfigFile, ObjectInstance> datafilemap;
 
         /// <summary>
-        /// Initialises a new instance of the LuaDatafile class
+        /// Initializes a new instance of the LuaDatafile class
         /// <param name="engine"></param>
         /// </summary>
         public JavaScriptDatafile(Engine engine)

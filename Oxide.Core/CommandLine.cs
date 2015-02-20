@@ -24,7 +24,7 @@ namespace Oxide.Core
         }
 
         /// <summary>
-        /// Initialises a new instance of the CommandLine class
+        /// Initializes a new instance of the CommandLine class
         /// </summary>
         /// <param name="cmdline"></param>
         public CommandLine(string cmdline)

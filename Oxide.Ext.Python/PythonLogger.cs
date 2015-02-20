@@ -17,7 +17,7 @@ namespace Oxide.Ext.Python
         public Logger Logger { get; private set; }
 
         /// <summary>
-        /// Initialises a new instance of the PythonLogger
+        /// Initializes a new instance of the PythonLogger
         /// </summary>
         /// <param name="logger"></param>
         public PythonLogger(Logger logger)

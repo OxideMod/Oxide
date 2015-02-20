@@ -21,7 +21,7 @@
         public ExtensionManager Manager { get; private set; }
 
         /// <summary>
-        /// Initialises a new instance of the Extension class
+        /// Initializes a new instance of the Extension class
         /// </summary>
         /// <param name="manager"></param>
         public Extension(ExtensionManager manager)

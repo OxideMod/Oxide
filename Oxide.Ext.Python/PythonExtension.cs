@@ -64,7 +64,7 @@ namespace Oxide.Ext.Python
         delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple fromlist);
 
         /// <summary>
-        /// Initialises a new instance of the PythonExtension class
+        /// Initializes a new instance of the PythonExtension class
         /// </summary>
         /// <param name="manager"></param>
         public PythonExtension(ExtensionManager manager)
@@ -85,7 +85,7 @@ namespace Oxide.Ext.Python
         public override void Load()
         {
             // Setup Lua instance
-            InitialisePython();
+            InitializePython();
 
             // Register the loader
             loader = new PythonPluginLoader(PythonEngine);
@@ -93,9 +93,9 @@ namespace Oxide.Ext.Python
         }
 
         /// <summary>
-        /// Initialises the Python engine
+        /// Initializes the Python engine
         /// </summary>
-        private void InitialisePython()
+        private void InitializePython()
         {
             // Create the Python engine
             PythonEngine = IronPython.Hosting.Python.CreateEngine();

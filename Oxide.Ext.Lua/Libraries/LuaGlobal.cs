@@ -19,7 +19,7 @@ namespace Oxide.Lua.Libraries
         public Logger Logger { get; private set; }
 
         /// <summary>
-        /// Initialises a new instance of the LuaGlobal library
+        /// Initializes a new instance of the LuaGlobal library
         /// </summary>
         /// <param name="logger"></param>
         public LuaGlobal(Logger logger)

@@ -27,7 +27,7 @@ namespace Oxide.Rust
         public override string Author { get { return "Oxide Team"; } }
 
         /// <summary>
-        /// Initialises a new instance of the RustExtension class
+        /// Initializes a new instance of the RustExtension class
         /// </summary>
         /// <param name="manager"></param>
         public RustExtension(ExtensionManager manager)

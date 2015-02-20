@@ -16,7 +16,7 @@ namespace Oxide.Unity.Plugins
         private UnityLogger logger;
 
         /// <summary>
-        /// Initialises a new instance of the UnityCore class
+        /// Initializes a new instance of the UnityCore class
         /// </summary>
         public UnityCore()
         {
@@ -46,7 +46,7 @@ namespace Oxide.Unity.Plugins
         }
 
         /// <summary>
-        /// Called when the it's safe to initialise logging
+        /// Called when the it's safe to initialize logging
         /// </summary>
         [HookMethod("OnInitLogging")]
         private void OnInitLogging()

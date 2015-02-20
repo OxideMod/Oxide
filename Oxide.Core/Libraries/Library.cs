@@ -17,7 +17,7 @@ namespace Oxide.Core.Libraries
         public string Name { get; private set; }
 
         /// <summary>
-        /// Initialises a new instance of the LibraryFunction class
+        /// Initializes a new instance of the LibraryFunction class
         /// </summary>
         /// <param name="name"></param>
         public LibraryFunction(string name)
@@ -40,7 +40,7 @@ namespace Oxide.Core.Libraries
         public abstract bool IsGlobal { get; }
 
         /// <summary>
-        /// Initialises a new instance of the Library class
+        /// Initializes a new instance of the Library class
         /// </summary>
         public Library()
         {

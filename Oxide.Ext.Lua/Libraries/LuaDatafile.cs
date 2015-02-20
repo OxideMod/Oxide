@@ -27,7 +27,7 @@ namespace Oxide.Lua.Libraries
         private Dictionary<DynamicConfigFile, LuaTable> datafilemap;
 
         /// <summary>
-        /// Initialises a new instance of the LuaDatafile class
+        /// Initializes a new instance of the LuaDatafile class
         /// </summary>
         /// <param name="logger"></param>
         public LuaDatafile(NLua.Lua lua)

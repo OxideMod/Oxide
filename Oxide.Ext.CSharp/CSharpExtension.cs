@@ -29,7 +29,7 @@ namespace Oxide.Plugins
         private CSharpPluginLoader loader;
 
         /// <summary>
-        /// Initialises a new instance of the CSharpExtension class
+        /// Initializes a new instance of the CSharpExtension class
         /// </summary>
         /// <param name="manager"></param>
         public CSharpExtension(ExtensionManager manager) : base(manager)

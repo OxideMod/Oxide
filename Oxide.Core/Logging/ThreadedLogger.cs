@@ -16,12 +16,12 @@ namespace Oxide.Core.Logging
         private Thread workerthread;
 
         /// <summary>
-        /// Initialises a new instance of the ThreadedLogger class
+        /// Initializes a new instance of the ThreadedLogger class
         /// </summary>
         public ThreadedLogger()
             : base(false)
         {
-            // Initialise
+            // Initialize
             waitevent = new AutoResetEvent(false);
             exit = false;
             syncroot = new object();

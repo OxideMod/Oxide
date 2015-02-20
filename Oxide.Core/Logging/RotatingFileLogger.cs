@@ -17,7 +17,7 @@ namespace Oxide.Core.Logging
         private StreamWriter writer;
 
         /// <summary>
-        /// Initialises a new instance of the RotatingFileLogger
+        /// Initializes a new instance of the RotatingFileLogger
         /// </summary>
         public RotatingFileLogger()
         {
