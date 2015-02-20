@@ -78,7 +78,7 @@ namespace Oxide.Rust.Libraries
         {
             if (message != null)
             {
-                ConsoleSystem.Broadcast("chat.add", userid, string.Format("<color=orange>{0}</color>  {1}", name, message), 1.0);
+                ConsoleSystem.Broadcast("chat.add", userid, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
             }
             else
             {
@@ -99,7 +99,7 @@ namespace Oxide.Rust.Libraries
         {
             if (message != null)
             {
-                player.SendConsoleCommand("chat.add", userid, string.Format("<color=orange>{0}</color>  {1}", name, message), 1.0);
+                player.SendConsoleCommand("chat.add", userid, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
             }
             else
             {
