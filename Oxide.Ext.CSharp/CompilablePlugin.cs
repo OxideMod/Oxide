@@ -170,7 +170,8 @@ namespace Oxide.Plugins
                     var exception_constructor = typeof(UnauthorizedAccessException).GetConstructor(new Type[] { typeof(string) });
                     var security_exception = definition.MainModule.Import(exception_constructor);
 
-                    foreach (var type in definition.MainModule.Types)
+                    Action<TypeDefinition> patch_module_type = null;
+                    patch_module_type = (type) =>
                     {
                         foreach (var method in type.Methods)
                         {
@@ -269,7 +270,12 @@ namespace Oxide.Plugins
                                 }
                             }
                         }
-                    }
+                        foreach (var nested_type in type.NestedTypes)
+                            patch_module_type(nested_type);
+                    };
+
+                    foreach (var type in definition.MainModule.Types)
+                        patch_module_type(type);
 
                     definition.Write(path);
 
