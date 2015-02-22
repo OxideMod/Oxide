@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Jint;
 using Jint.Native;
+using Jint.Native.Array;
 using Jint.Native.Object;
 
 using Oxide.Core.Configuration;
@@ -37,16 +39,35 @@ namespace Oxide.Ext.JavaScript
         /// <returns></returns>
         public static ObjectInstance ObjectFromConfig(DynamicConfigFile config, Engine engine)
         {
-            var tbl = new ObjectInstance(engine) {Extensible = true};
-            // Loop each item in config
+            var objInst = new ObjectInstance(engine) {Extensible = true};
             foreach (var pair in config)
             {
-                // Translate and set on object
-                tbl.FastAddProperty(pair.Key, JsValue.FromObject(engine, pair.Value), true, false, true);
+                objInst.FastAddProperty(pair.Key, JsValueFromObject(pair.Value, engine), true, true, true);
             }
+            return objInst;
+        }
 
-            // Return
-            return tbl;
+        public static JsValue JsValueFromObject(object obj, Engine engine)
+        {
+            var values = obj as List<object>;
+            if (values != null)
+            {
+                var jsValues = new List<JsValue>();
+                foreach (var v in values)
+                    jsValues.Add(JsValue.FromObject(engine, v));
+                return (ArrayInstance)engine.Array.Construct(jsValues.ToArray());
+            }
+            var dict = obj as Dictionary<string, object>;
+            if (dict != null)
+            {
+                var objInst = new ObjectInstance(engine) { Extensible = true };
+                foreach (var pair in dict)
+                {
+                    objInst.FastAddProperty(pair.Key, JsValueFromObject(pair.Value, engine), true, true, true);
+                }
+                return objInst;
+            }
+            return JsValue.FromObject(engine, obj);
         }
 
         /// <summary>
