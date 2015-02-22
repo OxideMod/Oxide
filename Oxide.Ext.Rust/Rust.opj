@@ -498,7 +498,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 50,
+            "InjectionIndex": 45,
             "ReturnBehaviour": 3,
             "ArgumentBehaviour": 4,
             "ArgumentString": "l0 => l0",
@@ -518,7 +518,7 @@
                 "ProtoBuf.Item/InstanceData"
               ]
             },
-            "MSILHash": "j8rtSeC0mqZwK1zQLnFKPvG7bH99u/14WrtfCzwVI8I="
+            "MSILHash": "870RyTgloeJerl5MQqW54vW6ShB5h6H0LhCAdjvxM80="
           }
         },
         {
