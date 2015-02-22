@@ -116,6 +116,75 @@
             },
             "MSILHash": "lnC6nbG5M9MpLqnw0phDXX3STkFSg2h8w/GcAkvsuZw="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 26,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "SavePlayerData",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SavePlayerData",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "PlayerDataFile"
+              ]
+            },
+            "MSILHash": "QxCYKLZcuYFRUuekHuGWuzI05gtizmML9qe1owhlZIw="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 38,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "SaveWorld",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SaveWorld",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "bpU0T0fqAfdELDZa7ycAZ2xrl7Lf2DE9AqKDNkpcm5Y="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnApplicationQuit",
+            "HookName": "OnServerQuit",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "OnApplicationQuit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "KMfUzhJBBVYOCXuLwkHgjeIBoxrox3AIyI2e23lWWn0="
+          }
         }
       ]
     }
