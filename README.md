@@ -1,33 +1,37 @@
 Oxide 2 [![Build Status](https://travis-ci.org/OxideMod/Oxide.png)](https://travis-ci.org/OxideMod/Oxide)
 =======
 
-Oxide 2 is a complete rewrite of the popular, original Oxide mod for the game Rust. Oxide 2 has a focus on modularity and extensibility. The core is highly abstracted and loosely coupled, and could be used to mod any game that uses .NET such as 7 Days to Die, The Forest, Space Engineers, and more.
+Oxide 2 is a complete rewrite of the popular, original Oxide mod for the game Rust. Oxide has a focus on modularity and extensibility.
 
-Extensions
-----------
+The core is highly abstracted and loosely coupled, and could be used to mod any game that uses .NET such as 7 Days to Die, The Forest, Space Engineers, and more. Support for games, plugin languages, and other functionality is added via extensions. When loading, Oxide 2 scans the binary folder for DLL extensions. Extension filenames are formatted as `Oxide.Ext.Name.dll`.
 
-When loading, Oxide 2 scans the binary folder for DLL extensions.
+The current official extensions are listed below:
 
-Extension filenames are formatted as follows:  
-Oxide.Ext.Name.dll
+ * Oxide.Ext.CSharp - _Allows raw [CSharp plugins](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
+ * Oxide.Ext.JavaScript - _Allows [JavaScript](http://en.wikipedia.org/wiki/JavaScript) plugins to be loaded_
+ * Oxide.Ext.Lua - _Allows [Lua](http://www.lua.org/) plugins to be loaded_
+ * Oxide.Ext.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
+ * Oxide.Ext.Python - _Allows [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) plugins to be loaded_
+ * Oxide.Ext.Rust - _Provides support for the [Rust](http://playrust.com/) Experimental server_
+ * Oxide.Ext.SevenDays - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
+ * Oxide.Ext.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
+ * Oxide.Ext.Unity - _Provides support for [Unity](http://unity3d.com/) games_
 
-Current extensions are listed below:
+Third-party, unofficial extensions available:
 
- * Oxide.Ext.CSharp - Allows raw CSharp plugins to be loaded
- * Oxide.Ext.JavaScript - Allows JavaScript plugins to be loaded
- * Oxide.Ext.Lua - Allows Lua plugins to be loaded
- * Oxide.Ext.Python - Allows Python plugins to be loaded
- * Oxide.Ext.Rust - Provides support for the Rust Experimental server
- * Oxide.Ext.Unity - Provides support for Unity games
+ * [Oxide.Ext.RustIO.dll](http://forum.rustoxide.com/resources/768/) - _Provides generation of map images, lightweight web server, and live map_
 
-As an example to what kind of extensions may be used in the future, here is a non-exhaustive list of possibilities:
+Examples of what extensions may be available in the future:
 
- * Oxide.Ext.MySQL - Allows plugins to access a MySQL database
- * Oxide.Ext.WebServer - Allows the server or modded game to also host a web server
+ * Oxide.Ext.IRC - _Allows plugins to access an IRC server_
+ * Oxide.Ext.Updater - _Allows for automatic plugin checking and updating_
 
-Building from Source
---------------------
+# Compiling Source
 
- 1. Clone the git repository locally.
- 2. Open the solution in Visual Studio (2013 is recommended, but it should work on earlier versions).
- 3. Compile the project. If you get errors, it probably means you're missing .NET framework.
+While we recommend using one of the [official release builds](http://forum.rustoxide.com/download/), you can compile your own builds if you'd like.
+
+ 1. Clone the git repository locally using `git clone https://github.com/OxideMod/Oxide.git`
+ 2. Open the solution in Visual Studio (2013 is recommended, but it should work with other versions).
+ 3. Build the project using the solution. If you get errors, it probably means you're missing .NET framework.
+
+Keep in mind that only official builds are supported by the Oxide team and community.
