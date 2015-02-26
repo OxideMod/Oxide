@@ -87,32 +87,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "xnnvSXKw11xk95rb+EtmqrrE2ulOkGXHrdNgk2W94kQ="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 122,
-            "ReturnBehaviour": 1,
-            "ArgumentBehaviour": 4,
-            "ArgumentString": "a0",
-            "HookTypeName": "Simple",
-            "Name": "ConnectionAuth_OnNewConnection",
-            "HookName": "OnUserApprove",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "ConnectionAuth",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnNewConnection",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "Network.Connection",
-                "ProtoBuf.Connect"
-              ]
-            },
-            "MSILHash": "PHBgz3dLyViysHGtA/O5Qo3PTuyd6+6N4y5Qvw+yp7Y="
+            "MSILHash": "yffWP2hdBCZz3uxjR15Bdn1ghVoQFcov9RQvp2J2rqc="
           }
         },
         {
@@ -234,7 +209,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 11,
+            "InjectionIndex": 14,
             "ReturnBehaviour": 1,
             "ArgumentBehaviour": 3,
             "ArgumentString": null,
@@ -252,7 +227,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "AteuUMOCUM4mXyRsCLEkHe98I42C7QnNygTGwvfKc+o="
+            "MSILHash": "5dFexgrQrRtgiMndKmMVwJadGuFwCyLclOqrWrClD14="
           }
         },
         {
@@ -276,7 +251,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "6avjhMeFR6p7naHU1/LZ5cyEtWSFr7FQ/AaWz/hOxtg="
+            "MSILHash": "1HliBe8OV+WS6DV3y8dKpbWoC+XmgpNDbbUQA034Y8M="
           }
         },
         {
@@ -824,7 +799,7 @@
             "ArgumentBehaviour": 4,
             "ArgumentString": "this, a0, l7",
             "HookTypeName": "Simple",
-            "Name": "GiveResourceFromItem",
+            "Name": "ResourceDispenser_GiveResourceFromItem",
             "HookName": "OnGather",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "ResourceDispenser",
@@ -851,7 +826,7 @@
             "ArgumentBehaviour": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "DoAttackShared",
+            "Name": "BaseMelee_DoAttackShared",
             "HookName": "OnMeleeAttack",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "BaseMelee",
@@ -899,7 +874,7 @@
             "ArgumentBehaviour": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "quit",
+            "Name": "ConsoleGlobal_quit",
             "HookName": "OnServerQuit",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "ConsoleGlobal",
@@ -923,7 +898,7 @@
             "ArgumentBehaviour": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "DoAutomatedSave",
+            "Name": "SaveRestore_DoAutomatedSave",
             "HookName": "OnServerSave",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "SaveRestore",
@@ -945,7 +920,7 @@
             "ArgumentBehaviour": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "UseOneItem",
+            "Name": "Item_UseOneItem",
             "HookName": "OnConsumableUse",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "Item",
@@ -1043,7 +1018,7 @@
             "ArgumentBehaviour": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "RunMetabolism",
+            "Name": "PlayerMetabolism_RunMetabolism",
             "HookName": "OnRunPlayerMetabolism",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "PlayerMetabolism",
@@ -1057,7 +1032,55 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "Sfo8nTfmerveN1KOFd5uId2tOjpOJE8+9hlqiqnBLfE="
+            "MSILHash": "zp6+uAJrpysRvNjtt7inA0lLm2uxG4K/0FC3k+HkPY8="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitializePVT_Apply",
+            "HookName": "OnTerrainInitialized",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "InitializePVT",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt32"
+              ]
+            },
+            "MSILHash": "+u2GCtSHTDWu7iqcjcFKh98FNKhbrQfPRx+LI73xrGk="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 115,
+            "ReturnBehaviour": 1,
+            "ArgumentBehaviour": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "ConnectionAuth_OnNewConnection",
+            "HookName": "OnUserApprove",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConnectionAuth",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnNewConnection",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Network.Connection"
+              ]
+            },
+            "MSILHash": "5rk7ltH+l9LtRPsBwxNRRx+ZSTTAdA/M6tfVCzipv8M="
           }
         }
       ]
