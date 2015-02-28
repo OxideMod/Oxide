@@ -112,6 +112,7 @@ namespace Oxide.Rust.Plugins
             // Load
             Interface.GetMod().LoadPlugin(name);
             Plugin plugin = pluginmanager.GetPlugin(name);
+            if (plugin == null) return;
             plugin.CallHook("OnServerInitialized", null);
         }
 
