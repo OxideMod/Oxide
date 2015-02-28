@@ -70,6 +70,7 @@ namespace Oxide.Plugins
                 }
                 else
                 {
+                    LastCompiledAt = default(DateTime);
                     Interface.GetMod().LogInfo("{0} plugin failed to compile! Exit code: {1}", ScriptName, compiler.ExitCode);
                     Interface.GetMod().LogInfo(compiler.StdOutput.ToString());
                     if (compiler.ErrOutput.Length > 0) Interface.GetMod().LogInfo(compiler.ErrOutput.ToString());
