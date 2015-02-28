@@ -37,7 +37,7 @@ namespace Oxide.Ext.JavaScript
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, 0); } }
+        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
 
         /// <summary>
         /// Gets the author of this extension

@@ -17,7 +17,7 @@ namespace Oxide.Plugins
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(0, 6, 0); } }
+        public override VersionNumber Version { get { return new VersionNumber(0, 6, OxideMod.Version.Patch); } }
 
         /// <summary>
         /// Gets the author of this extension
