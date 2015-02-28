@@ -28,6 +28,7 @@ function bundle_rust {
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/*ono*.dll \
+    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
@@ -66,6 +67,7 @@ function bundle_7dtd {
     cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/*ono*.dll \
+    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
