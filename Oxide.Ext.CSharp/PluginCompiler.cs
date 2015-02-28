@@ -105,10 +105,10 @@ namespace Oxide.Plugins
 
         private void SpawnCompiler(HashSet<string> references)
         {
-            var arguments = new List<string> { "/t:library" };
+            var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+", "/platform:x64" };
 
             foreach (var reference_name in references)
-                if (reference_name != "mscorlib" && reference_name != "System" && !reference_name.StartsWith("System."))
+                //if (reference_name != "mscorlib" && reference_name != "System")
                     arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, reference_name));
 
             arguments.Add(string.Format("/out:{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount));

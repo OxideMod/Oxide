@@ -24,13 +24,14 @@ namespace Oxide.Plugins
 
             // Plugins inherit all references from Oxide.Ext.CSharp
             ProjectReferences = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(r => r.Name).ToList();
+            ProjectReferences.Add("System.Data");
             ProjectReferences.Add("Oxide.Ext.CSharp");
 
             // Check if compatible compiler is installed
-            PluginCompiler.BinaryPath = Environment.GetEnvironmentVariable("systemroot") + @"\Microsoft.NET\Framework64\v3.5\csc.exe";
+            PluginCompiler.BinaryPath = Interface.GetMod().ExtensionDirectory + @"\CSharpCompiler.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
             {
-                Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find csc.exe! Have you installed .NET v3.5 x64?");
+                Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
                 PluginCompiler.BinaryPath = null;
                 return;
             }
