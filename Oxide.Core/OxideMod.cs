@@ -72,6 +72,8 @@ namespace Oxide.Core
         /// </summary>
         public DataFileSystem DataFileSystem { get; private set; }
 
+        public bool IsShuttingDown { get; private set; }
+
         /// <summary>
         /// The current Oxide version
         /// </summary>
@@ -251,7 +253,9 @@ namespace Oxide.Core
         /// </summary>
         public void UnloadAllPlugins()
         {
-            throw new NotImplementedException();
+            //TODO: Find a way to differentiate core plugins from reloadable ones
+            foreach (var plugin in pluginmanager.GetPlugins().ToArray())
+                UnloadPlugin(plugin.Name);
         }
 
         /// <summary>
@@ -428,6 +432,12 @@ namespace Oxide.Core
 
             // Update extensions
             onFrame();
+        }
+
+        public void OnShutdown()
+        {
+            IsShuttingDown = true;
+            UnloadAllPlugins();
         }
 
         #region Plugin Change Watchers
