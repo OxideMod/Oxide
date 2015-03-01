@@ -82,6 +82,15 @@ namespace Oxide.Rust.Plugins
         }
 
         /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown()
+        {
+            Interface.GetMod().OnShutdown();
+        }
+
+        /// <summary>
         /// Called when another plugin has been loaded
         /// </summary>
         /// <param name="plugin"></param>
