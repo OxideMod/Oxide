@@ -53,7 +53,18 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintToConsole(BasePlayer player, string format, params object[] args)
         {
-            player.SendConsoleCommand("echo " + string.Format(format, args), new object[] { });
+            player.SendConsoleCommand("echo " + string.Format(format, args), new object[0]);
+        }
+        
+        /// <summary>
+        /// Print a message to every players console log
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        protected void PrintToConsole(string format, params object[] args)
+        {
+            if (BasePlayer.activePlayerList.Count < 1) return;
+            ConsoleSystem.Broadcast("echo " + string.Format(format, args), new object[0]);
         }
 
         /// <summary>
@@ -64,7 +75,18 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintToChat(BasePlayer player, string format, params object[] args)
         {
-            player.SendConsoleCommand("chat.add", 0, string.Format(format, args), 1.0);
+            player.SendConsoleCommand("chat.add", 0, string.Format(format, args), 1f);
+        }
+
+        /// <summary>
+        /// Print a message to every players chat log
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        protected void PrintToChat(string format, params object[] args)
+        {
+            if (BasePlayer.activePlayerList.Count < 1) return;
+            ConsoleSystem.Broadcast("chat.add", 0, string.Format(format, args), 1f);
         }
 
         /// <summary>
@@ -145,6 +167,20 @@ namespace Oxide.Plugins
             }
 
             Debug.LogError(message);
+        }
+
+        /// <summary>
+        /// Forces a player to a specific position
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="destination"></param>
+        protected void ForcePlayerPosition(BasePlayer player, Vector3 destination)
+        {
+            player.transform.position = destination;
+            if (!player.IsSpectating() || Vector3.Distance(player.transform.position, destination) > 25.0)
+                player.ClientRPC(null, player, "ForcePositionTo", destination);
+            else
+                player.SendNetworkUpdate(BasePlayer.NetworkQueue.UpdateDistance);
         }
     }
 }
