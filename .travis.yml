@@ -5,7 +5,7 @@ before_script: sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUI
 
 # Build the project
 solution: Oxide.sln
-script: xbuild /p:Configuration=Release /langversion:6 Oxide.sln
+script: xbuild /p:Configuration=Release /p:langversion=6 Oxide.sln
 
 # Run deployment script
 after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
