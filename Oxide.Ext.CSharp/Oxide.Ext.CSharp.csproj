@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CompilablePlugin.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="PluginCompiler.cs" />
     <Compile Include="Plugins\SamplePlugin.cs" />
     <Compile Include="PluginTimers.cs" />
@@ -39,6 +40,7 @@
     <Compile Include="CSharpPlugin.cs" />
     <Compile Include="CSharpPluginLoader.cs" />
     <Compile Include="CSharpExtension.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
