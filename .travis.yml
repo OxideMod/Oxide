@@ -4,7 +4,8 @@ language: csharp
 before_script: sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
 
 # Build the project
-solution: Oxide.sln /langversion:6
+solution: Oxide.sln
+script: xbuild /p:Configuration=Release /langversion:6 Oxide.sln
 
 # Run deployment script
 after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
