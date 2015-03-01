@@ -1082,6 +1082,28 @@
             },
             "MSILHash": "5rk7ltH+l9LtRPsBwxNRRx+ZSTTAdA/M6tfVCzipv8M="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Rust.Application_Quit",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Rust.Application",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Quit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "43eaD6g4VGQl8SX+2eW1jnTWopSq/sUiOvQXsh5rNg4="
+          }
         }
       ]
     }
