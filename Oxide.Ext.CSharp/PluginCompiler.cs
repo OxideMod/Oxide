@@ -64,7 +64,7 @@ namespace Oxide.Plugins
                 source_lines = File.ReadAllLines(plugin.ScriptPath);
                 waitingForAccess = false;
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 if (!waitingForAccess)
                 {
@@ -93,10 +93,21 @@ namespace Oxide.Plugins
                     continue;
                 }
 
+                Assembly assembly;
+                try
+                {
+                    assembly = Assembly.Load(assembly_name);
+                }
+                catch (FileNotFoundException)
+                {
+                    Interface.GetMod().LogInfo("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
+                    continue;
+                }
+
                 references.Add(assembly_name);
 
                 // Include references made by the referenced assembly
-                foreach (var reference in Assembly.Load(assembly_name).GetReferencedAssemblies())
+                foreach (var reference in assembly.GetReferencedAssemblies())
                     references.Add(reference.Name);
             }
 
