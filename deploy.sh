@@ -31,6 +31,7 @@ function bundle_rust {
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
+    Oxide.Ext.Lua/Dependencies/msvc*.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
@@ -70,6 +71,7 @@ function bundle_7dtd {
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
+    Oxide.Ext.Lua/Dependencies/msvc*.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
