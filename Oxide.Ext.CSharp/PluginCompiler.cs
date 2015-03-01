@@ -64,7 +64,7 @@ namespace Oxide.Plugins
                 source_lines = File.ReadAllLines(plugin.ScriptPath);
                 waitingForAccess = false;
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 if (!waitingForAccess)
                 {
@@ -93,10 +93,21 @@ namespace Oxide.Plugins
                     continue;
                 }
 
+                Assembly assembly;
+                try
+                {
+                    assembly = Assembly.Load(assembly_name);
+                }
+                catch (FileNotFoundException)
+                {
+                    Interface.GetMod().LogInfo("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
+                    continue;
+                }
+
                 references.Add(assembly_name);
 
                 // Include references made by the referenced assembly
-                foreach (var reference in Assembly.Load(assembly_name).GetReferencedAssemblies())
+                foreach (var reference in assembly.GetReferencedAssemblies())
                     references.Add(reference.Name);
             }
 
@@ -108,8 +119,7 @@ namespace Oxide.Plugins
             var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+", "/platform:x64" };
 
             foreach (var reference_name in references)
-                //if (reference_name != "mscorlib" && reference_name != "System")
-                    arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, reference_name));
+                arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, reference_name));
 
             arguments.Add(string.Format("/out:{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount));
             arguments.Add(plugin.ScriptPath);
