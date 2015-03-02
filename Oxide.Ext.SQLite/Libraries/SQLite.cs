@@ -47,7 +47,7 @@ namespace Oxide.Ext.SQLite.Libraries
                     Sql.AddParams(cmd, sql.Arguments, "@");
                     using (var dataReader = cmd.ExecuteReader())
                     {
-                        //var list = new List<Dictionary<string, object>>();
+                        var list = new List<Dictionary<string, object>>();
                         while (dataReader.Read())
                         {
                             var dict = new Dictionary<string, object>();
@@ -55,10 +55,9 @@ namespace Oxide.Ext.SQLite.Libraries
                             {
                                 dict.Add(dataReader.GetName(i), dataReader.GetValue(i));
                             }
-                            yield return dict;
-                            //list.Add(dict);
+                            list.Add(dict);
                         }
-                        //return list;
+                        return list;
                     }
                 }
             }
