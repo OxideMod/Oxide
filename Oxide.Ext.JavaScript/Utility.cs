@@ -54,8 +54,10 @@ namespace Oxide.Ext.JavaScript
             {
                 var jsValues = new List<JsValue>();
                 foreach (var v in values)
-                    jsValues.Add(JsValue.FromObject(engine, v));
-                return (ArrayInstance)engine.Array.Construct(jsValues.ToArray());
+                    jsValues.Add(JsValueFromObject(v, engine));
+                var array = (ArrayInstance) engine.Array.Construct(jsValues.ToArray());
+                array.Extensible = true;
+                return array;
             }
             var dict = obj as Dictionary<string, object>;
             if (dict != null)
