@@ -41,6 +41,7 @@ namespace Oxide.Core
         private CommandLine commandline;
 
         // Various directories
+        public string RootDirectory { get; private set; }
         public string ExtensionDirectory { get; private set; }
         public string InstanceDirectory { get; private set; }
         public string PluginDirectory { get; private set; }
@@ -84,12 +85,15 @@ namespace Oxide.Core
         /// </summary>
         public void Load()
         {
+            RootDirectory = Environment.CurrentDirectory;
+
             // Create the commandline
             commandline = new CommandLine(Environment.CommandLine);
 
             // Load the config
-            if (!File.Exists("oxide.root.json")) throw new FileNotFoundException("Could not load Oxide root configuration", "oxide.root.json");
-            rootconfig = ConfigFile.Load<OxideConfig>("oxide.root.json");
+            var oxideConfig = Path.Combine(RootDirectory, "oxide.root.json");
+            if (!File.Exists(oxideConfig)) throw new FileNotFoundException("Could not load Oxide root configuration", oxideConfig);
+            rootconfig = ConfigFile.Load<OxideConfig>(oxideConfig);
 
             // Work out the instance directory
             for (int i = 0; i < rootconfig.InstanceCommandLines.Length; i++)
@@ -98,12 +102,12 @@ namespace Oxide.Core
                 rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
                 if (string.IsNullOrEmpty(varname) || commandline.HasVariable(varname))
                 {
-                    InstanceDirectory = Path.Combine(Environment.CurrentDirectory, string.Format(format, commandline.GetVariable(varname)));
+                    InstanceDirectory = Path.Combine(RootDirectory, string.Format(format, commandline.GetVariable(varname)));
                     break;
                 }
             }
             if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
-            ExtensionDirectory = Path.Combine(Environment.CurrentDirectory, rootconfig.ExtensionDirectory);
+            ExtensionDirectory = Path.Combine(RootDirectory, rootconfig.ExtensionDirectory);
             PluginDirectory = Path.Combine(InstanceDirectory, rootconfig.PluginDirectory);
             DataDirectory = Path.Combine(InstanceDirectory, rootconfig.DataDirectory);
             LogDirectory = Path.Combine(InstanceDirectory, rootconfig.LogDirectory);
