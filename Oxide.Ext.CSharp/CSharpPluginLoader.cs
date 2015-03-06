@@ -27,7 +27,7 @@ namespace Oxide.Plugins
             ProjectReferences.Add("Oxide.Ext.CSharp");
 
             // Check if compatible compiler is installed
-            PluginCompiler.BinaryPath = Interface.GetMod().ExtensionDirectory + @"\CSharpCompiler.exe";
+            PluginCompiler.BinaryPath = Interface.GetMod().RootDirectory + @"\CSharpCompiler.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
             {
                 Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
