@@ -101,6 +101,7 @@ namespace Oxide.Core.Logging
                 Write(LogType.Error, string.Format("{0}{1}{2}", message, Environment.NewLine, formatted));
                 return;
             }
+            Write(LogType.Debug, "ExType: {0}", ex.GetType().Name);
             while (ex.InnerException != null) ex = ex.InnerException;
             Write(LogType.Error, string.Format("{0} ({1}: {2})", message, ex.GetType().Name, ex.Message));
             Write(LogType.Debug, "{0}", ex.StackTrace);

@@ -157,7 +157,7 @@ namespace Oxide.Core.Plugins
                 }
                 catch (Exception ex)
                 {
-                    Logger.WriteException(string.Format("Failed to call hook '{0}' on plugin '{1}'", hookname, plugin), ex);
+                    Logger.WriteException(string.Format("Failed to call hook '{0}' on plugin '{1}'", hookname, plugin.Title), ex);
                 }
             }
 
