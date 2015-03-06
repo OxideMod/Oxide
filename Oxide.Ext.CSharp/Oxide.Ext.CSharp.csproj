@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>Dependencies\UnityEngine.dll</HintPath>
+      <HintPath>..\Oxide.Ext.Unity\Dependencies\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
