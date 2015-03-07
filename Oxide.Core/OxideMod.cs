@@ -190,7 +190,7 @@ namespace Oxide.Core
         {
             rootlogger.Write(LogType.Info, format, args);
         }
-        
+
         #region Plugin Management
 
         /// <summary>
@@ -234,7 +234,6 @@ namespace Oxide.Core
                     OnFrame();
                 }
             }
-
 
             // Init all successfully loaded plugins
             foreach (Plugin plugin in plugins)
@@ -297,7 +296,7 @@ namespace Oxide.Core
             {
                 rootlogger.WriteException(string.Format("Failed to load plugin {0}:", name), ex);
                 return;
-            }            
+            }
         }
 
         public bool PluginLoaded(Plugin plugin)
@@ -370,7 +369,7 @@ namespace Oxide.Core
         }
 
         #endregion
-        
+
         /// <summary>
         /// Calls a hook
         /// </summary>

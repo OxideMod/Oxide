@@ -146,7 +146,7 @@ namespace Oxide.Core.Configuration
                     if (reader.TokenType != JsonToken.PropertyName) Throw("Unexpected token");
                     string propname = reader.Value as string;
                     if (!reader.Read()) Throw("Unexpected end of json");
-                    
+
                     // What type of object are we reading?
                     switch (reader.TokenType)
                     {
@@ -251,7 +251,7 @@ namespace Oxide.Core.Configuration
 
                 // Start array
                 writer.WriteStartArray();
-                
+
                 // Simply loop through and serialise
                 for (int i = 0; i < list.Count; i++)
                     serializer.Serialize(writer, list[i]);

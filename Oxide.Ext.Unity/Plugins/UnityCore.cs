@@ -42,7 +42,7 @@ namespace Oxide.Unity.Plugins
         [HookMethod("Init")]
         private void Init()
         {
-            
+
         }
 
         /// <summary>

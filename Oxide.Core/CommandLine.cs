@@ -59,7 +59,7 @@ namespace Oxide.Core
                     curarg.Append(c);
             }
             if (curarg.Length > 0) arglist.Add(curarg.ToString());
-            
+
             // Build flags and variables arrays
             List<string> flaglist = new List<string>();
             List<Variable> varlist = new List<Variable>();

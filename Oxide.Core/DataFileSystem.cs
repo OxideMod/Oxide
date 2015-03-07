@@ -57,7 +57,7 @@ namespace Oxide.Core
 
             // Generate the filename
             string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
-            
+
             // Does it exist?
             if (File.Exists(filename))
             {
@@ -93,7 +93,7 @@ namespace Oxide.Core
             // Save it
             datafile.Save(filename);
         }
-        
+
         public T ReadObject<T>(string name)
         {
             string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));

@@ -49,8 +49,6 @@ namespace Oxide.Tests
             TestConfigFile(cfg);
 
             System.IO.File.Delete(filename);
-
-            
         }
 
         private void TestConfigFile(DynamicConfigFile cfg)

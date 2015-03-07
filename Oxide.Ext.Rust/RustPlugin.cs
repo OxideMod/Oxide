@@ -55,7 +55,7 @@ namespace Oxide.Plugins
         {
             player.SendConsoleCommand("echo " + string.Format(format, args), new object[0]);
         }
-        
+
         /// <summary>
         /// Print a message to every players console log
         /// </summary>

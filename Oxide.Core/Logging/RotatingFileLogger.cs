@@ -21,7 +21,7 @@ namespace Oxide.Core.Logging
         /// </summary>
         public RotatingFileLogger()
         {
-            
+
         }
 
         /// <summary>

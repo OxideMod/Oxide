@@ -36,7 +36,7 @@ namespace Oxide.Plugins
         private string[] whitelistedNamespaces = {
             "System.IO.MemoryStream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags"
         };
-        
+
         public CompilablePlugin(CSharpExtension extension, string directory, string name)
         {
             Extension = extension;

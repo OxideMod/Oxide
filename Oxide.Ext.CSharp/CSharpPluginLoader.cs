@@ -39,7 +39,7 @@ namespace Oxide.Plugins
             foreach (var path in Directory.GetFiles(Interface.GetMod().TempDirectory, "*.dll"))
                 File.Delete(path);
         }
-        
+
         public override IEnumerable<string> ScanDirectory(string directory)
         {
             if (PluginCompiler.BinaryPath == null) yield break;
@@ -47,7 +47,7 @@ namespace Oxide.Plugins
             foreach (string file in Directory.GetFiles(directory, "*.cs"))
                 yield return Path.GetFileNameWithoutExtension(file);
         }
-        
+
         /// <summary>
         /// Attempt to asynchronously compile and load plugin
         /// </summary>

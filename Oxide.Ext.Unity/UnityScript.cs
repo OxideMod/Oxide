@@ -12,7 +12,7 @@ namespace Oxide.Unity
         private OxideMod oxideMod;
 
         void Awake()
-        {            
+        {
             oxideMod = Interface.GetMod();
         }
 

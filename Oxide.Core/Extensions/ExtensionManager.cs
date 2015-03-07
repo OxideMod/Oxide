@@ -131,7 +131,7 @@ namespace Oxide.Core.Extensions
             {
                 // Load the assembly
                 Assembly assembly = Assembly.LoadFile(filename);
-                
+
                 // Search for a type that derives Extension
                 Type exttype = typeof(Extension);
                 Type extensiontype = null;

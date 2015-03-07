@@ -69,7 +69,7 @@ namespace Oxide.Plugins
                 {
                     waitingForAccess = true;
                     Interface.GetMod().LogInfo("Waiting for another application to stop using script: {0}", plugin.Name);
-                }                
+                }
                 Interface.GetMod().NextTick(BuildReferences);
                 return;
             }

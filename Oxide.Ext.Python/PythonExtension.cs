@@ -202,7 +202,6 @@ namespace Oxide.Ext.Python
             watcher = new FSWatcher(plugindir, "*.py");
             Manager.RegisterPluginChangeWatcher(watcher);
             loader.Watcher = watcher;
-            
         }
 
         /// <summary>
@@ -217,7 +216,7 @@ namespace Oxide.Ext.Python
             LoadLibrary(new PythonDatafile(PythonEngine), "data");
             LoadLibrary(new PythonUtil(), "util");
 
-            // Bind any libraries to python
+            // Bind any libraries to Python
             foreach (string name in Manager.GetLibraries())
             {
                 LoadLibrary(Manager.GetLibrary(name), name.ToLowerInvariant());

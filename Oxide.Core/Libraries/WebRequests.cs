@@ -107,7 +107,7 @@ namespace Oxide.Core.Libraries
             public GetWebrequest(string url, Action<int, string> callback, Plugin owner)
                 : base(url, callback, owner)
             {
-                
+
             }
 
             /// <summary>
@@ -234,7 +234,6 @@ namespace Oxide.Core.Libraries
 
         private Queue<WebrequestInstance> waitingqueue, completequeue;
 
-
         private object syncroot;
 
         private Thread workerthread;
@@ -294,7 +293,7 @@ namespace Oxide.Core.Libraries
                     {
                         Interface.GetMod().RootLogger.WriteException("Web request produced exception", ex);
                     }
-                    
+
                     lock (syncroot) completequeue.Enqueue(request);
                 }
                 lock (syncroot) if (waitingqueue.Count > 0) workevent.Set();

@@ -15,7 +15,7 @@ namespace Oxide.Unity.Logging
         public UnityLogger()
             : base(true)
         {
-            
+
         }
 
         /// <summary>
