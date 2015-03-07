@@ -12,14 +12,14 @@ namespace Oxide.Plugins
     public abstract class RustPlugin : CSharpPlugin
     {
         protected Command cmd;
-        protected Permissions permissions;
+        protected Permission permission;
 
         public override void SetPluginInfo(string name, string path)
         {
             base.SetPluginInfo(name, path);
 
             cmd = Interface.GetMod().GetLibrary<Command>("Command");
-            permissions = Interface.GetMod().GetLibrary<Permissions>("Permissions");
+            permission = Interface.GetMod().GetLibrary<Permission>("Permission");
         }
 
         public override void HandleAddedToManager(PluginManager manager)

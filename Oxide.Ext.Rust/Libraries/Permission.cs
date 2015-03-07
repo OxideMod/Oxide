@@ -62,7 +62,7 @@ namespace Oxide.Rust.Libraries
     /// <summary>
     /// A library providing a unified permissions system
     /// </summary>
-    public class Permissions : Library
+    public class Permission : Library
     {
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
@@ -83,9 +83,9 @@ namespace Oxide.Rust.Libraries
         private DynamicConfigFile datafile;
 
         /// <summary>
-        /// Initializes a new instance of the Permissions library
+        /// Initializes a new instance of the Permission library
         /// </summary>
-        public Permissions()
+        public Permission()
         {
             // Initialize
             permset = new Dictionary<Plugin, HashSet<string>>();
@@ -395,7 +395,7 @@ namespace Oxide.Rust.Libraries
             SaveToDatafile();
         }
 
-        #region User Permissions
+        #region User Permission
 
         /// <summary>
         /// Grants the specified permission to the specified user
@@ -438,7 +438,7 @@ namespace Oxide.Rust.Libraries
 
         #endregion
 
-        #region Group Permissions
+        #region Group Permission
 
         /// <summary>
         /// Grant the specified permission to the specified group
