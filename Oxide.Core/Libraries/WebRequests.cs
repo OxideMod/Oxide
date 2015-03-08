@@ -142,7 +142,7 @@ namespace Oxide.Core.Libraries
                 {
                     HttpWebResponse response = webex.Response as HttpWebResponse;
                     ResponseText = webex.Message;
-                    ResponseCode = (int)response.StatusCode;
+                    ResponseCode = response != null ? (int)response.StatusCode : 0;
                 }
                 catch (Exception ex)
                 {
@@ -218,7 +218,7 @@ namespace Oxide.Core.Libraries
                 {
                     HttpWebResponse response = webex.Response as HttpWebResponse;
                     ResponseText = webex.Message;
-                    ResponseCode = (int)response.StatusCode;
+                    ResponseCode = response != null ? (int)response.StatusCode : 0;
                 }
                 catch (Exception ex)
                 {
