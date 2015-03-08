@@ -54,10 +54,7 @@ namespace Oxide.Core
         private OxideConfig rootconfig;
 
         // Various libraries
-        private Global libglobal;
         private Timer libtimer;
-        private Time libtime;
-        private Libraries.Plugins libplugins;
         private WebRequests libwebrequests;
 
         // Thread safe NextTick callback queue
@@ -135,16 +132,12 @@ namespace Oxide.Core
             extensionmanager = new ExtensionManager(rootlogger);
 
             // Register core libraries
-            libglobal = new Global();
-            extensionmanager.RegisterLibrary("Global", libglobal);
-            libtimer = new Timer();
-            extensionmanager.RegisterLibrary("Timer", libtimer);
-            libtime = new Time();
-            extensionmanager.RegisterLibrary("Time", libtime);
-            libplugins = new Libraries.Plugins(pluginmanager);
-            extensionmanager.RegisterLibrary("Plugins", libplugins);
-            libwebrequests = new WebRequests();
-            extensionmanager.RegisterLibrary("WebRequests", libwebrequests);
+            extensionmanager.RegisterLibrary("Global", new Global());
+            extensionmanager.RegisterLibrary("Timer", libtimer = new Timer());
+            extensionmanager.RegisterLibrary("Time", new Time());
+            extensionmanager.RegisterLibrary("Permission", new Permission());
+            extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(pluginmanager));
+            extensionmanager.RegisterLibrary("WebRequests", libwebrequests = new WebRequests());
 
             // Initialize other things
             DataFileSystem = new DataFileSystem(DataDirectory);

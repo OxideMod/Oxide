@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 
 using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 using Oxide.Rust.Libraries;
@@ -50,7 +51,7 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="player"></param>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void PrintToConsole(BasePlayer player, string format, params object[] args)
         {
             player.SendConsoleCommand("echo " + string.Format(format, args), new object[0]);
@@ -72,7 +73,7 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="player"></param>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void PrintToChat(BasePlayer player, string format, params object[] args)
         {
             player.SendConsoleCommand("chat.add", 0, string.Format(format, args), 1f);
@@ -94,7 +95,7 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void SendReply(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
@@ -117,7 +118,7 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="player"></param>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void SendReply(BasePlayer player, string format, params object[] args)
         {
             PrintToChat(player, format, args);
@@ -128,7 +129,7 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void SendWarning(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
@@ -151,7 +152,7 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void SendError(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);

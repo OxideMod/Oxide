@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Command.cs" />
-    <Compile Include="Libraries\Permission.cs" />
     <Compile Include="Libraries\Rust.cs" />
     <Compile Include="Plugins\SamplePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
