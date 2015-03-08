@@ -47,7 +47,6 @@ namespace Oxide.Rust
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("Permission", new Permission());
             Manager.RegisterLibrary("Rust", new Rust.Libraries.Rust());
         }
 
