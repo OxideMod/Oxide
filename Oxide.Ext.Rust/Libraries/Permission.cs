@@ -273,7 +273,7 @@ namespace Oxide.Rust.Libraries
         /// <param name="connection"></param>
         /// <returns></returns>
         [LibraryFunction("GetIdentityFromConnection")]
-        public UserIdentity GetIdentityFromPlayer(Network.Connection connection)
+        public UserIdentity GetIdentityFromConnection(Network.Connection connection)
         {
             return new UserIdentity { UID = connection.userid };
         }
