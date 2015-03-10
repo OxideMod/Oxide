@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Reflection;
 
 using Oxide.Core;
 using Oxide.Core.Logging;
@@ -25,6 +26,9 @@ namespace Oxide.Rust.Plugins
 
         // Track when the server has been initialized
         private bool ServerInitialized;
+
+        // Cache the serverInput field info
+        FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
 
         /// <summary>
         /// Initializes a new instance of the RustCore class
@@ -375,6 +379,18 @@ namespace Oxide.Rust.Plugins
         private void OnPlayerInit(BasePlayer player)
         {
 
+        }
+        
+        /// <summary>
+        /// Called when a player tick is received from a client
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        [HookMethod("OnPlayerTick")]
+        private object OnPlayerTick(BasePlayer player, PlayerTick msg)
+        {
+            return Interface.CallHook("OnPlayerInput", player, serverInputField.GetValue(player));
         }
 
         /// <summary>
