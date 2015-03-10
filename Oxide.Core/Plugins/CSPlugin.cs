@@ -42,14 +42,19 @@ namespace Oxide.Core.Plugins
             hooks = new Dictionary<string, MethodInfo>();
 
             // Find all hooks
-            foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+            var type = GetType();
+            while (type != typeof(CSPlugin))
             {
-                object[] attr = method.GetCustomAttributes(typeof(HookMethod), true);
-                if (attr.Length > 0)
+                foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    HookMethod hookmethod = attr[0] as HookMethod;
-                    hooks.Add(hookmethod.Name, method);
+                    object[] attr = method.GetCustomAttributes(typeof(HookMethod), true);
+                    if (attr.Length > 0)
+                    {
+                        HookMethod hookmethod = attr[0] as HookMethod;
+                        hooks.Add(hookmethod.Name, method);
+                    }
                 }
+                type = type.BaseType;
             }
         }
 

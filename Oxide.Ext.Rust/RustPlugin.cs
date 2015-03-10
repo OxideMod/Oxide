@@ -105,7 +105,7 @@ namespace Oxide.Plugins
                 var player = arg.connection.player as BasePlayer;
                 if (player != null)
                 {
-                    player.SendConsoleCommand("echo ", message);
+                    player.SendConsoleCommand("echo " + message);
                     return;
                 }
             }
@@ -139,7 +139,7 @@ namespace Oxide.Plugins
                 var player = arg.connection.player as BasePlayer;
                 if (player != null)
                 {
-                    player.SendConsoleCommand("echo ", message);
+                    player.SendConsoleCommand("echo " + message);
                     return;
                 }
             }
@@ -162,7 +162,7 @@ namespace Oxide.Plugins
                 var player = arg.connection.player as BasePlayer;
                 if (player != null)
                 {
-                    player.SendConsoleCommand("echo ", message);
+                    player.SendConsoleCommand("echo " + message);
                     return;
                 }
             }
