@@ -41,6 +41,7 @@ namespace Oxide.Core
         private CommandLine commandline;
 
         // Various directories
+        public string RootDirectory { get; private set; }
         public string ExtensionDirectory { get; private set; }
         public string InstanceDirectory { get; private set; }
         public string PluginDirectory { get; private set; }
@@ -53,10 +54,7 @@ namespace Oxide.Core
         private OxideConfig rootconfig;
 
         // Various libraries
-        private Global libglobal;
         private Timer libtimer;
-        private Time libtime;
-        private Libraries.Plugins libplugins;
         private WebRequests libwebrequests;
 
         // Thread safe NextTick callback queue
@@ -84,12 +82,15 @@ namespace Oxide.Core
         /// </summary>
         public void Load()
         {
+            RootDirectory = Environment.CurrentDirectory;
+
             // Create the commandline
             commandline = new CommandLine(Environment.CommandLine);
 
             // Load the config
-            if (!File.Exists("oxide.root.json")) throw new FileNotFoundException("Could not load Oxide root configuration", "oxide.root.json");
-            rootconfig = ConfigFile.Load<OxideConfig>("oxide.root.json");
+            var oxideConfig = Path.Combine(RootDirectory, "oxide.root.json");
+            if (!File.Exists(oxideConfig)) throw new FileNotFoundException("Could not load Oxide root configuration", oxideConfig);
+            rootconfig = ConfigFile.Load<OxideConfig>(oxideConfig);
 
             // Work out the instance directory
             for (int i = 0; i < rootconfig.InstanceCommandLines.Length; i++)
@@ -98,12 +99,12 @@ namespace Oxide.Core
                 rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
                 if (string.IsNullOrEmpty(varname) || commandline.HasVariable(varname))
                 {
-                    InstanceDirectory = Path.Combine(Environment.CurrentDirectory, string.Format(format, commandline.GetVariable(varname)));
+                    InstanceDirectory = Path.Combine(RootDirectory, string.Format(format, commandline.GetVariable(varname)));
                     break;
                 }
             }
             if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
-            ExtensionDirectory = Path.Combine(Environment.CurrentDirectory, rootconfig.ExtensionDirectory);
+            ExtensionDirectory = Path.Combine(RootDirectory, rootconfig.ExtensionDirectory);
             PluginDirectory = Path.Combine(InstanceDirectory, rootconfig.PluginDirectory);
             DataDirectory = Path.Combine(InstanceDirectory, rootconfig.DataDirectory);
             LogDirectory = Path.Combine(InstanceDirectory, rootconfig.LogDirectory);
@@ -131,16 +132,12 @@ namespace Oxide.Core
             extensionmanager = new ExtensionManager(rootlogger);
 
             // Register core libraries
-            libglobal = new Global();
-            extensionmanager.RegisterLibrary("Global", libglobal);
-            libtimer = new Timer();
-            extensionmanager.RegisterLibrary("Timer", libtimer);
-            libtime = new Time();
-            extensionmanager.RegisterLibrary("Time", libtime);
-            libplugins = new Libraries.Plugins(pluginmanager);
-            extensionmanager.RegisterLibrary("Plugins", libplugins);
-            libwebrequests = new WebRequests();
-            extensionmanager.RegisterLibrary("WebRequests", libwebrequests);
+            extensionmanager.RegisterLibrary("Global", new Global());
+            extensionmanager.RegisterLibrary("Timer", libtimer = new Timer());
+            extensionmanager.RegisterLibrary("Time", new Time());
+            extensionmanager.RegisterLibrary("Permission", new Permission());
+            extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(pluginmanager));
+            extensionmanager.RegisterLibrary("WebRequests", libwebrequests = new WebRequests());
 
             // Initialize other things
             DataFileSystem = new DataFileSystem(DataDirectory);
@@ -186,7 +183,7 @@ namespace Oxide.Core
         {
             rootlogger.Write(LogType.Info, format, args);
         }
-        
+
         #region Plugin Management
 
         /// <summary>
@@ -230,7 +227,6 @@ namespace Oxide.Core
                     OnFrame();
                 }
             }
-
 
             // Init all successfully loaded plugins
             foreach (Plugin plugin in plugins)
@@ -293,7 +289,7 @@ namespace Oxide.Core
             {
                 rootlogger.WriteException(string.Format("Failed to load plugin {0}:", name), ex);
                 return;
-            }            
+            }
         }
 
         public bool PluginLoaded(Plugin plugin)
@@ -366,7 +362,7 @@ namespace Oxide.Core
         }
 
         #endregion
-        
+
         /// <summary>
         /// Calls a hook
         /// </summary>

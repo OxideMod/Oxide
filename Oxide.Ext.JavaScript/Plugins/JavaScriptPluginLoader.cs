@@ -56,7 +56,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         {
             // Get the filename
             string filename = Path.Combine(directory, name + ".js");
-            
+
             // Check it exists
             if (!File.Exists(filename)) return null;
 

@@ -45,7 +45,7 @@ namespace Oxide.Plugins
         public int Count => dictionary.Count;
         public bool IsReadOnly => dictionary.IsReadOnly;
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => dictionary.GetEnumerator();        
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => dictionary.GetEnumerator();
         public bool ContainsKey(TKey key) => dictionary.ContainsKey(key);
         public bool Contains(KeyValuePair<TKey, TValue> item) => dictionary.Contains(item);
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => dictionary.CopyTo(array, arrayIndex);

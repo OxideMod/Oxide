@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
@@ -28,7 +27,7 @@ namespace Oxide.Plugins
             ProjectReferences.Add("Oxide.Ext.CSharp");
 
             // Check if compatible compiler is installed
-            PluginCompiler.BinaryPath = Interface.GetMod().ExtensionDirectory + @"\CSharpCompiler.exe";
+            PluginCompiler.BinaryPath = Interface.GetMod().RootDirectory + @"\CSharpCompiler.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
             {
                 Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
@@ -40,7 +39,7 @@ namespace Oxide.Plugins
             foreach (var path in Directory.GetFiles(Interface.GetMod().TempDirectory, "*.dll"))
                 File.Delete(path);
         }
-        
+
         public override IEnumerable<string> ScanDirectory(string directory)
         {
             if (PluginCompiler.BinaryPath == null) yield break;
@@ -48,7 +47,7 @@ namespace Oxide.Plugins
             foreach (string file in Directory.GetFiles(directory, "*.cs"))
                 yield return Path.GetFileNameWithoutExtension(file);
         }
-        
+
         /// <summary>
         /// Attempt to asynchronously compile and load plugin
         /// </summary>

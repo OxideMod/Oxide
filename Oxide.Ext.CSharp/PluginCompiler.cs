@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Linq;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
@@ -70,7 +69,7 @@ namespace Oxide.Plugins
                 {
                     waitingForAccess = true;
                     Interface.GetMod().LogInfo("Waiting for another application to stop using script: {0}", plugin.Name);
-                }                
+                }
                 Interface.GetMod().NextTick(BuildReferences);
                 return;
             }

@@ -55,7 +55,7 @@ namespace Oxide.Lua.Plugins
         {
             // Get the filename
             string filename = Path.Combine(directory, name + ".lua");
-            
+
             // Check it exists
             if (!File.Exists(filename)) return null;
 

@@ -201,7 +201,7 @@ namespace Oxide.Ext.JavaScript
                 LoadLibrary(Manager.GetLibrary(name), name.ToLowerInvariant());
             }
 
-            //extension to webrequests
+            // Extension to webrequests
             LoadLibrary(new JavaScriptWebRequests(), "webrequests");
         }
     }

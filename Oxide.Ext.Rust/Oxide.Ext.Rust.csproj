@@ -46,12 +46,11 @@
     <Compile Include="Libraries\Command.cs" />
     <Compile Include="Libraries\Rust.cs" />
     <Compile Include="Plugins\SamplePlugin.cs" />
-    <Compile Include="RustPlugin.cs" />
-    <Compile Include="RustCore.cs" />
-    <Compile Include="Libraries\Permissions.cs" />
-    <Compile Include="RustPluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RustCore.cs" />
     <Compile Include="RustExtension.cs" />
+    <Compile Include="RustPlugin.cs" />
+    <Compile Include="RustPluginLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">

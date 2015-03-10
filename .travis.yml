@@ -1,5 +1,12 @@
 language: csharp
 
+# Update Mono to latest snapshot
+before_install:
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  - echo "deb http://jenkins.mono-project.com/repo/debian sid main" | sudo tee /etc/apt/sources.list.d/mono-jenkins.list
+  - sudo apt-get update -qq && sudo apt-get install -y mono-snapshot-latest && . mono-snapshot mono
+  - MONO_PATH=`echo /opt/mono-*/lib/mono` && sudo ln -s $TRAVIS_BUILD_DIR/Mono/2.0 $MONO_PATH/2.0 && sudo ln -s $TRAVIS_BUILD_DIR/Mono/xbuild-frameworks/.NETFramework/v3.5 $MONO_PATH/xbuild-frameworks/.NETFramework/v3.5
+
 # Add build number to version
 before_script: sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
 
@@ -12,6 +19,10 @@ after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == O
 notifications:
   # Disable build status email notifications, until the issue with forks is fixed
   email: false
+  # Slack (oxidemod.slack.com)
+  slack:
+    rooms:
+      secure: "bmk8bmBzIOjuCR4qs5zx+SypIqLFR0QqXmd04mUohaLpAp1lJ5JQiOgKAcQPz0sqdUlu2ZAWjDT2brx0/DPssBJnQOTdKcWhYdp6n70oqXA/tvSj0FLSrZyFJjldI5okqkqGXkOdaees5mqWxEYVJEP/BjgVsDd+JvTuV5jGXlc="
   # IRC notification
   irc: "chat.freenode.net#oxidemod"
 

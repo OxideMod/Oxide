@@ -28,6 +28,6 @@ namespace Oxide.Core.Plugins.Watchers
             Name = name;
             ChangeType = changeType;
         }
-    
+
     }
 }

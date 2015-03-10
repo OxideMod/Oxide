@@ -56,7 +56,7 @@ namespace Oxide.Ext.Python.Plugins
         {
             // Get the filename
             string filename = Path.Combine(directory, name + ".py");
-            
+
             // Check it exists
             if (!File.Exists(filename)) return null;
 

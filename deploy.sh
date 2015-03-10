@@ -26,9 +26,7 @@ function bundle_rust {
     Oxide.Ext.SQLite/bin/x64/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/*ono*.dll \
-    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
+    cp -vf Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
@@ -39,7 +37,11 @@ function bundle_rust {
     cp -vf Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
+    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
+    Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
+    Oxide.Ext.Lua/Dependencies/msvc*.dll \
     Oxide.Ext.SQLite/Dependencies/sqlite3.dll \
     $HOME/temp_rust || die_with "Failed to copy config file and root DLLs!"
 
@@ -65,9 +67,7 @@ function bundle_7dtd {
     Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
-    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/*ono*.dll \
-    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
+    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
@@ -78,7 +78,11 @@ function bundle_7dtd {
     cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
+    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
+    Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     Oxide.Ext.Lua/Dependencies/lua5*.dll \
+    Oxide.Ext.Lua/Dependencies/msvc*.dll \
     Oxide.Ext.SQLite/Dependencies/sqlite3.dll \
     $HOME/temp_7dtd || die_with "Failed to copy config file and root DLLs!"
 
