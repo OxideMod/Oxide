@@ -647,7 +647,7 @@
             "InjectionIndex": 65,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l4",
+            "ArgumentString": "this, l3",
             "HookTypeName": "Simple",
             "Name": "DoDeploy_Regular",
             "HookName": "OnItemDeployed",
