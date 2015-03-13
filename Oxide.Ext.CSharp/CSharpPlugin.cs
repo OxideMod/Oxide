@@ -185,8 +185,7 @@ namespace Oxide.Plugins
                 if (info_attributes.Length > 0) continue;
                 if (method.Name == "OnFrame") HookedOnFrame = true;
                 // Assume all private instance methods which are not explicitly hooked could be hooks
-                if (method.DeclaringType.Name == type.Name && !hooks.ContainsKey(method.Name))
-                    AddHookMethod(method.Name, method);
+                if (method.DeclaringType.Name == type.Name) AddHookMethod(method.Name, method);
             }
         }
 
