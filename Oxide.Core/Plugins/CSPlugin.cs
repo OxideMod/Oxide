@@ -40,21 +40,23 @@ namespace Oxide.Core.Plugins
         {
             // Initialize
             hooks = new Dictionary<string, List<MethodInfo>>();
-            
-            // Find all hooks
+
+            // Find all hooks in the plugin and any base classes derived from CSPlugin
+            var types = new List<Type>();
             var type = GetType();
-            while (type != typeof(CSPlugin))
+            types.Add(type);
+            while (type != typeof(CSPlugin)) types.Add(type = type.BaseType);
+
+            // Add hooks implemented in base classes before user implemented methods
+            for (var i = types.Count - 1; i >= 0; i--)
             {
-                foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                foreach (var method in types[i].GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    object[] attr = method.GetCustomAttributes(typeof(HookMethod), true);
-                    if (attr.Length > 0)
-                    {
-                        HookMethod hookmethod = attr[0] as HookMethod;
-                        AddHookMethod(hookmethod.Name, method);
-                    }
+                    var attr = method.GetCustomAttributes(typeof(HookMethod), true);
+                    if (attr.Length < 1) continue;
+                    var hookmethod = attr[0] as HookMethod;
+                    AddHookMethod(hookmethod.Name, method);
                 }
-                type = type.BaseType;
             }
         }
 
@@ -79,7 +81,10 @@ namespace Oxide.Core.Plugins
         {
             List<MethodInfo> hook_methods;
             if (!hooks.TryGetValue(name, out hook_methods))
-                hooks[name] = hook_methods = new List<MethodInfo>();
+            {
+                hook_methods = new List<MethodInfo>();
+                hooks[name] = hook_methods;
+            }
             hook_methods.Add(method);
         }
 
