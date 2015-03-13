@@ -8,6 +8,23 @@ namespace Oxide.Plugins
     [Info("CSharp 6 Sample", "bawNg", 0.1)]
     public class SamplePlugin : RustPlugin
     {
+        // Implement a custom class representing an online player
+        class OnlinePlayer
+        {
+            // This field is required and will be automatically set to the player
+            public BasePlayer Player;
+            // A custom field
+            public bool HasSpawned;
+
+            // This constructor can be implemented without any arguments if the player is not needed
+            public OnlinePlayer(BasePlayer player)
+            {
+            }
+        }
+
+        // Automatically track online players, connected players are added to this collection and are removed when they disconnect
+        [OnlinePlayers] Hash<BasePlayer, OnlinePlayer> onlinePlayers = new Hash<BasePlayer, OnlinePlayer>();
+
         // Define a shortcut property to get the amount of seconds since the server started
         float Now => Time.realtimeSinceStartup;
 
@@ -33,12 +50,22 @@ namespace Oxide.Plugins
         {
             var player = connection.player as BasePlayer;
             if (!player) return;
-            // Call a method which has an optional argument
-            SendHelpToPlayer(player);
             // Call a method using a named argument for one of the optional arguments
             ItemManager.CreateByItemID(ItemManager.FindItemDefinition("rock").itemid, isBlueprint: true);
             // Send a push notification if the "push" plugin is currently loaded
             push?.Call("PushMessage", "Player connected", $"{player.displayName} connected", "low");
+        }
+
+        void OnPlayerSpawn(BasePlayer player)
+        {
+            // Use automatically managed onlinePlayers field to track if a player has already spawned
+            var online_player = onlinePlayers[player];
+            if (!online_player.HasSpawned)
+            {
+                online_player.HasSpawned = true;
+                // Call a method which has an optional argument
+                SendHelpToPlayer(player);
+            }
         }
 
         [ChatCommand("address")]
