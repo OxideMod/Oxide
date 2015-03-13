@@ -8,7 +8,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 9,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide",
             "HookName": "OnInitialization",
@@ -161,7 +161,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 18,
+            "InjectionIndex": 17,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -185,7 +185,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 31,
+            "InjectionIndex": 30,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -251,7 +251,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "NKln3fcrkc/OLrvF4bZ+aZCHnxgkKywr11JvLtEwhKM="
+            "MSILHash": "TRopDyYjBZRp4L6jA5YDH0lPiFAhgOt2ZZPEUuYd54g="
           }
         },
         {
@@ -281,7 +281,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 58,
+            "InjectionIndex": 59,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -517,7 +517,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "uw0rlBxEpX4GW6adObbSZEyFfh19p1VnqRkWG44zEos="
+            "MSILHash": "kgZlD84FqOMPqByz0hL6qK7v602kNjB7eQ6ovgjOGkM="
           }
         },
         {
@@ -566,7 +566,7 @@
                 "Item"
               ]
             },
-            "MSILHash": "QMNC3mD8uk1yy7hbzxV89eKOofmhi3AD13jKgDL9TBQ="
+            "MSILHash": "gM8SsDPDwefqSe97hKKVxZiIAoZhnf3BuACnmZB2IXs="
           }
         },
         {
@@ -644,7 +644,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 63,
+            "InjectionIndex": 62,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l3",
@@ -669,7 +669,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 69,
+            "InjectionIndex": 66,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l1",
@@ -794,7 +794,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 106,
+            "InjectionIndex": 104,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0, l7",
@@ -1032,7 +1032,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "ADAvKttgD1VUUpr1ZoiWE1kEwLBW+pO0ZH2vHGA5+IA="
+            "MSILHash": "FCh7pvRP8dY18h3s6ZpH3LrbLOzzrvYK4OvUWx+liE8="
           }
         },
         {
