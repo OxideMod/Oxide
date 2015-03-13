@@ -167,8 +167,10 @@ namespace Oxide.Ext.Python
             }
             else if (!PythonEngine.GetBuiltinModule().TryGetVariable(path, out scope))
             {
-                scope = PythonEngine.CreateScope();
-                PythonEngine.GetBuiltinModule().SetVariable(path, scope);
+                //scope = PythonEngine.CreateScope();
+                //PythonEngine.GetBuiltinModule().SetVariable(path, scope);
+                PythonEngine.GetBuiltinModule().SetVariable(path, library);
+                return;
             }
             foreach (string name in library.GetFunctionNames())
             {
