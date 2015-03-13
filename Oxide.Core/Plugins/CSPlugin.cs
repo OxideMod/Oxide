@@ -31,7 +31,7 @@ namespace Oxide.Core.Plugins
     public abstract class CSPlugin : Plugin
     {
         // All hooked methods
-        protected IDictionary<string, MethodInfo> hooks;
+        protected IDictionary<string, List<MethodInfo>> hooks;
 
         /// <summary>
         /// Initializes a new instance of the CSPlugin class
@@ -39,22 +39,24 @@ namespace Oxide.Core.Plugins
         public CSPlugin()
         {
             // Initialize
-            hooks = new Dictionary<string, MethodInfo>();
+            hooks = new Dictionary<string, List<MethodInfo>>();
 
-            // Find all hooks
+            // Find all hooks in the plugin and any base classes derived from CSPlugin
+            var types = new List<Type>();
             var type = GetType();
-            while (type != typeof(CSPlugin))
+            types.Add(type);
+            while (type != typeof(CSPlugin)) types.Add(type = type.BaseType);
+
+            // Add hooks implemented in base classes before user implemented methods
+            for (var i = types.Count - 1; i >= 0; i--)
             {
-                foreach (MethodInfo method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                foreach (var method in types[i].GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    object[] attr = method.GetCustomAttributes(typeof(HookMethod), true);
-                    if (attr.Length > 0)
-                    {
-                        HookMethod hookmethod = attr[0] as HookMethod;
-                        hooks.Add(hookmethod.Name, method);
-                    }
+                    var attr = method.GetCustomAttributes(typeof(HookMethod), true);
+                    if (attr.Length < 1) continue;
+                    var hookmethod = attr[0] as HookMethod;
+                    AddHookMethod(hookmethod.Name, method);
                 }
-                type = type.BaseType;
             }
         }
 
@@ -75,6 +77,17 @@ namespace Oxide.Core.Plugins
             CallHook("Init", null);
         }
 
+        protected void AddHookMethod(string name, MethodInfo method)
+        {
+            List<MethodInfo> hook_methods;
+            if (!hooks.TryGetValue(name, out hook_methods))
+            {
+                hook_methods = new List<MethodInfo>();
+                hooks[name] = hook_methods;
+            }
+            hook_methods.Add(method);
+        }
+
         /// <summary>
         /// Calls the specified hook on this plugin
         /// </summary>
@@ -84,46 +97,53 @@ namespace Oxide.Core.Plugins
         protected override object OnCallHook(string hookname, object[] args)
         {
             // Get the method
-            MethodInfo method;
-            if (!hooks.TryGetValue(hookname, out method)) return null;
+            List<MethodInfo> methods;
+            if (!hooks.TryGetValue(hookname, out methods)) return null;
 
-            // Verify the args
-            ParameterInfo[] parameters = method.GetParameters();
-            object[] funcargs = new object[parameters.Length];
-            int args_received;
-            if (args == null)
-                args_received = 0;
-            else
+            object return_value = null;
+            foreach (var method in methods)
             {
-                args_received = args.Length;
-                Array.Copy(args, funcargs, Math.Min(args_received, funcargs.Length));
-            }
-            if (funcargs.Length > args_received)
-            {
-                // Invent args in an attempt to let the invoke call work
-                for (int i = args_received; i < funcargs.Length; i++)
+                // Verify the args
+                ParameterInfo[] parameters = method.GetParameters();
+                object[] funcargs = new object[parameters.Length];
+                int args_received;
+                if (args == null)
+                    args_received = 0;
+                else
                 {
-                    ParameterInfo pinfo = parameters[i];
+                    args_received = args.Length;
+                    Array.Copy(args, funcargs, Math.Min(args_received, funcargs.Length));
+                }
+                if (funcargs.Length > args_received)
+                {
+                    // Invent args in an attempt to let the invoke call work
+                    for (int i = args_received; i < funcargs.Length; i++)
+                    {
+                        ParameterInfo pinfo = parameters[i];
 
-                    // Does it have a default value? Fill it in
-                    //if (pinfo.DefaultValue != null)
+                        // Does it have a default value? Fill it in
+                        //if (pinfo.DefaultValue != null)
                         //funcargs[i] = pinfo.DefaultValue;
-                    // Is it a value type? Pass in the default
-                    if (pinfo.ParameterType.IsValueType)
-                        funcargs[i] = Activator.CreateInstance(pinfo.ParameterType);
-                    // Otherwise it's a reference type so just leaving it null will work
+                        // Is it a value type? Pass in the default
+                        if (pinfo.ParameterType.IsValueType)
+                            funcargs[i] = Activator.CreateInstance(pinfo.ParameterType);
+                        // Otherwise it's a reference type so just leaving it null will work
+                    }
+                }
+
+                // Call it
+                try
+                {
+                    var value = method.Invoke(this, funcargs);
+                    if (value != null) return_value = value;
+                }
+                catch (TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
                 }
             }
 
-            // Call it
-            try
-            {
-                return method.Invoke(this, funcargs);
-            }
-            catch (TargetInvocationException ex)
-            {
-                throw ex.InnerException;
-            }
+            return return_value;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -25,6 +26,36 @@ namespace Oxide.Plugins
 
         public override void HandleAddedToManager(PluginManager manager)
         {
+            foreach (FieldInfo field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                var attributes = field.GetCustomAttributes(typeof(OnlinePlayersAttribute), true);
+                if (attributes.Length > 0)
+                {
+                    var plugin_field = new PluginFieldInfo(this, field);
+                    if (plugin_field.GenericArguments.Length != 2 || plugin_field.GenericArguments[0] != typeof(BasePlayer))
+                    {
+                        Puts("[{0}] The {1} field is not a Hash with a BasePlayer key! (online players will not be tracked)", Name, field.Name);
+                        continue;
+                    }
+                    if (!plugin_field.LookupMethod("Add", plugin_field.GenericArguments))
+                    {
+                        Puts("[{0}] The {1} field does not support adding BasePlayer keys! (online players will not be tracked)", Name, field.Name);
+                        continue;
+                    }
+                    if (!plugin_field.LookupMethod("Remove", typeof(BasePlayer)))
+                    {
+                        Puts("[{0}] The {1} field does not support removing BasePlayer keys! (online players will not be tracked)", Name, field.Name);
+                        continue;
+                    }
+                    if (plugin_field.GenericArguments[1].GetField("Player") == null)
+                    {
+                        Puts("[{0}] The {1} class does not have a public Player field! (online players will not be tracked)", Name, plugin_field.GenericArguments[1].Name);
+                        continue;
+                    }
+                    onlinePlayerFields.Add(plugin_field);
+                }
+            }
+
             foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
             {
                 var attributes = method.GetCustomAttributes(typeof(ConsoleCommandAttribute), true);
@@ -42,8 +73,42 @@ namespace Oxide.Plugins
                     cmd.AddChatCommand(attribute.Command, this, method.Name);
                 }
             }
+            
+            if (onlinePlayerFields.Count > 0)
+            {
+                foreach (var player in BasePlayer.activePlayerList)
+                    AddOnlinePlayer(player);
+            }
 
             base.HandleAddedToManager(manager);
+        }
+
+        [HookMethod("OnPlayerInit")]
+        private void base_OnPlayerInit(BasePlayer player, Network.Connection connection)
+        {
+            AddOnlinePlayer(player);
+        }
+
+        [HookMethod("OnPlayerDisconnected")]
+        private void base_OnPlayerDisconnected(BasePlayer player)
+        {
+            foreach (var plugin_field in onlinePlayerFields)
+                plugin_field.Call("Remove", player);
+        }
+
+        private void AddOnlinePlayer(BasePlayer player)
+        {
+            foreach (var plugin_field in onlinePlayerFields)
+            {
+                var type = plugin_field.GenericArguments[1];
+                object online_player;
+                if (type.GetConstructor(new Type[] { typeof(BasePlayer) }) == null)
+                    online_player = Activator.CreateInstance(type);
+                else
+                    online_player = Activator.CreateInstance(type, (object)player);
+                type.GetField("Player").SetValue(online_player, player);
+                plugin_field.Call("Add", player, online_player);
+            }
         }
 
         /// <summary>

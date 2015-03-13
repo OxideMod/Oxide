@@ -5,10 +5,50 @@ using Oxide.Core.Plugins;
 
 namespace Oxide.Plugins
 {
+    public class Timer
+    {
+        private Core.Libraries.Timer.TimerInstance instance;
+
+        public Timer(Core.Libraries.Timer.TimerInstance instance)
+        {
+            this.instance = instance;
+        }
+
+        /// <summary>
+        /// Gets the number of repetitions left on this timer
+        /// </summary>
+        public int Repetitions => instance.Repetitions;
+
+        /// <summary>
+        /// Gets the delay between each repetition
+        /// </summary>
+        public float Delay => instance.Delay;
+
+        /// <summary>
+        /// Gets the callback delegate
+        /// </summary>
+        public Action Callback => instance.Callback;
+
+        /// <summary>
+        /// Gets if this timer has been destroyed
+        /// </summary>
+        public bool Destroyed => instance.Destroyed;
+
+        /// <summary>
+        /// Gets the plugin to which this timer belongs, if any
+        /// </summary>
+        public Plugin Owner => instance.Owner;
+
+        /// <summary>
+        /// Destroys this timer
+        /// </summary>
+        public void Destroy() => instance.Destroy();
+    }
+
     public class PluginTimers
     {
-        Core.Libraries.Timer timer = Interface.GetMod().GetLibrary<Core.Libraries.Timer>("Timer");
-        Plugin plugin;
+        private Core.Libraries.Timer timer = Interface.GetMod().GetLibrary<Core.Libraries.Timer>("Timer");
+        private Plugin plugin;
 
         public PluginTimers(Plugin plugin)
         {
@@ -20,9 +60,9 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="seconds"></param>
         /// <param name="callback"></param>
-        public void Once(float seconds, Action callback)
+        public Timer Once(float seconds, Action callback)
         {
-            timer.Once(seconds, callback, plugin);
+            return new Timer(timer.Once(seconds, callback, plugin));
         }
 
         /// <summary>
@@ -30,9 +70,9 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="seconds"></param>
         /// <param name="callback"></param>
-        public void In(float seconds, Action callback)
+        public Timer In(float seconds, Action callback)
         {
-            timer.Once(seconds, callback, plugin);
+            return new Timer(timer.Once(seconds, callback, plugin));
         }
 
         /// <summary>
@@ -40,9 +80,9 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="interval"></param>
         /// <param name="callback"></param>
-        public void Every(float interval, Action callback)
+        public Timer Every(float interval, Action callback)
         {
-            timer.Repeat(interval, -1, callback, plugin);
+            return new Timer(timer.Repeat(interval, -1, callback, plugin));
         }
 
         /// <summary>
@@ -51,9 +91,9 @@ namespace Oxide.Plugins
         /// <param name="interval"></param>
         /// <param name="repeats"></param>
         /// <param name="callback"></param>
-        public void Repeat(float interval, int repeats, Action callback)
+        public Timer Repeat(float interval, int repeats, Action callback)
         {
-            timer.Repeat(interval, repeats, callback, plugin);
+            return new Timer(timer.Repeat(interval, repeats, callback, plugin));
         }
     }
 }
