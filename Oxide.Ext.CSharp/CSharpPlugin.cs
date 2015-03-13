@@ -94,16 +94,70 @@ namespace Oxide.Plugins
     }
 
     /// <summary>
+    /// Indicates that the specified Hash field should be used to automatically track online players
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    public class OnlinePlayersAttribute : Attribute
+    {
+        public OnlinePlayersAttribute()
+        {
+        }
+    }
+
+    /// <summary>
     /// Base class which all dynamic CSharp plugins must inherit
     /// </summary>
     public abstract partial class CSharpPlugin : CSPlugin
     {
+        /// <summary>
+        /// Wrapper for dynamically managed plugin fields
+        /// </summary>
+        public class PluginFieldInfo
+        {
+            public Plugin Plugin;
+            public FieldInfo Field;
+            public Type FieldType;
+            public Type[] GenericArguments;
+            public Dictionary<string, MethodInfo> Methods = new Dictionary<string, MethodInfo>();
+
+            public PluginFieldInfo(Plugin plugin, FieldInfo field)
+            {
+                this.Plugin = plugin;
+                this.Field = field;
+                this.FieldType = field.FieldType;
+                this.GenericArguments = FieldType.GetGenericArguments();
+            }
+
+            public object Value => Field.GetValue(Plugin);
+
+            public bool LookupMethod(string method_name, params Type[] argument_types)
+            {
+                var method = FieldType.GetMethod(method_name, argument_types);
+                if (method == null) return false;
+                Methods[method_name] = method;
+                return true;
+            }
+
+            public object Call(string method_name, params object[] args)
+            {
+                MethodInfo method;
+                if (!Methods.TryGetValue(method_name, out method))
+                {
+                    method = FieldType.GetMethod(method_name, BindingFlags.Instance | BindingFlags.Public);
+                    Methods[method_name] = method;
+                }
+                if (method == null) throw new MissingMethodException(FieldType.Name, method_name);
+                return method.Invoke(Value, args);
+            }
+        }
+
         public string Filename;
         public FSWatcher Watcher;
 
         protected Core.Libraries.Plugins plugins = Interface.GetMod().GetLibrary<Core.Libraries.Plugins>("Plugins");
         protected PluginTimers timer;
-
+        
+        protected HashSet<PluginFieldInfo> onlinePlayerFields = new HashSet<PluginFieldInfo>();
         private Dictionary<string, FieldInfo> pluginReferences = new Dictionary<string, FieldInfo>();
 
         public bool HookedOnFrame
@@ -132,7 +186,7 @@ namespace Oxide.Plugins
                 if (method.Name == "OnFrame") HookedOnFrame = true;
                 // Assume all private instance methods which are not explicitly hooked could be hooks
                 if (method.DeclaringType.Name == type.Name && !hooks.ContainsKey(method.Name))
-                    hooks[method.Name] = method;
+                    AddHookMethod(method.Name, method);
             }
         }
 
