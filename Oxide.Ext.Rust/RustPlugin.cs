@@ -47,6 +47,11 @@ namespace Oxide.Plugins
                         Puts("[{0}] The {1} field does not support removing BasePlayer keys! (online players will not be tracked)", Name, field.Name);
                         continue;
                     }
+                    if (plugin_field.GenericArguments[1].GetField("Player") == null)
+                    {
+                        Puts("[{0}] The {1} class does not have a public Player field! (online players will not be tracked)", Name, plugin_field.GenericArguments[1].Name);
+                        continue;
+                    }
                     onlinePlayerFields.Add(plugin_field);
                 }
             }
@@ -72,27 +77,38 @@ namespace Oxide.Plugins
             if (onlinePlayerFields.Count > 0)
             {
                 foreach (var player in BasePlayer.activePlayerList)
-                {
-                    foreach (var plugin_field in onlinePlayerFields)
-                        plugin_field.Call("Add", player, Activator.CreateInstance(plugin_field.GenericArguments[1], (object)player));
-                }
+                    AddOnlinePlayer(player);
             }
 
             base.HandleAddedToManager(manager);
         }
 
         [HookMethod("OnPlayerInit")]
-        void base_OnPlayerInit(BasePlayer player, Network.Connection connection)
+        private void base_OnPlayerInit(BasePlayer player, Network.Connection connection)
         {
-            foreach (var plugin_field in onlinePlayerFields)
-                plugin_field.Call("Add", player, Activator.CreateInstance(plugin_field.GenericArguments[1], (object)player));
+            AddOnlinePlayer(player);
         }
 
         [HookMethod("OnPlayerDisconnected")]
-        void base_OnPlayerDisconnected(BasePlayer player)
+        private void base_OnPlayerDisconnected(BasePlayer player)
         {
             foreach (var plugin_field in onlinePlayerFields)
                 plugin_field.Call("Remove", player);
+        }
+
+        private void AddOnlinePlayer(BasePlayer player)
+        {
+            foreach (var plugin_field in onlinePlayerFields)
+            {
+                var type = plugin_field.GenericArguments[1];
+                object online_player;
+                if (type.GetConstructor(new Type[] { typeof(BasePlayer) }) == null)
+                    online_player = Activator.CreateInstance(type);
+                else
+                    online_player = Activator.CreateInstance(type, (object)player);
+                type.GetField("Player").SetValue(online_player, player);
+                plugin_field.Call("Add", player, online_player);
+            }
         }
 
         /// <summary>
