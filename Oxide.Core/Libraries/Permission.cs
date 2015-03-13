@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Oxide.Core.Plugins;
 using Oxide.Core.Logging;
@@ -24,7 +25,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Gets or sets the usergroup for this user
         /// </summary>
-        public string Usergroup { get; set; }
+        public HashSet<string> Groups { get; set; }
     }
 
     /// <summary>
@@ -176,20 +177,31 @@ namespace Oxide.Core.Libraries
         /// Returns the data for the specified user
         /// </summary>
         /// <param name="userid"></param>
-        /// <param name="name"></param>
         /// <returns></returns>
         [LibraryFunction("GetUserData")]
-        public UserData GetUserData(string userid, string name = "")
+        public UserData GetUserData(string userid)
         {
             UserData data;
             if (!userdata.TryGetValue(userid, out data))
             {
-                data = new UserData {LastSeenNickname = name, Usergroup = string.Empty, Perms = new HashSet<string>()};
+                data = new UserData { LastSeenNickname = string.Empty, Groups = new HashSet<string>(), Perms = new HashSet<string>() };
                 userdata.Add(userid, data);
             }
 
             // Return the data
             return data;
+        }
+
+        /// <summary>
+        /// Returns if the specified group has the specified permission or not
+        /// </summary>
+        /// <param name="groupname"></param>
+        /// <param name="perm"></param>
+        /// <returns></returns>
+        [LibraryFunction("GroupsHavePermission")]
+        public bool GroupsHavePermission(HashSet<string> groupname, string perm)
+        {
+            return groupname.Any(@group => GroupHasPermission(@group, perm));
         }
 
         /// <summary>
@@ -223,7 +235,7 @@ namespace Oxide.Core.Libraries
             if (data.Perms.Contains(perm)) return true;
 
             // Check if their group has the perm
-            return GroupHasPermission(data.Usergroup, perm);
+            return GroupsHavePermission(data.Groups, perm);
         }
 
         /// <summary>
@@ -231,14 +243,14 @@ namespace Oxide.Core.Libraries
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        [LibraryFunction("GetUserGroup")]
-        public string GetUserGroup(string userid)
+        [LibraryFunction("GetUserGroups")]
+        public HashSet<string> GetUserGroups(string userid)
         {
             // First, get the user data
             var data = GetUserData(userid);
 
             // Return the group
-            return data.Usergroup;
+            return data.Groups;
         }
 
         /// <summary>
@@ -250,10 +262,10 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("SetUserGroup")]
         public void SetUserGroup(string userid, string groupname)
         {
-            if (!GroupExists(groupname)) return;
+            if (!string.IsNullOrEmpty(groupname) && !GroupExists(groupname)) return;
 
             var data = GetUserData(userid);
-            data.Usergroup = groupname;
+            if (!data.Groups.Add(groupname)) return;
             SaveUsers();
         }
 
@@ -402,7 +414,11 @@ namespace Oxide.Core.Libraries
 
             // Remove and save
             groupdata.Remove(name);
-            //TODO unset user groups?
+
+            //remove group from users
+            var changed = userdata.Values.Aggregate(false, (current, userData) => current | userData.Groups.Remove(name));
+
+            if (changed) SaveUsers();
             SaveGroups();
         }
 
