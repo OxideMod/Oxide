@@ -1104,6 +1104,78 @@
             },
             "MSILHash": "43eaD6g4VGQl8SX+2eW1jnTWopSq/sUiOvQXsh5rNg4="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0, a0 => l0",
+            "HookTypeName": "Simple",
+            "Name": "BuildingBlock_DoUpgradeToGrade",
+            "HookName": "OnBuildingBlockUpgrade",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoUpgradeToGrade",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "1zvhQre06OtUyB2uNV9flOaiBMIZg8CRwmCZZgzj0Jc="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 5,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "BuildingBlock_OnDoImmediateDemolish",
+            "HookName": "OnBuildingBlockDemolish",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoImmediateDemolish",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "FF/i8CXhwforqCvzZisoopztkc7cpD4CSZLXOiB+aKU="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 21,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "BuildingBlock_DoRotation",
+            "HookName": "OnBuildingBlockRotate",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoRotation",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "xzqU4Zvwh7iQJS7VFT6F02+GPcZIwZUHnQMR8fqHRQo="
+          }
         }
       ]
     }
