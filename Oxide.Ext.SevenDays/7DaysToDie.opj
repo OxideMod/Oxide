@@ -95,7 +95,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 25,
+            "InjectionIndex": 29,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -184,6 +184,156 @@
               "Parameters": []
             },
             "MSILHash": "KMfUzhJBBVYOCXuLwkHgjeIBoxrox3AIyI2e23lWWn0="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "cl0006_OnEntityDeath",
+            "HookName": "OnEntityDeath",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "cl0006",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnEntityDeath",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "1yU0b68V6f6PWH3qAyziP5cSCAKGZ4a6lqONL5FbDSA="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 135,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "World_SpawnEntityInWorld",
+            "HookName": "OnEntitySpawned",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "World",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SpawnEntityInWorld",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Entity",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "BXCA+E+u4R8vx7J7kEz8bIEQn2p8BIviCqEiNSzRD9g="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 97,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "cl0006_DamageEntity",
+            "HookName": "OnEntityHurt",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "cl0006",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DamageEntity",
+              "ReturnType": "System.Int32",
+              "Parameters": [
+                "DamageSource",
+                "System.Int32",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "HUD+0A9x70WJ+CC3DOYN7vbYpO7R5/NNU9mzbBEIKKU="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 53,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1, a1, l2",
+            "HookTypeName": "Simple",
+            "Name": "ConsoleSdtd_ExecuteClientCmdInternal",
+            "HookName": "OnRunCommand",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConsoleSdtd",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ExecuteClientCmdInternal",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.String"
+              ]
+            },
+            "MSILHash": "vLfjeBZg2MmMI701tRW1SLlPGVWOuq53bReQy6ovKdQ="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 99,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l2, null, l3",
+            "HookTypeName": "Simple",
+            "Name": "ConsoleSdtd_ExecuteRemoteCmdInternal",
+            "HookName": "OnRunCommand",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConsoleSdtd",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ExecuteRemoteCmdInternal",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "yVViu8IBsyga2WZRVbCcg1g6IdOgqdoug7CLJwTOZdc="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "GameManager_SendChatMessage",
+            "HookName": "OnPlayerChat",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SendChatMessage",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.Int32",
+                "System.String"
+              ]
+            },
+            "MSILHash": "T4yeIeXzvipeA9k6EDCCiQFH84n4qPGKTlSiIeOKY0k="
           }
         }
       ]
