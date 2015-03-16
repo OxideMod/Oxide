@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Libraries\Command.cs" />
     <Compile Include="Libraries\Rust.cs" />
+    <Compile Include="Plugins\HooksTest.cs" />
     <Compile Include="Plugins\SamplePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RustCore.cs" />
