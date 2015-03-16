@@ -62,7 +62,7 @@ namespace Oxide.Plugins
 
         private void OnInitLogging()
         {
-            // Called from Assembly-CSharp/
+            // Called from Assembly-CSharp/??
             // No return behavior
             // Used internally by Oxide to start Unity logging
             HookCalled("OnInitLogging");
@@ -70,7 +70,7 @@ namespace Oxide.Plugins
 
         private void OnServerInitialized()
         {
-            // Called from Assembly-CSharp/
+            // Called from Assembly-CSharp/??
             // No return behavior
             // Is called after the server startup has been completed and is awaiting connections
             HookCalled("OnServerInitialized");
@@ -78,7 +78,7 @@ namespace Oxide.Plugins
 
         private void OnServerSave()
         {
-            // Called from Assembly-CSharp/
+            // Called from Assembly-CSharp/??
             // No return behavior
             // Is called before the server saves world and player data
             HookCalled("OnServerSave");
@@ -86,7 +86,7 @@ namespace Oxide.Plugins
 
         private void OnServerQuit()
         {
-            // Called from Assembly-CSharp/
+            // Called from Assembly-CSharp/??
             // No return behavior
             // Is called before the server starts the shutdown sequence
             HookCalled("OnServerQuit");
@@ -94,10 +94,9 @@ namespace Oxide.Plugins
 
         private void OnPlayerConnected(ClientInfo client)
         {
-            // Called from Assembly-CSharp/
+            // Called from Assembly-CSharp/??
             // No return behavior
             // Is called before the player object is created, but after the player has been approved to join the game
-            // Can get the connection from packet.connection
             HookCalled("OnPlayerConnected");
             PrintWarning("{0} has connected!", client.playerName);
             PrintToChat(client.playerName + " has connected!");
@@ -105,7 +104,7 @@ namespace Oxide.Plugins
 
         private void OnPlayerDisconnected(ClientInfo client)
         {
-            // Called from Assembly-CSharp/
+            // Called from Assembly-CSharp/??
             // No return behavior
             // Is called before the player object is created, but after the player has been approved to join the game
             HookCalled("OnPlayerDisconnected");
@@ -115,13 +114,13 @@ namespace Oxide.Plugins
 
         private void OnPlayerChat(string message, int team, string playerName)
         {
-            // Called from 
+            // Called from Assembly-CSharp/??
             HookCalled("OnPlayerChat");
         }
 
         private void OnEntityDeath(cl0006 entity)
         {
-            // Called from 
+            // Called from Assembly-CSharp/??
             HookCalled("OnEntityDeath");
             PrintWarning("{0} has died!", entity.EntityName);
             PrintToChat(entity.EntityName + " has died!");
@@ -129,7 +128,7 @@ namespace Oxide.Plugins
 
         private void OnEntitySpawned(Entity entity)
         {
-            // Called from 
+            // Called from Assembly-CSharp/??
             HookCalled("OnEntitySpawned");
             //PrintWarning("{0} has spawned!", entity._entity);
             //PrintToChat(entity._entity + " has spawned!");
@@ -137,13 +136,13 @@ namespace Oxide.Plugins
 
         private void OnEntityHurt(cl0006 entity, DamageSource source)
         {
-            // Called from 
+            // Called from Assembly-CSharp/??
             HookCalled("OnEntityHurt");
         }
 
         private void OnRunCommand(ConsoleCommand command, String arg, String[] args)
         {
-            // Called from 
+            // Called from Assembly-CSharp/??
             HookCalled("OnRunCommand");
         }
     }
