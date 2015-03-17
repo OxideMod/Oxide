@@ -242,7 +242,7 @@
             "HookName": "OnEntityDeath",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Die",
@@ -251,7 +251,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "NKln3fcrkc/OLrvF4bZ+aZCHnxgkKywr11JvLtEwhKM="
+            "MSILHash": "TRopDyYjBZRp4L6jA5YDH0lPiFAhgOt2ZZPEUuYd54g="
           }
         },
         {
@@ -508,7 +508,7 @@
             "HookName": "OnPlayerChat",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "chat",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "say",
@@ -517,7 +517,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "uw0rlBxEpX4GW6adObbSZEyFfh19p1VnqRkWG44zEos="
+            "MSILHash": "kgZlD84FqOMPqByz0hL6qK7v602kNjB7eQ6ovgjOGkM="
           }
         },
         {
@@ -557,7 +557,7 @@
             "HookName": "OnPlayerLoot",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "PlayerLoot",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "StartLootingItem",
@@ -566,7 +566,7 @@
                 "Item"
               ]
             },
-            "MSILHash": "QMNC3mD8uk1yy7hbzxV89eKOofmhi3AD13jKgDL9TBQ="
+            "MSILHash": "gM8SsDPDwefqSe97hKKVxZiIAoZhnf3BuACnmZB2IXs="
           }
         },
         {
@@ -1022,7 +1022,7 @@
             "HookName": "OnRunPlayerMetabolism",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "PlayerMetabolism",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "RunMetabolism",
@@ -1032,7 +1032,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "ADAvKttgD1VUUpr1ZoiWE1kEwLBW+pO0ZH2vHGA5+IA="
+            "MSILHash": "FCh7pvRP8dY18h3s6ZpH3LrbLOzzrvYK4OvUWx+liE8="
           }
         },
         {
@@ -1175,6 +1175,31 @@
               ]
             },
             "MSILHash": "xzqU4Zvwh7iQJS7VFT6F02+GPcZIwZUHnQMR8fqHRQo="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 14,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "ConsumeFuel",
+            "HookName": "OnConsumeFuel",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BaseOven",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ConsumeFuel",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Item",
+                "ItemModBurnable"
+              ]
+            },
+            "MSILHash": "n6TJImSm0Im4OJnz8d88wc3thV4lpLzHqQtQpDOkvZs="
           }
         }
       ]
