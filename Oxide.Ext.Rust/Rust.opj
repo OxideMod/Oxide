@@ -1176,6 +1176,31 @@
             },
             "MSILHash": "xzqU4Zvwh7iQJS7VFT6F02+GPcZIwZUHnQMR8fqHRQo="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "BaseOven_ConsumeFuel",
+            "HookName": "OnConsumeFuel",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BaseOven",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ConsumeFuel",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Item",
+                "ItemModBurnable"
+              ]
+            },
+            "MSILHash": "n6TJImSm0Im4OJnz8d88wc3thV4lpLzHqQtQpDOkvZs="
+          }
         }
       ]
     }
