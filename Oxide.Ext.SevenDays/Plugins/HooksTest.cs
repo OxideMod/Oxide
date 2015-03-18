@@ -111,8 +111,22 @@ namespace Oxide.Plugins
             HookCalled("OnEntityHurt");
         }
 
-        private void OnRunCommand(ConsoleCommand command, String arg, String[] args)
+        private void OnRunCommand(ConsoleSdtd console, ConsoleCommand command, String[] args)
         {
+            string[] commandAliases = command.Names();
+            Puts("The command that was executed is " + command.ToString());
+            Puts("This command is called with: ");
+            foreach (string alias in commandAliases)
+                Puts(alias);
+            Puts("This command does the following: ");
+            Puts(command.Description());
+
+            Puts("You have used " + args.Length.ToString() + " arguments with this command: ");
+            foreach (string argss in args)
+                Puts(argss);
+
+            console.SendResult("This is a test reply from Oxide to the console!!");
+
             HookCalled("OnRunCommand");
         }
     }

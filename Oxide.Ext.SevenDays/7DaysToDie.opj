@@ -262,36 +262,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 53,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l1, a1, l2",
-            "HookTypeName": "Simple",
-            "Name": "ConsoleSdtd_ExecuteClientCmdInternal",
-            "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "ConsoleSdtd",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "ExecuteClientCmdInternal",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String",
-                "System.String",
-                "System.String"
-              ]
-            },
-            "MSILHash": "vLfjeBZg2MmMI701tRW1SLlPGVWOuq53bReQy6ovKdQ="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 99,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l2, null, l3",
+            "ArgumentString": "this, l2, l3",
             "HookTypeName": "Simple",
             "Name": "ConsoleSdtd_ExecuteRemoteCmdInternal",
             "HookName": "OnRunCommand",
