@@ -360,7 +360,7 @@ namespace Oxide.Plugins
             HookCalled("OnPlayerLoot");
         }
 
-        private void OnBuildingBlockUpgrade(BuildingBlock buildingblock, BuildingGrade.Enum grade, BaseEntity.RPCMessage message)
+        private void OnBuildingBlockUpgrade(BuildingBlock block, BasePlayer player, BuildingGrade.Enum grade)
         {
             // Called from Assembly-CSharp/BuildingBlock
             // Returning a BuildingGrade.Enum grade will change the grade that will be upgraded to
@@ -368,20 +368,20 @@ namespace Oxide.Plugins
             HookCalled("OnBuildingBlockUpgrade");
         }
 
-        private void OnBuildingBlockDemolish(BuildingBlock buildingblock, BaseEntity.RPCMessage message)
-        {
-            // Called from Assembly-CSharp/BuildingBlock
-            // Return true to cancel
-            // Called when a player selects DemolishImmediate from the BuildingBlock menu
-            HookCalled("OnBuildingBlockDemolish");
-        }
-
-        private void OnBuildingBlockRotate(BuildingBlock buildingblock, BaseEntity.RPCMessage message)
+        private void OnBuildingBlockRotate(BuildingBlock block, BasePlayer player)
         {
             // Called from Assembly-CSharp/BuildingBlock
             // No return behavior
             // Called when a player rotates a BuildingBlock
             HookCalled("OnBuildingBlockRotate");
+        }
+
+        private void OnBuildingBlockDemolish(BuildingBlock block, BasePlayer player)
+        {
+            // Called from Assembly-CSharp/BuildingBlock
+            // Return true to cancel
+            // Called when a player selects DemolishImmediate from the BuildingBlock menu
+            HookCalled("OnBuildingBlockDemolish");
         }
     }
 }
