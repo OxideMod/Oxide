@@ -505,5 +505,26 @@ namespace Oxide.Rust.Plugins
         {
             return Interface.CallHook("OnPlayerAttack", melee.ownerPlayer, hitinfo);
         }
+
+        /// <summary>
+        /// Called when the entity has spawned
+        /// </summary>
+        /// <param name="entity"></param>
+        [HookMethod("OnEntitySpawned")]
+        private object OnEntitySpawned(BaseNetworkable entity)
+        {
+            return Interface.CallHook("OnEntitySpawn", entity);
+        }
+
+        /// <summary>
+        /// Called when the player has been respawned
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="connection"></param>
+        [HookMethod("OnPlayerRespawned")]
+        private object OnPlayerRespawned(BasePlayer player, Network.Connection connection)
+        {
+            return Interface.CallHook("OnPlayerSpawn", player, connection);
+        }
     }
 }
