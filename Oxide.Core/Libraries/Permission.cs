@@ -267,13 +267,29 @@ namespace Oxide.Core.Libraries
         /// <param name="userid"></param>
         /// <param name="groupname"></param>
         /// <returns></returns>
-        [LibraryFunction("SetUserGroup")]
-        public void SetUserGroup(string userid, string groupname)
+        [LibraryFunction("AddUserGroup")]
+        public void AddUserGroup(string userid, string groupname)
         {
-            if (!string.IsNullOrEmpty(groupname) && !GroupExists(groupname)) return;
+            if (string.IsNullOrEmpty(groupname) || !GroupExists(groupname)) return;
 
             var data = GetUserData(userid);
             if (!data.Groups.Add(groupname)) return;
+            SaveUsers();
+        }
+
+        /// <summary>
+        /// Set the group to which the specified user belongs
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="groupname"></param>
+        /// <returns></returns>
+        [LibraryFunction("RemoveUserGroup")]
+        public void RemoveUserGroup(string userid, string groupname)
+        {
+            if (string.IsNullOrEmpty(groupname) || !GroupExists(groupname)) return;
+
+            var data = GetUserData(userid);
+            if (!data.Groups.Remove(groupname)) return;
             SaveUsers();
         }
 
