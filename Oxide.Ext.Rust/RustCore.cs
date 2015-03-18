@@ -526,5 +526,23 @@ namespace Oxide.Rust.Plugins
         {
             return Interface.CallHook("OnPlayerSpawn", player, connection);
         }
+
+        [HookMethod("OnBuildingBlockDoUpgradeToGrade")]
+        private object OnBuildingBlockDoUpgradeToGrade(BuildingBlock block, BaseEntity.RPCMessage msg, BuildingGrade.Enum grade)
+        {
+            return Interface.CallHook("OnBuildingBlockUpgrade", block, msg.player, grade);
+        }
+
+        [HookMethod("OnBuildingBlockDoImmediateDemolish")]
+        private object OnBuildingBlockDoImmediateDemolish(BuildingBlock block, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnBuildingBlockDemolish", block, msg.player);
+        }
+
+        [HookMethod("OnBuildingBlockDoRotation")]
+        private object OnBuildingBlockDoRotation(BuildingBlock block, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnBuildingBlockRotate", block, msg.player);
+        }
     }
 }
