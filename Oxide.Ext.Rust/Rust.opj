@@ -1111,7 +1111,7 @@
             "InjectionIndex": 11,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l0, a0",
+            "ArgumentString": "this, a0, l0",
             "HookTypeName": "Simple",
             "Name": "BuildingBlock_DoUpgradeToGrade",
             "HookName": "OnBuildingBlockDoUpgradeToGrade",
