@@ -28,9 +28,6 @@ namespace Oxide.Plugins
 
         private void Init()
         {
-            // Called when the plugin is being loaded
-            // Other plugins may or may not be present, dependant on load order
-            // Other plugins WILL have been executed though, so globals exposed by them will be present
             hookCount = hooks.Count;
             hooksRemaining = hooks.Keys.ToDictionary(k => k, k => true);
             PrintWarning("{0} hook to test!", hookCount);
@@ -45,8 +42,6 @@ namespace Oxide.Plugins
 
         private void LoadDefaultConfig()
         {
-            // Called when the config for the plugin should be initialised
-            // Only called if the config file does not already exist
             HookCalled("LoadDefaultConfig");
             // TODO: CreateDefaultConfig();
             //LoadConfig();
@@ -54,49 +49,32 @@ namespace Oxide.Plugins
 
         private void Unloaded()
         {
-            // Called when the config for the plugin should be initialised
-            // Only called if the config file does not already exist
             HookCalled("Unloaded");
             // TODO: Unload plugin and store state in config
         }
 
         private void OnInitLogging()
         {
-            // Called from Assembly-CSharp/??
-            // No return behavior
-            // Used internally by Oxide to start Unity logging
             HookCalled("OnInitLogging");
         }
 
         private void OnServerInitialized()
         {
-            // Called from Assembly-CSharp/??
-            // No return behavior
-            // Is called after the server startup has been completed and is awaiting connections
             HookCalled("OnServerInitialized");
         }
 
         private void OnServerSave()
         {
-            // Called from Assembly-CSharp/??
-            // No return behavior
-            // Is called before the server saves world and player data
             HookCalled("OnServerSave");
         }
 
         private void OnServerQuit()
         {
-            // Called from Assembly-CSharp/??
-            // No return behavior
-            // Is called before the server starts the shutdown sequence
             HookCalled("OnServerQuit");
         }
 
         private void OnPlayerConnected(ClientInfo client)
         {
-            // Called from Assembly-CSharp/??
-            // No return behavior
-            // Is called before the player object is created, but after the player has been approved to join the game
             HookCalled("OnPlayerConnected");
             PrintWarning("{0} has connected!", client.playerName);
             PrintToChat(client.playerName + " has connected!");
@@ -104,9 +82,6 @@ namespace Oxide.Plugins
 
         private void OnPlayerDisconnected(ClientInfo client)
         {
-            // Called from Assembly-CSharp/??
-            // No return behavior
-            // Is called before the player object is created, but after the player has been approved to join the game
             HookCalled("OnPlayerDisconnected");
             PrintWarning("{0} has disconnected!", client.playerName);
             PrintToChat(client.playerName + " has disconnected!");
@@ -114,13 +89,11 @@ namespace Oxide.Plugins
 
         private void OnPlayerChat(string message, int team, string playerName)
         {
-            // Called from Assembly-CSharp/??
             HookCalled("OnPlayerChat");
         }
 
         private void OnEntityDeath(cl0006 entity)
         {
-            // Called from Assembly-CSharp/??
             HookCalled("OnEntityDeath");
             PrintWarning("{0} has died!", entity.EntityName);
             PrintToChat(entity.EntityName + " has died!");
@@ -128,7 +101,6 @@ namespace Oxide.Plugins
 
         private void OnEntitySpawned(Entity entity)
         {
-            // Called from Assembly-CSharp/??
             HookCalled("OnEntitySpawned");
             //PrintWarning("{0} has spawned!", entity._entity);
             //PrintToChat(entity._entity + " has spawned!");
@@ -136,13 +108,11 @@ namespace Oxide.Plugins
 
         private void OnEntityHurt(cl0006 entity, DamageSource source)
         {
-            // Called from Assembly-CSharp/??
             HookCalled("OnEntityHurt");
         }
 
         private void OnRunCommand(ConsoleCommand command, String arg, String[] args)
         {
-            // Called from Assembly-CSharp/??
             HookCalled("OnRunCommand");
         }
     }
