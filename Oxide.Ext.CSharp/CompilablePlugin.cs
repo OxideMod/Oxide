@@ -97,6 +97,8 @@ namespace Oxide.Plugins
                 if (type == null)
                 {
                     Interface.GetMod().LogInfo("Unable to find main plugin class: {0}", Name);
+                    OnPluginFailed();
+                    if (callback != null) callback(null);
                     return;
                 }
 
@@ -104,6 +106,8 @@ namespace Oxide.Plugins
                 if (plugin == null)
                 {
                     Interface.GetMod().LogInfo("Plugin assembly failed to load: {0} (version {1})", ScriptName, version);
+                    OnPluginFailed();
+                    if (callback != null) callback(null);
                     return;
                 }
 
@@ -118,15 +122,7 @@ namespace Oxide.Plugins
                 else
                 {
                     // Plugin failed to be initialized
-                    if (LastGoodVersion > 0)
-                    {
-                        Interface.GetMod().LogInfo("Rolling back plugin to version {0}: {1}", LastGoodVersion, ScriptName);
-                        LoadAssembly(LastGoodVersion, null);
-                    }
-                    else
-                    {
-                        Interface.GetMod().LogInfo("No previous version to rollback plugin: {0}", ScriptName);
-                    }
+                    OnPluginFailed();
                     if (callback != null) callback(null);
                 }
             });
@@ -142,6 +138,19 @@ namespace Oxide.Plugins
             //Interface.GetMod().LogInfo("Compiling plugin: {0}", Name);
             LastCompiledAt = LastModifiedAt;
             CompilationCount++;
+        }
+
+        public void OnPluginFailed()
+        {
+            if (LastGoodVersion > 0)
+            {
+                Interface.GetMod().LogInfo("Rolling back plugin to version {0}: {1}", LastGoodVersion, ScriptName);
+                LoadAssembly(LastGoodVersion, null);
+            }
+            else
+            {
+                Interface.GetMod().LogInfo("No previous version to rollback plugin: {0}", ScriptName);
+            }
         }
 
         private void PatchAssembly(int version, Action callback)
