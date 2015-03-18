@@ -1201,6 +1201,30 @@
             },
             "MSILHash": "n6TJImSm0Im4OJnz8d88wc3thV4lpLzHqQtQpDOkvZs="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "BasePlayer_OnReceiveTick",
+            "HookName": "OnPlayerTick",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnReceiveTick",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "PlayerTick"
+              ]
+            },
+            "MSILHash": "eNn2dn8jeSL62wGM6zW/6cJydbHUnk5UfDymSXF55Rw="
+          }
         }
       ]
     }
