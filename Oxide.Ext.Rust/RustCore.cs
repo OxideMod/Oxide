@@ -5,12 +5,13 @@ using System.Reflection;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 
 using Oxide.Rust.Libraries;
 
 using Rust;
+
+using UnityEngine;
 
 namespace Oxide.Rust.Plugins
 {
@@ -119,6 +120,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdLoad")]
         private void cmdLoad(ConsoleSystem.Arg arg)
         {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check arg 1 exists
             if (!arg.HasArgs(1))
             {
@@ -148,6 +150,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdUnload")]
         private void cmdUnload(ConsoleSystem.Arg arg)
         {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check arg 1 exists
             if (!arg.HasArgs(1))
             {
@@ -177,6 +180,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdReload")]
         private void cmdReload(ConsoleSystem.Arg arg)
         {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check arg 1 exists
             if (!arg.HasArgs(1))
             {
@@ -226,6 +230,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdGroup")]
         private void cmdGroup(ConsoleSystem.Arg arg)
         {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 2 args exists
             if (!arg.HasArgs(2))
             {
@@ -278,6 +283,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdUserGroup")]
         private void cmdUserGroup(ConsoleSystem.Arg arg)
         {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
@@ -323,6 +329,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdGrant")]
         private void cmdGrant(ConsoleSystem.Arg arg)
         {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
@@ -366,6 +373,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdRevoke")]
         private void cmdRevoke(ConsoleSystem.Arg arg)
         {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
@@ -505,7 +513,7 @@ namespace Oxide.Rust.Plugins
                     BasePlayer ply = arg.connection.player as BasePlayer;
                     if (ply == null)
                     {
-                        Interface.GetMod().RootLogger.Write(LogType.Debug, "Player is actually a {0}!", arg.connection.player.GetType());
+                        Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Debug, "Player is actually a {0}!", arg.connection.player.GetType());
                     }
                     else
                     {
