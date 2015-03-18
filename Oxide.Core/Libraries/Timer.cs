@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Oxide.Core.Plugins;
 
@@ -11,8 +12,6 @@ namespace Oxide.Core.Libraries
     /// </summary>
     public class Timer : Library
     {
-        #region Time Control
-
         private static Stopwatch stopwatch;
 
         private static float CurrentTime { get { return (float)stopwatch.Elapsed.TotalSeconds; } }
@@ -22,8 +21,6 @@ namespace Oxide.Core.Libraries
             stopwatch = new Stopwatch();
             stopwatch.Start();
         }
-
-        #endregion
 
         /// <summary>
         /// Represents a single timer instance
@@ -56,10 +53,10 @@ namespace Oxide.Core.Libraries
             public Plugin Owner { get; private set; }
 
             // The next rep time
-            private float nextrep;
+            internal float nextrep;
 
             /// <summary>
-            /// Initializes a new instance of the TimerInstance class
+            /// Initialises a new instance of the TimerInstance class
             /// </summary>
             /// <param name="repetitions"></param>
             /// <param name="delay"></param>
@@ -97,51 +94,81 @@ namespace Oxide.Core.Libraries
             /// </summary>
             public void Update()
             {
-                // Check if we need to rep
-                float ctime = CurrentTime;
-                if (ctime >= nextrep)
-                {
-                    nextrep += Delay;
-                    try
-                    {
-                        Callback();
-                    }
-                    catch (Exception ex)
-                    {
-                        Destroy();
-                        if (Owner != null)
-                            Interface.GetMod().RootLogger.WriteException(string.Format("Failed to run a timer from {0}.", Owner.Name), ex);
-                        else
-                            Interface.GetMod().RootLogger.WriteException("Failed to run a timer.", ex);
-                    }
+                nextrep += Delay;
 
-                    if (Repetitions > 0)
-                    {
-                        Repetitions--;
-                        if (Repetitions == 0) Destroy();
-                    }
+                try
+                {
+                    Callback();
+                }
+                catch (Exception ex)
+                {
+                    Destroy();
+                    Interface.GetMod().RootLogger.WriteException(Owner ? $"Failed to run a {Delay:0.00} timer in {Owner.Name}" : $"Failed to run a {Delay:0.00} timer", ex);
+                }
+
+                if (Repetitions > 0)
+                {
+                    Repetitions--;
+                    if (Repetitions == 0) Destroy();
                 }
             }
         }
-
-        /// <summary>
-        /// Returns if this library should be loaded into the global namespace
-        /// </summary>
+        
         public override bool IsGlobal { get { return false; } }
+        
+        private const float updateInterval = .025f;
+        private float lastUpdateAt;
 
-        private readonly HashSet<TimerInstance> alltimers;
-
-        public Timer()
-        {
-            alltimers = new HashSet<TimerInstance>();
-        }
+        private readonly List<TimerInstance> timers = new List<TimerInstance>();
 
         /// <summary>
-        /// Updates all timers
+        /// Updates all timers - called every server frame
         /// </summary>
         public void Update()
         {
-            alltimers.RemoveWhere(timer => { timer.Update(); return timer.Destroyed; });   
+            if (timers.Count < 1) return;
+
+            var now = CurrentTime;
+
+            if (now < lastUpdateAt)
+            {
+                var difference = lastUpdateAt - now;
+                Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, $"Time travelling detected! Timers were updated {difference:0.00} seconds in the future? We will attempt to recover but this should really never happen!");
+                foreach (var timer in timers) timer.nextrep -= difference;
+            }
+            
+            if (now < lastUpdateAt + updateInterval) return;
+
+            var expired = timers.TakeWhile(t => t.nextrep <= now).ToArray();
+            if (expired.Length > 0)
+            {
+                timers.RemoveRange(0, expired.Length);
+                foreach (var timer in expired)
+                {
+                    timer.Update();
+                    // Add the timer back to the queue if it needs to fire again
+                    if (!timer.Destroyed) InsertTimer(timer);
+                }                    
+            }
+        }
+
+        private TimerInstance AddTimer(int repetitions, float delay, Action callback, Plugin owner = null)
+        {
+            var timer = new TimerInstance(repetitions, delay, callback, owner);
+            InsertTimer(timer);
+            return timer;
+        }
+
+        private void InsertTimer(TimerInstance timer)
+        {
+            var index = timers.Count;
+            for (var i = 0; i < timers.Count; i++)
+            {
+                if (timers[i].nextrep <= timer.nextrep) continue;
+                index = i;
+                break;
+            }
+            timers.Insert(index, timer);
         }
 
         /// <summary>
@@ -154,9 +181,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("Once")]
         public TimerInstance Once(float delay, Action callback, Plugin owner = null)
         {
-            TimerInstance timer = new TimerInstance(1, delay, callback, owner);
-            alltimers.Add(timer);
-            return timer;
+            return AddTimer(1, delay, callback, owner);
         }
 
         /// <summary>
@@ -170,9 +195,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("Repeat")]
         public TimerInstance Repeat(float delay, int reps, Action callback, Plugin owner = null)
         {
-            TimerInstance timer = new TimerInstance(reps, delay, callback, owner);
-            alltimers.Add(timer);
-            return timer;
+            return AddTimer(reps, delay, callback, owner);
         }
 
         /// <summary>
@@ -183,9 +206,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("NextFrame")]
         public TimerInstance NextFrame(Action callback)
         {
-            TimerInstance timer = new TimerInstance(1, 0.0f, callback, null);
-            alltimers.Add(timer);
-            return timer;
+            return AddTimer(1, 0.0f, callback, null);
         }
     }
 }
