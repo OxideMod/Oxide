@@ -204,7 +204,7 @@ namespace Oxide.Plugins
             HookCalled("OnEntityAttacked");
         }
 
-        private void OnEntityBuilt(Planner planner, GameObject object)
+        private void OnEntityBuilt(Planner planner, GameObject gameObject)
         {
             HookCalled("OnEntityBuilt");
         }
