@@ -104,7 +104,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
-            if (ServerInitialized) plugin.CallHook("OnServerInitialized", null);
+            if (ServerInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         /// <summary>
@@ -132,9 +132,7 @@ namespace Oxide.Rust.Plugins
                 if (string.IsNullOrEmpty(name)) continue;
                 // Load
                 Interface.GetMod().LoadPlugin(name);
-                var plugin = pluginmanager.GetPlugin(name);
-                if (plugin == null) continue;
-                plugin.CallHook("OnServerInitialized", null);
+                pluginmanager.GetPlugin(name);
             }
         }
 

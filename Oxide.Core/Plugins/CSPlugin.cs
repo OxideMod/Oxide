@@ -91,58 +91,68 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Calls the specified hook on this plugin
         /// </summary>
-        /// <param name="hookname"></param>
+        /// <param name="name"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected override object OnCallHook(string hookname, object[] args)
+        protected override object OnCallHook(string name, object[] args)
         {
-            // Get the method
             List<MethodInfo> methods;
-            if (!hooks.TryGetValue(hookname, out methods)) return null;
-
+            if (!hooks.TryGetValue(name, out methods)) return null;
+            
             object return_value = null;
             foreach (var method in methods)
             {
-                // Verify the args
-                ParameterInfo[] parameters = method.GetParameters();
-                object[] funcargs = new object[parameters.Length];
-                int args_received;
-                if (args == null)
-                    args_received = 0;
-                else
-                {
-                    args_received = args.Length;
-                    Array.Copy(args, funcargs, Math.Min(args_received, funcargs.Length));
-                }
-                if (funcargs.Length > args_received)
-                {
-                    // Invent args in an attempt to let the invoke call work
-                    for (int i = args_received; i < funcargs.Length; i++)
-                    {
-                        ParameterInfo pinfo = parameters[i];
+                var hook_args = args;
+                var parameters = method.GetParameters();
+                var args_received = args?.Length ?? 0;
 
-                        // Does it have a default value? Fill it in
-                        //if (pinfo.DefaultValue != null)
-                        //funcargs[i] = pinfo.DefaultValue;
-                        // Is it a value type? Pass in the default
-                        if (pinfo.ParameterType.IsValueType)
-                            funcargs[i] = Activator.CreateInstance(pinfo.ParameterType);
-                        // Otherwise it's a reference type so just leaving it null will work
+                if (args_received != parameters.Length)
+                {
+                    // The call argument count is different to the declared callback methods argument count
+                    hook_args = new object[parameters.Length];
+                    
+                    if (args_received > 0)
+                    {
+                        // Remove any additional arguments which the callback method does not declare
+                        Array.Copy(args, hook_args, Math.Min(args_received, hook_args.Length));
+                    }
+                    if (hook_args.Length > args_received)
+                    {
+                        // Create additional parameters for arguments excluded in this hook call
+                        for (var i = args_received; i < hook_args.Length; i++)
+                        {
+                            var parameter = parameters[i];
+                            // Use the default value if one is provided by the method definition or the argument is a value type
+                            if (parameter.DefaultValue != null || parameter.ParameterType.IsValueType)
+                                hook_args[i] = parameter.DefaultValue ?? Activator.CreateInstance(parameter.ParameterType);
+                        }
                     }
                 }
 
-                // Call it
                 try
                 {
-                    var value = method.Invoke(this, funcargs);
+                    // Call method with the correct number of arguments
+                    var value = method.Invoke(this, hook_args);
                     if (value != null) return_value = value;
                 }
                 catch (TargetInvocationException ex)
                 {
                     throw ex.InnerException;
                 }
-            }
 
+                if (args_received != parameters.Length)
+                {
+                    // A copy of the call arguments was used for this method call
+                    for (var i = 0; i < parameters.Length; i++)
+                    {
+                        var parameter = parameters[i];
+                        // Copy output values for out and by reference arguments back to the calling args
+                        if (parameter.IsOut || parameter.ParameterType.IsByRef)
+                            args[i] = hook_args[i];
+                    }
+                }
+            }
+            
             return return_value;
         }
     }
