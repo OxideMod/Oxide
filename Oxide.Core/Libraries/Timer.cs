@@ -12,15 +12,9 @@ namespace Oxide.Core.Libraries
     /// </summary>
     public class Timer : Library
     {
-        private static Stopwatch stopwatch;
+        private static Stopwatch stopwatch = Stopwatch.StartNew();
 
         private static float CurrentTime => (float)stopwatch.Elapsed.TotalSeconds;
-
-        static Timer()
-        {
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
-        }
 
         /// <summary>
         /// Represents a single timer instance
@@ -87,6 +81,7 @@ namespace Oxide.Core.Libraries
             public void Destroy()
             {
                 Destroyed = true;
+                if (Owner != null) Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
             }
 
             /// <summary>
@@ -105,7 +100,7 @@ namespace Oxide.Core.Libraries
                 catch (Exception ex)
                 {
                     Destroy();
-                    var error_message = $"Failed to run a {Delay:0.00} timer";
+                    var error_message = string.Format("Failed to run a {0:0.00} timer", Delay);
                     if (Owner) error_message += " in " + Owner.Name;
                     Interface.GetMod().RootLogger.WriteException(error_message, ex);
                 }
@@ -137,7 +132,7 @@ namespace Oxide.Core.Libraries
             if (now < lastUpdateAt)
             {
                 var difference = lastUpdateAt - now;
-                var msg = $"Time travelling detected! Timers were updated {difference:0.00} seconds in the future? We will attempt to recover but this should really never happen!";
+                var msg = string.Format("Time travelling detected! Timers were updated {0:0.00} seconds in the future? We will attempt to recover but this should really never happen!", difference);
                 Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, msg);
                 foreach (var timer in timers) timer.nextrep -= difference;
             }
