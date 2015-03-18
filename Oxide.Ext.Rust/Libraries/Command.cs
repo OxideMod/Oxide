@@ -13,43 +13,93 @@ namespace Oxide.Rust.Libraries
     /// </summary>
     public class Command : Library
     {
-        /// <summary>
-        /// Returns if this library should be loaded into the global namespace
-        /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        private static string ReturnEmptyString() => string.Empty;
+        private static void DoNothing(string str) { }
+        
+        public override bool IsGlobal => false;
 
-        private struct ConsoleCommand
+        private struct PluginCallback
+        {
+            public Plugin Plugin;
+            public string Name;
+
+            public PluginCallback(Plugin plugin, string name)
+            {
+                Plugin = plugin;
+                Name = name;
+            }
+        }
+
+        private class ConsoleCommand
         {
             public string Name;
-            public Plugin Plugin;
-            public string CallbackName;
+            public List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
             public ConsoleSystem.Command RustCommand;
+            public Action<ConsoleSystem.Arg> OriginalCallback;
+
+            public ConsoleCommand(string name)
+            {
+                Name = name;
+                var split_name = Name.Split('.');
+                RustCommand = new ConsoleSystem.Command
+                {
+                    name = split_name[1],
+                    parent = split_name[0],
+                    namefull = name,
+                    isCommand = true,
+                    isUser = true,
+                    isAdmin = true,
+                    GetString = ReturnEmptyString,
+                    SetString = DoNothing,
+                    Call = HandleCommand
+                };
+            }
+
+            public void AddCallback(Plugin plugin, string name)
+            {
+                PluginCallbacks.Add(new PluginCallback(plugin, name));
+            }
+
+            private void HandleCommand(ConsoleSystem.Arg arg)
+            {
+                foreach (var callback in PluginCallbacks)
+                    if (callback.Plugin.CallHook(callback.Name, arg) != null) return;
+
+                // Call rust implemented command handler if the command was not handled by a plugin
+                if (OriginalCallback != null) OriginalCallback(arg);
+            }
         }
 
-        private struct ChatCommand
+        private class ChatCommand
         {
             public string Name;
             public Plugin Plugin;
             public string CallbackName;
+
+            public ChatCommand(string name, Plugin plugin, string callback_name)
+            {
+                Name = name;
+                Plugin = plugin;
+                CallbackName = callback_name;
+            }
         }
 
-        // All console commands that we're currently tracking
-        private IList<ConsoleCommand> concommands;
+        // All console commands that plugins have registered
+        private Dictionary<string, ConsoleCommand> consoleCommands;
 
-        // Rust's internal command dictionary
+        // All chat commands that plugins have registered
+        private Dictionary<string, ChatCommand> chatCommands;
+
+        // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustcommands;
-
-        // All chat commands that we're currently tracking
-        private IDictionary<string, ChatCommand> chatcommands;
 
         /// <summary>
         /// Initializes a new instance of the Command class
         /// </summary>
         public Command()
         {
-            // Initialize
-            concommands = new List<ConsoleCommand>();
-            chatcommands = new Dictionary<string, ChatCommand>();
+            consoleCommands = new Dictionary<string, ConsoleCommand>();
+            chatCommands = new Dictionary<string, ChatCommand>();
         }
 
         /// <summary>
@@ -57,40 +107,64 @@ namespace Oxide.Rust.Libraries
         /// </summary>
         /// <param name="name"></param>
         /// <param name="plugin"></param>
-        /// <param name="callbackname"></param>
+        /// <param name="callback_name"></param>
         [LibraryFunction("AddConsoleCommand")]
-        public void AddConsoleCommand(string name, Plugin plugin, string callbackname)
+        public void AddConsoleCommand(string name, Plugin plugin, string callback_name)
         {
             // Hack us the dictionary
             if (rustcommands == null) rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
 
-            // Split into parent and field name
-            string[] leftright = name.Trim().Split('.');
-
-            // Create the command struct
-            ConsoleCommand cmd = new ConsoleCommand();
-            cmd.Name = name;
-            cmd.Plugin = plugin;
-            cmd.CallbackName = callbackname;
-            cmd.RustCommand = new ConsoleSystem.Command
-            {
-                name = leftright[1],
-                parent = leftright[0],
-                namefull = string.Join(".", leftright),
-                isCommand = true,
-                isAdmin = true,
-                GetString = ReturnEmptyString,
-                SetString = DoNothing,
-                Call = CallCommand
-            };
-
-            // Add to collections
-            concommands.Add(cmd);
-            rustcommands.Add(cmd.RustCommand.namefull, cmd.RustCommand);
-            ConsoleSystem.Index.GetAll().Add(cmd.RustCommand);
-
             // Hook the unload event
-            plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+
+            var full_name = name.Trim();
+
+            ConsoleCommand cmd;
+            if (consoleCommands.TryGetValue(full_name, out cmd))
+            {
+                // Another plugin registered this command
+                if (cmd.OriginalCallback != null)
+                {
+                    // This is a vanilla rust command which has already been pre-hooked by another plugin
+                    cmd.AddCallback(plugin, callback_name);
+                    return;
+                }
+
+                // This is a custom command which was already registered by another plugin
+                var previous_plugin_name = cmd.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
+                var new_plugin_name = plugin?.Name ?? "An unknown plugin";
+                var msg = $"{new_plugin_name} has replaced the {name} console command which was previously registered by {previous_plugin_name}";
+                Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Warning, msg);
+                consoleCommands.Remove(full_name);
+                rustcommands.Remove(full_name);
+                ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
+            }
+                        
+            // The command either does not already exist or is replacing a previously registered command
+            cmd = new ConsoleCommand(full_name);
+            cmd.AddCallback(plugin, callback_name);
+            
+            ConsoleSystem.Command rust_command;
+            if (rustcommands.TryGetValue(full_name, out rust_command))
+            {
+                // This is a vanilla rust command which has not yet been hooked by a plugin
+                if (rust_command.isVariable)
+                {
+                    var new_plugin_name = plugin?.Name ?? "An unknown plugin";
+                    Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, $"{new_plugin_name} tried to register the {name} console variable as a command!");
+                    return;
+                }
+                // Copy some of the original rust commands attributes
+                cmd.RustCommand.isUser = rust_command.isUser;
+                cmd.RustCommand.isAdmin = rust_command.isAdmin;
+                // Store the original rust callback
+                cmd.OriginalCallback = rust_command.Call;
+            }
+
+            // Add the new command to collections
+            consoleCommands[full_name] = cmd;
+            rustcommands[cmd.RustCommand.namefull] = cmd.RustCommand;
+            ConsoleSystem.Index.GetAll().Add(cmd.RustCommand);
         }
 
         /// <summary>
@@ -100,19 +174,26 @@ namespace Oxide.Rust.Libraries
         /// <param name="plugin"></param>
         /// <param name="callbackname"></param>
         [LibraryFunction("AddChatCommand")]
-        public void AddChatCommand(string name, Plugin plugin, string callbackname)
+        public void AddChatCommand(string name, Plugin plugin, string callback_name)
         {
-            // Create the command struct
-            ChatCommand cmd = new ChatCommand();
-            cmd.Name = name.ToLowerInvariant();
-            cmd.Plugin = plugin;
-            cmd.CallbackName = callbackname;
+            var command_name = name.ToLowerInvariant();
 
-            // Add to collections
-            chatcommands.Add(cmd.Name, cmd);
+            ChatCommand cmd;
+            if (chatCommands.TryGetValue(command_name, out cmd))
+            {
+                var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
+                var new_plugin_name = plugin?.Name ?? "An unknown plugin";
+                var msg = $"{new_plugin_name} has replaced the {command_name} chat command which was previously registered by {previous_plugin_name}";
+                Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Warning, msg);
+            }
+
+            cmd = new ChatCommand(command_name, plugin, callback_name);
+
+            // Add the new command to collections
+            chatCommands[command_name] = cmd;
 
             // Hook the unload event
-            plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
         }
 
         /// <summary>
@@ -122,55 +203,14 @@ namespace Oxide.Rust.Libraries
         /// <param name="args"></param>
         internal bool HandleChatCommand(BasePlayer sender, string name, string[] args)
         {
-            // Try and find it
             ChatCommand cmd;
-            if (!chatcommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
-
-            // Call it
-            cmd.Plugin.CallHook(cmd.CallbackName, new object[] { sender, name, args });
-
-            // Handled
+            if (!chatCommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
+            
+            cmd.Plugin.CallHook(cmd.CallbackName, sender, name, args);
+            
             return true;
         }
-
-        /// <summary>
-        /// Calls the specified command
-        /// </summary>
-        /// <param name="arg"></param>
-        private void CallCommand(ConsoleSystem.Arg arg)
-        {
-            //Oxide.Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Debug, "CallCommand {0}", arg.cmd.namefull);
-
-            // Find the command
-            ConsoleCommand cmd;
-            try
-            {
-                cmd = concommands.Single((c) => c.RustCommand == arg.cmd);
-            }
-            catch (Exception)
-            {
-                //Oxide.Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Debug, "Command not found");
-                return;
-            }
-
-            // Execute it
-            cmd.Plugin.CallHook(cmd.CallbackName, new object[] { arg });
-        }
-
-        #region Empty Functions
-
-        private string ReturnEmptyString()
-        {
-            return string.Empty;
-        }
-
-        private void DoNothing(string str)
-        {
-
-        }
-
-        #endregion
-
+        
         /// <summary>
         /// Called when a plugin has been removed from manager
         /// </summary>
@@ -178,24 +218,32 @@ namespace Oxide.Rust.Libraries
         /// <param name="manager"></param>
         private void plugin_OnRemovedFromManager(Plugin sender, PluginManager manager)
         {
-            // Find all console commands that belong to the plugin
-            HashSet<ConsoleCommand> concommands_toremove = new HashSet<ConsoleCommand>(concommands.Where((c) => c.Plugin == sender));
-            foreach (ConsoleCommand cmd in concommands_toremove)
+            // Find all console commands which were registered by the plugin
+            var commands = consoleCommands.Values.Where(c => c.PluginCallbacks.Any(cb => cb.Plugin == sender)).ToArray();
+            foreach (var cmd in commands)
             {
-                // Remove it
-                concommands.Remove(cmd);
-                rustcommands.Remove(cmd.RustCommand.namefull);
-                ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
+                cmd.PluginCallbacks.RemoveAll(cb => cb.Plugin == sender);
+                if (cmd.PluginCallbacks.Count > 0) continue;
 
+                // This command is no longer registered by any plugins
+                consoleCommands.Remove(cmd.Name);
+
+                if (cmd.OriginalCallback == null)
+                {
+                    // This is a custom command, remove it completely
+                    rustcommands.Remove(cmd.RustCommand.namefull);
+                    ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
+                }
+                else
+                {
+                    // This is a vanilla rust command, restore the original callback
+                    cmd.RustCommand.Call = cmd.OriginalCallback;
+                }
             }
 
-            // Find all chat commands that belong to the plugin
-            HashSet<ChatCommand> chatcommands_toremove = new HashSet<ChatCommand>(chatcommands.Values.Where((c) => c.Plugin == sender));
-            foreach (ChatCommand cmd in chatcommands_toremove)
-            {
-                // Remove it
-                chatcommands.Remove(cmd.Name);
-            }
+            // Remove all chat commands which were registered by the plugin
+            foreach (var cmd in chatCommands.Values.Where(c => c.Plugin == sender).ToArray())
+                chatCommands.Remove(cmd.Name);
 
             // Unhook the event
             sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;
