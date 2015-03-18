@@ -14,7 +14,7 @@ namespace Oxide.Core.Libraries
     {
         private static Stopwatch stopwatch;
 
-        private static float CurrentTime { get { return (float)stopwatch.Elapsed.TotalSeconds; } }
+        private static float CurrentTime => (float)stopwatch.Elapsed.TotalSeconds;
 
         static Timer()
         {
@@ -94,6 +94,8 @@ namespace Oxide.Core.Libraries
             /// </summary>
             public void Update()
             {
+                if (Destroyed) return;
+
                 nextrep += Delay;
 
                 try
@@ -103,7 +105,9 @@ namespace Oxide.Core.Libraries
                 catch (Exception ex)
                 {
                     Destroy();
-                    Interface.GetMod().RootLogger.WriteException(Owner ? $"Failed to run a {Delay:0.00} timer in {Owner.Name}" : $"Failed to run a {Delay:0.00} timer", ex);
+                    var error_message = $"Failed to run a {Delay:0.00} timer";
+                    if (Owner) error_message += " in " + Owner.Name;
+                    Interface.GetMod().RootLogger.WriteException(error_message, ex);
                 }
 
                 if (Repetitions > 0)
@@ -114,7 +118,7 @@ namespace Oxide.Core.Libraries
             }
         }
         
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
         
         private const float updateInterval = .025f;
         private float lastUpdateAt;
@@ -133,7 +137,8 @@ namespace Oxide.Core.Libraries
             if (now < lastUpdateAt)
             {
                 var difference = lastUpdateAt - now;
-                Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, $"Time travelling detected! Timers were updated {difference:0.00} seconds in the future? We will attempt to recover but this should really never happen!");
+                var msg = $"Time travelling detected! Timers were updated {difference:0.00} seconds in the future? We will attempt to recover but this should really never happen!";
+                Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, msg);
                 foreach (var timer in timers) timer.nextrep -= difference;
             }
             
