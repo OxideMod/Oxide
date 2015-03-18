@@ -287,7 +287,7 @@ namespace Oxide.Rust.Plugins
             // Check 2 args exists
             if (!arg.HasArgs(2))
             {
-                arg.ReplyWith("Syntax: oxide.revoke <group|user> <name|id>");
+                arg.ReplyWith("Syntax: oxide.revoke <group|user> <name|id> <permission>");
                 return;
             }
 
