@@ -192,8 +192,8 @@ namespace Oxide.Core
         public void LoadAllPlugins()
         {
             // Get all plugin loaders, scan the plugin directory and load all reported plugins
-            HashSet<Plugin> plugins = new HashSet<Plugin>();
             foreach (PluginLoader loader in extensionmanager.GetPluginLoaders())
+            {
                 foreach (string name in loader.ScanDirectory(PluginDirectory))
                 {
                     // Check if the plugin is already loaded
@@ -204,9 +204,7 @@ namespace Oxide.Core
                         {
                             Plugin plugin = loader.Load(PluginDirectory, name);
                             if (plugin == null) continue; // Async load
-                            plugin.OnError += plugin_OnError;
-                            rootlogger.Write(LogType.Info, "Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
-                            plugins.Add(plugin);
+                            PluginLoaded(plugin);
                         }
                         catch (Exception ex)
                         {
@@ -214,44 +212,31 @@ namespace Oxide.Core
                         }
                     }
                 }
-
-            foreach (PluginLoader loader in extensionmanager.GetPluginLoaders())
-            {
-                var loading_plugin_count = loader.LoadingPlugins.Count;
-                if (loading_plugin_count < 1) continue;
-                // Wait until all async plugins have finished loading
-                while (loader.LoadingPlugins.Count > 0)
-                {
-                    System.Threading.Thread.Sleep(25);
-                    // Process any NextTick callbacks which other threads may have queued
-                    OnFrame();
-                }
             }
-
-            // Init all successfully loaded plugins
-            foreach (Plugin plugin in plugins)
-            {
-                try
-                {
-                    pluginmanager.AddPlugin(plugin);
-                }
-                catch (Exception ex)
-                {
-                    rootlogger.WriteException(string.Format("Failed to initialize plugin {0}", plugin.Name), ex);
-                }
-            }
-
-            isInitialized = true;
         }
 
         /// <summary>
         /// Unloads all plugins
         /// </summary>
-        public void UnloadAllPlugins()
+        public void UnloadAllPlugins(IList<string> skip = null)
         {
             //TODO: Find a way to differentiate core plugins from reloadable ones
-            foreach (var plugin in pluginmanager.GetPlugins().ToArray())
+            foreach (var plugin in pluginmanager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
+            {
                 UnloadPlugin(plugin.Name);
+            }
+        }
+
+        /// <summary>
+        /// Reloads all plugins
+        /// </summary>
+        public void ReloadAllPlugins(IList<string> skip = null)
+        {
+            //TODO: Find a way to differentiate core plugins from reloadable ones
+            foreach (var plugin in pluginmanager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
+            {
+                ReloadPlugin(plugin.Name);
+            }
         }
 
         /// <summary>
@@ -421,7 +406,15 @@ namespace Oxide.Core
             libwebrequests.Update();
 
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
-            if (!isInitialized) return;
+            if (!isInitialized)
+            {
+                foreach (PluginLoader loader in extensionmanager.GetPluginLoaders())
+                {
+                    // Wait until all async plugins have finished loading
+                    if (loader.LoadingPlugins.Count > 0) return;
+                }
+                isInitialized = true;
+            }
 
             // Update plugin change watchers
             UpdatePluginWatchers();

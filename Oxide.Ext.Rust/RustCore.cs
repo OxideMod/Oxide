@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 
@@ -18,17 +19,17 @@ namespace Oxide.Rust.Plugins
     /// </summary>
     public class RustCore : CSPlugin
     {
-        // The logger
-        private Logger logger;
-
         // The pluginmanager
-        private PluginManager pluginmanager;
+        private readonly PluginManager pluginmanager;
+
+        // The permission lib
+        private readonly Permission permission;
 
         // Track when the server has been initialized
         private bool ServerInitialized;
 
         // Cache the serverInput field info
-        FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
+        private readonly FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
 
         /// <summary>
         /// Initializes a new instance of the RustCore class
@@ -42,11 +43,9 @@ namespace Oxide.Rust.Plugins
             Version = new VersionNumber(1, 0, 0);
             HasConfig = false;
 
-            // Get logger
-            logger = Interface.GetMod().RootLogger;
-
             // Get the pluginmanager
             pluginmanager = Interface.GetMod().RootPluginManager;
+            permission = Interface.GetMod().GetLibrary<Permission>("Permission");
         }
 
         /// <summary>
@@ -73,6 +72,10 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
             cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
             cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
+
+            cmdlib.AddConsoleCommand("oxide.group", this, "cmdGroup");
+            cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
+            cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
         }
 
         /// <summary>
@@ -114,19 +117,25 @@ namespace Oxide.Rust.Plugins
             // Check arg 1 exists
             if (!arg.HasArgs(1))
             {
-                arg.ReplyWith("Syntax: oxide.load <pluginname>");
+                arg.ReplyWith("Syntax: oxide.load *|<pluginname>+");
                 return;
             }
 
-            // Get the plugin name
-            string name = arg.GetString(0);
-            if (string.IsNullOrEmpty(name)) return;
+            if (arg.GetString(0).Equals("*"))
+            {
+                Interface.GetMod().LoadAllPlugins();
+                return;
+            }
 
-            // Load
-            Interface.GetMod().LoadPlugin(name);
-            Plugin plugin = pluginmanager.GetPlugin(name);
-            if (plugin == null) return;
-            plugin.CallHook("OnServerInitialized", null);
+            foreach (var name in arg.Args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+                // Load
+                Interface.GetMod().LoadPlugin(name);
+                var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null) continue;
+                plugin.CallHook("OnServerInitialized", null);
+            }
         }
 
         /// <summary>
@@ -139,22 +148,22 @@ namespace Oxide.Rust.Plugins
             // Check arg 1 exists
             if (!arg.HasArgs(1))
             {
-                arg.ReplyWith("Syntax: oxide.unload <pluginname>");
+                arg.ReplyWith("Syntax: oxide.unload *|<pluginname>+");
                 return;
             }
 
-            // Get the plugin name
-            string name = arg.GetString(0);
-            if (string.IsNullOrEmpty(name)) return;
-
-            // Unload
-            if (!Interface.GetMod().UnloadPlugin(name))
+            if (arg.GetString(0).Equals("*"))
             {
-                arg.ReplyWith(string.Format("Plugin '{0}' not found!", name));
+                Interface.GetMod().UnloadAllPlugins(new []{"rustcore", "unitycore"});
+                return;
             }
-            else
+
+            foreach (var name in arg.Args)
             {
-                arg.ReplyWith(string.Format("Plugin '{0}' unloaded.", name));
+                if (string.IsNullOrEmpty(name)) continue;
+
+                // Unload
+                Interface.GetMod().UnloadPlugin(name);
             }
         }
 
@@ -168,18 +177,22 @@ namespace Oxide.Rust.Plugins
             // Check arg 1 exists
             if (!arg.HasArgs(1))
             {
-                arg.ReplyWith("Syntax: oxide.reload <pluginname>");
+                arg.ReplyWith("Syntax: oxide.reload *|<pluginname>+");
                 return;
             }
 
-            // Get the plugin name
-            string name = arg.GetString(0);
-            if (string.IsNullOrEmpty(name)) return;
-
-            // Reload
-            if (!Interface.GetMod().ReloadPlugin(name))
+            if (arg.GetString(0).Equals("*"))
             {
-                arg.ReplyWith(string.Format("Plugin '{0}' not found!", name));
+                Interface.GetMod().ReloadAllPlugins(new[] { "rustcore", "unitycore" });
+                return;
+            }
+
+            foreach (var name in arg.Args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+
+                // Reload
+                Interface.GetMod().ReloadPlugin(name);
             }
         }
 
@@ -204,6 +217,97 @@ namespace Oxide.Rust.Plugins
         }
 
         /// <summary>
+        /// Called when the "group" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("cmdGroup")]
+        private void cmdGroup(ConsoleSystem.Arg arg)
+        {
+            // Check 2 args exists
+            if (!arg.HasArgs(2))
+            {
+                arg.ReplyWith("Syntax: oxide.group <add|remove> <name> [title] [rank]");
+                return;
+            }
+
+            var mode = arg.GetString(0);
+            var name = arg.GetString(1);
+            var title = arg.GetString(2);
+            var rank = arg.GetInt(3);
+
+            if (mode.Equals("add"))
+            {
+                permission.CreateGroup(name, title, rank);
+                arg.ReplyWith("Group '" + name + "' created");
+            }
+            else if (mode.Equals("remove"))
+            {
+                permission.RemoveGroup(name);
+                arg.ReplyWith("Group '" + name + "' deleted");
+            }
+        }
+
+        /// <summary>
+        /// Called when the "grant" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("cmdGrant")]
+        private void cmdGrant(ConsoleSystem.Arg arg)
+        {
+            // Check 2 args exists
+            if (!arg.HasArgs(2))
+            {
+                arg.ReplyWith("Syntax: oxide.grant <group|user> <name|id> <permission>");
+                return;
+            }
+
+            var mode = arg.GetString(0);
+            var name = arg.GetString(1);
+            var perm = arg.GetString(2);
+
+            if (mode.Equals("group"))
+            {
+                permission.GrantGroupPermission(name, perm, null);
+                arg.ReplyWith("Group '" + name + "' granted permission: " + perm);
+            }
+            else if (mode.Equals("user"))
+            {
+                permission.GrantUserPermission(name, perm, null);
+                arg.ReplyWith("User '" + name + "' granted permission: " + perm);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "grant" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("cmdRevoke")]
+        private void cmdRevoke(ConsoleSystem.Arg arg)
+        {
+            // Check 2 args exists
+            if (!arg.HasArgs(2))
+            {
+                arg.ReplyWith("Syntax: oxide.revoke <group|user> <name|id>");
+                return;
+            }
+
+            var mode = arg.GetString(0);
+            var name = arg.GetString(1);
+            var perm = arg.GetString(2);
+
+            if (mode.Equals("group"))
+            {
+                permission.RevokeGroupPermission(name, perm);
+                arg.ReplyWith("Group '" + name + "' revoked permission: " + perm);
+            }
+            else if (mode.Equals("user"))
+            {
+                permission.RevokeUserPermission(name, perm);
+                arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
+            }
+        }
+
+        /// <summary>
         /// Called when the server wants to know what tags to use
         /// </summary>
         /// <param name="oldtags"></param>
@@ -212,10 +316,9 @@ namespace Oxide.Rust.Plugins
         private string ModifyTags(string oldtags)
         {
             // We're going to call out and build a list of all tags to use
-            List<string> taglist = new List<string>(oldtags.Split(','));
-            Interface.CallHook("BuildServerTags", new object[] { taglist });
-            string newtags = string.Join(",", taglist.ToArray());
-            return newtags;
+            var taglist = new List<string>(oldtags.Split(','));
+            Interface.CallHook("BuildServerTags", taglist);
+            return string.Join(",", taglist.ToArray());
         }
 
         /// <summary>
@@ -239,7 +342,7 @@ namespace Oxide.Rust.Plugins
         private object OnUserApprove(Network.Connection connection)
         {
             // Call out and see if we should reject
-            object canlogin = Interface.CallHook("CanClientLogin", new object[] { connection });
+            object canlogin = Interface.CallHook("CanClientLogin", connection);
             if (canlogin != null)
             {
                 // If it's a bool and it's true, let them in
@@ -263,7 +366,6 @@ namespace Oxide.Rust.Plugins
         /// Called when a console command was run
         /// </summary>
         /// <param name="arg"></param>
-        /// <param name="wantsfeedback"></param>
         /// <returns></returns>
         [HookMethod("OnRunCommand")]
         private object OnRunCommand(ConsoleSystem.Arg arg)

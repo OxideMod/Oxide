@@ -84,7 +84,7 @@ namespace Oxide.Plugins
         }
 
         [HookMethod("OnPlayerInit")]
-        private void base_OnPlayerInit(BasePlayer player, Network.Connection connection)
+        private void base_OnPlayerInit(BasePlayer player)
         {
             AddOnlinePlayer(player);
         }

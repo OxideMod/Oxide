@@ -130,7 +130,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("RegisterPermission")]
         public void RegisterPermission(string name, Plugin owner)
         {
-            if (PermissionExists(name, owner))
+            if (PermissionExists(name))
             {
                 Interface.GetMod().RootLogger.Write(LogType.Warning, "Duplicate permission registered '{0}' (by plugin '{1}')", name, owner.Title);
                 return;
@@ -152,8 +152,16 @@ namespace Oxide.Core.Libraries
         /// <param name="owner"></param>
         /// <returns></returns>
         [LibraryFunction("PermissionExists")]
-        public bool PermissionExists(string name, Plugin owner)
+        public bool PermissionExists(string name, Plugin owner = null)
         {
+            if (owner == null)
+            {
+                foreach (var value in permset.Values)
+                {
+                    if (value.Contains(name)) return true;
+                }
+                return false;
+            }
             HashSet<string> set;
             if (!permset.TryGetValue(owner, out set)) return false;
             return set.Contains(name);
