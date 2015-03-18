@@ -1207,7 +1207,7 @@
           "Hook": {
             "InjectionIndex": 13,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "BasePlayer_OnReceiveTick",
