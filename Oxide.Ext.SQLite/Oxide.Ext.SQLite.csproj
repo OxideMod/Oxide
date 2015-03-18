@@ -11,6 +11,7 @@
     <AssemblyName>Oxide.Ext.SQLite</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -42,8 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\SQLite.cs" />
-    <Compile Include="SQLiteExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQLiteExtension.cs" />
     <Compile Include="Sql.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -54,11 +54,11 @@
   <ItemGroup>
     <Compile Include="Libraries\PythonDatafile.cs" />
     <Compile Include="Libraries\PythonUtil.cs" />
-    <Compile Include="PythonLogger.cs" />
-    <Compile Include="PythonExtension.cs" />
     <Compile Include="Plugins\PythonPlugin.cs" />
     <Compile Include="Plugins\PythonPluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PythonExtension.cs" />
+    <Compile Include="PythonLogger.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +67,6 @@
       <Name>Oxide.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
