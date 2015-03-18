@@ -103,10 +103,38 @@ namespace Oxide.Core.Plugins
             object return_value = null;
             foreach (var method in methods)
             {
+                // Verify the args
+                ParameterInfo[] parameters = method.GetParameters();
+                object[] funcargs = new object[parameters.Length];
+                int args_received;
+                if (args == null)
+                    args_received = 0;
+                else
+                {
+                    args_received = args.Length;
+                    Array.Copy(args, funcargs, Math.Min(args_received, funcargs.Length));
+                }
+                if (funcargs.Length > args_received)
+                {
+                    // Invent args in an attempt to let the invoke call work
+                    for (int i = args_received; i < funcargs.Length; i++)
+                    {
+                        ParameterInfo pinfo = parameters[i];
+
+                        // Does it have a default value? Fill it in
+                        //if (pinfo.DefaultValue != null)
+                        //funcargs[i] = pinfo.DefaultValue;
+                        // Is it a value type? Pass in the default
+                        if (pinfo.ParameterType.IsValueType)
+                            funcargs[i] = Activator.CreateInstance(pinfo.ParameterType);
+                        // Otherwise it's a reference type so just leaving it null will work
+                    }
+                }
+
                 // Call it
                 try
                 {
-                    var value = method.Invoke(this, args);
+                    var value = method.Invoke(this, funcargs);
                     if (value != null) return_value = value;
                 }
                 catch (TargetInvocationException ex)
