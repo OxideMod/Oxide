@@ -25,6 +25,9 @@ namespace Oxide.Rust.Plugins
         // The permission lib
         private readonly Permission permission;
 
+        // The rust lib
+        private readonly Libraries.Rust rust;
+
         // Track when the server has been initialized
         private bool ServerInitialized;
 
@@ -46,6 +49,7 @@ namespace Oxide.Rust.Plugins
             // Get the pluginmanager
             pluginmanager = Interface.GetMod().RootPluginManager;
             permission = Interface.GetMod().GetLibrary<Permission>("Permission");
+            rust = Interface.GetMod().GetLibrary<Libraries.Rust>("Rust");
         }
 
         /// <summary>
@@ -74,6 +78,7 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
 
             cmdlib.AddConsoleCommand("oxide.group", this, "cmdGroup");
+            cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
             cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
         }
@@ -224,7 +229,7 @@ namespace Oxide.Rust.Plugins
             // Check 2 args exists
             if (!arg.HasArgs(2))
             {
-                arg.ReplyWith("Syntax: oxide.group <add|remove> <name> [title] [rank]");
+                arg.ReplyWith("Syntax: oxide.group <add|remove|set> <name> [title] [rank]");
                 return;
             }
 
@@ -235,13 +240,79 @@ namespace Oxide.Rust.Plugins
 
             if (mode.Equals("add"))
             {
+                if (permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' already exist");
+                    return;
+                }
                 permission.CreateGroup(name, title, rank);
                 arg.ReplyWith("Group '" + name + "' created");
             }
             else if (mode.Equals("remove"))
             {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
                 permission.RemoveGroup(name);
                 arg.ReplyWith("Group '" + name + "' deleted");
+            }
+            else if (mode.Equals("set"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
+                permission.SetGroupTitle(name, title);
+                permission.SetGroupRank(name, rank);
+                arg.ReplyWith("Group '" + name + "' changed");
+            }
+        }
+
+        /// <summary>
+        /// Called when the "group" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("cmdUserGroup")]
+        private void cmdUserGroup(ConsoleSystem.Arg arg)
+        {
+            // Check 3 args exists
+            if (!arg.HasArgs(3))
+            {
+                arg.ReplyWith("Syntax: oxide.usergroup <add|remove> <username> <groupname>");
+                return;
+            }
+
+            var mode = arg.GetString(0);
+            var name = arg.GetString(1);
+            var group = arg.GetString(2);
+
+            var player = FindPlayer(name);
+            if (player == null)
+            {
+                arg.ReplyWith("User '" + name + "' not found");
+                return;
+            }
+            name = rust.UserIDFromPlayer(player);
+            permission.GetUserData(name).LastSeenNickname = player.displayName;
+
+            if (!permission.GroupExists(group))
+            {
+                arg.ReplyWith("Group '" + group + "' doesn't exist");
+                return;
+            }
+
+            if (mode.Equals("add"))
+            {
+                permission.AddUserGroup(name, group);
+                arg.ReplyWith("User '" + player.displayName + "' assigned group: " + group);
+            }
+            else if (mode.Equals("remove"))
+            {
+                permission.RemoveUserGroup(name, group);
+                arg.ReplyWith("User '" + player.displayName + "' removed from group: " + group);
             }
         }
 
@@ -252,8 +323,8 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdGrant")]
         private void cmdGrant(ConsoleSystem.Arg arg)
         {
-            // Check 2 args exists
-            if (!arg.HasArgs(2))
+            // Check 3 args exists
+            if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: oxide.grant <group|user> <name|id> <permission>");
                 return;
@@ -265,13 +336,26 @@ namespace Oxide.Rust.Plugins
 
             if (mode.Equals("group"))
             {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
                 permission.GrantGroupPermission(name, perm, null);
                 arg.ReplyWith("Group '" + name + "' granted permission: " + perm);
             }
             else if (mode.Equals("user"))
             {
+                var player = FindPlayer(name);
+                if (player == null)
+                {
+                    arg.ReplyWith("User '" + name + "' not found");
+                    return;
+                }
+                name = rust.UserIDFromPlayer(player);
+                permission.GetUserData(name).LastSeenNickname = player.displayName;
                 permission.GrantUserPermission(name, perm, null);
-                arg.ReplyWith("User '" + name + "' granted permission: " + perm);
+                arg.ReplyWith("User '" + player.displayName + "' granted permission: " + perm);
             }
         }
 
@@ -282,8 +366,8 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdRevoke")]
         private void cmdRevoke(ConsoleSystem.Arg arg)
         {
-            // Check 2 args exists
-            if (!arg.HasArgs(2))
+            // Check 3 args exists
+            if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: oxide.revoke <group|user> <name|id> <permission>");
                 return;
@@ -295,14 +379,39 @@ namespace Oxide.Rust.Plugins
 
             if (mode.Equals("group"))
             {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
                 permission.RevokeGroupPermission(name, perm);
                 arg.ReplyWith("Group '" + name + "' revoked permission: " + perm);
             }
             else if (mode.Equals("user"))
             {
+                var player = FindPlayer(name);
+                if (player == null)
+                {
+                    arg.ReplyWith("User '" + name + "' not found");
+                    return;
+                }
+                name = rust.UserIDFromPlayer(player);
+                permission.GetUserData(name).LastSeenNickname = player.displayName;
                 permission.RevokeUserPermission(name, perm);
-                arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
+                arg.ReplyWith("User '" + player.displayName + "' revoked permission: " + perm);
             }
+        }
+
+        private BasePlayer FindPlayer(string nameOrIdOrIp)
+        {
+            var player = BasePlayer.Find(nameOrIdOrIp);
+            if (player == null)
+            {
+                ulong id;
+                if (ulong.TryParse(nameOrIdOrIp, out id))
+                    player = BasePlayer.FindSleeping(id);
+            }
+            return player;
         }
 
         /// <summary>
