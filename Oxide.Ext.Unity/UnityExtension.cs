@@ -51,9 +51,7 @@ namespace Oxide.Unity
             // Register our libraries
 
             // Register our MonoBehaviour
-            gameObject = new GameObject("Oxide.Ext.Unity");
-            UnityEngine.Object.DontDestroyOnLoad(gameObject);
-            gameObject.AddComponent<UnityScript>();
+            UnityScript.Create();
         }
 
         /// <summary>
