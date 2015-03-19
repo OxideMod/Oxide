@@ -62,6 +62,10 @@
       <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
       <Name>Oxide.Ext.CSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Oxide.Ext.Unity\Oxide.Ext.Unity.csproj">
+      <Project>{52c26c5b-23e5-48a2-b403-5ff5c898e91a}</Project>
+      <Name>Oxide.Ext.Unity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

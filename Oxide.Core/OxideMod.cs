@@ -54,7 +54,6 @@ namespace Oxide.Core
         private OxideConfig rootconfig;
 
         // Various libraries
-        private Timer libtimer;
         private WebRequests libwebrequests;
 
         // Thread safe NextTick callback queue
@@ -133,7 +132,6 @@ namespace Oxide.Core
 
             // Register core libraries
             extensionmanager.RegisterLibrary("Global", new Global());
-            extensionmanager.RegisterLibrary("Timer", libtimer = new Timer());
             extensionmanager.RegisterLibrary("Time", new Time());
             extensionmanager.RegisterLibrary("Permission", new Permission());
             extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(pluginmanager));
@@ -402,7 +400,6 @@ namespace Oxide.Core
                 }
 
             // Update libraries
-            libtimer.Update(delta);
             libwebrequests.Update();
 
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
