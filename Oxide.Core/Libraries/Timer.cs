@@ -125,8 +125,6 @@ namespace Oxide.Core.Libraries
         /// </summary>
         public void Update(float delta)
         {
-            if (timers.Count < 1) return;
-
             var now = CurrentTime;
 
             if (now < lastUpdateAt)
@@ -147,6 +145,8 @@ namespace Oxide.Core.Libraries
             if (now < lastUpdateAt + updateInterval) return;
 
             lastUpdateAt = now;
+
+            if (timers.Count < 1) return;
 
             var expired = timers.TakeWhile(t => t.nextrep <= now).ToArray();
             if (expired.Length > 0)
