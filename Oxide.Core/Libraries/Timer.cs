@@ -133,6 +133,7 @@ namespace Oxide.Core.Libraries
                 var msg = string.Format("Time travelling detected! Timers were updated {0:0.00} seconds in the future? We will attempt to recover but this should really never happen!", difference);
                 Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, msg);
                 foreach (var timer in timers) timer.nextrep -= difference;
+                lastUpdateAt = now;
             }
             
             if (lastUpdateAt > 0f && now > lastUpdateAt + 60f)
