@@ -635,11 +635,10 @@ namespace Oxide.Rust.Plugins
         /// Called when the player has been respawned
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="connection"></param>
         [HookMethod("OnPlayerRespawned")]
-        private object OnPlayerRespawned(BasePlayer player, Network.Connection connection)
+        private object OnPlayerRespawned(BasePlayer player)
         {
-            return Interface.CallHook("OnPlayerSpawn", player, connection);
+            return Interface.CallHook("OnPlayerSpawn", player);
         }
 
         [HookMethod("OnBuildingBlockDoUpgradeToGrade")]
