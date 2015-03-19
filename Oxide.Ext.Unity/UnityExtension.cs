@@ -1,6 +1,7 @@
 ﻿using Oxide.Core;
 using Oxide.Core.Extensions;
 
+using Oxide.Unity.Libraries;
 using Oxide.Unity.Plugins;
 
 using UnityEngine;
@@ -27,6 +28,8 @@ namespace Oxide.Unity
         /// </summary>
         public override string Author { get { return "Oxide Team"; } }
 
+        private Timer libtimer;
+
         private GameObject gameObject;
 
         /// <summary>
@@ -49,6 +52,10 @@ namespace Oxide.Unity
             Manager.RegisterPluginLoader(new UnityPluginLoader());
 
             // Register our libraries
+            Manager.RegisterLibrary("Timer", libtimer = new Timer());
+
+            // Register engine frame callback
+            Interface.GetMod().OnFrame(OnFrame);
 
             // Register our MonoBehaviour
             UnityScript.Create();
@@ -70,6 +77,15 @@ namespace Oxide.Unity
         public override void OnModLoad()
         {
 
+        }
+
+
+        /// <summary>
+        /// Called by engine every server frame
+        /// </summary>
+        private void OnFrame()
+        {
+            libtimer.Update(Time.deltaTime);
         }
     }
 }

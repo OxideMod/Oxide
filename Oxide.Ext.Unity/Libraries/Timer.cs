@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
 
+using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Core.Logging;
 
-namespace Oxide.Core.Libraries
+namespace Oxide.Unity.Libraries
 {
     /// <summary>
     /// The timer library
     /// </summary>
     public class Timer : Library
     {
-        private static Stopwatch stopwatch = Stopwatch.StartNew();
-
-        private static float CurrentTime => (float)stopwatch.Elapsed.TotalSeconds;
-
         /// <summary>
         /// Represents a single timer instance
         /// </summary>
@@ -60,7 +58,7 @@ namespace Oxide.Core.Libraries
                 Repetitions = repetitions;
                 Delay = delay;
                 Callback = callback;
-                nextrep = CurrentTime + delay;
+                nextrep = UnityEngine.Time.realtimeSinceStartup + delay;
                 Owner = owner;
                 if (owner != null) owner.OnRemovedFromManager += owner_OnRemovedFromManager;
             }
@@ -125,13 +123,13 @@ namespace Oxide.Core.Libraries
         /// </summary>
         public void Update(float delta)
         {
-            var now = CurrentTime;
+            var now = UnityEngine.Time.realtimeSinceStartup;
 
             if (now < lastUpdateAt)
             {
                 var difference = lastUpdateAt - now - delta;
                 var msg = string.Format("Time travelling detected! Timers were updated {0:0.00} seconds in the future? We will attempt to recover but this should really never happen!", difference);
-                Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, msg);
+                Interface.GetMod().RootLogger.Write(LogType.Warning, msg);
                 foreach (var timer in timers) timer.nextrep -= difference;
                 lastUpdateAt = now;
             }
@@ -139,7 +137,7 @@ namespace Oxide.Core.Libraries
             if (lastUpdateAt > 0f && now > lastUpdateAt + 60f)
             {
                 var difference = now - lastUpdateAt - delta;
-                Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, "Clock is {0:0.00} seconds late! Timers have been delayed. Maybe the server froze for a long time.", difference);
+                Interface.GetMod().RootLogger.Write(LogType.Warning, "Clock is {0:0.00} seconds late! Timers have been delayed. Maybe the server froze for a long time.", difference);
                 foreach (var timer in timers) timer.nextrep += difference;
             }
             

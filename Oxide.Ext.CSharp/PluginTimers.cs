@@ -7,9 +7,9 @@ namespace Oxide.Plugins
 {
     public class Timer
     {
-        private Core.Libraries.Timer.TimerInstance instance;
+        private Unity.Libraries.Timer.TimerInstance instance;
 
-        public Timer(Core.Libraries.Timer.TimerInstance instance)
+        public Timer(Unity.Libraries.Timer.TimerInstance instance)
         {
             this.instance = instance;
         }
@@ -47,7 +47,7 @@ namespace Oxide.Plugins
 
     public class PluginTimers
     {
-        private Core.Libraries.Timer timer = Interface.GetMod().GetLibrary<Core.Libraries.Timer>("Timer");
+        private Unity.Libraries.Timer timer = Interface.GetMod().GetLibrary<Unity.Libraries.Timer>("Timer");
         private Plugin plugin;
 
         public PluginTimers(Plugin plugin)
