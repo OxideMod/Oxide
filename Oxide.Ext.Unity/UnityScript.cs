@@ -27,7 +27,7 @@ namespace Oxide.Unity
 
         void Update()
         {
-            oxideMod.OnFrame();
+            oxideMod.OnFrame(Time.deltaTime);
         }
 
         void OnDestroy()

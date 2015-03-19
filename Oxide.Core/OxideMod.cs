@@ -381,7 +381,7 @@ namespace Oxide.Core
         /// <summary>
         /// Called every server frame, implemented by an engine-specific extension
         /// </summary>
-        public void OnFrame()
+        public void OnFrame(float delta)
         {
             // Call any callbacks queued for this frame
             if (nextTickQueue.Count > 0)
@@ -402,7 +402,7 @@ namespace Oxide.Core
                 }
 
             // Update libraries
-            libtimer.Update();
+            libtimer.Update(delta);
             libwebrequests.Update();
 
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking

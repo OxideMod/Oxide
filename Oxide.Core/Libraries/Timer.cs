@@ -123,7 +123,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Updates all timers - called every server frame
         /// </summary>
-        public void Update()
+        public void Update(float delta)
         {
             if (timers.Count < 1) return;
 
@@ -131,13 +131,22 @@ namespace Oxide.Core.Libraries
 
             if (now < lastUpdateAt)
             {
-                var difference = lastUpdateAt - now;
+                var difference = lastUpdateAt - now - delta;
                 var msg = string.Format("Time travelling detected! Timers were updated {0:0.00} seconds in the future? We will attempt to recover but this should really never happen!", difference);
                 Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, msg);
                 foreach (var timer in timers) timer.nextrep -= difference;
             }
             
+            if (lastUpdateAt > 0f && now > lastUpdateAt + 60f)
+            {
+                var difference = now - lastUpdateAt - delta;
+                Interface.GetMod().RootLogger.Write(Logging.LogType.Warning, "Clock is {0:0.00} seconds late! Timers have been delayed. Maybe the server froze for a long time.", difference);
+                foreach (var timer in timers) timer.nextrep += difference;
+            }
+            
             if (now < lastUpdateAt + updateInterval) return;
+
+            lastUpdateAt = now;
 
             var expired = timers.TakeWhile(t => t.nextrep <= now).ToArray();
             if (expired.Length > 0)
