@@ -130,15 +130,15 @@ namespace Oxide.Core
             pluginmanager = new PluginManager(rootlogger) { ConfigPath = ConfigDirectory };
             extensionmanager = new ExtensionManager(rootlogger);
 
+            // Initialize other things
+            DataFileSystem = new DataFileSystem(DataDirectory);
+
             // Register core libraries
             extensionmanager.RegisterLibrary("Global", new Global());
             extensionmanager.RegisterLibrary("Time", new Time());
             extensionmanager.RegisterLibrary("Permission", new Permission());
             extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(pluginmanager));
             extensionmanager.RegisterLibrary("WebRequests", libwebrequests = new WebRequests());
-
-            // Initialize other things
-            DataFileSystem = new DataFileSystem(DataDirectory);
 
             // Load all extensions
             rootlogger.Write(LogType.Info, "Loading extensions...");
