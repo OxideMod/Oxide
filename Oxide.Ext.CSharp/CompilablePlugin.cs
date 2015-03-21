@@ -20,6 +20,8 @@ namespace Oxide.Plugins
         public string Directory;
         public string ScriptName;
         public string ScriptPath;
+        public byte[] CompiledRawAssembly;
+        public byte[] LastGoodRawAssembly;
         public DateTime LastModifiedAt;
         public DateTime LastCompiledAt;
         public int CompilationCount;
@@ -62,36 +64,36 @@ namespace Oxide.Plugins
                 return;
             }
             compiler = new PluginCompiler(this);
-            compiler.Compile(compiled =>
+            compiler.Compile(raw_assembly =>
             {
-                if (compiled)
-                {
-                    Interface.GetMod().LogInfo("{0} plugin was compiled successfully in {1}ms", ScriptName, Math.Round(compiler.Duration * 1000f));
-                }
-                else
+                if (raw_assembly == null)
                 {
                     LastCompiledAt = default(DateTime);
                     Interface.GetMod().LogInfo("{0} plugin failed to compile! Exit code: {1}", ScriptName, compiler.ExitCode);
                     Interface.GetMod().LogInfo(compiler.StdOutput.ToString());
                     if (compiler.ErrOutput.Length > 0) Interface.GetMod().LogInfo(compiler.ErrOutput.ToString());
                 }
+                else
+                {
+                    Interface.GetMod().LogInfo("{0} plugin was compiled successfully in {1}ms", ScriptName, Math.Round(compiler.Duration * 1000f));
+                    CompiledRawAssembly = raw_assembly;
+                }
                 compiler = null;
-                callback(compiled);
+                callback(raw_assembly != null);
             });
         }
 
-        public void LoadAssembly(int version, Action<CSharpPlugin> callback)
+        public void LoadAssembly(bool should_rollback, Action<CSharpPlugin> callback)
         {
             //Interface.GetMod().LogInfo("Loading plugin: {0}_{1}", Name, version);
 
             var started_at = UnityEngine.Time.realtimeSinceStartup;
-            var assembly_path = string.Format("{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, Name, version);
 
-            PatchAssembly(version, () =>
+            PatchAssembly(should_rollback, raw_assembly =>
             {
                 //Interface.GetMod().LogInfo("Patching {0} took {1}ms", Name, Math.Round((UnityEngine.Time.realtimeSinceStartup - started_at) * 1000f));
 
-                var assembly = Assembly.LoadFrom(assembly_path);
+                var assembly = Assembly.Load(raw_assembly);
 
                 var type = assembly.GetType("Oxide.Plugins." + Name);
                 if (type == null)
@@ -105,7 +107,7 @@ namespace Oxide.Plugins
                 var plugin = Activator.CreateInstance(type) as CSharpPlugin;
                 if (plugin == null)
                 {
-                    Interface.GetMod().LogInfo("Plugin assembly failed to load: {0} (version {1})", ScriptName, version);
+                    Interface.GetMod().LogInfo("Plugin assembly failed to load: {0}", ScriptName);
                     OnPluginFailed();
                     if (callback != null) callback(null);
                     return;
@@ -117,6 +119,7 @@ namespace Oxide.Plugins
                 if (Interface.GetMod().PluginLoaded(plugin))
                 {
                     LastGoodVersion = CompilationCount;
+                    LastGoodRawAssembly = raw_assembly;
                     if (callback != null) callback(plugin);
                 }
                 else
@@ -130,7 +133,7 @@ namespace Oxide.Plugins
 
         public void LoadAssembly(Action<CSharpPlugin> callback)
         {
-            LoadAssembly(CompilationCount, callback);
+            LoadAssembly(false, callback);
         }
 
         public void OnCompilerStarted()
@@ -145,7 +148,7 @@ namespace Oxide.Plugins
             if (LastGoodVersion > 0)
             {
                 Interface.GetMod().LogInfo("Rolling back plugin to version {0}: {1}", LastGoodVersion, ScriptName);
-                LoadAssembly(LastGoodVersion, null);
+                LoadAssembly(true, null);
             }
             else
             {
@@ -153,22 +156,16 @@ namespace Oxide.Plugins
             }
         }
 
-        private void PatchAssembly(int version, Action callback)
+        private void PatchAssembly(bool last_good_version, Action<byte[]> callback)
         {
             if (isPatching)
             {
                 Interface.GetMod().LogInfo("Already patching plugin assembly: {0} (ignoring)", ScriptName);
                 return;
             }
-
-            if (version == LastGoodVersion)
-            {
-                //Interface.GetMod().LogInfo("Plugin assembly has already been patched: {0}", Name);
-                callback();
-                return;
-            }
-
-            var path = string.Format("{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, Name, version);
+            
+            var raw_assembly = last_good_version ? LastGoodRawAssembly : CompiledRawAssembly;
+            var started_at = UnityEngine.Time.realtimeSinceStartup;
 
             //Interface.GetMod().LogInfo("Patching plugin assembly: {0}", Name);
             isPatching = true;
@@ -176,7 +173,10 @@ namespace Oxide.Plugins
             {
                 try
                 {
-                    var definition = AssemblyDefinition.ReadAssembly(path);
+                    AssemblyDefinition definition;
+                    using (var stream = new MemoryStream(raw_assembly))
+                        definition = AssemblyDefinition.ReadAssembly(stream);
+
                     var exception_constructor = typeof(UnauthorizedAccessException).GetConstructor(new Type[] { typeof(string) });
                     var security_exception = definition.MainModule.Import(exception_constructor);
 
@@ -287,12 +287,18 @@ namespace Oxide.Plugins
                     foreach (var type in definition.MainModule.Types)
                         patch_module_type(type);
 
-                    definition.Write(path);
+                    byte[] patched_assembly;
+                    using (var stream = new MemoryStream())
+                    {
+                        definition.Write(stream);
+                        patched_assembly = stream.ToArray();
+                    }
 
                     Interface.GetMod().NextTick(() =>
                     {
                         isPatching = false;
-                        callback();
+                        Interface.GetMod().LogInfo("Patching {0} assembly took {1:0.00} ms", ScriptName, UnityEngine.Time.realtimeSinceStartup - started_at);
+                        callback(patched_assembly);
                     });
                 }
                 catch (Exception ex)

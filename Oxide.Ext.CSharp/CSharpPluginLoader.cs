@@ -34,10 +34,6 @@ namespace Oxide.Plugins
                 PluginCompiler.BinaryPath = null;
                 return;
             }
-
-            // Delete any previously compiled temporary plugin files
-            foreach (var path in Directory.GetFiles(Interface.GetMod().TempDirectory, "*.dll"))
-                File.Delete(path);
         }
 
         public void OnModLoaded()
