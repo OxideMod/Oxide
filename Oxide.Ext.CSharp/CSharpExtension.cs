@@ -67,7 +67,7 @@ namespace Oxide.Plugins
         /// <param name="manager"></param>
         public override void OnModLoad()
         {
-
+            loader.OnModLoaded();
         }
 
         /// <summary>
