@@ -5,7 +5,6 @@ using System.Linq;
 
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
-using Oxide.Core.Plugins.Watchers;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Configuration;
@@ -145,7 +144,7 @@ namespace Oxide.Core
             extensionmanager.LoadAllExtensions(ExtensionDirectory);
 
             // Load all watchers
-            foreach (Extension ext in extensionmanager.GetAllExtensions())
+            foreach (var ext in extensionmanager.GetAllExtensions())
                 ext.LoadPluginWatchers(PluginDirectory);
 
             // Load all plugins
@@ -153,7 +152,7 @@ namespace Oxide.Core
             LoadAllPlugins();
 
             // Hook all watchers
-            foreach (PluginChangeWatcher watcher in extensionmanager.GetPluginChangeWatchers())
+            foreach (var watcher in extensionmanager.GetPluginChangeWatchers())
             {
                 watcher.OnPluginSourceChanged += watcher_OnPluginSourceChanged;
                 watcher.OnPluginAdded += watcher_OnPluginAdded;
@@ -234,7 +233,7 @@ namespace Oxide.Core
         public void LoadAllPlugins()
         {
             // Get all plugin loaders, scan the plugin directory and load all reported plugins
-            foreach (PluginLoader loader in extensionmanager.GetPluginLoaders())
+            foreach (var loader in extensionmanager.GetPluginLoaders())
             {
                 foreach (string name in loader.ScanDirectory(PluginDirectory))
                 {
@@ -244,7 +243,7 @@ namespace Oxide.Core
                         // Load it and watch for errors
                         try
                         {
-                            Plugin plugin = loader.Load(PluginDirectory, name);
+                            var plugin = loader.Load(PluginDirectory, name);
                             if (plugin == null) continue; // Async load
                             PluginLoaded(plugin);
                         }
@@ -291,18 +290,18 @@ namespace Oxide.Core
             if (pluginmanager.GetPlugin(name) != null) return;
 
             // Find all plugin loaders that lay claim to the name
-            HashSet<PluginLoader> loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where((l) => l.ScanDirectory(PluginDirectory).Contains(name)));
+            var loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where((l) => l.ScanDirectory(PluginDirectory).Contains(name)));
             if (loaders.Count == 0)
             {
-                rootlogger.Write(LogType.Error, "Failed to load plugin '{0}' (no source found)", name);
+                LogError("Failed to load plugin '{0}' (no source found)", name);
                 return;
             }
             if (loaders.Count > 1)
             {
-                rootlogger.Write(LogType.Error, "Failed to load plugin '{0}' (multiple sources found)", name);
+                LogError("Failed to load plugin '{0}' (multiple sources found)", name);
                 return;
             }
-            PluginLoader loader = loaders.First();
+            var loader = loaders.First();
 
             // Load it and watch for errors
             Plugin plugin;
@@ -327,7 +326,7 @@ namespace Oxide.Core
             try
             {
                 pluginmanager.AddPlugin(plugin);
-                CallHook("OnPluginLoaded", new object[] { plugin });
+                CallHook("OnPluginLoaded", plugin);
                 return true;
             }
             catch (Exception ex)
@@ -344,7 +343,7 @@ namespace Oxide.Core
         public bool UnloadPlugin(string name)
         {
             // Get the plugin
-            Plugin plugin = pluginmanager.GetPlugin(name);
+            var plugin = pluginmanager.GetPlugin(name);
             if (plugin == null) return false;
 
             // Let the plugin loader know that this plugin is being unloaded
@@ -355,7 +354,7 @@ namespace Oxide.Core
             pluginmanager.RemovePlugin(plugin);
 
             // Let other plugins know that this plugin has been unloaded
-            CallHook("OnPluginUnloaded", new object[] { plugin });
+            CallHook("OnPluginUnloaded", plugin);
 
             LogInfo("Unloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             return true;
@@ -396,7 +395,7 @@ namespace Oxide.Core
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallHook(string hookname, object[] args)
+        public object CallHook(string hookname, params object[] args)
         {
             // Forward the call to the plugin manager
             return pluginmanager.CallHook(hookname, args);
@@ -449,7 +448,7 @@ namespace Oxide.Core
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
             if (!isInitialized)
             {
-                foreach (PluginLoader loader in extensionmanager.GetPluginLoaders())
+                foreach (var loader in extensionmanager.GetPluginLoaders())
                 {
                     // Wait until all async plugins have finished loading
                     if (loader.LoadingPlugins.Count > 0) return;
@@ -477,7 +476,7 @@ namespace Oxide.Core
         /// </summary>
         private void UpdatePluginWatchers()
         {
-            foreach (PluginChangeWatcher watcher in extensionmanager.GetPluginChangeWatchers())
+            foreach (var watcher in extensionmanager.GetPluginChangeWatchers())
                 watcher.UpdateChangeStatus();
         }
 

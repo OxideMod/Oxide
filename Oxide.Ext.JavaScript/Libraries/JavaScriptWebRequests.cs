@@ -19,7 +19,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         {
             Interface.GetMod().GetLibrary<WebRequests>("WebRequests").EnqueueGet(url, (a,b) =>
             {
-                owner.CallHook(callback, new object[] {a, b});
+                owner.CallHook(callback, a, b);
             }, owner);
         }
 
@@ -35,7 +35,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         {
             Interface.GetMod().GetLibrary<WebRequests>("WebRequests").EnqueuePost(url, postdata, (a, b) =>
             {
-                owner.CallHook(callback, new object[] { a, b });
+                owner.CallHook(callback, a, b);
             }, owner);
         }
     }
