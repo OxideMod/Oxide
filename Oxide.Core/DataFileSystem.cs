@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 using Oxide.Core.Configuration;
@@ -18,7 +19,9 @@ namespace Oxide.Core
         public string Directory { get; private set; }
 
         // All currently loaded datafiles
-        private Dictionary<string, DynamicConfigFile> datafiles;
+        private readonly Dictionary<string, DynamicConfigFile> _datafiles;
+
+        private readonly JsonSerializerSettings _settings;
 
         /// <summary>
         /// Initializes a new instance of the DataFileSystem class
@@ -27,7 +30,10 @@ namespace Oxide.Core
         public DataFileSystem(string directory)
         {
             Directory = directory;
-            datafiles = new Dictionary<string, DynamicConfigFile>();
+            _datafiles = new Dictionary<string, DynamicConfigFile>();
+            var converter = new KeyValuesConverter();
+            _settings = new JsonSerializerSettings();
+            _settings.Converters.Add(converter);
         }
 
         /// <summary>
@@ -37,11 +43,7 @@ namespace Oxide.Core
         /// <returns></returns>
         private static string SanitiseName(string name)
         {
-            string file = name.Replace('\\', '_');
-            file = file.Replace('/', '_');
-            file = file.Replace(':', '_');
-            file = file.Replace(',', '_');
-            return file;
+            return Regex.Replace(name, @"[/:,\\]", "_");
         }
 
         /// <summary>
@@ -53,27 +55,26 @@ namespace Oxide.Core
         {
             // See if it already exists
             DynamicConfigFile datafile;
-            if (datafiles.TryGetValue(name, out datafile)) return datafile;
+            if (_datafiles.TryGetValue(name, out datafile)) return datafile;
 
             // Generate the filename
             string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
 
+            datafile = new DynamicConfigFile();
             // Does it exist?
             if (File.Exists(filename))
             {
                 // Load it
-                datafile = new DynamicConfigFile();
                 datafile.Load(filename);
             }
             else
             {
                 // Just make a new one
-                datafile = new DynamicConfigFile();
                 datafile.Save(filename);
             }
 
             // Add and return
-            datafiles.Add(name, datafile);
+            _datafiles.Add(name, datafile);
             return datafile;
         }
 
@@ -85,7 +86,7 @@ namespace Oxide.Core
         {
             // Get the datafile
             DynamicConfigFile datafile;
-            if (!datafiles.TryGetValue(name, out datafile)) return;
+            if (!_datafiles.TryGetValue(name, out datafile)) return;
 
             // Generate the filename
             string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
@@ -97,27 +98,36 @@ namespace Oxide.Core
         public T ReadObject<T>(string name)
         {
             string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
-            T CustomObject = default(T);
-            if (File.Exists(filename) == false)
+            CheckPath(filename);
+            T customObject;
+            if (File.Exists(filename))
             {
-                throw new FileNotFoundException(string.Format("File not found : {0}",filename));
+                customObject = JsonConvert.DeserializeObject<T>(File.ReadAllText(filename), _settings);
             }
-            try
+            else
             {
-                CustomObject = JsonConvert.DeserializeObject<T>(File.ReadAllText(filename).ToString());
+                customObject = (T)Activator.CreateInstance(typeof(T));
+                WriteObject(name, customObject);
             }
-            catch (JsonSerializationException)
-            {
-                throw new JsonSerializationException(string.Format("Deserialization error on : {0}",filename));
-            }
-            return CustomObject;
+            return customObject;
         }
 
         public void WriteObject<T>(string name, T Object)
         {
             string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
-            string JsonText = JsonConvert.SerializeObject(Object,Formatting.Indented);
-            File.WriteAllText(filename, JsonText);
+            CheckPath(filename);
+            File.WriteAllText(filename, JsonConvert.SerializeObject(Object, Formatting.Indented, _settings));
+        }
+
+        /// <summary>
+        /// Check if file path is in chroot directory
+        /// </summary>
+        /// <param name="filename"></param>
+        private void CheckPath(string filename)
+        {
+            string path = Path.GetFullPath(filename);
+            if (!path.StartsWith(Directory, StringComparison.Ordinal))
+                throw new Exception("Only access to oxide directory!");
         }
     }
 }
