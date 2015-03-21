@@ -100,7 +100,7 @@ namespace Oxide.Unity.Libraries
                     Destroy();
                     var error_message = string.Format("Failed to run a {0:0.00} timer", Delay);
                     if (Owner) error_message += " in " + Owner.Name;
-                    Interface.GetMod().RootLogger.WriteException(error_message, ex);
+                    Interface.Oxide.LogException(error_message, ex);
                 }
 
                 if (Repetitions > 0)
@@ -128,17 +128,9 @@ namespace Oxide.Unity.Libraries
             if (now < lastUpdateAt)
             {
                 var difference = lastUpdateAt - now - delta;
-                var msg = string.Format("Time travelling detected! Timers were updated {0:0.00} seconds in the future? We will attempt to recover but this should really never happen!", difference);
-                Interface.GetMod().RootLogger.Write(LogType.Warning, msg);
+                Interface.Oxide.LogWarning("Time travelling detected! Timers were updated {0:0.00} seconds in the future? We will attempt to recover but this should really never happen!", difference);
                 foreach (var timer in timers) timer.nextrep -= difference;
                 lastUpdateAt = now;
-            }
-            
-            if (lastUpdateAt > 0f && now > lastUpdateAt + 60f)
-            {
-                var difference = now - lastUpdateAt - delta;
-                Interface.GetMod().RootLogger.Write(LogType.Warning, "Clock is {0:0.00} seconds late! Timers have been delayed. Maybe the server froze for a long time.", difference);
-                foreach (var timer in timers) timer.nextrep += difference;
             }
             
             if (now < lastUpdateAt + updateInterval) return;

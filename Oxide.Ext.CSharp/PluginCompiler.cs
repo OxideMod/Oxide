@@ -186,7 +186,7 @@ namespace Oxide.Plugins
                 }
                 catch (Exception ex)
                 {
-                    Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Unable to read compiled plugin: {0} ({1})", plugin.Name, ex.Message);
+                    Interface.Oxide.LogError("Unable to read compiled plugin: {0} ({1})", plugin.Name, ex.Message);
                 }
             }
             Interface.GetMod().NextTick(() => callback(raw_assembly));

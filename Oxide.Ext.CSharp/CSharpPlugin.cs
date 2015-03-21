@@ -154,11 +154,11 @@ namespace Oxide.Plugins
         public string Filename;
         public FSWatcher Watcher;
 
-        protected Core.Libraries.Plugins plugins = Interface.GetMod().GetLibrary<Core.Libraries.Plugins>("Plugins");
+        protected Core.Libraries.Plugins plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
         protected PluginTimers timer;
         
         protected HashSet<PluginFieldInfo> onlinePlayerFields = new HashSet<PluginFieldInfo>();
-        private Dictionary<string, FieldInfo> pluginReferences = new Dictionary<string, FieldInfo>();
+        private Dictionary<string, FieldInfo> pluginReferenceFields = new Dictionary<string, FieldInfo>();
 
         public bool HookedOnFrame
         {
@@ -176,7 +176,7 @@ namespace Oxide.Plugins
                 if (reference_attributes.Length > 0)
                 {
                     var plugin_reference = reference_attributes[0] as PluginReferenceAttribute;
-                    pluginReferences[plugin_reference.Name ?? field.Name] = field;
+                    pluginReferenceFields[plugin_reference.Name ?? field.Name] = field;
                 }
             }
             foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
@@ -214,8 +214,8 @@ namespace Oxide.Plugins
 
             if (Filename != null) Watcher.AddMapping(Name);
 
-            foreach (var name in pluginReferences.Keys)
-                pluginReferences[name].SetValue(this, manager.GetPlugin(name));
+            foreach (var name in pluginReferenceFields.Keys)
+                pluginReferenceFields[name].SetValue(this, manager.GetPlugin(name));
 
             CallHook("Loaded", null);
         }
@@ -227,8 +227,8 @@ namespace Oxide.Plugins
 
             Watcher.RemoveMapping(Name);
 
-            foreach (var name in pluginReferences.Keys)
-                pluginReferences[name].SetValue(this, null);
+            foreach (var name in pluginReferenceFields.Keys)
+                pluginReferenceFields[name].SetValue(this, null);
 
             base.HandleRemovedFromManager(manager);
         }
@@ -237,7 +237,7 @@ namespace Oxide.Plugins
         void base_OnPluginLoaded(Plugin plugin)
         {
             FieldInfo field;
-            if (pluginReferences.TryGetValue(plugin.Name, out field))
+            if (pluginReferenceFields.TryGetValue(plugin.Name, out field))
                 field.SetValue(this, plugin);
         }
 
@@ -245,7 +245,7 @@ namespace Oxide.Plugins
         void base_OnPluginUnloaded(Plugin plugin)
         {
             FieldInfo field;
-            if (pluginReferences.TryGetValue(plugin.Name, out field))
+            if (pluginReferenceFields.TryGetValue(plugin.Name, out field))
                 field.SetValue(this, null);
         }
 
@@ -256,7 +256,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void Puts(string format, params object[] args)
         {
-            Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Info, format, args);
+            Interface.Oxide.LogInfo(format, args);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintWarning(string format, params object[] args)
         {
-            Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Warning, format, args);
+            Interface.Oxide.LogWarning(format, args);
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintError(string format, params object[] args)
         {
-            Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, format, args);
+            Interface.Oxide.LogError(format, args);
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace Oxide.Plugins
         /// <param name="callback"></param>
         protected void NextTick(Action callback)
         {
-            Interface.GetMod().NextTick(callback);
+            Interface.Oxide.NextTick(callback);
         }
 
         /// <summary>

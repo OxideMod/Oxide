@@ -33,7 +33,7 @@ namespace Oxide.Unity
         void OnDestroy()
         {
             if (oxideMod.IsShuttingDown) return;
-            oxideMod.RootLogger.Write(Core.Logging.LogType.Warning, "The Oxide Unity Script was destroyed (creating a new instance)");
+            oxideMod.LogWarning("The Oxide Unity Script was destroyed (creating a new instance)");
             oxideMod.NextTick(Create);
         }
     }
