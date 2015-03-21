@@ -5,8 +5,10 @@
     /// </summary>
     public static class Interface
     {
-        // The main Oxide mod
-        private static OxideMod oxide;
+        /// <summary>
+        /// Gets the main OxideMod instance
+        /// </summary>
+        public static OxideMod Oxide { get; private set; }
 
         /// <summary>
         /// Initializes Oxide
@@ -14,10 +16,10 @@
         public static void Initialize()
         {
             // Create if not already created
-            if (oxide == null)
+            if (Oxide == null)
             {
-                oxide = new OxideMod();
-                oxide.Load();
+                Oxide = new OxideMod();
+                Oxide.Load();
             }
         }
 
@@ -30,7 +32,7 @@
         public static object CallHook(string hookname, params object[] args)
         {
             // Call into Oxide core
-            return oxide.CallHook(hookname, args);
+            return Oxide.CallHook(hookname, args);
         }
 
         /// <summary>
@@ -39,7 +41,7 @@
         /// <returns></returns>
         public static OxideMod GetMod()
         {
-            return oxide;
+            return Oxide;
         }
     }
 }
