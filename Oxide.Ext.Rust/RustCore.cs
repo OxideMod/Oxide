@@ -513,7 +513,7 @@ namespace Oxide.Rust.Plugins
                     BasePlayer ply = arg.connection.player as BasePlayer;
                     if (ply == null)
                     {
-                        Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Debug, "Player is actually a {0}!", arg.connection.player.GetType());
+                        Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
                     }
                     else
                     {

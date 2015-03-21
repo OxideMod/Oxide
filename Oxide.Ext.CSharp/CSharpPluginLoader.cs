@@ -30,7 +30,7 @@ namespace Oxide.Plugins
             PluginCompiler.BinaryPath = Interface.GetMod().RootDirectory + @"\CSharpCompiler.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
             {
-                Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
+                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
                 PluginCompiler.BinaryPath = null;
                 return;
             }

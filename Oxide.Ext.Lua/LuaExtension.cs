@@ -168,7 +168,7 @@ end
                 LuaTable curtable = LuaEnvironment["_G"] as LuaTable;
                 if (curtable == null)
                 {
-                    Interface.GetMod().RootLogger.Write(LogType.Debug, "_G is null!");
+                    Interface.Oxide.LogError("_G is null!");
                     return null;
                 }
                 for (int i = 0; i < nspacesplit.Length; i++)
@@ -299,7 +299,7 @@ end
         /// <returns></returns>
         private static object ReadStaticProperty(LuaTable tbl, object key)
         {
-            Interface.GetMod().RootLogger.Write(LogType.Warning, "__index ReadStaticProperty {0}", key);
+            Interface.Oxide.LogWarning("__index ReadStaticProperty {0}", key);
             string keystr = key as string;
             if (keystr == null) return null;
             if (keystr == "_sftbl") return null;
@@ -333,7 +333,7 @@ end
             LuaTable sftbl = tbl["_sftbl"] as LuaTable;
             if (sftbl == null)
             {
-                Interface.GetMod().RootLogger.Write(LogType.Warning, "Tried to access _sftbl on type table when writing but it doesn't exist!");
+                Interface.Oxide.LogWarning("Tried to access _sftbl on type table when writing but it doesn't exist!");
                 return;
             }
             object prop = sftbl[keystr];

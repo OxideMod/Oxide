@@ -124,7 +124,7 @@ namespace Oxide.Core
             rootlogger.AddLogger(filelogger);
 
             // Log Oxide core loading
-            rootlogger.Write(LogType.Info, "Loading Oxide core v{0}...", Version);
+            LogInfo("Loading Oxide core v{0}...", Version);
 
             // Create the managers
             pluginmanager = new PluginManager(rootlogger) { ConfigPath = ConfigDirectory };
@@ -141,7 +141,7 @@ namespace Oxide.Core
             DataFileSystem = new DataFileSystem(DataDirectory);
 
             // Load all extensions
-            rootlogger.Write(LogType.Info, "Loading extensions...");
+            LogInfo("Loading extensions...");
             extensionmanager.LoadAllExtensions(ExtensionDirectory);
 
             // Load all watchers
@@ -149,7 +149,7 @@ namespace Oxide.Core
                 ext.LoadPluginWatchers(PluginDirectory);
 
             // Load all plugins
-            rootlogger.Write(LogType.Info, "Loading plugins...");
+            LogInfo("Loading plugins...");
             LoadAllPlugins();
 
             // Hook all watchers
@@ -172,7 +172,7 @@ namespace Oxide.Core
         }
 
         /// <summary>
-        /// Logs a formatted message to the root logger
+        /// Logs a formatted info message to the root logger
         /// </summary>
         /// <param name="format"></param>
         /// <param name="args"></param>
@@ -180,6 +180,50 @@ namespace Oxide.Core
         public void LogInfo(string format, params object[] args)
         {
             rootlogger.Write(LogType.Info, format, args);
+        }
+
+        /// <summary>
+        /// Logs a formatted debug message to the root logger
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public void LogDebug(string format, params object[] args)
+        {
+            rootlogger.Write(LogType.Debug, format, args);
+        }
+
+        /// <summary>
+        /// Logs a formatted warning message to the root logger
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public void LogWarning(string format, params object[] args)
+        {
+            rootlogger.Write(LogType.Warning, format, args);
+        }
+
+        /// <summary>
+        /// Logs a formatted error message to the root logger
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public void LogError(string format, params object[] args)
+        {
+            rootlogger.Write(LogType.Error, format, args);
+        }
+
+        /// <summary>
+        /// Logs an exception to the root logger
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public void LogException(string message, Exception ex)
+        {
+            rootlogger.WriteException(message, ex);
         }
 
         #region Plugin Management
@@ -206,7 +250,7 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
-                            rootlogger.WriteException(string.Format("Failed to load plugin {0}", name), ex);
+                            LogException(string.Format("Failed to load plugin {0}", name), ex);
                         }
                     }
                 }
@@ -270,7 +314,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                rootlogger.WriteException(string.Format("Failed to load plugin {0}:", name), ex);
+                LogException(string.Format("Failed to load plugin {0}:", name), ex);
                 return;
             }
         }
@@ -279,7 +323,7 @@ namespace Oxide.Core
         {
             plugin.OnError += plugin_OnError;
             // Log plugin loaded
-            rootlogger.Write(LogType.Info, "Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
+            LogInfo("Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
             {
                 pluginmanager.AddPlugin(plugin);
@@ -288,7 +332,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                rootlogger.WriteException(string.Format("Failed to initialize plugin {0}", plugin.Name), ex);
+                LogException(string.Format("Failed to initialize plugin {0}", plugin.Name), ex);
                 return false;
             }
         }
@@ -313,7 +357,7 @@ namespace Oxide.Core
             // Let other plugins know that this plugin has been unloaded
             CallHook("OnPluginUnloaded", new object[] { plugin });
 
-            rootlogger.Write(LogType.Info, "Unloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
+            LogInfo("Unloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             return true;
         }
 
@@ -341,7 +385,7 @@ namespace Oxide.Core
         /// <param name="message"></param>
         private void plugin_OnError(Plugin sender, string message)
         {
-            rootlogger.Write(LogType.Error, "{0}: {1}", sender.Name, message);
+            LogError("{0}: {1}", sender.Name, message);
         }
 
         #endregion
@@ -393,7 +437,7 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
-                            rootlogger.Write(LogType.Error, "Exception while calling NextTick callback: {0}", ex.ToString());
+                            LogError("Exception while calling NextTick callback: {0}", ex.ToString());
                         }
                     }
                     nextTickQueue.Clear();

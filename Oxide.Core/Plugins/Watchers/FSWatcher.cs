@@ -53,7 +53,7 @@ namespace Oxide.Core.Plugins.Watchers
             watcher.Deleted += watcher_Changed;
             watcher.Error += watcher_Error;
             watcher.EnableRaisingEvents = true;
-            //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, "FSWatcher started '{0}' {1}", directory, filter);
+            //Interface.Oxide.LogDebug("FSWatcher started '{0}' {1}", directory, filter);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Oxide.Core.Plugins.Watchers
         public void AddMapping(string name)
         {
             //filename = Path.GetFullPath(filename);
-            //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, "Added mapping '{0}'", filename);
+            //Interface.Oxide.LogDebug("Added mapping '{0}'", filename);
             watchedplugins.Add(name);
         }
 
@@ -86,32 +86,32 @@ namespace Oxide.Core.Plugins.Watchers
         {
             //string filename = Path.Combine(e.FullPath, e.Name);
             string name = Path.GetFileNameWithoutExtension(e.Name);
-            //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, filename);
+            //Interface.Oxide.LogDebug(filename);
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Changed:
                     lock (syncroot)
                         filechanges.Enqueue(new FileChange(name, e.ChangeType));
-                    //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, "Changed plugin {0}", name);
+                    //Interface.Oxide.LogDebug("Changed plugin {0}", name);
                     break;
                 case WatcherChangeTypes.Created:
                     lock (syncroot)
                         filechanges.Enqueue(new FileChange(name, e.ChangeType));
-                    //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, "New plugin {0}", name);
+                    //Interface.Oxide.LogDebug("New plugin {0}", name);
                     break;
                 case WatcherChangeTypes.Deleted:
                     lock (syncroot)
                         filechanges.Enqueue(new FileChange(name, e.ChangeType));
-                    //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, "Deleted plugin {0}", name);
+                    //Interface.Oxide.LogDebug("Deleted plugin {0}", name);
                     break;
             }
         }
 
         private void watcher_Error(object sender, ErrorEventArgs e)
         {
-            Interface.GetMod().NextTick(() =>
+            Interface.Oxide.NextTick(() =>
             {
-                Interface.GetMod().RootLogger.Write(Logging.LogType.Error, "FSWatcher error: {0}", e.GetException());
+                Interface.Oxide.LogError("FSWatcher error: {0}", e.GetException());
             });
         }
 
@@ -125,7 +125,7 @@ namespace Oxide.Core.Plugins.Watchers
                 while (filechanges.Count > 0)
                 {
                     FileChange fileChange = filechanges.Dequeue();
-                    //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, filename);
+                    //Interface.Oxide.LogDebug(filename);
 
                     switch (fileChange.ChangeType)
                     {

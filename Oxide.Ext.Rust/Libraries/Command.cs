@@ -134,7 +134,7 @@ namespace Oxide.Rust.Libraries
                 var previous_plugin_name = cmd.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{new_plugin_name} has replaced the {name} console command which was previously registered by {previous_plugin_name}";
-                Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Warning, msg);
+                Core.Interface.Oxide.LogWarning(msg);
                 consoleCommands.Remove(full_name);
                 rustcommands.Remove(full_name);
                 ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
@@ -151,7 +151,7 @@ namespace Oxide.Rust.Libraries
                 if (rust_command.isVariable)
                 {
                     var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                    Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, $"{new_plugin_name} tried to register the {name} console variable as a command!");
+                    Core.Interface.Oxide.LogError($"{new_plugin_name} tried to register the {name} console variable as a command!");
                     return;
                 }
                 // Copy some of the original rust commands attributes
@@ -184,7 +184,7 @@ namespace Oxide.Rust.Libraries
                 var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{new_plugin_name} has replaced the {command_name} chat command which was previously registered by {previous_plugin_name}";
-                Core.Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Warning, msg);
+                Core.Interface.Oxide.LogWarning(msg);
             }
 
             cmd = new ChatCommand(command_name, plugin, callback_name);
