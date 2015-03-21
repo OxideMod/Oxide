@@ -20,7 +20,7 @@ namespace Oxide.Plugins
         public int ExitCode;
 
         private CompilablePlugin plugin;
-        private Action<bool> callback;
+        private Action<byte[]> callback;
         private Process process;
         private float startedAt;
         private float endedAt;
@@ -31,14 +31,14 @@ namespace Oxide.Plugins
             this.plugin = plugin;
         }
 
-        public void Compile(Action<bool> callback)
+        public void Compile(Action<byte[]> callback)
         {
             if (BinaryPath == null) return;
 
             if (!File.Exists(plugin.ScriptPath))
             {
                 Interface.GetMod().LogInfo("Unable to compile plugin. File not found: {0}", plugin.ScriptPath);
-                callback(false);
+                callback(null);
                 return;
             }
 
@@ -175,7 +175,21 @@ namespace Oxide.Plugins
         {
             endedAt = UnityEngine.Time.realtimeSinceStartup;
             ExitCode = process.ExitCode;
-            Interface.GetMod().NextTick(() => callback(ExitCode == 0));
+            byte[] raw_assembly = null;
+            if (ExitCode == 0)
+            {
+                try
+                {
+                    var assembly_path = string.Format("{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount);
+                    raw_assembly = File.ReadAllBytes(assembly_path);
+                    File.Delete(assembly_path);
+                }
+                catch (Exception ex)
+                {
+                    Interface.GetMod().RootLogger.Write(Core.Logging.LogType.Error, "Unable to read compiled plugin: {0} ({1})", plugin.Name, ex.Message);
+                }
+            }
+            Interface.GetMod().NextTick(() => callback(raw_assembly));
         }
 
         /// <summary>
