@@ -51,6 +51,7 @@ namespace Oxide.Core.Plugins.Watchers
             watcher.Changed += watcher_Changed;
             watcher.Created += watcher_Changed;
             watcher.Deleted += watcher_Changed;
+            watcher.Error += watcher_Error;
             watcher.EnableRaisingEvents = true;
             //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, "FSWatcher started '{0}' {1}", directory, filter);
         }
@@ -104,6 +105,14 @@ namespace Oxide.Core.Plugins.Watchers
                     //Interface.GetMod().RootLogger.Write(Logging.LogType.Debug, "Deleted plugin {0}", name);
                     break;
             }
+        }
+
+        private void watcher_Error(object sender, ErrorEventArgs e)
+        {
+            Interface.GetMod().NextTick(() =>
+            {
+                Interface.GetMod().RootLogger.Write(Logging.LogType.Error, "FSWatcher error: {0}", e.GetException());
+            });
         }
 
         /// <summary>
