@@ -1,6 +1,4 @@
-﻿// Reference: Oxide.Ext.Rust
-
-using Oxide.Core.Plugins;
+﻿using Oxide.Core.Plugins;
 using UnityEngine;
 
 namespace Oxide.Plugins

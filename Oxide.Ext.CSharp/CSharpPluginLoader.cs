@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Oxide.Plugins
 {
     public class CSharpPluginLoader : PluginLoader
     {
-        public static List<string> ProjectReferences;
+        public static HashSet<string> ProjectReferences;
         public List<CSharpPlugin> LoadedPlugins = new List<CSharpPlugin>();
 
         private CSharpExtension extension;
@@ -22,10 +23,9 @@ namespace Oxide.Plugins
             this.extension = extension;
 
             // Plugins inherit all references from Oxide.Ext.CSharp
-            ProjectReferences = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(r => r.Name).ToList();
+            ProjectReferences = new HashSet<string>(Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(r => r.Name));
             ProjectReferences.Add("System.Data");
-            ProjectReferences.Add("Oxide.Ext.CSharp");
-
+            
             // Check if compatible compiler is installed
             PluginCompiler.BinaryPath = Interface.GetMod().RootDirectory + @"\CSharpCompiler.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
@@ -38,6 +38,18 @@ namespace Oxide.Plugins
             // Delete any previously compiled temporary plugin files
             foreach (var path in Directory.GetFiles(Interface.GetMod().TempDirectory, "*.dll"))
                 File.Delete(path);
+        }
+
+        public void OnModLoaded()
+        {
+            // Include references to all loaded Oxide extensions and any assemblies they reference
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (!assembly.FullName.StartsWith("Oxide.Ext")) continue;
+                ProjectReferences.Add(assembly.GetName().Name);
+                foreach (var reference in assembly.GetReferencedAssemblies())
+                    ProjectReferences.Add(reference.Name);
+            }
         }
 
         public override IEnumerable<string> ScanDirectory(string directory)
