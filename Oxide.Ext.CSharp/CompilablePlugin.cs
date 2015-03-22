@@ -60,7 +60,7 @@ namespace Oxide.Plugins
             }
             if (compiler != null)
             {
-                Interface.Oxide.LogInfo("Plugin compilation is already in progress: {0}", ScriptName);
+                //Interface.Oxide.LogInfo("Plugin compilation is already in progress: {0}", ScriptName);
                 return;
             }
             compiler = new PluginCompiler(this);
@@ -79,7 +79,16 @@ namespace Oxide.Plugins
                     CompiledRawAssembly = raw_assembly;
                 }
                 compiler = null;
-                callback(raw_assembly != null);
+                CheckLastModificationTime();
+                if (LastCompiledAt == LastModifiedAt)
+                {
+                    callback(raw_assembly != null);
+                }
+                else
+                { 
+                    Interface.Oxide.LogInfo("{0} plugin was changed during compilation and needs to be recompiled", ScriptName);
+                    Compile(callback);
+                }
             });
         }
 
