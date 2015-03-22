@@ -153,6 +153,7 @@ namespace Oxide.Plugins
                     Interface.Oxide.NextTick(() =>
                     {
                         Interface.Oxide.LogError("Timed out waiting for compiler!");
+                        RemoteLogger.Error("Timed out waiting for compiler to compile: " + plugin.Name);
                         process.Kill();
                     });
                 }
@@ -187,6 +188,7 @@ namespace Oxide.Plugins
                 catch (Exception ex)
                 {
                     Interface.Oxide.LogError("Unable to read compiled plugin: {0} ({1})", plugin.Name, ex.Message);
+                    RemoteLogger.Error($"Unable to read compiled plugin: {plugin.Name} ({ex.Message})");
                 }
             }
             Interface.Oxide.NextTick(() => callback(raw_assembly));

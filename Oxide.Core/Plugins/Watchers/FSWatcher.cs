@@ -112,6 +112,7 @@ namespace Oxide.Core.Plugins.Watchers
             Interface.Oxide.NextTick(() =>
             {
                 Interface.Oxide.LogError("FSWatcher error: {0}", e.GetException());
+                RemoteLogger.Exception("FSWatcher error", e.GetException());
             });
         }
 

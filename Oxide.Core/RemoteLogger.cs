@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using Oxide.Core.Libraries;
 using Newtonsoft.Json;
 
-namespace Oxide.Core.Logging
+namespace Oxide.Core
 {
     public static class RemoteLogger
     {

@@ -124,6 +124,7 @@ namespace Oxide.Plugins
                 if (plugin == null)
                 {
                     Interface.Oxide.LogError("Plugin assembly failed to load: {0}", ScriptName);
+                    RemoteLogger.Error("Plugin assembly failed to load: " + ScriptName);
                     OnPluginFailed();
                     if (callback != null) callback(null);
                     return;
@@ -177,6 +178,7 @@ namespace Oxide.Plugins
             if (isPatching)
             {
                 Interface.Oxide.LogWarning("Already patching plugin assembly: {0} (ignoring)", ScriptName);
+                RemoteLogger.Warning("Already patching plugin assembly: " + ScriptName);
                 return;
             }
             
@@ -320,7 +322,10 @@ namespace Oxide.Plugins
                 catch (Exception ex)
                 {
                     isPatching = false;
-                    Interface.Oxide.NextTick(() => Interface.Oxide.LogException("Exception while patching " + ScriptName, ex));
+                    Interface.Oxide.NextTick(() => {
+                        Interface.Oxide.LogException("Exception while patching " + ScriptName, ex);
+                        RemoteLogger.Exception("Exception while patching " + ScriptName, ex);
+                    });
                 }
             });
         }
