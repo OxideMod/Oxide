@@ -153,7 +153,7 @@ namespace Oxide.Plugins
                     Interface.Oxide.NextTick(() =>
                     {
                         if (process.HasExited) return;
-                        Interface.Oxide.LogError("Timed out waiting for compiler!");
+                        Interface.Oxide.LogError("Timed out waiting for compiler to compile: " + plugin.Name);
                         RemoteLogger.Error("Timed out waiting for compiler to compile: " + plugin.Name);
                         process.Kill();
                     });
