@@ -1,4 +1,6 @@
-﻿using Oxide.Core;
+﻿using System.Collections.Generic;
+
+using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
@@ -15,12 +17,12 @@ namespace Oxide.Ext.JavaScript.Libraries
         /// <param name="callback"></param>
         /// <param name="owner"></param>
         [LibraryFunction("EnqueueGetHook")]
-        public void EnqueueGet(string url, string callback, Plugin owner)
+        public void EnqueueGet(string url, string callback, Plugin owner, Dictionary<string, string> headers = null)
         {
             Interface.GetMod().GetLibrary<WebRequests>("WebRequests").EnqueueGet(url, (a,b) =>
             {
                 owner.CallHook(callback, a, b);
-            }, owner);
+            }, owner, headers);
         }
 
         /// <summary>
@@ -31,12 +33,12 @@ namespace Oxide.Ext.JavaScript.Libraries
         /// <param name="callback"></param>
         /// <param name="owner"></param>
         [LibraryFunction("EnqueuePostHook")]
-        public void EnqueuePost(string url, string postdata, string callback, Plugin owner)
+        public void EnqueuePost(string url, string postdata, string callback, Plugin owner, Dictionary<string, string> headers = null)
         {
             Interface.GetMod().GetLibrary<WebRequests>("WebRequests").EnqueuePost(url, postdata, (a, b) =>
             {
                 owner.CallHook(callback, a, b);
-            }, owner);
+            }, owner, headers);
         }
     }
 }
