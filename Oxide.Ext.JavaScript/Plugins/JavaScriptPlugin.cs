@@ -156,6 +156,7 @@ namespace Oxide.Ext.JavaScript.Plugins
                     if (callable != null) Globals.Add(property.Key);
                 }
             }
+            if (!HasConfig) HasConfig = Globals.Contains("LoadDefaultConfig");
 
             // Bind any base methods (we do it here because we don't want them to be hooked)
             BindBaseMethods();

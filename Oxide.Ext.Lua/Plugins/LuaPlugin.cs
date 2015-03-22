@@ -142,6 +142,7 @@ namespace Oxide.Lua.Plugins
                     }
                 }
             }
+            if (!HasConfig) HasConfig = functions.ContainsKey("LoadDefaultConfig");
 
             // Bind any base methods (we do it here because we don't want them to be hooked)
             BindBaseMethods();
