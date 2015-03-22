@@ -36,10 +36,6 @@
       <HintPath>Dependencies\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\Oxide.Ext.Unity\Dependencies\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSharpExtension.cs" />
@@ -57,10 +53,6 @@
     <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
       <Name>Oxide.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Oxide.Ext.Unity\Oxide.Ext.Unity.csproj">
-      <Project>{52c26c5b-23e5-48a2-b403-5ff5c898e91a}</Project>
-      <Name>Oxide.Ext.Unity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

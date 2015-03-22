@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Oxide.Plugins
+﻿namespace Oxide.Plugins
 {
     [Info("Unity Sample Plugin", "bawNg", 0.1)]
     class SamplePlugin : CSharpPlugin
@@ -13,10 +11,10 @@ namespace Oxide.Plugins
             Puts("SamplePlugin: This plugin will display the average frame rate for any Unity game");
         }
 
-        void OnFrame()
+        void OnFrame(float delta)
         {
             currentFrames++;
-            currentDuration += Time.deltaTime;
+            currentDuration += delta;
 
             if (currentDuration >= 15f)
             {

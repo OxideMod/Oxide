@@ -38,7 +38,7 @@ namespace Oxide.Plugins
         /// </summary>
         public static object Sample(this object[] array)
         {
-            return array[UnityEngine.Random.Range(0, array.Length)];
+            return array[Core.Random.Range(0, array.Length)];
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Oxide.Plugins
         /// </summary>
         public static string Sample(this string[] array)
         {
-            return array[UnityEngine.Random.Range(0, array.Length)];
+            return array[Core.Random.Range(0, array.Length)];
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Oxide.Plugins
         /// </summary>
         public static int Sample(this int[] array)
         {
-            return array[UnityEngine.Random.Range(0, array.Length)];
+            return array[Core.Random.Range(0, array.Length)];
         }
     }
 }

@@ -16,28 +16,25 @@ namespace Oxide.Core
     /// </summary>
     public sealed class OxideMod
     {
-        // The loggers used to... log things
-        private CompoundLogger rootlogger;
-        private RotatingFileLogger filelogger;
+        /// <summary>
+        /// The current Oxide version
+        /// </summary>
+        public static readonly VersionNumber Version = new VersionNumber(2, 0, 0);
 
         /// <summary>
         /// Gets the main logger
         /// </summary>
-        public CompoundLogger RootLogger { get { return rootlogger; } }
-
-        // The plugin manager
-        private PluginManager pluginmanager;
+        public CompoundLogger RootLogger { get; private set; }
 
         /// <summary>
         /// Gets the main pluginmanager
         /// </summary>
-        public PluginManager RootPluginManager { get { return pluginmanager; } }
+        public PluginManager RootPluginManager { get; private set; }
 
-        // The extension manager
-        private ExtensionManager extensionmanager;
-
-        // The command line
-        private CommandLine commandline;
+        /// <summary>
+        /// Gets the data file system
+        /// </summary>
+        public DataFileSystem DataFileSystem { get; private set; }
 
         // Various directories
         public string RootDirectory { get; private set; }
@@ -49,31 +46,40 @@ namespace Oxide.Core
         public string LogDirectory { get; private set; }
         public string TempDirectory { get; private set; }
 
+        // Gets the number of seconds since the server started
+        public float Now { get { return getTimeSinceStartup(); } }
+        
+        /// <summary>
+        /// This is true if the server is shutting down
+        /// </summary>
+        public bool IsShuttingDown { get; private set; }
+        
+        // The rotating file logger
+        private RotatingFileLogger filelogger;
+
+        // The extension manager
+        private ExtensionManager extensionmanager;
+
+        // The command line
+        private CommandLine commandline;
+
         // Various configs
         private OxideConfig rootconfig;
 
         // Various libraries
+        private Timer libtimer;
         private WebRequests libwebrequests;
+
+        // Extension implemented delegates
+        private Func<float> getTimeSinceStartup;
 
         // Thread safe NextTick callback queue
         private List<Action> nextTickQueue = new List<Action>();
         private object nextTickLock = new object();
 
         // Allow extensions to register a method to be called every frame
-        private Action onFrame;
+        private Action<float> onFrame;
         private bool isInitialized = false;
-
-        /// <summary>
-        /// Gets the data file system
-        /// </summary>
-        public DataFileSystem DataFileSystem { get; private set; }
-
-        public bool IsShuttingDown { get; private set; }
-
-        /// <summary>
-        /// The current Oxide version
-        /// </summary>
-        public static readonly VersionNumber Version = new VersionNumber(2, 0, 0);
 
         /// <summary>
         /// Initializes a new instance of the OxideMod class
@@ -119,15 +125,15 @@ namespace Oxide.Core
             // Create the loggers
             filelogger = new RotatingFileLogger();
             filelogger.Directory = LogDirectory;
-            rootlogger = new CompoundLogger();
-            rootlogger.AddLogger(filelogger);
+            RootLogger = new CompoundLogger();
+            RootLogger.AddLogger(filelogger);
 
             // Log Oxide core loading
             LogInfo("Loading Oxide core v{0}...", Version);
 
             // Create the managers
-            pluginmanager = new PluginManager(rootlogger) { ConfigPath = ConfigDirectory };
-            extensionmanager = new ExtensionManager(rootlogger);
+            RootPluginManager = new PluginManager(RootLogger) { ConfigPath = ConfigDirectory };
+            extensionmanager = new ExtensionManager(RootLogger);
 
             // Initialize other things
             DataFileSystem = new DataFileSystem(DataDirectory);
@@ -135,8 +141,9 @@ namespace Oxide.Core
             // Register core libraries
             extensionmanager.RegisterLibrary("Global", new Global());
             extensionmanager.RegisterLibrary("Time", new Time());
+            extensionmanager.RegisterLibrary("Timer", libtimer = new Timer());
             extensionmanager.RegisterLibrary("Permission", new Permission());
-            extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(pluginmanager));
+            extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(RootPluginManager));
             extensionmanager.RegisterLibrary("WebRequests", libwebrequests = new WebRequests());
 
             // Load all extensions
@@ -178,7 +185,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public void LogInfo(string format, params object[] args)
         {
-            rootlogger.Write(LogType.Info, format, args);
+            RootLogger.Write(LogType.Info, format, args);
         }
 
         /// <summary>
@@ -189,7 +196,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public void LogDebug(string format, params object[] args)
         {
-            rootlogger.Write(LogType.Debug, format, args);
+            RootLogger.Write(LogType.Debug, format, args);
         }
 
         /// <summary>
@@ -200,7 +207,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public void LogWarning(string format, params object[] args)
         {
-            rootlogger.Write(LogType.Warning, format, args);
+            RootLogger.Write(LogType.Warning, format, args);
         }
 
         /// <summary>
@@ -211,7 +218,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public void LogError(string format, params object[] args)
         {
-            rootlogger.Write(LogType.Error, format, args);
+            RootLogger.Write(LogType.Error, format, args);
         }
 
         /// <summary>
@@ -222,7 +229,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public void LogException(string message, Exception ex)
         {
-            rootlogger.WriteException(message, ex);
+            RootLogger.WriteException(message, ex);
         }
 
         #region Plugin Management
@@ -238,7 +245,7 @@ namespace Oxide.Core
                 foreach (string name in loader.ScanDirectory(PluginDirectory))
                 {
                     // Check if the plugin is already loaded
-                    if (pluginmanager.GetPlugin(name) == null)
+                    if (RootPluginManager.GetPlugin(name) == null)
                     {
                         // Load it and watch for errors
                         try
@@ -262,7 +269,7 @@ namespace Oxide.Core
         public void UnloadAllPlugins(IList<string> skip = null)
         {
             //TODO: Find a way to differentiate core plugins from reloadable ones
-            foreach (var plugin in pluginmanager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
+            foreach (var plugin in RootPluginManager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
             {
                 UnloadPlugin(plugin.Name);
             }
@@ -274,7 +281,7 @@ namespace Oxide.Core
         public void ReloadAllPlugins(IList<string> skip = null)
         {
             //TODO: Find a way to differentiate core plugins from reloadable ones
-            foreach (var plugin in pluginmanager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
+            foreach (var plugin in RootPluginManager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
             {
                 ReloadPlugin(plugin.Name);
             }
@@ -287,7 +294,7 @@ namespace Oxide.Core
         public void LoadPlugin(string name)
         {
             // Check if the plugin is already loaded
-            if (pluginmanager.GetPlugin(name) != null) return;
+            if (RootPluginManager.GetPlugin(name) != null) return;
 
             // Find all plugin loaders that lay claim to the name
             var loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where((l) => l.ScanDirectory(PluginDirectory).Contains(name)));
@@ -313,7 +320,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                LogException(string.Format("Failed to load plugin {0}:", name), ex);
+                LogException("Failed to load plugin " + name, ex);
                 return;
             }
         }
@@ -325,13 +332,13 @@ namespace Oxide.Core
             LogInfo("Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
             {
-                pluginmanager.AddPlugin(plugin);
+                RootPluginManager.AddPlugin(plugin);
                 CallHook("OnPluginLoaded", plugin);
                 return true;
             }
             catch (Exception ex)
             {
-                LogException(string.Format("Failed to initialize plugin {0}", plugin.Name), ex);
+                LogException("Failed to initialize plugin " + plugin.Name, ex);
                 return false;
             }
         }
@@ -343,7 +350,7 @@ namespace Oxide.Core
         public bool UnloadPlugin(string name)
         {
             // Get the plugin
-            var plugin = pluginmanager.GetPlugin(name);
+            var plugin = RootPluginManager.GetPlugin(name);
             if (plugin == null) return false;
 
             // Let the plugin loader know that this plugin is being unloaded
@@ -351,7 +358,7 @@ namespace Oxide.Core
             if (loader != null) loader.Unloading(plugin);
 
             // Unload it
-            pluginmanager.RemovePlugin(plugin);
+            RootPluginManager.RemovePlugin(plugin);
 
             // Let other plugins know that this plugin has been unloaded
             CallHook("OnPluginUnloaded", plugin);
@@ -398,7 +405,7 @@ namespace Oxide.Core
         public object CallHook(string hookname, params object[] args)
         {
             // Forward the call to the plugin manager
-            return pluginmanager.CallHook(hookname, args);
+            return RootPluginManager.CallHook(hookname, args);
         }
 
         /// <summary>
@@ -414,7 +421,7 @@ namespace Oxide.Core
         /// Register a callback which will be called every server frame
         /// </summary>
         /// <param name="callback"></param>
-        public void OnFrame(Action callback)
+        public void OnFrame(Action<float> callback)
         {
             onFrame += callback;
         }
@@ -436,13 +443,14 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
-                            LogError("Exception while calling NextTick callback: {0}", ex.ToString());
+                            LogException("Exception while calling NextTick callback", ex);
                         }
                     }
                     nextTickQueue.Clear();
                 }
 
             // Update libraries
+            libtimer.Update(delta);
             libwebrequests.Update();
 
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
@@ -460,13 +468,22 @@ namespace Oxide.Core
             UpdatePluginWatchers();
 
             // Update extensions
-            onFrame();
+            onFrame(delta);
         }
 
         public void OnShutdown()
         {
             IsShuttingDown = true;
             UnloadAllPlugins();
+        }
+
+        /// <summary>
+        /// Called by an engine-specific extension to register the engine clock
+        /// </summary>
+        /// <param name="method"></param>
+        public void RegisterEngineClock(Func<float> method)
+        {
+            getTimeSinceStartup = method;
         }
 
         #region Plugin Change Watchers

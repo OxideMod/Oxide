@@ -54,13 +54,13 @@ namespace Oxide.Plugins
             CheckLastModificationTime();
             if (LastCompiledAt == LastModifiedAt)
             {
-                //Interface.GetMod().LogInfo("Plugin is already compiled: {0}", Name);
+                //Interface.Oxide.LogInfo("Plugin is already compiled: {0}", Name);
                 callback(true);
                 return;
             }
             if (compiler != null)
             {
-                Interface.GetMod().LogInfo("Plugin compilation is already in progress: {0}", ScriptName);
+                //Interface.Oxide.LogInfo("Plugin compilation is already in progress: {0}", ScriptName);
                 return;
             }
             compiler = new PluginCompiler(this);
@@ -69,36 +69,52 @@ namespace Oxide.Plugins
                 if (raw_assembly == null)
                 {
                     LastCompiledAt = default(DateTime);
-                    Interface.GetMod().LogInfo("{0} plugin failed to compile! Exit code: {1}", ScriptName, compiler.ExitCode);
-                    Interface.GetMod().LogInfo(compiler.StdOutput.ToString());
-                    if (compiler.ErrOutput.Length > 0) Interface.GetMod().LogInfo(compiler.ErrOutput.ToString());
+                    Interface.Oxide.LogError("{0} plugin failed to compile! Exit code: {1}", ScriptName, compiler.ExitCode);
+                    Interface.Oxide.LogWarning(compiler.StdOutput.ToString());
+                    if (compiler.ErrOutput.Length > 0) Interface.Oxide.LogError(compiler.ErrOutput.ToString());
                 }
                 else
                 {
-                    Interface.GetMod().LogInfo("{0} plugin was compiled successfully in {1}ms", ScriptName, Math.Round(compiler.Duration * 1000f));
+                    Interface.Oxide.LogInfo("{0} plugin was compiled successfully in {1}ms", ScriptName, Math.Round(compiler.Duration * 1000f));
                     CompiledRawAssembly = raw_assembly;
                 }
                 compiler = null;
-                callback(raw_assembly != null);
+                if (raw_assembly == null)
+                {
+                    callback(false);
+                }
+                else
+                {
+                    CheckLastModificationTime();
+                    if (LastCompiledAt == LastModifiedAt)
+                    {
+                        callback(true);
+                    }
+                    else
+                    {
+                        Interface.Oxide.LogInfo("{0} plugin was changed during compilation and needs to be recompiled", ScriptName);
+                        Compile(callback);
+                    }
+                }
             });
         }
 
         public void LoadAssembly(bool should_rollback, Action<CSharpPlugin> callback)
         {
-            //Interface.GetMod().LogInfo("Loading plugin: {0}_{1}", Name, version);
+            //Interface.Oxide.LogInfo("Loading plugin: {0}_{1}", Name, version);
 
-            var started_at = UnityEngine.Time.realtimeSinceStartup;
+            var started_at = Interface.Oxide.Now;
 
             PatchAssembly(should_rollback, raw_assembly =>
             {
-                //Interface.GetMod().LogInfo("Patching {0} took {1}ms", Name, Math.Round((UnityEngine.Time.realtimeSinceStartup - started_at) * 1000f));
+                //Interface.Oxide.LogInfo("Patching {0} took {1}ms", Name, Math.Round((Interface.Oxide.Now - started_at) * 1000f));
 
                 var assembly = Assembly.Load(raw_assembly);
 
                 var type = assembly.GetType("Oxide.Plugins." + Name);
                 if (type == null)
                 {
-                    Interface.GetMod().LogInfo("Unable to find main plugin class: {0}", Name);
+                    Interface.Oxide.LogError("Unable to find main plugin class: {0}", Name);
                     OnPluginFailed();
                     if (callback != null) callback(null);
                     return;
@@ -107,7 +123,7 @@ namespace Oxide.Plugins
                 var plugin = Activator.CreateInstance(type) as CSharpPlugin;
                 if (plugin == null)
                 {
-                    Interface.GetMod().LogInfo("Plugin assembly failed to load: {0}", ScriptName);
+                    Interface.Oxide.LogError("Plugin assembly failed to load: {0}", ScriptName);
                     OnPluginFailed();
                     if (callback != null) callback(null);
                     return;
@@ -116,7 +132,7 @@ namespace Oxide.Plugins
                 plugin.SetPluginInfo(ScriptName, ScriptPath);
                 plugin.Watcher = Extension.Watcher;
 
-                if (Interface.GetMod().PluginLoaded(plugin))
+                if (Interface.Oxide.PluginLoaded(plugin))
                 {
                     LastGoodVersion = CompilationCount;
                     LastGoodRawAssembly = raw_assembly;
@@ -138,7 +154,7 @@ namespace Oxide.Plugins
 
         public void OnCompilerStarted()
         {
-            //Interface.GetMod().LogInfo("Compiling plugin: {0}", Name);
+            //Interface.Oxide.LogInfo("Compiling plugin: {0}", Name);
             LastCompiledAt = LastModifiedAt;
             CompilationCount++;
         }
@@ -147,12 +163,12 @@ namespace Oxide.Plugins
         {
             if (LastGoodVersion > 0)
             {
-                Interface.GetMod().LogInfo("Rolling back plugin to version {0}: {1}", LastGoodVersion, ScriptName);
+                Interface.Oxide.LogInfo("Rolling back plugin to version {0}: {1}", LastGoodVersion, ScriptName);
                 LoadAssembly(true, null);
             }
             else
             {
-                Interface.GetMod().LogInfo("No previous version to rollback plugin: {0}", ScriptName);
+                Interface.Oxide.LogInfo("No previous version to rollback plugin: {0}", ScriptName);
             }
         }
 
@@ -160,14 +176,14 @@ namespace Oxide.Plugins
         {
             if (isPatching)
             {
-                Interface.GetMod().LogInfo("Already patching plugin assembly: {0} (ignoring)", ScriptName);
+                Interface.Oxide.LogWarning("Already patching plugin assembly: {0} (ignoring)", ScriptName);
                 return;
             }
             
             var raw_assembly = last_good_version ? LastGoodRawAssembly : CompiledRawAssembly;
-            var started_at = UnityEngine.Time.realtimeSinceStartup;
+            var started_at = Interface.Oxide.Now;
 
-            //Interface.GetMod().LogInfo("Patching plugin assembly: {0}", Name);
+            //Interface.Oxide.LogInfo("Patching plugin assembly: {0}", Name);
             isPatching = true;
             ThreadPool.QueueUserWorkItem((_) =>
             {
@@ -267,7 +283,7 @@ namespace Oxide.Plugins
 
                             if (changed_method)
                             {
-                                //Interface.GetMod().LogInfo("Updating {0} instruction offsets: {1}", instructions.Count, method.FullName);
+                                //Interface.Oxide.LogDebug("Updating {0} instruction offsets: {1}", instructions.Count, method.FullName);
                                 int curoffset = 0;
                                 for (var i = 0; i < instructions.Count; i++)
                                 {
@@ -276,7 +292,7 @@ namespace Oxide.Plugins
                                     instruction.Next = (i == instructions.Count - 1) ? null : instructions[i + 1];
                                     instruction.Offset = curoffset;
                                     curoffset += instruction.GetSize();
-                                    //Interface.GetMod().LogInfo("    {0}", instruction.ToString());
+                                    //Interface.Oxide.LogDebug("    {0}", instruction.ToString());
                                 }
                             }
                         }
@@ -294,17 +310,17 @@ namespace Oxide.Plugins
                         patched_assembly = stream.ToArray();
                     }
 
-                    Interface.GetMod().NextTick(() =>
+                    Interface.Oxide.NextTick(() =>
                     {
                         isPatching = false;
-                        Interface.GetMod().LogInfo("Patching {0} assembly took {1:0.00} ms", ScriptName, UnityEngine.Time.realtimeSinceStartup - started_at);
+                        //Interface.Oxide.LogDebug("Patching {0} assembly took {1:0.00} ms", ScriptName, Interface.Oxide.Now - started_at);
                         callback(patched_assembly);
                     });
                 }
                 catch (Exception ex)
                 {
                     isPatching = false;
-                    Interface.GetMod().NextTick(() => Interface.GetMod().LogInfo("Exception while patching {0} assembly: {1}", ScriptName, ex.ToString()));
+                    Interface.Oxide.NextTick(() => Interface.Oxide.LogException("Exception while patching " + ScriptName, ex));
                 }
             });
         }
@@ -318,7 +334,7 @@ namespace Oxide.Plugins
             }
             catch (IOException ex)
             {
-                Interface.GetMod().LogInfo("IOException while checking plugin: {0}", ScriptName, ex.ToString());
+                Interface.Oxide.LogError("IOException while checking plugin: {0} ({1})", ScriptName, ex.Message);
             }
         }
     }

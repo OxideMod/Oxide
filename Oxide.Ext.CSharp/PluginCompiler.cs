@@ -37,7 +37,7 @@ namespace Oxide.Plugins
 
             if (!File.Exists(plugin.ScriptPath))
             {
-                Interface.GetMod().LogInfo("Unable to compile plugin. File not found: {0}", plugin.ScriptPath);
+                Interface.Oxide.LogError("Unable to compile plugin. File not found: {0}", plugin.ScriptPath);
                 callback(null);
                 return;
             }
@@ -68,9 +68,9 @@ namespace Oxide.Plugins
                 if (!waitingForAccess)
                 {
                     waitingForAccess = true;
-                    Interface.GetMod().LogInfo("Waiting for another application to stop using script: {0}", plugin.Name);
+                    Interface.Oxide.LogWarning("Waiting for another application to stop using script: {0}", plugin.Name);
                 }
-                Interface.GetMod().NextTick(BuildReferences);
+                Interface.Oxide.NextTick(BuildReferences);
                 return;
             }
 
@@ -85,10 +85,10 @@ namespace Oxide.Plugins
 
                 var assembly_name = match.Groups[1].Value;
 
-                var path = string.Format("{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, assembly_name);
+                var path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, assembly_name);
                 if (!File.Exists(path))
                 {
-                    Interface.GetMod().LogInfo("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
+                    Interface.Oxide.LogError("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
                     continue;
                 }
 
@@ -99,7 +99,7 @@ namespace Oxide.Plugins
                 }
                 catch (FileNotFoundException)
                 {
-                    Interface.GetMod().LogInfo("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
+                    Interface.Oxide.LogError("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
                     continue;
                 }
 
@@ -118,9 +118,9 @@ namespace Oxide.Plugins
             var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+", "/platform:x64" };
 
             foreach (var reference_name in references)
-                arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.GetMod().ExtensionDirectory, reference_name));
+                arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference_name));
 
-            arguments.Add(string.Format("/out:{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount));
+            arguments.Add(string.Format("/out:{0}\\{1}_{2}.dll", Interface.Oxide.TempDirectory, plugin.Name, plugin.CompilationCount));
             arguments.Add(plugin.ScriptPath);
 
             var start_info = new ProcessStartInfo(BinaryPath, EscapeArguments(arguments.ToArray()))
@@ -133,7 +133,7 @@ namespace Oxide.Plugins
 
             process = new Process { StartInfo = start_info, EnableRaisingEvents = true };
 
-            startedAt = UnityEngine.Time.realtimeSinceStartup;
+            startedAt = Interface.Oxide.Now;
             StdOutput = new StringBuilder();
             ErrOutput = new StringBuilder();
 
@@ -150,9 +150,9 @@ namespace Oxide.Plugins
                 Thread.Sleep(30000);
                 if (!process.HasExited)
                 {
-                    Interface.GetMod().NextTick(() =>
+                    Interface.Oxide.NextTick(() =>
                     {
-                        Interface.GetMod().LogInfo("ERROR: Timed out waiting for compiler!");
+                        Interface.Oxide.LogError("Timed out waiting for compiler!");
                         process.Kill();
                     });
                 }
@@ -173,14 +173,14 @@ namespace Oxide.Plugins
 
         private void OnExited(object sender, EventArgs e)
         {
-            endedAt = UnityEngine.Time.realtimeSinceStartup;
+            endedAt = Interface.Oxide.Now;
             ExitCode = process.ExitCode;
             byte[] raw_assembly = null;
             if (ExitCode == 0)
             {
                 try
                 {
-                    var assembly_path = string.Format("{0}\\{1}_{2}.dll", Interface.GetMod().TempDirectory, plugin.Name, plugin.CompilationCount);
+                    var assembly_path = string.Format("{0}\\{1}_{2}.dll", Interface.Oxide.TempDirectory, plugin.Name, plugin.CompilationCount);
                     raw_assembly = File.ReadAllBytes(assembly_path);
                     File.Delete(assembly_path);
                 }
@@ -189,7 +189,7 @@ namespace Oxide.Plugins
                     Interface.Oxide.LogError("Unable to read compiled plugin: {0} ({1})", plugin.Name, ex.Message);
                 }
             }
-            Interface.GetMod().NextTick(() => callback(raw_assembly));
+            Interface.Oxide.NextTick(() => callback(raw_assembly));
         }
 
         /// <summary>

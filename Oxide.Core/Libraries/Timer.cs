@@ -2,12 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using Oxide.Core;
-using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-using Oxide.Core.Logging;
 
-namespace Oxide.Unity.Libraries
+namespace Oxide.Core.Libraries
 {
     /// <summary>
     /// The timer library
@@ -58,7 +55,7 @@ namespace Oxide.Unity.Libraries
                 Repetitions = repetitions;
                 Delay = delay;
                 Callback = callback;
-                nextrep = UnityEngine.Time.realtimeSinceStartup + delay;
+                nextrep = Interface.Oxide.Now + delay;
                 Owner = owner;
                 if (owner != null) owner.OnRemovedFromManager += owner_OnRemovedFromManager;
             }
@@ -123,7 +120,7 @@ namespace Oxide.Unity.Libraries
         /// </summary>
         public void Update(float delta)
         {
-            var now = UnityEngine.Time.realtimeSinceStartup;
+            var now = Interface.Oxide.Now;
 
             if (now < lastUpdateAt)
             {
