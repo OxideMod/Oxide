@@ -147,11 +147,12 @@ namespace Oxide.Plugins
 
             ThreadPool.QueueUserWorkItem((_) =>
             {
-                Thread.Sleep(30000);
+                Thread.Sleep(120000);
                 if (!process.HasExited)
                 {
                     Interface.Oxide.NextTick(() =>
                     {
+                        if (process.HasExited) return;
                         Interface.Oxide.LogError("Timed out waiting for compiler!");
                         RemoteLogger.Error("Timed out waiting for compiler to compile: " + plugin.Name);
                         process.Kill();
