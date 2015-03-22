@@ -178,6 +178,15 @@ namespace Oxide.Core
         }
 
         /// <summary>
+        /// Gets all loaded extensions
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Extension> GetAllExtensions()
+        {
+            return extensionmanager.GetAllExtensions();
+        }
+
+        /// <summary>
         /// Logs a formatted info message to the root logger
         /// </summary>
         /// <param name="format"></param>

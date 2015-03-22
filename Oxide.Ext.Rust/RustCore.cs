@@ -6,6 +6,7 @@ using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Core.Logging;
 
 using Oxide.Rust.Libraries;
 
@@ -82,6 +83,11 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
             cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
+
+            // Configure remote logging
+            RemoteLogger.SetTag("os", SystemInfo.operatingSystem);
+            RemoteLogger.SetTag("game", "rust");
+            RemoteLogger.SetTag("protocol", Protocol.network.ToString());
         }
 
         /// <summary>
@@ -92,6 +98,8 @@ namespace Oxide.Rust.Plugins
         {
             if (ServerInitialized) return;
             ServerInitialized = true;
+            // Configure the hostname after it has been set
+            RemoteLogger.SetTag("hostname", server.hostname);
         }
 
         /// <summary>
