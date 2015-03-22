@@ -83,12 +83,37 @@ namespace Oxide.Core.Logging
 
         public static void Debug(string message)
         {
-            var assembly = Assembly.GetCallingAssembly();
-            var culprit = GetCurrentMethod();
-            var body = JsonConvert.SerializeObject(new Report("debug", assembly, culprit, message));
-            Interface.Oxide.LogWarning("Requesting: " + url);
-            Interface.Oxide.LogDebug(body);
-            webrequests.EnqueuePost(url, body, (a, b) => Interface.Oxide.LogDebug("Request complete: " + a + " -> " + b), null, BuildHeaders());
+            SendReport("debug", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
+        }
+
+        public static void Info(string message)
+        {
+            SendReport("info", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
+        }
+
+        public static void Warning(string message)
+        {
+            SendReport("warning", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
+        }
+
+        public static void Error(string message)
+        {
+            SendReport("error", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
+        }
+
+        public static void Exception(string message, Exception exception)
+        {
+            SendReport("exception", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
+        }
+
+        private static void SendReport(string level, Assembly assembly, string culprit, string message, string exception = null)
+        {
+            var body = JsonConvert.SerializeObject(new Report(level, assembly, culprit, message, exception.ToString()));
+            webrequests.EnqueuePost(url, body, OnReportSent, null, BuildHeaders());
+        }
+
+        private static void OnReportSent(int code, string response)
+        {
         }
         
         [MethodImpl(MethodImplOptions.NoInlining)]
