@@ -57,6 +57,7 @@
     <Compile Include="Libraries\WebRequests.cs" />
     <Compile Include="Logging\CompoundLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\RemoteLogger.cs" />
     <Compile Include="Logging\RotatingFileLogger.cs" />
     <Compile Include="Logging\ThreadedLogger.cs" />
     <Compile Include="OxideMod.cs" />
