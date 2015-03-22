@@ -27,7 +27,7 @@ namespace Oxide.Plugins
             ProjectReferences.Add("System.Data");
             
             // Check if compatible compiler is installed
-            PluginCompiler.BinaryPath = Interface.GetMod().RootDirectory + @"\CSharpCompiler.exe";
+            PluginCompiler.BinaryPath = Interface.Oxide.RootDirectory + @"\CSharpCompiler.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
             {
                 Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
@@ -68,7 +68,7 @@ namespace Oxide.Plugins
 
             if (LoadingPlugins.Contains(name))
             {
-                Interface.GetMod().LogInfo("Plugin is already being loaded: {0}", name);
+                Interface.Oxide.LogWarning("Plugin is already being loaded: {0}", name);
                 return null;
             }
 
@@ -104,11 +104,11 @@ namespace Oxide.Plugins
             {
                 if (!compiled)
                 {
-                    Interface.GetMod().LogInfo("Plugin failed to compile: {0} (leaving previous version loaded)", name);
+                    Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", name);
                     return;
                 }
-                Interface.GetMod().UnloadPlugin(name);
-                Interface.GetMod().LoadPlugin(name);
+                Interface.Oxide.UnloadPlugin(name);
+                Interface.Oxide.LoadPlugin(name);
             });
         }
 

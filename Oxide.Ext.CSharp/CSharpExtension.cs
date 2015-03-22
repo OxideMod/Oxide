@@ -47,7 +47,7 @@ namespace Oxide.Plugins
             loader = new CSharpPluginLoader(this);
             Manager.RegisterPluginLoader(loader);
             // Register engine frame callback
-            Interface.GetMod().OnFrame(OnFrame);
+            Interface.Oxide.OnFrame(OnFrame);
         }
 
         /// <summary>

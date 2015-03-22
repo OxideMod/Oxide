@@ -47,7 +47,7 @@ namespace Oxide.Plugins
 
     public class PluginTimers
     {
-        private Unity.Libraries.Timer timer = Interface.GetMod().GetLibrary<Unity.Libraries.Timer>("Timer");
+        private Unity.Libraries.Timer timer = Interface.Oxide.GetLibrary<Unity.Libraries.Timer>("Timer");
         private Plugin plugin;
 
         public PluginTimers(Plugin plugin)
