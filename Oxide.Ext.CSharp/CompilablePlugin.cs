@@ -79,15 +79,22 @@ namespace Oxide.Plugins
                     CompiledRawAssembly = raw_assembly;
                 }
                 compiler = null;
-                CheckLastModificationTime();
-                if (LastCompiledAt == LastModifiedAt)
+                if (raw_assembly == null)
                 {
-                    callback(raw_assembly != null);
+                    callback(false);
                 }
                 else
-                { 
-                    Interface.Oxide.LogInfo("{0} plugin was changed during compilation and needs to be recompiled", ScriptName);
-                    Compile(callback);
+                {
+                    CheckLastModificationTime();
+                    if (LastCompiledAt == LastModifiedAt)
+                    {
+                        callback(true);
+                    }
+                    else
+                    {
+                        Interface.Oxide.LogInfo("{0} plugin was changed during compilation and needs to be recompiled", ScriptName);
+                        Compile(callback);
+                    }
                 }
             });
         }
