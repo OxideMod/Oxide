@@ -17,6 +17,11 @@ namespace Oxide.Core
     public sealed class OxideMod
     {
         /// <summary>
+        /// The current Oxide version
+        /// </summary>
+        public static readonly VersionNumber Version = new VersionNumber(2, 0, 0);
+
+        /// <summary>
         /// Gets the main logger
         /// </summary>
         public CompoundLogger RootLogger { get; private set; }
@@ -25,6 +30,11 @@ namespace Oxide.Core
         /// Gets the main pluginmanager
         /// </summary>
         public PluginManager RootPluginManager { get; private set; }
+
+        /// <summary>
+        /// Gets the data file system
+        /// </summary>
+        public DataFileSystem DataFileSystem { get; private set; }
 
         // Various directories
         public string RootDirectory { get; private set; }
@@ -35,21 +45,14 @@ namespace Oxide.Core
         public string DataDirectory { get; private set; }
         public string LogDirectory { get; private set; }
         public string TempDirectory { get; private set; }
-        
-        /// <summary>
-        /// Gets the data file system
-        /// </summary>
-        public DataFileSystem DataFileSystem { get; private set; }
 
+        // Gets the number of seconds since the server started
+        public float Now { get { return getTimeSinceStartup(); } }
+        
         /// <summary>
         /// This is true if the server is shutting down
         /// </summary>
         public bool IsShuttingDown { get; private set; }
-
-        /// <summary>
-        /// The current Oxide version
-        /// </summary>
-        public static readonly VersionNumber Version = new VersionNumber(2, 0, 0);
         
         // The rotating file logger
         private RotatingFileLogger filelogger;
@@ -64,14 +67,18 @@ namespace Oxide.Core
         private OxideConfig rootconfig;
 
         // Various libraries
+        private Timer libtimer;
         private WebRequests libwebrequests;
+
+        // Extension implemented delegates
+        private Func<float> getTimeSinceStartup;
 
         // Thread safe NextTick callback queue
         private List<Action> nextTickQueue = new List<Action>();
         private object nextTickLock = new object();
 
         // Allow extensions to register a method to be called every frame
-        private Action onFrame;
+        private Action<float> onFrame;
         private bool isInitialized = false;
 
         /// <summary>
@@ -131,6 +138,7 @@ namespace Oxide.Core
             // Register core libraries
             extensionmanager.RegisterLibrary("Global", new Global());
             extensionmanager.RegisterLibrary("Time", new Time());
+            extensionmanager.RegisterLibrary("Timer", libtimer = new Timer());
             extensionmanager.RegisterLibrary("Permission", new Permission());
             extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(RootPluginManager));
             extensionmanager.RegisterLibrary("WebRequests", libwebrequests = new WebRequests());
@@ -413,7 +421,7 @@ namespace Oxide.Core
         /// Register a callback which will be called every server frame
         /// </summary>
         /// <param name="callback"></param>
-        public void OnFrame(Action callback)
+        public void OnFrame(Action<float> callback)
         {
             onFrame += callback;
         }
@@ -442,6 +450,7 @@ namespace Oxide.Core
                 }
 
             // Update libraries
+            libtimer.Update(delta);
             libwebrequests.Update();
 
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
@@ -459,13 +468,22 @@ namespace Oxide.Core
             UpdatePluginWatchers();
 
             // Update extensions
-            onFrame();
+            onFrame(delta);
         }
 
         public void OnShutdown()
         {
             IsShuttingDown = true;
             UnloadAllPlugins();
+        }
+
+        /// <summary>
+        /// Called by an engine-specific extension to register the engine clock
+        /// </summary>
+        /// <param name="method"></param>
+        public void RegisterEngineClock(Func<float> method)
+        {
+            getTimeSinceStartup = method;
         }
 
         #region Plugin Change Watchers

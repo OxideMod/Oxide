@@ -73,10 +73,10 @@ namespace Oxide.Plugins
         /// <summary>
         /// Called by engine every server frame
         /// </summary>
-        private void OnFrame()
+        private void OnFrame(float delta)
         {
             foreach (var plugin in loader.LoadedPlugins)
-                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", null);
+                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", delta);
         }
     }
 }

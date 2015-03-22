@@ -103,11 +103,11 @@ namespace Oxide.Plugins
         {
             //Interface.Oxide.LogInfo("Loading plugin: {0}_{1}", Name, version);
 
-            var started_at = UnityEngine.Time.realtimeSinceStartup;
+            var started_at = Interface.Oxide.Now;
 
             PatchAssembly(should_rollback, raw_assembly =>
             {
-                //Interface.Oxide.LogInfo("Patching {0} took {1}ms", Name, Math.Round((UnityEngine.Time.realtimeSinceStartup - started_at) * 1000f));
+                //Interface.Oxide.LogInfo("Patching {0} took {1}ms", Name, Math.Round((Interface.Oxide.Now - started_at) * 1000f));
 
                 var assembly = Assembly.Load(raw_assembly);
 
@@ -181,7 +181,7 @@ namespace Oxide.Plugins
             }
             
             var raw_assembly = last_good_version ? LastGoodRawAssembly : CompiledRawAssembly;
-            var started_at = UnityEngine.Time.realtimeSinceStartup;
+            var started_at = Interface.Oxide.Now;
 
             //Interface.Oxide.LogInfo("Patching plugin assembly: {0}", Name);
             isPatching = true;
@@ -313,7 +313,7 @@ namespace Oxide.Plugins
                     Interface.Oxide.NextTick(() =>
                     {
                         isPatching = false;
-                        //Interface.Oxide.LogDebug("Patching {0} assembly took {1:0.00} ms", ScriptName, UnityEngine.Time.realtimeSinceStartup - started_at);
+                        //Interface.Oxide.LogDebug("Patching {0} assembly took {1:0.00} ms", ScriptName, Interface.Oxide.Now - started_at);
                         callback(patched_assembly);
                     });
                 }

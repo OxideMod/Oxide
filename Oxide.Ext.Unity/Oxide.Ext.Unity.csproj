@@ -40,7 +40,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\Timer.cs" />
     <Compile Include="Logging\UnityLogger.cs" />
     <Compile Include="Plugins\UnityCore.cs" />
     <Compile Include="Plugins\UnityPluginLoader.cs" />
@@ -54,7 +53,9 @@
       <Name>Oxide.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Libraries\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

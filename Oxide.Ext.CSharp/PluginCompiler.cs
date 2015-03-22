@@ -133,7 +133,7 @@ namespace Oxide.Plugins
 
             process = new Process { StartInfo = start_info, EnableRaisingEvents = true };
 
-            startedAt = UnityEngine.Time.realtimeSinceStartup;
+            startedAt = Interface.Oxide.Now;
             StdOutput = new StringBuilder();
             ErrOutput = new StringBuilder();
 
@@ -173,7 +173,7 @@ namespace Oxide.Plugins
 
         private void OnExited(object sender, EventArgs e)
         {
-            endedAt = UnityEngine.Time.realtimeSinceStartup;
+            endedAt = Interface.Oxide.Now;
             ExitCode = process.ExitCode;
             byte[] raw_assembly = null;
             if (ExitCode == 0)

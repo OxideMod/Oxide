@@ -53,6 +53,7 @@
     <Compile Include="Libraries\Permission.cs" />
     <Compile Include="Libraries\Plugins.cs" />
     <Compile Include="Libraries\Time.cs" />
+    <Compile Include="Libraries\Timer.cs" />
     <Compile Include="Libraries\WebRequests.cs" />
     <Compile Include="Logging\CompoundLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Plugins\Watchers\FileChange.cs" />
     <Compile Include="Plugins\Watchers\PluginChangeWatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Random.cs" />
     <Compile Include="VersionNumber.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
