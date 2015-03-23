@@ -17,6 +17,7 @@ namespace Oxide.Plugins
 
         private CSharpExtension extension;
         private Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
+        private List<CompilablePlugin> compilationQueue = new List<CompilablePlugin>();
 
         public CSharpPluginLoader(CSharpExtension extension)
         {
@@ -80,7 +81,7 @@ namespace Oxide.Plugins
             {
                 // Load the plugin assembly if it was successfully compiled
                 if (compiled)
-                    compilable_plugin.LoadAssembly(plugin =>
+                    compilable_plugin.LoadPlugin(plugin =>
                     {
                         LoadingPlugins.Remove(name);
                         if (plugin != null) LoadedPlugins.Add(plugin);
@@ -120,6 +121,47 @@ namespace Oxide.Plugins
         {
             var plugin = plugin_base as CSharpPlugin;
             LoadedPlugins.Remove(plugin);
+        }
+
+        /// <summary>
+        /// Called when a CompilablePlugin wants to be compiled
+        /// </summary>
+        /// <param name="plugin"></param>
+        public void CompilationRequested(CompilablePlugin plugin)
+        {
+            compilationQueue.Add(plugin);
+            if (compilationQueue.Count > 1) return;
+            Interface.Oxide.NextTick(() =>
+            {
+                CompileAssembly(compilationQueue.ToArray());
+                compilationQueue.Clear();
+            });
+        }
+        
+        private void CompileAssembly(CompilablePlugin[] plugins)
+        {
+            var compiler = new PluginCompiler(plugins);
+            foreach (var pl in plugins) pl.OnCompilationStarted(compiler);
+            compiler.Compile(raw_assembly =>
+            {
+                var plugin_names = string.Join(", ", compiler.Plugins.Select(pl => pl.Name).ToArray());
+                if (compiler.Plugins.Count > 1 && raw_assembly == null)
+                {
+                    Interface.Oxide.LogError($"A batch of {compiler.Plugins.Count} plugins failed to compile, attempting to compile separately");
+                    foreach (var plugin in compiler.Plugins) CompileAssembly(new[] { plugin });
+                    return;
+                }
+                if (raw_assembly == null)
+                {
+                    foreach (var plugin in compiler.Plugins) plugin.OnCompilationFailed();
+                }
+                else
+                {
+                    Interface.Oxide.LogInfo("{0} {1} compiled successfully in {2}ms", plugin_names, compiler.Plugins.Count > 1 ? "were" : "was", Math.Round(compiler.Duration * 1000f));
+                    var compiled_assembly = new CompiledAssembly(compiler.Plugins.ToArray(), raw_assembly);
+                    foreach (var plugin in compiler.Plugins) plugin.OnCompilationSucceeded(compiled_assembly);
+                }
+            });
         }
 
         private CompilablePlugin GetCompilablePlugin(CSharpExtension extension, string directory, string name)

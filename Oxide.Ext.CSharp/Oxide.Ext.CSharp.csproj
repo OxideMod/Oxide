@@ -38,6 +38,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompiledAssembly.cs" />
     <Compile Include="CSharpExtension.cs" />
     <Compile Include="CSharpPlugin.cs" />
     <Compile Include="CSharpPluginLoader.cs" />
