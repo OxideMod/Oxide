@@ -107,7 +107,7 @@ namespace Oxide.Plugins
             ResolveReferences(() =>
             {
                 if (Plugins.Count < 1) return;
-                compiledName = Plugins.Count == 1 ? Plugins[0].Name : "plugins_" + Math.Round(Interface.Oxide.Now * 100000f);                
+                compiledName = (Plugins.Count == 1 ? Plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 100000f);                
                 SpawnCompiler();
             });
         }
