@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Oxide.Core.Plugins
 {
@@ -11,13 +12,21 @@ namespace Oxide.Core.Plugins
         /// Stores the names of plugins which are currently loading asynchronously
         /// </summary>
         public List<string> LoadingPlugins = new List<string>();
+        
+        /// <summary>
+        /// Stores the names of core plugins which should never be unloaded
+        /// </summary>
+        public virtual Type[] CorePlugins { get; } = new Type[0];
 
         /// <summary>
         /// Scans the specified directory and returns a set of plugin names for plugins that this loader can load
         /// </summary>
         /// <param name="directory"></param>
         /// <returns></returns>
-        public abstract IEnumerable<string> ScanDirectory(string directory);
+        public virtual IEnumerable<string> ScanDirectory(string directory)
+        {
+            return new string[0];
+        }
 
         /// <summary>
         /// Loads a plugin given the specified name
@@ -25,7 +34,10 @@ namespace Oxide.Core.Plugins
         /// <param name="directory"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public abstract Plugin Load(string directory, string name);
+        public virtual Plugin Load(string directory, string name)
+        {
+            return null;
+        }
 
         /// <summary>
         /// Reloads a plugin given the specified name, implemented by plugin loaders which support reloading plugins
@@ -35,8 +47,8 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public virtual void Reload(string directory, string name)
         {
-            Interface.GetMod().UnloadPlugin(name);
-            Interface.GetMod().LoadPlugin(name);
+            Interface.Oxide.UnloadPlugin(name);
+            Interface.Oxide.LoadPlugin(name);
         }
 
         /// <summary>

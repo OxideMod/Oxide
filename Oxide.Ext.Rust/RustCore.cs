@@ -49,9 +49,9 @@ namespace Oxide.Rust.Plugins
             HasConfig = false;
 
             // Get the pluginmanager
-            pluginmanager = Interface.GetMod().RootPluginManager;
-            permission = Interface.GetMod().GetLibrary<Permission>("Permission");
-            rust = Interface.GetMod().GetLibrary<Libraries.Rust>("Rust");
+            pluginmanager = Interface.Oxide.RootPluginManager;
+            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
+            rust = Interface.Oxide.GetLibrary<Libraries.Rust>("Rust");
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Oxide.Rust.Plugins
         private void Init()
         {
             // Get the command library
-            Command cmdlib = Interface.GetMod().GetLibrary<Command>("Command");
+            Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
 
             // Add our commands
             cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
@@ -108,7 +108,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown()
         {
-            Interface.GetMod().OnShutdown();
+            Interface.Oxide.OnShutdown();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Oxide.Rust.Plugins
 
             if (arg.GetString(0).Equals("*"))
             {
-                Interface.GetMod().LoadAllPlugins();
+                Interface.Oxide.LoadAllPlugins();
                 return;
             }
 
@@ -146,7 +146,7 @@ namespace Oxide.Rust.Plugins
             {
                 if (string.IsNullOrEmpty(name)) continue;
                 // Load
-                Interface.GetMod().LoadPlugin(name);
+                Interface.Oxide.LoadPlugin(name);
                 pluginmanager.GetPlugin(name);
             }
         }
@@ -168,7 +168,7 @@ namespace Oxide.Rust.Plugins
 
             if (arg.GetString(0).Equals("*"))
             {
-                Interface.GetMod().UnloadAllPlugins(new []{"rustcore", "unitycore"});
+                Interface.Oxide.UnloadAllPlugins();
                 return;
             }
 
@@ -177,7 +177,7 @@ namespace Oxide.Rust.Plugins
                 if (string.IsNullOrEmpty(name)) continue;
 
                 // Unload
-                Interface.GetMod().UnloadPlugin(name);
+                Interface.Oxide.UnloadPlugin(name);
             }
         }
 
@@ -198,7 +198,7 @@ namespace Oxide.Rust.Plugins
 
             if (arg.GetString(0).Equals("*"))
             {
-                Interface.GetMod().ReloadAllPlugins(new[] { "rustcore", "unitycore" });
+                Interface.Oxide.ReloadAllPlugins();
                 return;
             }
 
@@ -207,7 +207,7 @@ namespace Oxide.Rust.Plugins
                 if (string.IsNullOrEmpty(name)) continue;
 
                 // Reload
-                Interface.GetMod().ReloadPlugin(name);
+                Interface.Oxide.ReloadPlugin(name);
             }
         }
 
@@ -517,7 +517,7 @@ namespace Oxide.Rust.Plugins
                     if (cmd == null) return null;
 
                     // Handle it
-                    Command cmdlib = Interface.GetMod().GetLibrary<Command>("Command");
+                    Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
                     BasePlayer ply = arg.connection.player as BasePlayer;
                     if (ply == null)
                     {
