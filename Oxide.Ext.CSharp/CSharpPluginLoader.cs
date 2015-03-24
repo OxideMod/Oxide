@@ -153,7 +153,11 @@ namespace Oxide.Plugins
                 }
                 if (raw_assembly == null)
                 {
-                    foreach (var plugin in compiler.Plugins) plugin.OnCompilationFailed();
+                    var plugin = compiler.Plugins[0];
+                    plugin.OnCompilationFailed();
+                    Interface.Oxide.LogError("{0} plugin failed to compile! Exit code: {1}", plugin.ScriptName, compiler.ExitCode);
+                    Interface.Oxide.LogWarning(compiler.StdOutput.ToString());
+                    if (compiler.ErrOutput.Length > 0) Interface.Oxide.LogError(compiler.ErrOutput.ToString());
                 }
                 else
                 {

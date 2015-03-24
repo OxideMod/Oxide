@@ -128,6 +128,7 @@ namespace Oxide.Plugins
         public void OnCompilationFailed()
         {
             isCompilationQueued = false;
+            LastCompiledAt = default(DateTime);
             callback(false);
         }
 
