@@ -78,7 +78,11 @@ namespace Oxide.Plugins
                     compilable_plugin.LoadPlugin(plugin =>
                     {
                         LoadingPlugins.Remove(name);
-                        if (plugin != null) LoadedPlugins.Add(plugin);
+                        if (plugin != null)
+                        {
+                            plugin.Loader = this;
+                            LoadedPlugins.Add(plugin);
+                        }
                     });
                 else
                     LoadingPlugins.Remove(name);
@@ -149,9 +153,18 @@ namespace Oxide.Plugins
                 {
                     var plugin = compiler.Plugins[0];
                     plugin.OnCompilationFailed();
+                    PluginErrors[plugin.Name] = "Failed to compile";
                     Interface.Oxide.LogError("{0} plugin failed to compile! Exit code: {1}", plugin.ScriptName, compiler.ExitCode);
-                    Interface.Oxide.LogWarning(compiler.StdOutput.ToString());
-                    if (compiler.ErrOutput.Length > 0) Interface.Oxide.LogError(compiler.ErrOutput.ToString());
+                    foreach (var line in compiler.StdOutput.ToString().Split('\n'))
+                        if (!line.StartsWith("Compilation failed: ")) Interface.Oxide.LogWarning(line);
+                    
+                    if (compiler.ErrOutput.Length > 0)
+                    {
+                        var error_output = compiler.ErrOutput.ToString();
+                        error_output = error_output.Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
+                        PluginErrors[plugin.Name] = "Failed to compile: " + error_output;
+                        Interface.Oxide.LogError(error_output);
+                    }
                 }
                 else
                 {

@@ -11,8 +11,13 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Stores the names of plugins which are currently loading asynchronously
         /// </summary>
-        public List<string> LoadingPlugins = new List<string>();
-        
+        public List<string> LoadingPlugins { get; } = new List<string>();
+
+        /// <summary>
+        /// Stores the last error a plugin had while loading
+        /// </summary>
+        public Dictionary<string, string> PluginErrors { get; } = new Dictionary<string, string>();
+
         /// <summary>
         /// Stores the names of core plugins which should never be unloaded
         /// </summary>

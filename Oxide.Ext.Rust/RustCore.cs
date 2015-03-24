@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-using Oxide.Core.Logging;
 
 using Oxide.Rust.Libraries;
 
@@ -73,6 +73,7 @@ namespace Oxide.Rust.Plugins
             Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
 
             // Add our commands
+            cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
             cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
             cmdlib.AddConsoleCommand("oxide.unload", this, "cmdUnload");
             cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
@@ -119,6 +120,42 @@ namespace Oxide.Rust.Plugins
         private void OnPluginLoaded(Plugin plugin)
         {
             if (ServerInitialized) plugin.CallHook("OnServerInitialized");
+        }
+
+        /// <summary>
+        /// Called when the "oxide.plugins" command has been executed
+        /// </summary>
+        [HookMethod("cmdPlugins")]
+        private void cmdPlugins(ConsoleSystem.Arg arg)
+        {
+            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            
+            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
+            var unloaded_plugin_errors = new Dictionary<string, string>();
+            foreach (var loader in Interface.Oxide.GetPluginLoaders())
+            {
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
+                {
+                    string msg;
+                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                }
+            }
+
+            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
+            if (total_plugin_count < 1)
+            {
+                arg.ReplyWith($"[Oxide] No plugins are currently available");
+                return;
+            }
+
+            var output = $"[Oxide] Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
+            var number = 1;
+            foreach (var plugin in loaded_plugins)
+                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
+            foreach (var plugin_name in unloaded_plugin_errors.Keys)
+                output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            arg.ReplyWith(output);
         }
 
         /// <summary>

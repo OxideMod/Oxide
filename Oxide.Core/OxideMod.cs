@@ -188,6 +188,15 @@ namespace Oxide.Core
         }
 
         /// <summary>
+        /// Gets all loaded extensions
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PluginLoader> GetPluginLoaders()
+        {
+            return extensionmanager.GetPluginLoaders();
+        }
+
+        /// <summary>
         /// Logs a formatted info message to the root logger
         /// </summary>
         /// <param name="format"></param>
@@ -288,6 +297,7 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
+                            loader.PluginErrors[name] = ex.Message;
                             LogException(string.Format("Failed to load plugin {0}", name), ex);
                         }
                     }
@@ -346,6 +356,7 @@ namespace Oxide.Core
             {
                 plugin = loader.Load(PluginDirectory, name);
                 if (plugin == null) return; // async load
+                plugin.Loader = loader;
                 PluginLoaded(plugin);
             }
             catch (Exception ex)
@@ -368,6 +379,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
+                if (plugin.Loader != null) plugin.Loader.PluginErrors[plugin.Name] = ex.Message;
                 LogException("Failed to initialize plugin " + plugin.Name, ex);
                 return false;
             }
