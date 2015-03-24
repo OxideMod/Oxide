@@ -71,6 +71,15 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
+        /// Called by a CompilablePlugin that wants to be compiled
+        /// </summary>
+        /// <param name="plugin"></param>
+        public void CompilationRequested(CompilablePlugin plugin)
+        {
+            loader.CompilationRequested(plugin);
+        }
+
+        /// <summary>
         /// Called by engine every server frame
         /// </summary>
         private void OnFrame(float delta)

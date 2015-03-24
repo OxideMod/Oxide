@@ -61,6 +61,16 @@ namespace Oxide.Core.Plugins
         public bool HasConfig { get; protected set; }
 
         /// <summary>
+        /// Gets if this plugin should never be unloaded
+        /// </summary>
+        public bool IsCorePlugin { get; set; }
+
+        /// <summary>
+        /// Gets the PluginLoader which loaded this plugin
+        /// </summary>
+        public PluginLoader Loader { get; set; }
+
+        /// <summary>
         /// Gets the object associated with this plugin
         /// </summary>
         public virtual object Object { get { return this; } }

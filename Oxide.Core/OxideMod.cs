@@ -79,7 +79,8 @@ namespace Oxide.Core
 
         // Allow extensions to register a method to be called every frame
         private Action<float> onFrame;
-        private bool isInitialized = false;
+        private bool isInitialized;
+        private bool hasLoadedCorePlugins;
 
         /// <summary>
         /// Initializes a new instance of the OxideMod class
@@ -187,6 +188,15 @@ namespace Oxide.Core
         }
 
         /// <summary>
+        /// Gets all loaded extensions
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PluginLoader> GetPluginLoaders()
+        {
+            return extensionmanager.GetPluginLoaders();
+        }
+
+        /// <summary>
         /// Logs a formatted info message to the root logger
         /// </summary>
         /// <param name="format"></param>
@@ -248,8 +258,30 @@ namespace Oxide.Core
         /// </summary>
         public void LoadAllPlugins()
         {
-            // Get all plugin loaders, scan the plugin directory and load all reported plugins
-            foreach (var loader in extensionmanager.GetPluginLoaders())
+            var loaders = extensionmanager.GetPluginLoaders();
+            // Load all core plugins first
+            if (!hasLoadedCorePlugins)
+            {
+                hasLoadedCorePlugins = true;
+                foreach (var loader in loaders)
+                {
+                    foreach (var type in loader.CorePlugins)
+                    {
+                        try
+                        {
+                            var plugin = (Plugin)Activator.CreateInstance(type);
+                            plugin.IsCorePlugin = true;
+                            PluginLoaded(plugin);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogException(string.Format("Failed to load core plugin {0}", type.Name), ex);
+                        }
+                    }
+                }
+            }
+            // Scan the plugin directory and load all reported plugins
+            foreach (var loader in loaders)
             {
                 foreach (string name in loader.ScanDirectory(PluginDirectory))
                 {
@@ -265,6 +297,7 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
+                            loader.PluginErrors[name] = ex.Message;
                             LogException(string.Format("Failed to load plugin {0}", name), ex);
                         }
                     }
@@ -277,8 +310,7 @@ namespace Oxide.Core
         /// </summary>
         public void UnloadAllPlugins(IList<string> skip = null)
         {
-            //TODO: Find a way to differentiate core plugins from reloadable ones
-            foreach (var plugin in RootPluginManager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
+            foreach (var plugin in RootPluginManager.GetPlugins().Where(p => !p.IsCorePlugin && (skip == null || !skip.Contains(p.Name))).ToArray())
             {
                 UnloadPlugin(plugin.Name);
             }
@@ -289,8 +321,7 @@ namespace Oxide.Core
         /// </summary>
         public void ReloadAllPlugins(IList<string> skip = null)
         {
-            //TODO: Find a way to differentiate core plugins from reloadable ones
-            foreach (var plugin in RootPluginManager.GetPlugins().Where(p => skip == null || !skip.Contains(p.Name)).ToArray())
+            foreach (var plugin in RootPluginManager.GetPlugins().Where(p => !p.IsCorePlugin && (skip == null || !skip.Contains(p.Name))).ToArray())
             {
                 ReloadPlugin(plugin.Name);
             }
@@ -325,6 +356,7 @@ namespace Oxide.Core
             {
                 plugin = loader.Load(PluginDirectory, name);
                 if (plugin == null) return; // async load
+                plugin.Loader = loader;
                 PluginLoaded(plugin);
             }
             catch (Exception ex)
@@ -347,6 +379,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
+                if (plugin.Loader != null) plugin.Loader.PluginErrors[plugin.Name] = ex.Message;
                 LogException("Failed to initialize plugin " + plugin.Name, ex);
                 return false;
             }
