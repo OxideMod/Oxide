@@ -85,7 +85,10 @@ namespace Oxide.Plugins
                         }
                     });
                 else
+                {
                     LoadingPlugins.Remove(name);
+                    compilable_plugin.IsReloading = false;
+                }
             });
 
             return null;
@@ -117,7 +120,10 @@ namespace Oxide.Plugins
                 }
                 Interface.Oxide.UnloadPlugin(name);
                 // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
-                Interface.Oxide.NextTick(() => Interface.Oxide.LoadPlugin(name));
+                Interface.Oxide.NextTick(() =>
+                {
+                    if (!Interface.Oxide.LoadPlugin(name)) compilable_plugin.IsReloading = false;
+                });
             });
         }
 
@@ -165,9 +171,12 @@ namespace Oxide.Plugins
                     plugin.OnCompilationFailed();
                     PluginErrors[plugin.Name] = "Failed to compile";
                     Interface.Oxide.LogError("{0} plugin failed to compile! Exit code: {1}", plugin.ScriptName, compiler.ExitCode);
-                    foreach (var line in compiler.StdOutput.ToString().Split('\n'))
+                    foreach (var raw_line in compiler.StdOutput.ToString().Split('\n'))
+                    {
+                        var line = raw_line.Trim();
+                        if (line.Length < 1) continue;
                         if (!line.StartsWith("Compilation failed: ")) Interface.Oxide.LogWarning(line);
-                    
+                    }
                     if (compiler.ErrOutput.Length > 0)
                     {
                         var error_output = compiler.ErrOutput.ToString();

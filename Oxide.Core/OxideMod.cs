@@ -331,22 +331,22 @@ namespace Oxide.Core
         /// Loads a plugin by the given name
         /// </summary>
         /// <param name="name"></param>
-        public void LoadPlugin(string name)
+        public bool LoadPlugin(string name)
         {
             // Check if the plugin is already loaded
-            if (RootPluginManager.GetPlugin(name) != null) return;
+            if (RootPluginManager.GetPlugin(name) != null) return false;
 
             // Find all plugin loaders that lay claim to the name
             var loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where((l) => l.ScanDirectory(PluginDirectory).Contains(name)));
             if (loaders.Count == 0)
             {
                 LogError("Failed to load plugin '{0}' (no source found)", name);
-                return;
+                return false;
             }
             if (loaders.Count > 1)
             {
                 LogError("Failed to load plugin '{0}' (multiple sources found)", name);
-                return;
+                return false;
             }
             var loader = loaders.First();
 
@@ -355,14 +355,15 @@ namespace Oxide.Core
             try
             {
                 plugin = loader.Load(PluginDirectory, name);
-                if (plugin == null) return; // async load
+                if (plugin == null) return true; // async load
                 plugin.Loader = loader;
                 PluginLoaded(plugin);
+                return true;
             }
             catch (Exception ex)
             {
                 LogException("Failed to load plugin " + name, ex);
-                return;
+                return false;
             }
         }
 
