@@ -99,15 +99,25 @@ namespace Oxide.Plugins
         public override void Reload(string directory, string name)
         {
             // Attempt to compile the plugin before unloading the old version
-            GetCompilablePlugin(extension, directory, name).Compile(compiled =>
+            var compilable_plugin = GetCompilablePlugin(extension, directory, name);
+            if (compilable_plugin.IsReloading)
+            {
+                Interface.Oxide.LogWarning("Reload requested for plugin which is already reloading: {0}", name);
+                RemoteLogger.Warning("Reload requested for plugin which is already reloading: " + name);
+                return;
+            }
+            compilable_plugin.IsReloading = true;
+            compilable_plugin.Compile(compiled =>
             {
                 if (!compiled)
                 {
                     Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", name);
+                    compilable_plugin.IsReloading = false;
                     return;
                 }
                 Interface.Oxide.UnloadPlugin(name);
-                Interface.Oxide.LoadPlugin(name);
+                // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
+                Interface.Oxide.NextTick(() => Interface.Oxide.LoadPlugin(name));
             });
         }
 
