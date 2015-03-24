@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
 
@@ -18,6 +19,7 @@ namespace Oxide.Plugins
         public CompiledAssembly LastGoodAssembly;
         public DateTime LastModifiedAt;
         public DateTime LastCompiledAt;
+        public bool IsReloading;
 
         private Action<bool> callback;
         private bool isCompilationQueued;
@@ -46,12 +48,14 @@ namespace Oxide.Plugins
                 Interface.Oxide.LogDebug("Plugin compilation is already queued: {0}", ScriptName);
                 return;
             }
-            CheckLastModificationTime();
-            if (CompiledAssembly != null && !CompiledAssembly.IsBatch && LastCompiledAt == LastModifiedAt)
+            if (CompiledAssembly != null && !HasBeenModified())
             {
-                //Interface.Oxide.LogDebug("Plugin is already compiled: {0}", Name);
-                callback(true);
-                return;
+                if (!CompiledAssembly.IsBatch || CompiledAssembly.CompilablePlugins.All(pl => pl.IsReloading))
+                {
+                    //Interface.Oxide.LogDebug("Plugin is already compiled: {0}", Name);
+                    callback(true);
+                    return;
+                }
             }
             this.callback = callback;
             isCompilationQueued = true;
@@ -66,8 +70,10 @@ namespace Oxide.Plugins
                 return;
             }
 
+
             CompiledAssembly.LoadAssembly(loaded =>
             {
+                IsReloading = false;
                 if (loaded)
                 {
                     var type = CompiledAssembly.LoadedAssembly.GetType("Oxide.Plugins." + Name);
@@ -113,13 +119,6 @@ namespace Oxide.Plugins
 
         public void OnCompilationSucceeded(CompiledAssembly compiled_assembly)
         {
-            CheckLastModificationTime();
-            if (LastCompiledAt != LastModifiedAt)
-            {
-                Interface.Oxide.LogInfo("{0} plugin was changed during compilation and needs to be recompiled", ScriptName);
-                Extension.CompilationRequested(this);
-                return;
-            }
             isCompilationQueued = false;
             CompiledAssembly = compiled_assembly;
             callback(true);
