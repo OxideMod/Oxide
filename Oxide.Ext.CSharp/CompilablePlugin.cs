@@ -67,6 +67,8 @@ namespace Oxide.Plugins
             if (CompiledAssembly == null)
             { 
                 Interface.Oxide.LogError("Load called before a compiled assembly exists: " + Name);
+                RemoteLogger.Error("Load called before a compiled assembly exists: " + Name);
+                IsReloading = false;
                 return;
             }
 
