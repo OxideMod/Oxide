@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Oxide.Plugins
 {
@@ -26,7 +28,23 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Checks if a astring array contains a specific string
+        /// Turns an array of strings into a sentence
+        /// </summary>
+        /// <param name="strings"></param>
+        /// <returns></returns>
+        public static string ToSentence(this IEnumerable<string> enumerable)
+        {
+            var strings = enumerable.ToArray();
+            var output = strings[0];
+            if (strings.Length == 1) return output;
+            for (var i = 1; i < strings.Length - 1; i++)
+                output += ", " + strings[i];
+            output += " and " + strings[strings.Length - 1];
+            return output;
+        }
+
+        /// <summary>
+        /// Checks if a string array contains a specific string
         /// </summary>
         public static bool Contains(this string[] array, string value)
         {

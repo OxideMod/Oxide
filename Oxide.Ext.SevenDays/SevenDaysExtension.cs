@@ -41,6 +41,8 @@ namespace Oxide.SevenDays
         /// <param name="manager"></param>
         public override void Load()
         {
+            IsGameExtension = true;
+
             // Register our loader
             Manager.RegisterPluginLoader(new SevenDaysPluginLoader());
 

@@ -42,7 +42,7 @@ namespace Oxide.Plugins
         public void ResolveReferences(Action callback)
         {
             // Include references made by the CSharpPlugins project
-            references = new HashSet<string>(CSharpPluginLoader.ProjectReferences);
+            references = new HashSet<string>(CSharpPluginLoader.PluginReferences);
             
             ThreadPool.QueueUserWorkItem((_) =>
             {
@@ -88,7 +88,7 @@ namespace Oxide.Plugins
                         }
                     }
 
-                    callback(); //Interface.Oxide.NextTick(callback);
+                    callback();
                 }
                 catch (Exception ex)
                 {
@@ -152,7 +152,7 @@ namespace Oxide.Plugins
                     Interface.Oxide.NextTick(() =>
                     {
                         if (process.HasExited) return;
-                        var plugin_names = string.Join(", ", Plugins.Select(p => p.Name).ToArray());
+                        var plugin_names = Plugins.Select(p => p.Name).ToSentence();
                         Interface.Oxide.LogError("Timed out waiting for compiler to compile: " + plugin_names);
                         RemoteLogger.Error("Timed out waiting for compiler to compile: " + plugin_names);
                         process.Kill();
@@ -188,7 +188,7 @@ namespace Oxide.Plugins
                 }
                 catch (Exception ex)
                 {
-                    var plugin_names = string.Join(", ", Plugins.Select(p => p.Name).ToArray());
+                    var plugin_names = Plugins.Select(p => p.Name).ToSentence();
                     Interface.Oxide.LogError("Unable to read compiled plugins: {0} ({1})", plugin_names, ex.Message);
                     RemoteLogger.Error($"Unable to read compiled plugins: {plugin_names} ({ex.Message})");
                 }

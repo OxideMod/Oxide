@@ -49,7 +49,7 @@ namespace Oxide.Plugins
             CheckLastModificationTime();
             if (CompiledAssembly != null && !CompiledAssembly.IsBatch && LastCompiledAt == LastModifiedAt)
             {
-                Interface.Oxide.LogDebug("Plugin is already compiled: {0}", Name);
+                //Interface.Oxide.LogDebug("Plugin is already compiled: {0}", Name);
                 callback(true);
                 return;
             }

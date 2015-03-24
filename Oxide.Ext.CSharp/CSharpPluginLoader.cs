@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
-using System.Reflection;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -12,7 +11,8 @@ namespace Oxide.Plugins
 {
     public class CSharpPluginLoader : PluginLoader
     {
-        public static HashSet<string> ProjectReferences;
+        public static string[] DefaultReferences = { "System", "System.Core", "System.Data", "Oxide.Core", "Oxide.Ext.CSharp" };
+        public static HashSet<string> PluginReferences = new HashSet<string>(DefaultReferences);
         public List<CSharpPlugin> LoadedPlugins = new List<CSharpPlugin>();
 
         private CSharpExtension extension;
@@ -22,10 +22,6 @@ namespace Oxide.Plugins
         public CSharpPluginLoader(CSharpExtension extension)
         {
             this.extension = extension;
-
-            // Plugins inherit all references from Oxide.Ext.CSharp
-            ProjectReferences = new HashSet<string>(Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(r => r.Name));
-            ProjectReferences.Add("System.Data");
             
             // Check if compatible compiler is installed
             PluginCompiler.BinaryPath = Interface.Oxide.RootDirectory + @"\CSharpCompiler.exe";
@@ -39,20 +35,20 @@ namespace Oxide.Plugins
 
         public void OnModLoaded()
         {
-            // Include references to all loaded Oxide extensions and any assemblies they reference
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            // Include references to all loaded game extensions and any assemblies they reference
+            foreach (var extension in Interface.Oxide.GetAllExtensions())
             {
-                if (!assembly.FullName.StartsWith("Oxide.Ext")) continue;
-                ProjectReferences.Add(assembly.GetName().Name);
+                if (!extension.IsGameExtension) continue;
+                var assembly = extension.GetType().Assembly;
+                PluginReferences.Add(assembly.GetName().Name);
                 foreach (var reference in assembly.GetReferencedAssemblies())
-                    ProjectReferences.Add(reference.Name);
+                    PluginReferences.Add(reference.Name);
             }
         }
 
         public override IEnumerable<string> ScanDirectory(string directory)
         {
             if (PluginCompiler.BinaryPath == null) yield break;
-            //yield return "CSharpCore";
             foreach (string file in Directory.GetFiles(directory, "*.cs"))
                 yield return Path.GetFileNameWithoutExtension(file);
         }
@@ -65,8 +61,6 @@ namespace Oxide.Plugins
         /// <returns></returns>
         public override Plugin Load(string directory, string name)
         {
-            //if (name == "CSharpCore") return new CSharpCore();
-
             if (LoadingPlugins.Contains(name))
             {
                 Interface.Oxide.LogWarning("Plugin is already being loaded: {0}", name);
@@ -144,7 +138,7 @@ namespace Oxide.Plugins
             foreach (var pl in plugins) pl.OnCompilationStarted(compiler);
             compiler.Compile(raw_assembly =>
             {
-                var plugin_names = string.Join(", ", compiler.Plugins.Select(pl => pl.Name).ToArray());
+                var plugin_names = compiler.Plugins.Select(p => p.Name).ToSentence();
                 if (compiler.Plugins.Count > 1 && raw_assembly == null)
                 {
                     Interface.Oxide.LogError($"A batch of {compiler.Plugins.Count} plugins failed to compile, attempting to compile separately");

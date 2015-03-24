@@ -42,6 +42,8 @@ namespace Oxide.Rust
         /// <param name="manager"></param>
         public override void Load()
         {
+            IsGameExtension = true;
+
             // Register our loader
             Manager.RegisterPluginLoader(new RustPluginLoader());
 

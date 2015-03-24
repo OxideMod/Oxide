@@ -38,7 +38,7 @@ namespace Oxide.Plugins
         {
             CompilablePlugins = plugins;
             RawAssembly = raw_assembly;
-            PluginNames = string.Join(", ", CompilablePlugins.Select(pl => pl.Name).ToArray());
+            PluginNames = CompilablePlugins.Select(pl => pl.Name).ToSentence();
         }
 
         public void LoadAssembly(Action<bool> callback)
