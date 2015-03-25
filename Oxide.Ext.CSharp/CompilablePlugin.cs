@@ -15,6 +15,7 @@ namespace Oxide.Plugins
         public string ScriptName;
         public string ScriptPath;
         public string[] ScriptLines;
+        public string CompilerErrors;
         public CompiledAssembly CompiledAssembly;
         public CompiledAssembly LastGoodAssembly;
         public DateTime LastModifiedAt;

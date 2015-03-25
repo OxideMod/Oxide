@@ -63,7 +63,7 @@ namespace Oxide.Plugins
         {
             if (LoadingPlugins.Contains(name))
             {
-                Interface.Oxide.LogWarning("Plugin is already being loaded: {0}", name);
+                Interface.Oxide.LogDebug("Plugin is already being loaded: {0}", name);
                 return null;
             }
 
@@ -105,8 +105,7 @@ namespace Oxide.Plugins
             var compilable_plugin = GetCompilablePlugin(extension, directory, name);
             if (compilable_plugin.IsReloading)
             {
-                Interface.Oxide.LogWarning("Reload requested for plugin which is already reloading: {0}", name);
-                RemoteLogger.Warning("Reload requested for plugin which is already reloading: " + name);
+                Interface.Oxide.LogDebug("Reload requested for plugin which is already reloading: {0}", name);
                 return;
             }
             compilable_plugin.IsReloading = true;
@@ -187,9 +186,28 @@ namespace Oxide.Plugins
                 }
                 else
                 {
-                    Interface.Oxide.LogInfo("{0} {1} compiled successfully in {2}ms", plugin_names, compiler.Plugins.Count > 1 ? "were" : "was", Math.Round(compiler.Duration * 1000f));
-                    var compiled_assembly = new CompiledAssembly(compiler.Plugins.ToArray(), raw_assembly);
-                    foreach (var plugin in compiler.Plugins) plugin.OnCompilationSucceeded(compiled_assembly);
+                    var compiled_plugins = compiler.Plugins.Where(pl => pl.CompilerErrors == null).ToArray();
+                    CompiledAssembly compiled_assembly = null;
+                    if (compiled_plugins.Length > 0)
+                    {
+                        var compiled_names = compiled_plugins.Select(pl => pl.Name).ToSentence();
+                        var verb = compiled_names.Length > 1 ? "were" : "was";
+                        Interface.Oxide.LogInfo($"{compiled_names} {verb} compiled successfully in {Math.Round(compiler.Duration * 1000f)}ms");
+                        compiled_assembly = new CompiledAssembly(compiled_plugins, raw_assembly);
+                    }
+                    foreach (var plugin in compiler.Plugins)
+                    {
+                        if (plugin.CompilerErrors == null)
+                        {
+                            plugin.OnCompilationSucceeded(compiled_assembly);
+                        }
+                        else
+                        {
+                            plugin.OnCompilationFailed();
+                            PluginErrors[plugin.Name] = "Failed to compile: " + plugin.CompilerErrors;
+                            Interface.Oxide.LogError($"Error while compiling {plugin.CompilerErrors}");
+                        }
+                    }
                 }
             });
         }
