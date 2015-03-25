@@ -28,6 +28,7 @@ namespace Oxide.Plugins
         private float endedAt;
         private string compiledName;
         private HashSet<string> references;
+        private ManualResetEvent compilerExited = new ManualResetEvent(false);
 
         public PluginCompiler(CompilablePlugin[] plugins)
         {
@@ -64,6 +65,7 @@ namespace Oxide.Plugins
                             if (!File.Exists(path))
                             {
                                 Interface.Oxide.LogError("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
+                                plugin.CompilerErrors = "Referenced assembly does not exist: " + assembly_name;
                                 RemovePlugin(plugin);
                                 continue;
                             }
@@ -76,6 +78,7 @@ namespace Oxide.Plugins
                             catch (FileNotFoundException)
                             {
                                 Interface.Oxide.LogError("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
+                                plugin.CompilerErrors = "Referenced assembly is invalid: " + assembly_name;
                                 RemovePlugin(plugin);
                                 continue;
                             }
@@ -107,6 +110,7 @@ namespace Oxide.Plugins
             ResolveReferences(() =>
             {
                 if (Plugins.Count < 1) return;
+                foreach (var plugin in Plugins) plugin.CompilerErrors = null;
                 compiledName = (Plugins.Count == 1 ? Plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 100000f);                
                 SpawnCompiler();
             });
@@ -146,7 +150,7 @@ namespace Oxide.Plugins
 
             ThreadPool.QueueUserWorkItem((_) =>
             {
-                Thread.Sleep(120000);
+                if (compilerExited.WaitOne(120000)) return;
                 if (!process.HasExited)
                 {
                     Interface.Oxide.NextTick(() =>
@@ -161,9 +165,33 @@ namespace Oxide.Plugins
             });
         }
 
+        Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
+
         private void OnStdOutput(object sender, DataReceivedEventArgs e)
         {
             var process = sender as Process;
+            if (e.Data.StartsWith("warning: restarting compilation"))
+            {
+                foreach (var line in StdOutput.ToString().Split('\n'))
+                { 
+                    var match = fileErrorRegex.Match(line.Trim());
+                    for (var i = 1; i < match.Groups.Count; i++)
+                    {
+                        var value = match.Groups[i].Value;
+                        if (value == null || value.Trim() == string.Empty) continue;
+                        var file_name = value.Basename();
+                        var script_name = file_name.Substring(0, file_name.Length - 3);
+                        var compilable_plugin = Plugins.SingleOrDefault(pl => pl.ScriptName == script_name);
+                        if (compilable_plugin == null)
+                            Interface.Oxide.LogError("Unable to resolve script error to plugin: " + line);
+                        else
+                            compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
+                    }
+                }
+                StdOutput.Remove(0, StdOutput.Length);
+                ErrOutput.Remove(0, ErrOutput.Length);
+                return;
+            }
             StdOutput.Append(e.Data);
         }
 
@@ -177,6 +205,7 @@ namespace Oxide.Plugins
         {
             endedAt = Interface.Oxide.Now;
             ExitCode = process.ExitCode;
+            compilerExited.Set();
             byte[] raw_assembly = null;
             if (ExitCode == 0)
             {
@@ -206,6 +235,7 @@ namespace Oxide.Plugins
                     if (!File.Exists(plugin.ScriptPath))
                     {
                         Interface.Oxide.LogWarning("Script no longer exists: {0}", plugin.Name);
+                        plugin.CompilerErrors = "Plugin file was deleted";
                         return false;
                     }
                     plugin.ScriptLines = File.ReadAllLines(plugin.ScriptPath);
