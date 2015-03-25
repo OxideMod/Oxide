@@ -143,8 +143,6 @@ namespace Oxide.Plugins
             process.ErrorDataReceived += OnErrorOutput;
             process.Exited += OnExited;
 
-            Interface.Oxide.LogDebug("Spawning compiler: " + Plugins.Select(pl => pl.Name).ToSentence());
-
             process.Start();
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();

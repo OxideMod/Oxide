@@ -170,11 +170,13 @@ namespace Oxide.Plugins
                     plugin.OnCompilationFailed();
                     PluginErrors[plugin.Name] = "Failed to compile";
                     Interface.Oxide.LogError("{0} plugin failed to compile! Exit code: {1}", plugin.ScriptName, compiler.ExitCode);
+                    var debug_output = $"{plugin.ScriptName} plugin failed to compile! Exit code: {compiler.ExitCode}";
                     foreach (var raw_line in compiler.StdOutput.ToString().Split('\n'))
                     {
                         var line = raw_line.Trim();
-                        if (line.Length < 1) continue;
-                        if (!line.StartsWith("Compilation failed: ")) Interface.Oxide.LogWarning(line);
+                        if (line.Length < 1 || line.StartsWith("Compilation failed: ")) continue;
+                        Interface.Oxide.LogWarning(line);
+                        debug_output += "\n" + line;
                     }
                     if (compiler.ErrOutput.Length > 0)
                     {
@@ -182,7 +184,9 @@ namespace Oxide.Plugins
                         error_output = error_output.Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
                         PluginErrors[plugin.Name] = "Failed to compile: " + error_output;
                         Interface.Oxide.LogError(error_output);
+                        debug_output += "\n" + error_output;
                     }
+                    RemoteLogger.Warning(debug_output);
                 }
                 else
                 {
