@@ -28,6 +28,7 @@ namespace Oxide.Plugins
         private float endedAt;
         private string compiledName;
         private HashSet<string> references;
+        private ManualResetEvent compilerExited = new ManualResetEvent(false);
 
         public PluginCompiler(CompilablePlugin[] plugins)
         {
@@ -149,7 +150,7 @@ namespace Oxide.Plugins
 
             ThreadPool.QueueUserWorkItem((_) =>
             {
-                Thread.Sleep(120000);
+                if (compilerExited.WaitOne(120000)) return;
                 if (!process.HasExited)
                 {
                     Interface.Oxide.NextTick(() =>
@@ -204,6 +205,7 @@ namespace Oxide.Plugins
         {
             endedAt = Interface.Oxide.Now;
             ExitCode = process.ExitCode;
+            compilerExited.Set();
             byte[] raw_assembly = null;
             if (ExitCode == 0)
             {
