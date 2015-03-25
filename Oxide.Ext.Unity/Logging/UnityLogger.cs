@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Threading;
+using Oxide.Core;
+using UnityEngine;
 
 namespace Oxide.Unity.Logging
 {
@@ -9,6 +11,8 @@ namespace Oxide.Unity.Logging
     /// </summary>
     public sealed class UnityLogger : Logger
     {
+        private Thread mainThread = Thread.CurrentThread;
+
         /// <summary>
         /// Initializes a new instance of the UnityLogger class
         /// </summary>
@@ -24,6 +28,12 @@ namespace Oxide.Unity.Logging
         /// <param name="message"></param>
         protected override void ProcessMessage(LogMessage message)
         {
+            if (Thread.CurrentThread != mainThread)
+            {
+                Interface.Oxide.NextTick(() => ProcessMessage(message));
+                return;
+            }
+
             switch (message.Type)
             {
                 case LogType.Info:
