@@ -42,18 +42,24 @@
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public abstract void Load();
+        public virtual void Load()
+        {
+        }
 
         /// <summary>
         /// Loads any plugin watchers pertinent to this extension
         /// </summary>
         /// <param name="plugindir"></param>
-        public abstract void LoadPluginWatchers(string plugindir);
+        public virtual void LoadPluginWatchers(string plugindir)
+        {
+        }
 
         /// <summary>
         /// Called after all other extensions have been loaded
         /// </summary>
         /// <param name="manager"></param>
-        public abstract void OnModLoad();
+        public virtual void OnModLoad()
+        {
+        }
     }
 }
