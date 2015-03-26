@@ -208,7 +208,7 @@ namespace Oxide.Plugins
                         {
                             if (PluginNames.Contains(type.Name))
                             {
-                                var constructor = type.Methods.FirstOrDefault(m => !m.IsStatic && m.IsConstructor && !m.HasParameters && m.IsPublic);
+                                var constructor = type.Methods.FirstOrDefault(m => !m.IsStatic && m.IsConstructor && !m.HasParameters && !m.IsPublic);
                                 if (constructor != null)
                                 {
                                     var plugin = CompilablePlugins.SingleOrDefault(p => p.Name == type.Name);
@@ -239,7 +239,8 @@ namespace Oxide.Plugins
                 }
                 catch (Exception ex)
                 {
-                    Interface.Oxide.NextTick(() => {
+                    Interface.Oxide.NextTick(() =>
+                    {
                         isPatching = false;
                         Interface.Oxide.LogException("Exception while patching: " + PluginNames.ToSentence(), ex);
                         RemoteLogger.Exception("Exception while patching: " + PluginNames.ToSentence(), ex);
