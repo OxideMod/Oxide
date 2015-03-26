@@ -476,21 +476,25 @@ namespace Oxide.Core
         {
             // Call any callbacks queued for this frame
             if (nextTickQueue.Count > 0)
+            {
+                List<Action> queued;
                 lock (nextTickLock)
                 {
-                    for (var i = 0; i < nextTickQueue.Count; i++)
-                    {
-                        try
-                        {
-                            nextTickQueue[i]();
-                        }
-                        catch (Exception ex)
-                        {
-                            LogException("Exception while calling NextTick callback", ex);
-                        }
-                    }
-                    nextTickQueue.Clear();
+                    queued = nextTickQueue;
+                    nextTickQueue = new List<Action>();
                 }
+                for (var i = 0; i < queued.Count; i++)
+                {
+                    try
+                    {
+                        queued[i]();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogException("Exception while calling NextTick callback", ex);
+                    }
+                }
+            }
 
             // Update libraries
             libtimer.Update(delta);

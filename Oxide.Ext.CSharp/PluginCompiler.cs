@@ -53,41 +53,30 @@ namespace Oxide.Plugins
 
                     foreach (var plugin in Plugins.ToArray())
                     {
-                        // Include references defined by magic comments in script
-                        foreach (var line in plugin.ScriptLines)
+                        foreach (var script_line in plugin.ScriptLines)
                         {
-                            var match = Regex.Match(line, @"^//\s?Reference:\s?(\S+)$", RegexOptions.IgnoreCase);
-                            if (!match.Success) break;
+                            var line = script_line.Trim();
+                            if (line.Length < 1) continue;
 
-                            var assembly_name = match.Groups[1].Value;
-
-                            var path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, assembly_name);
-                            if (!File.Exists(path))
+                            // Include explicit references defined by magic comments in script
+                            var match = Regex.Match(line.Trim(), @"^//\s?Reference:\s?(\S+)$", RegexOptions.IgnoreCase);
+                            if (match.Success)
                             {
-                                Interface.Oxide.LogError("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
-                                plugin.CompilerErrors = "Referenced assembly does not exist: " + assembly_name;
-                                RemovePlugin(plugin);
+                                AddReference(plugin, match.Groups[1].Value);
                                 continue;
                             }
 
-                            Assembly assembly;
-                            try
+                            // Include implicit references detected from using statements in script
+                            match = Regex.Match(line.Trim(), @"^using\s+([^;]+)\s+;$", RegexOptions.IgnoreCase);
+                            if (match.Success)
                             {
-                                assembly = Assembly.Load(assembly_name);
-                            }
-                            catch (FileNotFoundException)
-                            {
-                                Interface.Oxide.LogError("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
-                                plugin.CompilerErrors = "Referenced assembly is invalid: " + assembly_name;
-                                RemovePlugin(plugin);
+                                var split_name = match.Groups[1].Value.Trim().Split('.');
+                                if (split_name.Length > 2 && split_name[0] == "Oxide" && split_name[1] == "Ext")
+                                    AddReference(plugin, string.Join(".", split_name.Take(3).ToArray()));
                                 continue;
                             }
 
-                            references.Add(assembly_name);
-
-                            // Include references made by the referenced assembly
-                            foreach (var reference in assembly.GetReferencedAssemblies())
-                                references.Add(reference.Name);
+                            break;
                         }
                     }
 
@@ -99,6 +88,39 @@ namespace Oxide.Plugins
                     RemoteLogger.Exception("Exception while resolving plugin references", ex);
                 }
             });
+        }
+
+        private void AddReference(CompilablePlugin plugin, string assembly_name)
+        {
+            if (references.Contains(assembly_name)) return;
+
+            var path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, assembly_name);
+            if (!File.Exists(path))
+            {
+                Interface.Oxide.LogError("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
+                plugin.CompilerErrors = "Referenced assembly does not exist: " + assembly_name;
+                RemovePlugin(plugin);
+                return;
+            }
+
+            Assembly assembly;
+            try
+            {
+                assembly = Assembly.Load(assembly_name);
+            }
+            catch (FileNotFoundException)
+            {
+                Interface.Oxide.LogError("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
+                plugin.CompilerErrors = "Referenced assembly is invalid: " + assembly_name;
+                RemovePlugin(plugin);
+                return;
+            }
+
+            references.Add(assembly_name);
+
+            // Include references made by the referenced assembly
+            foreach (var reference in assembly.GetReferencedAssemblies())
+                references.Add(reference.Name);
         }
 
         public void Compile(Action<byte[]> callback)
