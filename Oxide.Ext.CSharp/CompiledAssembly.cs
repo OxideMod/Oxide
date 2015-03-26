@@ -16,7 +16,7 @@ namespace Oxide.Plugins
     public class CompiledAssembly
     {
         public CompilablePlugin[] CompilablePlugins;
-        public string PluginNames;
+        public string[] PluginNames;
         public byte[] RawAssembly;
         public Assembly LoadedAssembly;        
         public bool IsBatch => CompilablePlugins.Length > 1;
@@ -38,7 +38,7 @@ namespace Oxide.Plugins
         {
             CompilablePlugins = plugins;
             RawAssembly = raw_assembly;
-            PluginNames = CompilablePlugins.Select(pl => pl.Name).ToSentence();
+            PluginNames = CompilablePlugins.Select(pl => pl.Name).ToArray();
         }
 
         public void LoadAssembly(Action<bool> callback)
@@ -52,7 +52,7 @@ namespace Oxide.Plugins
             loadCallbacks.Add(callback);
             if (isPatching) return;
 
-            //Interface.Oxide.LogDebug("Loading plugins: {0}", PluginNames);
+            //Interface.Oxide.LogDebug("Loading plugins: {0}", PluginNames.ToSentence());
 
             //var started_at = Interface.Oxide.Now;
             PatchAssembly(raw_assembly =>
@@ -76,8 +76,8 @@ namespace Oxide.Plugins
         {
             if (isPatching)
             {
-                Interface.Oxide.LogWarning("Already patching plugin assembly: {0} (ignoring)", PluginNames);
-                RemoteLogger.Warning("Already patching plugin assembly: " + PluginNames);
+                Interface.Oxide.LogWarning("Already patching plugin assembly: {0} (ignoring)", PluginNames.ToSentence());
+                RemoteLogger.Warning("Already patching plugin assembly: " + PluginNames.ToSentence());
                 return;
             }
             
@@ -201,7 +201,27 @@ namespace Oxide.Plugins
                     };
 
                     foreach (var type in definition.MainModule.Types)
+                    {
                         patch_module_type(type);
+
+                        if (type.Namespace == "Oxide.Plugins")
+                        {
+                            if (PluginNames.Contains(type.Name))
+                            {
+                                var constructor = type.Methods.FirstOrDefault(m => !m.IsStatic && m.IsConstructor && !m.HasParameters && m.IsPublic);
+                                if (constructor != null)
+                                {
+                                    var plugin = CompilablePlugins.SingleOrDefault(p => p.Name == type.Name);
+                                    plugin.CompilerErrors = "Primary constructor in main class must be public";
+                                }
+                            }
+                            else
+                            {
+                                Interface.Oxide.LogWarning("A plugin has polluted the global namespace by defining " + type.Name + ": " + PluginNames.ToSentence());
+                                RemoteLogger.Info("A plugin has polluted the global namespace by defining " + type.Name + ": " + PluginNames.ToSentence());
+                            }
+                        }
+                    }
 
                     byte[] patched_assembly;
                     using (var stream = new MemoryStream())
@@ -221,8 +241,8 @@ namespace Oxide.Plugins
                 {
                     Interface.Oxide.NextTick(() => {
                         isPatching = false;
-                        Interface.Oxide.LogException("Exception while patching: " + PluginNames, ex);
-                        RemoteLogger.Exception("Exception while patching: " + PluginNames, ex);
+                        Interface.Oxide.LogException("Exception while patching: " + PluginNames.ToSentence(), ex);
+                        RemoteLogger.Exception("Exception while patching: " + PluginNames.ToSentence(), ex);
                         callback(null);
                     });
                 }

@@ -22,7 +22,8 @@ namespace Oxide.Plugins
         public DateTime LastCompiledAt;
         public bool IsReloading;
 
-        private Action<bool> callback;
+        private Action<CSharpPlugin> loadCallback;
+        private Action<bool> compileCallback;
         private bool isCompilationQueued;
 
         public CompilablePlugin(CSharpExtension extension, string directory, string name)
@@ -58,7 +59,7 @@ namespace Oxide.Plugins
                     return;
                 }
             }
-            this.callback = callback;
+            compileCallback = callback;
             isCompilationQueued = true;
             Extension.CompilationRequested(this);
         }
@@ -73,44 +74,59 @@ namespace Oxide.Plugins
                 return;
             }
 
+            loadCallback = callback;
 
             CompiledAssembly.LoadAssembly(loaded =>
             {
                 IsReloading = false;
-                if (loaded)
+                if (!loaded)
                 {
-                    var type = CompiledAssembly.LoadedAssembly.GetType("Oxide.Plugins." + Name);
-                    if (type == null)
-                    {
-                        Interface.Oxide.LogError("Unable to find main plugin class: {0}", Name);
-                        OnPluginFailed();
-                        if (callback != null) callback(null);
-                        return;
-                    }
-
-                    var plugin = Activator.CreateInstance(type) as CSharpPlugin;
-                    if (plugin == null)
-                    {
-                        Interface.Oxide.LogError("Plugin assembly failed to load: {0}", ScriptName);
-                        RemoteLogger.Error("Plugin assembly failed to load: " + ScriptName);
-                        OnPluginFailed();
-                        if (callback != null) callback(null);
-                        return;
-                    }
-
-                    plugin.SetPluginInfo(ScriptName, ScriptPath);
-                    plugin.Watcher = Extension.Watcher;
-
-                    if (Interface.Oxide.PluginLoaded(plugin))
-                    {
-                        if (!CompiledAssembly.IsBatch) LastGoodAssembly = CompiledAssembly;
-                        if (callback != null) callback(plugin);
-                        return;
-                    }
-
-                    OnPluginFailed();
+                    if (callback != null) callback(null);
+                    return;
                 }
-                if (callback != null) callback(null);
+
+                if (CompilerErrors != null)
+                {
+                    InitFailed("Unable to load " + ScriptName + ". " + CompilerErrors);
+                    return;
+                }
+
+                var type = CompiledAssembly.LoadedAssembly.GetType("Oxide.Plugins." + Name);
+                if (type == null)
+                {
+                    InitFailed("Unable to find main plugin class: " + Name);
+                    return;
+                }
+
+                CSharpPlugin plugin = null;
+                try
+                {
+                    plugin = Activator.CreateInstance(type) as CSharpPlugin;
+                }
+                catch (MissingMethodException)
+                {
+                    InitFailed("Main plugin class should not have a constructor defined: " + Name);
+                    return;
+                }
+
+                if (plugin == null)
+                {
+                    RemoteLogger.Error("Plugin assembly failed to load: " + ScriptName);
+                    InitFailed("Plugin assembly failed to load: " + ScriptName);
+                    return;
+                }
+
+                plugin.SetPluginInfo(ScriptName, ScriptPath);
+                plugin.Watcher = Extension.Watcher;
+
+                if (!Interface.Oxide.PluginLoaded(plugin))
+                {
+                    InitFailed();
+                    return;
+                }
+
+                if (!CompiledAssembly.IsBatch) LastGoodAssembly = CompiledAssembly;
+                if (callback != null) callback(plugin);
             });
         }
 
@@ -124,14 +140,14 @@ namespace Oxide.Plugins
         {
             isCompilationQueued = false;
             CompiledAssembly = compiled_assembly;
-            callback(true);
+            compileCallback(true);
         }
 
         public void OnCompilationFailed()
         {
             isCompilationQueued = false;
             LastCompiledAt = default(DateTime);
-            callback(false);
+            compileCallback(false);
         }
 
         private void OnPluginFailed()
@@ -145,7 +161,14 @@ namespace Oxide.Plugins
             CompiledAssembly = LastGoodAssembly;
             LoadPlugin();
         }
-        
+
+        private void InitFailed(string message = null)
+        {
+            if (message != null) Interface.Oxide.LogError(message);
+            OnPluginFailed();
+            if (loadCallback != null) loadCallback(null);
+        }
+
         private void CheckLastModificationTime()
         {
             if (!File.Exists(ScriptPath)) return;
