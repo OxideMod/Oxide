@@ -96,7 +96,7 @@ bundle_rust; bundle_7dtd
 
 echo "Adding, committing, and pushing to snapshots"
 cd $HOME/Snapshots || die_with "Failed to change to snapshots directory!"
-git add -f . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/OxideMod/Oxide/commit/${TRAVIS_COMMIT:0:7}" || die_with "Failed to add and commit files!"
+git add -f . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}" || die_with "Failed to add and commit files!"
 git push -qf origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"
