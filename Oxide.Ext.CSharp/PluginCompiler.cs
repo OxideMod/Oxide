@@ -29,6 +29,7 @@ namespace Oxide.Plugins
         private string compiledName;
         private HashSet<string> references;
         private ManualResetEvent compilerExited = new ManualResetEvent(false);
+        private Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
 
         public PluginCompiler(CompilablePlugin[] plugins)
         {
@@ -53,30 +54,61 @@ namespace Oxide.Plugins
 
                     foreach (var plugin in Plugins.ToArray())
                     {
+                        bool parsingNamespace = false;
                         foreach (var script_line in plugin.ScriptLines)
                         {
                             var line = script_line.Trim();
                             if (line.Length < 1) continue;
 
-                            // Include explicit references defined by magic comments in script
-                            var match = Regex.Match(line.Trim(), @"^//\s?Reference:\s?(\S+)$", RegexOptions.IgnoreCase);
-                            if (match.Success)
+                            Match match;
+                            if (parsingNamespace)
                             {
-                                AddReference(plugin, match.Groups[1].Value);
-                                continue;
-                            }
+                                // Skip blank lines and opening brace at the top of the namespace block
+                                match = Regex.Match(line, @"^\s*\{?\s*$", RegexOptions.IgnoreCase);
+                                if (match.Success) continue;
 
-                            // Include implicit references detected from using statements in script
-                            match = Regex.Match(line.Trim(), @"^\s*using\s+([^;]+)\s*;$", RegexOptions.IgnoreCase);
-                            if (match.Success)
+                                // Skip class custom attributes
+                                match = Regex.Match(line, @"^\s*\[", RegexOptions.IgnoreCase);
+                                if (match.Success) continue;
+
+                                // Detect main plugin class name
+                                match = Regex.Match(line, @"^\s*(?:public |private |protected )?class\s+(\S+)\s+\:\s+\S+Plugin\s*$", RegexOptions.IgnoreCase);
+                                if (!match.Success) break;
+
+                                var class_name = match.Groups[1].Value;
+                                if (class_name != plugin.Name)
+                                {
+                                    Interface.Oxide.LogError("Plugin filename is incorrect: {0}.cs", plugin.ScriptName);
+                                    plugin.CompilerErrors = "Plugin filename is incorrect";
+                                    RemovePlugin(plugin);
+                                }
+
+                                break;
+                            }
+                            else
                             {
-                                var split_name = match.Groups[1].Value.Trim().Split('.');
-                                if (split_name.Length > 2 && split_name[0] == "Oxide" && split_name[1] == "Ext")
-                                    AddReference(plugin, string.Join(".", split_name.Take(3).ToArray()));
-                                continue;
-                            }
+                                // Include explicit references defined by magic comments in script
+                                match = Regex.Match(line, @"^//\s?Reference:\s?(\S+)$", RegexOptions.IgnoreCase);
+                                if (match.Success)
+                                {
+                                    AddReference(plugin, match.Groups[1].Value);
+                                    continue;
+                                }
 
-                            break;
+                                // Include implicit references detected from using statements in script
+                                match = Regex.Match(line, @"^\s*using\s+([^;]+)\s*;$", RegexOptions.IgnoreCase);
+                                if (match.Success)
+                                {
+                                    var split_name = match.Groups[1].Value.Trim().Split('.');
+                                    if (split_name.Length > 2 && split_name[0] == "Oxide" && split_name[1] == "Ext")
+                                        AddReference(plugin, "Oxide.Ext." + split_name[2]);
+                                    continue;
+                                }
+
+                                // Start parsing the Oxide.Plugins namespace contents
+                                match = Regex.Match(line, @"^\s*namespace Oxide\.Plugins\s*(\{\s*)?$", RegexOptions.IgnoreCase);
+                                if (match.Success) parsingNamespace = true;
+                            }
                         }
                     }
 
@@ -186,9 +218,7 @@ namespace Oxide.Plugins
                 }
             });
         }
-
-        Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
-
+        
         private void OnStdOutput(object sender, DataReceivedEventArgs e)
         {
             var process = sender as Process;
