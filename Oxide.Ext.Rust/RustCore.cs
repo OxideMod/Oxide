@@ -703,5 +703,17 @@ namespace Oxide.Rust.Plugins
         {
             return Interface.CallHook("OnBuildingBlockRotate", block, msg.player);
         }
+
+        [HookMethod("LockSign")]
+        private object LockSign(Signage sign, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnSignLocked", sign, msg.player);
+        }
+
+        [HookMethod("UpdateSign")]
+        private object UpdateSign(Signage sign, BaseEntity.RPCMessage msg, string text)
+        {
+            return Interface.CallHook("OnSignUpdated", sign, msg.player, text);
+        }
     }
 }
