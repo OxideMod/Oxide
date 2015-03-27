@@ -192,7 +192,7 @@ namespace Oxide.Plugins
         private void OnStdOutput(object sender, DataReceivedEventArgs e)
         {
             var process = sender as Process;
-            if (e.Data.StartsWith("warning: restarting compilation"))
+            if (e.Data.StartsWith("Warning: restarting compilation"))
             {
                 foreach (var line in StdOutput.ToString().Split('\n'))
                 { 
