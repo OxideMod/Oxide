@@ -671,7 +671,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 42,
+            "InjectionIndex": 37,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l0",
@@ -1199,7 +1199,7 @@
                 "PlayerTick"
               ]
             },
-            "MSILHash": "5aDg4drI1e+23rjTUq/9KZCSj90jsXOH+34EfP3o9/M="
+            "MSILHash": "haxZNiNfs4ok5twfxvXDbXZbXiPqNCUgSaJpiUvgFIc="
           }
         }
       ]
