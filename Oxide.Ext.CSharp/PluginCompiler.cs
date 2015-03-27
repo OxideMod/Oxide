@@ -67,7 +67,7 @@ namespace Oxide.Plugins
                             }
 
                             // Include implicit references detected from using statements in script
-                            match = Regex.Match(line.Trim(), @"^using\s+([^;]+)\s+;$", RegexOptions.IgnoreCase);
+                            match = Regex.Match(line.Trim(), @"^\s*using\s+([^;]+)\s*;$", RegexOptions.IgnoreCase);
                             if (match.Success)
                             {
                                 var split_name = match.Groups[1].Value.Trim().Split('.');
