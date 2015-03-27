@@ -1201,6 +1201,78 @@
             },
             "MSILHash": "haxZNiNfs4ok5twfxvXDbXZbXiPqNCUgSaJpiUvgFIc="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "Signage_CanUpdateSign",
+            "HookName": "CanUpdateSign",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Signage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanUpdateSign",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "p1mGBYvffFZHtPNZW/ynU37akiE77LZerF0LmJw34m4="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "Signage_LockSign",
+            "HookName": "LockSign",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Signage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "LockSign",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "4hffnTdU26EoDkOiYtzdJi+U7niqi7rGVrl6D3mjEs0="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 33,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0, l0",
+            "HookTypeName": "Simple",
+            "Name": "Signage_UpdateSign",
+            "HookName": "UpdateSign",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Signage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UpdateSign",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "LD0ohJjBuA2+e4U8kGhwGIwkEm4Fpm2YknhBxib7rfA="
+          }
         }
       ]
     }
