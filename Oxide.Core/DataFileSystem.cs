@@ -55,12 +55,15 @@ namespace Oxide.Core
         {
             // See if it already exists
             DynamicConfigFile datafile;
-            if (_datafiles.TryGetValue(name, out datafile)) return datafile;
+            if (!_datafiles.TryGetValue(name, out datafile))
+            {
+                datafile = new DynamicConfigFile();
+                _datafiles.Add(name, datafile);
+            }
 
             // Generate the filename
             string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
 
-            datafile = new DynamicConfigFile();
             // Does it exist?
             if (File.Exists(filename))
             {
@@ -73,8 +76,6 @@ namespace Oxide.Core
                 datafile.Save(filename);
             }
 
-            // Add and return
-            _datafiles.Add(name, datafile);
             return datafile;
         }
 
