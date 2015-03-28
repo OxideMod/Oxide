@@ -88,7 +88,6 @@ function bundle_7dtd {
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_7dtd || die_with "Failed to change to temp directory!"
-    rm -f $HOME/Snapshots/7DaysToDie/Oxide7DaysToDie.zip || die_with "Failed to remove old bundle!"
     zip -FS -vr9 $HOME/Snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
 } || die_with "Failed to create 7 Days to Die bundle!"
 
