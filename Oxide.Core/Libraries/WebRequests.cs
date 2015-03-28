@@ -120,17 +120,17 @@ namespace Oxide.Core.Libraries
             /// </summary>
             public override void Process()
             {
-                // Create the request
-                var request = (HttpWebRequest)WebRequest.Create(URL);
-                request.Credentials = CredentialCache.DefaultCredentials;
-                request.Proxy = null;
-                request.KeepAlive = false;
-
-                request.Timeout = 5000;
-                request.ServicePoint.MaxIdleTime = 5000;
-
+                HttpWebRequest request = null;
                 try
                 {
+                    // Create the request
+                    request = (HttpWebRequest)WebRequest.Create(URL);
+                    request.Credentials = CredentialCache.DefaultCredentials;
+                    request.Proxy = null;
+                    request.KeepAlive = false;
+
+                    request.Timeout = 5000;
+                    request.ServicePoint.MaxIdleTime = 5000;
                     if (RequestHeaders != null)
                         request.SetRawHeaders(RequestHeaders);
                     // Get the response
@@ -157,7 +157,7 @@ namespace Oxide.Core.Libraries
                 }
                 finally
                 {
-                    request.Abort();
+                    if (request != null) request.Abort();
                 }
 
                 // Done
@@ -193,22 +193,21 @@ namespace Oxide.Core.Libraries
             /// </summary>
             public override void Process()
             {
-                // Create the request
-                var request = (HttpWebRequest)WebRequest.Create(URL);
-                request.Credentials = CredentialCache.DefaultCredentials;
-                request.Proxy = null;
-                request.KeepAlive = false;
-
-                request.Timeout = 5000;
-                request.ServicePoint.MaxIdleTime = 5000;
-
-                // Setup post data
-                request.Method = "POST";
-                if (RequestHeaders != null && !RequestHeaders.ContainsKey("Content-Type"))
-                    request.ContentType = "application/x-www-form-urlencoded";
-
+                HttpWebRequest request = null;
                 try
                 {
+                    // Create the request
+                    request = (HttpWebRequest)WebRequest.Create(URL);
+                    request.Credentials = CredentialCache.DefaultCredentials;
+                    request.Proxy = null;
+                    request.KeepAlive = false;
+
+                    request.Timeout = 5000;
+                    request.ServicePoint.MaxIdleTime = 5000;
+
+                    // Setup post data
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
                     if (RequestHeaders != null)
                         request.SetRawHeaders(RequestHeaders);
                     var data = Encoding.UTF8.GetBytes(PostData);
@@ -240,7 +239,7 @@ namespace Oxide.Core.Libraries
                 }
                 finally
                 {
-                    request.Abort();
+                    if (request != null) request.Abort();
                 }
                 // Done
                 Finish();

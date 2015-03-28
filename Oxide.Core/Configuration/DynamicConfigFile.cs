@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Oxide.Core.Configuration
@@ -136,8 +136,7 @@ namespace Oxide.Core.Configuration
             if (objectType == typeof(Dictionary<string, object>))
             {
                 // Get the dictionary to populate
-                Dictionary<string, object> dict = existingValue as Dictionary<string, object>;
-                if (dict == null) dict = new Dictionary<string, object>();
+                Dictionary<string, object> dict = existingValue as Dictionary<string, object> ?? new Dictionary<string, object>();
 
                 // Read until end of object
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
@@ -176,11 +175,10 @@ namespace Oxide.Core.Configuration
                 // Return it
                 return dict;
             }
-            else if (objectType == typeof(List<object>))
+            if (objectType == typeof(List<object>))
             {
                 // Get the list to populate
-                List<object> list = existingValue as List<object>;
-                if (list == null) list = new List<object>();
+                List<object> list = existingValue as List<object> ?? new List<object>();
 
                 // Read until end of array
                 while (reader.Read() && reader.TokenType != JsonToken.EndArray)
@@ -214,8 +212,7 @@ namespace Oxide.Core.Configuration
                 // Return it
                 return list;
             }
-            else
-                return existingValue;
+            return existingValue;
         }
 
         /// <summary>
@@ -229,13 +226,13 @@ namespace Oxide.Core.Configuration
             if (value is Dictionary<string, object>)
             {
                 // Get the dictionary to write
-                Dictionary<string, object> dict = value as Dictionary<string, object>;
+                var dict = (Dictionary<string, object>) value;
 
                 // Start object
                 writer.WriteStartObject();
 
                 // Simply loop through and serialise
-                foreach (var pair in dict)
+                foreach (var pair in dict.OrderBy(i => i.Key))
                 {
                     writer.WritePropertyName(pair.Key);
                     serializer.Serialize(writer, pair.Value);
@@ -247,14 +244,14 @@ namespace Oxide.Core.Configuration
             else if (value is List<object>)
             {
                 // Get the list to write
-                List<object> list = value as List<object>;
+                var list = (List<object>) value;
 
                 // Start array
                 writer.WriteStartArray();
 
                 // Simply loop through and serialise
-                for (int i = 0; i < list.Count; i++)
-                    serializer.Serialize(writer, list[i]);
+                foreach (var t in list)
+                    serializer.Serialize(writer, t);
 
                 // End array
                 writer.WriteEndArray();
