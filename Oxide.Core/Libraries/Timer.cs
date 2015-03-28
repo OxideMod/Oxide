@@ -45,7 +45,7 @@ namespace Oxide.Core.Libraries
             internal float nextrep;
 
             /// <summary>
-            /// Initialises a new instance of the TimerInstance class
+            /// Initializes a new instance of the TimerInstance class
             /// </summary>
             /// <param name="repetitions"></param>
             /// <param name="delay"></param>
@@ -107,9 +107,9 @@ namespace Oxide.Core.Libraries
                 }
             }
         }
-        
+
         public override bool IsGlobal => false;
-        
+
         private const float updateInterval = .025f;
         private float lastUpdateAt;
 
@@ -129,7 +129,7 @@ namespace Oxide.Core.Libraries
                 foreach (var timer in timers) timer.nextrep -= difference;
                 lastUpdateAt = now;
             }
-            
+
             if (now < lastUpdateAt + updateInterval) return;
 
             lastUpdateAt = now;
@@ -145,7 +145,7 @@ namespace Oxide.Core.Libraries
                     timer.Update();
                     // Add the timer back to the queue if it needs to fire again
                     if (!timer.Destroyed) InsertTimer(timer);
-                }                    
+                }
             }
         }
 

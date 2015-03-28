@@ -48,7 +48,7 @@ namespace Oxide.Core
                 Body = JsonConvert.SerializeObject(report);
             }
         }
-        
+
         public class Report
         {
             public string event_id;
@@ -74,7 +74,7 @@ namespace Oxide.Core
                 {
                     var exception_lines = exception.Split('\n').Take(31).Select(line => line.Trim(' ', '\r', '\n').Replace('\t', ' '));
                     extra = new Dictionary<string, string> { { "exception", string.Join("\\n", exception_lines.ToArray()) } };
-                }                
+                }
             }
 
             public void DetectModules(Assembly assembly)
@@ -115,7 +115,7 @@ namespace Oxide.Core
         private static WebRequests webrequests = Interface.Oxide.GetLibrary<WebRequests>("WebRequests");
         private static List<QueuedReport> queuedReports = new List<QueuedReport>();
         private static bool submittingReports;
-        
+
         public static void SetTag(string name, string value)
         {
             tags[name] = value;

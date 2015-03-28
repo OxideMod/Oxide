@@ -45,7 +45,7 @@ namespace Oxide.Plugins
         {
             // Include references made by the CSharpPlugins project
             references = new HashSet<string>(CSharpPluginLoader.PluginReferences);
-            
+
             ThreadPool.QueueUserWorkItem((_) =>
             {
                 try
@@ -165,11 +165,11 @@ namespace Oxide.Plugins
             {
                 if (Plugins.Count < 1) return;
                 foreach (var plugin in Plugins) plugin.CompilerErrors = null;
-                compiledName = (Plugins.Count == 1 ? Plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 100000f);                
+                compiledName = (Plugins.Count == 1 ? Plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 100000f);
                 SpawnCompiler();
             });
         }
-        
+
         private void SpawnCompiler()
         {
             var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+", "/platform:x64" };
@@ -218,14 +218,14 @@ namespace Oxide.Plugins
                 }
             });
         }
-        
+
         private void OnStdOutput(object sender, DataReceivedEventArgs e)
         {
             var process = sender as Process;
             if (e.Data.StartsWith("Warning: restarting compilation"))
             {
                 foreach (var line in StdOutput.ToString().Split('\n'))
-                { 
+                {
                     var match = fileErrorRegex.Match(line.Trim());
                     for (var i = 1; i < match.Groups.Count; i++)
                     {
@@ -321,7 +321,7 @@ namespace Oxide.Plugins
                 if (!CacheScriptLines(plugin)) RemovePlugin(plugin);
             CacheModifiedScripts();
         }
-        
+
         private void RemovePlugin(CompilablePlugin plugin)
         {
             Plugins.Remove(plugin);

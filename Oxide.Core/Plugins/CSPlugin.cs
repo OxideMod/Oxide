@@ -98,7 +98,7 @@ namespace Oxide.Core.Plugins
         {
             List<MethodInfo> methods;
             if (!hooks.TryGetValue(name, out methods)) return null;
-            
+
             object return_value = null;
             foreach (var method in methods)
             {
@@ -110,7 +110,7 @@ namespace Oxide.Core.Plugins
                 {
                     // The call argument count is different to the declared callback methods argument count
                     hook_args = new object[parameters.Length];
-                    
+
                     if (args_received > 0)
                     {
                         // Remove any additional arguments which the callback method does not declare
@@ -152,7 +152,7 @@ namespace Oxide.Core.Plugins
                     }
                 }
             }
-            
+
             return return_value;
         }
     }

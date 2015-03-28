@@ -46,10 +46,10 @@ namespace Oxide.Unity
         {
             // Register our loader
             Manager.RegisterPluginLoader(new UnityPluginLoader());
-            
+
             // Register engine clock
             Interface.Oxide.RegisterEngineClock(() => UnityEngine.Time.realtimeSinceStartup);
-            
+
             // Register our MonoBehaviour
             UnityScript.Create();
         }

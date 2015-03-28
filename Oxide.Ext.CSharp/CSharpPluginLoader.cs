@@ -22,7 +22,7 @@ namespace Oxide.Plugins
         public CSharpPluginLoader(CSharpExtension extension)
         {
             this.extension = extension;
-            
+
             // Check if compatible compiler is installed
             PluginCompiler.BinaryPath = Interface.Oxide.RootDirectory + @"\CSharpCompiler.exe";
             if (!File.Exists(PluginCompiler.BinaryPath))
@@ -150,7 +150,7 @@ namespace Oxide.Plugins
                 compilationQueue.Clear();
             });
         }
-        
+
         private void CompileAssembly(CompilablePlugin[] plugins)
         {
             var compiler = new PluginCompiler(plugins);

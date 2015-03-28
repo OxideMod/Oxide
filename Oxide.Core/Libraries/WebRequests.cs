@@ -128,7 +128,7 @@ namespace Oxide.Core.Libraries
 
                 request.Timeout = 5000;
                 request.ServicePoint.MaxIdleTime = 5000;
-                
+
                 try
                 {
                     if (RequestHeaders != null)
@@ -206,7 +206,7 @@ namespace Oxide.Core.Libraries
                 request.Method = "POST";
                 if (RequestHeaders != null && !RequestHeaders.ContainsKey("Content-Type"))
                     request.ContentType = "application/x-www-form-urlencoded";
-                
+
                 try
                 {
                     if (RequestHeaders != null)
@@ -228,7 +228,6 @@ namespace Oxide.Core.Libraries
                 }
                 catch (WebException webex)
                 {
-                    
                     var response = webex.Response as HttpWebResponse;
                     ResponseText = webex.Message;
                     ResponseCode = response != null ? (int)response.StatusCode : 0;
@@ -408,7 +407,7 @@ namespace Oxide.Core.Libraries
         private static readonly Dictionary<string, PropertyInfo> HeaderProperties = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Initialise the HeaderProperties dictionary
+        /// Initialize the HeaderProperties dictionary
         /// </summary>
         static HttpWebRequestExtensions()
         {

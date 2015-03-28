@@ -15,7 +15,7 @@ namespace Oxide.Rust.Libraries
     {
         private static string ReturnEmptyString() => string.Empty;
         private static void DoNothing(string str) { }
-        
+
         public override bool IsGlobal => false;
 
         private struct PluginCallback
@@ -139,11 +139,11 @@ namespace Oxide.Rust.Libraries
                 rustcommands.Remove(full_name);
                 ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
             }
-                        
+
             // The command either does not already exist or is replacing a previously registered command
             cmd = new ConsoleCommand(full_name);
             cmd.AddCallback(plugin, callback_name);
-            
+
             ConsoleSystem.Command rust_command;
             if (rustcommands.TryGetValue(full_name, out rust_command))
             {
@@ -205,12 +205,12 @@ namespace Oxide.Rust.Libraries
         {
             ChatCommand cmd;
             if (!chatCommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
-            
+
             cmd.Plugin.CallHook(cmd.CallbackName, sender, name, args);
-            
+
             return true;
         }
-        
+
         /// <summary>
         /// Called when a plugin has been removed from manager
         /// </summary>

@@ -18,7 +18,7 @@ namespace Oxide.Plugins
         public CompilablePlugin[] CompilablePlugins;
         public string[] PluginNames;
         public byte[] RawAssembly;
-        public Assembly LoadedAssembly;        
+        public Assembly LoadedAssembly;
         public bool IsBatch => CompilablePlugins.Length > 1;
 
         private List<Action<bool>> loadCallbacks = new List<Action<bool>>();
@@ -33,7 +33,7 @@ namespace Oxide.Plugins
         private string[] whitelistedNamespaces = {
             "System.IO.MemoryStream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags"
         };
-        
+
         public CompiledAssembly(CompilablePlugin[] plugins, byte[] raw_assembly)
         {
             CompilablePlugins = plugins;
@@ -80,7 +80,7 @@ namespace Oxide.Plugins
                 RemoteLogger.Warning("Already patching plugin assembly: " + PluginNames.ToSentence());
                 return;
             }
-            
+
             var started_at = Interface.Oxide.Now;
 
             //Interface.Oxide.LogInfo("Patching plugin assembly: {0}", Name);

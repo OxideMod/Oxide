@@ -156,7 +156,7 @@ namespace Oxide.Plugins
 
         protected Core.Libraries.Plugins plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
         protected PluginTimers timer;
-        
+
         protected HashSet<PluginFieldInfo> onlinePlayerFields = new HashSet<PluginFieldInfo>();
         private Dictionary<string, FieldInfo> pluginReferenceFields = new Dictionary<string, FieldInfo>();
 

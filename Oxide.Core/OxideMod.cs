@@ -48,12 +48,12 @@ namespace Oxide.Core
 
         // Gets the number of seconds since the server started
         public float Now { get { return getTimeSinceStartup(); } }
-        
+
         /// <summary>
         /// This is true if the server is shutting down
         /// </summary>
         public bool IsShuttingDown { get; private set; }
-        
+
         // The rotating file logger
         private RotatingFileLogger filelogger;
 

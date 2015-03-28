@@ -129,7 +129,7 @@ namespace Oxide.Rust.Plugins
         private void cmdPlugins(ConsoleSystem.Arg arg)
         {
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
-            
+
             var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
             var unloaded_plugin_errors = new Dictionary<string, string>();
@@ -642,7 +642,7 @@ namespace Oxide.Rust.Plugins
         {
 
         }
-        
+
         /// <summary>
         /// Called when a player tick is received from a client
         /// </summary>

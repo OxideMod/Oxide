@@ -73,7 +73,7 @@ namespace Oxide.Plugins
                     cmd.AddChatCommand(attribute.Command, this, method.Name);
                 }
             }
-            
+
             if (onlinePlayerFields.Count > 0)
             {
                 foreach (var player in BasePlayer.activePlayerList)
