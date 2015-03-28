@@ -48,7 +48,7 @@ function bundle_rust {
     echo "Bundling and compressing target files"
     cd $HOME/temp_rust || die_with "Failed to change to temp directory!"
     rm -f $HOME/Snapshots/Rust/OxideRust.zip || die_with "Failed to remove old bundle!"
-    zip -vr9 $HOME/Snapshots/Rust/OxideRust.zip . || die_with "Failed to bundle snapshot files!"
+    zip -FS -vr9 $HOME/Snapshots/Rust/OxideRust.zip . || die_with "Failed to bundle snapshot files!"
 } || die_with "Failed to create Rust bundle!"
 
 function bundle_7dtd {
@@ -89,14 +89,14 @@ function bundle_7dtd {
     echo "Bundling and compressing target files"
     cd $HOME/temp_7dtd || die_with "Failed to change to temp directory!"
     rm -f $HOME/Snapshots/7DaysToDie/Oxide7DaysToDie.zip || die_with "Failed to remove old bundle!"
-    zip -vr9 $HOME/Snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
+    zip -FS -vr9 $HOME/Snapshots/7DaysToDie/Oxide7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
 } || die_with "Failed to create 7 Days to Die bundle!"
 
 bundle_rust; bundle_7dtd
 
 echo "Adding, committing, and pushing to snapshots"
 cd $HOME/Snapshots || die_with "Failed to change to snapshots directory!"
-git add -f . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}" || die_with "Failed to add and commit files!"
-git push -qf origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
+git add . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}" || die_with "Failed to add and commit files!"
+git push -q origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"
