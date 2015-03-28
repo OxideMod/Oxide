@@ -3,7 +3,7 @@ language: csharp
 # Update Mono to latest snapshot
 before_install:
   - echo "deb http://jenkins.mono-project.com/repo/debian sid main" | sudo tee /etc/apt/sources.list.d/mono-jenkins.list
-  - sudo apt-get update -qq && sudo apt-get install -y mono-4.0-snapshot-latest && . mono-snapshot mono
+  - sudo apt-get update -qq && sudo apt-get install -y mono-4.0-snapshot-latest && . mono-snapshot mono-4.0
   - MONO_PATH=`echo /opt/mono-*/lib/mono` && sudo ln -s $TRAVIS_BUILD_DIR/Mono/2.0 $MONO_PATH/2.0 && sudo ln -s $TRAVIS_BUILD_DIR/Mono/xbuild-frameworks/.NETFramework/v3.5 $MONO_PATH/xbuild-frameworks/.NETFramework/v3.5
 
 # Add build number to version
