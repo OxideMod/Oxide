@@ -1,0 +1,83 @@
+{
+  "Name": "The Forest",
+  "TargetDirectory": "D:\\Servers\\Game\\TheForest\\Latest\TheForest_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "Connected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "CoopServerCallbacks",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Connected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BoltConnection",
+                "Bolt.IProtocolToken",
+                "Bolt.IProtocolToken"
+              ]
+            },
+            "MSILHash": "9KW4ubzLXWSHsQ/u5WLfi7twHRdXJO8P1kSAD1DJ6TY="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Disconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "CoopServerCallbacks",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Disconnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BoltConnection"
+              ]
+            },
+            "MSILHash": "o5DFwgrG/P+obOEJ69t+ciGSI81yeav269QAhVAvtiQ="
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "HookTypeName": "Initialise Oxide",
+            "Name": "Initialize",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BoltLauncher",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BoltNetworkModes",
+                "UdpKit.UdpEndPoint",
+                "BoltConfig"
+              ]
+            },
+            "MSILHash": "z2OfEJ/OMtSOTWRLQ77QckEip4VGtJFPrDMvpJ1G7hE="
+          }
+        }
+      ]
+    }
+  ]
+}
