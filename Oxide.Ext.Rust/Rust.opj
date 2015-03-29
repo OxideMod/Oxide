@@ -209,30 +209,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 14,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "BasePlayer_OnAttacked",
-            "HookName": "OnEntityAttacked",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "BasePlayer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnAttacked",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "HitInfo"
-              ]
-            },
-            "MSILHash": "NC8fu0c9y7dAHBn+7PCBDS0Z+l/8h1b8M/d/kdvGE2I="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 22,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
@@ -720,13 +696,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 4,
+            "InjectionIndex": 8,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "BaseCombatEntity_Hurt",
-            "HookName": "OnEntityAttacked",
+            "HookName": "OnEntityTakeDamage",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "BaseCombatEntity",
             "Flagged": false,
@@ -1272,6 +1248,52 @@
               ]
             },
             "MSILHash": "LD0ohJjBuA2+e4U8kGhwGIwkEm4Fpm2YknhBxib7rfA="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Item_LoseCondition",
+            "HookName": "LoseCondition",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Item",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "LoseCondition",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Single"
+              ]
+            },
+            "MSILHash": "RY+xhlAthAwFiNxy4cFkPjJfuI6BEyfG9+/tBbJSr7k="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "BasePlayer_EndSleeping",
+            "HookName": "OnPlayerSleepEnded",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "EndSleeping",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "XAfx+dSBUPbKAgc/11XqrJeikX/5CJXJaHCEoheJi4k="
           }
         }
       ]

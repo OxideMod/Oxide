@@ -686,34 +686,95 @@ namespace Oxide.Rust.Plugins
             return Interface.CallHook("OnPlayerSpawn", player);
         }
 
+        /// <summary>
+        /// Called when the player upgrades a BuildingBlock
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="msg"></param>
+        /// <param name="grade"></param>
         [HookMethod("OnBuildingBlockDoUpgradeToGrade")]
         private object OnBuildingBlockDoUpgradeToGrade(BuildingBlock block, BaseEntity.RPCMessage msg, BuildingGrade.Enum grade)
         {
             return Interface.CallHook("OnBuildingBlockUpgrade", block, msg.player, grade);
         }
 
+        /// <summary>
+        /// Called when the player demolishes a BuildingBlock
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="msg"></param>
         [HookMethod("OnBuildingBlockDoImmediateDemolish")]
         private object OnBuildingBlockDoImmediateDemolish(BuildingBlock block, BaseEntity.RPCMessage msg)
         {
             return Interface.CallHook("OnBuildingBlockDemolish", block, msg.player);
         }
 
+        /// <summary>
+        /// Called when the player rotates a BuildingBlock
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="msg"></param>
         [HookMethod("OnBuildingBlockDoRotation")]
         private object OnBuildingBlockDoRotation(BuildingBlock block, BaseEntity.RPCMessage msg)
         {
             return Interface.CallHook("OnBuildingBlockRotate", block, msg.player);
         }
 
+        /// <summary>
+        /// Called when a player locks a sign
+        /// </summary>
+        /// <param name="sign"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         [HookMethod("LockSign")]
         private object LockSign(Signage sign, BaseEntity.RPCMessage msg)
         {
             return Interface.CallHook("OnSignLocked", sign, msg.player);
         }
 
+        /// <summary>
+        /// Called when a player has changed a sign.
+        /// </summary>
+        /// <param name="sign"></param>
+        /// <param name="msg"></param>
+        /// <param name="text"></param>
         [HookMethod("UpdateSign")]
         private object UpdateSign(Signage sign, BaseEntity.RPCMessage msg, string text)
         {
             return Interface.CallHook("OnSignUpdated", sign, msg.player, text);
+        }
+
+        /// <summary>
+        /// Called when an item loses durability
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="amount"></param>
+        [HookMethod("LoseCondition")]
+        private object LoseCondition(Item item, float amount)
+        {
+            var arguments = new object[] { item, amount };
+            Interface.Oxide.CallHook("OnLoseCondition", arguments);
+            amount = (float)arguments[1];
+            float condition = item.condition;
+            item.condition -= amount;
+
+            if((item.condition <= 0f) && (item.condition < condition))
+            {
+                item.OnBroken();
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Called when a BaseCombatEntity takes damage
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="info"></param>
+        [HookMethod("OnEntityTakeDamage")]
+        private object OnEntityTakeDamage(BaseCombatEntity entity, HitInfo info)
+        {
+            return Interface.CallHook("OnEntityAttacked", entity, info);
         }
     }
 }
