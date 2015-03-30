@@ -84,5 +84,30 @@ namespace Oxide.Core.Libraries
             if (!functions.TryGetValue(name, out info)) return null;
             return info;
         }
+
+        /// <summary>
+        /// Calls a function by the specified name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <exception cref="MissingMethodException"></exception>
+        public object Call(string name, params object[] args) {
+            MethodInfo info;
+            if (!functions.TryGetValue(name, out info))
+                throw new MissingMethodException("No such library method: " + this.GetType().FullName + "#" + name);
+            return info.Invoke(this, args);
+        }
+
+        /// <summary>
+        /// Calls a function by the specified name and converts the return value to the specified type
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public T Call<T>(string name, params object[] args) {
+            // Also support type conversions (e.g. int to string) for convenience
+            return (T)Convert.ChangeType(Call(name, args), typeof(T));
+        }
     }
 }
