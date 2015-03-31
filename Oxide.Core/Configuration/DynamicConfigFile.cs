@@ -100,7 +100,7 @@ namespace Oxide.Core.Configuration
                 return Get(new string[] { keyLevel1, keyLevel2 });
             }
             set {
-                Set(value, new string[] { keyLevel1, keyLevel2 });
+                Set(new object[] { /* path */ keyLevel1, keyLevel2, /* value */ value });
             }
         }
 
@@ -115,7 +115,7 @@ namespace Oxide.Core.Configuration
                 return Get(new string[] { keyLevel1, keyLevel2, keyLevel3 });
             }
             set {
-                Set(value, new string[] { keyLevel1, keyLevel2, keyLevel3 });
+                Set(new object[] { /* path */ keyLevel1, keyLevel2, keyLevel3, /* value */ value });
             }
         }
 
@@ -190,11 +190,14 @@ namespace Oxide.Core.Configuration
         /// <summary>
         /// Sets a configuration value at the specified path
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="path"></param>
-        public void Set(object value, params string[] path) {
-            if (path.Length < 1)
+        /// <param name="pathAndTrailingValue"></param>
+        public void Set(params object[] pathAndTrailingValue) {
+            if (pathAndTrailingValue.Length < 2)
                 throw new ArgumentException("path must not be empty");
+            var path = new string[pathAndTrailingValue.Length - 1];
+            for (var i=0; i<pathAndTrailingValue.Length-1; ++i)
+                path[i] = (string)pathAndTrailingValue[i];
+            var value = pathAndTrailingValue[pathAndTrailingValue.Length - 1];
             object val;
             if (!_keyvalues.TryGetValue(path[0], out val)) {
                 val = new Dictionary<string, object>();
@@ -204,15 +207,6 @@ namespace Oxide.Core.Configuration
                 val = (((Dictionary<string,object>)val)[path[i]] = new Dictionary<string, object>());
             }
             ((Dictionary<string, object>)val)[path[path.Length - 1]] = value;
-        }
-
-        /// <summary>
-        /// Sets a configuration value at the specified path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="value"></param>
-        public void Set(string[] path, object value) {
-            Set(value, path);
         }
 
         #region IEnumerable
