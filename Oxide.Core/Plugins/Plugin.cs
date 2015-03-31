@@ -76,6 +76,11 @@ namespace Oxide.Core.Plugins
         public virtual object Object { get { return this; } }
 
         /// <summary>
+        /// Gets the source file name, if any
+        /// </summary>
+        public virtual string Filename { get { return null; } }
+
+        /// <summary>
         /// Gets the total CPU time spent in this plugin in seconds
         /// </summary>
         public float TimeSpent

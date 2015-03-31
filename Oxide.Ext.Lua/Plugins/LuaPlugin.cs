@@ -34,7 +34,7 @@ namespace Oxide.Lua.Plugins
         /// <summary>
         /// Gets the filename of this plugin
         /// </summary>
-        public string Filename { get; private set; }
+        public new string Filename { get; private set; }
 
         // All functions in this plugin
         private IDictionary<string, LuaFunction> functions;
