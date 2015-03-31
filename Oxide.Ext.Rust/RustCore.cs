@@ -668,6 +668,7 @@ namespace Oxide.Rust.Plugins
 
         /// <summary>
         /// Called when the entity has spawned
+        /// This is used to handle the deprecated hook OnEntitySpawn
         /// </summary>
         /// <param name="entity"></param>
         [HookMethod("OnEntitySpawned")]
@@ -678,6 +679,7 @@ namespace Oxide.Rust.Plugins
 
         /// <summary>
         /// Called when the player has been respawned
+        /// This is used to handle the deprecated hook OnPlayerSpawn
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("OnPlayerRespawned")]
@@ -733,7 +735,7 @@ namespace Oxide.Rust.Plugins
         }
 
         /// <summary>
-        /// Called when a player has changed a sign.
+        /// Called when a player has changed a sign
         /// </summary>
         /// <param name="sign"></param>
         /// <param name="msg"></param>
@@ -768,6 +770,7 @@ namespace Oxide.Rust.Plugins
 
         /// <summary>
         /// Called when a BaseCombatEntity takes damage
+        /// This is used to handle the deprecated hook OnEntityAttacked
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="info"></param>
@@ -775,6 +778,18 @@ namespace Oxide.Rust.Plugins
         private object OnEntityTakeDamage(BaseCombatEntity entity, HitInfo info)
         {
             return Interface.CallHook("OnEntityAttacked", entity, info);
+        }
+
+        /// <summary>
+        /// Called when a player uses a door
+        /// This is used to handle the deprecated hook CanOpenDoor
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="doorlock"></param>
+        [HookMethod("CanUseDoor")]
+        private object CanUseDoor(BasePlayer player, BaseLock doorlock)
+        {
+            return Interface.CallHook("CanOpenDoor", player, doorlock);
         }
     }
 }

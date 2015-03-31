@@ -209,7 +209,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 22,
+            "InjectionIndex": 21,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -287,7 +287,7 @@
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
             "Name": "BaseLock_OnTryToOpen",
-            "HookName": "CanOpenDoor",
+            "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "BaseLock",
             "Flagged": false,
@@ -311,7 +311,7 @@
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
             "Name": "BaseLock_OnTryToClose",
-            "HookName": "CanOpenDoor",
+            "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "BaseLock",
             "Flagged": false,
@@ -335,7 +335,7 @@
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
             "Name": "CodeLock_OnTryToOpen",
-            "HookName": "CanOpenDoor",
+            "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "CodeLock",
             "Flagged": false,
@@ -359,7 +359,7 @@
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
             "Name": "CodeLock_OnTryToClose",
-            "HookName": "CanOpenDoor",
+            "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp",
             "TypeName": "CodeLock",
             "Flagged": false,
@@ -1229,7 +1229,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 33,
+            "InjectionIndex": 32,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0, l0",
@@ -1294,6 +1294,28 @@
               "Parameters": []
             },
             "MSILHash": "XAfx+dSBUPbKAgc/11XqrJeikX/5CJXJaHCEoheJi4k="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "DestroyOnGroundMissing_OnGroundMissing",
+            "HookName": "OnEntityGroundMissing",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "DestroyOnGroundMissing",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnGroundMissing",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "CQW+eywQn+dbiSB1fXzXp0iAY8Sm4oAwDDmwYlAfElg="
           }
         }
       ]
