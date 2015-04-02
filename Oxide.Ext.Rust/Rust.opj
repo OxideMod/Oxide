@@ -1317,6 +1317,54 @@
             },
             "MSILHash": "CQW+eywQn+dbiSB1fXzXp0iAY8Sm4oAwDDmwYlAfElg="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 25,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Door_RPC_OpenDoor",
+            "HookName": "OnDoorOpened",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Door",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RPC_OpenDoor",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "KFU6hkaLdPZcMn4rP9yn1qhPAOV0Lj+IpmbDub6JZV4="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 25,
+            "ReturnBehaviour": 0,
+            "ArgumentBehaviour": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Door_RPC_CloseDoor",
+            "HookName": "OnDoorClosed",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Door",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RPC_CloseDoor",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "uXipJ5L7oXp2XY4eDGdGxPU+UPduQ27NakJmcTPQAJI="
+          }
         }
       ]
     }
