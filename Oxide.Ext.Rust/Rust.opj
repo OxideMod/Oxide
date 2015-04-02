@@ -1322,8 +1322,8 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 25,
-            "ReturnBehaviour": 0,
-            "ArgumentBehaviour": 3,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "Door_RPC_OpenDoor",
@@ -1346,8 +1346,8 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 25,
-            "ReturnBehaviour": 0,
-            "ArgumentBehaviour": 3,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "Door_RPC_CloseDoor",
