@@ -14,6 +14,11 @@ namespace Oxide.Core.Plugins
         public List<string> LoadingPlugins { get; } = new List<string>();
 
         /// <summary>
+        /// Optional loaded plugin instances used by loaders which need to be notified before a plugin is unloaded
+        /// </summary>
+        public Dictionary<string, Plugin> LoadedPlugins = new Dictionary<string, Plugin>();
+
+        /// <summary>
         /// Stores the last error a plugin had while loading
         /// </summary>
         public Dictionary<string, string> PluginErrors { get; } = new Dictionary<string, string>();

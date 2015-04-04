@@ -25,12 +25,12 @@ namespace Oxide.Plugins
         private bool isPatching;
         private bool isLoaded;
 
-        private string[] blacklistedNamespaces = {
+        private string[] blacklistedNamespaces => new[] {
             "System.IO", "System.Net", "System.Xml", "System.Reflection.Assembly", "System.Reflection.Emit", "System.Threading",
             "System.Runtime.InteropServices", "System.Diagnostics", "System.Security", "System.Timers", "Mono.CSharp", "Mono.Cecil"
         };
 
-        private string[] whitelistedNamespaces = {
+        private string[] whitelistedNamespaces => new[] {
             "System.IO.MemoryStream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags"
         };
 
