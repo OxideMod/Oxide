@@ -58,7 +58,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "HookTypeName": "Initialise Oxide",
+            "HookTypeName": "Initialize Oxide",
             "Name": "Initialize",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp",
