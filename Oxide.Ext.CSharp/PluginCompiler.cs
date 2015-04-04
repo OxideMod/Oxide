@@ -172,7 +172,7 @@ namespace Oxide.Plugins
 
         private void SpawnCompiler()
         {
-            var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+", "/platform:x64" };
+            var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+" };
 
             foreach (var reference_name in references)
                 arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference_name));
