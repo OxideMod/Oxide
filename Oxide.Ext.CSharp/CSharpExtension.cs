@@ -84,7 +84,7 @@ namespace Oxide.Plugins
         /// </summary>
         private void OnFrame(float delta)
         {
-            foreach (var plugin in loader.LoadedPlugins)
+            foreach (CSharpPlugin plugin in loader.LoadedPlugins.Values)
                 if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", delta);
         }
     }

@@ -397,7 +397,7 @@ namespace Oxide.Core
             if (plugin == null) return false;
 
             // Let the plugin loader know that this plugin is being unloaded
-            var loader = extensionmanager.GetPluginLoaders().SingleOrDefault(l => l.ScanDirectory(PluginDirectory).Contains(name));
+            var loader = extensionmanager.GetPluginLoaders().SingleOrDefault(l => l.LoadedPlugins.ContainsKey(name));
             if (loader != null) loader.Unloading(plugin);
 
             // Unload it

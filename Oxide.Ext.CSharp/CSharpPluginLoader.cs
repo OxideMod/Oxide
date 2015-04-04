@@ -13,7 +13,6 @@ namespace Oxide.Plugins
     {
         public static string[] DefaultReferences = { "System", "System.Core", "System.Data", "Oxide.Core", "Oxide.Ext.CSharp" };
         public static HashSet<string> PluginReferences = new HashSet<string>(DefaultReferences);
-        public List<CSharpPlugin> LoadedPlugins = new List<CSharpPlugin>();
 
         private CSharpExtension extension;
         private Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
@@ -81,7 +80,7 @@ namespace Oxide.Plugins
                         if (plugin != null)
                         {
                             plugin.Loader = this;
-                            LoadedPlugins.Add(plugin);
+                            LoadedPlugins[compilable_plugin.Name] = plugin;
                         }
                     });
                 else
@@ -133,7 +132,7 @@ namespace Oxide.Plugins
         public override void Unloading(Plugin plugin_base)
         {
             var plugin = plugin_base as CSharpPlugin;
-            LoadedPlugins.Remove(plugin);
+            LoadedPlugins.Remove(plugin.Name);
         }
 
         /// <summary>
