@@ -14,17 +14,18 @@ git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/Snaps
 function bundle_rust {
     cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
     mkdir -p $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to create directory structure!"
+    mkdir -p $HOME/temp_rust/RustDedicated_Data/Managed/x64 || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/x64/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/x64/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/x64/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/x64/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.MySql/bin/x64/Release/Oxide.Ext.MySql.dll \
-    Oxide.Ext.Python/bin/x64/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.Rust/bin/x64/Release/Oxide.Ext.Rust.dll \
-    Oxide.Ext.SQLite/bin/x64/Release/Oxide.Ext.SQLite.dll \
-    Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
+    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
+    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
+    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
+    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
+    Oxide.Ext.MySql/bin/Release/Oxide.Ext.MySql.dll \
+    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
+    Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll \
+    Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
+    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
@@ -34,15 +35,15 @@ function bundle_rust {
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
     Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
+    cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
+    Oxide.Ext.SQLite/Dependencies/x64/*.dll \
+    $HOME/temp_rust/RustDedicated_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    Oxide.Ext.Lua/Dependencies/lua5*.dll \
-    Oxide.Ext.Lua/Dependencies/msvc*.dll \
-    Oxide.Ext.SQLite/Dependencies/sqlite3.dll \
     $HOME/temp_rust || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
@@ -54,17 +55,19 @@ function bundle_rust {
 function bundle_7dtd {
     cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
     mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to create directory structure!"
+    mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed/x64 || die_with "Failed to create directory structure!"
+    mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed/x86 || die_with "Failed to create directory structure!"
 
     echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/x64/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/x64/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/x64/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/x64/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.MySql/bin/x64/Release/Oxide.Ext.MySql.dll \
-    Oxide.Ext.Python/bin/x64/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.SevenDays/bin/x64/Release/Oxide.Ext.SevenDays.dll \
-    Oxide.Ext.SQLite/bin/x64/Release/Oxide.Ext.SQLite.dll \
-    Oxide.Ext.Unity/bin/x64/Release/Oxide.Ext.Unity.dll \
+    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
+    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
+    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
+    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
+    Oxide.Ext.MySql/bin/Release/Oxide.Ext.MySql.dll \
+    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
+    Oxide.Ext.SevenDays/bin/Release/Oxide.Ext.SevenDays.dll \
+    Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
+    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
@@ -75,15 +78,18 @@ function bundle_7dtd {
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
     Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
+    cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
+    Oxide.Ext.SQLite/Dependencies/x64/*.dll \
+    $HOME/temp_rust/7DaysToDie_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
+    cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
+    Oxide.Ext.SQLite/Dependencies/x86/*.dll \
+    $HOME/temp_rust/7DaysToDie_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    Oxide.Ext.Lua/Dependencies/lua5*.dll \
-    Oxide.Ext.Lua/Dependencies/msvc*.dll \
-    Oxide.Ext.SQLite/Dependencies/sqlite3.dll \
     $HOME/temp_7dtd || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
