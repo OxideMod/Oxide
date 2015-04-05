@@ -123,6 +123,8 @@ namespace Oxide.Core
             if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
             if (!Directory.Exists(TempDirectory)) Directory.CreateDirectory(TempDirectory);
 
+            RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
+
             // Create the loggers
             filelogger = new RotatingFileLogger();
             filelogger.Directory = LogDirectory;
@@ -575,5 +577,26 @@ namespace Oxide.Core
         }
 
         #endregion
+
+        private static void RegisterLibrarySearchPath(string path)
+        {
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Win32NT:
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                    var currentPath = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+                    var newPath = string.IsNullOrEmpty(currentPath) ? path : currentPath + Path.PathSeparator + path;
+                    Environment.SetEnvironmentVariable("PATH", newPath);
+                    //SetDllDirectory(path);
+                    break;
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    var currentLdLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH") ?? string.Empty;
+                    var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : currentLdLibraryPath + Path.PathSeparator + path;
+                    Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", newLdLibraryPath);
+                    break;
+            }
+        }
     }
 }
