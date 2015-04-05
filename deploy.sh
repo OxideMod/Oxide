@@ -80,10 +80,10 @@ function bundle_7dtd {
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
     Oxide.Ext.SQLite/Dependencies/x64/*.dll \
-    $HOME/temp_rust/7DaysToDie_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
+    $HOME/temp_7dtd/7DaysToDie_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
     Oxide.Ext.SQLite/Dependencies/x86/*.dll \
-    $HOME/temp_rust/7DaysToDie_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
+    $HOME/temp_7dtd/7DaysToDie_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
