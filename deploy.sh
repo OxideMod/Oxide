@@ -71,11 +71,11 @@ function bundle_rustlegacy {
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
+    Oxide.Ext.RustLegacy/Dependencies/Newtonsoft.Json.dll \
+    Oxide.Ext.RustLegacy/Dependencies/System.*.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
     Oxide.Ext.SQLite/Dependencies/x86/*.dll \
-    Oxide.Ext.RustLegacy/Dependencies/Newtonsoft.Json.dll \
-    Oxide.Ext.RustLegacy/Dependencies/System.*.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.RustLegacy/Patched/Assembly-CSharp.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy patched server files!"
