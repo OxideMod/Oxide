@@ -76,7 +76,7 @@ function bundle_rustlegacy {
     Oxide.Ext.SQLite/Dependencies/x86/*.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.RustLegacy/Patched/Assembly-CSharp.dll \
-    $HOME/temp_rustlegacy/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
+    $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.RustLegacy/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
