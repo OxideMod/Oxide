@@ -27,7 +27,8 @@ namespace Oxide.Plugins
 
         private string[] blacklistedNamespaces => new[] {
             "System.IO", "System.Net", "System.Xml", "System.Reflection.Assembly", "System.Reflection.Emit", "System.Threading",
-            "System.Runtime.InteropServices", "System.Diagnostics", "System.Security", "System.Timers", "Mono.CSharp", "Mono.Cecil"
+            "System.Runtime.InteropServices", "System.Diagnostics", "System.Security", "System.Timers", "Mono.CSharp", "Mono.Cecil",
+            "ServerFileSystem"
         };
 
         private string[] whitelistedNamespaces => new[] {

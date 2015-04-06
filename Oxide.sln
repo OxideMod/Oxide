@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.Python", "Oxide.E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.Rust", "Oxide.Ext.Rust\Oxide.Ext.Rust.csproj", "{87568E26-BF3C-4A14-A3C4-8B74616D6FA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.RustLegacy", "Oxide.Ext.RustLegacy\Oxide.Ext.RustLegacy.csproj", "{ADA2D153-8B29-4B9D-A20F-B24150471715}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.SevenDays", "Oxide.Ext.SevenDays\Oxide.Ext.SevenDays.csproj", "{6A987A21-D407-41C6-AD9F-E5D3DF22D617}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oxide.Ext.SQLite", "Oxide.Ext.SQLite\Oxide.Ext.SQLite.csproj", "{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}"
@@ -74,6 +76,10 @@ Global
 		{04DC61C2-E138-4D67-BFA1-50208DFA6B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04DC61C2-E138-4D67-BFA1-50208DFA6B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04DC61C2-E138-4D67-BFA1-50208DFA6B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA2D153-8B29-4B9D-A20F-B24150471715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA2D153-8B29-4B9D-A20F-B24150471715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA2D153-8B29-4B9D-A20F-B24150471715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA2D153-8B29-4B9D-A20F-B24150471715}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

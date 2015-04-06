@@ -1,0 +1,585 @@
+{
+  "Name": "RustLegacy",
+  "TargetDirectory": "D:\\Servers\\Game\\RustLegacy\\rust_server_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 109,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnInitLogging",
+            "HookName": "OnInitLogging",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ServerInit",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "7iVtg/bpIqwFz7+vQqcwUW6jlrzElI5du3p+Y60GSjM="
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 109,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ServerInit",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "7iVtg/bpIqwFz7+vQqcwUW6jlrzElI5du3p+Y60GSjM="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnRunCommand",
+            "HookName": "OnRunCommand",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConsoleSystem",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RunCommand",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "ConsoleSystem/Arg&",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "LfxsfVOyLYpdMn2t4W0i+hsXpRE9sL1ESi9Q0XEvn/I="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnAirdrop",
+            "HookName": "OnAirdrop",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "SupplyDropZone",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CallAirDropAt",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "S2yoVky4RWw71R2i31mvZVhxsvYcDku/FZ6isRfF9/o="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnStructureDecay",
+            "HookName": "OnStructureDecay",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "StructureMaster",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "DoDecay",
+              "ReturnType": "StructureMaster/DecayStatus",
+              "Parameters": []
+            },
+            "MSILHash": "1IZr+5cupcX96geh6H0KOncnvIHezo9qQOc6EfVR+Ho="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnItemCraft",
+            "HookName": "OnItemCraft",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "CraftingInventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "StartCrafting",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BlueprintDataBlock",
+                "System.Int32",
+                "System.UInt64"
+              ]
+            },
+            "MSILHash": "pn59MFOF07zNbcKg/nwCL688lIUAe1HKOHlTmuRLUto="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 76,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDatablocksInitialized",
+            "HookName": "OnDatablocksInitialized",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "DatablockDictionary",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "eBr1ektSE4qkPjF6YAXebPzMJSlMZ2HUj30Q72XFmSg="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnResearchItem",
+            "HookName": "OnResearchItem",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ResearchToolItem`1",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "TryCombine",
+              "ReturnType": "InventoryItem/MergeResult",
+              "Parameters": [
+                "IInventoryItem"
+              ]
+            },
+            "MSILHash": "GiYcSjmSJwL/YZmLrAfiSIONsDOyay4sPrVq9LmgFBM="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnItemAdded",
+            "HookName": "OnItemAdded",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Inventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "ItemAdded",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "IInventoryItem"
+              ]
+            },
+            "MSILHash": "MRARJtLIarrpMY6AiJUFxVxqjAvnXfYXgeJb93y71Qw="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnItemRemoved",
+            "HookName": "OnItemRemoved",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Inventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "ItemRemoved",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "IInventoryItem"
+              ]
+            },
+            "MSILHash": "itot1Z1wC1nvMg6rE/9kHjYYHSnWCsoIXsj7lRqomPs="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBlueprintUse",
+            "HookName": "OnBlueprintUse",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BlueprintDataBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UseItem",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "IBlueprintItem"
+              ]
+            },
+            "MSILHash": "CgKwpuOUEX3GpJi+PkdDhqSIcamTWscdfTSmOdlKkJc="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 100,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l8, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnStructurePlaced [internal]",
+            "HookName": "OnStructurePlaced",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "StructureComponentDataBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoAction1",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.BitStream",
+                "ItemRepresentation",
+                "uLink.NetworkMessageInfo&"
+              ]
+            },
+            "MSILHash": "nL/FQ9TKbClVCUDdUW1SI8zLTp2uVDJBgNW63uQAo7M="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 23,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0 => l0",
+            "HookTypeName": "Simple",
+            "Name": "ModifyTags [internal]",
+            "HookName": "ModifyTags",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "Rust.Steam.Server",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetTags",
+              "ReturnType": "System.String",
+              "Parameters": []
+            },
+            "MSILHash": "eRdK7MTGBpUJ7RwefOdl4tKMLdvBm68Q+3nVglAwDTQ="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConnectionAcceptor",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerDisconnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "GnOuwgB2ugu3v4gb7XB/6WdgEPMra0VVIxFZfohvOeM="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ServerManagement",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnUserConnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "NetUser"
+              ]
+            },
+            "MSILHash": "HXUoxG6IuT2ff73Gnq4tU9S57PDqexwQ3g15tuG32GU="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpawn",
+            "HookName": "OnPlayerSpawn",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ServerManagement",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SpawnPlayer",
+              "ReturnType": "Character",
+              "Parameters": [
+                "PlayerClient",
+                "System.Boolean",
+                "RustProto.Avatar"
+              ]
+            },
+            "MSILHash": "H7Duc8/AlTI2KyTcwQcUHXL5fgAMuiHlclidaj+iO5g="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDoorToggle",
+            "HookName": "OnDoorToggle",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BasicDoor",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ToggleStateServer",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt64",
+                "Controllable"
+              ]
+            },
+            "MSILHash": "HzmiBy0ILMm46510rpxVn49Rem0lTiEYKkGA8qap4QI="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnResourceNodeLoaded",
+            "HookName": "OnResourceNodeLoaded",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ResourceTarget",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "xffkTIaQARf90il62rylHiVmrPAHfXAbQrHYP5fj88M="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 65,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0,a0,this",
+            "HookTypeName": "Simple",
+            "Name": "OnUserApprove",
+            "HookName": "OnUserApprove",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ConnectionAcceptor",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerApproval",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayerApproval"
+              ]
+            },
+            "MSILHash": "CnmQP1Icge5S9Qx0Kx3afF8hshkFb7tgA0MpK5gccFw="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "global",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "quit",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ConsoleSystem/Arg&"
+              ]
+            },
+            "MSILHash": "D+SNQLZAu1h9q887bYqu6ZC46PyVl+A9elZsvqKFpSo="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 63,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l8, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemDeployedByPlayer [internal]",
+            "HookName": "OnItemDeployedByPlayer",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "DeployableItemDataBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoAction1",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.BitStream",
+                "ItemRepresentation",
+                "uLink.NetworkMessageInfo&"
+              ]
+            },
+            "MSILHash": "9Gc1zsNm4Qm4bBVPJ4TmX4r6Zyf5VNrlnq8WRWsMrK0="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 99,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0,  l5 => l5",
+            "HookTypeName": "Simple",
+            "Name": "OnClientSpeak [internal]",
+            "HookName": "OnClientSpeak",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "VoiceCom",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "clientspeak",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "System.Byte[]"
+              ]
+            },
+            "MSILHash": "lRGPZP8plhLfvl3CE3NCwiq4UT541gqnktbZUGo+MAY="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnProcessDamageEvent [internal]",
+            "HookName": "OnProcessDamageEvent",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "TakeDamage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "ProcessDamageEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "DamageEvent&"
+              ]
+            },
+            "MSILHash": "4RmI0n6m7vZy7x0iOWeLFMWQ4TNmf5zSxvGCiX0zL5I="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "ServerSaveManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Save",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "CRWJTnUr3SKgxShiXNVO6wrfYEnOOcVasPkgRpK2Oo4="
+          }
+        }
+      ]
+    }
+  ]
+}
