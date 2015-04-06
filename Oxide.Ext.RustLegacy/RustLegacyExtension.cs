@@ -48,7 +48,7 @@ namespace Oxide.RustLegacy
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("RustLegacy", new Libraries.RustLegacy());
+            Manager.RegisterLibrary("Rust", new Libraries.RustLegacy());
 
             // Register the OnServerInitialized hook that we can't hook using the IL injector
             var serverinit = UnityEngine.Object.FindObjectOfType<ServerInit>();
