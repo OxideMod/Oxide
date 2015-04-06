@@ -41,6 +41,7 @@ function bundle_rust {
     cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     $HOME/temp_rust || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
@@ -73,12 +74,15 @@ function bundle_rustlegacy {
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
     Oxide.Ext.SQLite/Dependencies/x86/*.dll \
+    Oxide.Ext.RustLegacy/Dependencies/Newtonsoft.Json.dll \
+    Oxide.Ext.RustLegacy/Dependencies/System.*.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.RustLegacy/Patched/Assembly-CSharp.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.RustLegacy/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     $HOME/temp_rustlegacy || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
@@ -123,6 +127,7 @@ function bundle_7dtd {
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     $HOME/temp_7dtd || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
