@@ -2,6 +2,9 @@
 
 function die_with { echo "$*" >&2; exit 1; }
 
+echo "Are you Travis?"
+if [ ! $TRAVIS ]; then die_with "You are not Travis!"; fi
+
 echo "Checking if commit is a pull request"
 if [ $TRAVIS_PULL_REQUEST == true ]; then die_with "Skipping deployment for pull request!"; fi
 
