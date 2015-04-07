@@ -34,8 +34,7 @@ namespace Oxide.RustLegacy.Libraries
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string format, params object[] args)
         {
-            foreach (var playerClient in PlayerClient.All)
-                ConsoleNetworker.SendClientCommand(playerClient.netUser.networkPlayer, "chat.add Oxide " + QuoteSafe(string.Format(format, args)));
+            ConsoleNetworker.Broadcast("chat.add Oxide " + QuoteSafe(string.Format(format, args)));
         }
 
         /// <summary>
@@ -70,8 +69,7 @@ namespace Oxide.RustLegacy.Libraries
         [LibraryFunction("BroadcastConsole")]
         public void BroadcastConsole(string format, params object[] args)
         {
-            foreach (var playerClient in PlayerClient.All)
-                ConsoleNetworker.SendClientCommand(playerClient.netUser.networkPlayer, "echo " + QuoteSafe(string.Format(format, args)));
+            ConsoleNetworker.Broadcast("echo " + QuoteSafe(string.Format(format, args)));
         }
 
         /// <summary>
