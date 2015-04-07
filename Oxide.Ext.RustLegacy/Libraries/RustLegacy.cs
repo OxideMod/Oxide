@@ -111,5 +111,17 @@ namespace Oxide.RustLegacy.Libraries
             }
             return null;
         }
+
+        [LibraryFunction("Notice")]
+        public void Notice(NetUser netUser, string message, string icon = " ", float duration = 4f)
+        {
+            Rust.Notice.Popup(netUser.networkPlayer, icon, message, duration);
+        }
+
+        [LibraryFunction("InventoryNotice")]
+        public void InventoryNotice(NetUser netUser, string message)
+        {
+            Rust.Notice.Inventory(netUser.networkPlayer, message);
+        }
     }
 }
