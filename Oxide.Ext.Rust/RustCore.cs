@@ -674,7 +674,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnEntitySpawned")]
         private object OnEntitySpawned(BaseNetworkable entity)
         {
-            return Interface.CallHook("OnEntitySpawn", entity);
+            return Interface.Oxide.CallDeprecatedHook("OnEntitySpawn", entity);
         }
 
         /// <summary>
@@ -685,7 +685,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnPlayerRespawned")]
         private object OnPlayerRespawned(BasePlayer player)
         {
-            return Interface.CallHook("OnPlayerSpawn", player);
+            return Interface.Oxide.CallDeprecatedHook("OnPlayerSpawn", player);
         }
 
         /// <summary>
@@ -777,7 +777,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnEntityTakeDamage")]
         private object OnEntityTakeDamage(BaseCombatEntity entity, HitInfo info)
         {
-            return Interface.CallHook("OnEntityAttacked", entity, info);
+            return Interface.Oxide.CallDeprecatedHook("OnEntityAttacked", entity, info);
         }
 
         /// <summary>
@@ -789,7 +789,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("CanUseDoor")]
         private object CanUseDoor(BasePlayer player, BaseLock doorlock)
         {
-            return Interface.CallHook("CanOpenDoor", player, doorlock);
+            return Interface.Oxide.CallDeprecatedHook("CanOpenDoor", player, doorlock);
         }
     }
 }
