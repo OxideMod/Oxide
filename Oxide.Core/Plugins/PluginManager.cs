@@ -12,12 +12,6 @@ namespace Oxide.Core.Plugins
     /// </summary>
     public sealed class PluginManager
     {
-        // All loaded plugins
-        private readonly IDictionary<string, Plugin> loadedplugins;
-
-        // All hook subscriptions
-        private readonly IDictionary<string, IList<Plugin>> hooksubscriptions;
-
         /// <summary>
         /// Gets the logger to which this plugin manager writes
         /// </summary>
@@ -38,6 +32,15 @@ namespace Oxide.Core.Plugins
         /// </summary>
         public event PluginEvent OnPluginRemoved;
 
+        // All loaded plugins
+        private readonly IDictionary<string, Plugin> loadedplugins;
+
+        // All hook subscriptions
+        private readonly IDictionary<string, IList<Plugin>> hooksubscriptions;
+
+        // Stores the last time a deprecation warning was printed for a specific hook
+        private Dictionary<string, float> lastDeprecatedWarningAt = new Dictionary<string, float>();
+
         /// <summary>
         /// Initializes a new instance of the PluginManager class
         /// </summary>
@@ -55,12 +58,10 @@ namespace Oxide.Core.Plugins
         /// <param name="plugin"></param>
         public bool AddPlugin(Plugin plugin)
         {
-            if (loadedplugins.ContainsKey(plugin.Name))
-                return false;
+            if (loadedplugins.ContainsKey(plugin.Name)) return false;
             loadedplugins.Add(plugin.Name, plugin);
             plugin.HandleAddedToManager(this);
-            if (OnPluginAdded != null)
-                OnPluginAdded(plugin);
+            if (OnPluginAdded != null) OnPluginAdded(plugin);
             return true;
         }
 
@@ -71,15 +72,12 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public bool RemovePlugin(Plugin plugin)
         {
-            if (!loadedplugins.ContainsKey(plugin.Name))
-                return false;
+            if (!loadedplugins.ContainsKey(plugin.Name)) return false;
             loadedplugins.Remove(plugin.Name);
             foreach (IList<Plugin> list in hooksubscriptions.Values)
-                if (list.Contains(plugin))
-                    list.Remove(plugin);
+                if (list.Contains(plugin)) list.Remove(plugin);
             plugin.HandleRemovedFromManager(this);
-            if (OnPluginRemoved != null)
-                OnPluginRemoved(plugin);
+            if (OnPluginRemoved != null) OnPluginRemoved(plugin);
             return true;
         }
 
@@ -91,8 +89,8 @@ namespace Oxide.Core.Plugins
         public Plugin GetPlugin(string name)
         {
             Plugin plugin;
-            if (!loadedplugins.TryGetValue(name, out plugin)) return null;
-            return plugin;
+            if (loadedplugins.TryGetValue(name, out plugin)) return plugin;
+            return null;
         }
 
         /// <summary>
@@ -175,6 +173,29 @@ namespace Oxide.Core.Plugins
             }
             Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
             return finalvalue;
+        }
+
+        /// <summary>
+        /// Calls a hook on all plugins of this manager and prints a deprecation warning
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public object CallDeprecatedHook(string name, params object[] args)
+        {
+            IList<Plugin> plugins;
+            if (!hooksubscriptions.TryGetValue(name, out plugins)) return null;
+            if (plugins.Count == 0) return null;
+
+            var now = Interface.Oxide.Now;
+            float last_warning_at;
+            if (!lastDeprecatedWarningAt.TryGetValue(name, out last_warning_at) || now - last_warning_at > 120f)
+            {
+                lastDeprecatedWarningAt[name] = now;
+                Interface.Oxide.LogWarning("{0} plugin is using deprecated hook: {1}", plugins[0].Name, name);
+            }
+
+            return CallHook(name, args);
         }
     }
 }

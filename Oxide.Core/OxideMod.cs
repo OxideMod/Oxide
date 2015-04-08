@@ -454,6 +454,17 @@ namespace Oxide.Core
         }
 
         /// <summary>
+        /// Calls a deprecated hook and print a warning
+        /// </summary>
+        /// <param name="hookname"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public object CallDeprecatedHook(string hookname, params object[] args)
+        {
+            return RootPluginManager.CallDeprecatedHook(hookname, args);
+        }
+
+        /// <summary>
         /// Queue a callback to be called in the next server frame
         /// </summary>
         /// <param name="callback"></param>
