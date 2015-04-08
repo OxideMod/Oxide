@@ -186,7 +186,7 @@ namespace Oxide.Plugins
                     if (compiled_plugins.Length > 0)
                     {
                         var compiled_names = compiled_plugins.Select(pl => pl.Name).ToSentence();
-                        var verb = compiled_names.Length > 1 ? "were" : "was";
+                        var verb = compiled_plugins.Length > 1 ? "were" : "was";
                         Interface.Oxide.LogInfo($"{compiled_names} {verb} compiled successfully in {Math.Round(compiler.Duration * 1000f)}ms");
                         compiled_assembly = new CompiledAssembly(compiled_plugins, raw_assembly);
                     }
