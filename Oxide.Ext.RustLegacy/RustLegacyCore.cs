@@ -671,7 +671,7 @@ namespace Oxide.RustLegacy.Plugins
                 Interface.CallHook("OnHurt", takedamage, damage);
             }
 
-            return null;
+            return damage;
         }
     }
 }
