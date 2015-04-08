@@ -41,6 +41,17 @@ namespace Oxide.Plugins
             Plugins = new List<CompilablePlugin> { plugin };
         }
 
+        public void CheckCompilerBinary()
+        {
+            BinaryPath = Interface.Oxide.RootDirectory + @"\CSharpCompiler.exe";
+            if (!File.Exists(BinaryPath))
+            {
+                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
+                BinaryPath = null;
+                return;
+            }
+        }
+
         public void ResolveReferences(Action callback)
         {
             // Include references made by the CSharpPlugins project
@@ -172,6 +183,9 @@ namespace Oxide.Plugins
 
         private void SpawnCompiler()
         {
+            CheckCompilerBinary();
+            if (BinaryPath == null) return;
+
             var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+" };
 
             foreach (var reference_name in references)
