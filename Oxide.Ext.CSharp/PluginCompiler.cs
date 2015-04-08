@@ -18,13 +18,25 @@ namespace Oxide.Plugins
 
         public static void CheckCompilerBinary()
         {
-            BinaryPath = Interface.Oxide.RootDirectory + @"\CSharpCompiler.exe";
-            if (!File.Exists(BinaryPath))
+            BinaryPath = null;
+            var root_directory = Interface.Oxide.RootDirectory;
+            if (!File.Exists(root_directory + @"\mono-2.0.dll"))
             {
-                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
-                BinaryPath = null;
+                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find mono-2.0.dll!");
                 return;
             }
+            if (!File.Exists(root_directory + @"\msvcr120.dll") && !File.Exists(Environment.SystemDirectory + @"\msvcr120.dll"))
+            {
+                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find msvcr120.dll!");
+                return;
+            }
+            var binary_path = root_directory + @"\CSharpCompiler.exe";
+            if (!File.Exists(binary_path))
+            {
+                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
+                return;
+            }
+            BinaryPath = binary_path;
         }
 
         public List<CompilablePlugin> Plugins;
