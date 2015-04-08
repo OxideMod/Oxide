@@ -16,6 +16,17 @@ namespace Oxide.Plugins
     {
         public static string BinaryPath;
 
+        public static void CheckCompilerBinary()
+        {
+            BinaryPath = Interface.Oxide.RootDirectory + @"\CSharpCompiler.exe";
+            if (!File.Exists(BinaryPath))
+            {
+                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
+                BinaryPath = null;
+                return;
+            }
+        }
+
         public List<CompilablePlugin> Plugins;
         public StringBuilder StdOutput;
         public StringBuilder ErrOutput;
@@ -172,6 +183,9 @@ namespace Oxide.Plugins
 
         private void SpawnCompiler()
         {
+            CheckCompilerBinary();
+            if (BinaryPath == null) return;
+
             var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+" };
 
             foreach (var reference_name in references)
@@ -224,7 +238,7 @@ namespace Oxide.Plugins
             var process = sender as Process;
             if (e.Data.StartsWith("Warning: restarting compilation"))
             {
-                foreach (var line in StdOutput.ToString().Split('\n'))
+                foreach (var line in StdOutput.ToString().Split('\r', '\n'))
                 {
                     var match = fileErrorRegex.Match(line.Trim());
                     for (var i = 1; i < match.Groups.Count; i++)
