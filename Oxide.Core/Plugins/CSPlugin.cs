@@ -124,7 +124,7 @@ namespace Oxide.Core.Plugins
                             var parameter = parameters[i];
                             // Use the default value if one is provided by the method definition or the argument is a value type
                             if (parameter.DefaultValue != null || parameter.ParameterType.IsValueType)
-                                hook_args[i] = parameter.DefaultValue ?? Activator.CreateInstance(parameter.ParameterType);
+                                hook_args[i] = parameter.DefaultValue == DBNull.Value ? Activator.CreateInstance(parameter.ParameterType) : parameter.DefaultValue;
                         }
                     }
                 }
