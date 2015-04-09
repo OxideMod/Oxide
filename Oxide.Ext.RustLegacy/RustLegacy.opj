@@ -578,6 +578,58 @@
             },
             "MSILHash": "CRWJTnUr3SKgxShiXNVO6wrfYEnOOcVasPkgRpK2Oo4="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "GetClientMove [internal]",
+            "HookName": "OnGetClientMove",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "HumanController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "GetClientMove",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.Vector3",
+                "System.Int32",
+                "System.UInt16",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "DToIg6WBON5urrKVC0qFBtbjkUb6bietRyrycSbRimI="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "OnAIMovement [internal]",
+            "HookName": "OnAIMovement",
+            "AssemblyName": "Assembly-CSharp",
+            "TypeName": "BaseAIMovement",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoMove",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasicWildLifeAI",
+                "System.UInt64"
+              ]
+            },
+            "MSILHash": "+u2GCtSHTDWu7iqcjcFKh98FNKhbrQfPRx+LI73xrGk="
+          }
         }
       ]
     }
