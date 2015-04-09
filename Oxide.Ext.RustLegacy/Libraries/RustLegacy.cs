@@ -93,6 +93,10 @@ namespace Oxide.RustLegacy.Libraries
             return string.Concat("\"", str, "\"");
         }
 
+        /// <summary>
+        /// Finds a player by name, steam id or ip
+        /// </summary>
+        /// <param name="strNameOrIDOrIP"></param>
         [LibraryFunction("FindPlayer")]
         public NetUser FindPlayer(string strNameOrIDOrIP)
         {
@@ -112,16 +116,40 @@ namespace Oxide.RustLegacy.Libraries
             return null;
         }
 
+        /// <summary>
+        /// Shows a notice to a player
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <param name="message"></param>
+        /// <param name="icon"></param>
+        /// <param name="duration"></param>
         [LibraryFunction("Notice")]
         public void Notice(NetUser netUser, string message, string icon = " ", float duration = 4f)
         {
             Rust.Notice.Popup(netUser.networkPlayer, icon, message, duration);
         }
 
+        /// <summary>
+        /// Shows an inventory notice to a player
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <param name="message"></param>
         [LibraryFunction("InventoryNotice")]
         public void InventoryNotice(NetUser netUser, string message)
         {
             Rust.Notice.Inventory(netUser.networkPlayer, message);
+        }
+
+        /// <summary>
+        /// Returns an Inventory.Slot.Preference
+        /// </summary>
+        /// <param name="startSlotKind"></param>
+        /// <param name="slot"></param>
+        /// <param name="flags"></param>
+        [LibraryFunction("InventorySlotPreference")]
+        public Inventory.Slot.Preference InventorySlotPreference(Inventory.Slot.Kind startSlotKind, bool stack, Inventory.Slot.KindFlags flags)
+        {
+            return Inventory.Slot.Preference.Define(startSlotKind, stack, flags);
         }
     }
 }
