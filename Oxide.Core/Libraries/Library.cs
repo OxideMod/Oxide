@@ -54,8 +54,15 @@ namespace Oxide.Core.Libraries
             functions = new Dictionary<string, MethodInfo>();
             foreach (var method in GetType().GetMethods())
             {
-                var attribute = method.GetCustomAttributes(typeof(LibraryFunction), true).SingleOrDefault() as LibraryFunction;
-                if (attribute != null) functions.Add(attribute.Name ?? method.Name, method);
+                try
+                {
+                    var attribute = method.GetCustomAttributes(typeof(LibraryFunction), true).SingleOrDefault() as LibraryFunction;
+                    if (attribute != null) functions.Add(attribute.Name ?? method.Name, method);
+                }
+                catch (TypeLoadException)
+                {
+                    // Ignore rare exceptions caused by type information being loaded for all methods
+                }
             }
         }
 

@@ -161,6 +161,7 @@ namespace Oxide.Core.Extensions
             {
                 //Logger.Write(LogType.Error, "Failed to load extension {0} ({1})", name, ex.Message);
                 Logger.WriteException(string.Format("Failed to load extension {0}", name), ex);
+                RemoteLogger.Exception(string.Format("Failed to load extension {0}", name), ex);
             }
         }
 
