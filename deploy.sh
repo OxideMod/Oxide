@@ -34,7 +34,7 @@ function bundle_rust {
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
+    Oxide.Ext.SQLite/Dependencies/System.*.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
     Oxide.Ext.SQLite/Dependencies/x64/*.dll \
@@ -73,7 +73,7 @@ function bundle_rustlegacy {
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
+    Oxide.Ext.SQLite/Dependencies/System.*.dll \
     Oxide.Ext.RustLegacy/Dependencies/Newtonsoft.Json.dll \
     Oxide.Ext.RustLegacy/Dependencies/System.*.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy dependency DLLs!"
@@ -117,7 +117,7 @@ function bundle_7dtd {
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SevenDays/Dependencies/System.*.dll \
-    Oxide.Ext.SQLite/Dependencies/System.Data.SQLite.dll \
+    Oxide.Ext.SQLite/Dependencies/System.*.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
     Oxide.Ext.SQLite/Dependencies/x64/*.dll \
