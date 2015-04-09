@@ -1,0 +1,256 @@
+{
+  "Name": "Terraria",
+  "TargetDirectory": "D:\\Servers\\Game\\Terraria\\Latest",
+  "Manifests": [
+    {
+      "AssemblyName": "TerrariaServer.exe",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "DedServ",
+            "HookName": "OnDedServ",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Main",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DedServ",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "RPbngvAhUOgb1r8dTFag3sabxrrxmI7rwJDYtbeZNjM="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "QuitGame",
+            "HookName": "OnQuitGame",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Main",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "QuitGame",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "hJbMs1S+SDEsS4KGs17Jcf1V/jhG57LxSTTjSmHzbik="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitMap",
+            "HookName": "OnInitMap",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Main",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "InitMap",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "3X7/OQZbOVKio0ciMC60cBJRv0ENxHaP+hej2TjtoLk="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Initialize",
+            "HookName": "OnInitialize",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Main",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "kg8Ykav3/Hj6H1Hnk0+Y4Px8CBHn4qz0es+chfCxM/E="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "StartServer",
+            "HookName": "OnStartServer",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Netplay",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StartServer",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "NqojzM43wSpNHp+UurQ4t/4njBxGYTkFHzXQkLIzcg8="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Init",
+            "HookName": "OnInit",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Netplay",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Init",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "2EoZSTWn260otNKAg633bEwdg4taK0p4v3yJ8ZgcKio="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Spawn",
+            "HookName": "OnSpawn",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Player",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Spawn",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "3j7JB3t2PVJM4swQuo8tkeBsj/7fgbLeKVEynshSHbE="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Teleport",
+            "HookName": "OnTeleport",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Player",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Teleport",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Microsoft.Xna.Framework.Vector2",
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "zIFbDKq6df8TebSSsYIObJ3E6OiIwfYJpwtv2jeOoH4="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "SaveAndQuit",
+            "HookName": "OnSaveAndQuit",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.WorldGen",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SaveAndQuit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "6wXq/l0zIIe8LivsdFTXvFQ4ZZGSEMiQJvGwSVfEfS8="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": ".ctor",
+            "HookName": "On.ctor",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Player",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": ".ctor",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "FK7Y3Sw3eKl3KoSqWVcdXZD4p6syG28Y+sAHaX9bPsI="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "PlaceThing",
+            "HookName": "OnPlaceThing",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Player",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PlaceThing",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "LoLxplt5DRJ586aCOGBLFjcNlaNKRHwDo4X7X1IS9lg="
+          }
+        }
+      ]
+    }
+  ]
+}
