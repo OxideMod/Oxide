@@ -17,7 +17,14 @@ namespace Oxide.Core.Libraries
         public string Name { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the LibraryFunction class
+        /// Creates a library function using the methods name
+        /// </summary>
+        public LibraryFunction()
+        {
+        }
+
+        /// <summary>
+        /// Creates a library function using the given name
         /// </summary>
         /// <param name="name"></param>
         public LibraryFunction(string name)
@@ -44,23 +51,11 @@ namespace Oxide.Core.Libraries
         /// </summary>
         public Library()
         {
-            // Load all functions
             functions = new Dictionary<string, MethodInfo>();
-            foreach (MethodInfo method in GetType().GetMethods())
+            foreach (var method in GetType().GetMethods())
             {
-                LibraryFunction func;
-                try
-                {
-                    func = method.GetCustomAttributes(typeof(LibraryFunction), true).Single() as LibraryFunction;
-                }
-                catch (Exception)
-                {
-                    func = null;
-                }
-                if (func != null)
-                {
-                    functions.Add(func.Name, method);
-                }
+                var attribute = method.GetCustomAttributes(typeof(LibraryFunction), true).SingleOrDefault() as LibraryFunction;
+                if (attribute != null) functions.Add(attribute.Name ?? method.Name, method);
             }
         }
 
@@ -81,8 +76,8 @@ namespace Oxide.Core.Libraries
         public MethodInfo GetFunction(string name)
         {
             MethodInfo info;
-            if (!functions.TryGetValue(name, out info)) return null;
-            return info;
+            if (functions.TryGetValue(name, out info)) return info;
+            return null;
         }
     }
 }
