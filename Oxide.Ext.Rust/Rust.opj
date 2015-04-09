@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\Rust\\Latest\\RustDedicated_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "InitOxide",
@@ -12,7 +12,7 @@
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide",
             "HookName": "OnInitialization",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Bootstrap",
             "Flagged": false,
             "Signature": {
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "mustgmzL4j3p7pGum7HC8L+Xyw4pV1a04mHVeVdAhAI="
+            "MSILHash": "fw6KvgrDe7ZdyatWZ0L0nPVzlbN5XeJW1tfG/0LAWYY="
           }
         },
         {
@@ -34,7 +34,7 @@
             "HookTypeName": "Simple",
             "Name": "InitLogging",
             "HookName": "OnInitLogging",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Bootstrap",
             "Flagged": false,
             "Signature": {
@@ -56,7 +56,7 @@
             "HookTypeName": "Simple",
             "Name": "ServerMgr_DoTick",
             "HookName": "OnTick",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
             "Signature": {
@@ -78,7 +78,7 @@
             "HookTypeName": "Simple",
             "Name": "ServerMgr_ModifyTags",
             "HookName": "ModifyTags",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
             "Signature": {
@@ -87,7 +87,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "BTvCoWCG4dilUxN7Y9zkHCU4AIw0b0XantFaD19CF3w="
+            "MSILHash": "TxCBYrWH+R5hPe8YyOlmOw+GkKksFnelixXBLmUXWdI="
           }
         },
         {
@@ -100,7 +100,7 @@
             "HookTypeName": "Simple",
             "Name": "ServerMgr_ClientReady",
             "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
             "Signature": {
@@ -124,7 +124,7 @@
             "HookTypeName": "Simple",
             "Name": "ServerMgr_FindSpawnPoint",
             "HookName": "OnFindSpawnPoint",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
             "Signature": {
@@ -146,7 +146,7 @@
             "HookTypeName": "Simple",
             "Name": "BasePlayer_OnDisconnected",
             "HookName": "OnPlayerDisconnected",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
             "Flagged": false,
             "Signature": {
@@ -168,7 +168,7 @@
             "HookTypeName": "Simple",
             "Name": "ItemContainer_Remove",
             "HookName": "OnItemRemovedFromContainer",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemContainer",
             "Flagged": false,
             "Signature": {
@@ -192,7 +192,7 @@
             "HookTypeName": "Simple",
             "Name": "ItemContainer_Insert",
             "HookName": "OnItemAddedToContainer",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemContainer",
             "Flagged": false,
             "Signature": {
@@ -209,14 +209,14 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 21,
+            "InjectionIndex": 26,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "BaseNetworkable_Spawn",
             "HookName": "OnEntitySpawned",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseNetworkable",
             "Flagged": false,
             "Signature": {
@@ -227,7 +227,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rmnOx/Bs5qP0rc/SfOpj/NdDdD4wIIQhp5+SA1c8Skc="
+            "MSILHash": "vAr7MtChAJKwbUzwBzf50M5LZ9QQQtI2ov59M4tZaHM="
           }
         },
         {
@@ -240,7 +240,7 @@
             "HookTypeName": "Simple",
             "Name": "BasePlayer_Respawn",
             "HookName": "OnPlayerRespawned",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
             "Flagged": false,
             "Signature": {
@@ -251,7 +251,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "SdTdUvBD4rsZpiNTuOLWQ2YNDbhF9nDmWYJlJ5+tCeM="
+            "MSILHash": "/ZR7rdag54LVzqfCvD7r9CgRvKb75fCnHP/sHHAq710="
           }
         },
         {
@@ -264,7 +264,7 @@
             "HookTypeName": "Simple",
             "Name": "BasePlayer_PlayerInit",
             "HookName": "OnPlayerInit",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
             "Flagged": false,
             "Signature": {
@@ -288,7 +288,7 @@
             "HookTypeName": "Simple",
             "Name": "BaseLock_OnTryToOpen",
             "HookName": "CanUseDoor",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseLock",
             "Flagged": false,
             "Signature": {
@@ -312,7 +312,7 @@
             "HookTypeName": "Simple",
             "Name": "BaseLock_OnTryToClose",
             "HookName": "CanUseDoor",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseLock",
             "Flagged": false,
             "Signature": {
@@ -336,7 +336,7 @@
             "HookTypeName": "Simple",
             "Name": "CodeLock_OnTryToOpen",
             "HookName": "CanUseDoor",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeLock",
             "Flagged": false,
             "Signature": {
@@ -360,7 +360,7 @@
             "HookTypeName": "Simple",
             "Name": "CodeLock_OnTryToClose",
             "HookName": "CanUseDoor",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeLock",
             "Flagged": false,
             "Signature": {
@@ -384,7 +384,7 @@
             "HookTypeName": "Simple",
             "Name": "KeyLock_OnTryToClose",
             "HookName": "CanOpenDoor",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "KeyLock",
             "Flagged": false,
             "Signature": {
@@ -408,7 +408,7 @@
             "HookTypeName": "Simple",
             "Name": "KeyLock_OnTryToOpen",
             "HookName": "CanOpenDoor",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "KeyLock",
             "Flagged": false,
             "Signature": {
@@ -432,7 +432,7 @@
             "HookTypeName": "Simple",
             "Name": "ItemCrafter_CraftItem",
             "HookName": "OnItemCraft",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemCrafter",
             "Flagged": false,
             "Signature": {
@@ -458,7 +458,7 @@
             "HookTypeName": "Simple",
             "Name": "chat_say",
             "HookName": "OnPlayerChat",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "chat",
             "Flagged": false,
             "Signature": {
@@ -482,7 +482,7 @@
             "HookTypeName": "Simple",
             "Name": "PlayerLoot_StartLootingEntity",
             "HookName": "OnPlayerLoot",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
             "Flagged": false,
             "Signature": {
@@ -507,7 +507,7 @@
             "HookTypeName": "Simple",
             "Name": "PlayerLoot_StartLootingItem",
             "HookName": "OnPlayerLoot",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
             "Flagged": false,
             "Signature": {
@@ -531,7 +531,7 @@
             "HookTypeName": "Simple",
             "Name": "PlayerLoot_StartLootingPlayer",
             "HookName": "OnPlayerLoot",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
             "Flagged": false,
             "Signature": {
@@ -555,7 +555,7 @@
             "HookTypeName": "Simple",
             "Name": "TriggerBase_OnEntityEnter",
             "HookName": "OnEntityEnter",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerBase",
             "Flagged": false,
             "Signature": {
@@ -579,7 +579,7 @@
             "HookTypeName": "Simple",
             "Name": "TriggerBase_OnEntityLeave",
             "HookName": "OnEntityLeave",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerBase",
             "Flagged": false,
             "Signature": {
@@ -603,7 +603,7 @@
             "HookTypeName": "Simple",
             "Name": "Deployer_DoDeploy_Regular",
             "HookName": "OnItemDeployed",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Deployer",
             "Flagged": false,
             "Signature": {
@@ -628,7 +628,7 @@
             "HookTypeName": "Simple",
             "Name": "Deployer_DoDeploy_Slot",
             "HookName": "OnItemDeployed",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Deployer",
             "Flagged": false,
             "Signature": {
@@ -654,7 +654,7 @@
             "HookTypeName": "Simple",
             "Name": "Planner_DoBuild",
             "HookName": "OnEntityBuilt",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Planner",
             "Flagged": false,
             "Signature": {
@@ -666,7 +666,7 @@
                 "Construction"
               ]
             },
-            "MSILHash": "ZoEQ5yyLWUL/P5OZEndseiIucYhdQrsMio92d38t0c8="
+            "MSILHash": "6B4/f1axVrJ9tcAyveNkn++jBsrJHWcTILyhCJn8Nbg="
           }
         },
         {
@@ -679,7 +679,7 @@
             "HookTypeName": "Simple",
             "Name": "BaseCombatEntity_Die",
             "HookName": "OnEntityDeath",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseCombatEntity",
             "Flagged": false,
             "Signature": {
@@ -703,7 +703,7 @@
             "HookTypeName": "Simple",
             "Name": "BaseCombatEntity_Hurt",
             "HookName": "OnEntityTakeDamage",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseCombatEntity",
             "Flagged": false,
             "Signature": {
@@ -727,7 +727,7 @@
             "HookTypeName": "Simple",
             "Name": "ServerMgr_Initialize",
             "HookName": "OnServerInitialized",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
             "Signature": {
@@ -740,7 +740,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "cZdjetU+uE6XQR23pS9LVTx69gzz672nwMbaYWwNMNI="
+            "MSILHash": "3h17Z0GvnoM+h0qXb/hQE3nQBlR6rXkehUs5FpWHRuc="
           }
         },
         {
@@ -753,7 +753,7 @@
             "HookTypeName": "Simple",
             "Name": "ResourceDispenser_GiveResourceFromItem",
             "HookName": "OnGather",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ResourceDispenser",
             "Flagged": false,
             "Signature": {
@@ -780,7 +780,7 @@
             "HookTypeName": "Simple",
             "Name": "BaseMelee_DoAttackShared",
             "HookName": "OnMeleeAttack",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseMelee",
             "Flagged": false,
             "Signature": {
@@ -804,7 +804,7 @@
             "HookTypeName": "Simple",
             "Name": "SharedProjectileAttack",
             "HookName": "OnPlayerAttack",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
             "Flagged": false,
             "Signature": {
@@ -828,7 +828,7 @@
             "HookTypeName": "Simple",
             "Name": "ConsoleGlobal_quit",
             "HookName": "OnServerQuit",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleGlobal",
             "Flagged": false,
             "Signature": {
@@ -839,7 +839,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "7gBVUKnfYSQKbbr8L5JrTOjMpi+njoB5huljw1B/HmQ="
+            "MSILHash": "pQHSwlF16ryoSGj7uyrJWaG9QuX5nV8Ssk5+krmZRlI="
           }
         },
         {
@@ -852,7 +852,7 @@
             "HookTypeName": "Simple",
             "Name": "SaveRestore_DoAutomatedSave",
             "HookName": "OnServerSave",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SaveRestore",
             "Flagged": false,
             "Signature": {
@@ -874,7 +874,7 @@
             "HookTypeName": "Simple",
             "Name": "Item_UseOneItem",
             "HookName": "OnConsumableUse",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Item",
             "Flagged": false,
             "Signature": {
@@ -896,7 +896,7 @@
             "HookTypeName": "Simple",
             "Name": "ConsoleSystem/Run_Internal",
             "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleSystem/Run",
             "Flagged": false,
             "Signature": {
@@ -921,7 +921,7 @@
             "HookTypeName": "Simple",
             "Name": "ConsoleSystem/Run_Unrestricted",
             "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleSystem/Run",
             "Flagged": false,
             "Signature": {
@@ -946,7 +946,7 @@
             "HookTypeName": "Simple",
             "Name": "ConsoleSystem/SystemRealm_Normal",
             "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleSystem/SystemRealm",
             "Flagged": false,
             "Signature": {
@@ -972,7 +972,7 @@
             "HookTypeName": "Simple",
             "Name": "PlayerMetabolism_RunMetabolism",
             "HookName": "OnRunPlayerMetabolism",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerMetabolism",
             "Flagged": false,
             "Signature": {
@@ -984,31 +984,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "DSxtPK3KyvpcWhzWO3u0HaLITCON0fTp4zys1OsmSrU="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "InitializePVT_Apply",
-            "HookName": "OnTerrainInitialized",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "InitializePVT",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Apply",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.UInt32"
-              ]
-            },
-            "MSILHash": "+u2GCtSHTDWu7iqcjcFKh98FNKhbrQfPRx+LI73xrGk="
+            "MSILHash": "q9sd4sdX6Dp1jg9aBBEvNuQCVQok2LxyQyDCdaqevNg="
           }
         },
         {
@@ -1021,7 +997,7 @@
             "HookTypeName": "Simple",
             "Name": "ConnectionAuth_OnNewConnection",
             "HookName": "OnUserApprove",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionAuth",
             "Flagged": false,
             "Signature": {
@@ -1032,7 +1008,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "CFQuu02Ea3vHxtKghMNU/1JiQiT5g0AZQH6RoBpEBwk="
+            "MSILHash": "KioJKDlj5P/II+xNbFkxBXEEuzFpDbJsBOLuwq9ztgs="
           }
         },
         {
@@ -1045,7 +1021,7 @@
             "HookTypeName": "Simple",
             "Name": "Rust.Application_Quit",
             "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Rust.Application",
             "Flagged": false,
             "Signature": {
@@ -1067,7 +1043,7 @@
             "HookTypeName": "Simple",
             "Name": "BuildingBlock_DoUpgradeToGrade",
             "HookName": "OnBuildingBlockDoUpgradeToGrade",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
             "Flagged": false,
             "Signature": {
@@ -1091,7 +1067,7 @@
             "HookTypeName": "Simple",
             "Name": "BuildingBlock_OnDoImmediateDemolish",
             "HookName": "OnBuildingBlockDoImmediateDemolish",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
             "Flagged": false,
             "Signature": {
@@ -1115,7 +1091,7 @@
             "HookTypeName": "Simple",
             "Name": "BuildingBlock_DoRotation",
             "HookName": "OnBuildingBlockDoRotation",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
             "Flagged": false,
             "Signature": {
@@ -1139,7 +1115,7 @@
             "HookTypeName": "Simple",
             "Name": "BaseOven_ConsumeFuel",
             "HookName": "OnConsumeFuel",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseOven",
             "Flagged": false,
             "Signature": {
@@ -1157,30 +1133,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 13,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "BasePlayer_OnReceiveTick",
-            "HookName": "OnPlayerTick",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "BasePlayer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnReceiveTick",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "PlayerTick"
-              ]
-            },
-            "MSILHash": "haxZNiNfs4ok5twfxvXDbXZbXiPqNCUgSaJpiUvgFIc="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
@@ -1188,7 +1140,7 @@
             "HookTypeName": "Simple",
             "Name": "Signage_CanUpdateSign",
             "HookName": "CanUpdateSign",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
             "Flagged": false,
             "Signature": {
@@ -1212,7 +1164,7 @@
             "HookTypeName": "Simple",
             "Name": "Signage_LockSign",
             "HookName": "LockSign",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
             "Flagged": false,
             "Signature": {
@@ -1236,7 +1188,7 @@
             "HookTypeName": "Simple",
             "Name": "Signage_UpdateSign",
             "HookName": "UpdateSign",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
             "Flagged": false,
             "Signature": {
@@ -1260,7 +1212,7 @@
             "HookTypeName": "Simple",
             "Name": "Item_LoseCondition",
             "HookName": "LoseCondition",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Item",
             "Flagged": false,
             "Signature": {
@@ -1284,7 +1236,7 @@
             "HookTypeName": "Simple",
             "Name": "BasePlayer_EndSleeping",
             "HookName": "OnPlayerSleepEnded",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
             "Flagged": false,
             "Signature": {
@@ -1306,7 +1258,7 @@
             "HookTypeName": "Simple",
             "Name": "DestroyOnGroundMissing_OnGroundMissing",
             "HookName": "OnEntityGroundMissing",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "DestroyOnGroundMissing",
             "Flagged": false,
             "Signature": {
@@ -1328,7 +1280,7 @@
             "HookTypeName": "Simple",
             "Name": "Door_RPC_OpenDoor",
             "HookName": "OnDoorOpened",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Door",
             "Flagged": false,
             "Signature": {
@@ -1352,7 +1304,7 @@
             "HookTypeName": "Simple",
             "Name": "Door_RPC_CloseDoor",
             "HookName": "OnDoorClosed",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Door",
             "Flagged": false,
             "Signature": {
@@ -1376,7 +1328,7 @@
             "HookTypeName": "Simple",
             "Name": "BaseEntity_SV_RPCMessage",
             "HookName": "OnEntityRpcMessage",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseEntity",
             "Flagged": false,
             "Signature": {
@@ -1388,7 +1340,56 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "6gOEUfRt/ac0LS11eoWk2NZ2o+vZxm+iBC63uJhQm0w="
+            "MSILHash": "SpwfC1Pc0qOXZSr+VKr5zI1gwgD2Mm5oUJfYp5KMlkA="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "BasePlayer_OnReceiveTick",
+            "HookName": "OnReceiveTick",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnReceiveTick",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "PlayerTick",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "LZz6RHZQreFG81/dktJa4QM3nrkjH1J2c1/wYVDQrVI="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CalculateChecksum_FinalPass",
+            "HookName": "OnTerrainInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CalculateChecksum",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "FinalPass",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt32"
+              ]
+            },
+            "MSILHash": "umQfvM5r8FsU0Zbgv8sgjU4yrG25xpz97x5Nfck8Mr0="
           }
         }
       ]
