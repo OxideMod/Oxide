@@ -673,5 +673,51 @@ namespace Oxide.RustLegacy.Plugins
 
             return damage;
         }
+
+        /// <summary>
+        /// Called when the GetClientMove packed is received for a player
+        /// Checking the player position in the packet to prevent harmful packets crashing the server
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="origin"></param>
+        /// <param name="encoded"></param>
+        /// <param name="stateFlags"></param>
+        /// <param name="info"></param>
+        [HookMethod("OnGetClientMove")]
+        private object OnGetClientMove(HumanController controller, Vector3 origin, int encoded, ushort stateFlags, uLink.NetworkMessageInfo info)
+        {
+            if (float.IsNaN(origin.x) || float.IsInfinity(origin.x) ||
+                float.IsNaN(origin.y) || float.IsInfinity(origin.y) ||
+                float.IsNaN(origin.z) || float.IsInfinity(origin.z))
+            {
+                Interface.Oxide.LogInfo($"Kicked {controller.netUser.displayName} [{controller.netUser.userID}] for sending bad packets for GetClientMove.");
+                controller.netUser.Kick(NetError.Facepunch_Kick_Violation, true);
+                return false;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Called when an AI moves
+        /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
+        /// </summary>
+        /// <param name="ai"></param>
+        /// <param name="movement"></param>
+        [HookMethod("OnAIMovement")]
+        private void OnAIMovement(BasicWildLifeAI ai, BaseAIMovement movement)
+        {
+            var nmMovement = movement as NavMeshMovement;
+            if (!nmMovement)
+                return;
+
+            var alive = ai.GetComponent<TakeDamage>().alive;
+
+            if (nmMovement._agent.pathStatus == NavMeshPathStatus.PathInvalid && alive)
+            {
+                TakeDamage.KillSelf(ai.GetComponent<IDBase>(), null);
+                Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
+            }
+        }
     }
 }
