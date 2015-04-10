@@ -52,17 +52,24 @@ namespace Oxide.Core.Libraries
         public Library()
         {
             functions = new Dictionary<string, MethodInfo>();
-            foreach (var method in GetType().GetMethods())
+            var type = GetType();
+            foreach (var method in type.GetMethods())
             {
+                LibraryFunction attribute;
                 try
                 {
-                    var attribute = method.GetCustomAttributes(typeof(LibraryFunction), true).SingleOrDefault() as LibraryFunction;
-                    if (attribute != null) functions.Add(attribute.Name ?? method.Name, method);
+                    attribute = method.GetCustomAttributes(typeof(LibraryFunction), true).SingleOrDefault() as LibraryFunction;
+                    if (attribute == null) continue;
                 }
                 catch (TypeLoadException)
                 {
-                    // Ignore rare exceptions caused by type information being loaded for all methods
+                    continue; // Ignore rare exceptions caused by type information being loaded for all methods
                 }
+                var name = attribute.Name ?? method.Name;
+                if (functions.ContainsKey(name))
+                    Interface.Oxide.LogError(type.FullName + " library tried to register an already registered function: " + name);
+                else
+                    functions[name] = method;
             }
         }
 
