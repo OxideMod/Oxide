@@ -1,21 +1,21 @@
 {
   "Name": "RustLegacy",
-  "TargetDirectory": "D:\\Servers\\Game\\RustLegacy\\rust_server_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Rust\\Legacy\\rust_server_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 109,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnInitLogging",
             "HookName": "OnInitLogging",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerInit",
             "Flagged": false,
             "Signature": {
@@ -30,11 +30,11 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 109,
+            "InjectionIndex": 0,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide",
             "HookName": "InitOxide",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerInit",
             "Flagged": false,
             "Signature": {
@@ -56,7 +56,7 @@
             "HookTypeName": "Simple",
             "Name": "OnRunCommand",
             "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleSystem",
             "Flagged": false,
             "Signature": {
@@ -81,7 +81,7 @@
             "HookTypeName": "Simple",
             "Name": "OnAirdrop",
             "HookName": "OnAirdrop",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SupplyDropZone",
             "Flagged": false,
             "Signature": {
@@ -105,7 +105,7 @@
             "HookTypeName": "Simple",
             "Name": "OnStructureDecay",
             "HookName": "OnStructureDecay",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "StructureMaster",
             "Flagged": false,
             "Signature": {
@@ -127,7 +127,7 @@
             "HookTypeName": "Simple",
             "Name": "OnItemCraft",
             "HookName": "OnItemCraft",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CraftingInventory",
             "Flagged": false,
             "Signature": {
@@ -153,7 +153,7 @@
             "HookTypeName": "Simple",
             "Name": "OnDatablocksInitialized",
             "HookName": "OnDatablocksInitialized",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "DatablockDictionary",
             "Flagged": false,
             "Signature": {
@@ -175,7 +175,7 @@
             "HookTypeName": "Simple",
             "Name": "OnResearchItem",
             "HookName": "OnResearchItem",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ResearchToolItem`1",
             "Flagged": false,
             "Signature": {
@@ -186,7 +186,7 @@
                 "IInventoryItem"
               ]
             },
-            "MSILHash": "GiYcSjmSJwL/YZmLrAfiSIONsDOyay4sPrVq9LmgFBM="
+            "MSILHash": "Q1a06utOa4nm6YEP2BwWU1Hm4iH4djgfrGKieJK7bN4="
           }
         },
         {
@@ -199,7 +199,7 @@
             "HookTypeName": "Simple",
             "Name": "OnItemAdded",
             "HookName": "OnItemAdded",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Inventory",
             "Flagged": false,
             "Signature": {
@@ -224,7 +224,7 @@
             "HookTypeName": "Simple",
             "Name": "OnItemRemoved",
             "HookName": "OnItemRemoved",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Inventory",
             "Flagged": false,
             "Signature": {
@@ -249,7 +249,7 @@
             "HookTypeName": "Simple",
             "Name": "OnBlueprintUse",
             "HookName": "OnBlueprintUse",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BlueprintDataBlock",
             "Flagged": false,
             "Signature": {
@@ -260,7 +260,7 @@
                 "IBlueprintItem"
               ]
             },
-            "MSILHash": "CgKwpuOUEX3GpJi+PkdDhqSIcamTWscdfTSmOdlKkJc="
+            "MSILHash": "rhgwtRt+H6Dv5OVK/knMULiuK531fXac94sobqkM1Rw="
           }
         },
         {
@@ -273,7 +273,7 @@
             "HookTypeName": "Simple",
             "Name": "OnStructurePlaced [internal]",
             "HookName": "OnStructurePlaced",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "StructureComponentDataBlock",
             "Flagged": false,
             "Signature": {
@@ -299,7 +299,7 @@
             "HookTypeName": "Simple",
             "Name": "ModifyTags [internal]",
             "HookName": "ModifyTags",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Rust.Steam.Server",
             "Flagged": false,
             "Signature": {
@@ -321,7 +321,7 @@
             "HookTypeName": "Simple",
             "Name": "OnPlayerDisconnected",
             "HookName": "OnPlayerDisconnected",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionAcceptor",
             "Flagged": false,
             "Signature": {
@@ -345,7 +345,7 @@
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerManagement",
             "Flagged": false,
             "Signature": {
@@ -369,7 +369,7 @@
             "HookTypeName": "Simple",
             "Name": "OnPlayerSpawn",
             "HookName": "OnPlayerSpawn",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerManagement",
             "Flagged": false,
             "Signature": {
@@ -395,7 +395,7 @@
             "HookTypeName": "Simple",
             "Name": "OnDoorToggle",
             "HookName": "OnDoorToggle",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasicDoor",
             "Flagged": false,
             "Signature": {
@@ -407,7 +407,7 @@
                 "Controllable"
               ]
             },
-            "MSILHash": "HzmiBy0ILMm46510rpxVn49Rem0lTiEYKkGA8qap4QI="
+            "MSILHash": "qaybCO95JK6Y3Al3132vRx2DrMntbutPnJBlp/O8mpw="
           }
         },
         {
@@ -420,7 +420,7 @@
             "HookTypeName": "Simple",
             "Name": "OnResourceNodeLoaded",
             "HookName": "OnResourceNodeLoaded",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ResourceTarget",
             "Flagged": false,
             "Signature": {
@@ -442,7 +442,7 @@
             "HookTypeName": "Simple",
             "Name": "OnUserApprove",
             "HookName": "OnUserApprove",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionAcceptor",
             "Flagged": false,
             "Signature": {
@@ -466,7 +466,7 @@
             "HookTypeName": "Simple",
             "Name": "OnServerShutdown",
             "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "global",
             "Flagged": false,
             "Signature": {
@@ -490,7 +490,7 @@
             "HookTypeName": "Simple",
             "Name": "OnItemDeployedByPlayer [internal]",
             "HookName": "OnItemDeployedByPlayer",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "DeployableItemDataBlock",
             "Flagged": false,
             "Signature": {
@@ -503,7 +503,7 @@
                 "uLink.NetworkMessageInfo&"
               ]
             },
-            "MSILHash": "9Gc1zsNm4Qm4bBVPJ4TmX4r6Zyf5VNrlnq8WRWsMrK0="
+            "MSILHash": "KF+2wmzeFWOhnpKt1jMGPRdUcuelLj0qU2778yHwI1Y="
           }
         },
         {
@@ -516,7 +516,7 @@
             "HookTypeName": "Simple",
             "Name": "OnClientSpeak [internal]",
             "HookName": "OnClientSpeak",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VoiceCom",
             "Flagged": false,
             "Signature": {
@@ -541,7 +541,7 @@
             "HookTypeName": "Simple",
             "Name": "OnProcessDamageEvent [internal]",
             "HookName": "OnProcessDamageEvent",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TakeDamage",
             "Flagged": false,
             "Signature": {
@@ -565,7 +565,7 @@
             "HookTypeName": "Simple",
             "Name": "OnServerSave",
             "HookName": "OnServerSave",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerSaveManager",
             "Flagged": false,
             "Signature": {
@@ -589,7 +589,7 @@
             "HookTypeName": "Simple",
             "Name": "GetClientMove [internal]",
             "HookName": "OnGetClientMove",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HumanController",
             "Flagged": false,
             "Signature": {
@@ -616,7 +616,7 @@
             "HookTypeName": "Simple",
             "Name": "OnAIMovement [internal]",
             "HookName": "OnAIMovement",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseAIMovement",
             "Flagged": false,
             "Signature": {
