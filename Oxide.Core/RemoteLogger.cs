@@ -34,7 +34,8 @@ namespace Oxide.Core
 
         private static Dictionary<string, string> tags = new Dictionary<string, string>
         {
-            { "arch", IntPtr.Size == 4 ? "x86" : "x64" }
+            { "arch", IntPtr.Size == 4 ? "x86" : "x64" },
+            { "game", Process.GetCurrentProcess().MainModule.FileName }
         };
 
         private class QueuedReport
@@ -72,8 +73,13 @@ namespace Oxide.Core
                 this.culprit = culprit;
                 if (exception != null)
                 {
-                    var exception_lines = exception.Split('\n').Take(31).Select(line => line.Trim(' ', '\r', '\n').Replace('\t', ' '));
-                    extra = new Dictionary<string, string> { { "exception", string.Join("\\n", exception_lines.ToArray()) } };
+                    extra = new Dictionary<string, string>();
+                    var exception_lines = exception.Split('\n').Take(31).ToArray();
+                    for (var i = 0; i < exception_lines.Length; i++)
+                    {
+                        var line = exception_lines[i].Trim(' ', '\r', '\n').Replace('\t', ' ');
+                        if (line.Length > 0) extra["line_" + i.ToString("00")] = line;
+                    }
                 }
             }
 
