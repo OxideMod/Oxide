@@ -8,7 +8,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 109,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -30,7 +30,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 109,
+            "InjectionIndex": 0,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide",
             "HookName": "InitOxide",
