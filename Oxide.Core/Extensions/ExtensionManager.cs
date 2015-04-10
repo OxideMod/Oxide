@@ -76,7 +76,10 @@ namespace Oxide.Core.Extensions
         /// <param name="library"></param>
         public void RegisterLibrary(string name, Library library)
         {
-            libraries.Add(name, library);
+            if (libraries.ContainsKey(name))
+                Interface.Oxide.LogError("An extension tried to register an already registered library: " + name);
+            else
+                libraries[name] = library;
         }
 
         /// <summary>
