@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.IO;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Oxide.Core.Libraries;
@@ -35,7 +36,7 @@ namespace Oxide.Core
         private static Dictionary<string, string> tags = new Dictionary<string, string>
         {
             { "arch", IntPtr.Size == 4 ? "x86" : "x64" },
-            { "game", Process.GetCurrentProcess().MainModule.FileName }
+            { "game", Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) }
         };
 
         private class QueuedReport
