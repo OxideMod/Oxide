@@ -23,6 +23,7 @@ namespace Oxide.Unity
         void Awake()
         {
             oxideMod = Interface.GetMod();
+            Application.logMessageReceived += HandleException;
         }
 
         void Update()
@@ -35,6 +36,12 @@ namespace Oxide.Unity
             if (oxideMod.IsShuttingDown) return;
             oxideMod.LogWarning("The Oxide Unity Script was destroyed (creating a new instance)");
             oxideMod.NextTick(Create);
+        }
+
+        void HandleException(string message, string stack_trace, LogType type)
+        {
+            if (type == LogType.Exception && stack_trace.Contains("Oxide"))
+                RemoteLogger.Exception(message, stack_trace);
         }
     }
 }

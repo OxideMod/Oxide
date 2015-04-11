@@ -153,17 +153,22 @@ namespace Oxide.Core
             EnqueueReport("exception", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
         }
 
+        public static void Exception(string message, string stack_trace)
+        {
+            EnqueueReport("exception", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, stack_trace);
+        }
+
         private static void EnqueueReport(string level, Assembly assembly, string culprit, string message, string exception = null)
         {
             var report = new Report(level, culprit, message, exception);
             report.DetectModules(assembly);
             queuedReports.Add(new QueuedReport(report));
-            SubmitNextReport();
+            if (!submittingReports) SubmitNextReport();
         }
 
         private static void SubmitNextReport()
         {
-            if (submittingReports || queuedReports.Count < 1) return;
+            if (queuedReports.Count < 1) return;
             var queued_report = queuedReports[0];
             submittingReports = true;
             Action<int, string> on_request_complete = (code, response) =>
@@ -176,11 +181,7 @@ namespace Oxide.Core
                 }
                 else
                 {
-                    timers.Once(5f, () =>
-                    {
-                        submittingReports = false;
-                        SubmitNextReport();
-                    });
+                    timers.Once(5f, SubmitNextReport);
                 }
             };
             webrequests.EnqueuePost(url, queued_report.Body, on_request_complete, null, queued_report.Headers);
