@@ -769,6 +769,31 @@ namespace Oxide.Rust.Plugins
         }
 
         /// <summary>
+        /// Called when a BasePlayer takes damage
+        /// This is used to call OnEntityTakeDamage for a BasePlayer
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="info"></param>
+        [HookMethod("OnPlayerTakeDamage")]
+        private object OnPlayerTakeDamage(BasePlayer entity, HitInfo info)
+        {
+            return Interface.Oxide.CallHook("OnEntityTakeDamage", entity, info);
+        }
+
+        /// <summary>
+        /// Called when a BaseCombatEntity takes damage
+        /// This is used to call OnEntityTakeDamage for anything other than a BasePlayer
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="info"></param>
+        [HookMethod("OnBaseCombatEntityHurt")]
+        private object OnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
+        {
+            if (entity is BasePlayer) return null;
+            return Interface.Oxide.CallHook("OnEntityTakeDamage", entity, info);
+        }
+
+        /// <summary>
         /// Called when a BaseCombatEntity takes damage
         /// This is used to handle the deprecated hook OnEntityAttacked
         /// </summary>
