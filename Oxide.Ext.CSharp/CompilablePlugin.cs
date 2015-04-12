@@ -24,7 +24,7 @@ namespace Oxide.Plugins
 
         private Action<CSharpPlugin> loadCallback;
         private Action<bool> compileCallback;
-        private bool isCompilationQueued;
+        private float compilationQueuedAt;
 
         public CompilablePlugin(CSharpExtension extension, string directory, string name)
         {
@@ -45,9 +45,11 @@ namespace Oxide.Plugins
 
         public void Compile(Action<bool> callback)
         {
-            if (isCompilationQueued)
+            if (compilationQueuedAt > 0f)
             {
-                Interface.Oxide.LogDebug("Plugin compilation is already queued: {0}", ScriptName);
+                var ago = Interface.Oxide.Now - compilationQueuedAt;
+                Interface.Oxide.LogDebug($"Plugin compilation is already queued: {ScriptName} ({ago:0.000} ago)");
+                RemoteLogger.Debug($"Plugin compilation is already queued: {ScriptName} ({ago:0.000} ago)");
                 return;
             }
             if (CompiledAssembly != null && !HasBeenModified())
@@ -60,7 +62,7 @@ namespace Oxide.Plugins
                 }
             }
             compileCallback = callback;
-            isCompilationQueued = true;
+            compilationQueuedAt = Interface.Oxide.Now;
             Extension.CompilationRequested(this);
         }
 
@@ -138,14 +140,14 @@ namespace Oxide.Plugins
 
         public void OnCompilationSucceeded(CompiledAssembly compiled_assembly)
         {
-            isCompilationQueued = false;
+            compilationQueuedAt = 0f;
             CompiledAssembly = compiled_assembly;
             compileCallback(true);
         }
 
         public void OnCompilationFailed()
         {
-            isCompilationQueued = false;
+            compilationQueuedAt = 0f;
             LastCompiledAt = default(DateTime);
             compileCallback(false);
         }

@@ -188,7 +188,7 @@ namespace Oxide.Plugins
             {
                 if (Plugins.Count < 1) return;
                 foreach (var plugin in Plugins) plugin.CompilerErrors = null;
-                compiledName = (Plugins.Count == 1 ? Plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 100000f);
+                compiledName = (Plugins.Count == 1 ? Plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 10000000f);
                 SpawnCompiler();
             });
         }
@@ -287,17 +287,26 @@ namespace Oxide.Plugins
             byte[] raw_assembly = null;
             if (ExitCode == 0)
             {
+                var assembly_path = string.Format("{0}\\{1}.dll", Interface.Oxide.TempDirectory, compiledName);
                 try
                 {
-                    var assembly_path = string.Format("{0}\\{1}.dll", Interface.Oxide.TempDirectory, compiledName);
                     raw_assembly = File.ReadAllBytes(assembly_path);
-                    File.Delete(assembly_path);
                 }
                 catch (Exception ex)
                 {
                     var plugin_names = Plugins.Select(p => p.Name).ToSentence();
                     Interface.Oxide.LogError("Unable to read compiled plugins: {0} ({1})", plugin_names, ex.Message);
                     RemoteLogger.Error($"Unable to read compiled plugins: {plugin_names} ({ex.Message})");
+                }
+                try
+                {
+                    File.Delete(assembly_path);
+                }
+                catch (Exception ex)
+                {
+                    var plugin_names = Plugins.Select(p => p.Name).ToSentence();
+                    Interface.Oxide.LogError("Unable to delete temporary compiled plugins: {0} ({1})", plugin_names, ex.Message);
+                    RemoteLogger.Error($"Unable to delete temporary compiled plugins: {plugin_names} ({ex.Message})");
                 }
             }
             Interface.Oxide.NextTick(() => callback(raw_assembly));
