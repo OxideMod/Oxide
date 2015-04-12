@@ -189,7 +189,7 @@ namespace Oxide.Core.Plugins
 
             var now = Interface.Oxide.Now;
             float last_warning_at;
-            if (!lastDeprecatedWarningAt.TryGetValue(name, out last_warning_at) || now - last_warning_at > 120f)
+            if (!lastDeprecatedWarningAt.TryGetValue(name, out last_warning_at) || now - last_warning_at > 300f)
             {
                 lastDeprecatedWarningAt[name] = now;
                 Interface.Oxide.LogWarning("{0} plugin is using deprecated hook: {1}", plugins[0].Name, name);

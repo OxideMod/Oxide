@@ -72,6 +72,9 @@ namespace Oxide.Core
                 this.message = message.Length > 1000 ? message.Substring(0, 1000) : message;
                 this.event_id = this.message.GetHashCode().ToString();
                 this.culprit = culprit;
+                this.modules = new Dictionary<string, string>();
+                foreach (var extension in Interface.Oxide.GetAllExtensions())
+                    modules[extension.GetType().FullName] = extension.Version.ToString();
                 if (exception != null)
                 {
                     extra = new Dictionary<string, string>();
@@ -87,27 +90,28 @@ namespace Oxide.Core
             public void DetectModules(Assembly assembly)
             {
                 var assembly_name = assembly.GetName().Name;
-                string assembly_version = string.Empty;
                 var extension_type = assembly.GetTypes().FirstOrDefault(t => t.BaseType == typeof(Extensions.Extension));
-                if (extension_type != null)
-                {
-                    var extension = Interface.Oxide.GetAllExtensions().FirstOrDefault(e => e.GetType() == extension_type);
-                    if (extension != null) assembly_version = extension.Version.ToString();
-                }
-                else
+                if (extension_type == null)
                 {
                     var plugin_type = assembly.GetTypes().FirstOrDefault(t => IsTypeDerivedFrom(t, typeof(Plugins.Plugin)));
                     if (plugin_type != null)
                     {
                         var plugin = Interface.Oxide.RootPluginManager.GetPlugin(plugin_type.Name);
-                        if (plugin != null)
-                        {
-                            assembly_name = "Plugins." + plugin.Name;
-                            assembly_version = plugin.Version.ToString();
-                        }
+                        if (plugin != null) modules["Plugins." + plugin.Name] = plugin.Version.ToString();
                     }
                 }
-                this.modules = new Dictionary<string, string> { { assembly_name, assembly_version } };
+            }
+
+            public void DetectModules(string[] stack_trace)
+            {
+                foreach (var line in stack_trace)
+                {
+                    if (!line.StartsWith("Oxide.Plugins.") || !line.Contains("+")) continue;
+                    var plugin_name = line.Split('+')[0];
+                    var plugin = Interface.Oxide.RootPluginManager.GetPlugin(plugin_name);
+                    if (plugin != null) modules["Plugins." + plugin.Name] = plugin.Version.ToString();
+                    break;
+                }
             }
 
             private bool IsTypeDerivedFrom(Type type, Type base_type)
@@ -153,15 +157,30 @@ namespace Oxide.Core
             EnqueueReport("exception", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
         }
 
-        public static void Exception(string message, string stack_trace)
+        public static void Exception(string message, string raw_stack_trace)
         {
-            EnqueueReport("exception", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, stack_trace);
+            var stack_trace = raw_stack_trace.Split('\r', '\n');
+            var culprit = stack_trace[0];
+            if (culprit.EndsWith(" ()")) culprit = culprit.Substring(0, culprit.Length - 3);
+            EnqueueReport("exception", stack_trace, culprit, message, raw_stack_trace);
         }
 
         private static void EnqueueReport(string level, Assembly assembly, string culprit, string message, string exception = null)
         {
             var report = new Report(level, culprit, message, exception);
             report.DetectModules(assembly);
+            EnqueueReport(report);
+        }
+
+        private static void EnqueueReport(string level, string[] stack_trace, string culprit, string message, string exception = null)
+        {
+            var report = new Report(level, culprit, message, exception);
+            report.DetectModules(stack_trace);
+            EnqueueReport(report);
+        }
+
+        private static void EnqueueReport(Report report)
+        {
             queuedReports.Add(new QueuedReport(report));
             if (!submittingReports) SubmitNextReport();
         }
