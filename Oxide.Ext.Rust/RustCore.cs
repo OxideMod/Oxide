@@ -26,6 +26,7 @@ namespace Oxide.Rust.Plugins
 
         // The permission lib
         private readonly Permission permission;
+        private static readonly string[] DefaultGroups = {"player", "moderator", "admin"};
 
         // The rust lib
         private readonly Libraries.Rust rust;
@@ -84,6 +85,13 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
             cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
+
+            var rank = 0;
+            for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+            {
+                var defaultGroup = DefaultGroups[i];
+                if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+            }
 
             // Configure remote logging
             RemoteLogger.SetTag("os", SystemInfo.operatingSystem);
@@ -640,7 +648,19 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnPlayerInit")]
         private void OnPlayerInit(BasePlayer player)
         {
+            var authLevel = player.net.connection.authLevel;
+            if (authLevel <= DefaultGroups.Length)
+            {
+                var userId = rust.UserIDFromPlayer(player);
+                permission.GetUserData(userId).LastSeenNickname = player.displayName;
 
+                // Remove player from old groups if auth level changed
+                for (var i = 0; i < DefaultGroups.Length; i++)
+                    if (i != authLevel) permission.RemoveUserGroup(userId, DefaultGroups[i]);
+
+                // Add player to default group
+                permission.AddUserGroup(userId, DefaultGroups[authLevel]);
+            }
         }
 
         /// <summary>
