@@ -669,8 +669,8 @@ namespace Oxide.Rust.Plugins
         /// <param name="player"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        [HookMethod("OnPlayerTick")]
-        private object OnPlayerTick(BasePlayer player, PlayerTick msg)
+        [HookMethod("OnReceiveTick")]
+        private object OnReceiveTick(BasePlayer player, PlayerTick msg)
         {
             return Interface.CallHook("OnPlayerInput", player, serverInputField.GetValue(player));
         }
