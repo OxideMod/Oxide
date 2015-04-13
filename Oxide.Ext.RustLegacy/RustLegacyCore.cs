@@ -88,7 +88,6 @@ namespace Oxide.RustLegacy.Plugins
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
 
             // Configure remote logging
-            RemoteLogger.SetTag("os", SystemInfo.operatingSystem);
             RemoteLogger.SetTag("game", "rust legacy");
             RemoteLogger.SetTag("protocol", Rust.Defines.Connection.protocol.ToString());
         }
