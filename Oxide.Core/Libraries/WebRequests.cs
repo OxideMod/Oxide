@@ -16,6 +16,11 @@ namespace Oxide.Core.Libraries
     public class WebRequests : Library
     {
         /// <summary>
+        /// Specifies the HTTP request timeout in seconds
+        /// </summary>
+        public static float Timeout = 5f;
+
+        /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
         public override bool IsGlobal { get { return false; } }
@@ -129,8 +134,8 @@ namespace Oxide.Core.Libraries
                     request.Proxy = null;
                     request.KeepAlive = false;
 
-                    request.Timeout = 5000;
-                    request.ServicePoint.MaxIdleTime = 5000;
+                    request.Timeout = (int)Math.Round(Timeout * 1000f);
+                    request.ServicePoint.MaxIdleTime = (int)Math.Round(Timeout * 1000f);
                     if (RequestHeaders != null)
                         request.SetRawHeaders(RequestHeaders);
                     // Get the response
@@ -153,7 +158,7 @@ namespace Oxide.Core.Libraries
                 {
                     ResponseText = ex.Message;
                     ResponseCode = 0;
-                    Interface.GetMod().RootLogger.WriteException(String.Format("Web request produced exception (Url: {0})", URL), ex);
+                    Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                 }
                 finally
                 {
@@ -202,8 +207,8 @@ namespace Oxide.Core.Libraries
                     request.Proxy = null;
                     request.KeepAlive = false;
 
-                    request.Timeout = 5000;
-                    request.ServicePoint.MaxIdleTime = 5000;
+                    request.Timeout = (int)Math.Round(Timeout * 1000f);
+                    request.ServicePoint.MaxIdleTime = (int)Math.Round(Timeout * 1000f);
 
                     // Setup post data
                     request.Method = "POST";
@@ -235,7 +240,7 @@ namespace Oxide.Core.Libraries
                 {
                     ResponseText = ex.Message;
                     ResponseCode = 0;
-                    Interface.GetMod().RootLogger.WriteException(String.Format("Web request produced exception (Url: {0})", URL), ex);
+                    Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                 }
                 finally
                 {
@@ -246,7 +251,7 @@ namespace Oxide.Core.Libraries
             }
         }
 
-        private readonly Queue<WebrequestInstance> waitingqueue, completequeue;
+        private readonly Queue<WebrequestInstance> waitingqueue;
         private readonly object syncroot;
         private readonly Thread workerthread;
         private bool shutdown;
@@ -259,7 +264,6 @@ namespace Oxide.Core.Libraries
         {
             // Initialize
             waitingqueue = new Queue<WebrequestInstance>();
-            completequeue = new Queue<WebrequestInstance>();
             syncroot = new object();
             workevent = new AutoResetEvent(false);
 
@@ -302,10 +306,19 @@ namespace Oxide.Core.Libraries
                     }
                     catch (Exception ex)
                     {
-                        Interface.GetMod().RootLogger.WriteException("Web request produced exception", ex);
+                        Interface.Oxide.LogException("Web request produced exception", ex);
                     }
-
-                    lock (syncroot) completequeue.Enqueue(request);
+                    Interface.Oxide.NextTick(() =>
+                    {
+                        try
+                        {
+                            request.Callback(request.ResponseCode, request.Finished ? request.ResponseText : null);
+                        }
+                        catch (Exception ex)
+                        {
+                            Interface.Oxide.LogException("Exception raised in web request callback", ex);
+                        }
+                    });
                 }
                 lock (syncroot) if (waitingqueue.Count > 0) workevent.Set();
             }
@@ -350,30 +363,6 @@ namespace Oxide.Core.Libraries
         public int GetQueueLength()
         {
             lock (syncroot) return waitingqueue.Count;
-        }
-
-        /// <summary>
-        /// Updates all webrequests
-        /// </summary>
-        public void Update()
-        {
-            lock (syncroot)
-            {
-                while (completequeue.Count > 0)
-                {
-                    var webrequest = completequeue.Dequeue();
-                    if (webrequest.Finished)
-                    {
-                        webrequest.Callback(webrequest.ResponseCode, webrequest.ResponseText);
-                    }
-                    else
-                    {
-                        // When can this happen? Did the webrequest fail?
-                        // Should we fire a separate error callback or something?
-                        webrequest.Callback(0, null);
-                    }
-                }
-            }
         }
     }
 
