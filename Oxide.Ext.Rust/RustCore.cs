@@ -97,7 +97,6 @@ namespace Oxide.Rust.Plugins
             }
 
             // Configure remote logging
-            RemoteLogger.SetTag("os", SystemInfo.operatingSystem);
             RemoteLogger.SetTag("game", "rust");
             RemoteLogger.SetTag("protocol", Protocol.network.ToString());
         }
