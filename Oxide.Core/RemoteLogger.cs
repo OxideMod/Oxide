@@ -74,7 +74,7 @@ namespace Oxide.Core
                 this.culprit = culprit;
                 this.modules = new Dictionary<string, string>();
                 foreach (var extension in Interface.Oxide.GetAllExtensions())
-                    modules[extension.GetType().Namespace] = extension.Version.ToString();
+                    modules[extension.GetType().Assembly.GetName().Name] = extension.Version.ToString();
                 if (exception != null)
                 {
                     extra = new Dictionary<string, string>();
