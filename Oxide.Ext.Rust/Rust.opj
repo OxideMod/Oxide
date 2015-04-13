@@ -1400,8 +1400,8 @@
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnPlayerTakeDamage",
-            "HookName": "OnPlayerTakeDamage",
+            "Name": "OnBasePlayerAttacked [internal]",
+            "HookName": "OnBasePlayerAttacked",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
             "Flagged": false,
@@ -1414,6 +1414,30 @@
               ]
             },
             "MSILHash": "2jNKQF4X/MTGIPWfm5/lmW6HXOgxce4xfhCJXv9vMEc="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 8,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBasePlayerHurt [internal]",
+            "HookName": "OnBasePlayerHurt",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Hurt",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "yqjyC9ahf3d10exc/yC6tMUngjIAlMmVh5P1nihhYHA="
           }
         }
       ]
