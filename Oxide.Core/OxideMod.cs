@@ -511,7 +511,6 @@ namespace Oxide.Core
 
             // Update libraries
             libtimer.Update(delta);
-            libwebrequests.Update();
 
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
             if (!isInitialized)

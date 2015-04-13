@@ -131,15 +131,13 @@ namespace Oxide.Core.Plugins
             // Locate the sublist
             IList<Plugin> plugins;
             if (!hooksubscriptions.TryGetValue(hookname, out plugins)) return null;
-
-            int subscriptions = plugins.Count;
-            if (subscriptions == 0) return null;
+            if (plugins.Count == 0) return null;
 
             // Loop each item
-            object[] values = new object[subscriptions];
+            object[] values = new object[plugins.Count];
             int returncount = 0;
             object finalvalue = null;
-            for (int i = 0; i < subscriptions; i++)
+            for (int i = 0; i < plugins.Count; i++)
             {
                 Plugin plugin = plugins[i];
                 // Call the hook
@@ -166,7 +164,7 @@ namespace Oxide.Core.Plugins
             // Notify log of hook conflict
             string[] conflicts = new string[returncount];
             int j = 0;
-            for (int i = 0; i < subscriptions; i++)
+            for (int i = 0; i < plugins.Count; i++)
             {
                 if (values[i] == null) continue;
                 conflicts[j++] = plugins[i].Name;

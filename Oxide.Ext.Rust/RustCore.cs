@@ -804,7 +804,7 @@ namespace Oxide.Rust.Plugins
             isPlayerTakingDamage = true;
             player.OnAttacked(info);
             isPlayerTakingDamage = false;
-            return null;
+            return true;
         }
 
         /// <summary>
