@@ -36,6 +36,9 @@ namespace Oxide.Rust.Plugins
         // Cache the serverInput field info
         private readonly FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        // Track if a BasePlayer.OnAttacked call is in progress
+        private bool isPlayerTakingDamage;
+
         /// <summary>
         /// Initializes a new instance of the RustCore class
         /// </summary>
@@ -769,14 +772,33 @@ namespace Oxide.Rust.Plugins
         }
 
         /// <summary>
-        /// Called when a BasePlayer takes damage
-        /// This is used to call OnEntityTakeDamage for a BasePlayer
+        /// Called when a BasePlayer is attacked
+        /// This is used to call OnEntityTakeDamage for a BasePlayer when attacked
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="info"></param>
-        [HookMethod("OnPlayerTakeDamage")]
-        private object OnPlayerTakeDamage(BasePlayer entity, HitInfo info)
+        [HookMethod("OnBasePlayerAttacked")]
+        private object OnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
+            if (isPlayerTakingDamage) return null;
+            if (Interface.Oxide.CallHook("OnEntityTakeDamage", player, info) != null) return true;
+            isPlayerTakingDamage = true;
+            player.OnAttacked(info);
+            isPlayerTakingDamage = false;
+            return null;
+        }
+
+        /// <summary>
+        /// Called when a BasePlayer is hurt
+        /// This is used to call OnEntityTakeDamage when a player was hurt without being attacked
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        [HookMethod("OnBasePlayerHurt")]
+        private object OnBasePlayerHurt(BasePlayer entity, HitInfo info)
+        {
+            if (isPlayerTakingDamage) return null;
             return Interface.Oxide.CallHook("OnEntityTakeDamage", entity, info);
         }
 
