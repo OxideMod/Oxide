@@ -74,7 +74,7 @@ namespace Oxide.Core
                 this.culprit = culprit;
                 this.modules = new Dictionary<string, string>();
                 foreach (var extension in Interface.Oxide.GetAllExtensions())
-                    modules[extension.GetType().FullName] = extension.Version.ToString();
+                    modules[extension.GetType().Namespace] = extension.Version.ToString();
                 if (exception != null)
                 {
                     extra = new Dictionary<string, string>();
@@ -132,6 +132,13 @@ namespace Oxide.Core
             tags[name] = value;
         }
 
+        public static string GetTag(string name)
+        {
+            string value;
+            if (tags.TryGetValue(name, out value)) return value;
+            return null;
+        }
+
         public static void Debug(string message)
         {
             EnqueueReport("debug", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
@@ -160,8 +167,7 @@ namespace Oxide.Core
         public static void Exception(string message, string raw_stack_trace)
         {
             var stack_trace = raw_stack_trace.Split('\r', '\n');
-            var culprit = stack_trace[0];
-            if (culprit.EndsWith(" ()")) culprit = culprit.Substring(0, culprit.Length - 3);
+            var culprit = stack_trace[0].Split('(')[0].Trim();
             EnqueueReport("exception", stack_trace, culprit, message, raw_stack_trace);
         }
 
