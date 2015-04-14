@@ -13,34 +13,24 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Libraries\Command.cs" />
-    <Compile Include="Libraries\RustLegacy.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RustLegacyCore.cs" />
-    <Compile Include="RustLegacyExtension.cs" />
-    <Compile Include="RustLegacyHooks.cs" />
-    <Compile Include="RustLegacyPlugin.cs" />
-    <Compile Include="RustLegacyPluginLoader.cs" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
@@ -57,6 +47,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libraries\Command.cs" />
+    <Compile Include="Libraries\RustLegacy.cs" />
+    <Compile Include="Plugins\HooksTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RustLegacyCore.cs" />
+    <Compile Include="RustLegacyExtension.cs" />
+    <Compile Include="RustLegacyHooks.cs" />
+    <Compile Include="RustLegacyPlugin.cs" />
+    <Compile Include="RustLegacyPluginLoader.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
       <Name>Oxide.Core</Name>
@@ -70,7 +71,6 @@
       <Name>Oxide.Ext.Unity</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
