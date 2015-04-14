@@ -175,9 +175,9 @@ namespace Oxide.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public T GetLibrary<T>(string name) where T : Library
+        public T GetLibrary<T>(string name = null) where T : Library
         {
-            return extensionmanager.GetLibrary(name) as T;
+            return extensionmanager.GetLibrary(name ?? typeof(T).Name) as T;
         }
 
         /// <summary>
