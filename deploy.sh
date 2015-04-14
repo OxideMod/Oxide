@@ -68,13 +68,13 @@ function bundle_rustlegacy {
     Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
+    cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
+    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
     Oxide.Ext.SQLite/Dependencies/System.*.dll \
-    Oxide.Ext.RustLegacy/Dependencies/Newtonsoft.Json.dll \
     Oxide.Ext.RustLegacy/Dependencies/System.*.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
