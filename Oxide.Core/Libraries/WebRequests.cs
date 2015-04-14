@@ -149,13 +149,19 @@ namespace Oxide.Core.Libraries
                                     ResponseText = reader.ReadToEnd();
                             ResponseCode = (int)response.StatusCode;
                         }
-                        OnComplete();
+                    }
+                    catch (WebException ex)
+                    {
+                        ResponseText = ex.Message;
+                        var response = ex.Response as HttpWebResponse;
+                        if (response != null) ResponseCode = (int)response.StatusCode;
                     }
                     catch (Exception ex)
                     {
                         ResponseText = ex.Message;
                         Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                     }
+                    OnComplete();
                 }, null);
             }
 
