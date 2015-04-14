@@ -7,8 +7,6 @@ namespace Oxide.SevenDays.Libraries
     /// </summary>
     public class SevenDays : Library
     {
-        private GameManager gameManager;
-
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
@@ -22,20 +20,14 @@ namespace Oxide.SevenDays.Libraries
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name, string message = null)
         {
-            if (gameManager == null)
-            {
-                gameManager = UnityEngine.Object.FindObjectOfType<GameManager>();
-                if (gameManager == null) return;
-            }
+            if (!GameManager.Instance) return;
 
             if (message != null)
-            {
-                gameManager.SendChatMessage(message, -1, name);
-            }
+                GameManager.Instance.GameMessageServer(message, name);
             else
             {
                 message = name;
-                gameManager.SendChatMessage(message, -1, "");
+                GameManager.Instance.GameMessageServer(message, "SERVER");
             }
         }
     }
