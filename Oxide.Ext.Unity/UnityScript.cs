@@ -23,7 +23,7 @@ namespace Oxide.Unity
         void Awake()
         {
             oxideMod = Interface.GetMod();
-            Application.logMessageReceived += HandleException;
+            Application.RegisterLogCallback(HandleException);
         }
 
         void Update()
