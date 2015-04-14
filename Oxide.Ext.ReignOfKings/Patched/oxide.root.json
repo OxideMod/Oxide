@@ -1,0 +1,15 @@
+{
+    "ExtensionDirectory": "ROK_Data\\Managed",
+
+    "PluginDirectory": "plugins",
+    "ConfigDirectory": "config",
+    "DataDirectory": "data",
+    "LogDirectory": "logs",
+    "TempDirectory": "temp",
+
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "oxide"
+    ]
+}

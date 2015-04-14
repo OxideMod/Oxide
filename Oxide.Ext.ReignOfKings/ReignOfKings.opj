@@ -3,56 +3,8 @@
   "TargetDirectory": "D:\\Servers\\Game\\ReignOfKings\\Latest\\ROK_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 1,
-            "ArgumentString": "",
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "uLinkSimpleServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "uLink_OnPlayerConnected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayer"
-              ]
-            },
-            "MSILHash": "e4v43eKyq3lYUdfYRZXDoc63w90kc/3xvJ8B3guuFuM="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerDisconnected",
-            "HookName": "OnPlayerDisconnected",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "uLinkSimpleServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "uLink_OnPlayerDisconnected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayer"
-              ]
-            },
-            "MSILHash": "f71DFaQX1yzNmVD51+hBYUv0bBrMG3wTQF3Lgym1F8M="
-          }
-        },
         {
           "Type": "Simple",
           "Hook": {
@@ -63,7 +15,7 @@
             "HookTypeName": "Simple",
             "Name": "OnServerInitialized",
             "HookName": "OnServerInitialized",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "uLinkSimpleServer",
             "Flagged": false,
             "Signature": {
@@ -85,7 +37,7 @@
             "HookTypeName": "Simple",
             "Name": "CreatePlayer",
             "HookName": "OnCreatePlayer",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Networking.CoreServer",
             "Flagged": true,
             "Signature": {
@@ -97,7 +49,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "FdW3mI3tri4mc0STOVOJuYj0qxAUWwVvJceXfZ31txI="
+            "MSILHash": "2WreADSgXeSPGvllFCxuSAICosULChaRXVYtSBpZpj8="
           }
         },
         {
@@ -108,18 +60,18 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp",
+            "Name": "OnServerQuit",
+            "HookName": "OnServerQuit",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Networking.CoreServer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Shutdown",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "U0GUS8yfB53mPFRzPrfEl0cf9//wsOOepadRzcdw0Ek="
+            "MSILHash": "wF1y7ahROUgudetm5uYQI2EOOtiFGi3hdhlen++V+9E="
           }
         },
         {
@@ -132,7 +84,7 @@
             "HookTypeName": "Simple",
             "Name": "OnDestroy",
             "HookName": "OnDestroy",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Networking.CoreServer",
             "Flagged": true,
             "Signature": {
@@ -141,7 +93,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "JJpJFxJAnz2BBncjG/ZQaYTYeiJK8Tqm3/svA0O8apU="
+            "MSILHash": "U11wCtIztvPsE1mbRlOCMaOHU0xJWdnIsQ6uXN3Tiho="
           }
         },
         {
@@ -152,11 +104,11 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnGameSave",
-            "HookName": "OnGameSave",
-            "AssemblyName": "Assembly-CSharp",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Networking.CoreServer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "OnGameSave",
@@ -165,7 +117,7 @@
                 "CodeHatch.Networking.Events.Gaming.GameSaveEvent"
               ]
             },
-            "MSILHash": "ufKwrXU3Z/tP+LsN3NRiDk8qEWdu7NKAUcQPtXM63G4="
+            "MSILHash": "FWAsIwb9oNY/em9ZXQcT6fFJRgmvNXdGJ5H8P1iLdCQ="
           }
         },
         {
@@ -176,33 +128,11 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "StartTerrain",
-            "HookName": "OnStartTerrain",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "CodeHatch.TerrainAPI.HeightMapAPI",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "StartTerrain",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "UfiPMm3D4/D/kSfb/wt4fnmJEBEzkVJ4nXyS6AtF0bM="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnTerrainReady",
-            "HookName": "OnTerrainReady",
-            "AssemblyName": "Assembly-CSharp",
+            "Name": "OnTerrainInitialized",
+            "HookName": "OnTerrainInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.HeightMap.Core.API.TerrainSettings",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "OnTerrainReady",
@@ -221,7 +151,7 @@
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide",
             "HookName": "InitOxide",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Networking.CoreServer",
             "Flagged": false,
             "Signature": {
@@ -230,7 +160,31 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Odh40ciN/bqJ/3gENILC/yICKWHcR3ovcJ8StLpdwC4="
+            "MSILHash": "hVlGmvS6Fl+RczYdreR81pj2P5oufwQm9dPE+QGXTR0="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "GetApprovedData",
+            "HookName": "OnGetApprovedData",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Networking.CoreServer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetApprovedData",
+              "ReturnType": "CodeHatch.Engine.Networking.ConnectionApprovedData",
+              "Parameters": [
+                "CodeHatch.Engine.Core.Networking.ConnectionLoginData"
+              ]
+            },
+            "MSILHash": "RKmA5vbm4QLtxNtXHcnSjnnyP/ruvV1UQ0ZpRjrAl+4="
           }
         }
       ]
