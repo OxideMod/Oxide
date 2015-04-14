@@ -23,8 +23,9 @@ namespace Oxide.Unity
         void Awake()
         {
             oxideMod = Interface.GetMod();
-            
-            if (typeof(Application).GetEvent("logMessageReceived") == null)
+
+            var event_info = typeof(Application).GetEvent("logMessageReceived");
+            if (event_info == null)
             {
                 // Unity 4   
                 var log_callback_field = typeof(Application).GetField("s_LogCallback", BindingFlags.Static | BindingFlags.NonPublic);
@@ -41,7 +42,8 @@ namespace Oxide.Unity
             else
             {
                 // Unity 5
-                Application.logMessageReceived += LogMessageReceived;
+                var handle_exception = System.Delegate.CreateDelegate(event_info.EventHandlerType, this, "LogMessageReceived");
+                event_info.GetAddMethod().Invoke(null, new object[] { handle_exception });
             }
         }
 
