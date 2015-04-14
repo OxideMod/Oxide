@@ -30,14 +30,12 @@ namespace Oxide.Unity
                 // Unity 4   
                 var log_callback_field = typeof(Application).GetField("s_LogCallback", BindingFlags.Static | BindingFlags.NonPublic);
                 var log_callback = log_callback_field.GetValue(null) as Application.LogCallback;
-                if (log_callback == null)
-                    Interface.Oxide.LogWarning("No Unity application log callback is registered");
-                else
-                    Application.RegisterLogCallback((message, stack_trace, type) =>
-                    {
-                        log_callback.Invoke(message, stack_trace, type);
-                        LogMessageReceived(message, stack_trace, type);
-                    });
+                if (log_callback == null) Interface.Oxide.LogWarning("No Unity application log callback is registered");
+                Application.RegisterLogCallback((message, stack_trace, type) =>
+                {
+                    if (log_callback != null) log_callback.Invoke(message, stack_trace, type);
+                    LogMessageReceived(message, stack_trace, type);
+                });
             }
             else
             {
