@@ -44,7 +44,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public abstract bool IsGlobal { get; }
+        public virtual bool IsGlobal { get; }
 
         /// <summary>
         /// Initializes a new instance of the Library class
