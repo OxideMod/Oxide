@@ -1321,31 +1321,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 37,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this, l0, a1",
-            "HookTypeName": "Simple",
-            "Name": "OnEntityRpcMessage",
-            "HookName": "OnEntityRpcMessage",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "BaseEntity",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SV_RPCMessage",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.UInt32",
-                "Network.Message"
-              ]
-            },
-            "MSILHash": "SpwfC1Pc0qOXZSr+VKr5zI1gwgD2Mm5oUJfYp5KMlkA="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 13,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
