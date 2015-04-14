@@ -22,10 +22,8 @@ namespace Oxide.Plugins
             hooksRemaining.Remove(name);
             if (hookCount == 0)
                 PrintWarning("All hooks verified!");
-            else {
+            else
                 PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
-                PrintWarning("--");
-            }
         }
 
         private void Init()

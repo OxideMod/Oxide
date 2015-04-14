@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Oxide.Plugins
 {
-    [Info("Hooks Test", "Wulfspider", "0.2.2", ResourceId = 826)]
+    [Info("Hooks Test", "Oxide Team", 0.1)]
     public class HooksTest : SevenDaysPlugin
     {
         int hookCount = 0;
