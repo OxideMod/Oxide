@@ -29,7 +29,8 @@ function bundle_rust {
     Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
+    cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
+    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
