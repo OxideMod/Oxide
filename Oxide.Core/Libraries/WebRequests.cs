@@ -11,24 +11,19 @@ using Oxide.Core.Plugins;
 namespace Oxide.Core.Libraries
 {
     /// <summary>
-    /// The webrequests library
+    /// The WebRequests library
     /// </summary>
     public class WebRequests : Library
     {
         /// <summary>
         /// Specifies the HTTP request timeout in seconds
         /// </summary>
-        public static float Timeout = 5f;
-
+        public static float Timeout = 30f;
+        
         /// <summary>
-        /// Returns if this library should be loaded into the global namespace
+        /// Represents a single WebRequest instance
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
-
-        /// <summary>
-        /// Represents a single webrequest instance
-        /// </summary>
-        public abstract class WebrequestInstance
+        public class WebRequest
         {
             /// <summary>
             /// Gets the callback delegate
@@ -36,14 +31,24 @@ namespace Oxide.Core.Libraries
             public Action<int, string> Callback { get; private set; }
 
             /// <summary>
-            /// Gets if this webrequest has finished
+            /// Overrides the default request timeout
             /// </summary>
-            public bool Finished { get; private set; }
+            public float Timeout { get; set; }
+
+            /// <summary>
+            /// Gets the web request method
+            /// </summary>
+            public string Method { get; set; }
 
             /// <summary>
             /// Gets the destination URL
             /// </summary>
             public string URL { get; private set; }
+            
+            /// <summary>
+            /// Gets or sets the request body
+            /// </summary>
+            public string Body { get; set; }
 
             /// <summary>
             /// Gets the response code
@@ -56,29 +61,119 @@ namespace Oxide.Core.Libraries
             public string ResponseText { get; protected set; }
 
             /// <summary>
-            /// Gets the plugin to which this webrequest belongs, if any
+            /// Gets the plugin to which this web request belongs, if any
             /// </summary>
             public Plugin Owner { get; private set; }
 
             /// <summary>
-            /// Gets the HTTP Request headers
+            /// Gets the web request headers
             /// </summary>
             public Dictionary<string, string> RequestHeaders { get; set; }
+            
+            private HttpWebRequest request = null;
 
             /// <summary>
-            /// Initializes a new instance of the WebrequestInstance class
+            /// Initializes a new instance of the WebRequest class
             /// </summary>
             /// <param name="url"></param>
             /// <param name="callback"></param>
             /// <param name="owner"></param>
-            public WebrequestInstance(string url, Action<int, string> callback, Plugin owner)
+            public WebRequest(string url, Action<int, string> callback, Plugin owner)
             {
                 URL = url;
                 Callback = callback;
                 Owner = owner;
                 if (owner != null) owner.OnRemovedFromManager += owner_OnRemovedFromManager;
             }
+            
+            /// <summary>
+            /// Used by the worker thread to start the request
+            /// </summary>
+            public void Start()
+            {   
+                try
+                {
+                    // Create the request
+                    request = (HttpWebRequest)System.Net.WebRequest.Create(URL);
+                    request.Method = Method;
+                    request.Credentials = CredentialCache.DefaultCredentials;
+                    request.Proxy = null;
+                    request.KeepAlive = false;
+                    request.Timeout = (int)Math.Round((Timeout == 0f ? WebRequests.Timeout : Timeout) * 1000f);
+                    request.ServicePoint.MaxIdleTime = request.Timeout;
 
+                    if (RequestHeaders != null) request.SetRawHeaders(RequestHeaders);
+
+                    // Optional request body for post requests
+                    var data = new byte[0];
+                    if (Body != null)
+                    {
+                        request.ContentType = "application/x-www-form-urlencoded";
+                        request.ContentLength = data.Length;
+                        data = Encoding.UTF8.GetBytes(Body);
+                    }
+
+                    // Perform DNS lookup and connect (blocking)
+                    if (data.Length > 0)
+                    {
+                        request.BeginGetRequestStream(result =>
+                        {
+                            // Write request body
+                            using (var stream = request.EndGetRequestStream(result))
+                                stream.Write(data, 0, data.Length);
+                            WaitForResponse();
+                        }, null);
+                    }
+                    else
+                    {
+                        WaitForResponse();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ResponseText = ex.Message;
+                    Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
+                    if (request != null) request.Abort();
+                }
+            }
+
+            private void WaitForResponse()
+            {
+                request.BeginGetResponse(result => {
+                    try
+                    {
+                        using (var response = (HttpWebResponse)request.EndGetResponse(result))
+                        {
+                            using (var stream = response.GetResponseStream())
+                                using (var reader = new StreamReader(stream))
+                                    ResponseText = reader.ReadToEnd();
+                            ResponseCode = (int)response.StatusCode;
+                        }
+                        OnComplete();
+                    }
+                    catch (Exception ex)
+                    {
+                        ResponseText = ex.Message;
+                        Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
+                    }
+                }, null);
+            }
+
+            private void OnComplete()
+            {
+                Interface.Oxide.NextTick(() =>
+                {
+                    try
+                    {
+                        Callback(ResponseCode, ResponseText);
+                    }
+                    catch (Exception ex)
+                    {
+                        Interface.Oxide.LogException("Exception raised in web request callback", ex);
+                    }
+                });
+            }
+            
             /// <summary>
             /// Called when the owner plugin was unloaded
             /// </summary>
@@ -86,187 +181,21 @@ namespace Oxide.Core.Libraries
             /// <param name="manager"></param>
             private void owner_OnRemovedFromManager(Plugin sender, PluginManager manager)
             {
-                Finish();
-            }
-
-            /// <summary>
-            /// Finishes this webrequest
-            /// </summary>
-            protected void Finish()
-            {
-                Finished = true;
-            }
-
-            /// <summary>
-            /// Processes this web request
-            /// </summary>
-            public abstract void Process();
-        }
-
-        /// <summary>
-        /// Represents a get request
-        /// </summary>
-        public class GetWebrequest : WebrequestInstance
-        {
-            /// <summary>
-            /// Initializes a new instance of the GetWebrequest class
-            /// </summary>
-            /// <param name="url"></param>
-            /// <param name="callback"></param>
-            /// <param name="owner"></param>
-            public GetWebrequest(string url, Action<int, string> callback, Plugin owner)
-                : base(url, callback, owner)
-            {
-
-            }
-
-            /// <summary>
-            /// Processes this web request
-            /// </summary>
-            public override void Process()
-            {
-                HttpWebRequest request = null;
-                try
-                {
-                    // Create the request
-                    request = (HttpWebRequest)WebRequest.Create(URL);
-                    request.Credentials = CredentialCache.DefaultCredentials;
-                    request.Proxy = null;
-                    request.KeepAlive = false;
-
-                    request.Timeout = (int)Math.Round(Timeout * 1000f);
-                    request.ServicePoint.MaxIdleTime = (int)Math.Round(Timeout * 1000f);
-                    if (RequestHeaders != null)
-                        request.SetRawHeaders(RequestHeaders);
-                    // Get the response
-                    using (var response = (HttpWebResponse)request.GetResponse())
-                    {
-                        // Read the output
-                        using (var responseStream = response.GetResponseStream())
-                            using (var reader = new StreamReader(responseStream))
-                                ResponseText = reader.ReadToEnd();
-                        ResponseCode = (int) response.StatusCode;
-                    }
-                }
-                catch (WebException webex)
-                {
-                    var response = webex.Response as HttpWebResponse;
-                    ResponseText = webex.Message;
-                    ResponseCode = response != null ? (int)response.StatusCode : 0;
-                }
-                catch (Exception ex)
-                {
-                    ResponseText = ex.Message;
-                    ResponseCode = 0;
-                    Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
-                }
-                finally
-                {
-                    if (request != null) request.Abort();
-                }
-
-                // Done
-                Finish();
+                OnComplete();
             }
         }
-
-        /// <summary>
-        /// Represents a post request
-        /// </summary>
-        public class PostWebrequest : WebrequestInstance
-        {
-            /// <summary>
-            /// Gets the post data associated with this request
-            /// </summary>
-            public string PostData { get; private set;}
-
-            /// <summary>
-            /// Initializes a new instance of the GetWebrequest class
-            /// </summary>
-            /// <param name="url"></param>
-            /// <param name="postdata"></param>
-            /// <param name="callback"></param>
-            /// <param name="owner"></param>
-            public PostWebrequest(string url, string postdata, Action<int, string> callback, Plugin owner)
-                : base(url, callback, owner)
-            {
-                PostData = postdata;
-            }
-
-            /// <summary>
-            /// Processes this web request
-            /// </summary>
-            public override void Process()
-            {
-                HttpWebRequest request = null;
-                try
-                {
-                    // Create the request
-                    request = (HttpWebRequest)WebRequest.Create(URL);
-                    request.Credentials = CredentialCache.DefaultCredentials;
-                    request.Proxy = null;
-                    request.KeepAlive = false;
-
-                    request.Timeout = (int)Math.Round(Timeout * 1000f);
-                    request.ServicePoint.MaxIdleTime = (int)Math.Round(Timeout * 1000f);
-
-                    // Setup post data
-                    request.Method = "POST";
-                    request.ContentType = "application/x-www-form-urlencoded";
-                    if (RequestHeaders != null)
-                        request.SetRawHeaders(RequestHeaders);
-                    var data = Encoding.UTF8.GetBytes(PostData);
-                    request.ContentLength = data.Length;
-                    using (var requeststream = request.GetRequestStream())
-                        requeststream.Write(data, 0, data.Length);
-
-                    // Get the response
-                    using (var response = (HttpWebResponse)request.GetResponse())
-                    {
-                        // Read the output
-                        using (var responseStream = response.GetResponseStream())
-                            using (var reader = new StreamReader(responseStream))
-                                ResponseText = reader.ReadToEnd();
-                        ResponseCode = (int) response.StatusCode;
-                    }
-                }
-                catch (WebException webex)
-                {
-                    var response = webex.Response as HttpWebResponse;
-                    ResponseText = webex.Message;
-                    ResponseCode = response != null ? (int)response.StatusCode : 0;
-                }
-                catch (Exception ex)
-                {
-                    ResponseText = ex.Message;
-                    ResponseCode = 0;
-                    Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
-                }
-                finally
-                {
-                    if (request != null) request.Abort();
-                }
-                // Done
-                Finish();
-            }
-        }
-
-        private readonly Queue<WebrequestInstance> waitingqueue;
-        private readonly object syncroot;
+        
+        private readonly Queue<WebRequest> queue = new Queue<WebRequest>();
+        private readonly object syncroot = new object();
         private readonly Thread workerthread;
+        private readonly AutoResetEvent workevent = new AutoResetEvent(false);
         private bool shutdown;
-        private readonly AutoResetEvent workevent;
 
         /// <summary>
         /// Initializes a new instance of the WebRequests library
         /// </summary>
         public WebRequests()
         {
-            // Initialize
-            waitingqueue = new Queue<WebrequestInstance>();
-            syncroot = new object();
-            workevent = new AutoResetEvent(false);
-
             // Initialize SSL
             ServicePointManager.Expect100Continue = false;
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
@@ -295,32 +224,14 @@ namespace Oxide.Core.Libraries
         {
             while (!shutdown)
             {
-                workevent.WaitOne();
-                WebrequestInstance request = null;
-                lock (syncroot) if (waitingqueue.Count > 0) request = waitingqueue.Dequeue();
-                if (request != null)
+                if (queue.Count < 1)
                 {
-                    try
-                    {
-                        request.Process();
-                    }
-                    catch (Exception ex)
-                    {
-                        Interface.Oxide.LogException("Web request produced exception", ex);
-                    }
-                    Interface.Oxide.NextTick(() =>
-                    {
-                        try
-                        {
-                            request.Callback(request.ResponseCode, request.Finished ? request.ResponseText : null);
-                        }
-                        catch (Exception ex)
-                        {
-                            Interface.Oxide.LogException("Exception raised in web request callback", ex);
-                        }
-                    });
+                    workevent.Reset();
+                    workevent.WaitOne();
                 }
-                lock (syncroot) if (waitingqueue.Count > 0) workevent.Set();
+                WebRequest request = null;
+                lock (syncroot) request = queue.Dequeue();
+                request.Start();
             }
         }
 
@@ -331,11 +242,12 @@ namespace Oxide.Core.Libraries
         /// <param name="callback"></param>
         /// <param name="owner"></param>
         /// <param name="headers"></param>
+        /// <param name="timeout"></param>
         [LibraryFunction("EnqueueGet")]
-        public void EnqueueGet(string url, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null)
+        public void EnqueueGet(string url, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            var request = new GetWebrequest(url, callback, owner) { RequestHeaders = headers };
-            lock (syncroot) waitingqueue.Enqueue(request);
+            var request = new WebRequest(url, callback, owner) { Method = "GET", RequestHeaders = headers, Timeout = timeout };
+            lock (syncroot) queue.Enqueue(request);
             workevent.Set();
         }
 
@@ -343,15 +255,18 @@ namespace Oxide.Core.Libraries
         /// Enqueues a post request
         /// </summary>
         /// <param name="url"></param>
-        /// <param name="postdata"></param>
+        /// <param name="body"></param>
         /// <param name="callback"></param>
         /// <param name="owner"></param>
         /// <param name="headers"></param>
+        /// <param name="timeout"></param>
         [LibraryFunction("EnqueuePost")]
-        public void EnqueuePost(string url, string postdata, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null)
+        public void EnqueuePost(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            var request = new PostWebrequest(url, postdata, callback, owner) { RequestHeaders = headers};
-            lock (syncroot) waitingqueue.Enqueue(request);
+            var request = new WebRequest(url, callback, owner) { Method = "POST", RequestHeaders = headers, Timeout = timeout };
+            if (timeout > 0f) request.Timeout = timeout;
+            request.Body = body;
+            lock (syncroot) queue.Enqueue(request);
             workevent.Set();
         }
 
@@ -362,7 +277,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("GetQueueLength")]
         public int GetQueueLength()
         {
-            lock (syncroot) return waitingqueue.Count;
+            return queue.Count;
         }
     }
 
@@ -373,21 +288,21 @@ namespace Oxide.Core.Libraries
         /// Headers that require modification via a property
         /// </summary>
         private static readonly string[] RestrictedHeaders = {
-                "Accept",
-                "Connection",
-                "Content-Length",
-                "Content-Type",
-                "Date",
-                "Expect",
-                "Host",
-                "If-Modified-Since",
-                "Keep-Alive",
-                "Proxy-Connection",
-                "Range",
-                "Referer",
-                "Transfer-Encoding",
-                "User-Agent"
-            };
+            "Accept",
+            "Connection",
+            "Content-Length",
+            "Content-Type",
+            "Date",
+            "Expect",
+            "Host",
+            "If-Modified-Since",
+            "Keep-Alive",
+            "Proxy-Connection",
+            "Range",
+            "Referer",
+            "Transfer-Encoding",
+            "User-Agent"
+        };
 
         /// <summary>
         /// Dictionary of all of the header properties
@@ -401,9 +316,7 @@ namespace Oxide.Core.Libraries
         {
             var type = typeof(HttpWebRequest);
             foreach (var header in RestrictedHeaders)
-            {
                 HeaderProperties[header] = type.GetProperty(header.Replace("-", ""));
-            }
         }
 
         /// <summary>
