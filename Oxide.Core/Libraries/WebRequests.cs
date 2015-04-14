@@ -161,6 +161,7 @@ namespace Oxide.Core.Libraries
                         ResponseText = ex.Message;
                         Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                     }
+                    if (request != null) request.Abort();
                     OnComplete();
                 }, null);
             }
