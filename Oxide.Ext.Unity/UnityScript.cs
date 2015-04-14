@@ -1,5 +1,5 @@
-﻿using Oxide.Core;
-
+﻿using System.Reflection;
+using Oxide.Core;
 using UnityEngine;
 
 namespace Oxide.Unity
@@ -23,7 +23,26 @@ namespace Oxide.Unity
         void Awake()
         {
             oxideMod = Interface.GetMod();
-            Application.RegisterLogCallback(HandleException);
+            
+            if (typeof(Application).GetEvent("logMessageReceived") == null)
+            {
+                // Unity 4   
+                var log_callback_field = typeof(Application).GetField("s_LogCallback", BindingFlags.Static | BindingFlags.NonPublic);
+                var log_callback = log_callback_field.GetValue(null) as Application.LogCallback;
+                if (log_callback == null)
+                    Interface.Oxide.LogWarning("No Unity application log callback is registered");
+                else
+                    Application.RegisterLogCallback((message, stack_trace, type) =>
+                    {
+                        log_callback.Invoke(message, stack_trace, type);
+                        LogMessageReceived(message, stack_trace, type);
+                    });
+            }
+            else
+            {
+                // Unity 5
+                Application.logMessageReceived += LogMessageReceived;
+            }
         }
 
         void Update()
@@ -38,7 +57,7 @@ namespace Oxide.Unity
             oxideMod.NextTick(Create);
         }
 
-        void HandleException(string message, string stack_trace, LogType type)
+        void LogMessageReceived(string message, string stack_trace, LogType type)
         {
             if (type == LogType.Exception && stack_trace.Contains("Oxide"))
                 RemoteLogger.Exception(message, stack_trace);
