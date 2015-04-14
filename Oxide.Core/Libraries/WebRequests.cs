@@ -108,9 +108,9 @@ namespace Oxide.Core.Libraries
                     var data = new byte[0];
                     if (Body != null)
                     {
-                        request.ContentType = "application/x-www-form-urlencoded";
-                        request.ContentLength = data.Length;
                         data = Encoding.UTF8.GetBytes(Body);
+                        request.ContentLength = data.Length;
+                        request.ContentType = "application/x-www-form-urlencoded";
                     }
 
                     // Perform DNS lookup and connect (blocking)
