@@ -10,7 +10,7 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "Data\\Oxide",
-        "server"
+        "data\\oxide",
+        "oxide"
     ]
 }

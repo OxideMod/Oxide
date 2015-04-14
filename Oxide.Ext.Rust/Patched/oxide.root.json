@@ -11,6 +11,6 @@
     [
         "{oxide.directory}",
         "server\\{server.identity}\\oxide",
-        "server"
+        "server\\my_server_identity\\oxide"
     ]
 }
