@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Oxide.Plugins
 {
-    [Info("Hooks Test", "Wulfspider", "0.0.1")]
+    [Info("Hooks Test", "Oxide Team", 0.1)]
     public class HooksTest : RustLegacyPlugin
     {
         int hookCount = 0;
@@ -161,7 +161,6 @@ namespace Oxide.Plugins
         {
             HookCalled("OnStructureBuilt");
         }
-
 
         private void OnPlayerChat(NetUser user, string msg)
         {

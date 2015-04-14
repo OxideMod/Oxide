@@ -1,12 +1,10 @@
-// Reference: Oxide.Ext.Rust
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("Hooks Test", "Wulfspider", "0.2.3", ResourceId = 727)]
+    [Info("Hooks Test", "Oxide Team", 0.1)]
     public class HooksTest : RustPlugin
     {
         int hookCount = 0;
@@ -130,10 +128,10 @@ namespace Oxide.Plugins
             // TODO: Print spawn point
         }
 
-        private void OnPlayerSpawn(BasePlayer player, Network.Connection connection)
+        private void OnPlayerRespawned(BasePlayer player, Network.Connection connection)
         {
-            HookCalled("OnPlayerSpawn");
-            // TODO: Print spawn location
+            HookCalled("OnPlayerRespawned");
+            // TODO: Print respawn location
             // TODO: Print start metabolism values
             // TODO: Give admin items for testing
         }
@@ -142,12 +140,6 @@ namespace Oxide.Plugins
         {
             HookCalled("OnRunPlayerMetabolism");
             // TODO: Print new metabolism values
-        }
-
-        private void OnPlayerAttack(BasePlayer attacker, HitInfo hitInfo)
-        {
-            HookCalled("OnPlayerAttack");
-            // TODO: Print target and weapon
         }
 
         private void OnItemCraft(ItemCraftTask item)
@@ -192,16 +184,16 @@ namespace Oxide.Plugins
             // TODO: Print item to be gathered
         }
 
-        private void CanOpenDoor(BasePlayer player, BaseLock door)
-        //private void CanOpenDoor(BasePlayer player, CodeLock doorCode)
-        //private void CanOpenDoor(BasePlayer player, KeyLock doorKey)
+        private void CanUseDoor(BasePlayer player, BaseLock door)
+        //private void CanUseDoor(BasePlayer player, CodeLock doorCode)
+        //private void CanUseDoor(BasePlayer player, KeyLock doorKey)
         {
-            HookCalled("CanOpenDoor");
+            HookCalled("CanUseDoor");
         }
 
-        private void OnEntityAttacked(MonoBehaviour entity, HitInfo hitInfo)
+        private void OnEntityTakeDamage(MonoBehaviour entity, HitInfo hitInfo)
         {
-            HookCalled("OnEntityAttacked");
+            HookCalled("OnEntityTakeDamage");
         }
 
         private void OnEntityBuilt(Planner planner, GameObject gameObject)
@@ -226,9 +218,9 @@ namespace Oxide.Plugins
             HookCalled("OnEntityLeave");
         }
 
-        private void OnEntitySpawn(MonoBehaviour entity)
+        private void OnEntitySpawned(MonoBehaviour entity)
         {
-            HookCalled("OnEntitySpawn");
+            HookCalled("OnEntitySpawned");
         }
 
         private void OnPlayerInit(BasePlayer player)
