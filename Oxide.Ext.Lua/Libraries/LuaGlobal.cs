@@ -32,9 +32,9 @@ namespace Oxide.Lua.Libraries
         /// </summary>
         /// <param name="message"></param>
         [LibraryFunction("print")]
-        public void Print(object obj)
+        public void Print(object message)
         {
-            Logger.Write(LogType.Info, obj.ToString());
+            Logger.Write(LogType.Info, message != null ? message.ToString() : "null");
         }
     }
 }
