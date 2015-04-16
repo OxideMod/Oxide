@@ -128,7 +128,7 @@ namespace Oxide.Plugins
             // TODO: Print spawn point
         }
 
-        private void OnPlayerRespawned(BasePlayer player, Network.Connection connection)
+        private void OnPlayerRespawned(BasePlayer player)
         {
             HookCalled("OnPlayerRespawned");
             // TODO: Print respawn location
