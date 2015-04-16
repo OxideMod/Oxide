@@ -11,11 +11,11 @@ namespace Oxide.Tests
         [TestMethod]
         public void TestCommandLine()
         {
-            CommandLine cmdline = new CommandLine("-batchmode +server.hostname \"My Server Name\" +server.port 28015 +server.identity \"facepunchdev\" +server.seed 6738");
+            CommandLine cmdline = new CommandLine(new string[] { "-batchmode", "+server.hostname", "My", "Server", "Name", "+server.port", "28015", "+server.identity", "facepunchdev", "+server.seed", "6738" });
 
-            Assert.AreEqual(true, cmdline.HasFlag("batchmode"), "Failed cmdline.HasFlag");
-            Assert.AreEqual(false, cmdline.HasFlag("random"), "Failed cmdline.HasFlag");
-            Assert.AreEqual(false, cmdline.HasFlag("server.hostname"), "Failed cmdline.HasFlag");
+            Assert.AreEqual(true, cmdline.HasVariable("batchmode"), "Failed cmdline.HasFlag");
+            Assert.AreEqual(false, cmdline.HasVariable("random"), "Failed cmdline.HasFlag");
+            Assert.AreEqual(false, cmdline.HasVariable("server.hostname"), "Failed cmdline.HasFlag");
 
             Assert.AreEqual(true, cmdline.HasVariable("server.hostname"), "Failed cmdline.HasVariable");
             Assert.AreEqual(true, cmdline.HasVariable("server.port"), "Failed cmdline.HasVariable");
