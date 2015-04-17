@@ -165,7 +165,7 @@ function bundle_rok {
     cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
     Oxide.Ext.SQLite/Dependencies/x64/*.dll \
     $HOME/temp_rok/ROK_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
+    cp -vf Oxide.Ext.ReignOfKings/Patched/Assembly-CSharp.dll \
     $HOME/temp_rok/ROK_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.ReignOfKings/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
