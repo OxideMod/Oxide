@@ -12,7 +12,7 @@ echo "Configuring git credentials"
 git config --global user.email "travis@travis-ci.org" && git config --global user.name "Travis" || die_with "Failed to configure git credentials!"
 
 echo "Cloning snapshots branch using token"
-git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/Snapshots >/dev/null || die_with "Failed to clone snapshots repo!"
+git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/Snapshots >/dev/null || die_with "Failed to clone snapshots repository!"
 
 function bundle_rust {
     cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
@@ -171,7 +171,7 @@ function bundle_rok {
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    $HOME/temp_7dtd || die_with "Failed to copy config file and root DLLs!"
+    $HOME/temp_rok || die_with "Failed to copy config file and root DLLs!"
 
     echo "Bundling and compressing target files"
     cd $HOME/temp_rok || die_with "Failed to change to temp directory!"
@@ -182,7 +182,8 @@ bundle_rust; bundle_rustlegacy; bundle_7dtd; bundle_rok
 
 echo "Adding, committing, and pushing to snapshots"
 cd $HOME/Snapshots || die_with "Failed to change to snapshots directory!"
-git add . && git commit -m "Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}" || die_with "Failed to add and commit files!"
+git add . || die_with "Failed to add files!"
+git commit -m "Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}" || die_with "Failed to commit files!"
 git push -q origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"
