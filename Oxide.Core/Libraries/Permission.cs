@@ -86,8 +86,8 @@ namespace Oxide.Core.Libraries
         private void LoadFromDatafile()
         {
             // Initialize
-            userdata = Interface.GetMod().DataFileSystem.ReadObject<Dictionary<string, UserData>>("oxide.users");
-            groupdata = Interface.GetMod().DataFileSystem.ReadObject<Dictionary<string, GroupData>>("oxide.groups");
+            userdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, UserData>>("oxide.users");
+            groupdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, GroupData>>("oxide.groups");
         }
 
         /// <summary>

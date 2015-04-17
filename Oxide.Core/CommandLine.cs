@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Oxide.Core
 {
@@ -11,89 +12,66 @@ namespace Oxide.Core
     public sealed class CommandLine
     {
         // The flags and variables of this command line
-        private string[] flags;
-        private Variable[] variables;
-
-        /// <summary>
-        /// Represents a variable
-        /// </summary>
-        private struct Variable
-        {
-            public string Name;
-            public string Value;
-        }
+        private Dictionary<string, string> variables = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the CommandLine class
         /// </summary>
         /// <param name="cmdline"></param>
-        public CommandLine(string cmdline)
+        public CommandLine(string[] commandline)
         {
-            // Split into args
-            List<string> arglist = new List<string>();
-            StringBuilder curarg = new StringBuilder();
-            bool insidelongarg = false;
-            for (int i = 0; i < cmdline.Length; i++)
-            {
-                char c = cmdline[i];
-                if (char.IsWhiteSpace(c) && !insidelongarg)
-                {
-                    if (curarg.Length > 0)
-                    {
-                        arglist.Add(curarg.ToString());
-                        curarg = new StringBuilder();
-                    }
-                }
-                else if (c == '"')
-                {
-                    if (insidelongarg)
-                    {
-                        insidelongarg = false;
-                        arglist.Add(curarg.ToString());
-                        curarg = new StringBuilder();
-                    }
-                    else if (curarg.Length == 0)
-                        insidelongarg = true;
-                }
-                else
-                    curarg.Append(c);
-            }
-            if (curarg.Length > 0) arglist.Add(curarg.ToString());
+            string cmdline = string.Empty;
+            string key = string.Empty;
 
-            // Build flags and variables arrays
-            List<string> flaglist = new List<string>();
-            List<Variable> varlist = new List<Variable>();
-            for (int i = 0; i < arglist.Count; i++)
+            foreach (string str in commandline)
+                cmdline += "\"" + str + "\"";
+
+            foreach (string str in Split(cmdline))
             {
-                string arg = arglist[i];
-                if (arg.Length > 0)
+                if (str.Length > 0)
                 {
-                    char prefix = arg[0];
-                    switch (prefix)
+                    var val = str.Trim(new[] { '/', '\\' });
+                    if (str[0] == '-' || str[0] == '+')
                     {
-                        case '-':
-                            flaglist.Add(arg.Substring(1));
-                            break;
-                        case '+':
-                            if (i < arglist.Count - 1)
-                                varlist.Add(new Variable() { Name = arg.Substring(1), Value = arglist[++i] });
-                            break;
+                        if (key != string.Empty && variables.ContainsKey(key))
+                            variables.Add(key, string.Empty);
+                        key = val.Substring(1);
+                    }
+                    else if (key != string.Empty)
+                    {
+                        if (!variables.ContainsKey(key))
+                        {
+                            if (key.Contains("dir"))
+                                val = val.Replace('/', '\\');
+                            variables.Add(key, val);
+                        }
+                        key = string.Empty;
                     }
                 }
             }
-            flags = flaglist.ToArray();
-            variables = varlist.ToArray();
+
+            if (key != string.Empty && !variables.ContainsKey(key))
+                variables.Add(key, string.Empty);
         }
 
         /// <summary>
-        /// Returns if this command line has the specified flag (prefixed with -)
+        /// Split the commandline arguments
         /// </summary>
-        /// <param name="flag"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public bool HasFlag(string flag)
+        public string[] Split(string input)
         {
-            // Search
-            return flags.Contains(flag);
+            input = input.Replace("\\\"", "&qute;");
+            MatchCollection matchs = new Regex("\"([^\"]+)\"|'([^']+)'|\\S+").Matches(input);
+            string[] strArray = new string[matchs.Count];
+            for (int i = 0; i < matchs.Count; i++)
+            {
+                char[] trimChars = new char[] { ' ', '"' };
+                strArray[i] = matchs[i].Groups[0].Value.Trim(trimChars);
+                strArray[i] = strArray[i].Replace("&qute;", "\"");
+            }
+
+            return strArray;
         }
 
         /// <summary>
@@ -104,7 +82,7 @@ namespace Oxide.Core
         public bool HasVariable(string name)
         {
             // Search
-            return variables.Any((v) => v.Name == name);
+            return variables.Any((v) => v.Key == name);
         }
 
         /// <summary>
@@ -116,7 +94,7 @@ namespace Oxide.Core
         {
             try
             {
-                return variables.Single((v) => v.Name == name).Value;
+                return variables.Single((v) => v.Key == name).Value;
             }
             catch (Exception)
             {

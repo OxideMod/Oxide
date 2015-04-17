@@ -90,7 +90,7 @@ namespace Oxide.Core
             RootDirectory = Environment.CurrentDirectory;
 
             // Create the commandline
-            commandline = new CommandLine(Environment.CommandLine);
+            commandline = new CommandLine(Environment.GetCommandLineArgs());
 
             // Load the config
             var oxideConfig = Path.Combine(RootDirectory, "oxide.root.json");
