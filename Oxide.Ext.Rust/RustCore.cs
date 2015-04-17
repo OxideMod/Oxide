@@ -22,14 +22,14 @@ namespace Oxide.Rust.Plugins
     public class RustCore : CSPlugin
     {
         // The pluginmanager
-        private readonly PluginManager pluginmanager;
+        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
         // The permission lib
-        private readonly Permission permission;
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = {"player", "moderator", "admin"};
 
-        // The rust lib
-        private readonly Libraries.Rust rust;
+        // The command lib
+        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // Track when the server has been initialized
         private bool ServerInitialized;
@@ -50,21 +50,6 @@ namespace Oxide.Rust.Plugins
             Title = "Rust Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
-            HasConfig = false;
-
-            // Get the pluginmanager
-            pluginmanager = Interface.Oxide.RootPluginManager;
-            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
-            rust = Interface.Oxide.GetLibrary<Libraries.Rust>("Rust");
-        }
-
-        /// <summary>
-        /// Loads the default config for this plugin
-        /// </summary>
-        protected override void LoadDefaultConfig()
-        {
-            // No config yet, we might use it later
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -73,9 +58,6 @@ namespace Oxide.Rust.Plugins
         [HookMethod("Init")]
         private void Init()
         {
-            // Get the command library
-            Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
-
             // Add our commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
             cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
@@ -98,7 +80,7 @@ namespace Oxide.Rust.Plugins
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust");
-            RemoteLogger.SetTag("protocol", Protocol.network.ToString());
+            RemoteLogger.SetTag("protocol", typeof(Protocol).GetField("network").GetValue(null).ToString());
         }
 
         /// <summary>
@@ -265,11 +247,11 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdVersion")]
         private void cmdVersion(ConsoleSystem.Arg arg)
         {
-            // Get the Rust network protocol version
-            string protocol = Protocol.network.ToString();
+            // Get the Rust network protocol version at runtime
+            var protocol = typeof(Protocol).GetField("network").GetValue(null).ToString();
 
             // Get the Oxide Core version
-            string oxide = OxideMod.Version.ToString();
+            var oxide = OxideMod.Version.ToString();
 
             // Show the versions
             if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
@@ -356,7 +338,7 @@ namespace Oxide.Rust.Plugins
                 arg.ReplyWith("User '" + name + "' not found");
                 return;
             }
-            name = rust.UserIDFromPlayer(player);
+            name = player.userID.ToString();
             permission.GetUserData(name).LastSeenNickname = player.displayName;
 
             if (!permission.GroupExists(group))
@@ -414,7 +396,7 @@ namespace Oxide.Rust.Plugins
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
                 }
-                name = rust.UserIDFromPlayer(player);
+                name = player.userID.ToString();
                 permission.GetUserData(name).LastSeenNickname = player.displayName;
                 permission.GrantUserPermission(name, perm, null);
                 arg.ReplyWith("User '" + player.displayName + "' granted permission: " + perm);
@@ -458,7 +440,7 @@ namespace Oxide.Rust.Plugins
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
                 }
-                name = rust.UserIDFromPlayer(player);
+                name = player.userID.ToString();
                 permission.GetUserData(name).LastSeenNickname = player.displayName;
                 permission.RevokeUserPermission(name, perm);
                 arg.ReplyWith("User '" + player.displayName + "' revoked permission: " + perm);
@@ -540,11 +522,8 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnRunCommand")]
         private object OnRunCommand(ConsoleSystem.Arg arg)
         {
-            // Sanity checks
-            if (arg == null) return null;
-            if (arg.cmd == null) return null;
+            if (arg == null || arg.cmd == null) return null;
 
-            // Is it chat.say?
             if (arg.cmd.namefull == "chat.say")
             {
                 // Get the args
@@ -554,27 +533,26 @@ namespace Oxide.Rust.Plugins
                 // Is it a chat command?
                 if (str[0] == '/' || str[0] == '!')
                 {
-                    // Get the arg string
-                    string argstr = str.Substring(1);
+                    // Get the message
+                    string message = str.Substring(1);
 
                     // Parse it
                     string cmd;
                     string[] args;
-                    ParseChatCommand(argstr, out cmd, out args);
+                    ParseChatCommand(message, out cmd, out args);
                     if (cmd == null) return null;
 
                     // Handle it
-                    Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
-                    BasePlayer ply = arg.connection.player as BasePlayer;
-                    if (ply == null)
+                    var player = arg.connection.player as BasePlayer;
+                    if (player == null)
                     {
                         Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
                     }
                     else
                     {
-                        if (!cmdlib.HandleChatCommand(ply, cmd, args))
+                        if (!cmdlib.HandleChatCommand(player, cmd, args))
                         {
-                            ply.SendConsoleCommand("chat.add", 0, string.Format("Unknown command '{0}'!", cmd));
+                            player.SendConsoleCommand("chat.add", 0, string.Format("Unknown command '{0}'!", cmd));
                         }
                     }
 
@@ -653,7 +631,7 @@ namespace Oxide.Rust.Plugins
             var authLevel = player.net.connection.authLevel;
             if (authLevel <= DefaultGroups.Length)
             {
-                var userId = rust.UserIDFromPlayer(player);
+                var userId = player.userID.ToString();
                 permission.GetUserData(userId).LastSeenNickname = player.displayName;
 
                 // Remove player from old groups if auth level changed
