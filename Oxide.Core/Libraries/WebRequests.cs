@@ -162,6 +162,7 @@ namespace Oxide.Core.Libraries
                         Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                     }
                     if (request != null) request.Abort();
+                    request = null;
                     OnComplete();
                 }, null);
             }
@@ -188,7 +189,7 @@ namespace Oxide.Core.Libraries
             /// <param name="manager"></param>
             private void owner_OnRemovedFromManager(Plugin sender, PluginManager manager)
             {
-                OnComplete();
+                if (request != null) request.Abort();
             }
         }
         
