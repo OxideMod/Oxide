@@ -29,13 +29,13 @@ function bundle_rust {
     Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
+    cp -vf Oxide.Core/Dependencies/*.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/System.*.dll \
+    Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
     Oxide.Ext.SQLite/Dependencies/x64/*.dll \
@@ -69,14 +69,13 @@ function bundle_rustlegacy {
     Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
+    cp -vf Oxide.Core/Dependencies/*.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/System.*.dll \
-    Oxide.Ext.RustLegacy/Dependencies/System.*.dll \
+    Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
     Oxide.Ext.SQLite/Dependencies/x86/*.dll \
@@ -111,14 +110,13 @@ function bundle_7dtd {
     Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
+    cp -vf Oxide.Core/Dependencies/*.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SevenDays/Dependencies/System.*.dll \
-    Oxide.Ext.SQLite/Dependencies/System.*.dll \
+    Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
     Oxide.Ext.SQLite/Dependencies/x64/*.dll \
@@ -154,13 +152,13 @@ function bundle_rok {
     Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
     $HOME/temp_rok/ROK_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/Newtonsoft.Json.dll \
+    cp -vf Oxide.Core/Dependencies/*.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
     Oxide.Ext.JavaScript/Dependencies/Jint.dll \
     Oxide.Ext.Lua/Dependencies/*Lua.dll \
     Oxide.Ext.MySql/Dependencies/*.dll \
     Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/System.*.dll \
+    Oxide.Ext.SQLite/Dependencies/*.dll \
     $HOME/temp_rok/ROK_Data/Managed || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
     Oxide.Ext.SQLite/Dependencies/x64/*.dll \
