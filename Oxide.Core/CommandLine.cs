@@ -24,13 +24,13 @@ namespace Oxide.Core
             string key = string.Empty;
 
             foreach (string str in commandline)
-                cmdline += "\"" + str + "\"";
+                cmdline += "\"" + str.Trim(new[] { '/', '\\' }) + "\"";
 
             foreach (string str in Split(cmdline))
             {
                 if (str.Length > 0)
                 {
-                    var val = str.Trim(new[] { '/', '\\' });
+                    var val = str;
                     if (str[0] == '-' || str[0] == '+')
                     {
                         if (key != string.Empty && variables.ContainsKey(key))
