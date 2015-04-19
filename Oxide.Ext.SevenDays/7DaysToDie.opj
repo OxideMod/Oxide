@@ -10,7 +10,7 @@
           "Hook": {
             "InjectionIndex": 94,
             "HookTypeName": "Initialize Oxide",
-            "Name": "InitLogging",
+            "Name": "InitLogging [internal]",
             "HookName": "InitLogging",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameStartupHelper",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "uxe9shgX88IeepJ1FKyplkcYf7FQirz95E8T38pcCJI="
+            "MSILHash": "To5yu3fuxDxZmdEeTRvTMO/cGvtczQv1Yt6h4sIsP58="
           }
         },
         {
@@ -29,7 +29,7 @@
           "Hook": {
             "InjectionIndex": 94,
             "HookTypeName": "Initialize Oxide",
-            "Name": "InitOxide",
+            "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameStartupHelper",
@@ -40,7 +40,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "uxe9shgX88IeepJ1FKyplkcYf7FQirz95E8T38pcCJI="
+            "MSILHash": "To5yu3fuxDxZmdEeTRvTMO/cGvtczQv1Yt6h4sIsP58="
           }
         },
         {
@@ -84,7 +84,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "046i0n+Svvp7S97SHbQvCq8W//oWfY0+bedGViSx0O0="
+            "MSILHash": "YQD6SIS/ipR+fAgzCOGiyL0uzOiLIbzuC1lQkvdWFOo="
           }
         },
         {
@@ -95,7 +95,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
             "HookTypeName": "Simple",
-            "Name": "PlayerDisconnected",
+            "Name": "OnPlayerDisconnected",
             "HookName": "OnPlayerDisconnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameManager",
@@ -108,7 +108,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "SnuYW9Wj6U8ZqkXRnMN2HffwzeNQWf5IgmGhZ1UrIIw="
+            "MSILHash": "DTRrx++duxK6HuRSpXieZ1D9IUW1zl694GGxwI15UHo="
           }
         },
         {
@@ -154,38 +154,13 @@
                 "Entity"
               ]
             },
-            "MSILHash": "Z4q5iDzYLhrWXfC+ETphFIOM73SPm7abGjHHWnoiP8A="
+            "MSILHash": "CjTUk2BhZ59UMsl56QlsfFQmUy6k9opiaOdkxrAa0ZE="
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 101,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this, l2, l3",
-            "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ConsoleSdtd",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "ExecuteRemoteCmdInternal",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "aGUhtu9LOozE+yQpAGsKvi6O4nkex70AxaVU4Em51DI="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 362,
+            "InjectionIndex": 367,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l10",
@@ -206,7 +181,7 @@
                 "PlayerProfile"
               ]
             },
-            "MSILHash": "RCcTVxam1YJuoEz7KBPDK/FiTO84bx2z8UChRWlhgBs="
+            "MSILHash": "xoq3Gxd+kmJaJWyH33BeUC8xFf1K7WxYM8delFU2Yyg="
           }
         },
         {
@@ -256,7 +231,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "RgTNSb1lKfZAi/NEXFur/+ZPYrT8PnyZGjpXE9HV2Es="
+            "MSILHash": "i2M/QqdzK85axMBUKOxvsWueXMUrVBMTQHl2wDNozvc="
           }
         },
         {
@@ -377,7 +352,32 @@
                 "System.String"
               ]
             },
-            "MSILHash": "z2fcp0ygHihQFWoxYGKh9tCE0U7BaE9HUzN4b9ffS4c="
+            "MSILHash": "W8T9s5k9RZ8lsyjAwtnbz9hou3mCll3uK/OnjZhsT8Q="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnRunCommand",
+            "HookName": "OnRunCommand",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SdtdConsole",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "executeCommand",
+              "ReturnType": "System.Collections.Generic.List`1<System.String>",
+              "Parameters": [
+                "System.String",
+                "CommandSenderInfo"
+              ]
+            },
+            "MSILHash": "2knkM4GuhQ7dFAuBX9IlNw48zROKbZP9j459C45Hc30="
           }
         }
       ]
