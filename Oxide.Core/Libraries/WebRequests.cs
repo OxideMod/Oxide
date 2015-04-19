@@ -131,7 +131,7 @@ namespace Oxide.Core.Libraries
                 }
                 catch (Exception ex)
                 {
-                    ResponseText = ex.Message;
+                    ResponseText = ex.Message.Trim('\r', '\n', ' ');
                     Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                     if (request != null) request.Abort();
                 }
@@ -139,10 +139,10 @@ namespace Oxide.Core.Libraries
 
             private void WaitForResponse()
             {
-                request.BeginGetResponse(result => {
+                var result = request.BeginGetResponse(res => {
                     try
                     {
-                        using (var response = (HttpWebResponse)request.EndGetResponse(result))
+                        using (var response = (HttpWebResponse)request.EndGetResponse(res))
                         {
                             using (var stream = response.GetResponseStream())
                                 using (var reader = new StreamReader(stream))
@@ -152,19 +152,25 @@ namespace Oxide.Core.Libraries
                     }
                     catch (WebException ex)
                     {
-                        ResponseText = ex.Message;
+                        ResponseText = ex.Message.Trim('\r', '\n', ' ');
                         var response = ex.Response as HttpWebResponse;
                         if (response != null) ResponseCode = (int)response.StatusCode;
                     }
                     catch (Exception ex)
                     {
-                        ResponseText = ex.Message;
+                        ResponseText = ex.Message.Trim('\r', '\n', ' ');
                         Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                     }
                     if (request != null) request.Abort();
                     request = null;
                     OnComplete();
                 }, null);
+                ThreadPool.RegisterWaitForSingleObject(result.AsyncWaitHandle, OnTimeout, null, request.Timeout, true);
+            }
+
+            private void OnTimeout(object state, bool timed_out)
+            {
+                if (timed_out && request != null) request.Abort();
             }
 
             private void OnComplete()
