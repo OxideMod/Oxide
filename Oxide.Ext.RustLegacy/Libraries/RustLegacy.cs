@@ -2,6 +2,7 @@
 using System.Reflection;
 
 using Oxide.Core.Libraries;
+using System.Collections.Generic;
 
 namespace Oxide.RustLegacy.Libraries
 {
@@ -29,24 +30,26 @@ namespace Oxide.RustLegacy.Libraries
         /// <summary>
         /// Print a message to every players chat log
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="format"></param>
         /// <param name="args"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string format, params object[] args)
+        public void BroadcastChat(string name, string format, params object[] args)
         {
-            ConsoleNetworker.Broadcast("chat.add Oxide " + QuoteSafe(string.Format(format, args)));
+            ConsoleNetworker.Broadcast($"chat.add {name} {QuoteSafe(string.Format(format, args))}");
         }
 
         /// <summary>
         /// Sends a chat message to the user
         /// </summary>
+        /// <param name="netUser"></param>
         /// <param name="name"></param>
         /// <param name="format"></param>
         /// <param name="args"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(NetUser netUser, string format, params object[] args)
+        public void SendChatMessage(NetUser netUser, string name, string format, params object[] args)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, "chat.add Oxide " + QuoteSafe(string.Format(format, args)));
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {name} {QuoteSafe(string.Format(format, args))}");
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace Oxide.RustLegacy.Libraries
         [LibraryFunction("SendConsoleMessage")]
         public void SendConsoleMessage(NetUser netUser, string format, params object[] args)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, "echo " + QuoteSafe(string.Format(format, args)));
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"echo {QuoteSafe(string.Format(format, args))}");
         }
 
         /// <summary>
@@ -69,7 +72,28 @@ namespace Oxide.RustLegacy.Libraries
         [LibraryFunction("BroadcastConsole")]
         public void BroadcastConsole(string format, params object[] args)
         {
-            ConsoleNetworker.Broadcast("echo " + QuoteSafe(string.Format(format, args)));
+            ConsoleNetworker.Broadcast($"echo {QuoteSafe(string.Format(format, args))}");
+        }
+
+        /// <summary>
+        /// Runs a console command on the server
+        /// </summary>
+        /// <param name="cmd"></param>
+        [LibraryFunction("RunServerCommand")]
+        public void RunServerCommand(string cmd)
+        {
+            ConsoleSystem.Run(cmd);
+        }
+
+        /// <summary>
+        /// Runs a console command for a specific player
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <param name="cmd"></param>
+        [LibraryFunction("RunClientCommand")]
+        public void RunClientCommand(NetUser netUser, string cmd)
+        {
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, cmd);
         }
 
         /// <summary>
@@ -105,7 +129,7 @@ namespace Oxide.RustLegacy.Libraries
             {
                 return netUser;
             }
-            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.displayName.StartsWith(strNameOrIDOrIP, StringComparison.CurrentCultureIgnoreCase))?.netUser) != null)
+            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.displayName.ToLower().Contains(strNameOrIDOrIP.ToLower()))?.netUser) != null)
             {
                 return netUser;
             }
@@ -114,6 +138,19 @@ namespace Oxide.RustLegacy.Libraries
                 return netUser;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns an array with all online player's their NetUser
+        /// </summary>
+        [LibraryFunction("GetAllNetUsers")]
+        public NetUser[] GetAllNetUsers()
+        {
+            List<NetUser> netUsers = new List<NetUser>();
+            foreach (var playerClient in PlayerClient.All)
+                netUsers.Add(playerClient.netUser);
+
+            return netUsers.ToArray();
         }
 
         /// <summary>
