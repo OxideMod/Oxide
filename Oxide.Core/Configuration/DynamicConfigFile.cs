@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace Oxide.Core.Configuration
 {
@@ -86,6 +87,126 @@ namespace Oxide.Core.Configuration
             {
                 _keyvalues[key] = value;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets a nested setting on this config by key
+        /// </summary>
+        /// <param name="keyLevel1"></param>
+        /// <param name="keyLevel2"></param>
+        /// <returns></returns>
+        public object this[string keyLevel1, string keyLevel2] {
+            get {
+                return Get(new string[] { keyLevel1, keyLevel2 });
+            }
+            set {
+                Set(new object[] { /* path */ keyLevel1, keyLevel2, /* value */ value });
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a nested setting on this config by key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="key2"></param>
+        /// <returns></returns>
+        public object this[string keyLevel1, string keyLevel2, string keyLevel3] {
+            get {
+                return Get(new string[] { keyLevel1, keyLevel2, keyLevel3 });
+            }
+            set {
+                Set(new object[] { /* path */ keyLevel1, keyLevel2, keyLevel3, /* value */ value });
+            }
+        }
+
+        /// <summary>
+        /// Converts a configuration value to another type
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public object ConvertValue(object value, Type destinationType) {
+            if (destinationType.IsGenericType) {
+                if (destinationType.GetGenericTypeDefinition() == typeof(List<>)) {
+                    var valueType = destinationType.GetGenericArguments()[0];
+                    var list = (IList)Activator.CreateInstance(destinationType);
+                    foreach (var val in (IList)value)
+                        list.Add(Convert.ChangeType(val, valueType));
+                    return list;
+                } else if (destinationType.GetGenericTypeDefinition() == typeof(Dictionary<,>)) {
+                    var keyType = destinationType.GetGenericArguments()[0];
+                    var valueType = destinationType.GetGenericArguments()[1];
+                    var dict = (IDictionary)Activator.CreateInstance(destinationType);
+                    foreach (var key in ((IDictionary)value).Keys)
+                        dict.Add(Convert.ChangeType(key, keyType), Convert.ChangeType(((IDictionary)value)[key], valueType));
+                    return dict;
+                } else
+                    throw new InvalidCastException("Generic types other than List<> and Dictionary<,> are not supported");
+            } else
+                return Convert.ChangeType(value, destinationType);
+        }
+
+        /// <summary>
+        /// Converts a configuration value to another type and returns it as that type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public T ConvertValue<T>(object value) {
+            return (T)ConvertValue(value, typeof(T));
+        }
+
+        /// <summary>
+        /// Gets a configuration value at the specified path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public object Get(params string[] path) {
+            if (path.Length < 1)
+                throw new ArgumentException("path must not be empty");
+            object val;
+            if (!_keyvalues.TryGetValue(path[0], out val))
+                return null;
+            for (var i=1; i<path.Length; ++i) {
+                try {
+                    val = ((Dictionary<string, object>)val)[path[i]];
+                } catch (Exception) {
+                    return null;
+                }
+            }
+            return val;
+        }
+
+        /// <summary>
+        /// Gets a configuration value at the specified path and converts it to the specified type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public T Get<T>(params string[] path) {
+            return ConvertValue<T>(Get(path));
+        }
+
+        /// <summary>
+        /// Sets a configuration value at the specified path
+        /// </summary>
+        /// <param name="pathAndTrailingValue"></param>
+        public void Set(params object[] pathAndTrailingValue) {
+            if (pathAndTrailingValue.Length < 2)
+                throw new ArgumentException("path must not be empty");
+            var path = new string[pathAndTrailingValue.Length - 1];
+            for (var i=0; i<pathAndTrailingValue.Length-1; ++i)
+                path[i] = (string)pathAndTrailingValue[i];
+            var value = pathAndTrailingValue[pathAndTrailingValue.Length - 1];
+            object val;
+            if (!_keyvalues.TryGetValue(path[0], out val)) {
+                val = new Dictionary<string, object>();
+                _keyvalues[path[0]] = val;
+            }
+            for (var i=1; i<path.Length-1; ++i) {
+                val = (((Dictionary<string,object>)val)[path[i]] = new Dictionary<string, object>());
+            }
+            ((Dictionary<string, object>)val)[path[path.Length - 1]] = value;
         }
 
         #region IEnumerable

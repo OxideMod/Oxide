@@ -40,7 +40,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Gets the filename of this plugin
         /// </summary>
-        public string Filename { get; private set; }
+        public new string Filename { get; private set; }
 
         public IList<string> Globals;
 

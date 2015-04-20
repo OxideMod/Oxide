@@ -38,7 +38,7 @@ namespace Oxide.Plugins
 
         }
 
-        private void LoadDefaultConfig()
+        protected override void LoadDefaultConfig()
         {
             HookCalled("LoadDefaultConfig");
             // TODO: CreateDefaultConfig();

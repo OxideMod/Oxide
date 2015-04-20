@@ -1,6 +1,8 @@
 ﻿using Oxide.Core.Plugins;
 using UnityEngine;
 
+#pragma warning disable 649 // variable is never assigned to
+
 namespace Oxide.Plugins
 {
     [Info("CSharp 6 Sample", "bawNg", 0.1)]
