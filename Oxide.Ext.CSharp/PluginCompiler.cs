@@ -145,15 +145,15 @@ namespace Oxide.Plugins
                         foreach (var reference in plugin.References)
                         {
                             if (!reference.StartsWith("Oxide.Ext.")) continue;
-                            var extension_name = reference.Substring(10);
-                            if (extension_names.Contains(extension_name)) continue;
-                            var include_file_path = include_path + "\\" + extension_name + ".cs";
+                            var name = reference.Substring(10);
+                            if (extension_names.Contains(name)) continue;
+                            var include_file_path = include_path + "\\Ext." + name + ".cs";
                             if (File.Exists(include_file_path))
                             {
                                 plugin.IncludePaths.Add(include_file_path);
                                 continue;
                             }
-                            var message = $"{extension_name} extension is referenced but is not loaded! An include file needs to be placed in Plugins\\Include if this is an optional dependency.";
+                            var message = $"{name} extension is referenced but is not loaded! An appropriate include file needs to be saved to Plugins\\Include\\Ext.{name}.cs if this is an optional dependency.";
                             Interface.Oxide.LogError(message);
                             plugin.CompilerErrors = message;
                             RemovePlugin(plugin);
