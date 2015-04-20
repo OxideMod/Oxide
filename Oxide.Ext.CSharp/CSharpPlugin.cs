@@ -151,7 +151,6 @@ namespace Oxide.Plugins
             }
         }
 
-        public string Filename;
         public FSWatcher Watcher;
 
         protected Core.Libraries.Plugins plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");

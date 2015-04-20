@@ -40,11 +40,6 @@ namespace Oxide.Ext.Python.Plugins
         /// </summary>
         public override object Object { get { return Class; } }
 
-        /// <summary>
-        /// Gets the filename of this plugin
-        /// </summary>
-        public string Filename { get; private set; }
-
         public IList<string> Globals;
 
         // The plugin change watcher
