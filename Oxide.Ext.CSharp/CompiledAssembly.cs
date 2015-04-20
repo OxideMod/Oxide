@@ -122,18 +122,16 @@ namespace Oxide.Plugins
                                 var replaced_method = false;
                                 foreach (var variable in method.Body.Variables)
                                 {
-                                    foreach (var namespace_name in blacklistedNamespaces)
-                                        if (variable.VariableType.FullName.StartsWith(namespace_name))
-                                        {
-                                            if (whitelistedNamespaces.Any(name => variable.VariableType.FullName.StartsWith(name))) continue;
-                                            var body = new Mono.Cecil.Cil.MethodBody(method);
-                                            body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + variable.VariableType.FullName));
-                                            body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
-                                            body.Instructions.Add(Instruction.Create(OpCodes.Throw));
-                                            method.Body = body;
-                                            replaced_method = true;
-                                            break;
-                                        }
+                                    if (IsNamespaceBlacklisted(variable.VariableType.FullName))
+                                    { 
+                                        var body = new Mono.Cecil.Cil.MethodBody(method);
+                                        body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + variable.VariableType.FullName));
+                                        body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
+                                        body.Instructions.Add(Instruction.Create(OpCodes.Throw));
+                                        method.Body = body;
+                                        replaced_method = true;
+                                        break;
+                                    }
                                     if (replaced_method) break;
                                 }
                                 if (replaced_method) continue;
@@ -148,35 +146,34 @@ namespace Oxide.Plugins
                                     {
                                         var operand = instruction.Operand as IMetadataTokenProvider;
                                         var token = operand.ToString();
-                                        foreach (var namespace_name in blacklistedNamespaces)
-                                            if (token.StartsWith(namespace_name))
-                                            {
-                                                if (whitelistedNamespaces.Any(name => token.StartsWith(name))) continue;
-                                                instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + token);
-                                                instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, security_exception));
-                                                instructions.Insert(i, Instruction.Create(OpCodes.Throw));
-                                                changed_method = true;
-                                            }
+                                        if (IsNamespaceBlacklisted(token))
+                                        {
+                                            instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + token);
+                                            instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, security_exception));
+                                            instructions.Insert(i, Instruction.Create(OpCodes.Throw));
+                                            changed_method = true;
+                                        }
                                     }
                                     else if (instruction.OpCode == OpCodes.Call)
                                     {
                                         var method_call = instruction.Operand as MethodReference;
                                         var full_namespace = method_call.DeclaringType.FullName;
 
-                                        foreach (var namespace_name in blacklistedNamespaces)
-                                            if (full_namespace.StartsWith(namespace_name))
-                                            {
-                                                if (whitelistedNamespaces.Any(name => full_namespace.StartsWith(name))) continue;
+                                        if (full_namespace == "System.Type" && method_call.Name == "GetType")
+                                            if (instruction.Previous.OpCode == OpCodes.Ldstr)
+                                                full_namespace = instruction.Previous.Operand as string;
 
-                                                for (var n = 0; n < method.Parameters.Count; n++)
-                                                    instructions.Insert(i++, Instruction.Create(OpCodes.Pop));
+                                        if (IsNamespaceBlacklisted(full_namespace))
+                                        {
+                                            for (var n = 0; n < method.Parameters.Count; n++)
+                                                instructions.Insert(i++, Instruction.Create(OpCodes.Pop));
 
-                                                instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + full_namespace);
-                                                instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, security_exception));
-                                                instructions.Insert(i, Instruction.Create(OpCodes.Throw));
+                                            instructions[i++] = Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + full_namespace);
+                                            instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, security_exception));
+                                            instructions.Insert(i, Instruction.Create(OpCodes.Throw));
 
-                                                changed_method = true;
-                                            }
+                                            changed_method = true;
+                                        }
                                     }
                                     i++;
                                 }
@@ -249,6 +246,17 @@ namespace Oxide.Plugins
                     });
                 }
             });
+        }
+
+        private bool IsNamespaceBlacklisted(string full_namespace)
+        {
+            foreach (var namespace_name in blacklistedNamespaces)
+            {
+                if (!full_namespace.StartsWith(namespace_name)) continue;
+                if (whitelistedNamespaces.Any(name => full_namespace.StartsWith(name))) continue;
+                return true;
+            }
+            return false;
         }
     }
 }
