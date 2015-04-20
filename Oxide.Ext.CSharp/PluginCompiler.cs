@@ -75,8 +75,14 @@ namespace Oxide.Plugins
                 {
                     CacheAllScripts();
 
+                    var extension_names = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
+                    var include_path = Interface.Oxide.PluginDirectory + "\\Include";
+
                     foreach (var plugin in Plugins.ToArray())
                     {
+                        plugin.References.Clear();
+                        plugin.IncludePaths.Clear();
+
                         bool parsingNamespace = false;
                         foreach (var script_line in plugin.ScriptLines)
                         {
@@ -133,6 +139,25 @@ namespace Oxide.Plugins
                                 if (match.Success) parsingNamespace = true;
                             }
                         }
+
+                        if (!Directory.Exists(include_path)) continue;
+                        
+                        foreach (var reference in plugin.References)
+                        {
+                            if (!reference.StartsWith("Oxide.Ext.")) continue;
+                            var extension_name = reference.Substring(10);
+                            if (extension_names.Contains(extension_name)) continue;
+                            var include_file_path = include_path + "\\" + extension_name + ".cs";
+                            if (File.Exists(include_file_path))
+                            {
+                                plugin.IncludePaths.Add(include_file_path);
+                                continue;
+                            }
+                            var message = $"{extension_name} extension is referenced but is not loaded! An include file needs to be placed in Plugins\\Include if this is an optional dependency.";
+                            Interface.Oxide.LogError(message);
+                            plugin.CompilerErrors = message;
+                            RemovePlugin(plugin);
+                        }
                     }
 
                     callback();
@@ -147,11 +172,14 @@ namespace Oxide.Plugins
 
         private void AddReference(CompilablePlugin plugin, string assembly_name)
         {
-            if (references.Contains(assembly_name)) return;
-
             var path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, assembly_name);
             if (!File.Exists(path))
             {
+                if (assembly_name.StartsWith("Oxide.Ext."))
+                {
+                    plugin.References.Add(assembly_name);
+                    return;
+                }
                 Interface.Oxide.LogError("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
                 plugin.CompilerErrors = "Referenced assembly does not exist: " + assembly_name;
                 RemovePlugin(plugin);
@@ -172,10 +200,14 @@ namespace Oxide.Plugins
             }
 
             references.Add(assembly_name);
+            plugin.References.Add(assembly_name);
 
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
+            {
                 references.Add(reference.Name);
+                plugin.References.Add(reference.Name);
+            }
         }
 
         public void Compile(Action<byte[]> callback)
@@ -204,6 +236,8 @@ namespace Oxide.Plugins
                 arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference_name));
 
             arguments.Add(string.Format("/out:{0}\\{1}.dll", Interface.Oxide.TempDirectory, compiledName));
+
+            arguments.AddRange(Plugins.SelectMany(plugin => plugin.IncludePaths));
             arguments.AddRange(Plugins.Select(plugin => plugin.ScriptPath));
 
             var start_info = new ProcessStartInfo(BinaryPath, EscapeArguments(arguments.ToArray()))

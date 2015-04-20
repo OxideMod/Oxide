@@ -35,6 +35,7 @@ namespace Oxide.Plugins
         public static string ToSentence(this IEnumerable<string> enumerable)
         {
             var strings = enumerable.ToArray();
+            if (strings.Length < 1) return string.Empty;
             var output = strings[0];
             if (strings.Length == 1) return output;
             for (var i = 1; i < strings.Length - 1; i++)

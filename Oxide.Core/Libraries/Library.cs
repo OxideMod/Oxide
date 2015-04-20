@@ -38,6 +38,16 @@ namespace Oxide.Core.Libraries
     /// </summary>
     public abstract class Library
     {
+        public static implicit operator bool (Library library)
+        {
+            return library != null;
+        }
+
+        public static bool operator !(Library library)
+        {
+            return !(bool)library;
+        }
+
         // Functions stored in this library
         private IDictionary<string, MethodInfo> functions;
 

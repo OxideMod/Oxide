@@ -30,6 +30,16 @@ namespace Oxide.Core.Plugins
     /// </summary>
     public abstract class CSPlugin : Plugin
     {
+        /// <summary>
+        /// Gets the library by the specified type or name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static T GetLibrary<T>(string name = null) where T : Libraries.Library
+        {
+            return Interface.Oxide.GetLibrary<T>(name);
+        }
+
         // All hooked methods
         protected IDictionary<string, List<MethodInfo>> hooks;
 
