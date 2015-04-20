@@ -1,4 +1,6 @@
-﻿namespace Oxide.Core
+﻿using System;
+
+namespace Oxide.Core
 {
     /// <summary>
     /// The interface class through which patched DLLs interact with Oxide
@@ -33,6 +35,29 @@
         {
             // Call into Oxide core
             return Oxide.CallHook(hookname, args);
+        }
+
+        /// <summary>
+        /// Calls the specified hook
+        /// </summary>
+        /// <param name="hookname"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static object Call(string hookname, params object[] args)
+        {
+            return CallHook(hookname, args);
+        }
+
+        /// <summary>
+        /// Calls the specified hook and converts the return value to the specified type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="hookname"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static T Call<T>(string hookname, params object[] args)
+        {
+            return (T)Convert.ChangeType(CallHook(hookname, args), typeof(T));
         }
 
         /// <summary>

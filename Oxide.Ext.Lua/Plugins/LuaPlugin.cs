@@ -31,11 +31,6 @@ namespace Oxide.Lua.Plugins
         /// </summary>
         public override object Object { get { return Table; } }
 
-        /// <summary>
-        /// Gets the filename of this plugin
-        /// </summary>
-        public string Filename { get; private set; }
-
         // All functions in this plugin
         private IDictionary<string, LuaFunction> functions;
 

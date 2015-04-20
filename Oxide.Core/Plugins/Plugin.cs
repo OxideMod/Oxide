@@ -26,6 +26,11 @@ namespace Oxide.Core.Plugins
         }
 
         /// <summary>
+        /// Gets the source file name, if any
+        /// </summary>
+        public string Filename { get; protected set; }
+
+        /// <summary>
         /// Gets the internal name of this plugin
         /// </summary>
         public string Name { get; protected set; }
@@ -74,7 +79,7 @@ namespace Oxide.Core.Plugins
         /// Gets the object associated with this plugin
         /// </summary>
         public virtual object Object { get { return this; } }
-
+        
         /// <summary>
         /// Gets the total CPU time spent in this plugin in seconds
         /// </summary>
@@ -175,9 +180,26 @@ namespace Oxide.Core.Plugins
             }
         }
 
+        /// <summary>
+        /// Calls a hook on this plugin
+        /// </summary>
+        /// <param name="hookname"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public object Call(string hookname, params object[] args)
         {
             return CallHook(hookname, args);
+        }
+
+        /// <summary>
+        /// Calls a hook on this plugin and converts the return value to the specified type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="hookname"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public T Call<T>(string hookname, params object[] args) {
+            return (T)Convert.ChangeType(CallHook(hookname, args), typeof(T));
         }
 
         /// <summary>
