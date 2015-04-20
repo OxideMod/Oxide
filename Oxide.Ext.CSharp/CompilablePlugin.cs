@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 
@@ -15,6 +16,8 @@ namespace Oxide.Plugins
         public string ScriptName;
         public string ScriptPath;
         public string[] ScriptLines;
+        public HashSet<string> References = new HashSet<string>();
+        public HashSet<string> IncludePaths = new HashSet<string>();
         public string CompilerErrors;
         public CompiledAssembly CompiledAssembly;
         public CompiledAssembly LastGoodAssembly;
