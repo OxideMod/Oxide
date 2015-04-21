@@ -835,5 +835,17 @@ namespace Oxide.Rust.Plugins
         {
             return Interface.Oxide.CallDeprecatedHook("CanOpenDoor", player, doorlock);
         }
+
+        /// <summary>
+        /// Called when a player throws a weapon like a Timed Explosive Charge or a F1 Grenade
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="entity"></param>
+        [HookMethod("OnWeaponDoThrow")]
+        private object OnWeaponDoThrow(BaseEntity.RPCMessage msg, BaseEntity entity)
+        {
+            return Interface.CallHook("OnWeaponThrown", msg.player, entity);
+        }
+
     }
 }

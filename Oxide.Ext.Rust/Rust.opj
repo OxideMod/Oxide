@@ -1414,6 +1414,54 @@
             },
             "MSILHash": "yqjyC9ahf3d10exc/yC6tMUngjIAlMmVh5P1nihhYHA="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 78,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l4",
+            "HookTypeName": "Simple",
+            "Name": "OnWeaponDoThrow [internal]",
+            "HookName": "OnWeaponDoThrow",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ThrownWeapon",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoThrow",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "ierEOg8jrnEsSvc/OgUnUNElv+nHVa1zP1sjRmgYvEI="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 34,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemCraftFinished",
+            "HookName": "OnItemCraftFinished",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ItemCrafter",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "FinishCrafting",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ItemCraftTask"
+              ]
+            },
+            "MSILHash": "R3IkY5gDSqTDWtFho2OpBJn3imBsrM1ws8r7tGyFRKQ="
+          }
         }
       ]
     }
