@@ -146,7 +146,7 @@ namespace Oxide.Plugins
         // <param name="message"></param>
         protected void SendReply(NetUser player, string message)
         {
-            SendReply(player, "Oxide", message);
+            rust.SendChatMessage(player, message);
         }
 
         protected void SendReply(NetUser player, string name, string message)
