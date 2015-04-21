@@ -145,14 +145,14 @@ namespace Oxide.Plugins
         // <param name="player"></param>
         // <param name="format"></param>
         // <param name="args"></param>
-        protected void SendReply(NetUser player, string format, params object[] args)
+        protected void SendReply(NetUser player, string message)
         {
-            SendReply(player, "Oxide", format, args);
+            SendReply(player, message);
         }
 
-        protected void SendReply(NetUser player, string name, string format, params object[] args)
+        protected void SendReply(NetUser player, string name, string message)
         {
-            rust.SendChatMessage(player, name, format, args);
+            rust.SendChatMessage(player, name, message);
         }
 
         // <summary>

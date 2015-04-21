@@ -34,9 +34,14 @@ namespace Oxide.RustLegacy.Libraries
         /// <param name="format"></param>
         /// <param name="args"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string format, params object[] args)
+        public void BroadcastChat(string name, string message = null)
         {
-            ConsoleNetworker.Broadcast($"chat.add {name} {QuoteSafe(string.Format(format, args))}");
+            if (message == null)
+            {
+                message = name;
+                name = "Server";
+            }
+            ConsoleNetworker.Broadcast($"chat.add {name} {QuoteSafe(message)}");
         }
 
         /// <summary>
@@ -47,9 +52,14 @@ namespace Oxide.RustLegacy.Libraries
         /// <param name="format"></param>
         /// <param name="args"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(NetUser netUser, string name, string format, params object[] args)
+        public void SendChatMessage(NetUser netUser, string name, string message = null)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {name} {QuoteSafe(string.Format(format, args))}");
+            if (message == null)
+            {
+                message = name;
+                name = "Server";
+            }
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {name} {QuoteSafe(message)}");
         }
 
         /// <summary>
