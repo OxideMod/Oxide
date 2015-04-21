@@ -120,6 +120,50 @@ namespace Oxide.Plugins
             }
         }
 
+        /// <summary>
+        /// Print a message to a players console log
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        protected void PrintToConsole(NetUser netUser, string format, params object[] args)
+        {
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, "echo " + string.Format(format, args));
+        }
+
+        /// <summary>
+        /// Print a message to every players console log
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        protected void PrintToConsole(string format, params object[] args)
+        {
+            if (PlayerClient.All.Count < 1) return;
+            ConsoleNetworker.Broadcast("echo " + string.Format(format, args));
+        }
+
+        /// <summary>
+        /// Print a message to a players chat log
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        protected void PrintToChat(NetUser netUser, string format, params object[] args)
+        {
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, "chat.add " + string.Format(format, args));
+        }
+
+        /// <summary>
+        /// Print a message to every players chat log
+        /// </summary>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        protected void PrintToChat(string format, params object[] args)
+        {
+            if (PlayerClient.All.Count < 1) return;
+            ConsoleNetworker.Broadcast("chat.add " + string.Format(format, args));
+        }
+
         // <summary>
         // Send a reply message in response to a console command
         // </summary>
@@ -132,7 +176,7 @@ namespace Oxide.Plugins
 
             if (arg.argUser != null)
             {
-                rust.SendConsoleMessage(arg.argUser, format, args);
+                PrintToConsole(arg.argUser, format, args);
                 return;
             }
 
@@ -145,14 +189,9 @@ namespace Oxide.Plugins
         // <param name="player"></param>
         // <param name="format"></param>
         // <param name="args"></param>
-        protected void SendReply(NetUser player, string message)
+        protected void SendReply(NetUser netUser, string format, params object[] args)
         {
-            SendReply(player, message);
-        }
-
-        protected void SendReply(NetUser player, string name, string message)
-        {
-            rust.SendChatMessage(player, name, message);
+            PrintToChat(netUser, format, args);
         }
 
         // <summary>
