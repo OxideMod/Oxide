@@ -120,12 +120,7 @@ namespace Oxide.RustLegacy.Libraries
         /// </summary>
         /// <param name="str"></param>
         [LibraryFunction("QuoteSafe")]
-        public string QuoteSafe(string str)
-        {
-            str = str.Replace("\"", "\\\"");
-            str = str.TrimEnd(new char[] { '\\' });
-            return string.Concat("\"", str, "\"");
-        }
+        public string QuoteSafe(string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd(new char[] { '\\' }) + "\"";
 
         /// <summary>
         /// Finds a player by name, steam id or ip

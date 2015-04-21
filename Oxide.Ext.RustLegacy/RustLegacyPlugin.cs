@@ -6,6 +6,7 @@ using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 using Oxide.RustLegacy.Libraries;
+using Oxide.RustLegacy.Plugins;
 
 using UnityEngine;
 
@@ -150,7 +151,7 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintToChat(NetUser netUser, string format, params object[] args)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, "chat.add " + string.Format(format, args));
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, "chat.add \"Server\" " + string.Format(format, args).QuoteSafe());
         }
 
         /// <summary>
@@ -161,7 +162,7 @@ namespace Oxide.Plugins
         protected void PrintToChat(string format, params object[] args)
         {
             if (PlayerClient.All.Count < 1) return;
-            ConsoleNetworker.Broadcast("chat.add " + string.Format(format, args));
+            ConsoleNetworker.Broadcast("chat.add \"Server\"" + string.Format(format, args).QuoteSafe());
         }
 
         // <summary>
