@@ -41,7 +41,7 @@ namespace Oxide.RustLegacy.Libraries
                 message = name;
                 name = "Server";
             }
-            ConsoleNetworker.Broadcast($"chat.add {name} {QuoteSafe(message)}");
+            ConsoleNetworker.Broadcast($"chat.add {QuoteSafe(name)} {QuoteSafe(message)}");
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Oxide.RustLegacy.Libraries
                 message = name;
                 name = "Server";
             }
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {name} {QuoteSafe(message)}");
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {QuoteSafe(name)} {QuoteSafe(message)}");
         }
 
         /// <summary>
