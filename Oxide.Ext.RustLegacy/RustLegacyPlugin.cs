@@ -143,11 +143,10 @@ namespace Oxide.Plugins
         // Send a reply message in response to a chat command
         // </summary>
         // <param name="player"></param>
-        // <param name="format"></param>
-        // <param name="args"></param>
+        // <param name="message"></param>
         protected void SendReply(NetUser player, string message)
         {
-            SendReply(player, message);
+            rust.SendChatMessage(player, message);
         }
 
         protected void SendReply(NetUser player, string name, string message)
