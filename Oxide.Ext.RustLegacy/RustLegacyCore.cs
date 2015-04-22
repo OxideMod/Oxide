@@ -522,7 +522,7 @@ namespace Oxide.RustLegacy.Plugins
                     NetUser ply = arg.argUser;
                     if (ply != null && !cmdlib.HandleChatCommand(ply, chatcmd, args))
                     {
-                        ConsoleNetworker.SendClientCommand(ply.networkPlayer, $"chat.add \"Oxide\" \" Unknown command {chatcmd}\"");
+                        ConsoleNetworker.SendClientCommand(ply.networkPlayer, $"chat.add \"Server\" \" Unknown command {chatcmd}\"");
                         return true;
                     }
 
