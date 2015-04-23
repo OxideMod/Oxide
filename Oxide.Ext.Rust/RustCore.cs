@@ -739,11 +739,10 @@ namespace Oxide.Rust.Plugins
         /// </summary>
         /// <param name="sign"></param>
         /// <param name="msg"></param>
-        /// <param name="text"></param>
         [HookMethod("UpdateSign")]
-        private object UpdateSign(Signage sign, BaseEntity.RPCMessage msg, string text)
+        private object UpdateSign(Signage sign, BaseEntity.RPCMessage msg)
         {
-            return Interface.CallHook("OnSignUpdated", sign, msg.player, text);
+            return Interface.CallHook("OnSignUpdated", sign, msg.player);
         }
 
         /// <summary>

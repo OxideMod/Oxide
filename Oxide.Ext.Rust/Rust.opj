@@ -1185,7 +1185,7 @@
             "InjectionIndex": 28,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0, l0",
+            "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
             "Name": "UpdateSign [internal]",
             "HookName": "UpdateSign",
