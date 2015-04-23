@@ -87,7 +87,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "X+nht8n5amnTKOccKnzjzyPgr+cQbt83Ynt8lDcZV0o="
+            "MSILHash": "A4hJCSKbU7KkGOlBoZreyi0t15QS7zzH/6JksTvYTmc="
           }
         },
         {
@@ -251,7 +251,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "kOXjz5Vm1PtsNqExd2jj5Xnf32jNhLf9Y988PUGdDR4="
+            "MSILHash": "Bdy2OwK/2fJqUKOzcUVXQ2Oz/MbzmXrIyYm+VLl1E1I="
           }
         },
         {
@@ -275,7 +275,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "a8MUHRRS0Oz11jWHdqeokJCsXGqReQVMxOiGATfm7rA="
+            "MSILHash": "U8868Pr4yUZgfhWXxysxbvN9X2eOg9GTjMJfP0QYNn8="
           }
         },
         {
@@ -711,10 +711,11 @@
               "Name": "Hurt",
               "ReturnType": "System.Void",
               "Parameters": [
-                "HitInfo"
+                "HitInfo",
+                "System.Boolean"
               ]
             },
-            "MSILHash": "flkmLNLCSuqSYamR6xhFgymf1WvpRYr4dMWcH3CknvY="
+            "MSILHash": "dPKWbvK9e4qBuE+qtvgsX/VXz+C+r3wBmRsJb3h+IyM="
           }
         },
         {
@@ -1008,7 +1009,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "B+lQ4RbMjJOUMWee7vokC9MOavZzeMlt4M2Ia7GtePc="
+            "MSILHash": "a3VG8//3hNXRH25PJVBa0+3lfDVit8orWynXrFF1OeA="
           }
         },
         {
@@ -1054,7 +1055,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "wHeHvKvdBtI7O+NCF7aqc1kbzSzEUxMckgKnyOps2ik="
+            "MSILHash": "pAlTSFZGfYwJnMKqAQvjROb2aq8qqBtSPbxGjwSx0UE="
           }
         },
         {
@@ -1181,7 +1182,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 32,
+            "InjectionIndex": 28,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0, l0",
@@ -1199,7 +1200,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "i8xmwH/8VfF3vqUjQ2O9SffPKhE0VTA8WyXm0MQt6nA="
+            "MSILHash": "Asvz/wUyrTQnL5ePZ0fnPg2fBQORqrqg1J+uW4Yi+qU="
           }
         },
         {
@@ -1409,10 +1410,11 @@
               "Name": "Hurt",
               "ReturnType": "System.Void",
               "Parameters": [
-                "HitInfo"
+                "HitInfo",
+                "System.Boolean"
               ]
             },
-            "MSILHash": "yqjyC9ahf3d10exc/yC6tMUngjIAlMmVh5P1nihhYHA="
+            "MSILHash": "/tBRuxRyYs8WNYbQR+wwP4Zywok+LFCBAFmp0E7Pk6s="
           }
         },
         {
