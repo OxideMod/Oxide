@@ -248,7 +248,7 @@ namespace Oxide.Plugins
         {
             player.transform.position = destination;
             if (!player.IsSpectating() || Vector3.Distance(player.transform.position, destination) > 25.0)
-                player.ClientRPC(null, player, "ForcePositionTo", destination);
+                player.ClientRPCPlayer(null, player, "ForcePositionTo", destination);
             else
                 player.SendNetworkUpdate(BasePlayer.NetworkQueue.UpdateDistance);
         }

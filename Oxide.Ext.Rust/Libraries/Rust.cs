@@ -119,7 +119,7 @@ namespace Oxide.Rust.Libraries
         public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
         {
             player.transform.position = new UnityEngine.Vector3(x, y, z);
-            player.ClientRPC(null, player, "ForcePositionTo", player.transform.position);
+            player.ClientRPCPlayer(null, player, "ForcePositionTo", player.transform.position);
             player.TransformChanged();
         }
 
