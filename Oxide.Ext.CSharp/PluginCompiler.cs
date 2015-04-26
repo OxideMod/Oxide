@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Reflection;
+
+using ObjectStream;
+using ObjectStream.Data;
 
 using Oxide.Core;
 
@@ -38,47 +40,69 @@ namespace Oxide.Plugins
             }
             BinaryPath = binary_path;
         }
-
-        public List<CompilablePlugin> Plugins;
-        public StringBuilder StdOutput;
-        public StringBuilder ErrOutput;
-        public int ExitCode;
-        public float Duration => endedAt - startedAt;
-
-        private Action<byte[]> callback;
+        
         private Process process;
-        private float startedAt;
-        private float endedAt;
-        private string compiledName;
-        private HashSet<string> references;
-        private ManualResetEvent compilerExited = new ManualResetEvent(false);
         private Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
+        private ObjectStreamClient<CompilerMessage> client;
+        private Dictionary<int, Compilation> pluginComp;
+        private volatile int lastId;
 
-        public PluginCompiler(CompilablePlugin[] plugins)
+        class Compilation
         {
-            Plugins = new List<CompilablePlugin>(plugins);
+            public Action<byte[], float> callback;
+            public List<CompilablePlugin> plugins;
+            public float startedAt;
+            public float endedAt;
+            public string compiledName;
+            public HashSet<string> references;
+            public float Duration
+            {
+                get { return endedAt - startedAt; }
+            }
         }
 
-        public PluginCompiler(CompilablePlugin plugin)
+        public PluginCompiler()
         {
-            Plugins = new List<CompilablePlugin> { plugin };
+            CheckCompilerBinary();
+            if (BinaryPath == null) return;
+
+            pluginComp = new Dictionary<int, Compilation>();
+
+            process = new Process
+            {
+                StartInfo =
+                {
+                    FileName = BinaryPath,
+                    Arguments = "/service",
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.Start();
+            client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
+            client.Message += OnMessage;
+            client.Error += OnError;
+            client.Start();
         }
 
-        public void ResolveReferences(Action callback)
+        public void ResolveReferences(int currentId, Action callback)
         {
+            var compilation = pluginComp[currentId];
             // Include references made by the CSharpPlugins project
-            references = new HashSet<string>(CSharpPluginLoader.PluginReferences);
+            compilation.references = new HashSet<string>(CSharpPluginLoader.PluginReferences);
 
             ThreadPool.QueueUserWorkItem((_) =>
             {
                 try
                 {
-                    CacheAllScripts();
+                    CacheAllScripts(compilation.plugins);
 
                     var extension_names = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
                     var include_path = Interface.Oxide.PluginDirectory + "\\Include";
 
-                    foreach (var plugin in Plugins.ToArray())
+                    foreach (var plugin in compilation.plugins.ToArray())
                     {
                         plugin.References.Clear();
                         plugin.IncludePaths.Clear();
@@ -109,7 +133,7 @@ namespace Oxide.Plugins
                                 {
                                     Interface.Oxide.LogError("Plugin filename is incorrect: {0}.cs", plugin.ScriptName);
                                     plugin.CompilerErrors = "Plugin filename is incorrect";
-                                    RemovePlugin(plugin);
+                                    RemovePlugin(compilation.plugins, plugin);
                                 }
 
                                 break;
@@ -120,7 +144,7 @@ namespace Oxide.Plugins
                                 match = Regex.Match(line, @"^//\s?Reference:\s?(\S+)$", RegexOptions.IgnoreCase);
                                 if (match.Success)
                                 {
-                                    AddReference(plugin, match.Groups[1].Value);
+                                    AddReference(currentId, plugin, match.Groups[1].Value);
                                     continue;
                                 }
 
@@ -130,7 +154,7 @@ namespace Oxide.Plugins
                                 {
                                     var split_name = match.Groups[1].Value.Trim().Split('.');
                                     if (split_name.Length > 2 && split_name[0] == "Oxide" && split_name[1] == "Ext")
-                                        AddReference(plugin, "Oxide.Ext." + split_name[2]);
+                                        AddReference(currentId, plugin, "Oxide.Ext." + split_name[2]);
                                     continue;
                                 }
 
@@ -156,7 +180,7 @@ namespace Oxide.Plugins
                             var message = $"{name} extension is referenced but is not loaded! An appropriate include file needs to be saved to Plugins\\Include\\Ext.{name}.cs if this is an optional dependency.";
                             Interface.Oxide.LogError(message);
                             plugin.CompilerErrors = message;
-                            RemovePlugin(plugin);
+                            RemovePlugin(compilation.plugins, plugin);
                         }
                     }
 
@@ -170,8 +194,9 @@ namespace Oxide.Plugins
             });
         }
 
-        private void AddReference(CompilablePlugin plugin, string assembly_name)
+        private void AddReference(int currentId, CompilablePlugin plugin, string assembly_name)
         {
+            var compilation = pluginComp[currentId];
             var path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, assembly_name);
             if (!File.Exists(path))
             {
@@ -182,7 +207,7 @@ namespace Oxide.Plugins
                 }
                 Interface.Oxide.LogError("Assembly referenced by {0} plugin does not exist: {1}.dll", plugin.Name, assembly_name);
                 plugin.CompilerErrors = "Referenced assembly does not exist: " + assembly_name;
-                RemovePlugin(plugin);
+                RemovePlugin(compilation.plugins, plugin);
                 return;
             }
 
@@ -195,155 +220,99 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.LogError("Assembly referenced by {0} plugin is invalid: {1}.dll", plugin.Name, assembly_name);
                 plugin.CompilerErrors = "Referenced assembly is invalid: " + assembly_name;
-                RemovePlugin(plugin);
+                RemovePlugin(compilation.plugins, plugin);
                 return;
             }
 
-            references.Add(assembly_name);
+            compilation.references.Add(assembly_name);
             plugin.References.Add(assembly_name);
 
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
-                references.Add(reference.Name);
+                compilation.references.Add(reference.Name);
                 plugin.References.Add(reference.Name);
             }
         }
 
-        public void Compile(Action<byte[]> callback)
+        public void Compile(List<CompilablePlugin> plugins, Action<byte[], float> callback)
         {
             if (BinaryPath == null) return;
+            var currentId = lastId++;
+            pluginComp[currentId] = new Compilation {callback = callback, plugins = plugins};
 
-            this.callback = callback;
-
-            ResolveReferences(() =>
+            ResolveReferences(currentId, () =>
             {
-                if (Plugins.Count < 1) return;
-                foreach (var plugin in Plugins) plugin.CompilerErrors = null;
-                compiledName = (Plugins.Count == 1 ? Plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 10000000f);
-                SpawnCompiler();
+                if (plugins.Count < 1) return;
+                foreach (var plugin in plugins) plugin.CompilerErrors = null;
+                SpawnCompiler(currentId);
             });
         }
 
-        private void SpawnCompiler()
+        private void SpawnCompiler(int currentId)
         {
-            CheckCompilerBinary();
-            if (BinaryPath == null) return;
+            var compilation = pluginComp[currentId];
+            compilation.startedAt = Interface.Oxide.Now;
+            var referenceFiles = new List<CompilerFile>(compilation.references.Count);
+            referenceFiles.AddRange(compilation.references.Select(reference_name => new CompilerFile { Name = reference_name + ".dll", Data = File.ReadAllBytes(Path.Combine(Interface.Oxide.ExtensionDirectory, reference_name + ".dll")) }));
 
-            var arguments = new List<string> { "/sdk:2", "/t:library", "/langversion:6", "/noconfig", "/nostdlib+" };
+            var sourceFiles = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Select(includePath => new CompilerFile { Name = Path.GetFileName(includePath), Data = File.ReadAllBytes(includePath) }).ToList();
+            sourceFiles.AddRange(compilation.plugins.Select(plugin => plugin.ScriptPath).Select(scriptPath => new CompilerFile { Name = Path.GetFileName(scriptPath), Data = File.ReadAllBytes(scriptPath) }));
 
-            foreach (var reference_name in references)
-                arguments.Add(string.Format("/r:{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference_name));
-
-            arguments.Add(string.Format("/out:{0}\\{1}.dll", Interface.Oxide.TempDirectory, compiledName));
-
-            arguments.AddRange(Plugins.SelectMany(plugin => plugin.IncludePaths));
-            arguments.AddRange(Plugins.Select(plugin => plugin.ScriptPath));
-
-            var start_info = new ProcessStartInfo(BinaryPath, EscapeArguments(arguments.ToArray()))
+            var compilerData = new CompilerData
             {
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
+                OutputFile = (compilation.plugins.Count == 1 ? compilation.plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 10000000f) + ".dll",
+                SourceFiles = sourceFiles.ToArray(),
+                ReferenceFiles = referenceFiles.ToArray()
             };
-
-            process = new Process { StartInfo = start_info, EnableRaisingEvents = true };
-
-            startedAt = Interface.Oxide.Now;
-            StdOutput = new StringBuilder();
-            ErrOutput = new StringBuilder();
-
-            process.OutputDataReceived += OnStdOutput;
-            process.ErrorDataReceived += OnErrorOutput;
-            process.Exited += OnExited;
-
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-
-            ThreadPool.QueueUserWorkItem((_) =>
-            {
-                if (compilerExited.WaitOne(120000)) return;
-                if (!process.HasExited)
-                {
-                    Interface.Oxide.NextTick(() =>
-                    {
-                        if (process.HasExited) return;
-                        var plugin_names = Plugins.Select(p => p.Name).ToSentence();
-                        Interface.Oxide.LogError("Timed out waiting for compiler to compile: " + plugin_names);
-                        RemoteLogger.Error("Timed out waiting for compiler to compile: " + plugin_names);
-                        process.Kill();
-                    });
-                }
-            });
+            // TODO queue until compiler ready
+            client.PushMessage(new CompilerMessage { Id = currentId, Data = compilerData, Type = CompilerMessageType.Compile });
         }
 
-        private void OnStdOutput(object sender, DataReceivedEventArgs e)
+        private void OnError(Exception exception)
         {
-            var process = sender as Process;
-            if (e.Data.StartsWith("Warning: restarting compilation"))
+            Interface.Oxide.LogException("Compilation error: ", exception);
+        }
+
+        private void OnMessage(ObjectStreamConnection<CompilerMessage, CompilerMessage> connection, CompilerMessage message)
+        {
+            switch (message.Type)
             {
-                foreach (var line in StdOutput.ToString().Split('\r', '\n'))
-                {
-                    var match = fileErrorRegex.Match(line.Trim());
-                    for (var i = 1; i < match.Groups.Count; i++)
+                case CompilerMessageType.Assembly:
+                    var compilation = pluginComp[message.Id];
+                    compilation.endedAt = Interface.Oxide.Now;
+                    var stdOutput = (string)message.ExtraData;
+                    if (stdOutput != null)
                     {
-                        var value = match.Groups[i].Value;
-                        if (value == null || value.Trim() == string.Empty) continue;
-                        var file_name = value.Basename();
-                        var script_name = file_name.Substring(0, file_name.Length - 3);
-                        var compilable_plugin = Plugins.SingleOrDefault(pl => pl.ScriptName == script_name);
-                        if (compilable_plugin == null)
-                            Interface.Oxide.LogError("Unable to resolve script error to plugin: " + line);
-                        else
-                            compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
+                        foreach (var line in stdOutput.Split('\r', '\n'))
+                        {
+                            var match = fileErrorRegex.Match(line.Trim());
+                            for (var i = 1; i < match.Groups.Count; i++)
+                            {
+                                var value = match.Groups[i].Value;
+                                if (value.Trim() == string.Empty) continue;
+                                var file_name = value.Basename();
+                                var script_name = file_name.Substring(0, file_name.Length - 3);
+                                var compilable_plugin = compilation.plugins.SingleOrDefault(pl => pl.ScriptName == script_name);
+                                if (compilable_plugin == null)
+                                    Interface.Oxide.LogError("Unable to resolve script error to plugin: " + line);
+                                else
+                                    compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
+                            }
+                        }
                     }
-                }
-                StdOutput.Remove(0, StdOutput.Length);
-                ErrOutput.Remove(0, ErrOutput.Length);
-                return;
+                    Interface.Oxide.NextTick(() => compilation.callback((byte[])message.Data, compilation.Duration));
+                    pluginComp.Remove(message.Id);
+                    break;
+                case CompilerMessageType.Error:
+                    Interface.Oxide.LogError("Compilation error: {0}", message.Data);
+                    Interface.Oxide.NextTick(() => pluginComp[message.Id].callback(null, 0));
+                    pluginComp.Remove(message.Id);
+                    break;
+                case CompilerMessageType.Ready:
+                    connection.PushMessage(message);
+                    break;
             }
-            StdOutput.Append(e.Data);
-        }
-
-        private void OnErrorOutput(object sender, DataReceivedEventArgs e)
-        {
-            var process = sender as Process;
-            ErrOutput.Append(e.Data);
-        }
-
-        private void OnExited(object sender, EventArgs e)
-        {
-            endedAt = Interface.Oxide.Now;
-            ExitCode = process.ExitCode;
-            compilerExited.Set();
-            byte[] raw_assembly = null;
-            if (ExitCode == 0)
-            {
-                var assembly_path = string.Format("{0}\\{1}.dll", Interface.Oxide.TempDirectory, compiledName);
-                try
-                {
-                    raw_assembly = File.ReadAllBytes(assembly_path);
-                }
-                catch (Exception ex)
-                {
-                    var plugin_names = Plugins.Select(p => p.Name).ToSentence();
-                    Interface.Oxide.LogError("Unable to read compiled plugins: {0} ({1})", plugin_names, ex.Message);
-                    RemoteLogger.Error($"Unable to read compiled plugins: {plugin_names} ({ex.Message})");
-                }
-                try
-                {
-                    File.Delete(assembly_path);
-                }
-                catch (Exception ex)
-                {
-                    var plugin_names = Plugins.Select(p => p.Name).ToSentence();
-                    Interface.Oxide.LogError("Unable to delete temporary compiled plugins: {0} ({1})", plugin_names, ex.Message);
-                    RemoteLogger.Error($"Unable to delete temporary compiled plugins: {plugin_names} ({ex.Message})");
-                }
-            }
-            Interface.Oxide.NextTick(() => callback(raw_assembly));
         }
 
         private bool CacheScriptLines(CompilablePlugin plugin)
@@ -374,61 +343,33 @@ namespace Oxide.Plugins
             }
         }
 
-        private void CacheModifiedScripts()
+        private void CacheModifiedScripts(List<CompilablePlugin> plugins)
         {
             Thread.Sleep(100);
-            var modified_plugins = Plugins.Where(pl => pl.HasBeenModified()).ToArray();
+            var modified_plugins = plugins.Where(pl => pl.HasBeenModified()).ToArray();
             if (modified_plugins.Length < 1) return;
             foreach (var plugin in modified_plugins)
                 CacheScriptLines(plugin);
-            CacheModifiedScripts();
+            CacheModifiedScripts(plugins);
         }
 
-        private void CacheAllScripts()
+        private void CacheAllScripts(List<CompilablePlugin> plugins)
         {
-            foreach (var plugin in Plugins.ToArray())
-                if (!CacheScriptLines(plugin)) RemovePlugin(plugin);
-            CacheModifiedScripts();
+            foreach (var plugin in plugins.ToArray())
+                if (!CacheScriptLines(plugin)) RemovePlugin(plugins, plugin);
+            CacheModifiedScripts(plugins);
         }
 
-        private void RemovePlugin(CompilablePlugin plugin)
+        private void RemovePlugin(List<CompilablePlugin> plugins, CompilablePlugin plugin)
         {
-            Plugins.Remove(plugin);
+            plugins.Remove(plugin);
             plugin.OnCompilationFailed();
         }
 
-        /// <summary>
-        /// Quotes all arguments that contain whitespace, or begin with a quote and returns a single argument string
-        /// </summary>
-        /// <param name="args">A list of strings for arguments, may not contain null, '\0', '\r', or '\n'</param>
-        /// <returns>A string containing the combined list of escaped/quoted strings</returns>
-        /// <exception cref="System.ArgumentNullException">Raised when one of the arguments is null</exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">Raised if an argument contains '\0', '\r', or '\n'</exception>
-        private string EscapeArguments(params string[] args)
+        public void OnShutdown()
         {
-            var arguments = new StringBuilder();
-            var invalid_char = new Regex("[\x00\x0a\x0d]");  // these can not be escaped
-            var needs_quotes = new Regex(@"\s|""");          // contains whitespace or two quote characters
-            var escape_quote = new Regex(@"(\\*)(""|$)");    // one or more '\' followed with a quote or end of string
-            for (int i = 0; args != null && i < args.Length; i++)
-            {
-                if (args[i] == null) throw new ArgumentNullException("args[" + i + "]");
-                if (invalid_char.IsMatch(args[i])) throw new ArgumentOutOfRangeException("args[" + i + "]");
-                if (args[i] == String.Empty)
-                    arguments.Append("\"\"");
-                else if (!needs_quotes.IsMatch(args[i]))
-                    arguments.Append(args[i]);
-                else
-                {
-                    arguments.Append('"');
-                    arguments.Append(escape_quote.Replace(args[i], m =>
-                        m.Groups[1].Value + m.Groups[1].Value + (m.Groups[2].Value == "\"" ? "\\\"" : ""))
-                    );
-                    arguments.Append('"');
-                }
-                if (i + 1 < args.Length) arguments.Append(' ');
-            }
-            return arguments.ToString();
+            if (client != null) client.Stop();
+            if (process != null) process.Kill();
         }
     }
 }
