@@ -57,8 +57,14 @@
         /// <summary>
         /// Called after all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public virtual void OnModLoad()
+        {
+        }
+
+        /// <summary>
+        /// Called on shutdown
+        /// </summary>
+        public virtual void OnShutdown()
         {
         }
     }

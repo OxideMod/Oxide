@@ -534,6 +534,10 @@ namespace Oxide.Core
         {
             IsShuttingDown = true;
             UnloadAllPlugins();
+            foreach (var extension in extensionmanager.GetAllExtensions())
+            {
+                extension.OnShutdown();
+            }
         }
 
         /// <summary>

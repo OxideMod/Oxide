@@ -17,11 +17,13 @@ namespace Oxide.Plugins
         private CSharpExtension extension;
         private Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
         private List<CompilablePlugin> compilationQueue = new List<CompilablePlugin>();
+        private PluginCompiler compiler;
 
         public CSharpPluginLoader(CSharpExtension extension)
         {
             this.extension = extension;
             PluginCompiler.CheckCompilerBinary();
+            compiler = new PluginCompiler();
         }
 
         public void OnModLoaded()
@@ -142,55 +144,40 @@ namespace Oxide.Plugins
             });
         }
 
-        private void CompileAssembly(CompilablePlugin[] plugins)
+        private void CompileAssembly(CompilablePlugin[] plugs)
         {
-            var compiler = new PluginCompiler(plugins);
-            foreach (var pl in plugins) pl.OnCompilationStarted(compiler);
-            compiler.Compile(raw_assembly =>
+            foreach (var pl in plugs) pl.OnCompilationStarted(compiler);
+            var plugins = new List<CompilablePlugin>(plugs);
+            compiler.Compile(plugins, (raw_assembly, duration) =>
             {
-                var plugin_names = compiler.Plugins.Select(p => p.Name).ToSentence();
-                if (compiler.Plugins.Count > 1 && raw_assembly == null)
+                //var plugin_names = compiler.Plugins.Select(p => p.Name).ToSentence();
+                if (plugins.Count > 1 && raw_assembly == null)
                 {
-                    Interface.Oxide.LogError($"A batch of {compiler.Plugins.Count} plugins failed to compile, attempting to compile separately");
-                    foreach (var plugin in compiler.Plugins) CompileAssembly(new[] { plugin });
+                    Interface.Oxide.LogError($"A batch of {plugins.Count} plugins failed to compile, attempting to compile separately");
+                    foreach (var plugin in plugins) CompileAssembly(new[] { plugin });
                     return;
                 }
                 if (raw_assembly == null)
                 {
-                    var plugin = compiler.Plugins[0];
+                    var plugin = plugins[0];
                     plugin.OnCompilationFailed();
-                    PluginErrors[plugin.Name] = "Failed to compile";
-                    Interface.Oxide.LogError("{0} plugin failed to compile! Exit code: {1}", plugin.ScriptName, compiler.ExitCode);
-                    var debug_output = $"{plugin.ScriptName} plugin failed to compile! Exit code: {compiler.ExitCode}";
-                    foreach (var raw_line in compiler.StdOutput.ToString().Split('\n'))
-                    {
-                        var line = raw_line.Trim();
-                        if (line.Length < 1 || line.StartsWith("Compilation failed: ")) continue;
-                        Interface.Oxide.LogWarning(line);
-                        debug_output += "\n" + line;
-                    }
-                    if (compiler.ErrOutput.Length > 0)
-                    {
-                        var error_output = compiler.ErrOutput.ToString();
-                        error_output = error_output.Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
-                        PluginErrors[plugin.Name] = "Failed to compile: " + error_output;
-                        Interface.Oxide.LogError(error_output);
-                        debug_output += "\n" + error_output;
-                    }
-                    RemoteLogger.Warning(debug_output);
+                    PluginErrors[plugin.Name] = "Failed to compile: " + plugin.CompilerErrors;
+                    Interface.Oxide.LogError("{0} plugin failed to compile!", plugin.ScriptName);
+                    Interface.Oxide.LogError(plugin.CompilerErrors);
+                    RemoteLogger.Warning($"{plugin.ScriptName} plugin failed to compile!\n{plugin.CompilerErrors}");
                 }
                 else
                 {
-                    var compiled_plugins = compiler.Plugins.Where(pl => pl.CompilerErrors == null).ToArray();
+                    var compiled_plugins = plugins.Where(pl => pl.CompilerErrors == null).ToArray();
                     CompiledAssembly compiled_assembly = null;
                     if (compiled_plugins.Length > 0)
                     {
                         var compiled_names = compiled_plugins.Select(pl => pl.Name).ToSentence();
                         var verb = compiled_plugins.Length > 1 ? "were" : "was";
-                        Interface.Oxide.LogInfo($"{compiled_names} {verb} compiled successfully in {Math.Round(compiler.Duration * 1000f)}ms");
+                        Interface.Oxide.LogInfo($"{compiled_names} {verb} compiled successfully in {Math.Round(duration * 1000f)}ms");
                         compiled_assembly = new CompiledAssembly(compiled_plugins, raw_assembly);
                     }
-                    foreach (var plugin in compiler.Plugins)
+                    foreach (var plugin in plugins)
                     {
                         if (plugin.CompilerErrors == null)
                         {
@@ -217,6 +204,11 @@ namespace Oxide.Plugins
                 plugins[class_name] = plugin;
             }
             return plugin;
+        }
+
+        public void OnShutdown()
+        {
+            compiler.OnShutdown();
         }
     }
 }

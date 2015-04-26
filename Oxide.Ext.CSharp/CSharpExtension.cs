@@ -70,6 +70,12 @@ namespace Oxide.Plugins
             loader.OnModLoaded();
         }
 
+        public override void OnShutdown()
+        {
+            base.OnShutdown();
+            loader.OnShutdown();
+        }
+
         /// <summary>
         /// Called by a CompilablePlugin that wants to be compiled
         /// </summary>
