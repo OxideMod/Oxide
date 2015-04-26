@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 
 using Oxide.Core.Configuration;
@@ -87,7 +86,7 @@ namespace Oxide.Core.Plugins
         {
             get
             {
-                return (float)stopwatch.Elapsed.TotalSeconds;
+                return stoppedAt - startedAt;
             }
         }
 
@@ -107,7 +106,8 @@ namespace Oxide.Core.Plugins
         public event PluginManagerEvent OnAddedToManager, OnRemovedFromManager;
 
         // Used to measure time spent in this plugin
-        private readonly Stopwatch stopwatch;
+        private float startedAt;
+        private float stoppedAt;
 
         // The depth of hook call nesting
         protected int nestcount;
@@ -121,7 +121,6 @@ namespace Oxide.Core.Plugins
             Title = "Base Plugin";
             Author = "System";
             Version = new VersionNumber(1, 0, 0);
-            stopwatch = new Stopwatch();
         }
 
         /// <summary>
@@ -162,7 +161,7 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public object CallHook(string hookname, params object[] args)
         {
-            if (nestcount == 0) stopwatch.Start();
+            if (nestcount == 0) startedAt = Interface.Oxide.Now;
             nestcount++;
             try
             {
@@ -176,7 +175,12 @@ namespace Oxide.Core.Plugins
             finally
             {
                 nestcount--;
-                if (nestcount == 0) stopwatch.Stop();
+                if (nestcount == 0)
+                {
+                    stoppedAt = Interface.Oxide.Now;
+                    if (TimeSpent > 0.5)
+                        Interface.Oxide.LogWarning(string.Format("CallHook '{0}' on plugin '{1}' took: {2}ms", hookname, Title, TimeSpent * 1000));
+                }
             }
         }
 

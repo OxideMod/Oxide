@@ -139,21 +139,13 @@ namespace Oxide.Core.Plugins
             object finalvalue = null;
             for (int i = 0; i < plugins.Count; i++)
             {
-                Plugin plugin = plugins[i];
                 // Call the hook
-                try
+                object value = plugins[i].CallHook(hookname, args);
+                if (value != null)
                 {
-                    object value = plugin.CallHook(hookname, args);
-                    if (value != null)
-                    {
-                        values[i] = value;
-                        finalvalue = value;
-                        returncount++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.WriteException(string.Format("Failed to call hook '{0}' on plugin '{1}'", hookname, plugin.Title), ex);
+                    values[i] = value;
+                    finalvalue = value;
+                    returncount++;
                 }
             }
 
