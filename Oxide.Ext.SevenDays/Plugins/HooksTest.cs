@@ -24,13 +24,17 @@ namespace Oxide.Plugins
                 PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
         }
 
+        private void InitLogging()
+        {
+            HookCalled("InitLogging");
+        }
+
         private void Init()
         {
             hookCount = hooks.Count;
             hooksRemaining = hooks.Keys.ToDictionary(k => k, k => true);
             PrintWarning("{0} hook to test!", hookCount);
             HookCalled("Init");
-            // TODO: LoadDefaultConfig();
         }
 
         public void Loaded()
@@ -41,19 +45,16 @@ namespace Oxide.Plugins
         protected override void LoadDefaultConfig()
         {
             HookCalled("LoadDefaultConfig");
-            // TODO: CreateDefaultConfig();
-            //LoadConfig();
         }
 
         private void Unloaded()
         {
             HookCalled("Unloaded");
-            // TODO: Unload plugin and store state in config
         }
 
-        private void OnInitLogging()
+        private void InitLogging()
         {
-            HookCalled("OnInitLogging");
+            HookCalled("InitLogging");
         }
 
         private void OnServerInitialized()
@@ -87,10 +88,10 @@ namespace Oxide.Plugins
             PrintToChat(player.EntityName + " has disconnected!");
         }
 
-        private void OnPlayerChat(string msg, string name)
+        private void OnPlayerChat(string message, string name)
         {
             HookCalled("OnPlayerChat");
-            PrintWarning($"{name} : {msg}");
+            PrintWarning($"{name} : {message}");
         }
 
         private void OnGameMessage()
@@ -164,10 +165,10 @@ namespace Oxide.Plugins
             //PrintWarning($"Airdrop inbound! The plane is flying from {airdrop.start} to {airdrop.end}");
         }
 
-        private void OnDoorUse(TileEntitySecureDoorBase door, string steamid)
+        private void OnDoorUse(TileEntitySecureDoorBase door, string steamId)
         {
             HookCalled("OnDoorUse");
-            PrintWarning($"A door was used by a player with the Steam ID {steamid}. Owner: {door.GetOwner()} Permission to use: {door.GetUsers().Contains(steamid)}");
+            PrintWarning($"A door was used by a player with the Steam ID {steamId}. Owner: {door.GetOwner()} Permission to use: {door.GetUsers().Contains(steamId)}");
         }
     }
 }

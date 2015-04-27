@@ -1,6 +1,6 @@
 ﻿namespace Oxide.Plugins
 {
-    [Info("Unity Sample Plugin", "bawNg", 0.1)]
+    [Info("Unity Sample Plugin", "Oxide Team", 0.1)]
     class SamplePlugin : CSharpPlugin
     {
         private int currentFrames;

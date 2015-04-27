@@ -1,9 +1,10 @@
 ﻿using Oxide.Core.Plugins;
+
 using UnityEngine;
 
 namespace Oxide.Plugins
 {
-    [Info("CSharp 6 Sample", "bawNg", 0.1)]
+    [Info("CSharp 6 Sample", "Oxide Team", 0.1)]
     public class SamplePlugin : RustPlugin
     {
         // Implement a custom class representing an online player

@@ -23,13 +23,17 @@ namespace Oxide.Plugins
                 PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
         }
 
+        private void InitLogging()
+        {
+            HookCalled("InitLogging");
+        }
+
         private void Init()
         {
             hookCount = hooks.Count;
             hooksRemaining = hooks.Keys.ToDictionary(k => k, k => true);
             PrintWarning("{0} hook to test!", hookCount);
             HookCalled("Init");
-            // TODO: LoadDefaultConfig();
         }
 
         public void Loaded()
@@ -40,14 +44,11 @@ namespace Oxide.Plugins
         protected override void LoadDefaultConfig()
         {
             HookCalled("LoadDefaultConfig");
-            // TODO: CreateDefaultConfig();
-            //LoadConfig();
         }
 
         private void Unloaded()
         {
             HookCalled("Unloaded");
-            // TODO: Unload plugin and store state in config
         }
 
         private void OnFrame()

@@ -10,8 +10,8 @@
           "Hook": {
             "InjectionIndex": 94,
             "HookTypeName": "Initialize Oxide",
-            "Name": "InitLogging [internal]",
-            "HookName": "InitLogging",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameStartupHelper",
             "Flagged": false,
@@ -25,12 +25,15 @@
           }
         },
         {
-          "Type": "InitOxide",
+          "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 94,
-            "HookTypeName": "Initialize Oxide",
-            "Name": "InitOxide [internal]",
-            "HookName": "InitOxide",
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameStartupHelper",
             "Flagged": false,

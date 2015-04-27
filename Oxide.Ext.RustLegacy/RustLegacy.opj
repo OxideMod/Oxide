@@ -1,20 +1,17 @@
 {
-  "Name": "RustLegacy",
+  "Name": "Rust Legacy",
   "TargetDirectory": "D:\\Servers\\Game\\Rust\\Legacy\\rust_server_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
-          "Type": "Simple",
+          "Type": "InitOxide",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnInitLogging",
-            "HookName": "OnInitLogging",
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerInit",
             "Flagged": false,
@@ -28,12 +25,15 @@
           }
         },
         {
-          "Type": "InitOxide",
+          "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "HookTypeName": "Initialize Oxide",
-            "Name": "InitOxide",
-            "HookName": "InitOxide",
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerInit",
             "Flagged": false,

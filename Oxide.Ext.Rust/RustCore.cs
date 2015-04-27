@@ -1,8 +1,7 @@
-﻿using System;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -649,8 +648,8 @@ namespace Oxide.Rust.Plugins
         /// <param name="player"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        [HookMethod("OnReceiveTick")]
-        private object OnReceiveTick(BasePlayer player, PlayerTick msg)
+        [HookMethod("OnPlayerTick")]
+        private object OnPlayerTick(BasePlayer player, PlayerTick msg)
         {
             return Interface.CallHook("OnPlayerInput", player, serverInputField.GetValue(player));
         }

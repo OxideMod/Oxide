@@ -3,19 +3,42 @@
   "TargetDirectory": "D:\\Servers\\Game\\TheForest\\Latest\TheForest_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BoltLauncher",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BoltNetworkModes",
+                "UdpKit.UdpEndPoint",
+                "BoltConfig"
+              ]
+            },
+            "MSILHash": "z2OfEJ/OMtSOTWRLQ77QckEip4VGtJFPrDMvpJ1G7hE="
+          }
+        },
         {
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehaviour": 0,
-            "ArgumentBehaviour": 4,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
             "ArgumentString": "a0",
             "HookTypeName": "Simple",
             "Name": "Connected",
             "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopServerCallbacks",
             "Flagged": false,
             "Signature": {
@@ -35,13 +58,13 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehaviour": 0,
-            "ArgumentBehaviour": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "Disconnected",
             "HookName": "OnPlayerDisconnected",
-            "AssemblyName": "Assembly-CSharp",
+            "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopServerCallbacks",
             "Flagged": false,
             "Signature": {
@@ -53,28 +76,6 @@
               ]
             },
             "MSILHash": "o5DFwgrG/P+obOEJ69t+ciGSI81yeav269QAhVAvtiQ="
-          }
-        },
-        {
-          "Type": "InitOxide",
-          "Hook": {
-            "HookTypeName": "Initialize Oxide",
-            "Name": "Initialize",
-            "HookName": "InitOxide",
-            "AssemblyName": "Assembly-CSharp",
-            "TypeName": "BoltLauncher",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "Initialize",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "BoltNetworkModes",
-                "UdpKit.UdpEndPoint",
-                "BoltConfig"
-              ]
-            },
-            "MSILHash": "z2OfEJ/OMtSOTWRLQ77QckEip4VGtJFPrDMvpJ1G7hE="
           }
         }
       ]

@@ -26,13 +26,17 @@ namespace Oxide.Plugins
                 PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
         }
 
+        private void InitLogging()
+        {
+            HookCalled("InitLogging");
+        }
+
         private void Init()
         {
             hookCount = hooks.Count;
             hooksRemaining = hooks.Keys.ToDictionary(k => k, k => true);
             PrintWarning("{0} hook to test!", hookCount);
             HookCalled("Init");
-            // TODO: LoadDefaultConfig();
         }
 
         public void Loaded()
@@ -43,14 +47,11 @@ namespace Oxide.Plugins
         protected override void LoadDefaultConfig()
         {
             HookCalled("LoadDefaultConfig");
-            // TODO: CreateDefaultConfig();
-            //LoadConfig();
         }
 
         private void Unloaded()
         {
             HookCalled("Unloaded");
-            // TODO: Unload plugin and store state in config
         }
 
         private void OnFrame()
@@ -58,9 +59,15 @@ namespace Oxide.Plugins
             HookCalled("OnFrame");
         }
 
-        private void ModifyTags()
+        private void ModifyTags(string oldtags)
         {
             HookCalled("ModifyTags");
+            // TODO: Modify tags, either remove or add
+        }
+
+        private void BuildServerTags(IList<string> tags)
+        {
+            HookCalled("BuildServerTags");
             // TODO: Print new tags
         }
 
@@ -89,6 +96,11 @@ namespace Oxide.Plugins
         private void OnUserApprove(ClientConnection connection, uLink.NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
         {
             HookCalled("OnUserApprove");
+        }
+
+        private void CanClientLogin(ClientConnection connection)
+        {
+            HookCalled("CanClientLogin");
         }
 
         private void OnPlayerConnected(NetUser netuser)
@@ -160,7 +172,7 @@ namespace Oxide.Plugins
             HookCalled("OnStructureBuilt");
         }
 
-        private void OnPlayerChat(NetUser user, string msg)
+        private void OnPlayerChat(NetUser user, string message)
         {
             HookCalled("OnPlayerChat");
         }
@@ -168,6 +180,42 @@ namespace Oxide.Plugins
         private void OnPlayerVoice(NetUser user, List<uLink.NetworkPlayer> listeners)
         {
             HookCalled("OnPlayerVoice");
+        }
+
+        private void OnAirDrop()
+        {
+            HookCalled("OnAirDrop");
+            // TODO: Complete parameters
+        }
+
+        private void OnStructureDecay()
+        {
+            HookCalled("OnStructureDecay");
+            // TODO: Complete parameters
+        }
+
+        private void OnResearchItem()
+        {
+            HookCalled("OnResearchItem");
+            // TODO: Complete parameters
+        }
+
+        private void OnBlueprintUse()
+        {
+            HookCalled("OnBlueprintUse");
+            // TODO: Complete parameters
+        }
+
+        private void OnDatablocksInitialized()
+        {
+            HookCalled("OnDatablocksInitialized");
+            // TODO: Complete parameters
+        }
+
+        private void OnResourceNodeLoaded()
+        {
+            HookCalled("OnResourceNodeLoaded");
+            // TODO: Complete parameters
         }
     }
 }

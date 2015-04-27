@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace Oxide.Plugins
@@ -24,13 +25,17 @@ namespace Oxide.Plugins
                 PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
         }
 
+        private void InitLogging()
+        {
+            HookCalled("InitLogging");
+        }
+
         private void Init()
         {
             hookCount = hooks.Count;
             hooksRemaining = hooks.Keys.ToDictionary(k => k, k => true);
             PrintWarning("{0} hook to test!", hookCount);
             HookCalled("Init");
-            // TODO: LoadDefaultConfig();
         }
 
         public void Loaded()
@@ -38,27 +43,15 @@ namespace Oxide.Plugins
 
         }
 
-        private void LoadDefaultConfig()
+        protected override void LoadDefaultConfig()
         {
             HookCalled("LoadDefaultConfig");
-            // TODO: CreateDefaultConfig();
-            //LoadConfig();
         }
 
         private void Unloaded()
         {
             HookCalled("Unloaded");
             // TODO: Unload plugin and store state in config
-        }
-
-        private void OnInitLogging()
-        {
-            HookCalled("OnInitLogging");
-        }
-
-        private void OnTick()
-        {
-            HookCalled("OnTick");
         }
 
         private void ModifyTags(string oldtags)
@@ -69,8 +62,18 @@ namespace Oxide.Plugins
 
         private void BuildServerTags(IList<string> tags)
         {
-            HookCalled("ModifyTags");
+            HookCalled("BuildServerTags");
             // TODO: Print new tags
+        }
+
+        private void OnFrame()
+        {
+            HookCalled("OnFrame");
+        }
+
+        private void OnTick()
+        {
+            HookCalled("OnTick");
         }
 
         private void OnTerrainInitialized()
@@ -107,7 +110,7 @@ namespace Oxide.Plugins
 
         private void CanClientLogin(Network.Connection connection)
         {
-            HookCalled("OnUserApprove");
+            HookCalled("CanClientLogin");
         }
 
         private void OnPlayerConnected(Network.Message packet)
@@ -162,7 +165,7 @@ namespace Oxide.Plugins
 
         private void OnItemRemovedFromContainer(ItemContainer container, Item item)
         {
-            HookCalled("OnItemAddedToContainer");
+            HookCalled("OnItemRemovedToContainer");
             // TODO: Print item removed
         }
 
@@ -243,7 +246,7 @@ namespace Oxide.Plugins
 
         private void OnPlayerInput(BasePlayer player, InputState input)
         {
-            HookCalled("OnPlayerLoot");
+            HookCalled("OnPlayerInput");
         }
 
         private void OnBuildingBlockUpgrade(BuildingBlock block, BasePlayer player, BuildingGrade.Enum grade)
