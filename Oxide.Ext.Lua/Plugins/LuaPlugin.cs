@@ -9,7 +9,7 @@ using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
 
-namespace Oxide.Lua.Plugins
+namespace Oxide.Ext.Lua.Plugins
 {
     /// <summary>
     /// Represents a Lua plugin

@@ -5,8 +5,8 @@ using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 
-using Oxide.Rust.Plugins;
 using Oxide.Rust.Libraries;
+using Oxide.Rust.Plugins;
 
 namespace Oxide.Rust
 {
@@ -83,7 +83,7 @@ namespace Oxide.Rust
             if (currentDirectory == oldFallbackDirectory) return;
 
             // Migrate existing oxide folders from the old fallback directory to the new one
-            string[] oxideDirectories = { config.PluginDirectory, config.ConfigDirectory, config.DataDirectory, config.LogDirectory, config.TempDirectory };
+            string[] oxideDirectories = { config.PluginDirectory, config.ConfigDirectory, config.DataDirectory, config.LogDirectory };
             foreach (var dir in oxideDirectories)
             {
                 string source = Path.Combine(oldFallbackDirectory, dir);

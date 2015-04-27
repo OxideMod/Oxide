@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 
-using Oxide.Core;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Unity.Plugins

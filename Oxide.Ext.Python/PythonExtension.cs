@@ -41,7 +41,7 @@ namespace Oxide.Ext.Python
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Nogrod"; } }
+        public override string Author { get { return "Oxide Team"; } }
 
         /// <summary>
         /// Gets the Lua environment

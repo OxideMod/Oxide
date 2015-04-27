@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Oxide.Ext.CSharp")]
 [assembly: AssemblyDescription("CSharp plugins which can be compiled and reloaded at runtime")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("bawNg")]
+[assembly: AssemblyCompany("Oxide Team")]
 [assembly: AssemblyProduct("Oxide.Ext.CSharp")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

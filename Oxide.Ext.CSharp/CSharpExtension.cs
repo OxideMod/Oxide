@@ -17,12 +17,12 @@ namespace Oxide.Plugins
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(0, 6, OxideMod.Version.Patch); } }
+        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "bawNg"; } }
+        public override string Author { get { return "Oxide Team"; } }
 
         public FSWatcher Watcher { get; private set; }
 

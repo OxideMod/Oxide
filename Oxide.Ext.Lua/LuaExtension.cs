@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 using NLua;
 
 using Oxide.Core;
-using Oxide.Core.Logging;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
+using Oxide.Core.Logging;
 using Oxide.Core.Plugins.Watchers;
 
-using Oxide.Lua.Plugins;
-using Oxide.Lua.Libraries;
+using Oxide.Ext.Lua.Libraries;
+using Oxide.Ext.Lua.Plugins;
 
-namespace Oxide.Lua
+namespace Oxide.Ext.Lua
 {
     /// <summary>
     /// The extension class that represents this extension

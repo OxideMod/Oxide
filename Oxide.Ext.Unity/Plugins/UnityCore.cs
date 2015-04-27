@@ -48,8 +48,8 @@ namespace Oxide.Unity.Plugins
         /// <summary>
         /// Called when the it's safe to initialize logging
         /// </summary>
-        [HookMethod("OnInitLogging")]
-        private void OnInitLogging()
+        [HookMethod("InitLogging")]
+        private void InitLogging()
         {
             // Create our logger and add it to the compound logger
             logger = new UnityLogger();

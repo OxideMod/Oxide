@@ -5,7 +5,7 @@ using Oxide.Core.Plugins;
 namespace Oxide.RustLegacy.Plugins
 {
     /// <summary>
-    /// Responsible for loading Rust core plugins
+    /// Responsible for loading Rust Legacy core plugins
     /// </summary>
     public class RustLegacyPluginLoader : PluginLoader
     {

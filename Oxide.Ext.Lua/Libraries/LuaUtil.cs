@@ -1,10 +1,10 @@
 ﻿using System;
 
-using Oxide.Core.Libraries;
-
 using NLua;
 
-namespace Oxide.Lua.Libraries
+using Oxide.Core.Libraries;
+
+namespace Oxide.Ext.Lua.Libraries
 {
     /// <summary>
     /// A utility library for Lua specific functions

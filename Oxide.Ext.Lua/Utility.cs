@@ -6,7 +6,7 @@ using NLua;
 
 using Oxide.Core.Configuration;
 
-namespace Oxide.Lua
+namespace Oxide.Ext.Lua
 {
     /// <summary>
     /// Contains extension and utility methods

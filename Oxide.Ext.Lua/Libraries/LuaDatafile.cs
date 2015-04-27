@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Configuration;
-
 using NLua;
 
-namespace Oxide.Lua.Libraries
+using Oxide.Core;
+using Oxide.Core.Configuration;
+using Oxide.Core.Libraries;
+
+namespace Oxide.Ext.Lua.Libraries
 {
     /// <summary>
     /// A datafile library that allows Lua to access datafiles

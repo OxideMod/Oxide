@@ -1,7 +1,7 @@
 ﻿using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 
-namespace Oxide.Lua.Libraries
+namespace Oxide.Ext.Lua.Libraries
 {
     /// <summary>
     /// A global library containing game-agnostic Lua utilities

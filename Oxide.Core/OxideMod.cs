@@ -1,13 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
-using Oxide.Core.Logging;
-using Oxide.Core.Plugins;
+using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
-using Oxide.Core.Configuration;
+using Oxide.Core.Logging;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Core
 {
@@ -44,7 +44,6 @@ namespace Oxide.Core
         public string ConfigDirectory { get; private set; }
         public string DataDirectory { get; private set; }
         public string LogDirectory { get; private set; }
-        public string TempDirectory { get; private set; }
 
         // Gets the number of seconds since the server started
         public float Now { get { return getTimeSinceStartup(); } }
@@ -114,14 +113,12 @@ namespace Oxide.Core
             DataDirectory = Path.Combine(InstanceDirectory, rootconfig.DataDirectory);
             LogDirectory = Path.Combine(InstanceDirectory, rootconfig.LogDirectory);
             ConfigDirectory = Path.Combine(InstanceDirectory, rootconfig.ConfigDirectory);
-            TempDirectory = Path.Combine(InstanceDirectory, rootconfig.TempDirectory);
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
             if (!Directory.Exists(DataDirectory)) Directory.CreateDirectory(DataDirectory);
             if (!Directory.Exists(LogDirectory)) Directory.CreateDirectory(LogDirectory);
             if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
-            if (!Directory.Exists(TempDirectory)) Directory.CreateDirectory(TempDirectory);
 
             RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
 

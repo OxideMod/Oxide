@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Oxide.Core.Configuration;
 
-using Utility = Oxide.Lua.Utility;
+using Utility = Oxide.Ext.Lua.Utility;
 
 struct TestStruct {}
 

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -16,7 +16,7 @@ using UnityEngine;
 namespace Oxide.RustLegacy.Plugins
 {
     /// <summary>
-    /// The core Rust plugin
+    /// The core Rust Legacy plugin
     /// </summary>
     public class RustLegacyCore : CSPlugin
     {

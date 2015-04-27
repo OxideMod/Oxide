@@ -13,7 +13,7 @@ namespace Oxide.Ext.MySql
 
         public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
 
-        public override string Author { get { return "Nogrod"; } }
+        public override string Author { get { return "Oxide Team"; } }
 
         public override void Load()
         {

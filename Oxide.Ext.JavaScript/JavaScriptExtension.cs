@@ -42,7 +42,7 @@ namespace Oxide.Ext.JavaScript
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Nogrod"; } }
+        public override string Author { get { return "Oxide Team"; } }
 
         /// <summary>
         /// Gets the JavaScript engine

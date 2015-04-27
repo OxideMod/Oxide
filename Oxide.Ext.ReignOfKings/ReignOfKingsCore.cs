@@ -4,7 +4,7 @@ using Oxide.Core.Plugins;
 namespace Oxide.ReignOfKings.Plugins
 {
     /// <summary>
-    /// The core 7 Days to Die plugin
+    /// The core Reign of Kings plugin
     /// </summary>
     public class ReignOfKingsCore : CSPlugin
     {

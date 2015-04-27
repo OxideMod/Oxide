@@ -1,13 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Reflection;
 
 using Oxide.Core.Libraries;
-using System.Collections.Generic;
 
 namespace Oxide.RustLegacy.Libraries
 {
     /// <summary>
-    /// A library containing utility shortcut functions for Rust
+    /// A library containing utility shortcut functions for Rust Legacy
     /// </summary>
     public class RustLegacy : Library
     {
