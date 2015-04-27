@@ -194,3 +194,4 @@ FakesAssemblies/
 
 !**/Dependencies/x64/
 !**/Dependencies/x86/
+Bundles/
