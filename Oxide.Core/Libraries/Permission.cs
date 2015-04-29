@@ -165,6 +165,17 @@ namespace Oxide.Core.Libraries
         }
 
         #region Querying
+        
+        /// <summary>
+        /// Returns if the specified user exists
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserExists")]
+        public bool UserExists(string userid)
+        {
+            return userdata.ContainsKey(userid);
+        }
 
         /// <summary>
         /// Returns the data for the specified user

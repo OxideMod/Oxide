@@ -21,13 +21,15 @@ namespace Oxide.RustLegacy.Plugins
     public class RustLegacyCore : CSPlugin
     {
         // The pluginmanager
-        private readonly PluginManager pluginmanager;
+        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
         // The permission lib
-        private readonly Permission permission;
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>("Permission");
 
-        // The rust lib
-        private readonly Libraries.RustLegacy rust;
+        private static readonly string[] DefaultGroups = { "player", "admin" };
+
+        // The command lib
+        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // Track when the server has been initialized
         private bool ServerInitialized;
@@ -48,21 +50,6 @@ namespace Oxide.RustLegacy.Plugins
             Title = "Rust Legacy Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
-            HasConfig = false;
-
-            // Get the pluginmanager
-            pluginmanager = Interface.Oxide.RootPluginManager;
-            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
-            rust = Interface.Oxide.GetLibrary<Libraries.RustLegacy>("Rust");
-        }
-
-        /// <summary>
-        /// Loads the default config for this plugin
-        /// </summary>
-        protected override void LoadDefaultConfig()
-        {
-            // No config yet, we might use it later
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -71,9 +58,6 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("Init")]
         private void Init()
         {
-            // Get the command library
-            Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
-
             // Add our commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
             cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
@@ -86,6 +70,14 @@ namespace Oxide.RustLegacy.Plugins
             cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
             cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
+
+            // Setup the default permission groups
+            var rank = 0;
+            for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+            {
+                var defaultGroup = DefaultGroups[i];
+                if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+            }
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust legacy");
@@ -341,14 +333,19 @@ namespace Oxide.RustLegacy.Plugins
             var name = arg.GetString(1);
             var group = arg.GetString(2);
 
-            NetUser player = rust.FindPlayer(name);
-            if (player == null)
+            var player = FindPlayer(name);
+            if (player == null && !permission.UserExists(name))
             {
                 arg.ReplyWith("User '" + name + "' not found");
                 return;
             }
-            name = rust.UserIDFromPlayer(player);
-            permission.GetUserData(name).LastSeenNickname = player.displayName;
+            var userId = name;
+            if (player != null)
+            {
+                userId = player.userID.ToString();
+                name = player.displayName;
+                permission.GetUserData(userId).LastSeenNickname = name;
+            }
 
             if (!permission.GroupExists(group))
             {
@@ -358,12 +355,12 @@ namespace Oxide.RustLegacy.Plugins
 
             if (mode.Equals("add"))
             {
-                permission.AddUserGroup(name, group);
+                permission.AddUserGroup(userId, group);
                 arg.ReplyWith("User '" + player.displayName + "' assigned group: " + group);
             }
             else if (mode.Equals("remove"))
             {
-                permission.RemoveUserGroup(name, group);
+                permission.RemoveUserGroup(userId, group);
                 arg.ReplyWith("User '" + player.displayName + "' removed from group: " + group);
             }
         }
@@ -402,16 +399,21 @@ namespace Oxide.RustLegacy.Plugins
             }
             else if (mode.Equals("user"))
             {
-                var player = rust.FindPlayer(name);
-                if (player == null)
+                var player = FindPlayer(name);
+                if (player == null && !permission.UserExists(name))
                 {
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
                 }
-                name = rust.UserIDFromPlayer(player);
-                permission.GetUserData(name).LastSeenNickname = player.displayName;
-                permission.GrantUserPermission(name, perm, null);
-                arg.ReplyWith("User '" + player.displayName + "' granted permission: " + perm);
+                var userId = name;
+                if (player != null)
+                {
+                    userId = player.userID.ToString();
+                    name = player.displayName;
+                    permission.GetUserData(name).LastSeenNickname = name;
+                }
+                permission.GrantUserPermission(userId, perm, null);
+                arg.ReplyWith("User '" + name + "' granted permission: " + perm);
             }
         }
 
@@ -446,17 +448,37 @@ namespace Oxide.RustLegacy.Plugins
             }
             else if (mode.Equals("user"))
             {
-                var player = rust.FindPlayer(name);
-                if (player == null)
+                var player = FindPlayer(name);
+                if (player == null && !permission.UserExists(name))
                 {
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
                 }
-                name = rust.UserIDFromPlayer(player);
-                permission.GetUserData(name).LastSeenNickname = player.displayName;
-                permission.RevokeUserPermission(name, perm);
-                arg.ReplyWith("User '" + player.displayName + "' revoked permission: " + perm);
+                var userId = name;
+                if (player != null)
+                {
+                    userId = player.userID.ToString();
+                    name = player.displayName;
+                    permission.GetUserData(name).LastSeenNickname = name;
+                }
+                permission.RevokeUserPermission(userId, perm);
+                arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
             }
+        }
+
+        public NetUser FindPlayer(string strNameOrIDOrIP)
+        {
+            NetUser netUser;
+            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.userID.ToString() == strNameOrIDOrIP)?.netUser) != null)
+                return netUser;
+
+            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.displayName.ToLower().Contains(strNameOrIDOrIP.ToLower()))?.netUser) != null)
+                return netUser;
+
+            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.networkPlayer.ipAddress == strNameOrIDOrIP)?.netUser) != null)
+                return netUser;
+
+            return null;
         }
 
         /// <summary>
@@ -607,6 +629,20 @@ namespace Oxide.RustLegacy.Plugins
                 return false;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(NetUser player)
+        {
+            var userId = player.userID.ToString();
+            permission.GetUserData(userId).LastSeenNickname = player.displayName;
+
+            // Add player to default group
+            permission.AddUserGroup(userId, DefaultGroups[0]);
         }
 
         /// <summary>
