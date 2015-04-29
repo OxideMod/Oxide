@@ -48,6 +48,20 @@ namespace Oxide.Plugins
     }
 
     /// <summary>
+    /// Allows plugins to specify a description of the plugin using an attribute above the plugin class
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public class DescriptionAttribute : Attribute
+    {
+        public string Description { get; private set; }
+
+        public DescriptionAttribute(string Description)
+        {
+            this.Description = Description;
+        }
+    }
+
+    /// <summary>
     /// Indicates that the specified field should be a reference to another plugin when it is loaded
     /// </summary>
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
@@ -201,6 +215,13 @@ namespace Oxide.Plugins
                 Author = info.Author;
                 Version = info.Version;
                 ResourceId = info.ResourceId;
+            }
+
+            var description_attributes = GetType().GetCustomAttributes(typeof(DescriptionAttribute), true);
+            if (description_attributes.Length > 0)
+            {
+                var info = description_attributes[0] as DescriptionAttribute;
+                Description = info.Description;
             }
 
             var method = GetType().GetMethod("LoadDefaultConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
