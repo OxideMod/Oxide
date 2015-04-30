@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Reflection;
+using System.IO;
 
 using Oxide.Core;
 
@@ -111,6 +113,12 @@ namespace Oxide.Plugins
                 catch (MissingMethodException)
                 {
                     InitFailed("Main plugin class should not have a constructor defined: " + Name);
+                    return;
+                }
+                catch (TargetInvocationException invocation_exception)
+                {
+                    var ex = invocation_exception.InnerException;
+                    InitFailed("Unable to load " + ScriptName + ". " + ex.ToString());
                     return;
                 }
 

@@ -415,7 +415,7 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public bool ReloadPlugin(string name)
         {
-            var loader = extensionmanager.GetPluginLoaders().SingleOrDefault(l => l.ScanDirectory(PluginDirectory).Contains(name));
+            var loader = extensionmanager.GetPluginLoaders().FirstOrDefault(l => l.ScanDirectory(PluginDirectory).Contains(name));
             if (loader != null)
             {
                 loader.Reload(PluginDirectory, name);
