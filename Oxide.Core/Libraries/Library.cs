@@ -57,6 +57,11 @@ namespace Oxide.Core.Libraries
         public virtual bool IsGlobal { get; }
 
         /// <summary>
+        /// Stores the last exception
+        /// </summary>
+        public Exception LastException { get; protected set; }
+
+        /// <summary>
         /// Initializes a new instance of the Library class
         /// </summary>
         public Library()
