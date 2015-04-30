@@ -83,17 +83,6 @@ namespace Oxide.Core.Plugins
         /// Gets the object associated with this plugin
         /// </summary>
         public virtual object Object { get { return this; } }
-        
-        /// <summary>
-        /// Gets the total CPU time spent in this plugin in seconds
-        /// </summary>
-        public float TimeSpent
-        {
-            get
-            {
-                return stoppedAt - startedAt;
-            }
-        }
 
         /// <summary>
         /// Gets the config file in use by this plugin
@@ -111,8 +100,10 @@ namespace Oxide.Core.Plugins
         public event PluginManagerEvent OnAddedToManager, OnRemovedFromManager;
 
         // Used to measure time spent in this plugin
+        private float averageAt;
         private float startedAt;
         private float stoppedAt;
+        private float sum;
 
         // The depth of hook call nesting
         protected int nestcount;
@@ -166,7 +157,11 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public object CallHook(string hookname, params object[] args)
         {
-            if (nestcount == 0) startedAt = Interface.Oxide.Now;
+            if (nestcount == 0)
+            {
+                startedAt = Interface.Oxide.Now;
+                if (averageAt < 1) averageAt = startedAt;
+            } 
             nestcount++;
             try
             {
@@ -183,8 +178,17 @@ namespace Oxide.Core.Plugins
                 if (nestcount == 0)
                 {
                     stoppedAt = Interface.Oxide.Now;
-                    if (TimeSpent > 0.5)
-                        Interface.Oxide.LogWarning(string.Format("CallHook '{0}' on plugin '{1}' took: {2}ms", hookname, Title, TimeSpent * 1000));
+                    if (stoppedAt - startedAt > 0.5)
+                        Interface.Oxide.LogWarning(string.Format("CallHook '{0}' on plugin '{1}' took: {2:0}ms", hookname, Title, (stoppedAt - startedAt) * 1000));
+                    sum += stoppedAt - startedAt;
+                    if (stoppedAt - averageAt > 10)
+                    {
+                        var measureTime = sum / (stoppedAt - averageAt);
+                        if (measureTime > 0.25)
+                            Interface.Oxide.LogWarning(string.Format("CallHook '{0}' on plugin '{1}' took average: {2:0}ms", hookname, Title, measureTime * 1000));
+                        averageAt = 0;
+                        sum = 0;
+                    }
                 }
             }
         }
