@@ -72,16 +72,30 @@ namespace Oxide.RustLegacy.Plugins
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
 
             // Setup the default permission groups
-            var rank = 0;
-            for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+            if (permission.IsLoaded)
             {
-                var defaultGroup = DefaultGroups[i];
-                if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                var rank = 0;
+                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+                {
+                    var defaultGroup = DefaultGroups[i];
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
             }
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust legacy");
             RemoteLogger.SetTag("protocol", Rust.Defines.Connection.protocol.ToString());
+        }
+
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <returns></returns>
+        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
+        {
+            if (permission.IsLoaded) return true;
+            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
+            return false;
         }
 
         /// <summary>
@@ -268,6 +282,8 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("cmdGroup")]
         private void cmdGroup(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             // Check 2 args exists
             if (!arg.HasArgs(2))
@@ -321,6 +337,8 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("cmdUserGroup")]
         private void cmdUserGroup(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
@@ -365,9 +383,6 @@ namespace Oxide.RustLegacy.Plugins
             }
         }
 
-
-
-
         /// <summary>
         /// Called when the "grant" command has been executed
         /// </summary>
@@ -375,6 +390,8 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("cmdGrant")]
         private void cmdGrant(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
@@ -424,6 +441,8 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("cmdRevoke")]
         private void cmdRevoke(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
@@ -638,6 +657,8 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(NetUser player)
         {
+            if (!permission.IsLoaded) return;
+
             var userId = player.userID.ToString();
             permission.GetUserData(userId).LastSeenNickname = player.displayName;
 

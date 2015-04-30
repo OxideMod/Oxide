@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Oxide.Core.Logging;
@@ -67,6 +68,9 @@ namespace Oxide.Core.Libraries
         // All group data
         private Dictionary<string, GroupData> groupdata;
 
+        // Permission status
+        public bool IsLoaded { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the Permission library
         /// </summary>
@@ -85,8 +89,18 @@ namespace Oxide.Core.Libraries
         private void LoadFromDatafile()
         {
             // Initialize
-            userdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, UserData>>("oxide.users");
-            groupdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, GroupData>>("oxide.groups");
+            try
+            {
+                userdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, UserData>>("oxide.users");
+                groupdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, GroupData>>("oxide.groups");
+                IsLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                IsLoaded = false;
+                LastException = ex;
+                Interface.Oxide.LogError("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -165,7 +179,7 @@ namespace Oxide.Core.Libraries
         }
 
         #region Querying
-        
+
         /// <summary>
         /// Returns if the specified user exists
         /// </summary>
@@ -415,7 +429,7 @@ namespace Oxide.Core.Libraries
             if (groupdata.ContainsKey(name)) return;
 
             // Create the data
-            var data = new GroupData {Title = title, Rank = rank, Perms = new HashSet<string>()};
+            var data = new GroupData { Title = title, Rank = rank, Perms = new HashSet<string>() };
 
             // Add it and save
             groupdata.Add(name, data);

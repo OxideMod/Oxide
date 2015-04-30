@@ -25,7 +25,7 @@ namespace Oxide.Rust.Plugins
 
         // The permission lib
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = {"player", "moderator", "admin"};
+        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" };
 
         // The command lib
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -70,16 +70,29 @@ namespace Oxide.Rust.Plugins
             cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
 
-            var rank = 0;
-            for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+            if (permission.IsLoaded)
             {
-                var defaultGroup = DefaultGroups[i];
-                if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                var rank = 0;
+                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+                {
+                    var defaultGroup = DefaultGroups[i];
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
             }
-
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust");
             RemoteLogger.SetTag("protocol", typeof(Protocol).GetField("network").GetValue(null).ToString());
+        }
+
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <returns></returns>
+        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
+        {
+            if (permission.IsLoaded) return true;
+            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
+            return false;
         }
 
         /// <summary>
@@ -266,6 +279,8 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdGroup")]
         private void cmdGroup(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 2 args exists
             if (!arg.HasArgs(2))
@@ -319,6 +334,8 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdUserGroup")]
         private void cmdUserGroup(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
@@ -370,6 +387,8 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdGrant")]
         private void cmdGrant(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
@@ -419,6 +438,8 @@ namespace Oxide.Rust.Plugins
         [HookMethod("cmdRevoke")]
         private void cmdRevoke(ConsoleSystem.Arg arg)
         {
+            if (!PermissionsLoaded(arg)) return;
+
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
@@ -643,7 +664,7 @@ namespace Oxide.Rust.Plugins
         private void OnPlayerInit(BasePlayer player)
         {
             var authLevel = player.net.connection.authLevel;
-            if (authLevel <= DefaultGroups.Length)
+            if (authLevel <= DefaultGroups.Length && permission.IsLoaded)
             {
                 var userId = player.userID.ToString();
                 permission.GetUserData(userId).LastSeenNickname = player.displayName;
@@ -773,7 +794,7 @@ namespace Oxide.Rust.Plugins
             float condition = item.condition;
             item.condition -= amount;
 
-            if((item.condition <= 0f) && (item.condition < condition))
+            if ((item.condition <= 0f) && (item.condition < condition))
             {
                 item.OnBroken();
             }
