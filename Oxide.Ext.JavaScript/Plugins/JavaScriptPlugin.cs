@@ -136,6 +136,7 @@ namespace Oxide.Ext.JavaScript.Plugins
             Title = Class.Get("Title").AsString();
             Author = Class.Get("Author").AsString();
             Version = (VersionNumber) Class.Get("Version").ToObject();
+            if (Class.HasProperty("Description")) Description = Class.Get("Description").AsString();
             if (Class.HasProperty("ResourceId")) ResourceId = (int)Class.Get("ResourceId").AsNumber();
             HasConfig = Class.HasProperty("HasConfig") && Class.Get("HasConfig").AsBoolean();
 

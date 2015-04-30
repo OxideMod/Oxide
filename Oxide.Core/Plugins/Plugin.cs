@@ -40,6 +40,11 @@ namespace Oxide.Core.Plugins
         public string Title { get; protected set; }
 
         /// <summary>
+        /// Gets the description of this plugin
+        /// </summary>
+        public string Description { get; protected set; }
+
+        /// <summary>
         /// Gets the author of this plugin
         /// </summary>
         public string Author { get; protected set; }

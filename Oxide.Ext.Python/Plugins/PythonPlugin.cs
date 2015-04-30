@@ -127,6 +127,7 @@ namespace Oxide.Ext.Python.Plugins
             Title = PythonEngine.Operations.GetMember<string>(Class, "Title");
             Author = PythonEngine.Operations.GetMember<string>(Class, "Author");
             Version = PythonEngine.Operations.GetMember<VersionNumber>(Class, "Version");
+            if (PythonEngine.Operations.ContainsMember(Class, "Description")) Description = PythonEngine.Operations.GetMember<string>(Class, "Description");
             if (PythonEngine.Operations.ContainsMember(Class, "ResourceId")) ResourceId = PythonEngine.Operations.GetMember<int>(Class, "ResourceId");
             HasConfig = PythonEngine.Operations.ContainsMember(Class, "HasConfig") && PythonEngine.Operations.GetMember<bool>(Class, "HasConfig") || PythonEngine.Operations.ContainsMember(Class, "LoadDefaultConfig");
 
