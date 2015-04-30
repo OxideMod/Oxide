@@ -332,13 +332,18 @@ namespace Oxide.Rust.Plugins
             var group = arg.GetString(2);
 
             var player = FindPlayer(name);
-            if (player == null)
+            if (player == null && !permission.UserExists(name))
             {
                 arg.ReplyWith("User '" + name + "' not found");
                 return;
             }
-            name = player.userID.ToString();
-            permission.GetUserData(name).LastSeenNickname = player.displayName;
+            var userId = name;
+            if (player != null)
+            {
+                userId = player.userID.ToString();
+                name = player.displayName;
+                permission.GetUserData(userId).LastSeenNickname = name;
+            }
 
             if (!permission.GroupExists(group))
             {
@@ -348,13 +353,13 @@ namespace Oxide.Rust.Plugins
 
             if (mode.Equals("add"))
             {
-                permission.AddUserGroup(name, group);
-                arg.ReplyWith("User '" + player.displayName + "' assigned group: " + group);
+                permission.AddUserGroup(userId, group);
+                arg.ReplyWith("User '" + name + "' assigned group: " + group);
             }
             else if (mode.Equals("remove"))
             {
-                permission.RemoveUserGroup(name, group);
-                arg.ReplyWith("User '" + player.displayName + "' removed from group: " + group);
+                permission.RemoveUserGroup(userId, group);
+                arg.ReplyWith("User '" + name + "' removed from group: " + group);
             }
         }
 
@@ -390,15 +395,20 @@ namespace Oxide.Rust.Plugins
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null)
+                if (player == null && !permission.UserExists(name))
                 {
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
                 }
-                name = player.userID.ToString();
-                permission.GetUserData(name).LastSeenNickname = player.displayName;
-                permission.GrantUserPermission(name, perm, null);
-                arg.ReplyWith("User '" + player.displayName + "' granted permission: " + perm);
+                var userId = name;
+                if (player != null)
+                {
+                    userId = player.userID.ToString();
+                    name = player.displayName;
+                    permission.GetUserData(name).LastSeenNickname = name;
+                }
+                permission.GrantUserPermission(userId, perm, null);
+                arg.ReplyWith("User '" + name + "' granted permission: " + perm);
             }
         }
 
@@ -434,15 +444,20 @@ namespace Oxide.Rust.Plugins
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null)
+                if (player == null && !permission.UserExists(name))
                 {
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
                 }
-                name = player.userID.ToString();
-                permission.GetUserData(name).LastSeenNickname = player.displayName;
-                permission.RevokeUserPermission(name, perm);
-                arg.ReplyWith("User '" + player.displayName + "' revoked permission: " + perm);
+                var userId = name;
+                if (player != null)
+                {
+                    userId = player.userID.ToString();
+                    name = player.displayName;
+                    permission.GetUserData(name).LastSeenNickname = name;
+                }
+                permission.RevokeUserPermission(userId, perm);
+                arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
             }
         }
 
