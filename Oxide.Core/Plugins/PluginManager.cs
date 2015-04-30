@@ -153,15 +153,18 @@ namespace Oxide.Core.Plugins
             if (returncount == 0) return null;
             if (returncount == 1) return finalvalue;
 
-            // Notify log of hook conflict
-            string[] conflicts = new string[returncount];
-            int j = 0;
-            for (int i = 0; i < plugins.Count; i++)
+            if (finalvalue != null)
             {
-                if (values[i] == null) continue;
-                conflicts[j++] = plugins[i].Name;
+                // Notify log of hook conflict
+                string[] conflicts = new string[returncount];
+                int j = 0;
+                for (int i = 0; i < plugins.Count; i++)
+                {
+                    if (values[i] != null && values[i] != finalvalue)
+                        conflicts[j++] = plugins[i].Name;
+                }
+                Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
             }
-            Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
             return finalvalue;
         }
 
