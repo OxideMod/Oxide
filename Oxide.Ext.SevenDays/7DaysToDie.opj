@@ -21,13 +21,13 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "To5yu3fuxDxZmdEeTRvTMO/cGvtczQv1Yt6h4sIsP58="
+            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw="
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 95,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -43,7 +43,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "To5yu3fuxDxZmdEeTRvTMO/cGvtczQv1Yt6h4sIsP58="
+            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw="
           }
         },
         {
@@ -93,30 +93,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 7,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerDisconnected",
-            "HookName": "OnPlayerDisconnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "PlayerDisconnected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Int32"
-              ]
-            },
-            "MSILHash": "DTRrx++duxK6HuRSpXieZ1D9IUW1zl694GGxwI15UHo="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -157,13 +133,13 @@
                 "Entity"
               ]
             },
-            "MSILHash": "CjTUk2BhZ59UMsl56QlsfFQmUy6k9opiaOdkxrAa0ZE="
+            "MSILHash": "pzslO/TGE/T0V2BgrIPjW//DZ2srNBzdj1uZHjsObFk="
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 367,
+            "InjectionIndex": 331,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l10",
@@ -178,13 +154,36 @@
               "Name": "RequestToSpawnPlayer",
               "ReturnType": "System.Void",
               "Parameters": [
-                "System.Int32",
-                "System.String",
+                "ClientInfo",
                 "System.Int32",
                 "PlayerProfile"
               ]
             },
-            "MSILHash": "xoq3Gxd+kmJaJWyH33BeUC8xFf1K7WxYM8delFU2Yyg="
+            "MSILHash": "xi9WYw/Mnr8tTLjTSATTZqf+1OLMG85mPPR3kr7grkE="
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PlayerDisconnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ClientInfo"
+              ]
+            },
+            "MSILHash": "VS+ZkwGc+l+GI7pYX0MWgFCGs/1a/Hc4ItqYMrEgRkk="
           }
         },
         {
