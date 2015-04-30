@@ -306,7 +306,8 @@ namespace Oxide.Plugins
                     break;
                 case CompilerMessageType.Error:
                     Interface.Oxide.LogError("Compilation error: {0}", message.Data);
-                    Interface.Oxide.NextTick(() => pluginComp[message.Id].callback(null, 0));
+                    var comp = pluginComp[message.Id];
+                    Interface.Oxide.NextTick(() => comp.callback(null, 0));
                     pluginComp.Remove(message.Id);
                     break;
                 case CompilerMessageType.Ready:
