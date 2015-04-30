@@ -83,14 +83,14 @@ namespace Oxide.Core.Libraries
                 URL = url;
                 Callback = callback;
                 Owner = owner;
-                if (owner != null) owner.OnRemovedFromManager += owner_OnRemovedFromManager;
+                if (Owner != null) Owner.OnRemovedFromManager += owner_OnRemovedFromManager;
             }
             
             /// <summary>
             /// Used by the worker thread to start the request
             /// </summary>
             public void Start()
-            {   
+            {
                 try
                 {
                     // Create the request
@@ -101,6 +101,8 @@ namespace Oxide.Core.Libraries
                     request.KeepAlive = false;
                     request.Timeout = (int)Math.Round((Timeout == 0f ? WebRequests.Timeout : Timeout) * 1000f);
                     request.ServicePoint.MaxIdleTime = request.Timeout;
+                    request.ServicePoint.Expect100Continue = ServicePointManager.Expect100Continue;
+                    request.ServicePoint.ConnectionLimit = ServicePointManager.DefaultConnectionLimit;
 
                     if (RequestHeaders != null) request.SetRawHeaders(RequestHeaders);
 
@@ -171,6 +173,7 @@ namespace Oxide.Core.Libraries
             private void OnTimeout(object state, bool timed_out)
             {
                 if (timed_out && request != null) request.Abort();
+                if (Owner != null) Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
             }
 
             private void OnComplete()
@@ -211,6 +214,8 @@ namespace Oxide.Core.Libraries
         private readonly Thread workerthread;
         private readonly AutoResetEvent workevent = new AutoResetEvent(false);
         private bool shutdown;
+        private readonly int maxWorkerThreads;
+        private readonly int maxCompletionPortThreads;
 
         /// <summary>
         /// Initializes a new instance of the WebRequests library
@@ -221,6 +226,10 @@ namespace Oxide.Core.Libraries
             ServicePointManager.Expect100Continue = false;
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
             ServicePointManager.DefaultConnectionLimit = 200;
+
+            ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
+            maxCompletionPortThreads = (int) (maxCompletionPortThreads * 0.6);
+            maxWorkerThreads = (int) (maxWorkerThreads * 0.75);
 
             // Start worker thread
             workerthread = new Thread(Worker);
@@ -243,16 +252,32 @@ namespace Oxide.Core.Libraries
         /// </summary>
         private void Worker()
         {
-            while (!shutdown)
+            try
             {
-                if (queue.Count < 1)
+                while (!shutdown)
                 {
-                    workevent.Reset();
-                    workevent.WaitOne();
+                    if (queue.Count < 1)
+                    {
+                        workevent.Reset();
+                        workevent.WaitOne();
+                    }
+                    int workerThreads, completionPortThreads;
+                    ThreadPool.GetAvailableThreads(out workerThreads, out completionPortThreads);
+                    if (workerThreads <= maxWorkerThreads || completionPortThreads <= maxCompletionPortThreads)
+                    {
+                        Thread.Sleep(100);
+                        continue;
+                    }
+                    WebRequest request = null;
+                    lock (syncroot)
+                        if (queue.Count > 0)
+                            request = queue.Dequeue();
+                    if (request != null) request.Start();
                 }
-                WebRequest request = null;
-                lock (syncroot) request = queue.Dequeue();
-                request.Start();
+            }
+            catch (Exception ex)
+            {
+                Interface.Oxide.LogException("WebRequests worker: ", ex);
             }
         }
 
@@ -284,9 +309,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("EnqueuePost")]
         public void EnqueuePost(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            var request = new WebRequest(url, callback, owner) { Method = "POST", RequestHeaders = headers, Timeout = timeout };
-            if (timeout > 0f) request.Timeout = timeout;
-            request.Body = body;
+            var request = new WebRequest(url, callback, owner) {Method = "POST", RequestHeaders = headers, Timeout = timeout, Body = body};
             lock (syncroot) queue.Enqueue(request);
             workevent.Set();
         }
