@@ -302,6 +302,18 @@ namespace Oxide.Core
                     }
                 }
             }
+            var lastCall = Now;
+            foreach (var loader in extensionmanager.GetPluginLoaders())
+            {
+                // Wait until all async plugins have finished loading
+                while (loader.LoadingPlugins.Count > 0)
+                {
+                    System.Threading.Thread.Sleep(25);
+                    OnFrame(Now - lastCall);
+                    lastCall = Now;
+                }
+            }
+            isInitialized = true;
         }
 
         /// <summary>
@@ -510,15 +522,7 @@ namespace Oxide.Core
             libtimer.Update(delta);
 
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
-            if (!isInitialized)
-            {
-                foreach (var loader in extensionmanager.GetPluginLoaders())
-                {
-                    // Wait until all async plugins have finished loading
-                    if (loader.LoadingPlugins.Count > 0) return;
-                }
-                isInitialized = true;
-            }
+            if (!isInitialized) return;
 
             // Update plugin change watchers
             UpdatePluginWatchers();
