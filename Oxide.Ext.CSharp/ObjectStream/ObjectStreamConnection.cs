@@ -49,6 +49,7 @@ namespace ObjectStream
 
         private void CloseImpl()
         {
+            Error = null;
             _streamWrapper.Close();
             _writeSignal.Set();
         }
