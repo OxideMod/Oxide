@@ -45,7 +45,9 @@ namespace Oxide.Plugins
         private Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
         private ObjectStreamClient<CompilerMessage> client;
         private Dictionary<int, Compilation> pluginComp;
+        private Queue<CompilerMessage> compQueue;
         private volatile int lastId;
+        private volatile bool ready;
 
         class Compilation
         {
@@ -67,6 +69,7 @@ namespace Oxide.Plugins
             if (BinaryPath == null) return;
 
             pluginComp = new Dictionary<int, Compilation>();
+            compQueue = new Queue<CompilerMessage>();
 
             process = new Process
             {
@@ -265,8 +268,11 @@ namespace Oxide.Plugins
                 SourceFiles = sourceFiles.ToArray(),
                 ReferenceFiles = referenceFiles.ToArray()
             };
-            // TODO queue until compiler ready
-            client.PushMessage(new CompilerMessage { Id = currentId, Data = compilerData, Type = CompilerMessageType.Compile });
+            var message = new CompilerMessage {Id = currentId, Data = compilerData, Type = CompilerMessageType.Compile};
+            if (ready)
+                client.PushMessage(message);
+            else
+                compQueue.Enqueue(message);
         }
 
         private void OnError(Exception exception)
@@ -312,6 +318,12 @@ namespace Oxide.Plugins
                     break;
                 case CompilerMessageType.Ready:
                     connection.PushMessage(message);
+                    if (!ready)
+                    {
+                        ready = true;
+                        while(compQueue.Count > 0)
+                            connection.PushMessage(compQueue.Dequeue());
+                    }
                     break;
             }
         }
