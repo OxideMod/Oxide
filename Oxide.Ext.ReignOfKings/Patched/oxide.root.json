@@ -9,6 +9,6 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "oxide"
+        "saves\\oxide"
     ]
 }
