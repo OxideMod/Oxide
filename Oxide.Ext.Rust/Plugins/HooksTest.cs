@@ -25,11 +25,6 @@ namespace Oxide.Plugins
                 PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
         }
 
-        private void InitLogging()
-        {
-            HookCalled("InitLogging");
-        }
-
         private void Init()
         {
             hookCount = hooks.Count;
