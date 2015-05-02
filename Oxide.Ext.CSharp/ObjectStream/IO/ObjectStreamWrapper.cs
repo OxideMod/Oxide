@@ -71,7 +71,10 @@ namespace ObjectStream.IO
         private TRead ReadObject(int len)
         {
             var data = new byte[len];
-            _inStream.Read(data, 0, len);
+            int count;
+            int sum = 0;
+            while ((count = _inStream.Read(data, sum, len - sum)) > 0)
+                sum += count;
             using (var memoryStream = new MemoryStream(data))
             {
                 return (TRead)_binaryFormatter.Deserialize(memoryStream);
