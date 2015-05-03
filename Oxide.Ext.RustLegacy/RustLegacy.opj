@@ -630,6 +630,36 @@
             },
             "MSILHash": "+u2GCtSHTDWu7iqcjcFKh98FNKhbrQfPRx+LI73xrGk="
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnRecieveNetwork",
+            "HookName": "OnRecieveNetwork",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Metabolism",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RecieveNetwork",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Single",
+                "System.Single",
+                "System.Single",
+                "System.Single",
+                "System.Single",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "qDCF8ydMGtRraEzpDbOFELKJx5VWgw771Nr2MCQXZc8=",
+            "BaseHookName": null
+          }
         }
       ]
     }
