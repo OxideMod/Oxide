@@ -753,6 +753,16 @@ namespace Oxide.RustLegacy.Plugins
 
             return null;
         }
+        
+        [HookMethod("OnRecieveNetwork")]
+        private object OnRecieveNetwork(Metabolism metabolism, float calories, float water, float radiation, float antiradiation, float temperature, float poison)
+        {
+            if(metabolism != null)
+                if(metabolism.playerClient != null)
+                    if(metabolism.playerClient.userName != null)
+                        Debug.Log(string.Format("Detected metabolism hack that was targetting {0}, hack ignored", metabolism.playerClient.userName));
+            return false;
+        }
 
         /// <summary>
         /// Called when an AI moves
