@@ -120,9 +120,19 @@ namespace Oxide.Core.Libraries
                     {
                         request.BeginGetRequestStream(result =>
                         {
-                            // Write request body
-                            using (var stream = request.EndGetRequestStream(result))
-                                stream.Write(data, 0, data.Length);
+                            try
+                            {
+                                // Write request body
+                                using (var stream = request.EndGetRequestStream(result))
+                                    stream.Write(data, 0, data.Length);
+                            }
+                            catch (Exception ex)
+                            {
+                                ResponseText = ex.Message.Trim('\r', '\n', ' ');
+                                if (request != null) request.Abort();
+                                OnComplete();
+                                return;
+                            }
                             WaitForResponse();
                         }, null);
                     }
@@ -136,6 +146,7 @@ namespace Oxide.Core.Libraries
                     ResponseText = ex.Message.Trim('\r', '\n', ' ');
                     Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
                     if (request != null) request.Abort();
+                    OnComplete();
                 }
             }
 
@@ -178,6 +189,7 @@ namespace Oxide.Core.Libraries
 
             private void OnComplete()
             {
+                if (Owner != null) Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
                 Interface.Oxide.NextTick(() =>
                 {
                     if (request == null) return;
