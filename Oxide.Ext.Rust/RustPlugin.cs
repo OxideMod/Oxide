@@ -8,6 +8,7 @@ using Oxide.Core.Plugins;
 using Oxide.Rust.Libraries;
 
 using UnityEngine;
+using Network;
 
 namespace Oxide.Plugins
 {
@@ -87,6 +88,16 @@ namespace Oxide.Plugins
         private void base_OnPlayerInit(BasePlayer player)
         {
             AddOnlinePlayer(player);
+        }
+        
+        [HookMethod("OnUserApprove")]
+        private object base_OnUserApprove(Network.Connection connection)
+        {
+            if (ServerUsers.Is(connection.ownerid, ServerUsers.UserGroup.Banned))
+            {
+                ConnectionAuth.Reject(connection, "You are banned from this server");
+                return false;
+            }
         }
 
         [HookMethod("OnPlayerDisconnected")]
