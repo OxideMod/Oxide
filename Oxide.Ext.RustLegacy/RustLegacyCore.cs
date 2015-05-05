@@ -544,14 +544,15 @@ namespace Oxide.RustLegacy.Plugins
             if (cmd == "chat.say")
             {
                 // Get the args
-                string str = arg.GetString(0, "text");
-                if (str.Length == 0) return null;
+                string str = arg.GetString(0);
+                if (str.Length == 0) return true;
 
                 // Is it a chat command?
                 if (str[0] == '/' || str[0] == '!')
                 {
                     // Get the arg string
                     string argstr = str.Substring(1);
+                    if (str.Length == 1) return true;
 
                     // Parse it
                     string chatcmd;
@@ -774,6 +775,25 @@ namespace Oxide.RustLegacy.Plugins
                 TakeDamage.KillSelf(ai.GetComponent<IDBase>(), null);
                 Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
             }
+        }
+
+        /// <summary>
+        /// Called when receiving an RPC message from a client attempting to run RecieveNetwork on the server
+        /// This shouldn't happen and is only used by metabolism hacks
+        /// </summary>
+        /// <param name="metabolism"></param>
+        /// <param name="calories"></param>
+        /// <param name="water"></param>
+        /// <param name="radiation"></param>
+        /// <param name="antiradiation"></param>
+        /// <param name="temperature"></param>
+        /// <param name="poison"></param>
+        /// <returns></returns>
+        [HookMethod("OnRecieveNetwork")]
+        private object OnRecieveNetwork(Metabolism metabolism, float calories, float water, float radiation, float antiradiation, float temperature, float poison)
+        {
+            Interface.Oxide.LogInfo("An attempt to use a metabolism hack was prevented.");
+            return false;
         }
     }
 }
