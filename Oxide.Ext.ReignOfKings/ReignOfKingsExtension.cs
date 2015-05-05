@@ -1,6 +1,7 @@
 ﻿using Oxide.Core;
 using Oxide.Core.Extensions;
 
+using Oxide.ReignOfKings.Libraries;
 using Oxide.ReignOfKings.Plugins;
 
 namespace Oxide.ReignOfKings
@@ -47,7 +48,8 @@ namespace Oxide.ReignOfKings
             Manager.RegisterPluginLoader(new ReignOfKingsPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("ReignOfKings", new ReignOfKings.Libraries.ReignOfKings());
+            Manager.RegisterLibrary("Command", new Command());
+            Manager.RegisterLibrary("ROK", new ReignOfKings.Libraries.ReignOfKings());
         }
 
         /// <summary>
