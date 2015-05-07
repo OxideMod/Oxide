@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "F9iWhGbQqEfcwvQl3xS8eIvBRCs+752f977cfYgCtIQ=",
+            "MSILHash": "oPCSHYMgtp+LBYXrYaDanF7+TWGgRaBannGaw1ht63A=",
             "BaseHookName": null
           }
         },
@@ -1025,7 +1025,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "q9sd4sdX6Dp1jg9aBBEvNuQCVQok2LxyQyDCdaqevNg=",
+            "MSILHash": "sHWyuWd2jTBEMu3FgiMamSHlx5yjhVLZdLUYdJXmwxE=",
             "BaseHookName": null
           }
         },
@@ -1050,7 +1050,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "K1hC2uz2RifJbtg980fFchPlyO3bjlxwXv4l2i9e7sc=",
+            "MSILHash": "qQGc/AYO2OZe1cH5DkouC/MNibVa1du9bXyac/40CkY=",
             "BaseHookName": null
           }
         },
@@ -1403,31 +1403,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnTerrainInitialized",
-            "HookName": "OnTerrainInitialized",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CalculateChecksum",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "FinalPass",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.UInt32"
-              ]
-            },
-            "MSILHash": "dxmNPqY4BW1rBmtj4D9qVF4TOqyNEuOnSOJ1X6c4z70=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 5,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
@@ -1523,6 +1498,29 @@
               ]
             },
             "MSILHash": "R3IkY5gDSqTDWtFho2OpBJn3imBsrM1ws8r7tGyFRKQ=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 37,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnTerrainInitialized",
+            "HookName": "OnTerrainInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TerrainMeta",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CalculateChecksum",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "2QNKh9RzbxjuCSm0fDyAVbCt9iiRAuqRv800moOvG3w=",
             "BaseHookName": null
           }
         }
