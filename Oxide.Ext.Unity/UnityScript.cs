@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 
 using Oxide.Core;
+using Oxide.Ext.Unity.ServerConsole;
 
 using UnityEngine;
 
@@ -12,12 +13,15 @@ namespace Oxide.Unity
     public class UnityScript : MonoBehaviour
     {
         public static GameObject Instance { get; private set; }
+        public static ServerConsole ServerConsole { get; private set; }
 
         public static void Create()
         {
             Instance = new GameObject("Oxide.Ext.Unity");
             Object.DontDestroyOnLoad(Instance);
             Instance.AddComponent<UnityScript>();
+            if (Interface.Oxide.AddConsole)
+                ServerConsole = Instance.AddComponent<ServerConsole>();
         }
 
         private OxideMod oxideMod;

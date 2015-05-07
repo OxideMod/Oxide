@@ -38,6 +38,11 @@ namespace Oxide.Core.Configuration
         public string[] InstanceCommandLines { get; set; }
 
         /// <summary>
+        /// Gets or sets if a console should be setup
+        /// </summary>
+        public bool AddConsole { get; set; }
+
+        /// <summary>
         /// Sets defaults for oxide configuration
         /// </summary>
         public OxideConfig()

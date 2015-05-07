@@ -3,6 +3,9 @@ using Oxide.Core.Extensions;
 
 using Oxide.ReignOfKings.Libraries;
 using Oxide.ReignOfKings.Plugins;
+using Oxide.Unity;
+
+using UnityEngine;
 
 namespace Oxide.ReignOfKings
 {
@@ -49,7 +52,7 @@ namespace Oxide.ReignOfKings
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("ROK", new ReignOfKings.Libraries.ReignOfKings());
+            Manager.RegisterLibrary("ROK", new Libraries.ReignOfKings());
         }
 
         /// <summary>
@@ -67,7 +70,9 @@ namespace Oxide.ReignOfKings
         /// <param name="manager"></param>
         public override void OnModLoad()
         {
-
+            if (UnityScript.ServerConsole == null) return;
+            Logger.LogToFile = false;
+            Application.logMessageReceived += UnityScript.ServerConsole.HandleLog;
         }
     }
 }
