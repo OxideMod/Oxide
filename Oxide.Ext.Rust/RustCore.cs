@@ -881,5 +881,18 @@ namespace Oxide.Rust.Plugins
             return Interface.CallHook("OnWeaponThrown", msg.player, entity);
         }
 
+        /// <summary>
+        /// Called when a player finishes researching an item, before the result is available (success/failure)
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="chance"></param>
+        [HookMethod("OnItemResearchEnds")]
+        private float OnItemResearchEnds(ResearchTable table, float chance)
+        {
+            var returnvar = Interface.CallHook("OnItemResearchEnd", table, chance);
+            if (returnvar is float) return (float)returnvar;
+            if (returnvar is double) return (float)(double)returnvar;
+            return chance;
+        }
     }
 }
