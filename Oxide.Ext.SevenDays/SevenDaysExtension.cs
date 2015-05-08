@@ -2,6 +2,9 @@
 using Oxide.Core.Extensions;
 
 using Oxide.SevenDays.Plugins;
+using Oxide.Unity;
+
+using UnityEngine;
 
 namespace Oxide.SevenDays
 {
@@ -65,7 +68,8 @@ namespace Oxide.SevenDays
         /// <param name="manager"></param>
         public override void OnModLoad()
         {
-
+            if (UnityScript.ServerConsole == null) return;
+            Application.logMessageReceived += UnityScript.ServerConsole.HandleLog;
         }
     }
 }

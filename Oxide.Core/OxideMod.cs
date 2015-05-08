@@ -44,6 +44,7 @@ namespace Oxide.Core
         public string ConfigDirectory { get; private set; }
         public string DataDirectory { get; private set; }
         public string LogDirectory { get; private set; }
+        public bool AddConsole { get; private set; }
 
         // Gets the number of seconds since the server started
         public float Now { get { return getTimeSinceStartup(); } }
@@ -113,6 +114,7 @@ namespace Oxide.Core
             DataDirectory = Path.Combine(InstanceDirectory, rootconfig.DataDirectory);
             LogDirectory = Path.Combine(InstanceDirectory, rootconfig.LogDirectory);
             ConfigDirectory = Path.Combine(InstanceDirectory, rootconfig.ConfigDirectory);
+            AddConsole = rootconfig.AddConsole;
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
