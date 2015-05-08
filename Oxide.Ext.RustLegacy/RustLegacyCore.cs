@@ -40,6 +40,9 @@ namespace Oxide.RustLegacy.Plugins
         // Cache the DamageEvent.takenodamage field info
         FieldInfo takenodamage = typeof(TakeDamage).GetField("takenodamage", BindingFlags.NonPublic | BindingFlags.Instance);
 
+        // Last Metabolism hacker notification time
+        float lastWarningAt;
+
         /// <summary>
         /// Initializes a new instance of the RustCore class
         /// </summary>
@@ -779,7 +782,7 @@ namespace Oxide.RustLegacy.Plugins
 
         /// <summary>
         /// Called when receiving an RPC message from a client attempting to run RecieveNetwork on the server
-        /// This shouldn't happen and is only used by metabolism hacks
+        /// This shouldn't run from the server ever and is only used by metabolism hacks
         /// </summary>
         /// <param name="metabolism"></param>
         /// <param name="calories"></param>
@@ -788,11 +791,15 @@ namespace Oxide.RustLegacy.Plugins
         /// <param name="antiradiation"></param>
         /// <param name="temperature"></param>
         /// <param name="poison"></param>
-        /// <returns></returns>
         [HookMethod("OnRecieveNetwork")]
         private object OnRecieveNetwork(Metabolism metabolism, float calories, float water, float radiation, float antiradiation, float temperature, float poison)
         {
-            Interface.Oxide.LogInfo("An attempt to use a metabolism hack was prevented.");
+            var now = Interface.Oxide.Now;
+            if (now - lastWarningAt > 300f)
+            {
+                lastWarningAt = now;
+                Interface.Oxide.LogInfo("An attempt to use a metabolism hack was prevented.");
+            }
             return false;
         }
     }
