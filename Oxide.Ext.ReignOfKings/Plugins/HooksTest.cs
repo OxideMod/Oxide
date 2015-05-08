@@ -91,6 +91,7 @@ namespace Oxide.Plugins
             HookCalled("OnPlayerConnected");
             Puts(player.DisplayName + " has connected to the server.");
             PrintToChat(player.DisplayName + " has joined the server!");
+            SendReply(player, "Welcome to the server {0}! We hope you enjoy your stay!", player.DisplayName);
         }
 
         private void OnPlayerDisconnected(Player player)
@@ -120,31 +121,27 @@ namespace Oxide.Plugins
         {
             HookCalled("OnEntityHealthChange");
             if (e.Damage.Amount > 0)
-            {
-                if (e.Damage.DamageSource.Owner is Player && e.Entity.Owner is Player)
-                    Puts(e.Entity.Owner.Name + " took " + e.Damage.Amount.ToString() + " damage from " + e.Damage.DamageSource.Owner.Name + "'s " + e.Damage.Damager.name);
-                if (e.Damage.DamageSource.Owner is Player)
-                    Puts(e.Entity.Controller.Name + " took " + e.Damage.Amount.ToString() + " " + e.Damage.DamageTypes.ToString() + " damage from " + e.Damage.DamageSource.Owner.Name + "'s " + e.Damage.Damager.name);
-            }
+                Puts($"{e.Entity} took {e.Damage.Amount} {e.Damage?.DamageTypes} damage from {e.Damage?.DamageSource} ({e.Damage?.Damager?.name})");
+
 
             if (e.Damage.Amount < 0)
-                Puts(e.Entity.Controller.Name + " gained " + e.Damage.Amount.ToString() + " health.");
+                Puts($"{e.Entity} gained {e.Damage.Amount} health.");
         }
 
         private void OnEntityDeath(EntityDeathEvent e)
         {
             HookCalled("OnEntityDeath");
             if (e.KillingDamage != null)
-                Puts(e.Entity.Controller.Name + " was killed by " + e.KillingDamage.DamageSource.Controller.Name);
+                Puts($"{e.Entity} was killed by {e.KillingDamage?.DamageSource} ({e.KillingDamage?.DamageTypes})");
             else
-                Puts(e.Entity.Controller.Name + " died.");
+                Puts($"{e.Entity} died.");
         }
 
         void OnPlayerSpawn(PlayerFirstSpawnEvent e)
         {
             Puts(e.Player.DisplayName + " spawned at " + e.Position.ToString());
             if (e.AtFirstSpawn)
-                SendReply(e.Player, "Welcome to our server, we've noticed this is your first time here so we want to inform you that you can visit our website at www.oxidemod.org");
+                NextTick( () => SendReply(e.Player, "Welcome to our server, we've noticed this is your first time here so we want to inform you that you can visit our website at www.oxidemod.org"));
         }
 
         void OnCubePlacement(CubePlaceEvent e)
