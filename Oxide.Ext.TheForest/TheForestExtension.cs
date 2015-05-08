@@ -2,6 +2,9 @@
 using Oxide.Core.Extensions;
 
 using Oxide.TheForest.Plugins;
+using Oxide.Unity;
+
+using UnityEngine;
 
 namespace Oxide.TheForest
 {
@@ -47,7 +50,7 @@ namespace Oxide.TheForest
             Manager.RegisterPluginLoader(new TheForestPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("TheForest", new TheForest.Libraries.TheForest());
+            Manager.RegisterLibrary("TheForest", new Libraries.TheForest());
         }
 
         /// <summary>
@@ -65,7 +68,8 @@ namespace Oxide.TheForest
         /// <param name="manager"></param>
         public override void OnModLoad()
         {
-
+            if (UnityScript.ServerConsole == null) return;
+            Application.logMessageReceived += UnityScript.ServerConsole.HandleLog;
         }
     }
 }

@@ -1,9 +1,5 @@
-// Reference: Assembly-CSharp
-
 using System.Collections.Generic;
 using System.Linq;
-
-using CodeHatch.Engine.Networking;
 
 namespace Oxide.Plugins
 {
@@ -68,25 +64,6 @@ namespace Oxide.Plugins
         private void OnServerShutdown()
         {
             HookCalled("OnServerShutdown");
-        }
-
-        private void OnUserApprove(ConnectionRequest connection)
-        {
-            HookCalled("OnUserApprove");
-        }
-
-        private void OnPlayerConnected(Player player)
-        {
-            HookCalled("OnPlayerConnected");
-            //PrintWarning("{0} has connected!", player.DisplayName);
-            //PrintToChat(player.DisplayName + " has connected!");
-        }
-
-        private void OnPlayerDisconnected(Player player)
-        {
-            HookCalled("OnPlayerDisconnected");
-            //PrintWarning("{0} has disconnected!", player.DisplayName);
-            //PrintToChat(player.DisplayName + " has disconnected!");
         }
     }
 }
