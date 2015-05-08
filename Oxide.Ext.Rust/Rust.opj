@@ -1573,6 +1573,79 @@
             "MSILHash": "LsnrbG/La1ZgaGlBap/oDH5rVptbH3zwzBes9NkyhzQ=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemResearch",
+            "HookName": "OnItemResearch",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ResearchTable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoResearch",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "qv8x8l6PpCwehV+T0C8tKr6GDX+DmyThhrnB1mBxyy8=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 148,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnItemResearchStart",
+            "HookName": "OnItemResearchStart",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ResearchTable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoResearch",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "qv8x8l6PpCwehV+T0C8tKr6GDX+DmyThhrnB1mBxyy8=",
+            "BaseHookName": "OnItemResearch"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 9,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l1 => l1",
+            "HookTypeName": "Simple",
+            "Name": "OnItemResearchEnds [internal]",
+            "HookName": "OnItemResearchEnds",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ResearchTable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ResearchAttemptFinished",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "k2krPTsJ4jvs+tXBKZ/A5zH078ceK9Q/jAzg7CP4LrA=",
+            "BaseHookName": null
+          }
         }
       ]
     }
