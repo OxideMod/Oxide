@@ -40,7 +40,7 @@ namespace Oxide.Core.Configuration
         /// <summary>
         /// Gets or sets if a console should be setup
         /// </summary>
-        public bool AddConsole { get; set; }
+        public bool DisableConsole { get; set; }
 
         /// <summary>
         /// Sets defaults for oxide configuration

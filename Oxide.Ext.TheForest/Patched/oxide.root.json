@@ -11,6 +11,4 @@
         "{oxide.directory}",
         "oxide"
     ]
-
-    "AddConsole": true
 }

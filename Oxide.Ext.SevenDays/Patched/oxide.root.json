@@ -11,7 +11,5 @@
         "{oxide.directory}",
         "data\\oxide",
         "oxide"
-    ],
-
-    "AddConsole": true
+    ]
 }

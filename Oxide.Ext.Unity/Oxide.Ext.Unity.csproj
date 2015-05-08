@@ -43,9 +43,6 @@
     <Compile Include="Plugins\UnityCore.cs" />
     <Compile Include="Plugins\UnityPluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerConsole\ConsoleInput.cs" />
-    <Compile Include="ServerConsole\ConsoleWindow.cs" />
-    <Compile Include="ServerConsole\ServerConsole.cs" />
     <Compile Include="UnityExtension.cs" />
     <Compile Include="UnityScript.cs" />
   </ItemGroup>

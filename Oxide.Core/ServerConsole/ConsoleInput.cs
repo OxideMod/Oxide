@@ -1,14 +1,12 @@
 ﻿using System;
 
-using UnityEngine;
-
-namespace Oxide.Ext.Unity.ServerConsole
+namespace Oxide.Core.ServerConsole
 {
     public class ConsoleInput
     {
         public string InputString = string.Empty;
         private float _nextUpdate;
-        private Action<string> _onInputText;
+        public event Action<string> OnInputText;
         public string[] StatusText = {string.Empty, string.Empty, string.Empty};
 
         public int LineWidth
@@ -55,10 +53,10 @@ namespace Oxide.Ext.Unity.ServerConsole
         public void Update()
         {
             if (!Valid) return;
-            if (_nextUpdate < Time.realtimeSinceStartup)
+            if (_nextUpdate < Interface.Oxide.Now)
             {
                 RedrawInputLine();
-                _nextUpdate = Time.realtimeSinceStartup + 0.5f;
+                _nextUpdate = Interface.Oxide.Now + 0.5f;
             }
             try
             {
@@ -80,7 +78,7 @@ namespace Oxide.Ext.Unity.ServerConsole
                     Console.WriteLine(string.Concat("> ", InputString));
                     var str = InputString;
                     InputString = string.Empty;
-                    if (_onInputText != null) _onInputText(str);
+                    if (OnInputText != null) OnInputText(str);
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Backspace:
@@ -96,12 +94,6 @@ namespace Oxide.Ext.Unity.ServerConsole
             if (consoleKeyInfo.KeyChar == 0) return;
             InputString = string.Concat(InputString, consoleKeyInfo.KeyChar);
             RedrawInputLine();
-        }
-
-        public event Action<string> OnInputText
-        {
-            add { _onInputText += value; }
-            remove { _onInputText -= value; }
         }
     }
 }

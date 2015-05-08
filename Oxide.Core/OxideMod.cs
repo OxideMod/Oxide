@@ -8,6 +8,7 @@ using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
+using Oxide.Core.ServerConsole;
 
 namespace Oxide.Core
 {
@@ -44,7 +45,6 @@ namespace Oxide.Core
         public string ConfigDirectory { get; private set; }
         public string DataDirectory { get; private set; }
         public string LogDirectory { get; private set; }
-        public bool AddConsole { get; private set; }
 
         // Gets the number of seconds since the server started
         public float Now { get { return getTimeSinceStartup(); } }
@@ -82,6 +82,8 @@ namespace Oxide.Core
         private bool isInitialized;
         private bool hasLoadedCorePlugins;
 
+        public ServerConsole.ServerConsole ServerConsole;
+
         /// <summary>
         /// Initializes a new instance of the OxideMod class
         /// </summary>
@@ -114,7 +116,6 @@ namespace Oxide.Core
             DataDirectory = Path.Combine(InstanceDirectory, rootconfig.DataDirectory);
             LogDirectory = Path.Combine(InstanceDirectory, rootconfig.LogDirectory);
             ConfigDirectory = Path.Combine(InstanceDirectory, rootconfig.ConfigDirectory);
-            AddConsole = rootconfig.AddConsole;
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
@@ -526,6 +527,8 @@ namespace Oxide.Core
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
             if (!isInitialized) return;
 
+            if (ServerConsole != null) ServerConsole.Update();
+
             // Update plugin change watchers
             UpdatePluginWatchers();
 
@@ -541,6 +544,7 @@ namespace Oxide.Core
             {
                 extension.OnShutdown();
             }
+            if (ServerConsole != null) ServerConsole.OnDisable();
         }
 
         /// <summary>
@@ -550,6 +554,14 @@ namespace Oxide.Core
         public void RegisterEngineClock(Func<float> method)
         {
             getTimeSinceStartup = method;
+        }
+
+        public bool EnableConsole()
+        {
+            if (!ConsoleWindow.Check() || rootconfig.DisableConsole) return false;
+            ServerConsole = new ServerConsole.ServerConsole();
+            ServerConsole.OnEnable();
+            return true;
         }
 
         #region Plugin Change Watchers

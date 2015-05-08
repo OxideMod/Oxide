@@ -3,11 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
-using Microsoft.Win32.SafeHandles;
-
-using UnityEngine;
-
-namespace Oxide.Ext.Unity.ServerConsole
+namespace Oxide.Core.ServerConsole
 {
     public class ConsoleWindow
     {
@@ -30,20 +26,36 @@ namespace Oxide.Ext.Unity.ServerConsole
         [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false)]
         private static extern bool SetConsoleTitleA(string lpConsoleTitle);
 
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetConsoleWindow();
+
+        public static bool Check()
+        {
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Win32NT:
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                    return GetConsoleWindow() == IntPtr.Zero;
+            }
+            return false;
+        }
+
         public void Initialize()
         {
+            if (!Check()) return;
             if (!AttachConsole(ATTACH_PARENT_PROCESS)) AllocConsole();
             _oldOutput = Console.Out;
             try
             {
                 var stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-                var fileStream = new FileStream(new SafeFileHandle(stdHandle, true), FileAccess.Write);
+                var fileStream = new FileStream(new Microsoft.Win32.SafeHandles.SafeFileHandle(stdHandle, true), FileAccess.Write);
                 var streamWriter = new StreamWriter(fileStream, Encoding.ASCII) { AutoFlush = true };
                 Console.SetOut(streamWriter);
             }
             catch (Exception exception)
             {
-                Debug.Log(string.Concat("Couldn't redirect output: ", exception.Message));
+                Interface.Oxide.LogException("Couldn't redirect output: ", exception);
             }
         }
 

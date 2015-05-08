@@ -1,8 +1,9 @@
-﻿using Oxide.Core;
+﻿using System;
+
+using Oxide.Core;
 using Oxide.Core.Extensions;
 
 using Oxide.TheForest.Plugins;
-using Oxide.Unity;
 
 using UnityEngine;
 
@@ -68,8 +69,24 @@ namespace Oxide.TheForest
         /// <param name="manager"></param>
         public override void OnModLoad()
         {
-            if (UnityScript.ServerConsole == null) return;
-            Application.logMessageReceived += UnityScript.ServerConsole.HandleLog;
+            if (!Interface.Oxide.EnableConsole()) return;
+            Application.logMessageReceived += HandleLog;
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        private void ServerConsoleOnInput(string input)
+        {
+            //TODO
+        }
+
+        private void HandleLog(string message, string stackTrace, LogType type)
+        {
+            var color = ConsoleColor.Gray;
+            if (type == LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (type == LogType.Error)
+                color = ConsoleColor.Red;
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
 }
