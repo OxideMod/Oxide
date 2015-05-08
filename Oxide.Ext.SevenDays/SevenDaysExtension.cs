@@ -50,7 +50,7 @@ namespace Oxide.SevenDays
             Manager.RegisterPluginLoader(new SevenDaysPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("SevenDays", new SevenDays.Libraries.SevenDays());
+            Manager.RegisterLibrary("SevenDays", new Libraries.SevenDays());
         }
 
         /// <summary>

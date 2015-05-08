@@ -70,7 +70,7 @@ namespace Oxide.Rust
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("Rust", new Rust.Libraries.Rust());
+            Manager.RegisterLibrary("Rust", new Libraries.Rust());
 
             // Check if folder migration is needed
             var config = (Core.Configuration.OxideConfig)rootconfig.GetValue(Interface.Oxide);
