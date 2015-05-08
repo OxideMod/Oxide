@@ -1,16 +1,14 @@
 ﻿using System;
 
-using Oxide.Unity;
-
-using UnityEngine;
-
-namespace Oxide.Ext.Unity.ServerConsole
+namespace Oxide.Core.ServerConsole
 {
-    public class ServerConsole : MonoBehaviour
+    public class ServerConsole
     {
         private readonly ConsoleWindow _console = new ConsoleWindow();
         private readonly ConsoleInput _input = new ConsoleInput();
         private float _nextUpdate;
+
+        public event Action<string> Input;
 
         public Func<string> Status1Left;
         public Func<string> Status1Right;
@@ -54,21 +52,16 @@ namespace Oxide.Ext.Unity.ServerConsole
             return string.Concat(left, (left.Length >= right.Length ? string.Empty : right.Substring(left.Length)));
         }
 
-        public void HandleLog(string message, string stackTrace, LogType type)
+        public void AddMessage(string message, ConsoleColor color = ConsoleColor.Gray)
         {
-            if (type == LogType.Warning)
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            else if (type != LogType.Error)
-                Console.ForegroundColor = ConsoleColor.Gray;
-            else
-                Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = color;
             _input.ClearLine(_input.StatusText.Length);
             Console.WriteLine(message);
             _input.RedrawInputLine();
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
-        private void OnDisable()
+        public void OnDisable()
         {
             _input.OnInputText -= OnInputText;
             _console.Shutdown();
@@ -87,13 +80,13 @@ namespace Oxide.Ext.Unity.ServerConsole
 
         private void OnInputText(string obj)
         {
-            Console.WriteLine("Command: " + obj);
+            if (Input != null) Input(obj);
         }
 
         public static void PrintColoured(params object[] objects)
         {
-            if (UnityScript.ServerConsole == null) return;
-            UnityScript.ServerConsole._input.ClearLine(UnityScript.ServerConsole._input.StatusText.Length);
+            if (Interface.Oxide.ServerConsole == null) return;
+            Interface.Oxide.ServerConsole._input.ClearLine(Interface.Oxide.ServerConsole._input.StatusText.Length);
             for (var i = 0; i < objects.Length; i++)
             {
                 if (i%2 != 0)
@@ -109,10 +102,10 @@ namespace Oxide.Ext.Unity.ServerConsole
             {
                 Console.CursorTop = Console.CursorTop + 1;
             }
-            UnityScript.ServerConsole._input.RedrawInputLine();
+            Interface.Oxide.ServerConsole._input.RedrawInputLine();
         }
 
-        private void Update()
+        public void Update()
         {
             UpdateStatus();
             _input.Update();
@@ -120,8 +113,8 @@ namespace Oxide.Ext.Unity.ServerConsole
 
         private void UpdateStatus()
         {
-            if (_nextUpdate > Time.realtimeSinceStartup) return;
-            _nextUpdate = Time.realtimeSinceStartup + 0.33f;
+            if (_nextUpdate > Interface.Oxide.Now) return;
+            _nextUpdate = Interface.Oxide.Now + 0.33f;
             if (!_input.Valid) return;
             _input.StatusText[0] = string.Empty;
             _input.StatusText[1] = GetStatus(status1Left, status1Right);

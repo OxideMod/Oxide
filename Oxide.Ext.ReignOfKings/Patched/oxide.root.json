@@ -10,7 +10,5 @@
     [
         "{oxide.directory}",
         "saves\\oxide"
-    ],
-
-    "AddConsole": true
+    ]
 }
