@@ -1523,6 +1523,56 @@
             "MSILHash": "2QNKh9RzbxjuCSm0fDyAVbCt9iiRAuqRv800moOvG3w=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnHealingItemUse",
+            "HookName": "OnHealingItemUse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SyringeWeapon",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "GiveEffectsTo",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "MPtIBzZs52l7BoAWsIbUxRInzC9Pm5wCfr4MfmVrNzs=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnHealingItemUse",
+            "HookName": "OnHealingItemUse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "MedicalTool",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "GiveEffectsTo",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "LsnrbG/La1ZgaGlBap/oDH5rVptbH3zwzBes9NkyhzQ=",
+            "BaseHookName": null
+          }
         }
       ]
     }
