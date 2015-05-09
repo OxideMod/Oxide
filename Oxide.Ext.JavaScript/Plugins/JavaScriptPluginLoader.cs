@@ -16,7 +16,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Gets the JavaScript engine
         /// </summary>
-        public Engine JavaScriptEngine { get; private set; }
+        private Engine JavaScriptEngine { get; set; }
 
         /// <summary>
         /// Gets or sets the watcher

@@ -30,6 +30,9 @@ namespace Oxide.Rust
         /// </summary>
         public override string Author { get { return "Oxide Team"; } }
 
+        public override string[] WhitelistAssemblies { get { return new[] {"Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine"}; } }
+        public override string[] WhitelistNamespaces { get { return new[] {"Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine"}; } }
+
         /// <summary>
         /// Caches the OxideMod.rootconfig field
         /// </summary>

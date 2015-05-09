@@ -23,24 +23,24 @@ namespace Oxide.Ext.Python.Plugins
         /// <summary>
         /// Gets the Python engine
         /// </summary>
-        public ScriptEngine PythonEngine { get; private set; }
+        private ScriptEngine PythonEngine { get; set; }
 
         /// <summary>
         /// Gets this plugin's Python class
         /// </summary>
-        public object Class { get; private set; }
+        private object Class { get; set; }
 
         /// <summary>
         /// Gets this plugin's scope
         /// </summary>
-        public ScriptScope Scope { get; private set; }
+        private ScriptScope Scope { get; set; }
 
         /// <summary>
         /// Gets the object associated with this plugin
         /// </summary>
         public override object Object { get { return Class; } }
 
-        public IList<string> Globals;
+        private IList<string> Globals;
 
         // The plugin change watcher
         private readonly FSWatcher watcher;

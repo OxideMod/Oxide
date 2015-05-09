@@ -47,7 +47,7 @@ namespace Oxide.Ext.JavaScript
         /// <summary>
         /// Gets the JavaScript engine
         /// </summary>
-        public Engine JavaScriptEngine { get; private set; }
+        private Engine JavaScriptEngine { get; set; }
 
         // The plugin change watcher
         private FSWatcher watcher;
@@ -55,8 +55,7 @@ namespace Oxide.Ext.JavaScript
         // The plugin loader
         private JavaScriptPluginLoader loader;
 
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
-        private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
+        private bool _typesInit;
 
         /// <summary>
         /// Initializes a new instance of the JavaScript class
@@ -84,12 +83,6 @@ namespace Oxide.Ext.JavaScript
         /// </summary>
         public override void Load()
         {
-            // Setup JavaScript instance
-            InitializeJavaScript();
-
-            // Register the loader
-            loader = new JavaScriptPluginLoader(JavaScriptEngine);
-            Manager.RegisterPluginLoader(loader);
         }
 
         /// <summary>
@@ -191,6 +184,21 @@ namespace Oxide.Ext.JavaScript
         /// </summary>
         public override void OnModLoad()
         {
+            foreach (var extension in Manager.GetAllExtensions())
+            {
+                if (!extension.IsGameExtension) continue;
+                WhitelistAssemblies = extension.WhitelistAssemblies;
+                WhitelistNamespaces = extension.WhitelistNamespaces;
+                break;
+            }
+
+            // Setup JavaScript instance
+            InitializeJavaScript();
+
+            // Register the loader
+            loader = new JavaScriptPluginLoader(JavaScriptEngine);
+            Manager.RegisterPluginLoader(loader);
+
             // Bind JavaScript specific libraries
             LoadLibrary(new JavaScriptGlobal(Manager.Logger), "");
             LoadLibrary(new JavaScriptDatafile(JavaScriptEngine), "data");

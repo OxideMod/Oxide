@@ -29,6 +29,9 @@ namespace Oxide.SevenDays
         /// </summary>
         public override string Author { get { return "Oxide Team"; } }
 
+        public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
+        public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "UnityEngine" }; } }
+
         /// <summary>
         /// Initializes a new instance of the SevenDaysExtension class
         /// </summary>

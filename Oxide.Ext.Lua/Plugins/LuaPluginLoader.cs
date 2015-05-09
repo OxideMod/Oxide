@@ -14,7 +14,7 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        public NLua.Lua LuaEnvironment { get; private set; }
+        private NLua.Lua LuaEnvironment { get; set; }
 
         /// <summary>
         /// Gets or sets the watcher
@@ -22,12 +22,19 @@ namespace Oxide.Ext.Lua.Plugins
         public FSWatcher Watcher { get; set; }
 
         /// <summary>
+        /// Gets the Lua Extension
+        /// </summary>
+        private LuaExtension LuaExtension { get; set; }
+        
+        /// <summary>
         /// Initializes a new instance of the LuaPluginLoader class
         /// </summary>
         /// <param name="lua"></param>
-        public LuaPluginLoader(NLua.Lua lua)
+        /// <param name="luaExtension"></param>
+        public LuaPluginLoader(NLua.Lua lua, LuaExtension luaExtension)
         {
             LuaEnvironment = lua;
+            LuaExtension = luaExtension;
         }
 
         /// <summary>
@@ -58,6 +65,8 @@ namespace Oxide.Ext.Lua.Plugins
 
             // Check it exists
             if (!File.Exists(filename)) return null;
+
+            LuaExtension.InitializeTypes();
 
             // Create it
             LuaPlugin plugin = new LuaPlugin(filename, LuaEnvironment, Watcher);

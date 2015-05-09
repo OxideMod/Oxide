@@ -19,12 +19,12 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        public NLua.Lua LuaEnvironment { get; private set; }
+        private NLua.Lua LuaEnvironment { get; set; }
 
         /// <summary>
         /// Gets this plugin's Lua table
         /// </summary>
-        public LuaTable Table { get; private set; }
+        private LuaTable Table { get; set; }
 
         /// <summary>
         /// Gets the object associated with this plugin
