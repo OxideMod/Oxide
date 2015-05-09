@@ -16,7 +16,7 @@ namespace Oxide.Ext.Python.Plugins
         /// <summary>
         /// Gets the Python engine
         /// </summary>
-        public ScriptEngine PythonEngine { get; private set; }
+        private ScriptEngine PythonEngine { get; set; }
 
         /// <summary>
         /// Gets or sets the watcher
@@ -24,12 +24,19 @@ namespace Oxide.Ext.Python.Plugins
         public FSWatcher Watcher { get; set; }
 
         /// <summary>
+        /// Gets the Python Ext
+        /// </summary>
+        private PythonExtension PythonExtension { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the PythonPluginLoader class
         /// </summary>
         /// <param name="engine"></param>
-        public PythonPluginLoader(ScriptEngine engine)
+        /// <param name="pythonExtension"></param>
+        public PythonPluginLoader(ScriptEngine engine, PythonExtension pythonExtension)
         {
             PythonEngine = engine;
+            PythonExtension = pythonExtension;
         }
 
         /// <summary>
@@ -60,8 +67,10 @@ namespace Oxide.Ext.Python.Plugins
             // Check it exists
             if (!File.Exists(filename)) return null;
 
+            PythonExtension.InitializeTypes();
+
             // Create it
-            PythonPlugin plugin = new PythonPlugin(filename, PythonEngine, Watcher);
+            var plugin = new PythonPlugin(filename, PythonEngine, Watcher);
             plugin.Load();
 
             // Return it

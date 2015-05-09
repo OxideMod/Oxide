@@ -40,11 +40,10 @@ namespace Oxide.Ext.Lua
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        public NLua.Lua LuaEnvironment { get; private set; }
+        private NLua.Lua LuaEnvironment { get; set; }
 
         // Blacklist and whitelist
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
-        private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
+        private bool _typesInit;
 
         // Utility
         private LuaFunction setmetatable;
@@ -84,7 +83,7 @@ namespace Oxide.Ext.Lua
             InitializeLua();
 
             // Register the loader
-            loader = new LuaPluginLoader(LuaEnvironment);
+            loader = new LuaPluginLoader(LuaEnvironment, this);
             Manager.RegisterPluginLoader(loader);
         }
 
@@ -131,7 +130,12 @@ end
             //LuaEnvironment.RegisterFunction("tmp.__newindex", mytype.GetMethod("WriteStaticProperty", BindingFlags.NonPublic | BindingFlags.Static));
             typetablemeta = LuaEnvironment["tmp"] as LuaTable;
             LuaEnvironment["tmp"] = null;
+        }
 
+        internal void InitializeTypes()
+        {
+            if (_typesInit) return;
+            _typesInit = true;
             //var filter = new Regex(@"^[\dA-Z]{5}$|\$|\<|\>", RegexOptions.Compiled);
             // Bind all namespaces and types
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
@@ -141,7 +145,7 @@ end
             {
                 //if (filter.IsMatch(type.Name)) continue;
                 // Get the namespace table
-                LuaTable nspacetable = GetNamespaceTable(Utility.GetNamespace(type));
+                var nspacetable = GetNamespaceTable(Utility.GetNamespace(type));
 
                 // Bind the type
                 if (type.IsNested)
@@ -350,7 +354,7 @@ end
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        internal bool AllowAssemblyAccess(Assembly assembly)
+        private bool AllowAssemblyAccess(Assembly assembly)
         {
             return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
         }
@@ -360,7 +364,7 @@ end
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        internal bool AllowTypeAccess(Type type)
+        private bool AllowTypeAccess(Type type)
         {
             // Special case: allow access to Oxide.Core.OxideMod
             if (type.FullName == "Oxide.Core.OxideMod") return true;
@@ -410,6 +414,14 @@ end
         /// <param name="manager"></param>
         public override void OnModLoad()
         {
+            foreach (var extension in Manager.GetAllExtensions())
+            {
+                if (!extension.IsGameExtension) continue;
+                WhitelistAssemblies = extension.WhitelistAssemblies;
+                WhitelistNamespaces = extension.WhitelistNamespaces;
+                break;
+            }
+
             // Bind Lua specific libraries
             LoadLibrary(new LuaGlobal(Manager.Logger), "_G");
             LuaEnvironment.NewTable("datafile");

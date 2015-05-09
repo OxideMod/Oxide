@@ -44,9 +44,9 @@ namespace Oxide.Ext.Python
         public override string Author { get { return "Oxide Team"; } }
 
         /// <summary>
-        /// Gets the Lua environment
+        /// Gets the Python environment
         /// </summary>
-        public ScriptEngine PythonEngine { get; private set; }
+        private ScriptEngine PythonEngine { get; set; }
 
         // The plugin change watcher
         private FSWatcher watcher;
@@ -55,11 +55,10 @@ namespace Oxide.Ext.Python
         private PythonPluginLoader loader;
 
         // Whitelist
-        private static readonly string[] WhitelistAssemblies = { "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
-        private static readonly string[] WhitelistNamespaces = { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine" };
         private static readonly string[] WhitelistModules = { "__future__", "binascii", "hashlib", "math", "random", "re", "time", "types", "warnings" };
         private static readonly Dictionary<string, string[]> WhitelistParts = new Dictionary<string, string[]> { { "os", new [] { "urandom" } } };
         private List<string> _allowedTypes;
+        private bool _typesInit;
 
         delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple fromlist);
 
@@ -88,7 +87,7 @@ namespace Oxide.Ext.Python
             InitializePython();
 
             // Register the loader
-            loader = new PythonPluginLoader(PythonEngine);
+            loader = new PythonPluginLoader(PythonEngine, this);
             Manager.RegisterPluginLoader(loader);
         }
 
@@ -99,16 +98,6 @@ namespace Oxide.Ext.Python
         {
             // Create the Python engine
             PythonEngine = IronPython.Hosting.Python.CreateEngine();
-
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess);
-            // Bind all namespaces and types
-            foreach (var assembly in assemblies)
-            {
-                PythonEngine.Runtime.LoadAssembly(assembly);
-            }
-
-            _allowedTypes = assemblies.SelectMany(Utility.GetAllTypesFromAssembly)
-                .Where(t => string.IsNullOrEmpty(Utility.GetNamespace(t))).Select(t => t.Name).ToList();
 
             var paths = PythonEngine.GetSearchPaths();
             paths.Add(Path.Combine(Interface.GetMod().InstanceDirectory, "Lib"));
@@ -122,6 +111,22 @@ namespace Oxide.Ext.Python
             PythonEngine.GetBuiltinModule().RemoveVariable("open");
             PythonEngine.GetBuiltinModule().RemoveVariable("raw_input");
             PythonEngine.GetBuiltinModule().RemoveVariable("reload");
+        }
+
+        internal void InitializeTypes()
+        {
+            if (_typesInit) return;
+            _typesInit = true;
+
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess);
+            // Bind all namespaces and types
+            foreach (var assembly in assemblies)
+            {
+                PythonEngine.Runtime.LoadAssembly(assembly);
+            }
+
+            _allowedTypes = assemblies.SelectMany(Utility.GetAllTypesFromAssembly)
+                .Where(t => string.IsNullOrEmpty(Utility.GetNamespace(t))).Select(t => t.Name).ToList();
         }
 
         private object DoImport(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple fromlist)
@@ -148,7 +153,7 @@ namespace Oxide.Ext.Python
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        internal bool AllowAssemblyAccess(Assembly assembly)
+        private bool AllowAssemblyAccess(Assembly assembly)
         {
             return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
         }
@@ -211,6 +216,14 @@ namespace Oxide.Ext.Python
         /// </summary>
         public override void OnModLoad()
         {
+            foreach (var extension in Manager.GetAllExtensions())
+            {
+                if (!extension.IsGameExtension) continue;
+                WhitelistAssemblies = extension.WhitelistAssemblies;
+                WhitelistNamespaces = extension.WhitelistNamespaces;
+                break;
+            }
+
             // Bind Python specific libraries
             var logger = new PythonLogger(Manager.Logger);
             PythonEngine.Runtime.IO.SetOutput(logger, Encoding.Default);

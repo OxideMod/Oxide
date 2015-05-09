@@ -25,19 +25,19 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Gets the JavaScript Engine
         /// </summary>
-        public Engine JavaScriptEngine { get; private set; }
+        private Engine JavaScriptEngine { get; set; }
 
         /// <summary>
         /// Gets this plugin's JavaScript Class
         /// </summary>
-        public ObjectInstance Class { get; private set; }
+        private ObjectInstance Class { get; set; }
 
         /// <summary>
         /// Gets the object associated with this plugin
         /// </summary>
         public override object Object { get { return Class; } }
 
-        public IList<string> Globals;
+        private IList<string> Globals;
 
         // The plugin change watcher
         private readonly FSWatcher watcher;
