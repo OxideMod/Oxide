@@ -8,6 +8,7 @@ namespace ObjectStream.Data
         Assembly,
         Compile,
         Error,
+        Exit,
         Ready
     }
 }
