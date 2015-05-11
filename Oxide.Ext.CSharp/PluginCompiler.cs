@@ -321,7 +321,7 @@ namespace Oxide.Plugins
                     if (!ready)
                     {
                         ready = true;
-                        while(compQueue.Count > 0)
+                        while (compQueue.Count > 0)
                             connection.PushMessage(compQueue.Dequeue());
                     }
                     break;
@@ -381,8 +381,11 @@ namespace Oxide.Plugins
 
         public void OnShutdown()
         {
-            if (client != null) client.Stop();
-            if (process != null) process.Kill();
+            if (client != null)
+            {
+                client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
+                client.Stop();
+            }
         }
     }
 }

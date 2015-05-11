@@ -73,7 +73,7 @@ namespace ObjectStream.IO
             var data = new byte[len];
             int count;
             int sum = 0;
-            while ((count = _inStream.Read(data, sum, len - sum)) > 0)
+            while (len - sum > 0 && (count = _inStream.Read(data, sum, len - sum)) > 0)
                 sum += count;
             using (var memoryStream = new MemoryStream(data))
             {
