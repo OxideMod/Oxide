@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -7,6 +8,8 @@ using Oxide.Core.Extensions;
 
 using Oxide.RustLegacy.Libraries;
 using Oxide.RustLegacy.Plugins;
+
+using UnityEngine;
 
 namespace Oxide.RustLegacy
 {
@@ -160,7 +163,31 @@ namespace Oxide.RustLegacy
         /// <param name="manager"></param>
         public override void OnModLoad()
         {
+            if (!Interface.Oxide.CheckConsole(true)) return;
+            var obj = UnityEngine.Object.FindObjectsOfType<LibRust>();
+            if (obj.Length > 0)
+            {
+                obj[0].enabled = false;
+                LibRust.Shutdown();
+            }
+            if (!Interface.Oxide.EnableConsole(true)) return;
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            ConsoleSystem.RegisterLogCallback(HandleLog, true);
+        }
 
+        private void ServerConsoleOnInput(string input)
+        {
+            ConsoleSystem.Run(input, true);
+        }
+
+        private void HandleLog(string message, string stackTrace, LogType type)
+        {
+            var color = ConsoleColor.Gray;
+            if (type == LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (type == LogType.Error)
+                color = ConsoleColor.Red;
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
 }

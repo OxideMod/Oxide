@@ -30,7 +30,7 @@ namespace Oxide.TheForest
         public override string Author { get { return "Oxide Team"; } }
 
         public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
-        public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "UnityEngine" }; } }
+        public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "TheForest", "UnityEngine" }; } }
 
         /// <summary>
         /// Initializes a new instance of the TheForestExtension class

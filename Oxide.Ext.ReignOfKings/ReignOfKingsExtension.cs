@@ -98,6 +98,7 @@ namespace Oxide.ReignOfKings
                 }
                 return string.Format("Total Sent: {0:0.0} B/s Total Receive: {1:0.0} B/s", bytesSent, bytesReceived);
             };
+            Interface.Oxide.ServerConsole.Title = () => string.Concat(Server.PlayerCount, " | ", DedicatedServerBypass.Settings.ServerName);
         }
 
         private void ServerConsoleOnInput(string input)

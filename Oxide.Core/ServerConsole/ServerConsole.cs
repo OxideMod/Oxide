@@ -7,6 +7,7 @@ namespace Oxide.Core.ServerConsole
         private readonly ConsoleWindow _console = new ConsoleWindow();
         private readonly ConsoleInput _input = new ConsoleInput();
         private float _nextUpdate;
+        private float _nextTitleUpdate;
 
         public event Action<string> Input;
 
@@ -14,6 +15,8 @@ namespace Oxide.Core.ServerConsole
         public Func<string> Status1Right;
         public Func<string> Status2Left;
         public Func<string> Status2Right;
+
+        public Func<string> Title;
 
         private string status1Left
         {
@@ -44,6 +47,14 @@ namespace Oxide.Core.ServerConsole
             get
             {
                 return (Status2Right != null ? Status2Right() : "status2right").PadLeft(_input.LineWidth - 1);
+            }
+        }
+
+        private string title
+        {
+            get
+            {
+                return Title != null ? Title() : null;
             }
         }
 
@@ -109,6 +120,9 @@ namespace Oxide.Core.ServerConsole
         {
             UpdateStatus();
             _input.Update();
+            if (_nextTitleUpdate > Interface.Oxide.Now) return;
+            _nextTitleUpdate = Interface.Oxide.Now + 1f;
+            _console.SetTitle(title);
         }
 
         private void UpdateStatus()
