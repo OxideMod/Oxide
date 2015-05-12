@@ -22,9 +22,9 @@ namespace Oxide.Plugins
         {
             BinaryPath = null;
             var root_directory = Interface.Oxide.RootDirectory;
-            if (!File.Exists(root_directory + @"\mono-2.0.dll"))
+            if (!File.Exists(root_directory + @"\monosgen-2.0.dll"))
             {
-                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find mono-2.0.dll!");
+                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find monosgen-2.0.dll!");
                 return;
             }
             if (!File.Exists(root_directory + @"\msvcr120.dll") && !File.Exists(Environment.SystemDirectory + @"\msvcr120.dll"))
