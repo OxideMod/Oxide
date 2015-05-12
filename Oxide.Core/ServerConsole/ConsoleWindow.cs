@@ -41,6 +41,11 @@ namespace Oxide.Core.ServerConsole
             return false;
         }
 
+        public void SetTitle(string title)
+        {
+            if (title != null) SetConsoleTitleA(title);
+        }
+
         public void Initialize()
         {
             if (!Check()) return;

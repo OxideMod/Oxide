@@ -22,6 +22,12 @@ namespace Oxide.Plugins
         {
             BinaryPath = null;
             var root_directory = Interface.Oxide.RootDirectory;
+            var binary_path = root_directory + @"\basic.exe";
+            if (File.Exists(binary_path))
+            {
+                BinaryPath = binary_path;
+                return;
+            }
             if (!File.Exists(root_directory + @"\monosgen-2.0.dll"))
             {
                 Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find monosgen-2.0.dll!");
@@ -32,7 +38,7 @@ namespace Oxide.Plugins
                 Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find msvcr120.dll!");
                 return;
             }
-            var binary_path = root_directory + @"\CSharpCompiler.exe";
+            binary_path = root_directory + @"\CSharpCompiler.exe";
             if (!File.Exists(binary_path))
             {
                 Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");

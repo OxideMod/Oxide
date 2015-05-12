@@ -104,21 +104,32 @@ namespace Oxide.ReignOfKings.Plugins
         private void OnLog(Logger.LogType logType, Type type, object message, object context)
         {
             if (Interface.Oxide.ServerConsole == null) return;
+            var settings = Logger.GetSettings(type);
             var color = ConsoleColor.Gray;
-            if (logType == Logger.LogType.Warning)
-                color = ConsoleColor.Yellow;
-            else if (logType == Logger.LogType.Error)
-                color = ConsoleColor.Red;
+            switch (logType)
+            {
+                case Logger.LogType.Exception:
+                case Logger.LogType.Assert:
+                case Logger.LogType.Error:
+                    if (!settings.ShowError) return;
+                    color = ConsoleColor.Red;
+                    break;
+                case Logger.LogType.Warning:
+                    if (!settings.ShowWarning) return;
+                    color = ConsoleColor.Yellow;
+                    break;
+                case Logger.LogType.Info:
+                    if (!settings.ShowInfo) return;
+                    break;
+                case Logger.LogType.Debug:
+                    if (!settings.ShowDebug) return;
+                    break;
+            }
             object obj = message as string;
             if (obj == null && message is Exception)
-            {
                 obj = ((Exception) message).Message;
-            }
             var str = (string)obj;
-            if (string.IsNullOrEmpty(str))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(str)) return;
             Interface.Oxide.ServerConsole.AddMessage(str, color);
         }
 
