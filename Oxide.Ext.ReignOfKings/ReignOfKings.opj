@@ -8,20 +8,20 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 18,
+            "InjectionIndex": 0,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CodeHatch.Engine.Networking.CoreServer",
+            "TypeName": "CodeHatch.Engine.Core.Gaming.Game",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "Run",
+              "Name": "Awake",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "s+MlEzXB8qS5ETrNvnvwUDvamUTzvqU+WRz9mp2aIQU=",
+            "MSILHash": "fShCud2RtT/oA6MFDuB+1/hdeeUCRbtO6LqBt+Ib/fY=",
             "BaseHookName": null
           }
         },
@@ -389,6 +389,34 @@
               ]
             },
             "MSILHash": "Wm6kOY6gq/feE2hAWbrjC1Hlo6ff0+0lR++XRTQ2qRE=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnLog [internal]",
+            "HookName": "OnLog",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Logger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Log",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Logger/LogType",
+                "System.Type",
+                "System.Object",
+                "System.Object"
+              ]
+            },
+            "MSILHash": "3fbMDzQMSk46l0rkTlNzp1xGLqaMzZOi11ykz3SxHMo=",
             "BaseHookName": null
           }
         }

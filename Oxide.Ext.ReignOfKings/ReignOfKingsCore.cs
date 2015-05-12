@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using Oxide.Core;
@@ -8,7 +9,6 @@ using Oxide.ReignOfKings.Libraries;
 using CodeHatch.Build;
 using CodeHatch.Networking.Events.Players;
 
-using uLink;
 using UnityEngine;
 
 namespace Oxide.ReignOfKings.Plugins
@@ -98,6 +98,28 @@ namespace Oxide.ReignOfKings.Plugins
         {
             LoggingInitialized = true;
             CallHook("InitLogging", null);
+        }
+
+        [HookMethod("OnLog")]
+        private void OnLog(Logger.LogType logType, Type type, object message, object context)
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
+            var color = ConsoleColor.Gray;
+            if (logType == Logger.LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (logType == Logger.LogType.Error)
+                color = ConsoleColor.Red;
+            object obj = message as string;
+            if (obj == null && message is Exception)
+            {
+                obj = ((Exception) message).Message;
+            }
+            var str = (string)obj;
+            if (string.IsNullOrEmpty(str))
+            {
+                return;
+            }
+            Interface.Oxide.ServerConsole.AddMessage(str, color);
         }
 
         /// <summary>

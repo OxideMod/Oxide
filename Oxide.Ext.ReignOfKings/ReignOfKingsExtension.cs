@@ -81,8 +81,6 @@ namespace Oxide.ReignOfKings
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
-            Logger.LogToFile = false;
-            Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance.TimeOfDayAsClockString(), " Weather: ", Weather.Instance.CurrentWeather);
             Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
@@ -98,7 +96,7 @@ namespace Oxide.ReignOfKings
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
                 }
-                return string.Concat("Total Sent: ", bytesSent, " B/s Total Receive: ", bytesReceived, " B/s");
+                return string.Format("Total Sent: {0:0.0} B/s Total Receive: {1:0.0} B/s", bytesSent, bytesReceived);
             };
         }
 
@@ -110,16 +108,6 @@ namespace Oxide.ReignOfKings
             {
                 Interface.Oxide.ServerConsole.AddMessage(Console.CurrentOutput);
             }
-        }
-
-        private void HandleLog(string message, string stackTrace, LogType type)
-        {
-            var color = ConsoleColor.Gray;
-            if (type == LogType.Warning)
-                color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
-                color = ConsoleColor.Red;
-            Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
 }
