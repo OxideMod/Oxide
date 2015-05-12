@@ -29,14 +29,14 @@ namespace Oxide.Core.ServerConsole
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetConsoleWindow();
 
-        public static bool Check()
+        public static bool Check(bool force = false)
         {
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32NT:
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
-                    return GetConsoleWindow() == IntPtr.Zero;
+                    return force || GetConsoleWindow() == IntPtr.Zero;
             }
             return false;
         }

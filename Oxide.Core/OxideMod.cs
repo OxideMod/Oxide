@@ -556,9 +556,14 @@ namespace Oxide.Core
             getTimeSinceStartup = method;
         }
 
-        public bool EnableConsole()
+        public bool CheckConsole(bool force = false)
         {
-            if (!ConsoleWindow.Check() || rootconfig.DisableConsole) return false;
+            return ConsoleWindow.Check(force) && !rootconfig.DisableConsole;
+        }
+
+        public bool EnableConsole(bool force = false)
+        {
+            if (!CheckConsole(force)) return false;
             ServerConsole = new ServerConsole.ServerConsole();
             ServerConsole.OnEnable();
             return true;
