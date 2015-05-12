@@ -44,7 +44,7 @@ function bundle_rust {
     $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     $HOME/temp_rust || die_with "Failed to copy config file and root DLLs!"
 
@@ -84,7 +84,7 @@ function bundle_rustlegacy {
     $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.RustLegacy/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     $HOME/temp_rustlegacy || die_with "Failed to copy config file and root DLLs!"
 
@@ -128,7 +128,7 @@ function bundle_7dtd {
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     $HOME/temp_7dtd || die_with "Failed to copy config file and root DLLs!"
 
@@ -167,7 +167,7 @@ function bundle_rok {
     $HOME/temp_rok/ROK_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.ReignOfKings/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/mono-2.0.dll \
+    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
     $HOME/temp_rok || die_with "Failed to copy config file and root DLLs!"
 
