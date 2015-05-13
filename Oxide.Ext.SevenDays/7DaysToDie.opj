@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\7DaysToDie\\Latest\\7DaysToDie_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp.dll",
+      "AssemblyName": "Assembly-CSharp",
       "Hooks": [
         {
           "Type": "InitOxide",
@@ -21,7 +21,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw="
+            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw=",
+            "BaseHookName": null
           }
         },
         {
@@ -43,7 +44,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw="
+            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw=",
+            "BaseHookName": null
           }
         },
         {
@@ -65,7 +67,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "6xlN7ABrhshdbQVIyhOiiI0fg2D6XDOdp8V0IR50K9I="
+            "MSILHash": "6xlN7ABrhshdbQVIyhOiiI0fg2D6XDOdp8V0IR50K9I=",
+            "BaseHookName": null
           }
         },
         {
@@ -87,7 +90,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YQD6SIS/ipR+fAgzCOGiyL0uzOiLIbzuC1lQkvdWFOo="
+            "MSILHash": "YQD6SIS/ipR+fAgzCOGiyL0uzOiLIbzuC1lQkvdWFOo=",
+            "BaseHookName": null
           }
         },
         {
@@ -109,7 +113,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Et/a0r7e0PEhbWhXjoGbKj1ByikqqEoNXPVCfRI1PuA="
+            "MSILHash": "Et/a0r7e0PEhbWhXjoGbKj1ByikqqEoNXPVCfRI1PuA=",
+            "BaseHookName": null
           }
         },
         {
@@ -133,7 +138,8 @@
                 "Entity"
               ]
             },
-            "MSILHash": "pzslO/TGE/T0V2BgrIPjW//DZ2srNBzdj1uZHjsObFk="
+            "MSILHash": "pzslO/TGE/T0V2BgrIPjW//DZ2srNBzdj1uZHjsObFk=",
+            "BaseHookName": null
           }
         },
         {
@@ -159,7 +165,8 @@
                 "PlayerProfile"
               ]
             },
-            "MSILHash": "xi9WYw/Mnr8tTLjTSATTZqf+1OLMG85mPPR3kr7grkE="
+            "MSILHash": "xi9WYw/Mnr8tTLjTSATTZqf+1OLMG85mPPR3kr7grkE=",
+            "BaseHookName": null
           }
         },
         {
@@ -183,7 +190,8 @@
                 "ClientInfo"
               ]
             },
-            "MSILHash": "VS+ZkwGc+l+GI7pYX0MWgFCGs/1a/Hc4ItqYMrEgRkk="
+            "MSILHash": "VS+ZkwGc+l+GI7pYX0MWgFCGs/1a/Hc4ItqYMrEgRkk=",
+            "BaseHookName": null
           }
         },
         {
@@ -207,7 +215,8 @@
                 "RespawnType"
               ]
             },
-            "MSILHash": "bnMZ0OJqr9XxI13eI0+0f5f+0uPCWyhFQhe2HYf2dUk="
+            "MSILHash": "bnMZ0OJqr9XxI13eI0+0f5f+0uPCWyhFQhe2HYf2dUk=",
+            "BaseHookName": null
           }
         },
         {
@@ -233,7 +242,8 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "i2M/QqdzK85axMBUKOxvsWueXMUrVBMTQHl2wDNozvc="
+            "MSILHash": "i2M/QqdzK85axMBUKOxvsWueXMUrVBMTQHl2wDNozvc=",
+            "BaseHookName": null
           }
         },
         {
@@ -257,7 +267,8 @@
                 "System.UInt32"
               ]
             },
-            "MSILHash": "rJi8JrTTBpNlxqSDg+hRTtWykm7KiQW6BPkoHzRFmzU="
+            "MSILHash": "rJi8JrTTBpNlxqSDg+hRTtWykm7KiQW6BPkoHzRFmzU=",
+            "BaseHookName": null
           }
         },
         {
@@ -281,7 +292,8 @@
                 "DamageResponse"
               ]
             },
-            "MSILHash": "bG6hZZGlCFI1mrTnQcDaPhSGldv2rq3+3WyaFfci5Qg="
+            "MSILHash": "bG6hZZGlCFI1mrTnQcDaPhSGldv2rq3+3WyaFfci5Qg=",
+            "BaseHookName": null
           }
         },
         {
@@ -305,7 +317,8 @@
                 "AIAirDrop/scl0002"
               ]
             },
-            "MSILHash": "mli4NRLXPdd6jNQlGiGzVFCumgT4rOlnek+0U0TfmvE="
+            "MSILHash": "mli4NRLXPdd6jNQlGiGzVFCumgT4rOlnek+0U0TfmvE=",
+            "BaseHookName": null
           }
         },
         {
@@ -329,7 +342,8 @@
                 "System.String"
               ]
             },
-            "MSILHash": "U/XgjqhvS+vznkwndxeRaMAAZmm7BIew013TAOWum0o="
+            "MSILHash": "U/XgjqhvS+vznkwndxeRaMAAZmm7BIew013TAOWum0o=",
+            "BaseHookName": null
           }
         },
         {
@@ -354,7 +368,8 @@
                 "System.String"
               ]
             },
-            "MSILHash": "W8T9s5k9RZ8lsyjAwtnbz9hou3mCll3uK/OnjZhsT8Q="
+            "MSILHash": "W8T9s5k9RZ8lsyjAwtnbz9hou3mCll3uK/OnjZhsT8Q=",
+            "BaseHookName": null
           }
         },
         {
@@ -379,7 +394,31 @@
                 "CommandSenderInfo"
               ]
             },
-            "MSILHash": "2knkM4GuhQ7dFAuBX9IlNw48zROKbZP9j459C45Hc30="
+            "MSILHash": "2knkM4GuhQ7dFAuBX9IlNw48zROKbZP9j459C45Hc30=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ModManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GameShutdown",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "jgTulrYmFR+06L4AmZGBwJTdDrXVirqlqf/k6caQZ/A=",
+            "BaseHookName": null
           }
         }
       ]

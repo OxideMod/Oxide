@@ -8,7 +8,9 @@ namespace Oxide.SevenDays.Plugins
     /// </summary>
     public class SevenDaysCore : CSPlugin
     {
-        private bool loggingInitialized;
+        // Track when the server has been initialized
+        private bool ServerInitialized;
+        private bool LoggingInitialized;
 
         /// <summary>
         /// Initializes a new instance of the SevenDaysCore class
@@ -25,16 +27,56 @@ namespace Oxide.SevenDays.Plugins
             if (plugins.Exists("unitycore")) InitializeLogging();
         }
 
+        /// <summary>
+        /// Called when the plugin is initializing
+        /// </summary>
+        [HookMethod("Init")]
+        private void Init()
+        {
+            // Configure remote logging
+            RemoteLogger.SetTag("game", "7 days to die");
+            RemoteLogger.SetTag("protocol", cl000c.cCompatibilityVersion.ToLower());
+        }
+
+        /// <summary>
+        /// Called when the server is first initialized
+        /// </summary>
+        [HookMethod("OnServerInitialized")]
+        private void OnServerInitialized()
+        {
+            if (ServerInitialized) return;
+            ServerInitialized = true;
+            // Configure the hostname after it has been set
+            RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
+        }
+
+        /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown()
+        {
+            Interface.Oxide.OnShutdown();
+        }
+
+        /// <summary>
+        /// Called when a plugin is loaded
+        /// </summary>
+        /// <param name="plugin"></param>
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
-            if (!loggingInitialized && plugin.Name == "unitycore")
+            if (ServerInitialized) plugin.CallHook("OnServerInitialized");
+            if (!LoggingInitialized && plugin.Name == "unitycore")
                 InitializeLogging();
         }
 
+        /// <summary>
+        /// Starts the logging
+        /// </summary>
         private void InitializeLogging()
         {
-            loggingInitialized = true;
+            LoggingInitialized = true;
             CallHook("InitLogging", null);
         }
     }
