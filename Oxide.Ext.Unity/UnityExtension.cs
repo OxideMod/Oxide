@@ -1,11 +1,10 @@
 ﻿using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using Oxide.Unity.Plugins;
+using Oxide.Ext.Unity.Plugins;
 
 using UnityEngine;
 
-namespace Oxide.Unity
+namespace Oxide.Ext.Unity
 {
     /// <summary>
     /// The extension class that represents this extension
@@ -15,17 +14,17 @@ namespace Oxide.Unity
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "Unity"; } }
+        public override string Name => "Unity";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
         /// <summary>
         /// Initializes a new instance of the UnityExtension class
@@ -40,14 +39,13 @@ namespace Oxide.Unity
         /// <summary>
         /// Loads this extension
         /// </summary>
-        /// <param name="manager"></param>
         public override void Load()
         {
             // Register our loader
             Manager.RegisterPluginLoader(new UnityPluginLoader());
 
             // Register engine clock
-            Interface.Oxide.RegisterEngineClock(() => UnityEngine.Time.realtimeSinceStartup);
+            Interface.Oxide.RegisterEngineClock(() => Time.realtimeSinceStartup);
 
             // Configure remote logging
             RemoteLogger.SetTag("os", SystemInfo.operatingSystem);
@@ -69,7 +67,6 @@ namespace Oxide.Unity
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
 

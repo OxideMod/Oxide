@@ -2,10 +2,9 @@
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
+using Oxide.Ext.Unity.Logging;
 
-using Oxide.Unity.Logging;
-
-namespace Oxide.Unity.Plugins
+namespace Oxide.Ext.Unity.Plugins
 {
     /// <summary>
     /// The core Unity plugin

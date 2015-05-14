@@ -1,19 +1,20 @@
 ﻿using System.Threading;
 
 using Oxide.Core;
+using Oxide.Core.Logging;
 
 using UnityEngine;
 
-namespace Oxide.Unity.Logging
-{
-    using Oxide.Core.Logging;
+using LogType = Oxide.Core.Logging.LogType;
 
+namespace Oxide.Ext.Unity.Logging
+{
     /// <summary>
     /// A logger that writes to the Unity console
     /// </summary>
     public sealed class UnityLogger : Logger
     {
-        private Thread mainThread = Thread.CurrentThread;
+        private readonly Thread mainThread = Thread.CurrentThread;
 
         /// <summary>
         /// Initializes a new instance of the UnityLogger class
@@ -40,13 +41,13 @@ namespace Oxide.Unity.Logging
             {
                 case LogType.Info:
                 case LogType.Debug:
-                    Debug.Log(string.Format("[Oxide] {0}", message.Message));
+                    Debug.Log("[Oxide] " + message.Message);
                     break;
                 case LogType.Warning:
-                    Debug.LogWarning(string.Format("[Oxide] {0}", message.Message));
+                    Debug.LogWarning("[Oxide] " + message.Message);
                     break;
                 case LogType.Error:
-                    Debug.LogError(string.Format("[Oxide] {0}", message.Message));
+                    Debug.LogError("[Oxide] " + message.Message);
                     break;
             }
         }

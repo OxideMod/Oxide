@@ -1,10 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 using Oxide.Core;
 
 using UnityEngine;
 
-namespace Oxide.Unity
+namespace Oxide.Ext.Unity
 {
     /// <summary>
     /// The main MonoBehaviour which calls OxideMod.OnFrame
@@ -16,7 +17,7 @@ namespace Oxide.Unity
         public static void Create()
         {
             Instance = new GameObject("Oxide.Ext.Unity");
-            Object.DontDestroyOnLoad(Instance);
+            DontDestroyOnLoad(Instance);
             Instance.AddComponent<UnityScript>();
         }
 
@@ -29,20 +30,20 @@ namespace Oxide.Unity
             var event_info = typeof(Application).GetEvent("logMessageReceived");
             if (event_info == null)
             {
-                // Unity 4   
+                // Unity 4
                 var log_callback_field = typeof(Application).GetField("s_LogCallback", BindingFlags.Static | BindingFlags.NonPublic);
-                var log_callback = log_callback_field.GetValue(null) as Application.LogCallback;
+                var log_callback = log_callback_field?.GetValue(null) as Application.LogCallback;
                 if (log_callback == null) Interface.Oxide.LogWarning("No Unity application log callback is registered");
                 Application.RegisterLogCallback((message, stack_trace, type) =>
                 {
-                    if (log_callback != null) log_callback.Invoke(message, stack_trace, type);
+                    log_callback?.Invoke(message, stack_trace, type);
                     LogMessageReceived(message, stack_trace, type);
                 });
             }
             else
             {
                 // Unity 5
-                var handle_exception = System.Delegate.CreateDelegate(event_info.EventHandlerType, this, "LogMessageReceived");
+                var handle_exception = Delegate.CreateDelegate(event_info.EventHandlerType, this, "LogMessageReceived");
                 event_info.GetAddMethod().Invoke(null, new object[] { handle_exception });
             }
         }

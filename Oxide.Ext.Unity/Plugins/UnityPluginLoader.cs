@@ -2,7 +2,7 @@
 
 using Oxide.Core.Plugins;
 
-namespace Oxide.Unity.Plugins
+namespace Oxide.Ext.Unity.Plugins
 {
     /// <summary>
     /// Responsible for loading Unity core plugins
