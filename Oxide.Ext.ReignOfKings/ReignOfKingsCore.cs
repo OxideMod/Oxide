@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Oxide.Core;
@@ -27,6 +28,20 @@ namespace Oxide.ReignOfKings.Plugins
         // Track when the server has been initialized
         private bool ServerInitialized;
         private bool LoggingInitialized;
+
+        private static readonly string[] Filter =
+        {
+            "[EAC] [Debug] Ping? Pong!",
+            "ServerLobbyModule.cs - WWW - Result failure:",
+            "No AudioListener found in the scene",
+            "Processing new connection...",
+            "Registering user 9999999999 with authkey",
+            "9999999999 has null AuthenticationKey!",
+            "\"string button\" is empty;",
+            "m_guiCamera == null",
+            "Failed to apply setting to DrawDistanceQuality",
+            "Could not use effect because: !SystemInfo.supportsImageEffects"
+        };
 
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class
@@ -129,7 +144,7 @@ namespace Oxide.ReignOfKings.Plugins
             if (obj == null && message is Exception)
                 obj = ((Exception) message).Message;
             var str = (string)obj;
-            if (string.IsNullOrEmpty(str)) return;
+            if (string.IsNullOrEmpty(str) || Filter.Any(str.Contains)) return;
             Interface.Oxide.ServerConsole.AddMessage(str, color);
         }
 
