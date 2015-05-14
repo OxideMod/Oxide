@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "oPCSHYMgtp+LBYXrYaDanF7+TWGgRaBannGaw1ht63A=",
+            "MSILHash": "hARPZyiEujYmGFArQRQ6B3qa4j4wgAdziToDd5NMblc=",
             "BaseHookName": null
           }
         },
@@ -138,7 +138,7 @@
               "ReturnType": "BasePlayer/SpawnPoint",
               "Parameters": []
             },
-            "MSILHash": "m2u0BwAQCTkBGNWMdCYCeiDopU7jhVlapHGgQWh+0eY=",
+            "MSILHash": "P2BgXfh5JfNLr5sYXCWSPIFAv1KnvgbkmXN+cL2439A=",
             "BaseHookName": null
           }
         },
@@ -161,7 +161,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "m3b6H7tXSi00vuOaD/1lqBj5Lk055CqQ9ekMcaTN8dI=",
+            "MSILHash": "IxyzFaJjvR8BZqCaxU32iKLSLHhalNMG3zShvJWBj4s=",
             "BaseHookName": null
           }
         },
@@ -268,7 +268,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 70,
+            "InjectionIndex": 76,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -286,7 +286,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "U8868Pr4yUZgfhWXxysxbvN9X2eOg9GTjMJfP0QYNn8=",
+            "MSILHash": "SQGrf9Mv+bA+dLVzizjMc+QkaYewIb8LI1qwOlYiHq4=",
             "BaseHookName": null
           }
         },
@@ -1050,7 +1050,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "qQGc/AYO2OZe1cH5DkouC/MNibVa1du9bXyac/40CkY=",
+            "MSILHash": "gqmdoV3Ny6uAv1pStCWQSk2lkz9wFWNaZun7M8Hd2Xc=",
             "BaseHookName": null
           }
         },
@@ -1421,7 +1421,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "2jNKQF4X/MTGIPWfm5/lmW6HXOgxce4xfhCJXv9vMEc=",
+            "MSILHash": "OIe4wRDyk8qsgAHVL4O4ETUKIrQc4w1L2UutMQrlMSk=",
             "BaseHookName": null
           }
         },
