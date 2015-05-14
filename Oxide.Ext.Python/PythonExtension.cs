@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 
 using IronPython.Hosting;
+using IronPython.Modules;
 using IronPython.Runtime;
 using IronPython.Runtime.Exceptions;
 
@@ -17,7 +18,6 @@ using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins.Watchers;
-
 using Oxide.Ext.Python.Libraries;
 using Oxide.Ext.Python.Plugins;
 
@@ -31,17 +31,17 @@ namespace Oxide.Ext.Python
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "Python"; } }
+        public override string Name => "Python";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
         /// <summary>
         /// Gets the Python environment
@@ -120,12 +120,13 @@ namespace Oxide.Ext.Python
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(AllowAssemblyAccess);
             // Bind all namespaces and types
-            foreach (var assembly in assemblies)
+            var enumerable = assemblies as IList<Assembly> ?? assemblies.ToList();
+            foreach (var assembly in enumerable)
             {
                 PythonEngine.Runtime.LoadAssembly(assembly);
             }
 
-            _allowedTypes = assemblies.SelectMany(Utility.GetAllTypesFromAssembly)
+            _allowedTypes = enumerable.SelectMany(Utility.GetAllTypesFromAssembly)
                 .Where(t => string.IsNullOrEmpty(Utility.GetNamespace(t))).Select(t => t.Name).ToList();
         }
 
@@ -133,7 +134,7 @@ namespace Oxide.Ext.Python
         {
             if (CheckModule(moduleName, fromlist))
             {
-                return IronPython.Modules.Builtin.__import__(context, moduleName, globals, locals, fromlist, -1);
+                return Builtin.__import__(context, moduleName, globals, locals, fromlist, -1);
             }
             throw new ImportException("Import of module " + moduleName + " not allowed");
         }

@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 using IronPython.Runtime;
+
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
@@ -23,7 +24,7 @@ namespace Oxide.Ext.Python.Plugins
         /// <summary>
         /// Gets the Python engine
         /// </summary>
-        private ScriptEngine PythonEngine { get; set; }
+        private ScriptEngine PythonEngine { get; }
 
         /// <summary>
         /// Gets this plugin's Python class
@@ -38,7 +39,7 @@ namespace Oxide.Ext.Python.Plugins
         /// <summary>
         /// Gets the object associated with this plugin
         /// </summary>
-        public override object Object { get { return Class; } }
+        public override object Object => Class;
 
         private IList<string> Globals;
 

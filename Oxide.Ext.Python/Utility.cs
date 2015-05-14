@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using IronPython.Runtime;
+
 using Microsoft.Scripting.Hosting;
 
 using Oxide.Core.Configuration;
@@ -47,12 +49,7 @@ namespace Oxide.Ext.Python
             var tuple = item as PythonTuple;
             if (tuple != null)
             {
-                var tmpList = new List<object>();
-                foreach (var entry in tuple)
-                {
-                    tmpList.Add(TranslatePythonItemToConfigItem(entry));
-                }
-                return tmpList;
+                return tuple.Select(TranslatePythonItemToConfigItem).ToList();
             }
             var dictionary = item as PythonDictionary;
             if (dictionary != null)

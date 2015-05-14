@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using IronPython.Runtime;
+
 using Microsoft.Scripting.Hosting;
 
 using Oxide.Core;
@@ -17,12 +18,12 @@ namespace Oxide.Ext.Python.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Gets the Python engine
         /// </summary>
-        public ScriptEngine PythonEngine { get; private set; }
+        public ScriptEngine PythonEngine { get; }
 
         // The data file map
         private readonly Dictionary<DynamicConfigFile, PythonDictionary> datafilemap;

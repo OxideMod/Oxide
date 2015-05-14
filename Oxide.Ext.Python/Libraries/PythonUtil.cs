@@ -12,7 +12,7 @@ namespace Oxide.Ext.Python.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Converts the specified object to the specified type and sets it on the array

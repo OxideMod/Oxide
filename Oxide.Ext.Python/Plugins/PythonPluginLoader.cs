@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Microsoft.Scripting.Hosting;
 
@@ -49,8 +50,7 @@ namespace Oxide.Ext.Python.Plugins
             // For now, we will only load single-file plugins
             // In the future, we might want to accept multi-file plugins
             // This might include zip files or folders that contain a number of .py files making up one plugin
-            foreach (string file in Directory.GetFiles(directory, "*.py"))
-                yield return Path.GetFileNameWithoutExtension(file);
+            return Directory.GetFiles(directory, "*.py").Select(Path.GetFileNameWithoutExtension);
         }
 
         /// <summary>
