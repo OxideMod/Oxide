@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Jint;
 using Jint.Native;
@@ -25,8 +26,7 @@ namespace Oxide.Ext.JavaScript
             config.Clear();
             foreach (var property in objectInstance.Properties)
             {
-                if (property.Value.Value == null) continue;
-                object value = property.Value.Value.Value.ToObject();
+                var value = property.Value.Value?.ToObject();
                 if (value != null) config[property.Key] = value;
             }
         }
@@ -52,10 +52,7 @@ namespace Oxide.Ext.JavaScript
             var values = obj as List<object>;
             if (values != null)
             {
-                var jsValues = new List<JsValue>();
-                foreach (var v in values)
-                    jsValues.Add(JsValueFromObject(v, engine));
-                var array = (ArrayInstance) engine.Array.Construct(jsValues.ToArray());
+                var array = (ArrayInstance) engine.Array.Construct(values.Select(v => JsValueFromObject(v, engine)).ToArray());
                 array.Extensible = true;
                 return array;
             }

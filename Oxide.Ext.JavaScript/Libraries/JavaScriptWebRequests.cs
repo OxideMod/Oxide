@@ -8,7 +8,7 @@ namespace Oxide.Ext.JavaScript.Libraries
 {
     public class JavaScriptWebRequests : Library
     {
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Enqueues a get request
@@ -16,6 +16,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         /// <param name="url"></param>
         /// <param name="callback"></param>
         /// <param name="owner"></param>
+        /// <param name="headers"></param>
         [LibraryFunction("EnqueueGetHook")]
         public void EnqueueGet(string url, string callback, Plugin owner, Dictionary<string, string> headers = null)
         {
@@ -32,6 +33,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         /// <param name="postdata"></param>
         /// <param name="callback"></param>
         /// <param name="owner"></param>
+        /// <param name="headers"></param>
         [LibraryFunction("EnqueuePostHook")]
         public void EnqueuePost(string url, string postdata, string callback, Plugin owner, Dictionary<string, string> headers = null)
         {

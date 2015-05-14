@@ -11,7 +11,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return true; } }
+        public override bool IsGlobal => true;
 
         /// <summary>
         /// Gets the logger that this library writes to
@@ -34,7 +34,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         [LibraryFunction("print")]
         public void Print(object message)
         {
-            Logger.Write(LogType.Info, message != null ? message.ToString() : "null");
+            Logger.Write(LogType.Info, message?.ToString() ?? "null");
         }
     }
 }

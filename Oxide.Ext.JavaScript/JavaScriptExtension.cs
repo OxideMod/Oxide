@@ -18,7 +18,6 @@ using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins.Watchers;
-
 using Oxide.Ext.JavaScript.Libraries;
 using Oxide.Ext.JavaScript.Plugins;
 
@@ -32,17 +31,17 @@ namespace Oxide.Ext.JavaScript
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "JavaScript"; } }
+        public override string Name => "JavaScript";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
         /// <summary>
         /// Gets the JavaScript engine
@@ -54,8 +53,6 @@ namespace Oxide.Ext.JavaScript
 
         // The plugin loader
         private JavaScriptPluginLoader loader;
-
-        private bool _typesInit;
 
         /// <summary>
         /// Initializes a new instance of the JavaScript class

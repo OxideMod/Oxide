@@ -25,7 +25,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Gets the JavaScript Engine
         /// </summary>
-        private Engine JavaScriptEngine { get; set; }
+        private Engine JavaScriptEngine { get; }
 
         /// <summary>
         /// Gets this plugin's JavaScript Class
@@ -35,7 +35,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Gets the object associated with this plugin
         /// </summary>
-        public override object Object { get { return Class; } }
+        public override object Object => Class;
 
         private IList<string> Globals;
 
@@ -146,11 +146,8 @@ namespace Oxide.Ext.JavaScript.Plugins
             Globals = new List<string>();
             foreach (var property in Class.Properties)
             {
-                if (property.Value.Value != null)
-                {
-                    var callable = property.Value.Value.Value.TryCast<ICallable>();
-                    if (callable != null) Globals.Add(property.Key);
-                }
+                var callable = property.Value.Value?.TryCast<ICallable>();
+                if (callable != null) Globals.Add(property.Key);
             }
             if (!HasConfig) HasConfig = Globals.Contains("LoadDefaultConfig");
 

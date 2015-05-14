@@ -17,12 +17,12 @@ namespace Oxide.Ext.JavaScript.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Gets the JavaScript engine
         /// </summary>
-        public Engine JavaScriptEngine { get; private set; }
+        public Engine JavaScriptEngine { get; }
 
         // The data file map
         private readonly Dictionary<DynamicConfigFile, ObjectInstance> datafilemap;

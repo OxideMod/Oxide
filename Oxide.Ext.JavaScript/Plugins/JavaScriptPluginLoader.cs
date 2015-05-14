@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Jint;
 
@@ -16,7 +17,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Gets the JavaScript engine
         /// </summary>
-        private Engine JavaScriptEngine { get; set; }
+        private Engine JavaScriptEngine { get; }
 
         /// <summary>
         /// Gets or sets the watcher
@@ -42,8 +43,7 @@ namespace Oxide.Ext.JavaScript.Plugins
             // For now, we will only load single-file plugins
             // In the future, we might want to accept multi-file plugins
             // This might include zip files or folders that contain a number of .js files making up one plugin
-            foreach (string file in Directory.GetFiles(directory, "*.js"))
-                yield return Path.GetFileNameWithoutExtension(file);
+            return Directory.GetFiles(directory, "*.js").Select(Path.GetFileNameWithoutExtension);
         }
 
         /// <summary>
