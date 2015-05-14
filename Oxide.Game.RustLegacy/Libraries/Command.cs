@@ -1,25 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
-namespace Oxide.RustLegacy.Libraries
+namespace Oxide.Game.RustLegacy.Libraries
 {
     /// <summary>
     /// A library containing functions for adding console and chat commands
     /// </summary>
     public class Command : Library
     {
-        private static string ReturnEmptyString() => string.Empty;
-        private static void DoNothing(string str) { }
-
         public override bool IsGlobal => false;
 
         private struct PluginCallback
         {
-            public Plugin Plugin;
-            public string Name;
+            public readonly Plugin Plugin;
+            public readonly string Name;
 
             public PluginCallback(Plugin plugin, string name)
             {
@@ -30,8 +28,8 @@ namespace Oxide.RustLegacy.Libraries
 
         private class ConsoleCommand
         {
-            public string Name;
-            public List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
+            public readonly string Name;
+            public readonly List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
 
             public ConsoleCommand(string name)
             {
@@ -44,10 +42,10 @@ namespace Oxide.RustLegacy.Libraries
 
             public bool HandleCommand(ConsoleSystem.Arg arg)
             {
-                bool result = true;
+                var result = true;
                 foreach (var callback in PluginCallbacks)
                 {
-                    object callbackResult = callback.Plugin.CallHook(callback.Name, arg);
+                    var callbackResult = callback.Plugin.CallHook(callback.Name, arg);
                     if (callbackResult != null && !(bool)callbackResult)
                         result = (bool)callbackResult;
                 }
@@ -57,9 +55,9 @@ namespace Oxide.RustLegacy.Libraries
 
         private class ChatCommand
         {
-            public string Name;
-            public Plugin Plugin;
-            public string CallbackName;
+            public readonly string Name;
+            public readonly Plugin Plugin;
+            public readonly string CallbackName;
 
             public ChatCommand(string name, Plugin plugin, string callback_name)
             {
@@ -70,10 +68,10 @@ namespace Oxide.RustLegacy.Libraries
         }
 
         // All console commands that plugins have registered
-        private Dictionary<string, ConsoleCommand> consoleCommands;
+        private readonly Dictionary<string, ConsoleCommand> consoleCommands;
 
         // All chat commands that plugins have registered
-        private Dictionary<string, ChatCommand> chatCommands;
+        private readonly Dictionary<string, ChatCommand> chatCommands;
 
         /// <summary>
         /// Initializes a new instance of the Command class
@@ -105,7 +103,7 @@ namespace Oxide.RustLegacy.Libraries
                 var previous_plugin_name = cmd.PluginCallbacks[0].Plugin?.Name ?? "An unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{new_plugin_name} has replaced the {name} console command which was previously registered by {previous_plugin_name}";
-                Core.Interface.Oxide.LogWarning(msg);
+                Interface.Oxide.LogWarning(msg);
                 consoleCommands.Remove(full_name);
             }
 
@@ -122,7 +120,7 @@ namespace Oxide.RustLegacy.Libraries
         /// </summary>
         /// <param name="name"></param>
         /// <param name="plugin"></param>
-        /// <param name="callbackname"></param>
+        /// <param name="callback_name"></param>
         [LibraryFunction("AddChatCommand")]
         public void AddChatCommand(string name, Plugin plugin, string callback_name)
         {
@@ -134,7 +132,7 @@ namespace Oxide.RustLegacy.Libraries
                 var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{new_plugin_name} has replaced the {command_name} chat command which was previously registered by {previous_plugin_name}";
-                Core.Interface.Oxide.LogWarning(msg);
+                Interface.Oxide.LogWarning(msg);
             }
 
             cmd = new ChatCommand(command_name, plugin, callback_name);
@@ -149,6 +147,7 @@ namespace Oxide.RustLegacy.Libraries
         /// <summary>
         /// Handles the specified chat command
         /// </summary>
+        /// <param name="sender"></param>
         /// <param name="name"></param>
         /// <param name="args"></param>
         internal bool HandleChatCommand(NetUser sender, string name, string[] args)
@@ -165,7 +164,7 @@ namespace Oxide.RustLegacy.Libraries
         {
             ConsoleCommand cmd;
             if (!consoleCommands.TryGetValue($"{arg.Class}.{arg.Function}".ToLowerInvariant(), out cmd)) return null;
-            
+
             return cmd.HandleCommand(arg);
         }
 

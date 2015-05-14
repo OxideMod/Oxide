@@ -1,4 +1,4 @@
-﻿namespace Oxide.RustLegacy.Plugins
+﻿namespace Oxide.Game.RustLegacy
 {
     public static class ExtensionMethods
     {

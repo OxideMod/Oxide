@@ -4,9 +4,8 @@ using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-
-using Oxide.RustLegacy.Libraries;
-using Oxide.RustLegacy.Plugins;
+using Oxide.Game.RustLegacy;
+using Oxide.Game.RustLegacy.Libraries;
 
 using UnityEngine;
 
@@ -16,7 +15,7 @@ namespace Oxide.Plugins
     {
         protected Command cmd;
         protected Permission permission;
-        protected RustLegacy.Libraries.RustLegacy rust;
+        protected RustLegacy rust;
 
         public override void SetPluginInfo(string name, string path)
         {
@@ -24,12 +23,12 @@ namespace Oxide.Plugins
 
             cmd = Interface.Oxide.GetLibrary<Command>("Command");
             permission = Interface.Oxide.GetLibrary<Permission>("Permission");
-            rust = Interface.Oxide.GetLibrary<RustLegacy.Libraries.RustLegacy>("Rust");
+            rust = Interface.Oxide.GetLibrary<RustLegacy>("Rust");
         }
 
         public override void HandleAddedToManager(PluginManager manager)
         {
-            foreach (FieldInfo field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
             {
                 var attributes = field.GetCustomAttributes(typeof(OnlinePlayersAttribute), true);
                 if (attributes.Length > 0)
@@ -59,13 +58,16 @@ namespace Oxide.Plugins
                 }
             }
 
-            foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
             {
                 var attributes = method.GetCustomAttributes(typeof(ConsoleCommandAttribute), true);
                 if (attributes.Length > 0)
                 {
                     var attribute = attributes[0] as ConsoleCommandAttribute;
-                    cmd.AddConsoleCommand(attribute.Command, this, method.Name);
+                    if (attribute != null)
+                    {
+                        cmd.AddConsoleCommand(attribute.Command, this, method.Name);
+                    }
                     continue;
                 }
 
@@ -73,7 +75,10 @@ namespace Oxide.Plugins
                 if (attributes.Length > 0)
                 {
                     var attribute = attributes[0] as ChatCommandAttribute;
-                    cmd.AddChatCommand(attribute.Command, this, method.Name);
+                    if (attribute != null)
+                    {
+                        cmd.AddChatCommand(attribute.Command, this, method.Name);
+                    }
                 }
             }
 
@@ -111,11 +116,7 @@ namespace Oxide.Plugins
             foreach (var plugin_field in onlinePlayerFields)
             {
                 var type = plugin_field.GenericArguments[1];
-                object online_player;
-                if (type.GetConstructor(new Type[] { typeof(NetUser) }) == null)
-                    online_player = Activator.CreateInstance(type);
-                else
-                    online_player = Activator.CreateInstance(type, (object)player);
+                var online_player = type.GetConstructor(new[] { typeof(NetUser) }) == null ? Activator.CreateInstance(type) : Activator.CreateInstance(type, player);
                 type.GetField("Player").SetValue(online_player, player);
                 plugin_field.Call("Add", player, online_player);
             }

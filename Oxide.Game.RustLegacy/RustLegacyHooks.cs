@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace Oxide.Ext.RustLegacy
+namespace Oxide.Game.RustLegacy
 {
     public class OnServerInitHook : MonoBehaviour
     {

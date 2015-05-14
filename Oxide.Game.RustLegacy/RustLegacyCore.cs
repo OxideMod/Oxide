@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -7,13 +6,15 @@ using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.RustLegacy.Libraries;
 
-using Oxide.RustLegacy.Libraries;
+using Rust.Defines;
 
 using uLink;
+
 using UnityEngine;
 
-namespace Oxide.RustLegacy.Plugins
+namespace Oxide.Game.RustLegacy
 {
     /// <summary>
     /// The core Rust Legacy plugin
@@ -35,10 +36,10 @@ namespace Oxide.RustLegacy.Plugins
         private bool ServerInitialized;
 
         // Cache the VoiceCom.playerList field info
-        private FieldInfo playerList = typeof(VoiceCom).GetField("playerList", BindingFlags.Static | BindingFlags.NonPublic);
+        private readonly FieldInfo playerList = typeof(VoiceCom).GetField("playerList", BindingFlags.Static | BindingFlags.NonPublic);
 
         // Cache the DamageEvent.takenodamage field info
-        FieldInfo takenodamage = typeof(TakeDamage).GetField("takenodamage", BindingFlags.NonPublic | BindingFlags.Instance);
+        readonly FieldInfo takenodamage = typeof(TakeDamage).GetField("takenodamage", BindingFlags.NonPublic | BindingFlags.Instance);
 
         // Last Metabolism hacker notification time
         float lastWarningAt;
@@ -87,7 +88,7 @@ namespace Oxide.RustLegacy.Plugins
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust legacy");
-            RemoteLogger.SetTag("protocol", Rust.Defines.Connection.protocol.ToString());
+            RemoteLogger.SetTag("protocol", Connection.protocol.ToString());
         }
 
         /// <summary>
@@ -155,16 +156,14 @@ namespace Oxide.RustLegacy.Plugins
             var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
             if (total_plugin_count < 1)
             {
-                arg.ReplyWith($"[Oxide] No plugins are currently available");
+                arg.ReplyWith("[Oxide] No plugins are currently available");
                 return;
             }
 
             var output = $"[Oxide] Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
             var number = 1;
-            foreach (var plugin in loaded_plugins)
-                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
-            foreach (var plugin_name in unloaded_plugin_errors.Keys)
-                output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            output = loaded_plugins.Aggregate(output, (current, plugin) => current + $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}");
+            output = unloaded_plugin_errors.Keys.Aggregate(output, (current, plugin_name) => current + $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}");
             arg.ReplyWith(output);
         }
 
@@ -177,7 +176,7 @@ namespace Oxide.RustLegacy.Plugins
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             // Check arg 1 exists
-            if (!arg.HasArgs(1))
+            if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: oxide.load *|<pluginname>+");
                 return;
@@ -207,7 +206,7 @@ namespace Oxide.RustLegacy.Plugins
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             // Check arg 1 exists
-            if (!arg.HasArgs(1))
+            if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: oxide.unload *|<pluginname>+");
                 return;
@@ -237,7 +236,7 @@ namespace Oxide.RustLegacy.Plugins
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             // Check arg 1 exists
-            if (!arg.HasArgs(1))
+            if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: oxide.reload *|<pluginname>+");
                 return;
@@ -266,10 +265,10 @@ namespace Oxide.RustLegacy.Plugins
         private void cmdVersion(ConsoleSystem.Arg arg)
         {
             // Get the Rust network protocol version
-            string protocol = Rust.Defines.Connection.protocol.ToString();
+            var protocol = Connection.protocol.ToString();
 
             // Get the Oxide Core version
-            string oxide = OxideMod.Version.ToString();
+            var oxide = OxideMod.Version.ToString();
 
             // Show the versions
             if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
@@ -377,12 +376,18 @@ namespace Oxide.RustLegacy.Plugins
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                arg.ReplyWith("User '" + player.displayName + "' assigned group: " + group);
+                if (player != null)
+                {
+                    arg.ReplyWith("User '" + player.displayName + "' assigned group: " + @group);
+                }
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                arg.ReplyWith("User '" + player.displayName + "' removed from group: " + group);
+                if (player != null)
+                {
+                    arg.ReplyWith("User '" + player.displayName + "' removed from group: " + @group);
+                }
             }
         }
 
@@ -488,16 +493,16 @@ namespace Oxide.RustLegacy.Plugins
             }
         }
 
-        public NetUser FindPlayer(string strNameOrIDOrIP)
+        public NetUser FindPlayer(string strNameOrIdorIp)
         {
             NetUser netUser;
-            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.userID.ToString() == strNameOrIDOrIP)?.netUser) != null)
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.userID.ToString() == strNameOrIdorIp)?.netUser) != null)
                 return netUser;
 
-            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.displayName.ToLower().Contains(strNameOrIDOrIP.ToLower()))?.netUser) != null)
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.displayName.ToLower().Contains(strNameOrIdorIp.ToLower()))?.netUser) != null)
                 return netUser;
 
-            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.networkPlayer.ipAddress == strNameOrIDOrIP)?.netUser) != null)
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == strNameOrIdorIp)?.netUser) != null)
                 return netUser;
 
             return null;
@@ -533,6 +538,7 @@ namespace Oxide.RustLegacy.Plugins
         /// Called when a console command was run
         /// </summary>
         /// <param name="arg"></param>
+        /// <param name="wantreply"></param>
         /// <returns></returns>
         [HookMethod("OnRunCommand")]
         private object OnRunCommand(ConsoleSystem.Arg arg, bool wantreply)
@@ -540,21 +546,21 @@ namespace Oxide.RustLegacy.Plugins
             // Sanity checks
             if (arg == null) return null;
 
-            Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
+            var cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
             string cmd = $"{arg.Class}.{arg.Function}";
 
             // Is it chat.say?
             if (cmd == "chat.say")
             {
                 // Get the args
-                string str = arg.GetString(0);
+                var str = arg.GetString(0);
                 if (str.Length == 0) return true;
 
                 // Is it a chat command?
                 if (str[0] == '/' || str[0] == '!')
                 {
                     // Get the arg string
-                    string argstr = str.Substring(1);
+                    var argstr = str.Substring(1);
                     if (str.Length == 1) return true;
 
                     // Parse it
@@ -564,7 +570,7 @@ namespace Oxide.RustLegacy.Plugins
                     if (chatcmd == null) return null;
 
                     // Handle it
-                    NetUser ply = arg.argUser;
+                    var ply = arg.argUser;
                     if (ply != null && !cmdlib.HandleChatCommand(ply, chatcmd, args))
                     {
                         ConsoleNetworker.SendClientCommand(ply.networkPlayer, $"chat.add \"Server\" \" Unknown command {chatcmd}\"");
@@ -589,17 +595,16 @@ namespace Oxide.RustLegacy.Plugins
         /// <param name="args"></param>
         private void ParseChatCommand(string argstr, out string cmd, out string[] args)
         {
-            List<string> arglist = new List<string>();
-            StringBuilder sb = new StringBuilder();
-            bool inlongarg = false;
-            for (int i = 0; i < argstr.Length; i++)
+            var arglist = new List<string>();
+            var sb = new StringBuilder();
+            var inlongarg = false;
+            foreach (var c in argstr)
             {
-                char c = argstr[i];
                 if (c == '"')
                 {
                     if (inlongarg)
                     {
-                        string arg = sb.ToString().Trim();
+                        var arg = sb.ToString().Trim();
                         if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
                         sb = new StringBuilder();
                         inlongarg = false;
@@ -611,7 +616,7 @@ namespace Oxide.RustLegacy.Plugins
                 }
                 else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
-                    string arg = sb.ToString().Trim();
+                    var arg = sb.ToString().Trim();
                     if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
                     sb = new StringBuilder();
                 }
@@ -622,7 +627,7 @@ namespace Oxide.RustLegacy.Plugins
             }
             if (sb.Length > 0)
             {
-                string arg = sb.ToString().Trim();
+                var arg = sb.ToString().Trim();
                 if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
             }
             if (arglist.Count == 0)
@@ -637,7 +642,7 @@ namespace Oxide.RustLegacy.Plugins
         }
 
         /// <summary>
-        /// Called when a user attempts to connect 
+        /// Called when a user attempts to connect
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="approval"></param>
@@ -645,8 +650,8 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("OnUserApprove")]
         private object OnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
         {
-            object result = Interface.CallHook("CanClientLogin", connection, approval);
-            if (result != null && result is uLink.NetworkConnectionError)
+            var result = Interface.CallHook("CanClientLogin", connection, approval);
+            if (result is uLink.NetworkConnectionError)
             {
                 approval.Deny((uLink.NetworkConnectionError)result);
                 return false;
@@ -678,10 +683,10 @@ namespace Oxide.RustLegacy.Plugins
         [HookMethod("OnClientSpeak")]
         private object OnClientSpeak(PlayerClient client, int total)
         {
-            List<uLink.NetworkPlayer> players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
-            object num = Interface.CallHook("OnPlayerVoice", client.netUser, players);
+            var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
+            var num = Interface.CallHook("OnPlayerVoice", client.netUser, players);
             playerList.SetValue(null, players);
-            return num != null ? (int)num : num;
+            return (int) num;
         }
 
         /// <summary>
@@ -715,11 +720,11 @@ namespace Oxide.RustLegacy.Plugins
         private object OnProcessDamageEvent(TakeDamage takedamage, DamageEvent damage)
         {
             var dmg = Interface.CallHook("ModifyDamage", takedamage, damage);
-            if (dmg != null && dmg is DamageEvent)
+            if (dmg is DamageEvent)
                 damage = (DamageEvent)dmg;
             if ((bool)takenodamage.GetValue(takedamage)) return null;
 
-            LifeStatus lifeStatus = damage.status;
+            var lifeStatus = damage.status;
             if (lifeStatus == LifeStatus.WasKilled)
             {
                 takedamage.health = 0f;
@@ -775,7 +780,7 @@ namespace Oxide.RustLegacy.Plugins
 
             if (nmMovement._agent.pathStatus == NavMeshPathStatus.PathInvalid && alive)
             {
-                TakeDamage.KillSelf(ai.GetComponent<IDBase>(), null);
+                TakeDamage.KillSelf(ai.GetComponent<IDBase>());
                 Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
             }
         }

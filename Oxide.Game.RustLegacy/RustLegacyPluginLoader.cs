@@ -2,7 +2,7 @@
 
 using Oxide.Core.Plugins;
 
-namespace Oxide.RustLegacy.Plugins
+namespace Oxide.Game.RustLegacy
 {
     /// <summary>
     /// Responsible for loading Rust Legacy core plugins

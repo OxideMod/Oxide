@@ -7,8 +7,8 @@
     <ProjectGuid>{ADA2D153-8B29-4B9D-A20F-B24150471715}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Ext.RustLegacy</RootNamespace>
-    <AssemblyName>Oxide.Ext.RustLegacy</AssemblyName>
+    <RootNamespace>Oxide.Game.RustLegacy</RootNamespace>
+    <AssemblyName>Oxide.Game.RustLegacy</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

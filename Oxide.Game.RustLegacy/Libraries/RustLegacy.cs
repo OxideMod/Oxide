@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Reflection;
 
 using Oxide.Core.Libraries;
 
-namespace Oxide.RustLegacy.Libraries
+namespace Oxide.Game.RustLegacy.Libraries
 {
     /// <summary>
     /// A library containing utility shortcut functions for Rust Legacy
@@ -13,7 +13,7 @@ namespace Oxide.RustLegacy.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Returns the UserID for the specified player as a string
@@ -30,8 +30,7 @@ namespace Oxide.RustLegacy.Libraries
         /// Print a message to every players chat log
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
+        /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name, string message = null)
         {
@@ -48,8 +47,7 @@ namespace Oxide.RustLegacy.Libraries
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="name"></param>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
+        /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(NetUser netUser, string name, string message = null)
         {
@@ -119,25 +117,25 @@ namespace Oxide.RustLegacy.Libraries
         /// </summary>
         /// <param name="str"></param>
         [LibraryFunction("QuoteSafe")]
-        public string QuoteSafe(string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd(new char[] { '\\' }) + "\"";
+        public string QuoteSafe(string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
 
         /// <summary>
         /// Finds a player by name, steam id or ip
         /// </summary>
-        /// <param name="strNameOrIDOrIP"></param>
+        /// <param name="strNameOrIdorIp"></param>
         [LibraryFunction("FindPlayer")]
-        public NetUser FindPlayer(string strNameOrIDOrIP)
+        public NetUser FindPlayer(string strNameOrIdorIp)
         {
             NetUser netUser;
-            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.userID.ToString() == strNameOrIDOrIP)?.netUser) != null)
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.userID.ToString() == strNameOrIdorIp)?.netUser) != null)
             {
                 return netUser;
             }
-            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.displayName.ToLower().Contains(strNameOrIDOrIP.ToLower()))?.netUser) != null)
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.displayName.ToLower().Contains(strNameOrIdorIp.ToLower()))?.netUser) != null)
             {
                 return netUser;
             }
-            if ((netUser = PlayerClient.All.Find((PlayerClient p) => p.netUser.networkPlayer.ipAddress == strNameOrIDOrIP)?.netUser) != null)
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == strNameOrIdorIp)?.netUser) != null)
             {
                 return netUser;
             }
@@ -150,11 +148,7 @@ namespace Oxide.RustLegacy.Libraries
         [LibraryFunction("GetAllNetUsers")]
         public NetUser[] GetAllNetUsers()
         {
-            List<NetUser> netUsers = new List<NetUser>();
-            foreach (var playerClient in PlayerClient.All)
-                netUsers.Add(playerClient.netUser);
-
-            return netUsers.ToArray();
+            return Enumerable.ToArray(PlayerClient.All.Select(playerClient => playerClient.netUser));
         }
 
         /// <summary>
@@ -185,7 +179,7 @@ namespace Oxide.RustLegacy.Libraries
         /// Returns an Inventory.Slot.Preference
         /// </summary>
         /// <param name="startSlotKind"></param>
-        /// <param name="slot"></param>
+        /// <param name="stack"></param>
         /// <param name="flags"></param>
         [LibraryFunction("InventorySlotPreference")]
         public Inventory.Slot.Preference InventorySlotPreference(Inventory.Slot.Kind startSlotKind, bool stack, Inventory.Slot.KindFlags flags)
