@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
@@ -31,6 +32,18 @@ namespace Oxide.SevenDays
 
         public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
         public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "UnityEngine" }; } }
+
+        private static readonly string[] Filter =
+        {
+            "INF Dedicated server only build",
+            "HDR and MultisampleAntiAliasing",
+            "HDR Render",
+            "INF WSD.",
+            "INF GMA.",
+            "INF GOM.",
+            "INF SelectionBoxManager.Instance: SelectionBoxes",
+            "Setting breakpad minidump AppID = 251570"
+        };
 
         /// <summary>
         /// Initializes a new instance of the SevenDaysExtension class
@@ -89,6 +102,7 @@ namespace Oxide.SevenDays
 
         private void HandleLog(string message, string stackTrace, LogType type)
         {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

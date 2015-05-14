@@ -81,6 +81,7 @@ namespace Oxide.ReignOfKings
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+            //Logger.ReloadSettings();
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance.TimeOfDayAsClockString(), " Weather: ", Weather.Instance.CurrentWeather);
             Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
@@ -103,11 +104,12 @@ namespace Oxide.ReignOfKings
 
         private void ServerConsoleOnInput(string input)
         {
+            if (!input.StartsWith("/")) input = "/" + input;
             var messages = (List<Console.Message>)typeof(Console).GetField("m_messages", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
             messages.Clear();
             if (CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, input))
             {
-                Interface.Oxide.ServerConsole.AddMessage(Console.CurrentOutput);
+                Interface.Oxide.ServerConsole.AddMessage(Console.CurrentOutput.TrimEnd('\n', '\r'));
             }
         }
     }
