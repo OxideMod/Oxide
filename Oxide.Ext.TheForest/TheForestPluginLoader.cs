@@ -2,7 +2,7 @@
 
 using Oxide.Core.Plugins;
 
-namespace Oxide.TheForest.Plugins
+namespace Oxide.Game.TheForest
 {
     /// <summary>
     /// Responsible for loading The Forest core plugins

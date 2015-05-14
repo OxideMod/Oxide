@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Linq;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
 
-using Oxide.TheForest.Plugins;
-
 using UnityEngine;
 
-namespace Oxide.TheForest
+namespace Oxide.Game.TheForest
 {
     /// <summary>
     /// The extension class that represents this extension
@@ -17,20 +16,30 @@ namespace Oxide.TheForest
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "TheForest"; } }
+        public override string Name => "TheForest";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
-        public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "TheForest", "UnityEngine" }; } }
+        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
+        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "TheForest", "UnityEngine" };
+
+        private static readonly string[] Filter =
+        {
+            "Game Activation Sequence step",
+            "planeCrash started",
+            "Hull (UnityEngine.GameObject)",
+            "going black",
+            "disableFlying",
+            "WakeFromKnockOut"
+        };
 
         /// <summary>
         /// Initializes a new instance of the TheForestExtension class
@@ -45,7 +54,6 @@ namespace Oxide.TheForest
         /// <summary>
         /// Loads this extension
         /// </summary>
-        /// <param name="manager"></param>
         public override void Load()
         {
             IsGameExtension = true;
@@ -69,21 +77,22 @@ namespace Oxide.TheForest
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            // TODO: Add status information
         }
 
         private void ServerConsoleOnInput(string input)
         {
-            //TODO
+            // TODO
         }
 
         private void HandleLog(string message, string stackTrace, LogType type)
         {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

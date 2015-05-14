@@ -7,7 +7,7 @@
     <ProjectGuid>{183056B0-1635-46BB-81CC-8669EE46E83F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Ext.TheForest</RootNamespace>
+    <RootNamespace>Oxide.Game.TheForest</RootNamespace>
     <AssemblyName>Oxide.Ext.TheForest</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
