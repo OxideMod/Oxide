@@ -125,6 +125,7 @@ function bundle_7dtd {
     Oxide.Ext.SQLite/Dependencies/x86/*.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
     cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
+    Oxide.Ext.SevenDays/Patched/LogLibrary.dll \
     $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
     cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \

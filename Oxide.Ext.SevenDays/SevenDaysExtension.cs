@@ -36,6 +36,16 @@ namespace Oxide.SevenDays
         private static readonly string[] Filter =
         {
             "INF Dedicated server only build",
+            "WorldStaticData.Init()",
+            "Awake done",
+            "StartGame",
+            "GamePref.",
+            "GameStat.",
+            "StartAsServer",
+            "Started thread",
+            "createWorld() done",
+            "Load key config",
+            "Command line arguments:",
             "HDR and MultisampleAntiAliasing",
             "HDR Render",
             "INF WSD.",

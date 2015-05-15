@@ -32,6 +32,7 @@ namespace Oxide.ReignOfKings.Plugins
         private static readonly string[] Filter =
         {
             "[EAC] [Debug] Ping? Pong!",
+            "Save Server GUID:",
             "ServerLobbyModule.cs - WWW - Result failure:",
             "No AudioListener found in the scene",
             "Processing new connection...",
