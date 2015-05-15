@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using CodeHatch.Build;
@@ -100,6 +101,12 @@ namespace Oxide.ReignOfKings
                 return string.Format("Total Sent: {0:0.0} B/s Total Receive: {1:0.0} B/s", bytesSent, bytesReceived);
             };
             Interface.Oxide.ServerConsole.Title = () => string.Concat(Server.PlayerCount, " | ", DedicatedServerBypass.Settings.ServerName);
+            Interface.Oxide.ServerConsole.Completion = input =>
+            {
+                if (string.IsNullOrEmpty(input)) return null;
+                if (input.StartsWith("/")) input = input.Remove(0, 1);
+                return CommandManager.RegisteredCommands.Keys.Where(c => c.StartsWith(input)).ToArray();
+            };
         }
 
         private void ServerConsoleOnInput(string input)

@@ -19,6 +19,8 @@ namespace Oxide.Core.ServerConsole
             get { return Console.BufferWidth > 0; }
         }
 
+        public Func<string, string[]> Completion;
+
         public void ClearLine(int numLines)
         {
             Console.CursorLeft = 0;
@@ -88,6 +90,24 @@ namespace Oxide.Core.ServerConsole
                     return;
                 case ConsoleKey.Escape:
                     InputString = string.Empty;
+                    RedrawInputLine();
+                    return;
+                case ConsoleKey.Tab:
+                    if (Completion == null) return;
+                    var results = Completion(InputString);
+                    if (results == null) return;
+                    if (results.Length > 1)
+                    {
+                        ClearLine(StatusText.Length + 1);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        foreach (var result in results)
+                        {
+                            Console.WriteLine(result);
+                        }
+                        RedrawInputLine();
+                        return;
+                    }
+                    InputString = results[0];
                     RedrawInputLine();
                     return;
             }

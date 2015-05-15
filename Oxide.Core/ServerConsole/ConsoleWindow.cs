@@ -8,7 +8,6 @@ namespace Oxide.Core.ServerConsole
     public class ConsoleWindow
     {
         private const uint ATTACH_PARENT_PROCESS = 0xFFFFFFFF;
-        private const int STD_OUTPUT_HANDLE = -11;
         private TextWriter _oldOutput;
 
         [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false, SetLastError = true)]
@@ -51,17 +50,7 @@ namespace Oxide.Core.ServerConsole
             if (!Check()) return;
             if (!AttachConsole(ATTACH_PARENT_PROCESS)) AllocConsole();
             _oldOutput = Console.Out;
-            try
-            {
-                var stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-                var fileStream = new FileStream(new Microsoft.Win32.SafeHandles.SafeFileHandle(stdHandle, true), FileAccess.Write);
-                var streamWriter = new StreamWriter(fileStream, Encoding.ASCII) { AutoFlush = true };
-                Console.SetOut(streamWriter);
-            }
-            catch (Exception exception)
-            {
-                Interface.Oxide.LogException("Couldn't redirect output: ", exception);
-            }
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput(), Encoding.ASCII) { AutoFlush = true });
         }
 
         public void Shutdown()
