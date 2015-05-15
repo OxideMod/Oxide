@@ -31,17 +31,20 @@ namespace Oxide.ReignOfKings.Plugins
 
         private static readonly string[] Filter =
         {
-            "[EAC] [Debug] Ping? Pong!",
-            "Save Server GUID:",
-            "ServerLobbyModule.cs - WWW - Result failure:",
+            "9999999999 has null AuthenticationKey!",
+            "Could not use effect because: !SystemInfo.supportsImageEffects",
+            "Failed to apply setting to DrawDistanceQuality",
+            "Load Server GUID:",
+            "Loading: ",
             "No AudioListener found in the scene",
             "Processing new connection...",
             "Registering user 9999999999 with authkey",
-            "9999999999 has null AuthenticationKey!",
+            "Save Server GUID:",
+            "ServerLobbyModule.cs - WWW - Result failure:",
+            "Standard Deviation:",
+            "[EAC] [Debug] Ping? Pong!",
             "\"string button\" is empty;",
-            "m_guiCamera == null",
-            "Failed to apply setting to DrawDistanceQuality",
-            "Could not use effect because: !SystemInfo.supportsImageEffects"
+            "m_guiCamera == null"
         };
 
         /// <summary>
