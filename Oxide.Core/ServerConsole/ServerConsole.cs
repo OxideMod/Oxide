@@ -18,6 +18,12 @@ namespace Oxide.Core.ServerConsole
 
         public Func<string> Title;
 
+        public Func<string, string[]> Completion
+        {
+            get { return _input.Completion; }
+            set { _input.Completion = value; }
+        }
+
         private string status1Left
         {
             get
