@@ -287,22 +287,7 @@ namespace Oxide.Core
             {
                 foreach (string name in loader.ScanDirectory(PluginDirectory))
                 {
-                    // Check if the plugin is already loaded
-                    if (RootPluginManager.GetPlugin(name) == null)
-                    {
-                        // Load it and watch for errors
-                        try
-                        {
-                            var plugin = loader.Load(PluginDirectory, name);
-                            if (plugin == null) continue; // Async load
-                            PluginLoaded(plugin);
-                        }
-                        catch (Exception ex)
-                        {
-                            loader.PluginErrors[name] = ex.Message;
-                            LogException(string.Format("Failed to load plugin {0}", name), ex);
-                        }
-                    }
+                    LoadPlugin(name);
                 }
             }
             var lastCall = Now;
@@ -351,7 +336,7 @@ namespace Oxide.Core
             if (RootPluginManager.GetPlugin(name) != null) return false;
 
             // Find all plugin loaders that lay claim to the name
-            var loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where((l) => l.ScanDirectory(PluginDirectory).Contains(name)));
+            var loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where(l => l.ScanDirectory(PluginDirectory).Contains(name)));
             if (loaders.Count == 0)
             {
                 LogError("Failed to load plugin '{0}' (no source found)", name);
@@ -376,7 +361,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                LogException("Failed to load plugin " + name, ex);
+                LogException(string.Format("Failed to load plugin {0}", name), ex);
                 return false;
             }
         }

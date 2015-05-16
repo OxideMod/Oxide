@@ -121,6 +121,11 @@ namespace Oxide.SevenDays
             //Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
             Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", cl000c.cCompatibilityVersion, ", Oxide: ", OxideMod.Version.ToString());
             //Interface.Oxide.ServerConsole.Status1Right = () => ();
+            Interface.Oxide.ServerConsole.Completion = input =>
+            {
+                if (string.IsNullOrEmpty(input)) return null;
+                return SingletonMonoBehaviour<SdtdConsole>.Instance.commands.Keys.Where(c => c.StartsWith(input)).ToArray();
+            };
         }
 
         private void ServerConsoleOnInput(string input)

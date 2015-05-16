@@ -20,7 +20,8 @@ namespace Oxide.Core.Extensions
         private IList<Extension> extensions;
 
         // The search pattern for extensions
-        private const string FileSearchPattern = "Oxide.Ext.*.dll";
+        private const string ExtFileSearchPattern = "Oxide.Ext.*.dll";
+        private const string GameFileSearchPattern = "Oxide.Game.*.dll";
 
         /// <summary>
         /// Gets the logger to which this extension manager writes
@@ -174,12 +175,14 @@ namespace Oxide.Core.Extensions
         /// <param name="directory"></param>
         public void LoadAllExtensions(string directory)
         {
-            string[] files = Directory.GetFiles(directory, FileSearchPattern);
-            foreach (string file in files)
+            var gameFiles = Directory.GetFiles(directory, GameFileSearchPattern);
+            var files = Directory.GetFiles(directory, ExtFileSearchPattern).Concat(gameFiles);
+            foreach (var file in files)
             {
+                if (Array.IndexOf(gameFiles, file.Replace(".Ext.", ".Game.")) != -1) continue;
                 LoadExtension(Path.Combine(directory, file));
             }
-            foreach (Extension ext in extensions)
+            foreach (var ext in extensions)
                 ext.OnModLoad();
         }
 

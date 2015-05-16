@@ -314,10 +314,27 @@ namespace Oxide.Plugins
             }
         }
 
+        private void PurgeOldLogs()
+        {
+            //clear old logs
+            try
+            {
+                var filePaths = Directory.GetFiles(Interface.Oxide.RootDirectory, "*.txt").Where(f =>
+                {
+                    var fileName = Path.GetFileName(f);
+                    return fileName != null && fileName.StartsWith("compiler_log_");
+                });
+                foreach (var filePath in filePaths)
+                    File.Delete(filePath);
+            }
+            catch (Exception) { }
+        }
+
         private void CheckCompiler()
         {
             CheckCompilerBinary();
             if (BinaryPath == null || process != null && !process.HasExited) return;
+            PurgeOldLogs();
             ready = false;
             process?.Close();
             client?.Stop();
