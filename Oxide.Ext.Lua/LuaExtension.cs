@@ -136,14 +136,14 @@ end
         {
             if (_typesInit) return;
             _typesInit = true;
-            //var filter = new Regex(@"^[\dA-Z]{5}$|\$|\<|\>", RegexOptions.Compiled);
+            var filter = new Regex(@"\$|\<|\>", RegexOptions.Compiled);
             // Bind all namespaces and types
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
                 .Where(AllowAssemblyAccess)
                 .SelectMany(Utility.GetAllTypesFromAssembly)
                 .Where(AllowTypeAccess))
             {
-                //if (filter.IsMatch(type.Name)) continue;
+                if (filter.IsMatch(type.FullName)) continue;
                 // Get the namespace table
                 var nspacetable = GetNamespaceTable(Utility.GetNamespace(type));
 
