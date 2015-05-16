@@ -38,7 +38,7 @@ namespace Oxide.ReignOfKings
         public override string Author { get { return "Oxide Team"; } }
 
         public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
-        public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "UnityEngine" }; } }
+        public override string[] WhitelistNamespaces { get { return new[] { "CodeHatch", "Steamworks", "System.Collections", "UnityEngine" }; } }
 
         internal static readonly string[] Filter =
         {
