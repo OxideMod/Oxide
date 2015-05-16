@@ -40,6 +40,46 @@ namespace Oxide.ReignOfKings
         public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
         public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "UnityEngine" }; } }
 
+        internal static readonly string[] Filter =
+        {
+            "9999999999 has null AuthenticationKey!",
+            "<color=magenta>[Entity]",
+            "<color=yellow>Specific",
+            "<color=yellow>Transform",
+            "Client owned object was not found to sync with id",
+            "Could not find any serialized data",
+            "Could not use effect because",
+            "Dedicated mode detected.",
+            "Failed to apply setting to DrawDistanceQuality",
+            "Instantiating Base and Dedicated",
+            "Load Server GUID:",
+            "Loading: ",
+            "Lobby query failed.",
+            "No AudioListener found in the scene",
+            "PlayerTracker: Tracker",
+            "Processing new connection...",
+            "Registering user 9999999999 with authkey",
+            "Registering... Success",
+            "Save Server GUID:",
+            "Serialization settings set successfully",
+            "ServerLobbyModule.cs",
+            "Standard Deviation:",
+            "Sync member value was null",
+            "There were some issues with the attached",
+            "This could be due to momentary deregistration",
+            "[EAC] [Debug] Connecting",
+            "[EAC] [Debug] Local address",
+            "[EAC] [Debug] Ping? Pong!",
+            "[EAC] [Debug] Registering",
+            "[EAC] [Debug] Unregistering",
+            "[EAC] [Debug] UserStatus",
+            "[EAC] [Info] Connected",
+            "[WARNING] Recieved a",
+            "\"string button\" is empty;",
+            "m_guiCamera == null",
+            "with authkey System.Byte[]"
+        };
+
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsExtension class
         /// </summary>
@@ -83,6 +123,7 @@ namespace Oxide.ReignOfKings
         {
             if (!Interface.Oxide.EnableConsole()) return;
             //Logger.ReloadSettings();
+            Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance.TimeOfDayAsClockString(), " Weather: ", Weather.Instance.CurrentWeather);
             Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
@@ -98,7 +139,7 @@ namespace Oxide.ReignOfKings
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
                 }
-                return string.Format("Total Sent: {0:0.0} B/s Total Receive: {1:0.0} B/s", bytesSent, bytesReceived);
+                return $"Total Sent: {bytesSent:0.0} B/s Total Receive: {bytesReceived:0.0} B/s";
             };
             Interface.Oxide.ServerConsole.Title = () => string.Concat(Server.PlayerCount, " | ", DedicatedServerBypass.Settings.ServerName);
             Interface.Oxide.ServerConsole.Completion = input =>
@@ -118,6 +159,17 @@ namespace Oxide.ReignOfKings
             {
                 Interface.Oxide.ServerConsole.AddMessage(Console.CurrentOutput.TrimEnd('\n', '\r'));
             }
+        }
+
+        private void HandleLog(string message, string stackTrace, LogType type)
+        {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+            var color = ConsoleColor.Gray;
+            if (type == LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (type == LogType.Error)
+                color = ConsoleColor.Red;
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
 }

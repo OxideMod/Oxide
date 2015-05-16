@@ -29,46 +29,6 @@ namespace Oxide.ReignOfKings.Plugins
         private bool ServerInitialized;
         private bool LoggingInitialized;
 
-        private static readonly string[] Filter =
-        {
-            "9999999999 has null AuthenticationKey!",
-            "<color=magenta>[Entity]",
-            "<color=yellow>Specific",
-            "<color=yellow>Transform",
-            "Client owned object was not found to sync with id",
-            "Could not find any serialized data",
-            "Could not use effect because",
-            "Dedicated mode detected.",
-            "Failed to apply setting to DrawDistanceQuality",
-            "Instantiating Base and Dedicated",
-            "Load Server GUID:",
-            "Loading: ",
-            "Lobby query failed.",
-            "No AudioListener found in the scene",
-            "PlayerTracker: Tracker",
-            "Processing new connection...",
-            "Registering user 9999999999 with authkey",
-            "Registering... Success",
-            "Save Server GUID:",
-            "Serialization settings set successfully",
-            "ServerLobbyModule.cs",
-            "Standard Deviation:",
-            "Sync member value was null",
-            "There were some issues with the attached",
-            "This could be due to momentary deregistration",
-            "[EAC] [Debug] Connecting",
-            "[EAC] [Debug] Local address",
-            "[EAC] [Debug] Ping? Pong!",
-            "[EAC] [Debug] Registering",
-            "[EAC] [Debug] Unregistering",
-            "[EAC] [Debug] UserStatus",
-            "[EAC] [Info] Connected",
-            "[WARNING] Recieved a",
-            "\"string button\" is empty;",
-            "m_guiCamera == null",
-            "with authkey System.Byte[]"
-        };
-
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class
         /// </summary>
@@ -170,7 +130,7 @@ namespace Oxide.ReignOfKings.Plugins
             if (obj == null && message is Exception)
                 obj = ((Exception) message).Message;
             var str = (string)obj;
-            if (string.IsNullOrEmpty(str) || Filter.Any(str.Contains)) return;
+            if (string.IsNullOrEmpty(str) || ReignOfKingsExtension.Filter.Any(str.Contains)) return;
             Interface.Oxide.ServerConsole.AddMessage(str, color);
         }
 
