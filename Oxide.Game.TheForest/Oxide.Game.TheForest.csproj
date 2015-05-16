@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Oxide.Game.TheForest</RootNamespace>
-    <AssemblyName>Oxide.Ext.TheForest</AssemblyName>
+    <AssemblyName>Oxide.Game.TheForest</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
