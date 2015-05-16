@@ -149,6 +149,11 @@ namespace Oxide.Ext.JavaScript.Plugins
                 var callable = property.Value.Value?.TryCast<ICallable>();
                 if (callable != null) Globals.Add(property.Key);
             }
+            foreach (var property in Class.Prototype.Properties)
+            {
+                var callable = property.Value.Value?.TryCast<ICallable>();
+                if (callable != null) Globals.Add(property.Key);
+            }
             if (!HasConfig) HasConfig = Globals.Contains("LoadDefaultConfig");
 
             // Bind any base methods (we do it here because we don't want them to be hooked)

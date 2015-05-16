@@ -71,29 +71,8 @@ namespace Oxide.Plugins
 
         public PluginCompiler()
         {
-            CheckCompilerBinary();
-            if (BinaryPath == null) return;
-
             pluginComp = new Dictionary<int, Compilation>();
             compQueue = new Queue<CompilerMessage>();
-
-            process = new Process
-            {
-                StartInfo =
-                {
-                    FileName = BinaryPath,
-                    Arguments = "/service",
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true
-                }
-            };
-            process.Start();
-            client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
-            client.Message += OnMessage;
-            client.Error += OnError;
-            client.Start();
         }
 
         public void ResolveReferences(int currentId, Action callback)
@@ -246,6 +225,7 @@ namespace Oxide.Plugins
 
         public void Compile(List<CompilablePlugin> plugins, Action<byte[], float> callback)
         {
+            CheckCompiler();
             if (BinaryPath == null) return;
             var currentId = lastId++;
             pluginComp[currentId] = new Compilation {callback = callback, plugins = plugins};
@@ -334,6 +314,33 @@ namespace Oxide.Plugins
             }
         }
 
+        private void CheckCompiler()
+        {
+            CheckCompilerBinary();
+            if (BinaryPath == null || process != null && !process.HasExited) return;
+            ready = false;
+            process?.Close();
+            client?.Stop();
+            var args = new [] {"/service", "/logPath:" + Interface.Oxide.LogDirectory};
+            process = new Process
+            {
+                StartInfo =
+                {
+                    FileName = BinaryPath,
+                    Arguments = string.Join(" ", args),
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.Start();
+            client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
+            client.Message += OnMessage;
+            client.Error += OnError;
+            client.Start();
+        }
+
         private bool CacheScriptLines(CompilablePlugin plugin)
         {
             var waiting_for_access = false;
@@ -387,11 +394,9 @@ namespace Oxide.Plugins
 
         public void OnShutdown()
         {
-            if (client != null)
-            {
-                client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
-                client.Stop();
-            }
+            if (client == null) return;
+            client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
+            client.Stop();
         }
     }
 }
