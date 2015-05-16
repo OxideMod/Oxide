@@ -311,6 +311,21 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
+        /// Get if the user belongs to given group
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="groupname"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserHasGroup")]
+        public bool UserHasGroup(string userid, string groupname)
+        {
+            if (!GroupExists(groupname)) return false;
+
+            var data = GetUserData(userid);
+            return data.Groups.Contains(groupname.ToLower());
+        }
+
+        /// <summary>
         /// Returns if the specified group exists or not
         /// </summary>
         /// <param name="groupname"></param>
