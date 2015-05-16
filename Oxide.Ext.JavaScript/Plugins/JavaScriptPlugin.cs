@@ -251,7 +251,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         {
             var callable = Class.Get(name).TryCast<ICallable>();
             if (!Globals.Contains(name) || !Class.HasProperty(name) || callable == null) return null;
-            return callable.Call(Class, args?.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() ?? new JsValue[] {}).ToObject();
+            return callable.Call(Class, args != null ? args.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() : new JsValue[] {}).ToObject();
         }
     }
 }
