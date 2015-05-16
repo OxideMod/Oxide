@@ -190,7 +190,7 @@ function bundle_theforest {
     Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
     Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
     Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
-    Oxide.Ext.TheForest/bin/Release/Oxide.Ext.TheForest.dll \
+    Oxide.Game.TheForest/bin/Release/Oxide.Game.TheForest.dll \
     $HOME/temp_theforest/TheForest_Data/Managed || die_with "Failed to copy core and extension DLLs!"
     cp -vf Oxide.Core/Dependencies/*.dll \
     Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
@@ -203,9 +203,9 @@ function bundle_theforest {
     cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
     Oxide.Ext.SQLite/Dependencies/x86/*.dll \
     $HOME/temp_theforest/TheForest_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.TheForest/Patched/Assembly-CSharp.dll \
+    cp -vf Oxide.Game.TheForest/Patched/Assembly-CSharp.dll \
     $HOME/temp_theforest/TheForest_Data/Managed || die_with "Failed to copy patched server files!"
-    cp -vf Oxide.Ext.TheForest/Patched/oxide.root.json \
+    cp -vf Oxide.Game.TheForest/Patched/oxide.root.json \
     Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
     Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
     Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
