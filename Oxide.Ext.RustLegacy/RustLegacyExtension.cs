@@ -160,10 +160,9 @@ namespace Oxide.RustLegacy
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
-            if (!Interface.Oxide.CheckConsole(true)) return;
+            /*if (!Interface.Oxide.CheckConsole(true)) return;
             var obj = UnityEngine.Object.FindObjectsOfType<LibRust>();
             if (obj.Length > 0)
             {
@@ -172,7 +171,7 @@ namespace Oxide.RustLegacy
             }
             if (!Interface.Oxide.EnableConsole(true)) return;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            ConsoleSystem.RegisterLogCallback(HandleLog, true);
+            ConsoleSystem.RegisterLogCallback(HandleLog, true);*/
         }
 
         private void ServerConsoleOnInput(string input)
