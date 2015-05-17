@@ -179,7 +179,11 @@ namespace Oxide.Core.Extensions
             var files = Directory.GetFiles(directory, ExtFileSearchPattern).Concat(gameFiles);
             foreach (var file in files)
             {
-                if (Array.IndexOf(gameFiles, file.Replace(".Ext.", ".Game.")) != -1) continue;
+                if (file.Contains(".Ext.") && Array.IndexOf(gameFiles, file.Replace(".Ext.", ".Game.")) != -1)
+                {
+                    Logger.Write(LogType.Warning, "Found old game extension '{0}'. Please remove it!", Path.GetFileName(file));
+                    continue;
+                }
                 LoadExtension(Path.Combine(directory, file));
             }
             foreach (var ext in extensions)
