@@ -1,0 +1,15 @@
+{
+    "ExtensionDirectory": "FC_Oculus_Data\\Managed",
+
+    "PluginDirectory": "plugins",
+    "ConfigDirectory": "config",
+    "DataDirectory": "data",
+    "LogDirectory": "logs",
+
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "default\\oxide",
+        "oxide"
+    ]
+}
