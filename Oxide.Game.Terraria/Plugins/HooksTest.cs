@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,7 +33,7 @@ namespace Oxide.Plugins
 
         public void Loaded()
         {
-
+            HookCalled("Loaded");
         }
 
         protected override void LoadDefaultConfig()
@@ -47,6 +46,11 @@ namespace Oxide.Plugins
             HookCalled("Unloaded");
         }
 
+        private void OnFrame()
+        {
+            HookCalled("OnFrame");
+        }
+
         private void OnServerInitialized()
         {
             HookCalled("OnServerInitialized");
@@ -57,9 +61,9 @@ namespace Oxide.Plugins
             HookCalled("OnServerSave");
         }
 
-        private void OnServerQuit()
+        private void OnServerShutdown()
         {
-            HookCalled("OnServerQuit");
+            HookCalled("OnServerShutdown");
         }
     }
 }
