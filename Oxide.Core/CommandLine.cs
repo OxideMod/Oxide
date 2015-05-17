@@ -32,7 +32,7 @@ namespace Oxide.Core
                     var val = str;
                     if (str[0] == '-' || str[0] == '+')
                     {
-                        if (key != string.Empty && variables.ContainsKey(key))
+                        if (key != string.Empty && !variables.ContainsKey(key))
                             variables.Add(key, string.Empty);
                         key = val.Substring(1);
                     }
