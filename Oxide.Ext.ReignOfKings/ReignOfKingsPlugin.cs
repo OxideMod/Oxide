@@ -1,39 +1,103 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 using Oxide.ReignOfKings.Libraries;
 
 using CodeHatch.Common;
 using CodeHatch.Engine.Networking;
+using CodeHatch.Networking.Events.Players;
 
 namespace Oxide.Plugins
 {
     public abstract class ReignOfKingsPlugin : CSharpPlugin
     {
         protected Command cmd;
+        protected Permission permission;
 
         public override void SetPluginInfo(string name, string path)
         {
             base.SetPluginInfo(name, path);
 
             cmd = Interface.GetMod().GetLibrary<Command>("Command");
+            permission = Interface.GetMod().GetLibrary<Permission>("Permission");
         }
 
         public override void HandleAddedToManager(PluginManager manager)
         {
-            foreach (MethodInfo method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (FieldInfo field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
             {
-                var attributes = method.GetCustomAttributes(typeof(ChatCommandAttribute), true);
+                var attributes = field.GetCustomAttributes(typeof(OnlinePlayersAttribute), true);
                 if (attributes.Length > 0)
                 {
-                    var attribute = attributes[0] as ChatCommandAttribute;
-                    cmd.AddChatCommand(attribute.Command, this, method.Name);
+                    var plugin_field = new PluginFieldInfo(this, field);
+                    if (plugin_field.GenericArguments.Length != 2 || plugin_field.GenericArguments[0] != typeof(Player))
+                    {
+                        Puts("[{0}] The {1} field is not a Hash with a Player key! (online players will not be tracked)", Name, field.Name);
+                        continue;
+                    }
+                    if (!plugin_field.LookupMethod("Add", plugin_field.GenericArguments))
+                    {
+                        Puts("[{0}] The {1} field does not support adding Player keys! (online players will not be tracked)", Name, field.Name);
+                        continue;
+                    }
+                    if (!plugin_field.LookupMethod("Remove", typeof(Player)))
+                    {
+                        Puts("[{0}] The {1} field does not support removing Player keys! (online players will not be tracked)", Name, field.Name);
+                        continue;
+                    }
+                    if (plugin_field.GenericArguments[1].GetField("Player") == null)
+                    {
+                        Puts("[{0}] The {1} class does not have a public Player field! (online players will not be tracked)", Name, plugin_field.GenericArguments[1].Name);
+                        continue;
+                    }
+                    onlinePlayerFields.Add(plugin_field);
                 }
+            }
+
+            foreach (var method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                var attributes = method.GetCustomAttributes(typeof(ChatCommandAttribute), true);
+                if (attributes.Length <= 0) continue;
+                var attribute = attributes[0] as ChatCommandAttribute;
+                cmd.AddChatCommand(attribute.Command, this, method.Name);
             }
             
             base.HandleAddedToManager(manager);
+        }
+        [HookMethod("OnPlayerSpawn")]
+        private void base_OnPlayerSpawn(PlayerFirstSpawnEvent e)
+        {
+            AddOnlinePlayer(e.Player);
+        }
+
+        [HookMethod("OnPlayerDisconnected")]
+        private void base_OnPlayerDisconnected(Player player)
+        {
+            // Delay removing player until OnPlayerDisconnect has fired in plugin
+            NextTick(() =>
+            {
+                foreach (var plugin_field in onlinePlayerFields)
+                    plugin_field.Call("Remove", player);
+            });
+        }
+
+        private void AddOnlinePlayer(Player player)
+        {
+            foreach (var plugin_field in onlinePlayerFields)
+            {
+                var type = plugin_field.GenericArguments[1];
+                object online_player;
+                if (type.GetConstructor(new Type[] { typeof(Player) }) == null)
+                    online_player = Activator.CreateInstance(type);
+                else
+                    online_player = Activator.CreateInstance(type, (object)player);
+                type.GetField("Player").SetValue(online_player, player);
+                plugin_field.Call("Add", player, online_player);
+            }
         }
 
         /// <summary>
@@ -44,7 +108,7 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintToChat(Player player, string format, params object[] args)
         {
-            player.SendMessage(string.Format(format, args));
+            player.SendMessage(format, args);
         }
 
         /// <summary>
@@ -55,7 +119,7 @@ namespace Oxide.Plugins
         protected void PrintToChat(string format, params object[] args)
         {
             if (Server.PlayerCount < 1) return;
-            Server.BroadcastMessage(string.Format(format, args));
+            Server.BroadcastMessage(format, args);
         }
 
         /// <summary>
