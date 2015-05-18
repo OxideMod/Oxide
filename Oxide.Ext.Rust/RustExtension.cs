@@ -169,7 +169,11 @@ namespace Oxide.Rust
             };
             Interface.Oxide.ServerConsole.Status1Right = () => string.Concat(Performance.frameRate, "fps ", Number.FormatSeconds((int)Time.realtimeSinceStartup), string.Empty);
             Interface.Oxide.ServerConsole.Status2Left = () => string.Concat(" ", BaseNetworkable.serverEntities.Count, " ents, ", BasePlayer.sleepingPlayerList.Count, " slprs");
-            Interface.Oxide.ServerConsole.Status2Right = () => string.Concat(Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond)), "/s in, ", Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond)), "/s out");
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
+                return string.Concat(Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond)), "/s in, ", Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond)), "/s out");
+            };
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
