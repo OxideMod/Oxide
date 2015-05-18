@@ -9,219 +9,25 @@ echo "Checking if commit is a pull request"
 if [ $TRAVIS_PULL_REQUEST == true ]; then die_with "Skipping deployment for pull request!"; fi
 
 echo "Configuring git credentials"
-git config --global user.email "travis@travis-ci.org" && git config --global user.name "Travis" || die_with "Failed to configure git credentials!"
+git config --global user.email "travis@travis-ci.org" || die_with "Failed to configure git user email!"
+git config --global user.name "Travis" || die_with "Failed to configure git user name!"
 
 echo "Cloning snapshots branch using token"
-git clone -q https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git $HOME/Snapshots >/dev/null || die_with "Failed to clone snapshots repository!"
+GIT_REPO="https://$GITHUB_TOKEN@github.com/OxideMod/Snapshots.git"
+git clone -q $GIT_REPO $HOME/Snapshots >/dev/null || die_with "Failed to clone snapshots repository!"
 
-function bundle_rust {
-    cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
-    mkdir -p $HOME/temp_rust/RustDedicated_Data/Managed/x64 || die_with "Failed to create directory structure!"
+echo "Bundling and compressing files"
+for d in Bundles/*; do
+    GAME="${d##*/}"
+    cd Bundles/$GAME && zip -FS -vr9 $HOME/Snapshots/Oxide-$GAME.zip . || die_with "Failed to bundle files!"
+    cd $TRAVIS_BUILD_DIR
+done
 
-    echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.MySql/bin/Release/Oxide.Ext.MySql.dll \
-    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
-    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
-    Oxide.Ext.Rust/bin/Release/Oxide.Ext.Rust.dll \
-    $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/*.dll \
-    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
-    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
-    Oxide.Ext.Lua/Dependencies/*Lua.dll \
-    Oxide.Ext.MySql/Dependencies/*.dll \
-    Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/*.dll \
-    $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
-    Oxide.Ext.SQLite/Dependencies/x64/*.dll \
-    $HOME/temp_rust/RustDedicated_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.Rust/Patched/Assembly-CSharp.dll \
-    $HOME/temp_rust/RustDedicated_Data/Managed || die_with "Failed to copy patched server files!"
-    cp -vf Oxide.Ext.Rust/Patched/oxide.root.json \
-    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
-    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    $HOME/temp_rust || die_with "Failed to copy config file and root DLLs!"
-
-    echo "Bundling and compressing target files"
-    cd $HOME/temp_rust || die_with "Failed to change to temp directory!"
-    rm -f $HOME/Snapshots/Oxide-Rust.zip || die_with "Failed to remove old bundle!"
-    zip -FS -vr9 $HOME/Snapshots/Oxide-Rust.zip . || die_with "Failed to bundle snapshot files!"
-} || die_with "Failed to create Rust bundle!"
-
-function bundle_rustlegacy {
-    cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
-    mkdir -p $HOME/temp_rustlegacy/rust_server_Data/Managed/x86 || die_with "Failed to create directory structure!"
-
-    echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.MySql/bin/Release/Oxide.Ext.MySql.dll \
-    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
-    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
-    Oxide.Ext.RustLegacy/bin/Release/Oxide.Ext.RustLegacy.dll \
-    $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/*.dll \
-    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
-    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
-    Oxide.Ext.Lua/Dependencies/*Lua.dll \
-    Oxide.Ext.MySql/Dependencies/*.dll \
-    Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/*.dll \
-    $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
-    Oxide.Ext.SQLite/Dependencies/x86/*.dll \
-    $HOME/temp_rustlegacy/rust_server_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.RustLegacy/Patched/Assembly-CSharp.dll \
-    $HOME/temp_rustlegacy/rust_server_Data/Managed || die_with "Failed to copy patched server files!"
-    cp -vf Oxide.Ext.RustLegacy/Patched/oxide.root.json \
-    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
-    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    $HOME/temp_rustlegacy || die_with "Failed to copy config file and root DLLs!"
-
-    echo "Bundling and compressing target files"
-    cd $HOME/temp_rustlegacy || die_with "Failed to change to temp directory!"
-    rm -f $HOME/Snapshots/Oxide-RustLegacy.zip || die_with "Failed to remove old bundle!"
-    zip -FS -vr9 $HOME/Snapshots/Oxide-RustLegacy.zip . || die_with "Failed to bundle snapshot files!"
-} || die_with "Failed to create Rust Legacy bundle!"
-
-function bundle_7dtd {
-    cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
-    mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed/x64 || die_with "Failed to create directory structure!"
-    mkdir -p $HOME/temp_7dtd/7DaysToDie_Data/Managed/x86 || die_with "Failed to create directory structure!"
-
-    echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.MySql/bin/Release/Oxide.Ext.MySql.dll \
-    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
-    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
-    Oxide.Ext.SevenDays/bin/Release/Oxide.Ext.SevenDays.dll \
-    $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/*.dll \
-    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
-    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
-    Oxide.Ext.Lua/Dependencies/*Lua.dll \
-    Oxide.Ext.MySql/Dependencies/*.dll \
-    Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/*.dll \
-    $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
-    Oxide.Ext.SQLite/Dependencies/x64/*.dll \
-    $HOME/temp_7dtd/7DaysToDie_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
-    Oxide.Ext.SQLite/Dependencies/x86/*.dll \
-    $HOME/temp_7dtd/7DaysToDie_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.SevenDays/Patched/Assembly-CSharp.dll \
-    Oxide.Ext.SevenDays/Patched/LogLibrary.dll \
-    $HOME/temp_7dtd/7DaysToDie_Data/Managed || die_with "Failed to copy patched server files!"
-    cp -vf Oxide.Ext.SevenDays/Patched/oxide.root.json \
-    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
-    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    $HOME/temp_7dtd || die_with "Failed to copy config file and root DLLs!"
-
-    echo "Bundling and compressing target files"
-    cd $HOME/temp_7dtd || die_with "Failed to change to temp directory!"
-    zip -FS -vr9 $HOME/Snapshots/Oxide-7DaysToDie.zip . || die_with "Failed to bundle snapshot files!"
-} || die_with "Failed to create 7 Days to Die bundle!"
-
-function bundle_rok {
-    cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
-    mkdir -p $HOME/temp_rok/ROK_Data/Managed/x64 || die_with "Failed to create directory structure!"
-
-    echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.MySql/bin/Release/Oxide.Ext.MySql.dll \
-    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
-    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
-    Oxide.Ext.ReignOfKings/bin/Release/Oxide.Ext.ReignOfKings.dll \
-    $HOME/temp_rok/ROK_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/*.dll \
-    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
-    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
-    Oxide.Ext.Lua/Dependencies/*Lua.dll \
-    Oxide.Ext.MySql/Dependencies/*.dll \
-    Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/*.dll \
-    $HOME/temp_rok/ROK_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.Lua/Dependencies/x64/*.dll \
-    Oxide.Ext.SQLite/Dependencies/x64/*.dll \
-    $HOME/temp_rok/ROK_Data/Managed/x64 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.ReignOfKings/Patched/Assembly-CSharp.dll \
-    $HOME/temp_rok/ROK_Data/Managed || die_with "Failed to copy patched server files!"
-    cp -vf Oxide.Ext.ReignOfKings/Patched/oxide.root.json \
-    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
-    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    $HOME/temp_rok || die_with "Failed to copy config file and root DLLs!"
-
-    echo "Bundling and compressing target files"
-    cd $HOME/temp_rok || die_with "Failed to change to temp directory!"
-    zip -FS -vr9 $HOME/Snapshots/Oxide-ReignOfKings.zip . || die_with "Failed to bundle snapshot files!"
-} || die_with "Failed to create Reign of Kings bundle!"
-
-function bundle_theforest {
-    cd $HOME/build/$TRAVIS_REPO_SLUG || die_with "Failed to change to project home!"
-    mkdir -p $HOME/temp_theforest/TheForest_Data/Managed/x86 || die_with "Failed to create directory structure!"
-
-    echo "Copying target files to temp directory"
-    cp -vf Oxide.Core/bin/Release/Oxide.Core.dll \
-    Oxide.Ext.CSharp/bin/Release/Oxide.Ext.CSharp.dll \
-    Oxide.Ext.JavaScript/bin/Release/Oxide.Ext.JavaScript.dll \
-    Oxide.Ext.Lua/bin/Release/Oxide.Ext.Lua.dll \
-    Oxide.Ext.MySql/bin/Release/Oxide.Ext.MySql.dll \
-    Oxide.Ext.Python/bin/Release/Oxide.Ext.Python.dll \
-    Oxide.Ext.SQLite/bin/Release/Oxide.Ext.SQLite.dll \
-    Oxide.Ext.Unity/bin/Release/Oxide.Ext.Unity.dll \
-    Oxide.Game.TheForest/bin/Release/Oxide.Game.TheForest.dll \
-    $HOME/temp_theforest/TheForest_Data/Managed || die_with "Failed to copy core and extension DLLs!"
-    cp -vf Oxide.Core/Dependencies/*.dll \
-    Oxide.Ext.CSharp/Dependencies/Mono.Cecil.dll \
-    Oxide.Ext.JavaScript/Dependencies/Jint.dll \
-    Oxide.Ext.Lua/Dependencies/*Lua.dll \
-    Oxide.Ext.MySql/Dependencies/*.dll \
-    Oxide.Ext.Python/Dependencies/*.dll \
-    Oxide.Ext.SQLite/Dependencies/*.dll \
-    $HOME/temp_theforest/TheForest_Data/Managed || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Ext.Lua/Dependencies/x86/*.dll \
-    Oxide.Ext.SQLite/Dependencies/x86/*.dll \
-    $HOME/temp_theforest/TheForest_Data/Managed/x86 || die_with "Failed to copy dependency DLLs!"
-    cp -vf Oxide.Game.TheForest/Patched/Assembly-CSharp.dll \
-    $HOME/temp_theforest/TheForest_Data/Managed || die_with "Failed to copy patched server files!"
-    cp -vf Oxide.Game.TheForest/Patched/oxide.root.json \
-    Oxide.Ext.CSharp/Dependencies/CSharpCompiler.exe \
-    Oxide.Ext.CSharp/Dependencies/monosgen-2.0.dll \
-    Oxide.Ext.CSharp/Dependencies/msvcr120.dll \
-    $HOME/temp_theforest || die_with "Failed to copy config file and root DLLs!"
-
-    echo "Bundling and compressing target files"
-    cd $HOME/temp_theforest || die_with "Failed to change to temp directory!"
-    zip -FS -vr9 $HOME/Snapshots/Oxide-TheForest.zip . || die_with "Failed to bundle snapshot files!"
-} || die_with "Failed to create The Forest bundle!"
-
-bundle_rust; bundle_rustlegacy; bundle_7dtd; bundle_rok; bundle_theforest
-
-echo "Adding, committing, and pushing to snapshots"
+echo "Adding, committing, and deploying snapshots"
 cd $HOME/Snapshots || die_with "Failed to change to snapshots directory!"
-git add . || die_with "Failed to add files!"
-git commit -m "Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}" || die_with "Failed to commit files!"
+git add . || die_with "Failed to add files for commit!"
+COMMIT_MESSAGE="Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}"
+git commit -m "$COMMIT_MESSAGE" || die_with "Failed to commit files!"
 git push -q origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"
