@@ -7,8 +7,8 @@
     <ProjectGuid>{E6788452-90F2-4388-A9BC-67D7EBBFF8CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.ReignOfKings</RootNamespace>
-    <AssemblyName>Oxide.Ext.ReignOfKings</AssemblyName>
+    <RootNamespace>Oxide.Game.ReignOfKings</RootNamespace>
+    <AssemblyName>Oxide.Game.ReignOfKings</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

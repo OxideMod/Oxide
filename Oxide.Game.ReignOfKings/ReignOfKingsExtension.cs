@@ -9,13 +9,11 @@ using CodeHatch.Engine.Networking;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using Oxide.ReignOfKings.Libraries;
-using Oxide.ReignOfKings.Plugins;
+using Oxide.Game.ReignOfKings.Libraries;
 
 using UnityEngine;
 
-namespace Oxide.ReignOfKings
+namespace Oxide.Game.ReignOfKings
 {
     /// <summary>
     /// The extension class that represents this extension
@@ -25,20 +23,20 @@ namespace Oxide.ReignOfKings
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "ReignOfKings"; } }
+        public override string Name => "ReignOfKings";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
-        public override string[] WhitelistNamespaces { get { return new[] { "CodeHatch", "Steamworks", "System.Collections", "UnityEngine" }; } }
+        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
+        public override string[] WhitelistNamespaces => new[] { "CodeHatch", "Steamworks", "System.Collections", "UnityEngine" };
 
         internal static readonly string[] Filter =
         {
@@ -104,7 +102,6 @@ namespace Oxide.ReignOfKings
         /// <summary>
         /// Loads this extension
         /// </summary>
-        /// <param name="manager"></param>
         public override void Load()
         {
             IsGameExtension = true;
@@ -114,7 +111,7 @@ namespace Oxide.ReignOfKings
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("ROK", new Libraries.ReignOfKings());
+            Manager.RegisterLibrary("RoK", new Libraries.ReignOfKings());
         }
 
         /// <summary>
@@ -129,7 +126,6 @@ namespace Oxide.ReignOfKings
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;

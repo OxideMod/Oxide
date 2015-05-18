@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
-using Oxide.Core.Libraries;
-using Oxide.Core.Plugins;
 using CodeHatch.Engine.Networking;
 
-namespace Oxide.ReignOfKings.Libraries
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
+
+namespace Oxide.Game.ReignOfKings.Libraries
 {
     /// <summary>
     /// A library containing functions for adding console and chat commands
@@ -26,7 +26,7 @@ namespace Oxide.ReignOfKings.Libraries
                 Plugin = plugin;
                 Name = name;
             }
-        }       
+        }
 
         private class ChatCommand
         {
@@ -41,9 +41,9 @@ namespace Oxide.ReignOfKings.Libraries
                 CallbackName = callback_name;
             }
         }
-        
+
         // All chat commands that plugins have registered
-        private Dictionary<string, ChatCommand> chatCommands; 
+        private Dictionary<string, ChatCommand> chatCommands;
 
         /// <summary>
         /// Initializes a new instance of the Command class
@@ -52,13 +52,13 @@ namespace Oxide.ReignOfKings.Libraries
         {
             chatCommands = new Dictionary<string, ChatCommand>();
         }
-        
+
         /// <summary>
         /// Adds a chat command
         /// </summary>
         /// <param name="name"></param>
         /// <param name="plugin"></param>
-        /// <param name="callbackname"></param>
+        /// <param name="callback_name"></param>
         [LibraryFunction("AddChatCommand")]
         public void AddChatCommand(string name, Plugin plugin, string callback_name)
         {
@@ -70,7 +70,7 @@ namespace Oxide.ReignOfKings.Libraries
                 var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{new_plugin_name} has replaced the {command_name} chat command which was previously registered by {previous_plugin_name}";
-                Core.Interface.Oxide.LogWarning(msg);
+                Interface.Oxide.LogWarning(msg);
             }
 
             cmd = new ChatCommand(command_name, plugin, callback_name);
@@ -85,6 +85,7 @@ namespace Oxide.ReignOfKings.Libraries
         /// <summary>
         /// Handles the specified chat command
         /// </summary>
+        /// <param name="sender"></param>
         /// <param name="name"></param>
         /// <param name="args"></param>
         internal bool HandleChatCommand(Player sender, string name, string[] args)

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Reflection;
 
-using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Plugins;
-
-using Oxide.ReignOfKings.Libraries;
-
 using CodeHatch.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
+
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
+using Oxide.Game.ReignOfKings.Libraries;
 
 namespace Oxide.Plugins
 {
@@ -65,7 +64,7 @@ namespace Oxide.Plugins
                 var attribute = attributes[0] as ChatCommandAttribute;
                 cmd.AddChatCommand(attribute.Command, this, method.Name);
             }
-            
+
             base.HandleAddedToManager(manager);
         }
         [HookMethod("OnPlayerSpawn")]
@@ -91,7 +90,7 @@ namespace Oxide.Plugins
             {
                 var type = plugin_field.GenericArguments[1];
                 object online_player;
-                if (type.GetConstructor(new Type[] { typeof(Player) }) == null)
+                if (type.GetConstructor(new[] { typeof(Player) }) == null)
                     online_player = Activator.CreateInstance(type);
                 else
                     online_player = Activator.CreateInstance(type, (object)player);

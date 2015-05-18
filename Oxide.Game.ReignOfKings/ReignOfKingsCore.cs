@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using CodeHatch.Build;
+using CodeHatch.Common;
+using CodeHatch.Engine.Networking;
+using CodeHatch.Networking.Events.Players;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-using Oxide.ReignOfKings.Libraries;
-
-using CodeHatch.Build;
-using CodeHatch.Networking.Events.Players;
-using RoKPermissions = CodeHatch.Permissions;
+using Oxide.Game.ReignOfKings.Libraries;
 
 using UnityEngine;
-using CodeHatch.Engine.Networking;
-using CodeHatch.Common;
 
-namespace Oxide.ReignOfKings.Plugins
+using Network = uLink.Network;
+using RoKPermissions = CodeHatch.Permissions;
+
+namespace Oxide.Game.ReignOfKings
 {
     /// <summary>
     /// The core Reign of Kings plugin
@@ -40,7 +42,7 @@ namespace Oxide.ReignOfKings.Plugins
         private bool loggingInitialized;
 
         // Track oxide.load chat commands
-        private Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();  
+        private Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
 
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class
@@ -58,7 +60,7 @@ namespace Oxide.ReignOfKings.Plugins
 
             // Cheat a reference for UnityEngine and uLink in the default plugin reference list
             var zero = Vector3.zero;
-            var isServer = uLink.Network.isServer;
+            var isServer = Network.isServer;
         }
 
         /// <summary>
@@ -597,7 +599,7 @@ namespace Oxide.ReignOfKings.Plugins
         }
 
         /// <summary>
-        /// Looks for a player 
+        /// Looks for a player
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>

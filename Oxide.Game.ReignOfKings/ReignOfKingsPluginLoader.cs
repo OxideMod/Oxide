@@ -2,7 +2,7 @@
 
 using Oxide.Core.Plugins;
 
-namespace Oxide.ReignOfKings.Plugins
+namespace Oxide.Game.ReignOfKings
 {
     /// <summary>
     /// Responsible for loading Reign of Kings core plugins

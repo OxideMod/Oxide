@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Reflection;
 
-using Oxide.Core.Libraries;
-
 using CodeHatch.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events;
 
-namespace Oxide.ReignOfKings.Libraries
+using Oxide.Core.Libraries;
+
+namespace Oxide.Game.ReignOfKings.Libraries
 {
     /// <summary>
     /// A library containing utility shortcut functions for Reign of Kings
@@ -48,7 +48,6 @@ namespace Oxide.ReignOfKings.Libraries
         /// </summary>
         /// <param name="name"></param>
         /// <param name="message"></param>
-        /// <param name="userid"></param>
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name, string message = null)
         {
