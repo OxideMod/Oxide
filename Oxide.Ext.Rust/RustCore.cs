@@ -108,6 +108,18 @@ namespace Oxide.Rust.Plugins
         }
 
         /// <summary>
+        /// Called when ServerConsole is enabled
+        /// </summary>
+        [HookMethod("OnEnableServerConsole")]
+        private object OnEnableServerConsole(ServerConsole serverConsole)
+        {
+            if (!Interface.Oxide.CheckConsole(true)) return null;
+            serverConsole.enabled = false;
+            RustExtension.EnableConsole();
+            return false;
+        }
+
+        /// <summary>
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]

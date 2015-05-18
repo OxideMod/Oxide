@@ -1,12 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+
+using Facepunch;
+
+using Network;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
 
 using Oxide.Rust.Libraries;
 using Oxide.Rust.Plugins;
+
+using UnityEngine;
 
 namespace Oxide.Rust
 {
@@ -32,6 +40,10 @@ namespace Oxide.Rust
 
         public override string[] WhitelistAssemblies { get { return new[] {"Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine"}; } }
         public override string[] WhitelistNamespaces { get { return new[] {"Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine"}; } }
+
+        private static readonly string[] Filter =
+        {
+        };
 
         /// <summary>
         /// Caches the OxideMod.rootconfig field
@@ -143,6 +155,43 @@ namespace Oxide.Rust
         public override void OnModLoad()
         {
 
+        }
+
+        internal static void EnableConsole()
+        {
+            if (!Interface.Oxide.CheckConsole(true) || !Interface.Oxide.EnableConsole()) return;
+            Output.OnMessage += HandleLog;
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var str1 = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("[H:mm]");
+                return string.Concat(" ", str1, " [", BasePlayer.activePlayerList.Count, "/", (Net.sv == null ? 0 : Net.sv.maxConnections), "] ", server.hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () => string.Concat(Performance.frameRate, "fps ", Number.FormatSeconds((int)Time.realtimeSinceStartup), string.Empty);
+            Interface.Oxide.ServerConsole.Status2Left = () => string.Concat(" ", BaseNetworkable.serverEntities.Count, " ents, ", BasePlayer.sleepingPlayerList.Count, " slprs");
+            Interface.Oxide.ServerConsole.Status2Right = () => string.Concat(Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond)), "/s in, ", Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond)), "/s out");
+            Interface.Oxide.ServerConsole.Completion = input =>
+            {
+                if (string.IsNullOrEmpty(input)) return null;
+                if (!input.Contains(".")) input = string.Concat("global.", input);
+                return ConsoleSystem.Index.GetAll().Where(c => c.namefull.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.namefull).ToArray();
+            };
+        }
+
+        private static void ServerConsoleOnInput(string input)
+        {
+            ConsoleSystem.Run.Server.Normal(input);
+        }
+
+        private static void HandleLog(string message, string stackTrace, LogType type)
+        {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+            var color = ConsoleColor.Gray;
+            if (type == LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (type == LogType.Error)
+                color = ConsoleColor.Red;
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
 }

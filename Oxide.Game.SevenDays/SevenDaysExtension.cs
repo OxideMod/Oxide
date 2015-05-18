@@ -120,7 +120,7 @@ namespace Oxide.Game.SevenDays
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
-                return SingletonMonoBehaviour<SdtdConsole>.Instance.commands.Keys.Where(c => c.StartsWith(input)).ToArray();
+                return SingletonMonoBehaviour<SdtdConsole>.Instance.commands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
             };
         }
 

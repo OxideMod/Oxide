@@ -488,7 +488,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "CggacqkaE02KcRz+TpqTdQy+w1fEgXOUx4m0GhFC9Dk=",
+            "MSILHash": "2WzD7puAf1YMO4puli6632ulRyVE+W9hrb7LenAoins=",
             "BaseHookName": null
           }
         },
@@ -1025,7 +1025,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "sHWyuWd2jTBEMu3FgiMamSHlx5yjhVLZdLUYdJXmwxE=",
+            "MSILHash": "QWvKp8t31QKNFSikgbXCsB5Q3GAToMMXgQ9Fl8yDEKQ=",
             "BaseHookName": null
           }
         },
@@ -1297,7 +1297,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "XAfx+dSBUPbKAgc/11XqrJeikX/5CJXJaHCEoheJi4k=",
+            "MSILHash": "svxsLQOMSSDM18ehjM6YPD845VB3EI46XtJDFAMXs9o=",
             "BaseHookName": null
           }
         },
@@ -1644,6 +1644,29 @@
               "Parameters": []
             },
             "MSILHash": "k2krPTsJ4jvs+tXBKZ/A5zH078ceK9Q/jAzg7CP4LrA=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnEnableServerConsole [internal]",
+            "HookName": "OnEnableServerConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerConsole",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnEnable",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "/m2mXbZi/CGYAG4eX9A3YYIYTd4RqQKLUZkalMheHYU=",
             "BaseHookName": null
           }
         }
