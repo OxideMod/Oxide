@@ -95,7 +95,7 @@ namespace Oxide.Core.ServerConsole
                 case ConsoleKey.Tab:
                     if (Completion == null) return;
                     var results = Completion(InputString);
-                    if (results == null) return;
+                    if (results == null || results.Length == 0) return;
                     if (results.Length > 1)
                     {
                         ClearLine(StatusText.Length + 1);
