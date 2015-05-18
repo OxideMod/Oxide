@@ -1,7 +1,7 @@
 ﻿using Oxide.Core;
 using Oxide.Core.Plugins;
 
-namespace Oxide.SevenDays.Plugins
+namespace Oxide.Game.SevenDays
 {
     /// <summary>
     /// The core 7 Days to Die plugin
@@ -9,8 +9,8 @@ namespace Oxide.SevenDays.Plugins
     public class SevenDaysCore : CSPlugin
     {
         // Track when the server has been initialized
-        private bool ServerInitialized;
-        private bool LoggingInitialized;
+        private bool serverInitialized;
+        private bool loggingInitialized;
 
         /// <summary>
         /// Initializes a new instance of the SevenDaysCore class
@@ -44,8 +44,8 @@ namespace Oxide.SevenDays.Plugins
         [HookMethod("OnServerInitialized")]
         private void OnServerInitialized()
         {
-            if (ServerInitialized) return;
-            ServerInitialized = true;
+            if (serverInitialized) return;
+            serverInitialized = true;
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
         }
@@ -66,8 +66,8 @@ namespace Oxide.SevenDays.Plugins
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
-            if (ServerInitialized) plugin.CallHook("OnServerInitialized");
-            if (!LoggingInitialized && plugin.Name == "unitycore")
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+            if (!loggingInitialized && plugin.Name == "unitycore")
                 InitializeLogging();
         }
 
@@ -76,7 +76,7 @@ namespace Oxide.SevenDays.Plugins
         /// </summary>
         private void InitializeLogging()
         {
-            LoggingInitialized = true;
+            loggingInitialized = true;
             CallHook("InitLogging", null);
         }
     }

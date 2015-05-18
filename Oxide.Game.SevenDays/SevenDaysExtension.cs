@@ -4,11 +4,9 @@ using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 
-using Oxide.SevenDays.Plugins;
-
 using UnityEngine;
 
-namespace Oxide.SevenDays
+namespace Oxide.Game.SevenDays
 {
     /// <summary>
     /// The extension class that represents this extension
@@ -18,20 +16,20 @@ namespace Oxide.SevenDays
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "SevenDays"; } }
+        public override string Name => "SevenDays";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies { get { return new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" }; } }
-        public override string[] WhitelistNamespaces { get { return new[] { "Steamworks", "System.Collections", "UnityEngine" }; } }
+        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
+        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "UnityEngine" };
 
         private static readonly string[] Filter =
         {
@@ -87,7 +85,6 @@ namespace Oxide.SevenDays
         /// <summary>
         /// Loads this extension
         /// </summary>
-        /// <param name="manager"></param>
         public override void Load()
         {
             IsGameExtension = true;
@@ -111,7 +108,6 @@ namespace Oxide.SevenDays
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
@@ -128,13 +124,13 @@ namespace Oxide.SevenDays
             };
         }
 
-        private void ServerConsoleOnInput(string input)
+        private static void ServerConsoleOnInput(string input)
         {
             var result = SingletonMonoBehaviour<SdtdConsole>.Instance.ExecuteSync(input, null);
             if (result != null) Interface.Oxide.ServerConsole.AddMessage(string.Join("\n", result.ToArray()));
         }
 
-        private void HandleLog(string message, string stackTrace, LogType type)
+        private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
             var color = ConsoleColor.Gray;

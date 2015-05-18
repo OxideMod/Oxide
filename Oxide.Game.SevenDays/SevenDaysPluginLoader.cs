@@ -2,7 +2,7 @@
 
 using Oxide.Core.Plugins;
 
-namespace Oxide.SevenDays.Plugins
+namespace Oxide.Game.SevenDays
 {
     /// <summary>
     /// Responsible for loading 7 Days to Die core plugins

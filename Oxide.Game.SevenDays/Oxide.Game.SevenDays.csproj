@@ -7,8 +7,8 @@
     <ProjectGuid>{6A987A21-D407-41C6-AD9F-E5D3DF22D617}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Ext.SevenDays</RootNamespace>
-    <AssemblyName>Oxide.Ext.SevenDays</AssemblyName>
+    <RootNamespace>Oxide.Game.SevenDays</RootNamespace>
+    <AssemblyName>Oxide.Game.SevenDays</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

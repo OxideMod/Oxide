@@ -85,12 +85,12 @@ namespace Oxide.Game.TheForest
             // TODO: Add status information
         }
 
-        private void ServerConsoleOnInput(string input)
+        private static void ServerConsoleOnInput(string input)
         {
             // TODO
         }
 
-        private void HandleLog(string message, string stackTrace, LogType type)
+        private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
             var color = ConsoleColor.Gray;
