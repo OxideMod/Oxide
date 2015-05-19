@@ -115,7 +115,18 @@ namespace Oxide.Rust.Plugins
         {
             if (!Interface.Oxide.CheckConsole(true)) return null;
             serverConsole.enabled = false;
+            typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, null);
             RustExtension.EnableConsole();
+            return false;
+        }
+
+        /// <summary>
+        /// Called when ServerConsole is disabled
+        /// </summary>
+        [HookMethod("OnDisableServerConsole")]
+        private object OnDisableServerConsole()
+        {
+            if (!Interface.Oxide.CheckConsole(true)) return null;
             return false;
         }
 

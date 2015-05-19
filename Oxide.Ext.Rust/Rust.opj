@@ -1669,6 +1669,29 @@
             "MSILHash": "/m2mXbZi/CGYAG4eX9A3YYIYTd4RqQKLUZkalMheHYU=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDisableServerConsole [internal]",
+            "HookName": "OnDisableServerConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerConsole",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnDisable",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "4CAKC5UytzD2uJzaWnQXJ2VEGyypmvO7u7VGT65oUiE=",
+            "BaseHookName": null
+          }
         }
       ]
     }
