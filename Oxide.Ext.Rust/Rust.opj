@@ -1659,14 +1659,12 @@
             "HookName": "OnEnableServerConsole",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerConsole",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "SV_Launch",
+              "Exposure": 2,
+              "Name": "OnEnable",
               "ReturnType": "System.Void",
-              "Parameters": [
-                "BaseEntity/RPCMessage"
-              ]
+              "Parameters": []
             },
             "MSILHash": "/m2mXbZi/CGYAG4eX9A3YYIYTd4RqQKLUZkalMheHYU=",
             "BaseHookName": null
