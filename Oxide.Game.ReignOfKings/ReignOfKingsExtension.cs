@@ -153,7 +153,7 @@ namespace Oxide.Game.ReignOfKings
             {
                 if (string.IsNullOrEmpty(input)) return null;
                 if (input.StartsWith("/")) input = input.Remove(0, 1);
-                return CommandManager.RegisteredCommands.Keys.Where(c => c.StartsWith(input)).ToArray();
+                return CommandManager.RegisteredCommands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
             };
         }
 

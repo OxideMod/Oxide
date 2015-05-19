@@ -41,16 +41,13 @@ namespace Oxide.Core.Plugins
         }
 
         // All hooked methods
-        protected IDictionary<string, List<MethodInfo>> hooks;
+        protected IDictionary<string, List<MethodInfo>> hooks = new Dictionary<string, List<MethodInfo>>();
 
         /// <summary>
         /// Initializes a new instance of the CSPlugin class
         /// </summary>
         public CSPlugin()
         {
-            // Initialize
-            hooks = new Dictionary<string, List<MethodInfo>>();
-
             // Find all hooks in the plugin and any base classes derived from CSPlugin
             var types = new List<Type>();
             var type = GetType();
@@ -133,8 +130,10 @@ namespace Oxide.Core.Plugins
                         {
                             var parameter = parameters[i];
                             // Use the default value if one is provided by the method definition or the argument is a value type
-                            if (parameter.DefaultValue != null || parameter.ParameterType.IsValueType)
+                            if (parameter.DefaultValue != DBNull.Value || parameter.ParameterType.IsValueType)
+                            {
                                 hook_args[i] = parameter.DefaultValue == DBNull.Value ? Activator.CreateInstance(parameter.ParameterType) : parameter.DefaultValue;
+                            }
                         }
                     }
                 }
