@@ -120,6 +120,7 @@ namespace Oxide.Core.Libraries
                     {
                         request.BeginGetRequestStream(result =>
                         {
+                            if (request == null) return;
                             try
                             {
                                 // Write request body
