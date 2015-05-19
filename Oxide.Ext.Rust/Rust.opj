@@ -479,7 +479,7 @@
             "HookName": "OnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "chat",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "say",
@@ -488,7 +488,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "2WzD7puAf1YMO4puli6632ulRyVE+W9hrb7LenAoins=",
+            "MSILHash": "CggacqkaE02KcRz+TpqTdQy+w1fEgXOUx4m0GhFC9Dk=",
             "BaseHookName": null
           }
         },
@@ -1015,7 +1015,7 @@
             "HookName": "OnRunPlayerMetabolism",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerMetabolism",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "RunMetabolism",
@@ -1025,7 +1025,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "QWvKp8t31QKNFSikgbXCsB5Q3GAToMMXgQ9Fl8yDEKQ=",
+            "MSILHash": "sHWyuWd2jTBEMu3FgiMamSHlx5yjhVLZdLUYdJXmwxE=",
             "BaseHookName": null
           }
         },
@@ -1290,14 +1290,14 @@
             "HookName": "OnPlayerSleepEnded",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "EndSleeping",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "svxsLQOMSSDM18ehjM6YPD845VB3EI46XtJDFAMXs9o=",
+            "MSILHash": "XAfx+dSBUPbKAgc/11XqrJeikX/5CJXJaHCEoheJi4k=",
             "BaseHookName": null
           }
         },
@@ -1690,6 +1690,31 @@
               "Parameters": []
             },
             "MSILHash": "4CAKC5UytzD2uJzaWnQXJ2VEGyypmvO7u7VGT65oUiE=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 123,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0,l8",
+            "HookTypeName": "Simple",
+            "Name": "OnRocketLaunch [internal]",
+            "HookName": "OnRocketLaunch",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseLauncher",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SV_Launch",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "VaUWuwEzG3ApCu+KNe6s5x8XCcVCccoIl/AI0mrLZvI=",
             "BaseHookName": null
           }
         }
