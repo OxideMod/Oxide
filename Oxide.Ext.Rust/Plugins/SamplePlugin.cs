@@ -45,10 +45,8 @@ namespace Oxide.Plugins
             Puts($"Plugin loaded after {Now:0.000} seconds");
         }
 
-        void OnPlayerInit(Network.Connection connection)
+        void OnPlayerInit(BasePlayer player)
         {
-            var player = connection.player as BasePlayer;
-            if (!player) return;
             // Call a method using a named argument for one of the optional arguments
             ItemManager.CreateByItemID(ItemManager.FindItemDefinition("rock").itemid, isBlueprint: true);
             // Send a push notification if the "push" plugin is currently loaded

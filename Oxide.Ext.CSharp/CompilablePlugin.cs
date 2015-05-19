@@ -120,6 +120,11 @@ namespace Oxide.Plugins
                     InitFailed("Unable to load " + ScriptName + ". " + ex.ToString());
                     return;
                 }
+                catch (Exception ex)
+                {
+                    InitFailed("Unable to load " + ScriptName + ". " + ex.ToString());
+                    return;
+                }
 
                 if (plugin == null)
                 {
