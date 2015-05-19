@@ -894,5 +894,16 @@ namespace Oxide.Rust.Plugins
             if (returnvar is double) return (float)(double)returnvar;
             return chance;
         }
+        
+        /// <summary>
+        /// Called when a player fires a rocket from a rocket launcher.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="entity"></param>
+        [HookMethod("OnRocketLaunch")]
+        private object OnRocketLaunch(BaseEntity.RPCMessage msg, BaseEntity entity)
+        {
+            return Interface.CallHook("OnRocketFired", msg.player, entity);
+        }
     }
 }

@@ -1646,6 +1646,31 @@
             "MSILHash": "k2krPTsJ4jvs+tXBKZ/A5zH078ceK9Q/jAzg7CP4LrA=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 123,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l8",
+            "HookTypeName": "Simple",
+            "Name": "OnRocketLaunch [internal]",
+            "HookName": "OnRocketLaunch",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseLauncher",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SV_Launch",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "VaUWuwEzG3ApCu+KNe6s5x8XCcVCccoIl/AI0mrLZvI=",
+            "BaseHookName": null
+          }
         }
       ]
     }
