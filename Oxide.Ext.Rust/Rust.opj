@@ -1646,6 +1646,31 @@
             "MSILHash": "k2krPTsJ4jvs+tXBKZ/A5zH078ceK9Q/jAzg7CP4LrA=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "EligibleForWounding",
+            "HookName": "OnEligibleForWounding",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "EligibleForWounding",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "84NaHhBqRwoz2YEHXnJNhVrtZeZJzwdjHo0SIAC8ohs=",
+            "BaseHookName": null
+          }
         }
       ]
     }
