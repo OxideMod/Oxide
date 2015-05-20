@@ -575,15 +575,23 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("SetGroupParent")]
         public bool SetGroupParent(string groupname, string parent)
         {
-            if (!GroupExists(groupname) || !GroupExists(parent)) return false;
+            if (!GroupExists(groupname)) return false;
             groupname = groupname.ToLower();
-            parent = parent.ToLower();
-            if (groupname.Equals(parent)) return false;
             // First, get the group data
             GroupData data;
             if (!groupdata.TryGetValue(groupname, out data)) return false;
 
-            if (data.ParentGroup == parent) return true;
+            if (string.IsNullOrEmpty(parent))
+            {
+                data.ParentGroup = null;
+                SaveGroups();
+                return true;
+            }
+
+            if (!GroupExists(parent) || groupname.Equals(parent.ToLower())) return false;
+            parent = parent.ToLower();
+
+            if (data.ParentGroup.Equals(parent)) return true;
             //Get parent data
             GroupData parentData;
             if (!groupdata.TryGetValue(parent, out parentData)) return false;

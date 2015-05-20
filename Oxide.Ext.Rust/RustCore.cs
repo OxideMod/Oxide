@@ -357,7 +357,7 @@ namespace Oxide.Rust.Plugins
                     return;
                 }
                 var parent = arg.GetString(2);
-                if (!permission.GroupExists(parent))
+                if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
                     arg.ReplyWith("Parent group '" + parent + "' doesn't exist");
                     return;
