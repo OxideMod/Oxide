@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -88,6 +89,8 @@ namespace Oxide.Plugins
                     CacheAllScripts(compilation.plugins);
 
                     var extension_names = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
+                    var game_extension_ns = Interface.Oxide.GetAllExtensions().SingleOrDefault(ext => ext.IsGameExtension)?.GetType().Namespace;
+                    var new_game_ext = game_extension_ns != null && game_extension_ns.Contains(".Game.");
                     var include_path = Interface.Oxide.PluginDirectory + "\\Include";
 
                     foreach (var plugin in compilation.plugins.ToArray())
@@ -96,9 +99,9 @@ namespace Oxide.Plugins
                         plugin.IncludePaths.Clear();
 
                         bool parsingNamespace = false;
-                        foreach (var script_line in plugin.ScriptLines)
+                        for (var i = 0; i < plugin.ScriptLines.Length; i++)
                         {
-                            var line = script_line.Trim();
+                            var line = plugin.ScriptLines[i].Trim();
                             if (line.Length < 1) continue;
 
                             Match match;
@@ -129,20 +132,31 @@ namespace Oxide.Plugins
                             else
                             {
                                 // Include explicit references defined by magic comments in script
-                                match = Regex.Match(line, @"^//\s?Reference:\s?(\S+)$", RegexOptions.IgnoreCase);
+                                match = Regex.Match(line, @"^//\s*Reference:\s*(\S+)\s*$", RegexOptions.IgnoreCase);
                                 if (match.Success)
                                 {
-                                    AddReference(currentId, plugin, match.Groups[1].Value);
+                                    var result = match.Groups[1].Value;
+                                    //TODO temp ignore renamed game exts
+                                    if (!new_game_ext || !result.StartsWith(game_extension_ns.Replace(".Game.", ".Ext.")))
+                                        AddReference(currentId, plugin, match.Groups[1].Value);
+                                    else
+                                        Interface.Oxide.LogWarning("Ignored obsolete game extension reference '{0}' in plugin '{1}'", result, plugin.Name);
                                     continue;
                                 }
 
                                 // Include implicit references detected from using statements in script
-                                match = Regex.Match(line, @"^\s*using\s+([^;]+)\s*;$", RegexOptions.IgnoreCase);
+                                match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Ext|Game)[^;]+);\s*$", RegexOptions.IgnoreCase);
                                 if (match.Success)
                                 {
-                                    var split_name = match.Groups[1].Value.Trim().Split('.');
-                                    if (split_name.Length > 2 && split_name[0] == "Oxide" && split_name[1] == "Ext")
-                                        AddReference(currentId, plugin, "Oxide.Ext." + split_name[2]);
+                                    var result = match.Groups[1].Value;
+                                    //TODO temp ignore renamed game exts
+                                    if (new_game_ext && result.StartsWith(game_extension_ns.Replace(".Game.", ".Ext.")))
+                                    {
+                                        Interface.Oxide.LogWarning("Replaced obsolete game extension using directive '{0}' in plugin '{1}'", result, plugin.Name);
+                                        plugin.ScriptLines[i] = plugin.ScriptLines[i].Replace(".Ext.", ".Game.");
+                                        result = result.Replace(".Ext.", ".Game.");
+                                    }
+                                    AddReference(currentId, plugin, result);
                                     continue;
                                 }
 
@@ -246,7 +260,7 @@ namespace Oxide.Plugins
             referenceFiles.AddRange(compilation.references.Select(reference_name => new CompilerFile { Name = reference_name + ".dll", Data = File.ReadAllBytes(Path.Combine(Interface.Oxide.ExtensionDirectory, reference_name + ".dll")) }));
 
             var sourceFiles = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Select(includePath => new CompilerFile { Name = Path.GetFileName(includePath), Data = File.ReadAllBytes(includePath) }).ToList();
-            sourceFiles.AddRange(compilation.plugins.Select(plugin => plugin.ScriptPath).Select(scriptPath => new CompilerFile { Name = Path.GetFileName(scriptPath), Data = File.ReadAllBytes(scriptPath) }));
+            sourceFiles.AddRange(compilation.plugins.Select(plugin => new CompilerFile { Name = plugin.ScriptName + ".cs", Data = Encoding.Default.GetBytes(string.Join(Environment.NewLine, plugin.ScriptLines)) }));
 
             var compilerData = new CompilerData
             {
