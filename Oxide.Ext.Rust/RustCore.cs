@@ -308,14 +308,15 @@ namespace Oxide.Rust.Plugins
             // Check 2 args exists
             if (!arg.HasArgs(2))
             {
-                arg.ReplyWith("Syntax: oxide.group <add|remove|set> <name> [title] [rank]");
+                var reply = "Syntax: oxide.group <add|set> <name> [title] [rank]\n";
+                reply += "Syntax: oxide.group <remove|show> <name>\n";
+                reply += "Syntax: oxide.group <parent> <name> <parentName>";
+                arg.ReplyWith(reply);
                 return;
             }
 
             var mode = arg.GetString(0);
             var name = arg.GetString(1);
-            var title = arg.GetString(2);
-            var rank = arg.GetInt(3);
 
             if (mode.Equals("add"))
             {
@@ -324,7 +325,7 @@ namespace Oxide.Rust.Plugins
                     arg.ReplyWith("Group '" + name + "' already exist");
                     return;
                 }
-                permission.CreateGroup(name, title, rank);
+                permission.CreateGroup(name, arg.GetString(2), arg.GetInt(3));
                 arg.ReplyWith("Group '" + name + "' created");
             }
             else if (mode.Equals("remove"))
@@ -344,9 +345,38 @@ namespace Oxide.Rust.Plugins
                     arg.ReplyWith("Group '" + name + "' doesn't exist");
                     return;
                 }
-                permission.SetGroupTitle(name, title);
-                permission.SetGroupRank(name, rank);
+                permission.SetGroupTitle(name, arg.GetString(2));
+                permission.SetGroupRank(name, arg.GetInt(3));
                 arg.ReplyWith("Group '" + name + "' changed");
+            }
+            else if (mode.Equals("parent"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
+                var parent = arg.GetString(2);
+                if (!permission.GroupExists(parent))
+                {
+                    arg.ReplyWith("Parent group '" + parent + "' doesn't exist");
+                    return;
+                }
+                if (permission.SetGroupParent(name, parent))
+                    arg.ReplyWith("Group '" + name + "' changed");
+                else
+                    arg.ReplyWith("Group '" + name + "' failed to change");
+            }
+            else if (mode.Equals("show"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
+                var result = "Group '" + name + "' permissions:\n";
+                result += string.Join(",", permission.GetGroupPermissions(name));
+                arg.ReplyWith(result);
             }
         }
 
