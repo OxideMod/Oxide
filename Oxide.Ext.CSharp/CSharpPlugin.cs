@@ -276,7 +276,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void Puts(string format, params object[] args)
         {
-            Interface.Oxide.LogInfo(format, args);
+            Interface.Oxide.LogInfo($"[{Title}] {format}", args);
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintWarning(string format, params object[] args)
         {
-            Interface.Oxide.LogWarning(format, args);
+            Interface.Oxide.LogWarning($"[{Title}] {format}", args);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Oxide.Plugins
         /// <param name="params"></param>
         protected void PrintError(string format, params object[] args)
         {
-            Interface.Oxide.LogError(format, args);
+            Interface.Oxide.LogError($"[{Title}] {format}", args);
         }
 
         /// <summary>
