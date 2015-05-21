@@ -1457,7 +1457,7 @@
             "InjectionIndex": 74,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0, l5",
+            "ArgumentString": "a0, l4",
             "HookTypeName": "Simple",
             "Name": "OnWeaponDoThrow [internal]",
             "HookName": "OnWeaponDoThrow",
