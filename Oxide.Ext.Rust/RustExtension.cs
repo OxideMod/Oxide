@@ -198,9 +198,17 @@ namespace Oxide.Rust
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
+            {
                 color = ConsoleColor.Yellow;
+                server.Log("Log.Warning.txt", message);
+            }
             else if (type == LogType.Error)
+            {
                 color = ConsoleColor.Red;
+                server.Log("Log.Error.txt", message);
+            } 
+            else if (!message.StartsWith("[CHAT]"))
+                server.Log("Log.Log.txt", message);
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
