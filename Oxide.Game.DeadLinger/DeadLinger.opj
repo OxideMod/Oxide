@@ -1,0 +1,123 @@
+{
+  "Name": "The Dead Linger",
+  "TargetDirectory": "D:\\Servers\\Game\\DeadLinger\\Latest\\TDL_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TDLConfig",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "P7rQaq1x+u2qEStf/iPA5Y3F35P6V8lplnjOtnsJ6Mg=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 11,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SteamManager",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnDestroy",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "pAl/gHfTAXUj42TCBel3vNurYNpqFIIRbV0HDS6Pg0k=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Scenario",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "flushAllToDisk",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "IqZIlzcHIsIxfx0MeYzAebSqJDVkAKzp16rD67sFdGQ=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheDeadLinger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnApplicationQuit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "R2C+KSx9Brrb3h+Q2Gx7slUlabz4Mf+WP5fdP/r1D98=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 3,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TDLConfig",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "P7rQaq1x+u2qEStf/iPA5Y3F35P6V8lplnjOtnsJ6Mg=",
+            "BaseHookName": null
+          }
+        }
+      ]
+    }
+  ]
+}
