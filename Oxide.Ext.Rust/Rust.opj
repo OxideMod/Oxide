@@ -571,7 +571,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 12,
+            "InjectionIndex": 11,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -621,10 +621,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 69,
+            "InjectionIndex": 68,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l3",
+            "ArgumentString": "this, l4",
             "HookTypeName": "Simple",
             "Name": "OnItemDeployed",
             "HookName": "OnItemDeployed",
@@ -647,10 +647,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 72,
+            "InjectionIndex": 71,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l1",
+            "ArgumentString": "this, l2",
             "HookTypeName": "Simple",
             "Name": "OnItemDeployed",
             "HookName": "OnItemDeployed",
@@ -1690,6 +1690,106 @@
               "Parameters": []
             },
             "MSILHash": "4CAKC5UytzD2uJzaWnQXJ2VEGyypmvO7u7VGT65oUiE=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanLootPlayer",
+            "HookName": "CanLootPlayer",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanBeLooted",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "hSltD0G85Cvxb5pMK5exJk2lMjd8AebQKnHTlB1d9no=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanBeWounded",
+            "HookName": "CanBeWounded",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "EligibleForWounding",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "84NaHhBqRwoz2YEHXnJNhVrtZeZJzwdjHo0SIAC8ohs=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 123,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l7",
+            "HookTypeName": "Simple",
+            "Name": "OnRocketLaunch [internal]",
+            "HookName": "OnRocketLaunch",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseLauncher",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SV_Launch",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "NZ3Z7BD9N/Tjctw20mHRhMP9X/wgOhgthPZH8Oov37o=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 38,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l2, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnWeaponFire [internal]",
+            "HookName": "OnWeaponFire",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseProjectile",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CLProject",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "Y+uomN1anhD+70qDOoMujQWvXK7fva0H7nqO+AojDZw=",
             "BaseHookName": null
           }
         }

@@ -8,7 +8,7 @@ using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 using Oxide.Rust.Libraries;
-
+using ProtoBuf;
 using Rust;
 
 using UnityEngine;
@@ -946,6 +946,31 @@ namespace Oxide.Rust.Plugins
             if (returnvar is float) return (float)returnvar;
             if (returnvar is double) return (float)(double)returnvar;
             return chance;
+        }
+
+        /// <summary>
+        /// Called when a player launches a rocket with the rocket launcher
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HookMethod("OnRocketLaunch")]
+        private object OnRocketLaunch(BaseEntity.RPCMessage msg, BaseEntity entity)
+        {
+            return Interface.CallHook("OnRocketLaunched", msg.player, entity);
+        }
+
+        /// <summary>
+        /// Called when a player fires a weapon
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="component"></param>
+        /// <param name="projectiles"></param>
+        /// <returns></returns>
+        [HookMethod("OnWeaponFire")]
+        private object OnWeaponFire(BaseEntity.RPCMessage msg, ItemModProjectile component, ProjectileShoot projectiles)
+        {
+            return Interface.CallHook("OnWeaponFired", msg.player, component, projectiles);
         }
     }
 }
