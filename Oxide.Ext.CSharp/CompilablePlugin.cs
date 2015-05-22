@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Text;
 
 using Oxide.Core;
 
@@ -17,6 +18,7 @@ namespace Oxide.Plugins
         public string ScriptName;
         public string ScriptPath;
         public string[] ScriptLines;
+        public Encoding ScriptEncoding;
         public HashSet<string> References = new HashSet<string>();
         public HashSet<string> IncludePaths = new HashSet<string>();
         public string CompilerErrors;

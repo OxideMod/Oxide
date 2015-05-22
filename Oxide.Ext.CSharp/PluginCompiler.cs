@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -260,7 +259,7 @@ namespace Oxide.Plugins
             referenceFiles.AddRange(compilation.references.Select(reference_name => new CompilerFile { Name = reference_name + ".dll", Data = File.ReadAllBytes(Path.Combine(Interface.Oxide.ExtensionDirectory, reference_name + ".dll")) }));
 
             var sourceFiles = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Select(includePath => new CompilerFile { Name = Path.GetFileName(includePath), Data = File.ReadAllBytes(includePath) }).ToList();
-            sourceFiles.AddRange(compilation.plugins.Select(plugin => new CompilerFile { Name = plugin.ScriptName + ".cs", Data = Encoding.Default.GetBytes(string.Join(Environment.NewLine, plugin.ScriptLines)) }));
+            sourceFiles.AddRange(compilation.plugins.Select(plugin => new CompilerFile { Name = plugin.ScriptName + ".cs", Data = plugin.ScriptEncoding.GetBytes(string.Join(Environment.NewLine, plugin.ScriptLines)) }));
 
             var compilerData = new CompilerData
             {
@@ -385,7 +384,15 @@ namespace Oxide.Plugins
                         plugin.CompilerErrors = "Plugin file was deleted";
                         return false;
                     }
-                    plugin.ScriptLines = File.ReadAllLines(plugin.ScriptPath);
+                    using (var reader = File.OpenText(plugin.ScriptPath))
+                    {
+                        var list = new List<string>();
+                        while (!reader.EndOfStream)
+                            list.Add(reader.ReadLine());
+                        plugin.ScriptLines = list.ToArray();
+                        plugin.ScriptEncoding = reader.CurrentEncoding;
+                    }
+                    //plugin.ScriptLines = File.ReadAllLines(plugin.ScriptPath);
                     return true;
                 }
                 catch (IOException)
