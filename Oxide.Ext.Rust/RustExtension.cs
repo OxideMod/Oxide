@@ -46,9 +46,11 @@ namespace Oxide.Rust
             "AngryAnt Behave version",
             "HDR RenderTexture format is not supported on this platform.",
             "Image Effects are not supported on this platform.",
-            "Unsupported encoding: 'utf8'",
             "The image effect Main Camera",
-            "The image effect effect -"
+            "The image effect effect -",
+            "Unable to find shaders",
+            "Unsupported encoding: 'utf8'",
+            "[SpawnHandler] populationCounts"
         };
 
         /// <summary>
