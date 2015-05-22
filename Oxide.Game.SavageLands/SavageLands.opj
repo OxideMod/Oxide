@@ -1,0 +1,209 @@
+{
+  "Name": "Savage Lands",
+  "TargetDirectory": "D:\\Servers\\Game\\SavageLands\\Latest\\SavageLands_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Initialize",
+            "HookName": "OnInitialize",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "tPMtD5+W4gtJhEBKEs+65PYEtdtmuDrt4nPJMzUhFkM=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnApplicationQuit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "lD83a6rpd3bcqIVXtfgZqgy4Szah5GA7KLy7dmtyTHU=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "ShutDown",
+            "HookName": "OnShutDown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ShutDown",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "d6Ul5qzV7TsU1CfDYGyswhBdQhj+mN+6HaF1u7Sqvqk=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 10,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SaveGame",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "JIVaXU2okeSUfROvF+Jw4zt7UsrZUqrVdfB7748l61c=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "StartOnlineGame",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.String",
+                "System.String"
+              ]
+            },
+            "MSILHash": "nuoPyRcns0WNB7/wZZI+8QbrFU+oZO9gfvusyVeZ3YY=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "StartOnlineGame",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.String",
+                "System.String"
+              ]
+            },
+            "MSILHash": "nuoPyRcns0WNB7/wZZI+8QbrFU+oZO9gfvusyVeZ3YY=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "DoneLoadingData",
+            "HookName": "OnDoneLoadingData",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoneLoadingData",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "hzGKrcMlrBJ8lYpxr95duaEYgyiKxLCOogWaa1E4Mls=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "HostGame",
+            "HookName": "OnHostGame",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "HostGame",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "J+gPf+IOen2ryxr91wC/PA0b3exIdBGrN5GDrZSRd2A=",
+            "BaseHookName": null
+          }
+        }
+      ]
+    }
+  ]
+}
