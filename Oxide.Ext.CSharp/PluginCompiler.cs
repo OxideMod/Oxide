@@ -123,7 +123,7 @@ namespace Oxide.Plugins
                                 if (class_name != plugin.Name)
                                 {
                                     Interface.Oxide.LogError("Plugin filename is incorrect: {0}.cs (should be {1}.cs)", plugin.ScriptName, class_name);
-                                    plugin.CompilerErrors = string.Format("Plugin filename is incorrect (should be {1}.cs)", class_name);
+                                    plugin.CompilerErrors = string.Format("Plugin filename is incorrect: {0}.cs (should be {1}.cs)", plugin.ScriptName, class_name);
                                     RemovePlugin(compilation.plugins, plugin);
                                 }
 
