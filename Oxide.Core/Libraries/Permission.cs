@@ -591,7 +591,7 @@ namespace Oxide.Core.Libraries
             if (!GroupExists(parent) || groupname.Equals(parent.ToLower())) return false;
             parent = parent.ToLower();
 
-            if (data.ParentGroup.Equals(parent)) return true;
+            if (!string.IsNullOrEmpty(data.ParentGroup) && data.ParentGroup.Equals(parent)) return true;
             //Get parent data
             GroupData parentData;
             if (!groupdata.TryGetValue(parent, out parentData)) return false;
