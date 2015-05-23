@@ -281,6 +281,11 @@ namespace Oxide.Plugins
 
         private void OnMessage(ObjectStreamConnection<CompilerMessage, CompilerMessage> connection, CompilerMessage message)
         {
+            if (message == null)
+            {
+                Interface.Oxide.LogWarning("Compiler died?");
+                return;
+            }
             switch (message.Type)
             {
                 case CompilerMessageType.Assembly:

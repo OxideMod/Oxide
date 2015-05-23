@@ -49,7 +49,7 @@ namespace ObjectStream.IO
         public TRead ReadObject()
         {
             var len = ReadLength();
-            return len == 0 ? default(TRead) : ReadObject(len);
+            return len == 0 ? null : ReadObject(len);
         }
 
         #region Private stream readers
@@ -59,10 +59,7 @@ namespace ObjectStream.IO
             const int lensize = sizeof(int);
             var lenbuf = new byte[lensize];
             var bytesRead = _inStream.Read(lenbuf, 0, lensize);
-            if (bytesRead == 0)
-            {
-                return 0;
-            }
+            if (bytesRead == 0) return 0;
             if (bytesRead != lensize)
                 throw new IOException(string.Format("Expected {0} bytes but read {1}", lensize, bytesRead));
             return IPAddress.NetworkToHostOrder(BitConverter.ToInt32(lenbuf, 0));
