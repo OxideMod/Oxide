@@ -65,13 +65,11 @@ namespace ObjectStream
             while (_streamWrapper.CanRead)
             {
                 var obj = _streamWrapper.ReadObject();
-                if (obj == null)
-                {
-                    CloseImpl();
-                    return;
-                }
                 if (ReceiveMessage != null)
                     ReceiveMessage(this, obj);
+                if (obj != null) continue;
+                CloseImpl();
+                return;
             }
         }
 
