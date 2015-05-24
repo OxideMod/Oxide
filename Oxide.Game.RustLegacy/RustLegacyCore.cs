@@ -686,7 +686,7 @@ namespace Oxide.Game.RustLegacy
             var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
             var num = Interface.CallHook("OnPlayerVoice", client.netUser, players);
             playerList.SetValue(null, players);
-            return (int) num;
+            return (num != null) ? (int) num : num;
         }
 
         /// <summary>
