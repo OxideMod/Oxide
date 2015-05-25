@@ -751,7 +751,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 89,
+            "InjectionIndex": 82,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -771,7 +771,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "RIUffY8KP3ITpF/CiiQwNEV8ONYAmopzfo3uwuOmyNk=",
+            "MSILHash": "uiRiGLjV2PGPiPWYVIER6fciM+PAz290y5lI4yF5EjI=",
             "BaseHookName": null
           }
         },
