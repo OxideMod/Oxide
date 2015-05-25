@@ -744,7 +744,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "OiDde4edx/HIZFMxqcC/V5IHFn29r2LgziEITfS3DJ0=",
+            "MSILHash": "rHsfgDsE1rcnvOq3pWLe+rftRqmCN9adC0uIMuSIIfI=",
             "BaseHookName": null
           }
         },
@@ -1098,7 +1098,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "D7ejZeavUswi4H9Veb5U7Lq+l1kl/qoBXzBDKlDSIOo=",
+            "MSILHash": "3w+1pxf5P2X645P7FS1ILNvSCHrCyBq1i5Ja9GMTcRk=",
             "BaseHookName": null
           }
         },
@@ -1148,7 +1148,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "RgQEUe44PYFOQCs9jYhOxlxDreQ6gcjVUP5a+mkw8Fs=",
+            "MSILHash": "iIDsAWgI1Qzo0ix7mpQsqxt1e5gVILyDLDCRzvElx5c=",
             "BaseHookName": null
           }
         },
@@ -1224,7 +1224,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "LsqJqvo6eiEW6DFAOjKHEezQzau675ZtVhE9pdBPfDs=",
+            "MSILHash": "j/zRiPsK70z9dPAhMvei8fklNe46edTdFAsb/0F0Arw=",
             "BaseHookName": null
           }
         },
@@ -1249,7 +1249,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "Asvz/wUyrTQnL5ePZ0fnPg2fBQORqrqg1J+uW4Yi+qU=",
+            "MSILHash": "Fwv4xhJ6ELP5Qxe+oz/EUXrBjLXdlidNrx49qgUBpGM=",
             "BaseHookName": null
           }
         },
@@ -1595,7 +1595,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "qv8x8l6PpCwehV+T0C8tKr6GDX+DmyThhrnB1mBxyy8=",
+            "MSILHash": "Zc2T4/rGKYNK+U08LoPN0QDnx0W4Fms2XuaM39aHnSM=",
             "BaseHookName": null
           }
         },
@@ -1620,7 +1620,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "qv8x8l6PpCwehV+T0C8tKr6GDX+DmyThhrnB1mBxyy8=",
+            "MSILHash": "Zc2T4/rGKYNK+U08LoPN0QDnx0W4Fms2XuaM39aHnSM=",
             "BaseHookName": "OnItemResearch"
           }
         },
@@ -1643,7 +1643,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "k2krPTsJ4jvs+tXBKZ/A5zH078ceK9Q/jAzg7CP4LrA=",
+            "MSILHash": "Fu9IT/j90rglj6zPTxIf3Uiyay+syO8tNPxY+UraxlM=",
             "BaseHookName": null
           }
         },
