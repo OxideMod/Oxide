@@ -169,7 +169,7 @@ namespace Oxide.Plugins
                         
                         foreach (var reference in plugin.References)
                         {
-                            if (!reference.StartsWith("Oxide.Ext.")) continue;
+                            if (!reference.StartsWith("Oxide.Ext.") || !reference.StartsWith("Oxide.Game.")) continue;
                             var name = reference.Substring(10);
                             if (extension_names.Contains(name)) continue;
                             var include_file_path = include_path + "\\Ext." + name + ".cs";
@@ -201,7 +201,7 @@ namespace Oxide.Plugins
             var path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, assembly_name);
             if (!File.Exists(path))
             {
-                if (assembly_name.StartsWith("Oxide.Ext."))
+                if (assembly_name.StartsWith("Oxide.Ext.") || assembly_name.StartsWith("Oxide.Game."))
                 {
                     plugin.References.Add(assembly_name);
                     return;
