@@ -1792,6 +1792,31 @@
             "MSILHash": "Y+uomN1anhD+70qDOoMujQWvXK7fva0H7nqO+AojDZw=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnEnterBearTrap",
+            "HookName": "OnEnterBearTrap",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BearTrap",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ObjectEntered",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.GameObject"
+              ]
+            },
+            "MSILHash": "d7byajLmaBSp/+6V9g4JOF1VYA7Cig77zfht55n61pI=",
+            "BaseHookName": null
+          }
         }
       ]
     }
