@@ -1,0 +1,95 @@
+{
+  "Name": "Blockstorm",
+  "TargetDirectory": "D:\\Servers\\Game\\Blockstorm\\Latest\\Blockstorm_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnServerInitialized",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "hjbgYxLVZYw7UayDQ4UPvYKFwksrZUl5QCjihdBTk3U=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "Close",
+            "HookName": "OnClose",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Close",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "jmSeb9iWrQywBXWe+IXOYNCxZjyfR0NGvWcUSr3AJ0w=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Server",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": ".ctor",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "System.Net.IPAddress",
+                "System.UInt16",
+                "System.UInt16",
+                "System.Int32",
+                "System.String",
+                "System.String",
+                "System.String",
+                "System.Boolean",
+                "System.Boolean",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.String",
+                "System.String",
+                "System.UInt32",
+                "System.UInt64"
+              ]
+            },
+            "MSILHash": "y2JNRoQJ0zk2geMScfKdDfpub0cKI5GqVFoAFIOgsnc=",
+            "BaseHookName": null
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0D3AF12E-CDD8-4691-ADE4-364D5D5A5D32}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Oxide.Game.Blockstorm</RootNamespace>
+    <AssemblyName>Oxide.Game.Blockstorm</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="UnityEngine">
+      <HintPath>Dependencies\UnityEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Libraries\Blockstorm.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BlockstormCore.cs" />
+    <Compile Include="BlockstormExtension.cs" />
+    <Compile Include="BlockstormPlugin.cs" />
+    <Compile Include="BlockstormPluginLoader.cs" />
+    <None Include="Plugins\HooksTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
+      <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
+      <Name>Oxide.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Oxide.Ext.CSharp\Oxide.Ext.CSharp.csproj">
+      <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
+      <Name>Oxide.Ext.CSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <PropertyGroup>
+      <GameName>Blockstorm</GameName>
+      <BundleDir>$(SolutionDir)\Bundles</BundleDir>
+      <ManagedDir>$(GameName)\Blockstorm_Data\Managed</ManagedDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp.dll; $(TargetDir)\UnityEngine.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.JavaScript\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.JavaScript\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.MySql\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.MySql\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\UnityEngine.dll" />
+      <NativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.*" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.Cecil.dll" />
+      <PatchedFiles Include="$(ProjectDir)\Patched\*.dll; $(ProjectDir)\Patched\*.exe" />
+      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(ManagedDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+  </Target>
+</Project>
