@@ -72,6 +72,19 @@ namespace Oxide.Plugins
             Extension.CompilationRequested(this);
         }
 
+	    private Type FindPluginType()
+	    {
+			// We assume that the plugin class name, is the same as the plugin *file* name
+			// In practice, this isn't great, especially since the current system only allows a single file for C# plugins
+			// But for now, we'll simply search for the type by name, and ensure that it is indeed a CSharpPlugin instance
+		    foreach (var type in CompiledAssembly.LoadedAssembly.GetTypes())
+		    {
+			    if (type.IsAssignableFrom(typeof(CSharpPlugin)) && type.Name == Name)
+				    return type;
+		    }
+		    return null;
+	    }
+
         public void LoadPlugin(Action<CSharpPlugin> callback = null)
         {
             if (CompiledAssembly == null)
@@ -99,7 +112,7 @@ namespace Oxide.Plugins
                     return;
                 }
 
-                var type = CompiledAssembly.LoadedAssembly.GetType("Oxide.Plugins." + Name);
+	            var type = FindPluginType(); //  CompiledAssembly.LoadedAssembly.GetType("Oxide.Plugins." + Name);
                 if (type == null)
                 {
                     InitFailed("Unable to find main plugin class: " + Name);
