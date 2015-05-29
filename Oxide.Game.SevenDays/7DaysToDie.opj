@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw=",
+            "MSILHash": "b/oXmjBrlkrT8728AQ6r8bMu4ldHiuXMKWcGe9Ve5kQ=",
             "BaseHookName": null
           }
         },
@@ -44,30 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1yuJJ7wEz3fGPxf+bRfNoNcPLz2AJxsApJIXLubuStw=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 17,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerQuit",
-            "HookName": "OnServerQuit",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "OnApplicationQuit",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "6xlN7ABrhshdbQVIyhOiiI0fg2D6XDOdp8V0IR50K9I=",
+            "MSILHash": "b/oXmjBrlkrT8728AQ6r8bMu4ldHiuXMKWcGe9Ve5kQ=",
             "BaseHookName": null
           }
         },
@@ -90,7 +67,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YQD6SIS/ipR+fAgzCOGiyL0uzOiLIbzuC1lQkvdWFOo=",
+            "MSILHash": "SL6ziHKVA49KoMMmLpKE7cr5aRQVdgvjyZSoKLaovaY=",
             "BaseHookName": null
           }
         },
@@ -165,7 +142,7 @@
                 "PlayerProfile"
               ]
             },
-            "MSILHash": "xi9WYw/Mnr8tTLjTSATTZqf+1OLMG85mPPR3kr7grkE=",
+            "MSILHash": "AnsTWWQkyazyT4RphLbGpt+nC0L9qoq7C3XbhNzg2QU=",
             "BaseHookName": null
           }
         },
@@ -190,7 +167,7 @@
                 "ClientInfo"
               ]
             },
-            "MSILHash": "VS+ZkwGc+l+GI7pYX0MWgFCGs/1a/Hc4ItqYMrEgRkk=",
+            "MSILHash": "wkVwJlZ9lGX/3MLfaihrV0ckxq2rXPs0SZnGTImcKrY=",
             "BaseHookName": null
           }
         },
