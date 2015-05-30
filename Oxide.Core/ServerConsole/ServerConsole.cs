@@ -101,7 +101,7 @@ namespace Oxide.Core.ServerConsole
         private void UpdateStatus()
         {
             if (_nextUpdate > Interface.Oxide.Now) return;
-            _nextUpdate = Interface.Oxide.Now + 0.33f;
+            _nextUpdate = Interface.Oxide.Now + 0.66f;
             if (!_input.Valid) return;
             _input.StatusText[0] = string.Empty;
             _input.StatusText[1] = GetStatus(status1Left, status1Right);
