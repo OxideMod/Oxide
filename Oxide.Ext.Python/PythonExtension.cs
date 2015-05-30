@@ -227,8 +227,8 @@ namespace Oxide.Ext.Python
 
             // Bind Python specific libraries
             var logger = new PythonLogger(Manager.Logger);
-            PythonEngine.Runtime.IO.SetOutput(logger, Encoding.Default);
-            PythonEngine.Runtime.IO.SetErrorOutput(logger, Encoding.Default);
+            PythonEngine.Runtime.IO.SetOutput(logger, Encoding.UTF8);
+            PythonEngine.Runtime.IO.SetErrorOutput(logger, Encoding.UTF8);
             LoadLibrary(new PythonDatafile(PythonEngine), "data");
             LoadLibrary(new PythonUtil(), "util");
 
