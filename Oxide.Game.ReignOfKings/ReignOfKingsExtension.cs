@@ -144,16 +144,18 @@ namespace Oxide.Game.ReignOfKings
             //Logger.ReloadSettings();
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance.TimeOfDayAsClockString(), " Weather: ", Weather.Instance.CurrentWeather);
+            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown", " Weather: ", Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown");
             Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
             Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", GameInfo.VersionString, "(", GameInfo.Version, ") - ", GameInfo.VersionName);
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
+                if (uLink.Network.time <= 0) return "Total Sent: 0.0 B/s Total Receive: 0.0 B/s";
                 var players = Server.AllPlayers;
                 double bytesSent = 0;
                 double bytesReceived = 0;
                 for (var i = 0; i < players.Count; i++)
                 {
+                    if (!players[i].Connection.IsConnected) continue;
                     var statistics = players[i].Connection.Statistics;
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
