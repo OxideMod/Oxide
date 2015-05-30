@@ -25,6 +25,7 @@ namespace Oxide.Core.ServerConsole
 
         public void RedrawInputLine()
         {
+            if (_nextUpdate - 0.45f > Interface.Oxide.Now) return;
             Console.ForegroundColor = ConsoleColor.White;
             Console.CursorTop = Console.CursorTop + 1;
             for (var i = 0; i < StatusText.Length; i++)
