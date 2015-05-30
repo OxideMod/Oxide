@@ -56,6 +56,7 @@ namespace Oxide.Game.ReignOfKings
             "Could not use effect because",
             "Dedicated mode detected.",
             "Destroying DisableWithDistance",
+            "Destroying self because the given entity is",
             "Failed to apply setting to DrawDistanceQuality",
             "Flow controller warning:",
             "HDR RenderTexture",
@@ -96,6 +97,7 @@ namespace Oxide.Game.ReignOfKings
             "eac_server.dll",
             "is missing a default constructor.",
             "m_guiCamera == null",
+            "melee == null",
             "with authkey System.Byte[]"
         };
 
