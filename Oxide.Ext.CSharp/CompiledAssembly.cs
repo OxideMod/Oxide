@@ -6,8 +6,6 @@ using System.Reflection;
 using System.Threading;
 
 using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Mono.Collections.Generic;
 
 using Oxide.Core;
 
