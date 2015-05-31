@@ -117,7 +117,7 @@ namespace Oxide.Plugins
                                 // Detect main plugin class name
 								// Remove "protected class" and replace with "internal class" which is what I assume they meant?
 								// No such thing as a "protected" top-level class. Only nested classes can be protected...
-                                match = Regex.Match(line, @"^\s*(?:public |private |internal )?class\s+(\S+)\s+\:\s+\S+Plugin\s*$", RegexOptions.IgnoreCase);
+                                match = Regex.Match(line, @"^\s*(?:public |private |protected |internal )?class\s+(\S+)\s+\:\s+\S+Plugin\s*$", RegexOptions.IgnoreCase);
                                 if (!match.Success) break;
 
                                 var class_name = match.Groups[1].Value;
