@@ -82,6 +82,8 @@ namespace Oxide.Plugins
 
                     foreach (var type in definition.MainModule.Types)
                     {
+						// TODO: Remove this so we can deal with the namespace change for the main plugin class.
+						// Honestly, this can be removed entirely. Since we basically use Activator.CreateInstance, the ctor is called regardless of whether it's public or not.
                         if (type.Namespace == "Oxide.Plugins")
                         {
                             if (PluginNames.Contains(type.Name))

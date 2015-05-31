@@ -122,7 +122,7 @@ namespace Oxide.Plugins
                 CSharpPlugin plugin = null;
                 try
                 {
-                    plugin = Activator.CreateInstance(type) as CSharpPlugin;
+	                plugin = Activator.CreateInstance(type, BindingFlags.CreateInstance | BindingFlags.Public | BindingFlags.NonPublic) as CSharpPlugin;
                 }
                 catch (MissingMethodException)
                 {
