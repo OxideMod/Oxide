@@ -9,6 +9,7 @@ namespace Oxide.Core.ServerConsole
     {
         private const uint ATTACH_PARENT_PROCESS = 0xFFFFFFFF;
         private TextWriter _oldOutput;
+        private Encoding _oldEncoding;
 
         [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false, SetLastError = true)]
         private static extern bool AllocConsole();
@@ -19,14 +20,14 @@ namespace Oxide.Core.ServerConsole
         [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false, SetLastError = true)]
         private static extern bool FreeConsole();
 
-        [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, ExactSpelling = false, SetLastError = true)]
-        private static extern IntPtr GetStdHandle(int nStdHandle);
-
         [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false)]
         private static extern bool SetConsoleTitleA(string lpConsoleTitle);
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetConsoleWindow();
+
+        [DllImport("kernel32.dll")]
+        private static extern bool SetConsoleOutputCP(uint wCodePageID);
 
         public static bool Check(bool force = false)
         {
@@ -50,12 +51,17 @@ namespace Oxide.Core.ServerConsole
             if (!Check()) return;
             if (!AttachConsole(ATTACH_PARENT_PROCESS)) AllocConsole();
             _oldOutput = Console.Out;
-            Console.SetOut(new StreamWriter(Console.OpenStandardOutput(), Encoding.ASCII) { AutoFlush = true });
+            _oldEncoding = Console.OutputEncoding;
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8) { AutoFlush = true });
+            SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
+            Console.OutputEncoding = Encoding.UTF8;
         }
 
         public void Shutdown()
         {
             Console.SetOut(_oldOutput);
+            SetConsoleOutputCP((uint)_oldEncoding.CodePage);
+            Console.OutputEncoding = _oldEncoding;
             FreeConsole();
         }
     }

@@ -146,14 +146,14 @@ namespace Oxide.Plugins
                                 }
 
                                 // Include implicit references detected from using statements in script
-                                match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Ext|Game)[^;]+);\s*$", RegexOptions.IgnoreCase);
+                                match = Regex.Match(line, @"^\s*using\s+((Oxide\.(?:Ext|Game)\.[\w]+)[^;]+);\s*$", RegexOptions.IgnoreCase);
                                 if (match.Success)
                                 {
-                                    var result = match.Groups[1].Value;
+                                    var result = match.Groups[2].Value;
                                     //TODO temp ignore renamed game exts
-                                    if (new_game_ext && result.StartsWith(game_extension_ns.Replace(".Game.", ".Ext.")))
+                                    if (new_game_ext && match.Groups[1].Value.StartsWith(game_extension_ns.Replace(".Game.", ".Ext.")))
                                     {
-                                        Interface.Oxide.LogWarning("Replaced obsolete game extension using directive '{0}' in plugin '{1}'", result, plugin.Name);
+                                        Interface.Oxide.LogWarning("Replaced obsolete game extension using directive '{0}' in plugin '{1}'", match.Groups[1].Value, plugin.Name);
                                         plugin.ScriptLines[i] = plugin.ScriptLines[i].Replace(".Ext.", ".Game.");
                                         result = result.Replace(".Ext.", ".Game.");
                                     }
@@ -171,7 +171,7 @@ namespace Oxide.Plugins
                         
                         foreach (var reference in plugin.References)
                         {
-                            if (!reference.StartsWith("Oxide.Ext.") || !reference.StartsWith("Oxide.Game.")) continue;
+                            if (!reference.StartsWith("Oxide.Ext.") && !reference.StartsWith("Oxide.Game.")) continue;
                             var name = reference.Substring(10);
                             if (extension_names.Contains(name)) continue;
                             var include_file_path = include_path + "\\Ext." + name + ".cs";

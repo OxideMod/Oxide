@@ -9,15 +9,9 @@ namespace Oxide.Core.ServerConsole
         public event Action<string> OnInputText;
         public string[] StatusText = {string.Empty, string.Empty, string.Empty};
 
-        public int LineWidth
-        {
-            get { return Console.BufferWidth; }
-        }
+        public int LineWidth => Console.BufferWidth;
 
-        public bool Valid
-        {
-            get { return Console.BufferWidth > 0; }
-        }
+        public bool Valid => Console.BufferWidth > 0;
 
         public Func<string, string[]> Completion;
 
@@ -31,6 +25,7 @@ namespace Oxide.Core.ServerConsole
 
         public void RedrawInputLine()
         {
+            if (_nextUpdate - 0.45f > Interface.Oxide.Now) return;
             Console.ForegroundColor = ConsoleColor.White;
             Console.CursorTop = Console.CursorTop + 1;
             for (var i = 0; i < StatusText.Length; i++)

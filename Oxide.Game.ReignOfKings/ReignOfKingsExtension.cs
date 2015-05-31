@@ -44,14 +44,19 @@ namespace Oxide.Game.ReignOfKings
             "<color=magenta>[Entity]",
             "<color=yellow>Specific",
             "<color=yellow>Transform",
+            "An error occured handling",
             "Cannot retrieve Entity because the component",
             "Client owned object was not found to sync with id",
+            "Could not attach to bone of type",
             "Could not find any serialized data",
             "Could not find the bone",
+            "Could not initialize the native Steamworks API",
             "Could not retrieve Entity with Network View ID",
+            "Could not use FastAO because:",
             "Could not use effect because",
             "Dedicated mode detected.",
             "Destroying DisableWithDistance",
+            "Destroying self because the given entity is",
             "Failed to apply setting to DrawDistanceQuality",
             "Flow controller warning:",
             "HDR RenderTexture",
@@ -72,22 +77,27 @@ namespace Oxide.Game.ReignOfKings
             "Serialization settings set successfully",
             "Server has connected.",
             "ServerLobbyModule.cs",
+            "Setting breakpad minidump AppID",
             "Standard Deviation:",
+            "SteamInitializeFailed",
+            "Steam_SetMinidumpSteamID:",
             "Sync member value was null",
+            "The exclusive layer does not match the requested layer",
+            "The game ended because an error occured",
+            "The image effect Main Camera",
             "The referenced script on this Behaviour is missing!",
             "There were some issues with the attached",
             "This could be due to momentary deregistration",
-            "[EAC] [Debug] Connecting",
-            "[EAC] [Debug] Local address",
-            "[EAC] [Debug] Ping? Pong!",
-            "[EAC] [Debug] Registering",
-            "[EAC] [Debug] Unregistering",
-            "[EAC] [Debug] UserStatus",
-            "[EAC] [Info] Connected",
-            "[EAC] [Warning] Received",
+            "Trying to read past the buffer size",
+            "[EAC] [Debug]",
+            "[EAC] [Info]",
+            "[EAC] [Warning]",
             "[WARNING] Recieved a",
             "\"string button\" is empty;",
+            "eac_server.dll",
+            "is missing a default constructor.",
             "m_guiCamera == null",
+            "melee == null",
             "with authkey System.Byte[]"
         };
 
@@ -134,16 +144,18 @@ namespace Oxide.Game.ReignOfKings
             //Logger.ReloadSettings();
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance.TimeOfDayAsClockString(), " Weather: ", Weather.Instance.CurrentWeather);
+            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown", " Weather: ", Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown");
             Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
             Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", GameInfo.VersionString, "(", GameInfo.Version, ") - ", GameInfo.VersionName);
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
+                if (uLink.Network.time <= 0) return "Total Sent: 0.0 B/s Total Receive: 0.0 B/s";
                 var players = Server.AllPlayers;
                 double bytesSent = 0;
                 double bytesReceived = 0;
                 for (var i = 0; i < players.Count; i++)
                 {
+                    if (!players[i].Connection.IsConnected) continue;
                     var statistics = players[i].Connection.Statistics;
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;

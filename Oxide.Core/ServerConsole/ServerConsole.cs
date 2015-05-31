@@ -24,45 +24,12 @@ namespace Oxide.Core.ServerConsole
             set { _input.Completion = value; }
         }
 
-        private string status1Left
-        {
-            get
-            {
-                return Status1Left != null ? Status1Left() : "status1left";
-            }
-        }
+        private string status1Left => Status1Left != null ? Status1Left() : "status1left";
+        private string status1Right => (Status1Right != null ? Status1Right() : "status1right").PadLeft(_input.LineWidth - 1);
+        private string status2Left => Status2Left != null ? Status2Left() : "status2left";
+        private string status2Right => (Status2Right != null ? Status2Right() : "status2right").PadLeft(_input.LineWidth - 1);
 
-        private string status1Right
-        {
-            get
-            {
-                return (Status1Right != null ? Status1Right() : "status1right").PadLeft(_input.LineWidth - 1);
-            }
-        }
-
-        private string status2Left
-        {
-            get
-            {
-                return Status2Left != null ? Status2Left() : "status2left";
-            }
-        }
-
-        private string status2Right
-        {
-            get
-            {
-                return (Status2Right != null ? Status2Right() : "status2right").PadLeft(_input.LineWidth - 1);
-            }
-        }
-
-        private string title
-        {
-            get
-            {
-                return Title != null ? Title() : null;
-            }
-        }
+        private string title => Title != null ? Title() : null;
 
         private static string GetStatus(string left, string right)
         {
@@ -134,7 +101,7 @@ namespace Oxide.Core.ServerConsole
         private void UpdateStatus()
         {
             if (_nextUpdate > Interface.Oxide.Now) return;
-            _nextUpdate = Interface.Oxide.Now + 0.33f;
+            _nextUpdate = Interface.Oxide.Now + 0.66f;
             if (!_input.Valid) return;
             _input.StatusText[0] = string.Empty;
             _input.StatusText[1] = GetStatus(status1Left, status1Right);

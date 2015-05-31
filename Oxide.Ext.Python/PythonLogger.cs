@@ -46,7 +46,7 @@ namespace Oxide.Ext.Python
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            var message = Encoding.Default.GetString(buffer, offset, count);
+            var message = Encoding.UTF8.GetString(buffer, offset, count);
             if (message != Environment.NewLine) // Filter empty
                 Logger.Write(LogType.Info, message);
         }
