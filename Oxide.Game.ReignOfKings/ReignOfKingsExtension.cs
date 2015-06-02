@@ -44,6 +44,7 @@ namespace Oxide.Game.ReignOfKings
             "<color=magenta>[Entity]",
             "<color=yellow>Specific",
             "<color=yellow>Transform",
+            "A collider was found on a gameobject",
             "An error occured handling",
             "Cannot retrieve Entity because the component",
             "Client owned object was not found to sync with id",
@@ -94,8 +95,10 @@ namespace Oxide.Game.ReignOfKings
             "[EAC] [Warning]",
             "[WARNING] Recieved a",
             "\"string button\" is empty;",
+            "armorManager == null",
             "eac_server.dll",
             "is missing a default constructor.",
+            "linkedTo == null",
             "m_guiCamera == null",
             "melee == null",
             "with authkey System.Byte[]"
