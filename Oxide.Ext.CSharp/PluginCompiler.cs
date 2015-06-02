@@ -115,7 +115,7 @@ namespace Oxide.Plugins
                                 if (match.Success) continue;
 
                                 // Detect main plugin class name
-                                match = Regex.Match(line, @"^\s*(?:public |private |protected )?class\s+(\S+)\s+\:\s+\S+Plugin\s*$", RegexOptions.IgnoreCase);
+                                match = Regex.Match(line, @"^\s*(?:public|private|protected|internal)?\s*class\s+(\S+)\s+\:\s+\S+Plugin\s*$", RegexOptions.IgnoreCase);
                                 if (!match.Success) break;
 
                                 var class_name = match.Groups[1].Value;
