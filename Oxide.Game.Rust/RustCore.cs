@@ -963,14 +963,15 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when a player fires a weapon
         /// </summary>
+        /// <param name="projectile"></param>
         /// <param name="msg"></param>
         /// <param name="component"></param>
         /// <param name="projectiles"></param>
         /// <returns></returns>
         [HookMethod("OnWeaponFire")]
-        private object OnWeaponFire(BaseEntity.RPCMessage msg, ItemModProjectile component, ProjectileShoot projectiles)
+        private object OnWeaponFire(BaseProjectile projectile, BaseEntity.RPCMessage msg, ItemModProjectile component, ProjectileShoot projectiles)
         {
-            return Interface.CallHook("OnWeaponFired", msg.player, component, projectiles);
+            return Interface.CallHook("OnWeaponFired", projectile, msg.player, component, projectiles);
         }
     }
 }
