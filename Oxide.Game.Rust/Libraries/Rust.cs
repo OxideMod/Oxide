@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+
+using Network;
 
 using Oxide.Core.Libraries;
 
 using UnityEngine;
 
-namespace Oxide.Rust.Libraries
+namespace Oxide.Game.Rust.Libraries
 {
     /// <summary>
     /// A library containing utility shortcut functions for Rust
@@ -16,7 +18,7 @@ namespace Oxide.Rust.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Returns the UserID for the specified connection as a string
@@ -24,7 +26,7 @@ namespace Oxide.Rust.Libraries
         /// <param name="connection"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromConnection")]
-        public string UserIDFromConnection(Network.Connection connection)
+        public string UserIDFromConnection(Connection connection)
         {
             return connection.userid.ToString();
         }
@@ -32,23 +34,18 @@ namespace Oxide.Rust.Libraries
         /// <summary>
         /// Returns the UserIDs for the specified building privilege as an array
         /// </summary>
-        /// <param name="privilege"></param>
+        /// <param name="buildingpriv"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDsFromBuildingPrivilege")]
         public Array UserIDsFromBuildingPrivlidge(BuildingPrivlidge buildingpriv)
         {
-            List<string> list = new List<string>();
-            foreach (ProtoBuf.PlayerNameID eid in buildingpriv.authorizedPlayers)
-            {
-                list.Add(eid.userid.ToString());
-            }
-            return list.ToArray();
+            return buildingpriv.authorizedPlayers.Select(eid => eid.userid.ToString()).ToArray();
         }
 
         /// <summary>
         /// Returns the UserID for the specified player as a string
         /// </summary>
-        /// <param name="connection"></param>
+        /// <param name="player"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromPlayer")]
         public string UserIDFromPlayer(BasePlayer player)
@@ -78,7 +75,7 @@ namespace Oxide.Rust.Libraries
         {
             if (message != null)
             {
-                ConsoleSystem.Broadcast("chat.add", userid, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
+                ConsoleSystem.Broadcast("chat.add", userid, $"<color=orange>{name}:</color> {message}", 1.0);
             }
             else
             {
@@ -99,7 +96,7 @@ namespace Oxide.Rust.Libraries
         {
             if (message != null)
             {
-                player.SendConsoleCommand("chat.add", userid, string.Format("<color=orange>{0}:</color> {1}", name, message), 1.0);
+                player.SendConsoleCommand("chat.add", userid, $"<color=orange>{name}:</color> {message}", 1.0);
             }
             else
             {
@@ -118,7 +115,7 @@ namespace Oxide.Rust.Libraries
         [LibraryFunction("ForcePlayerPosition")]
         public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
         {
-            player.transform.position = new UnityEngine.Vector3(x, y, z);
+            player.transform.position = new Vector3(x, y, z);
             player.ClientRPCPlayer(null, player, "ForcePositionTo", player.transform.position);
             player.TransformChanged();
         }

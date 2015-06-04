@@ -9,14 +9,13 @@ using Facepunch;
 using Network;
 
 using Oxide.Core;
+using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
-
-using Oxide.Rust.Libraries;
-using Oxide.Rust.Plugins;
+using Oxide.Game.Rust.Libraries;
 
 using UnityEngine;
 
-namespace Oxide.Rust
+namespace Oxide.Game.Rust
 {
     /// <summary>
     /// The extension class that represents this extension
@@ -26,20 +25,20 @@ namespace Oxide.Rust
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "Rust"; } }
+        public override string Name => "Rust";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies { get { return new[] {"Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine"}; } }
-        public override string[] WhitelistNamespaces { get { return new[] {"Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine"}; } }
+        public override string[] WhitelistAssemblies => new[] {"Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine"};
+        public override string[] WhitelistNamespaces => new[] {"Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine"};
 
         private static readonly string[] Filter =
         {
@@ -56,12 +55,12 @@ namespace Oxide.Rust
         /// <summary>
         /// Caches the OxideMod.rootconfig field
         /// </summary>
-        FieldInfo rootconfig = typeof(OxideMod).GetField("rootconfig", BindingFlags.NonPublic | BindingFlags.Instance);
+        readonly FieldInfo rootconfig = typeof(OxideMod).GetField("rootconfig", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public class Folders
         {
-            public string Source { get; private set; }
-            public string Target { get; private set; }
+            public string Source { get; }
+            public string Target { get; }
 
             public Folders(string source, string target)
             {
@@ -83,7 +82,6 @@ namespace Oxide.Rust
         /// <summary>
         /// Loads this extension
         /// </summary>
-        /// <param name="manager"></param>
         public override void Load()
         {
             IsGameExtension = true;
@@ -96,7 +94,7 @@ namespace Oxide.Rust
             Manager.RegisterLibrary("Rust", new Libraries.Rust());
 
             // Check if folder migration is needed
-            var config = (Core.Configuration.OxideConfig)rootconfig.GetValue(Interface.Oxide);
+            var config = (OxideConfig)rootconfig.GetValue(Interface.Oxide);
             string rootDirectory = Interface.Oxide.RootDirectory;
             string currentDirectory = Interface.Oxide.InstanceDirectory;
             string fallbackDirectory = Path.Combine(rootDirectory, config.InstanceCommandLines[config.InstanceCommandLines.Length - 1]);
@@ -128,10 +126,10 @@ namespace Oxide.Rust
                             {
                                 int i = 1;
                                 string newTargetFile = targetFile + ".old";
-                                while (File.Exists(newTargetFile)) { 
+                                while (File.Exists(newTargetFile)) {
                                     newTargetFile = targetFile + ".old" + i;
                                     i++;
-                                } 
+                                }
                                 File.Move(file, newTargetFile);
                             }
                             else
@@ -159,7 +157,6 @@ namespace Oxide.Rust
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
 
@@ -208,7 +205,7 @@ namespace Oxide.Rust
             {
                 color = ConsoleColor.Red;
                 server.Log("Log.Error.txt", message);
-            } 
+            }
             else if (!message.StartsWith("[CHAT]"))
                 server.Log("Log.Log.txt", message);
             Interface.Oxide.ServerConsole.AddMessage(message, color);

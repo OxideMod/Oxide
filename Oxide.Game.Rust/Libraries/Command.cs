@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
-namespace Oxide.Rust.Libraries
+namespace Oxide.Game.Rust.Libraries
 {
     /// <summary>
     /// A library containing functions for adding console and chat commands
@@ -20,8 +21,8 @@ namespace Oxide.Rust.Libraries
 
         private struct PluginCallback
         {
-            public Plugin Plugin;
-            public string Name;
+            public readonly Plugin Plugin;
+            public readonly string Name;
 
             public PluginCallback(Plugin plugin, string name)
             {
@@ -32,9 +33,9 @@ namespace Oxide.Rust.Libraries
 
         private class ConsoleCommand
         {
-            public string Name;
-            public List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
-            public ConsoleSystem.Command RustCommand;
+            public readonly string Name;
+            public readonly List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
+            public readonly ConsoleSystem.Command RustCommand;
             public Action<ConsoleSystem.Arg> OriginalCallback;
 
             public ConsoleCommand(string name)
@@ -62,19 +63,21 @@ namespace Oxide.Rust.Libraries
 
             private void HandleCommand(ConsoleSystem.Arg arg)
             {
-                foreach (var callback in PluginCallbacks)
-                    if (callback.Plugin.CallHook(callback.Name, arg) != null) return;
+                if (PluginCallbacks.Any(callback => callback.Plugin.CallHook(callback.Name, arg) != null))
+                {
+                    return;
+                }
 
                 // Call rust implemented command handler if the command was not handled by a plugin
-                if (OriginalCallback != null) OriginalCallback(arg);
+                OriginalCallback?.Invoke(arg);
             }
         }
 
         private class ChatCommand
         {
-            public string Name;
-            public Plugin Plugin;
-            public string CallbackName;
+            public readonly string Name;
+            public readonly Plugin Plugin;
+            public readonly string CallbackName;
 
             public ChatCommand(string name, Plugin plugin, string callback_name)
             {
@@ -85,10 +88,10 @@ namespace Oxide.Rust.Libraries
         }
 
         // All console commands that plugins have registered
-        private Dictionary<string, ConsoleCommand> consoleCommands;
+        private readonly Dictionary<string, ConsoleCommand> consoleCommands;
 
         // All chat commands that plugins have registered
-        private Dictionary<string, ChatCommand> chatCommands;
+        private readonly Dictionary<string, ChatCommand> chatCommands;
 
         // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustcommands;
@@ -134,7 +137,7 @@ namespace Oxide.Rust.Libraries
                 var previous_plugin_name = cmd.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{new_plugin_name} has replaced the {name} console command which was previously registered by {previous_plugin_name}";
-                Core.Interface.Oxide.LogWarning(msg);
+                Interface.Oxide.LogWarning(msg);
                 consoleCommands.Remove(full_name);
                 rustcommands.Remove(full_name);
                 ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
@@ -151,7 +154,7 @@ namespace Oxide.Rust.Libraries
                 if (rust_command.isVariable)
                 {
                     var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                    Core.Interface.Oxide.LogError($"{new_plugin_name} tried to register the {name} console variable as a command!");
+                    Interface.Oxide.LogError($"{new_plugin_name} tried to register the {name} console variable as a command!");
                     return;
                 }
                 // Copy some of the original rust commands attributes
@@ -172,7 +175,7 @@ namespace Oxide.Rust.Libraries
         /// </summary>
         /// <param name="name"></param>
         /// <param name="plugin"></param>
-        /// <param name="callbackname"></param>
+        /// <param name="callback_name"></param>
         [LibraryFunction("AddChatCommand")]
         public void AddChatCommand(string name, Plugin plugin, string callback_name)
         {
@@ -184,7 +187,7 @@ namespace Oxide.Rust.Libraries
                 var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{new_plugin_name} has replaced the {command_name} chat command which was previously registered by {previous_plugin_name}";
-                Core.Interface.Oxide.LogWarning(msg);
+                Interface.Oxide.LogWarning(msg);
             }
 
             cmd = new ChatCommand(command_name, plugin, callback_name);
@@ -199,6 +202,7 @@ namespace Oxide.Rust.Libraries
         /// <summary>
         /// Handles the specified chat command
         /// </summary>
+        /// <param name="sender"></param>
         /// <param name="name"></param>
         /// <param name="args"></param>
         internal bool HandleChatCommand(BasePlayer sender, string name, string[] args)

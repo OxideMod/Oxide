@@ -4,8 +4,7 @@ using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-
-using Oxide.Rust.Libraries;
+using Oxide.Game.Rust.Libraries;
 
 using UnityEngine;
 
@@ -106,7 +105,7 @@ namespace Oxide.Plugins
             {
                 var type = plugin_field.GenericArguments[1];
                 object online_player;
-                if (type.GetConstructor(new Type[] { typeof(BasePlayer) }) == null)
+                if (type.GetConstructor(new[] { typeof(BasePlayer) }) == null)
                     online_player = Activator.CreateInstance(type);
                 else
                     online_player = Activator.CreateInstance(type, (object)player);
@@ -123,7 +122,7 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintToConsole(BasePlayer player, string format, params object[] args)
         {
-            player.SendConsoleCommand("echo " + string.Format(format, args), new object[0]);
+            player.SendConsoleCommand("echo " + string.Format(format, args));
         }
 
         /// <summary>
@@ -134,7 +133,7 @@ namespace Oxide.Plugins
         protected void PrintToConsole(string format, params object[] args)
         {
             if (BasePlayer.activePlayerList.Count < 1) return;
-            ConsoleSystem.Broadcast("echo " + string.Format(format, args), new object[0]);
+            ConsoleSystem.Broadcast("echo " + string.Format(format, args));
         }
 
         /// <summary>
@@ -169,14 +168,11 @@ namespace Oxide.Plugins
         {
             var message = string.Format(format, args);
 
-            if (arg.connection != null)
+            var player = arg.connection?.player as BasePlayer;
+            if (player != null)
             {
-                var player = arg.connection.player as BasePlayer;
-                if (player != null)
-                {
-                    player.SendConsoleCommand("echo " + message);
-                    return;
-                }
+                player.SendConsoleCommand("echo " + message);
+                return;
             }
 
             Puts(message);
@@ -203,14 +199,11 @@ namespace Oxide.Plugins
         {
             var message = string.Format(format, args);
 
-            if (arg.connection != null)
+            var player = arg.connection?.player as BasePlayer;
+            if (player != null)
             {
-                var player = arg.connection.player as BasePlayer;
-                if (player != null)
-                {
-                    player.SendConsoleCommand("echo " + message);
-                    return;
-                }
+                player.SendConsoleCommand("echo " + message);
+                return;
             }
 
             Debug.LogWarning(message);
@@ -226,14 +219,11 @@ namespace Oxide.Plugins
         {
             var message = string.Format(format, args);
 
-            if (arg.connection != null)
+            var player = arg.connection?.player as BasePlayer;
+            if (player != null)
             {
-                var player = arg.connection.player as BasePlayer;
-                if (player != null)
-                {
-                    player.SendConsoleCommand("echo " + message);
-                    return;
-                }
+                player.SendConsoleCommand("echo " + message);
+                return;
             }
 
             Debug.LogError(message);

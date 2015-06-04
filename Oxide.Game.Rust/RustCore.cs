@@ -6,14 +6,14 @@ using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.Rust.Libraries;
 
-using Oxide.Rust.Libraries;
+using Network;
 using ProtoBuf;
 using Rust;
-
 using UnityEngine;
 
-namespace Oxide.Rust.Plugins
+namespace Oxide.Game.Rust
 {
     /// <summary>
     /// The core Rust plugin
@@ -172,7 +172,7 @@ namespace Oxide.Rust.Plugins
             var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
             if (total_plugin_count < 1)
             {
-                arg.ReplyWith($"[Oxide] No plugins are currently available");
+                arg.ReplyWith("[Oxide] No plugins are currently available");
                 return;
             }
 
@@ -194,7 +194,7 @@ namespace Oxide.Rust.Plugins
         {
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check arg 1 exists
-            if (!arg.HasArgs(1))
+            if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: oxide.load *|<pluginname>+");
                 return;
@@ -224,7 +224,7 @@ namespace Oxide.Rust.Plugins
         {
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check arg 1 exists
-            if (!arg.HasArgs(1))
+            if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: oxide.unload *|<pluginname>+");
                 return;
@@ -254,7 +254,7 @@ namespace Oxide.Rust.Plugins
         {
             if (arg.Player() != null && !arg.Player().IsAdmin()) return;
             // Check arg 1 exists
-            if (!arg.HasArgs(1))
+            if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: oxide.reload *|<pluginname>+");
                 return;
@@ -579,7 +579,7 @@ namespace Oxide.Rust.Plugins
         /// <param name="connection"></param>
         /// <returns></returns>
         [HookMethod("OnUserApprove")]
-        private object OnUserApprove(Network.Connection connection)
+        private object OnUserApprove(Connection connection)
         {
             // Call out and see if we should reject
             object canlogin = Interface.CallHook("CanClientLogin", connection);
@@ -610,7 +610,7 @@ namespace Oxide.Rust.Plugins
         [HookMethod("OnRunCommand")]
         private object OnRunCommand(ConsoleSystem.Arg arg)
         {
-            if (arg == null || arg.cmd == null) return null;
+            if (arg?.cmd == null) return null;
 
             if (arg.cmd.namefull == "chat.say")
             {
@@ -640,7 +640,7 @@ namespace Oxide.Rust.Plugins
                     {
                         if (!cmdlib.HandleChatCommand(player, cmd, args))
                         {
-                            player.SendConsoleCommand("chat.add", 0, string.Format("Unknown command '{0}'!", cmd));
+                            player.SendConsoleCommand("chat.add", 0, $"Unknown command '{cmd}'!");
                         }
                     }
 
@@ -746,8 +746,8 @@ namespace Oxide.Rust.Plugins
         /// <summary>
         /// Called when the player has been melee attacked
         /// </summary>
-        /// <param name="basemelee"></param>
-        /// <param name="hit"></param>
+        /// <param name="melee"></param>
+        /// <param name="hitinfo"></param>
         [HookMethod("OnMeleeAttack")]
         private object OnMeleeAttack(BaseMelee melee, HitInfo hitinfo)
         {
@@ -859,7 +859,7 @@ namespace Oxide.Rust.Plugins
         /// Called when a BasePlayer is attacked
         /// This is used to call OnEntityTakeDamage for a BasePlayer when attacked
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="player"></param>
         /// <param name="info"></param>
         [HookMethod("OnBasePlayerAttacked")]
         private object OnBasePlayerAttacked(BasePlayer player, HitInfo info)

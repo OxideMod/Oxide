@@ -2,7 +2,7 @@
 
 using Oxide.Core.Plugins;
 
-namespace Oxide.Rust.Plugins
+namespace Oxide.Game.Rust
 {
     /// <summary>
     /// Responsible for loading Rust core plugins
