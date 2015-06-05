@@ -200,6 +200,11 @@ namespace Oxide.Core.Configuration
             for (var i = 0; i < pathAndTrailingValue.Length - 1; i++)
                 path[i] = (string)pathAndTrailingValue[i];
             var value = pathAndTrailingValue[pathAndTrailingValue.Length - 1];
+            if (path.Length == 1)
+            {
+                _keyvalues[path[0]] = value;
+                return;
+            }
             object val;
             if (!_keyvalues.TryGetValue(path[0], out val))
                 _keyvalues[path[0]] = val = new Dictionary<string, object>();
