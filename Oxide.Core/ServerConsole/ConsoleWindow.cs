@@ -29,6 +29,12 @@ namespace Oxide.Core.ServerConsole
         [DllImport("kernel32.dll")]
         private static extern bool SetConsoleOutputCP(uint wCodePageID);
 
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
+        private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
         public static bool Check(bool force = false)
         {
             switch (Environment.OSVersion.Platform)
@@ -36,7 +42,9 @@ namespace Oxide.Core.ServerConsole
                 case PlatformID.Win32NT:
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
-                    return force || GetConsoleWindow() == IntPtr.Zero;
+                    var pDll = GetModuleHandle("ntdll.dll");
+                    if (pDll == IntPtr.Zero) return false;
+                    return GetProcAddress(pDll, "wine_get_version") == IntPtr.Zero && (force || GetConsoleWindow() == IntPtr.Zero);
             }
             return false;
         }
@@ -48,7 +56,6 @@ namespace Oxide.Core.ServerConsole
 
         public void Initialize()
         {
-            if (!Check()) return;
             if (!AttachConsole(ATTACH_PARENT_PROCESS)) AllocConsole();
             _oldOutput = Console.Out;
             _oldEncoding = Console.OutputEncoding;
