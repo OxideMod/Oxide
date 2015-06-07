@@ -1,0 +1,1 @@
+TDL.exe +dedicatedServer -batchmode

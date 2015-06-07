@@ -13,15 +13,15 @@
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TDLConfig",
+            "TypeName": "StartLogosReel",
             "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "Initialize",
+              "Exposure": 0,
+              "Name": "Start",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "P7rQaq1x+u2qEStf/iPA5Y3F35P6V8lplnjOtnsJ6Mg=",
+            "MSILHash": "t8X7pzNFCdSD2cz7DmCqThDQjxNV7WQAip/WkJR3e6U=",
             "BaseHookName": null
           }
         },
