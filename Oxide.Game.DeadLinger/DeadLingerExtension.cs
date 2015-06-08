@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
@@ -31,6 +32,8 @@ namespace Oxide.Game.DeadLinger
         public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
         public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "UnityEngine" };
 
+        private static readonly MethodInfo EvalInputString = typeof (DebugConsole).GetMethod("EvalInputString", BindingFlags.Instance | BindingFlags.NonPublic);
+
         private static readonly string[] Filter =
         {
 
@@ -57,7 +60,7 @@ namespace Oxide.Game.DeadLinger
             Manager.RegisterPluginLoader(new DeadLingerPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("Forest", new Libraries.DeadLinger());
+            Manager.RegisterLibrary("DeadLinger", new Libraries.DeadLinger());
         }
 
         /// <summary>
@@ -77,12 +80,13 @@ namespace Oxide.Game.DeadLinger
             if (!Interface.Oxide.EnableConsole()) return;
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            Application.LoadLevel("mainScene");
             // TODO: Add status information
         }
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO
+            EvalInputString.Invoke(DebugConsole.Singleton, new object[] {input});
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
