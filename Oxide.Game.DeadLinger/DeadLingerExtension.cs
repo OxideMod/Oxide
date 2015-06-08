@@ -36,7 +36,29 @@ namespace Oxide.Game.DeadLinger
 
         private static readonly string[] Filter =
         {
-
+            "CategoryReader Awake",
+            "Content Template count:",
+            "Duplicate category name",
+            "Duplicate entity name in the entity file:",
+            "Duplicate template name:",
+            "Entities files count:",
+            "Exception loading an entity definition.",
+            "Failed to auto generate building waypoint links",
+            "HDR RenderTexture format",
+            "LoadAllCategories()",
+            "Needs a desktop tdlDir.txt",
+            "Template:",
+            "The image effect",
+            "Wardrobe file count:",
+            "Wardrobe:",
+            "attr class =",
+            "attr name =",
+            "attr prefab =",
+            "attr ilod =",
+            "attr ilod_range =",
+            "last entity name parsed:",
+            "loadCategoryFile",
+            "prefab load"
         };
 
         /// <summary>
@@ -86,12 +108,12 @@ namespace Oxide.Game.DeadLinger
 
         private static void ServerConsoleOnInput(string input)
         {
-            EvalInputString.Invoke(DebugConsole.Singleton, new object[] {input});
+            EvalInputString.Invoke(DebugConsole.Singleton, new object[] { input });
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
-            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
