@@ -96,6 +96,7 @@ namespace Oxide.Game.ReignOfKings
             "[WARNING] Recieved a",
             "\"string button\" is empty;",
             "armorManager == null",
+            "cannot estimate angular velocity.",
             "eac_server.dll",
             "is missing a default constructor.",
             "linkedTo == null",
