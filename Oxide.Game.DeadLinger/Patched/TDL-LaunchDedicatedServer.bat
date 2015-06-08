@@ -1,1 +1,1 @@
-TDL.exe +dedicatedServer -batchmode
+@TDL.exe +dedicatedServer -batchmode
