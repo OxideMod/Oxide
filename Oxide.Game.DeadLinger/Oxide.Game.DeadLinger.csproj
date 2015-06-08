@@ -87,7 +87,7 @@
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\UnityEngine.dll" />
       <NativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.*" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.Cecil.dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll; $(ProjectDir)\Patched\*.exe" />
-      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
+      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json; $(ProjectDir)\Patched\TDL-LaunchDedicatedServer.bat" />
     </ItemGroup>
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
