@@ -458,17 +458,17 @@ namespace Oxide.Game.ReignOfKings
             var name = args[1];
             var group = args[2];
 
-            var ply = FindPlayer(name);
-            if (ply == null && !permission.UserExists(name))
+            var target = FindPlayer(name);
+            if (target == null && !permission.UserExists(name))
             {
                 SendPlayerMessage(player, "User '" + name + "' not found");
                 return;
             }
             var userId = name;
-            if (ply != null)
+            if (target != null)
             {
-                userId = player.Id.ToString();
-                name = player.Name;
+                userId = target.Id.ToString();
+                name = target.Name;
                 permission.GetUserData(userId).LastSeenNickname = name;
             }
 
@@ -526,17 +526,17 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("user"))
             {
-                var ply = FindPlayer(name);
-                if (ply == null && !permission.UserExists(name))
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserExists(name))
                 {
                     SendPlayerMessage(player, "User '" + name + "' not found");
                     return;
                 }
                 var userId = name;
-                if (ply != null)
+                if (target != null)
                 {
-                    userId = player.Id.ToString();
-                    name = player.Name;
+                    userId = target.Id.ToString();
+                    name = target.Name;
                     permission.GetUserData(name).LastSeenNickname = name;
                 }
                 permission.GrantUserPermission(userId, perm, null);
@@ -580,17 +580,17 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("user"))
             {
-                var ply = FindPlayer(name);
-                if (ply == null && !permission.UserExists(name))
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserExists(name))
                 {
                     SendPlayerMessage(player, "User '" + name + "' not found");
                     return;
                 }
                 var userId = name;
-                if (ply != null)
+                if (target != null)
                 {
-                    userId = player.Id.ToString();
-                    name = player.Name;
+                    userId = target.Id.ToString();
+                    name = target.Name;
                     permission.GetUserData(name).LastSeenNickname = name;
                 }
                 permission.RevokeUserPermission(userId, perm);
@@ -614,8 +614,8 @@ namespace Oxide.Game.ReignOfKings
             }
             if (player == null)
             {
-                foreach (var ply in Server.ClientPlayers.Where(ply => ply.Connection.IpAddress == nameOrIdOrIp))
-                    player = ply;
+                foreach (var target in Server.ClientPlayers.Where(target => target.Connection.IpAddress == nameOrIdOrIp))
+                    player = target;
             }
             return player;
         }
@@ -626,7 +626,12 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="perm"></param>
         /// <returns></returns>
-        private bool HasPermission(Player player, string perm) => RoKPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm);
+        private bool HasPermission(Player player, string perm)
+        {
+            if (RoKPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm)) return true;
+            SendPlayerMessage(player, "You don't have permission to use this command.");
+            return false;
+        }
 
         /// <summary>
         /// Called when a chat command was run
