@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
+using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 
 using Oxide.Core;
@@ -78,8 +81,26 @@ namespace Oxide.Game.ReignOfKings.Libraries
             // Add the new command to collections
             chatCommands[command_name] = cmd;
 
+            var commandAttribute = new CommandAttribute("/" + command_name, string.Empty);
+            var action = (Action<CommandInfo>)Delegate.CreateDelegate(typeof(Action<CommandInfo>), this, GetType().GetMethod("HandleCommand", BindingFlags.NonPublic | BindingFlags.Instance));
+            commandAttribute.Method = action;
+            if (CommandManager.RegisteredCommands.ContainsKey(command_name))
+            {
+                var new_plugin_name = plugin?.Name ?? "An unknown plugin";
+                var msg = $"{new_plugin_name} has replaced the {command_name} chat command";
+                Interface.Oxide.LogWarning(msg);
+            }
+            CommandManager.RegisteredCommands[command_name] = commandAttribute;
+
             // Hook the unload event
             if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+        }
+
+        private void HandleCommand(CommandInfo cmdInfo)
+        {
+            ChatCommand cmd;
+            if (!chatCommands.TryGetValue(cmdInfo.Label.ToLowerInvariant(), out cmd)) return;
+            cmd.Plugin.CallHook(cmd.CallbackName, cmdInfo.Player, cmdInfo.Label, cmdInfo.Args);
         }
 
         /// <summary>
@@ -107,7 +128,10 @@ namespace Oxide.Game.ReignOfKings.Libraries
         {
             // Remove all chat commands which were registered by the plugin
             foreach (var cmd in chatCommands.Values.Where(c => c.Plugin == sender).ToArray())
+            {
                 chatCommands.Remove(cmd.Name);
+                CommandManager.RegisteredCommands.Remove(cmd.Name);
+            }
 
             // Unhook the event
             sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;

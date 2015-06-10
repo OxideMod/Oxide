@@ -117,7 +117,7 @@ namespace Oxide.Game.ReignOfKings
         /// <returns></returns>
         private bool PermissionsLoaded(Player player)
         {
-            if (permission.IsLoaded) return true;
+            if (permission.IsLoaded || player.IsServer) return true;
             SendPlayerMessage(player, "Unable to load permission files! Permissions will not work until the error has been resolved.\n => " + permission.LastException.Message);
             return false;
         }
@@ -128,7 +128,13 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="format"></param>
         /// <param name="args"></param>
-        private static void SendPlayerMessage(Player player, string format, params object[] args) => player.SendMessage("[950415]Oxide[FFFFFF]: " + format, args);
+        private static void SendPlayerMessage(Player player, string format, params object[] args)
+        {
+            if (player.IsServer)
+                Interface.Oxide.LogInfo(format, args);
+            else
+                player.SendMessage("[950415]Oxide[FFFFFF]: " + format, args);
+        }
 
         /// <summary>
         /// Called when the server is shutting down
@@ -628,7 +634,7 @@ namespace Oxide.Game.ReignOfKings
         /// <returns></returns>
         private bool HasPermission(Player player, string perm)
         {
-            if (RoKPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm)) return true;
+            if (RoKPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm) || player.IsServer) return true;
             SendPlayerMessage(player, "You don't have permission to use this command.");
             return false;
         }
