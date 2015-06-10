@@ -29,10 +29,7 @@ namespace Oxide.Ext.MySql
             _args = args;
         }
 
-        public static Sql Builder
-        {
-            get { return new Sql(); }
-        }
+        public static Sql Builder => new Sql();
 
         public string SQL
         {
@@ -86,7 +83,7 @@ namespace Oxide.Ext.MySql
 
         private static bool Is(Sql sql, string sqltype)
         {
-            return sql != null && sql._sql != null && sql._sql.StartsWith(sqltype, StringComparison.InvariantCultureIgnoreCase);
+            return sql?._sql != null && sql._sql.StartsWith(sqltype, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private void Build(StringBuilder sb, List<object> args, Sql lhs)
@@ -110,8 +107,7 @@ namespace Oxide.Ext.MySql
             }
 
             // Now do rhs
-            if (_rhs != null)
-                _rhs.Build(sb, args, this);
+            _rhs?.Build(sb, args, this);
         }
 
         public Sql Where(string sql, params object[] args)
