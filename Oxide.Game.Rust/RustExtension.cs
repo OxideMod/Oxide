@@ -179,6 +179,7 @@ namespace Oxide.Game.Rust
                 if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
                 return string.Concat(Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond)), "/s in, ", Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond)), "/s out");
             };
+            Interface.Oxide.ServerConsole.Title = () => string.Concat(BasePlayer.activePlayerList.Count, " | ", server.hostname);
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
