@@ -55,10 +55,11 @@ namespace Oxide.Core.ServerConsole
         {
             _console.Initialize();
             _input.OnInputText += OnInputText;
+            _input.ClearLine(1);
             _input.ClearLine(Console.WindowHeight);
             for (var i = 0; i < Console.WindowHeight; i++)
             {
-                Console.WriteLine(string.Empty);
+                Console.WriteLine();
             }
         }
 

@@ -3,11 +3,14 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using Microsoft.Win32.SafeHandles;
+
 namespace Oxide.Core.ServerConsole
 {
     public class ConsoleWindow
     {
         private const uint ATTACH_PARENT_PROCESS = 0xFFFFFFFF;
+        private const int STD_OUTPUT_HANDLE = -11;
         private TextWriter _oldOutput;
         private Encoding _oldEncoding;
 
@@ -20,9 +23,6 @@ namespace Oxide.Core.ServerConsole
         [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false, SetLastError = true)]
         private static extern bool FreeConsole();
 
-        [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false)]
-        private static extern bool SetConsoleTitleA(string lpConsoleTitle);
-
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetConsoleWindow();
 
@@ -34,6 +34,9 @@ namespace Oxide.Core.ServerConsole
 
         [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
         private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetStdHandle(int nStdHandle);
 
         public static bool Check(bool force = false)
         {
@@ -51,7 +54,7 @@ namespace Oxide.Core.ServerConsole
 
         public void SetTitle(string title)
         {
-            if (title != null) SetConsoleTitleA(title);
+            if (title != null) Console.Title = title;
         }
 
         public void Initialize()
@@ -59,9 +62,19 @@ namespace Oxide.Core.ServerConsole
             if (!AttachConsole(ATTACH_PARENT_PROCESS)) AllocConsole();
             _oldOutput = Console.Out;
             _oldEncoding = Console.OutputEncoding;
-            Console.SetOut(new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8) { AutoFlush = true });
             SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
             Console.OutputEncoding = Encoding.UTF8;
+            Stream outStream;
+            try
+            {
+                var safeFileHandle = new SafeFileHandle(GetStdHandle(STD_OUTPUT_HANDLE), true);
+                outStream = new FileStream(safeFileHandle, FileAccess.Write);
+            }
+            catch (Exception)
+            {
+                outStream = Console.OpenStandardOutput();
+            }
+            Console.SetOut(new StreamWriter(outStream, Encoding.UTF8) { AutoFlush = true });
         }
 
         public void Shutdown()
