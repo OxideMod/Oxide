@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Oxide.Core.ServerConsole
 {
@@ -88,17 +89,26 @@ namespace Oxide.Core.ServerConsole
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Tab:
-                    if (Completion == null) return;
-                    var results = Completion(InputString);
+                    var results = Completion?.Invoke(InputString);
                     if (results == null || results.Length == 0) return;
                     if (results.Length > 1)
                     {
                         ClearLine(StatusText.Length + 1);
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        foreach (var result in results)
+                        var lowestDiff = results.Max(r => r.Length);
+                        for (var index = 0; index < results.Length; index++)
                         {
+                            var result = results[index];
+                            if (index > 0)
+                            {
+                                var diff = GetFirstDiffIndex(results[0], result);
+                                if (diff > 0 && diff < lowestDiff)
+                                    lowestDiff = diff;
+                            }
                             Console.WriteLine(result);
                         }
+                        if (lowestDiff > 0)
+                            InputString = results[0].Substring(0, lowestDiff);
                         RedrawInputLine();
                         return;
                     }
@@ -109,6 +119,15 @@ namespace Oxide.Core.ServerConsole
             if (consoleKeyInfo.KeyChar == 0) return;
             InputString = string.Concat(InputString, consoleKeyInfo.KeyChar);
             RedrawInputLine();
+        }
+
+        private static int GetFirstDiffIndex(string str1, string str2)
+        {
+            if (str1 == null || str2 == null) return -1;
+            var length = Math.Min(str1.Length, str2.Length);
+            for (var index = 0; index < length; index++)
+                if (str1[index] != str2[index]) return index;
+            return length;
         }
     }
 }
