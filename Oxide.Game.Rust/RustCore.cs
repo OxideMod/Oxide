@@ -717,18 +717,12 @@ namespace Oxide.Game.Rust
         private void OnPlayerInit(BasePlayer player)
         {
             var authLevel = player.net.connection.authLevel;
-            if (authLevel <= DefaultGroups.Length && permission.IsLoaded)
-            {
-                var userId = player.userID.ToString();
-                permission.GetUserData(userId).LastSeenNickname = player.displayName;
-
-                // Remove player from old groups if auth level changed
-                for (var i = 0; i < DefaultGroups.Length; i++)
-                    if (i != authLevel) permission.RemoveUserGroup(userId, DefaultGroups[i]);
-
-                // Add player to default group
-                permission.AddUserGroup(userId, DefaultGroups[authLevel]);
-            }
+            if (authLevel > DefaultGroups.Length || !permission.IsLoaded) return;
+            var userId = player.userID.ToString();
+            var userData = permission.GetUserData(userId);
+            userData.LastSeenNickname = player.displayName;
+            if (userData.Groups.Count > 0) return;
+            permission.AddUserGroup(userId, DefaultGroups[authLevel]);
         }
 
         /// <summary>
