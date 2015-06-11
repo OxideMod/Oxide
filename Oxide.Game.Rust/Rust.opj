@@ -8,7 +8,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 9,
+            "InjectionIndex": 10,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "fw6KvgrDe7ZdyatWZ0L0nPVzlbN5XeJW1tfG/0LAWYY=",
+            "MSILHash": "duxytUjZ63dsldcVlddUlNVqB4g0PTMXPSApJT8a7G8=",
             "BaseHookName": null
           }
         },
@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "60rj5fEwosbkMBBsbU6wImwNIQHnF66d24Nwit4XEfU=",
+            "MSILHash": "dBn6mFBNWylH0XN8I8FCtZx/g64/EjlMYL6HGuDfRgw=",
             "BaseHookName": null
           }
         },
@@ -906,29 +906,6 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 3,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnConsumableUse",
-            "HookName": "OnConsumableUse",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Item",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "UseOneItem",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "goBb3GJtrD+2nYIYO9w5/VtRp66rmkN9y03hV0vbCss=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -1051,7 +1028,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "njNF/MUGoJDsEGTM9Bt/EQ8R2azPV+hONHFn6w1syMQ=",
+            "MSILHash": "B/ZGraApMGQfjFyRQjnnOLOkg5nVD+qleAKj1HZhQIM=",
             "BaseHookName": null
           }
         },
@@ -1791,6 +1768,31 @@
               ]
             },
             "MSILHash": "Z0sAsUNkyKCQLEW7HJ1Y30QNYqEZ9EZMglaVvI/FLAM=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnConsumableUse",
+            "HookName": "OnConsumableUse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Item",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UseItem",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "8LlQVWuYP7WPocZtichmuJDdVbq7NKLmOAkqb0ST3+M=",
             "BaseHookName": null
           }
         }
