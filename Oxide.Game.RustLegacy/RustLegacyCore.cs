@@ -667,11 +667,10 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerConnected(NetUser player)
         {
             if (!permission.IsLoaded) return;
-
             var userId = player.userID.ToString();
-            permission.GetUserData(userId).LastSeenNickname = player.displayName;
-
-            // Add player to default group
+            var userData = permission.GetUserData(userId);
+            userData.LastSeenNickname = player.displayName;
+            if (userData.Groups.Count > 0) return;
             permission.AddUserGroup(userId, DefaultGroups[0]);
         }
 
