@@ -29,6 +29,9 @@ namespace Oxide.Core.ServerConsole
         [DllImport("kernel32.dll")]
         private static extern bool SetConsoleOutputCP(uint wCodePageID);
 
+        [DllImport("kernel32.dll")]
+        private static extern bool SetConsoleTitle(string lpConsoleTitle);
+
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
@@ -54,7 +57,7 @@ namespace Oxide.Core.ServerConsole
 
         public void SetTitle(string title)
         {
-            if (title != null) Console.Title = title;
+            if (title != null) SetConsoleTitle(title);
         }
 
         public void Initialize()
