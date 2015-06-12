@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "b/oXmjBrlkrT8728AQ6r8bMu4ldHiuXMKWcGe9Ve5kQ=",
+            "MSILHash": "r2tp/EtRw+k28aSEe8FkNbPh1BJUvvwZtnCsrQvgDs8=",
             "BaseHookName": null
           }
         },
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "b/oXmjBrlkrT8728AQ6r8bMu4ldHiuXMKWcGe9Ve5kQ=",
+            "MSILHash": "r2tp/EtRw+k28aSEe8FkNbPh1BJUvvwZtnCsrQvgDs8=",
             "BaseHookName": null
           }
         },
@@ -125,7 +125,7 @@
             "InjectionIndex": 331,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l10",
+            "ArgumentString": "l9",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
@@ -357,32 +357,6 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SdtdConsole",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "executeCommand",
-              "ReturnType": "System.Collections.Generic.List`1<System.String>",
-              "Parameters": [
-                "System.String",
-                "CommandSenderInfo"
-              ]
-            },
-            "MSILHash": "2knkM4GuhQ7dFAuBX9IlNw48zROKbZP9j459C45Hc30=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
             "Name": "OnServerShutdown",
             "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
@@ -395,6 +369,32 @@
               "Parameters": []
             },
             "MSILHash": "jgTulrYmFR+06L4AmZGBwJTdDrXVirqlqf/k6caQZ/A=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnRunCommand",
+            "HookName": "OnRunCommand",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConnectionManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ServerConsoleCommand",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ClientInfo",
+                "System.String"
+              ]
+            },
+            "MSILHash": "UbsWNlK6DeHU8nWj5YXWr6zL2Jhz3HQQUe/tzuVWnzQ=",
             "BaseHookName": null
           }
         }
