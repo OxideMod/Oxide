@@ -37,7 +37,7 @@ namespace Oxide.Game.Rust
         public override string Author => "Oxide Team";
 
         public override string[] WhitelistAssemblies => new[] {"Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine"};
-        public override string[] WhitelistNamespaces => new[] {"Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine"};
+        public override string[] WhitelistNamespaces => new[] {"ConVar", "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "UnityEngine"};
 
         private static readonly string[] Filter =
         {
