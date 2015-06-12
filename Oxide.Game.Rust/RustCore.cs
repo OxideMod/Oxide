@@ -104,7 +104,7 @@ namespace Oxide.Game.Rust
             if (ServerInitialized) return;
             ServerInitialized = true;
             // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", server.hostname);
+            RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
         }
 
         /// <summary>

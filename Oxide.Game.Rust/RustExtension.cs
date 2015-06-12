@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 
 using Facepunch;
-
 using Network;
 
 using Oxide.Core;
@@ -170,7 +169,7 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
                 var str1 = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("[H:mm]");
-                return string.Concat(" ", str1, " [", BasePlayer.activePlayerList.Count, "/", (Net.sv == null ? 0 : Net.sv.maxConnections), "] ", server.hostname);
+                return string.Concat(" ", str1, " [", BasePlayer.activePlayerList.Count, "/", (Net.sv == null ? 0 : Net.sv.maxConnections), "] ", ConVar.Server.hostname);
             };
             Interface.Oxide.ServerConsole.Status1Right = () => string.Concat(Performance.frameRate, "fps ", Number.FormatSeconds((int)Time.realtimeSinceStartup), string.Empty);
             Interface.Oxide.ServerConsole.Status2Left = () => string.Concat(" ", BaseNetworkable.serverEntities.Count, " ents, ", BasePlayer.sleepingPlayerList.Count, " slprs");
@@ -179,7 +178,7 @@ namespace Oxide.Game.Rust
                 if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
                 return string.Concat(Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond)), "/s in, ", Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond)), "/s out");
             };
-            Interface.Oxide.ServerConsole.Title = () => string.Concat(BasePlayer.activePlayerList.Count, " | ", server.hostname);
+            Interface.Oxide.ServerConsole.Title = () => string.Concat(BasePlayer.activePlayerList.Count, " | ", ConVar.Server.hostname);
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
@@ -200,15 +199,15 @@ namespace Oxide.Game.Rust
             if (type == LogType.Warning)
             {
                 color = ConsoleColor.Yellow;
-                server.Log("Log.Warning.txt", message);
+                ConVar.Server.Log("Log.Warning.txt", message);
             }
             else if (type == LogType.Error)
             {
                 color = ConsoleColor.Red;
-                server.Log("Log.Error.txt", message);
+                ConVar.Server.Log("Log.Error.txt", message);
             }
             else if (!message.StartsWith("[CHAT]"))
-                server.Log("Log.Log.txt", message);
+                ConVar.Server.Log("Log.Log.txt", message);
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
