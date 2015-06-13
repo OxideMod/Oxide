@@ -595,6 +595,56 @@
             "MSILHash": "7/p5rivSaHNrEJ3kx0t/vHsEVCqnuJat4I2zYHmDOqs=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnRecalculateHash [internal]",
+            "HookName": "OnRecalculateHash",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Common.FileHasher",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RecalculateHash",
+              "ReturnType": "System.UInt32",
+              "Parameters": [
+                "System.UInt32"
+              ]
+            },
+            "MSILHash": "ZETSqh1ouKlWrAU9j0KXfR4fmJXkqDnr17bltm7gpPI=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnCountFolder [internal]",
+            "HookName": "OnCountFolder",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "FileCounter",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CountFolder",
+              "ReturnType": "System.UInt32",
+              "Parameters": [
+                "System.UInt32"
+              ]
+            },
+            "MSILHash": "nKss1i5/JvKpqtutTsbF8Wq2BZKwvwLeulzIJiVK5T8=",
+            "BaseHookName": null
+          }
         }
       ]
     }

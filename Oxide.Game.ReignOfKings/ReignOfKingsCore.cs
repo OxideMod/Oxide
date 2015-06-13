@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 using CodeHatch.Build;
 using CodeHatch.Common;
+using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
 
@@ -43,6 +45,8 @@ namespace Oxide.Game.ReignOfKings
 
         // Track oxide.load chat commands
         private Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
+
+        private static readonly FieldInfo FoldersField = typeof (FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
 
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class
@@ -640,24 +644,6 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies.
-        /// </summary>
-        /// <param name="fullTypeName"></param>
-        /// <returns></returns>
-        [HookMethod("IGetTypeFromName")]
-        private Type IGetTypeFromName(string fullTypeName)
-        {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (assembly is System.Reflection.Emit.AssemblyBuilder) continue;
-                foreach (var type in assembly.GetExportedTypes())
-                    if (type.Name == fullTypeName)
-                        return type;
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Called when a chat command was run
         /// </summary>
         /// <param name="e"></param>
@@ -757,6 +743,38 @@ namespace Oxide.Game.ReignOfKings
                 permission.AddUserGroup(userId, "default");
             else if (permission.GroupExists("guest"))
                 permission.AddUserGroup(userId, "guest");
+        }
+
+        /// <summary>
+        /// Called when the hash is recalculated
+        /// </summary>
+        /// <param name="fileHasher"></param>
+        [HookMethod("OnRecalculateHash")]
+        void OnRecalculateHash(FileHasher fileHasher)
+        {
+            if (fileHasher.FileLocationFromDataPath.Equals("/Managed/Assembly-CSharp.dll"))
+                fileHasher.FileLocationFromDataPath = "/Managed/Assembly-CSharp_Original.dll";
+        }
+
+        /// <summary>
+        /// Called when the files are counted
+        /// </summary>
+        /// <param name="fileCounter"></param>
+        [HookMethod("OnCountFolder")]
+        void OnCountFolder(FileCounter fileCounter)
+        {
+            if (fileCounter.FolderLocationFromDataPath.Equals("/Managed/") && fileCounter.Folders.Length != 39)
+            {
+                var folders = (string[]) FoldersField.GetValue(fileCounter); 
+                Array.Resize(ref folders, 39);
+                FoldersField.SetValue(fileCounter, folders);
+            }
+            else if (fileCounter.FolderLocationFromDataPath.Equals("/../") && fileCounter.Folders.Length != 2)
+            {
+                var folders = (string[])FoldersField.GetValue(fileCounter);
+                Array.Resize(ref folders, 2);
+                FoldersField.SetValue(fileCounter, folders);
+            }
         }
     }
 }

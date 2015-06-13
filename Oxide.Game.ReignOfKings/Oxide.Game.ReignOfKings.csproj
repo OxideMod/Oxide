@@ -98,5 +98,6 @@
     <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(ManagedDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(ProjectDir)\Dependencies\Assembly-CSharp.dll" DestinationFiles="$(BundleDir)\$(ManagedDir)\Assembly-CSharp_Original.dll" ContinueOnError="false" SkipUnchangedFiles="false" />
   </Target>
 </Project>
