@@ -12,6 +12,7 @@ using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins.Watchers;
+
 using Oxide.Ext.Lua.Libraries;
 using Oxide.Ext.Lua.Plugins;
 
@@ -40,7 +41,12 @@ namespace Oxide.Ext.Lua
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        private NLua.Lua LuaEnvironment { get; set; }
+        internal NLua.Lua LuaEnvironment { get; set; }
+
+        /// <summary>
+        /// Gets the metatable to use for the plugin table
+        /// </summary>
+        internal LuaTable PluginMetatable { get; private set; }
 
         // Blacklist and whitelist
         private bool _typesInit;
@@ -49,6 +55,7 @@ namespace Oxide.Ext.Lua
         private LuaFunction setmetatable;
         private LuaTable overloadselectormeta;
         private LuaTable typetablemeta;
+        private LuaTable libraryMetaTable;
 
         // The plugin change watcher
         private FSWatcher watcher;
@@ -130,6 +137,47 @@ end
             //LuaEnvironment.RegisterFunction("tmp.__newindex", mytype.GetMethod("WriteStaticProperty", BindingFlags.NonPublic | BindingFlags.Static));
             typetablemeta = LuaEnvironment["tmp"] as LuaTable;
             LuaEnvironment["tmp"] = null;
+
+            LuaEnvironment.NewTable("libraryMetaTable");
+            LuaEnvironment.LoadString(
+@"function libraryMetaTable:__index( key )
+    local ptbl = rawget( self, '_properties' )
+    local property = ptbl[ key ]
+    if (property) then return property:GetValue( rawget( self, '_object' ), null ) end
+end
+function libraryMetaTable:__newindex( key, value )
+    local ptbl = rawget( self, '_properties' )
+    local property = ptbl[ key ]
+    if (property) then property:SetValue( rawget( self, '_object' ), value ) end
+end
+", "LuaExtension").Call();
+            libraryMetaTable = LuaEnvironment["libraryMetaTable"] as LuaTable;
+            LuaEnvironment["libraryMetaTable"] = null;
+
+            LuaEnvironment.NewTable("tmp");
+            PluginMetatable = LuaEnvironment["tmp"] as LuaTable;
+            LuaEnvironment.LoadString(
+@"function tmp:__newindex( key, value )
+    if (type( value ) ~= 'function') then return rawset( self, key, value ) end
+    local activeAttrib = rawget( self, '_activeAttrib' )
+    if (not activeAttrib) then return rawset( self, key, value ) end
+    if (activeAttrib == self) then
+        print( 'PluginMetatable.__newindex - self._activeAttrib was somehow self!' )
+        rawset( self, key, value )
+        return
+    end
+    local attribArr = rawget( self, '_attribArr' )
+    if (not attribArr) then
+        attribArr = {}
+        rawset( self, '_attribArr', attribArr )
+    end
+    activeAttrib._func = value
+    attribArr[#attribArr + 1] = activeAttrib
+    rawset( self, '_activeAttrib', nil )
+end
+", "LuaExtension").Call();
+            LuaEnvironment["tmp"] = null;
+
         }
 
         internal void InitializeTypes()
@@ -383,16 +431,70 @@ end
         }
 
         /// <summary>
+        /// Loads a plugin function attribute type
+        /// </summary>
+        /// <param name="attrName"></param>
+        private void LoadPluginFunctionAttribute(string attrName)
+        {
+            Action<LuaTable> func = (tbl) =>
+            {
+                LuaTable pluginTable = LuaEnvironment["PLUGIN"] as LuaTable;
+                tbl["_attribName"] = attrName;
+                (LuaEnvironment["rawset"] as LuaFunction).Call(pluginTable, "_activeAttrib", tbl);
+            };
+            LuaEnvironment[attrName] = func;
+        }
+
+        /// <summary>
         /// Loads a library into the specified path
         /// </summary>
         /// <param name="library"></param>
         /// <param name="path"></param>
         public void LoadLibrary(Library library, string path)
         {
+            //Interface.GetMod().RootLogger.Write(LogType.Debug, "Loading library '{0}' into Lua... (path is '{1}')", library.GetType().Name, path);
+
+            // Create the library table if it doesn't exist
+            LuaTable libraryTable = LuaEnvironment[path] as LuaTable;
+            if (libraryTable == null)
+            {
+                LuaEnvironment.NewTable(path);
+                libraryTable = LuaEnvironment[path] as LuaTable;
+                //Interface.GetMod().RootLogger.Write(LogType.Debug, "Library table not found, creating one... {0}", libraryTable);
+            }
+            else
+            {
+                //Interface.GetMod().RootLogger.Write(LogType.Debug, "Library table found, using it... {0}", libraryTable);
+            }
+
+            // Bind all methods
             foreach (string name in library.GetFunctionNames())
             {
                 MethodInfo method = library.GetFunction(name);
                 LuaEnvironment.RegisterFunction(string.Format("{0}.{1}", path, name), library, method);
+            }
+
+            // Only bind properties if it's not global
+            if (path != "_G")
+            {
+                // Create properties table
+                LuaEnvironment.NewTable("tmp");
+                LuaTable propertiesTable = LuaEnvironment["tmp"] as LuaTable;
+                //Interface.GetMod().RootLogger.Write(LogType.Debug, "Made properties table {0}", propertiesTable);
+                libraryTable["_properties"] = propertiesTable;
+                libraryTable["_object"] = library; // NOTE: Is this a security risk?
+                LuaEnvironment["tmp"] = null;
+
+                // Bind all properties
+                foreach (string name in library.GetPropertyNames())
+                {
+                    PropertyInfo property = library.GetProperty(name);
+                    propertiesTable[name] = property;
+                }
+
+                // Bind the metatable
+                //Interface.GetMod().RootLogger.Write(LogType.Debug, "setmetatable {0}", libraryMetaTable);
+                (LuaEnvironment["setmetatable"] as LuaFunction).Call(libraryTable, libraryMetaTable);
             }
         }
 
@@ -427,9 +529,9 @@ end
             LoadLibrary(new LuaDatafile(LuaEnvironment), "datafile");
             if (LuaEnvironment["util"] == null)
                 LuaEnvironment.NewTable("util");
-            LoadLibrary(new LuaUtil(), "util");
+            LoadLibrary(new LuaUtil(LuaEnvironment), "util");
 
-            // Bind any libraries to lua
+            // Bind any libraries to Lua
             foreach (string name in Manager.GetLibraries())
             {
                 string path = name.ToLowerInvariant();
@@ -440,6 +542,9 @@ end
                     LuaEnvironment.NewTable(path);
                 LoadLibrary(lib, path);
             }
+
+            // Bind attributes to Lua
+            LoadPluginFunctionAttribute("Command");
         }
     }
 }

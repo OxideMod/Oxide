@@ -223,7 +223,7 @@ namespace Oxide.Ext.Python.Plugins
         }
 
         /// <summary>
-        /// Calls a lua function by the given name and returns the output
+        /// Calls a Python function by the given name and returns the output
         /// </summary>
         /// <param name="name"></param>
         /// <param name="args"></param>

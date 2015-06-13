@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 using NLua;
 
@@ -15,6 +16,20 @@ namespace Oxide.Ext.Lua.Libraries
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
         public override bool IsGlobal => false;
+
+        /// <summary>
+        /// Gets the Lua environment
+        /// </summary>
+        public NLua.Lua LuaEnvironment { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the LuaUtil class
+        /// </summary>
+        /// <param name="logger"></param>
+        public LuaUtil(NLua.Lua lua)
+        {
+            LuaEnvironment = lua;
+        }
 
         /// <summary>
         /// Converts the specified table to an object array
@@ -66,6 +81,26 @@ namespace Oxide.Ext.Lua.Libraries
             }
             array[index] = converted;
             return true;
+        }
+
+        /// <summary>
+        /// Evaluates the specified IEnumerable and converts it to a Lua table
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [LibraryFunction("EvaluateEnumerable")]
+        public LuaTable EvaluateEnumerable(IEnumerable obj)
+        {
+            LuaEnvironment.NewTable("_tmp_enumerable");
+            LuaTable tbl = LuaEnvironment["_tmp_enumerable"] as LuaTable;
+            var e = obj.GetEnumerator();
+            int i = 0;
+            while (e.MoveNext())
+            {
+                tbl[++i] = e.Current;
+            }
+            LuaEnvironment["_tmp_enumerable"] = null;
+            return tbl;
         }
     }
 }

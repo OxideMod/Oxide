@@ -34,6 +34,34 @@ namespace Oxide.Core.Libraries
     }
 
     /// <summary>
+    /// Indicates that the specified function is a library property with a name
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class LibraryProperty : Attribute
+    {
+        /// <summary>
+        /// Gets the name for the library property
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Creates a library property using the methods name
+        /// </summary>
+        public LibraryProperty()
+        {
+        }
+
+        /// <summary>
+        /// Creates a library property using the given name
+        /// </summary>
+        /// <param name="name"></param>
+        public LibraryProperty(string name)
+        {
+            Name = name;
+        }
+    }
+
+    /// <summary>
     /// Represents a library containing a set of functions for script languages to use
     /// </summary>
     public abstract class Library
@@ -51,6 +79,9 @@ namespace Oxide.Core.Libraries
         // Functions stored in this library
         private IDictionary<string, MethodInfo> functions;
 
+        // Properties stored in this library
+        private IDictionary<string, PropertyInfo> properties;
+
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
@@ -67,6 +98,7 @@ namespace Oxide.Core.Libraries
         public Library()
         {
             functions = new Dictionary<string, MethodInfo>();
+            properties = new Dictionary<string, PropertyInfo>();
             var type = GetType();
             foreach (var method in type.GetMethods())
             {
@@ -86,6 +118,24 @@ namespace Oxide.Core.Libraries
                 else
                     functions[name] = method;
             }
+            foreach (var property in type.GetProperties())
+            {
+                LibraryProperty attribute;
+                try
+                {
+                    attribute = property.GetCustomAttributes(typeof(LibraryProperty), true).SingleOrDefault() as LibraryProperty;
+                    if (attribute == null) continue;
+                }
+                catch (TypeLoadException)
+                {
+                    continue; // Ignore rare exceptions caused by type information being loaded for all properties
+                }
+                var name = attribute.Name ?? property.Name;
+                if (properties.ContainsKey(name))
+                    Interface.Oxide.LogError("{0} library tried to register an already registered property: {1}", type.FullName, name);
+                else
+                    properties[name] = property;
+            }
         }
 
         /// <summary>
@@ -98,6 +148,15 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
+        /// Gets all property names in this library
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<string> GetPropertyNames()
+        {
+            return properties.Keys;
+        }
+
+        /// <summary>
         /// Gets a function by the specified name
         /// </summary>
         /// <param name="name"></param>
@@ -106,6 +165,18 @@ namespace Oxide.Core.Libraries
         {
             MethodInfo info;
             if (functions.TryGetValue(name, out info)) return info;
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a property by the specified name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public PropertyInfo GetProperty(string name)
+        {
+            PropertyInfo info;
+            if (properties.TryGetValue(name, out info)) return info;
             return null;
         }
     }

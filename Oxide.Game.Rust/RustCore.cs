@@ -6,6 +6,7 @@ using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+
 using Oxide.Game.Rust.Libraries;
 
 using Network;
@@ -614,6 +615,13 @@ namespace Oxide.Game.Rust
 
             if (arg.cmd.namefull == "chat.say")
             {
+                if (arg.connection != null)
+                {
+                    var rustCovalence = Libraries.Covalence.RustCovalenceProvider.Instance;
+                    var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+                    if (rustCovalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0, ""))) return true;
+                }
+
                 // Get the args
                 string str = arg.GetString(0, "text");
                 if (str.Length == 0) return null;
@@ -716,6 +724,10 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerInit")]
         private void OnPlayerInit(BasePlayer player)
         {
+            // Let covalence know
+            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+
+            // Do permission stuff
             var authLevel = player.net.connection.authLevel;
             if (authLevel > DefaultGroups.Length || !permission.IsLoaded) return;
             var userId = player.userID.ToString();
@@ -723,6 +735,17 @@ namespace Oxide.Game.Rust
             userData.LastSeenNickname = player.displayName;
             if (userData.Groups.Count > 0) return;
             permission.AddUserGroup(userId, DefaultGroups[authLevel]);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(BasePlayer player)
+        {
+            // Let covalence know
+            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
         /// <summary>

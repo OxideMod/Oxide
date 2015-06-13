@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using System.Collections.Generic;
 
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
@@ -68,7 +68,7 @@ namespace Oxide.Ext.Lua.Plugins
             LuaExtension.InitializeTypes();
 
             // Create it
-            LuaPlugin plugin = new LuaPlugin(filename, LuaEnvironment, Watcher);
+            LuaPlugin plugin = new LuaPlugin(filename, LuaExtension, Watcher);
             plugin.Load();
 
             // Return it

@@ -1,13 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 
 using NLua;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Ext.Lua.Plugins
 {
@@ -19,7 +21,7 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        private NLua.Lua LuaEnvironment { get; }
+        internal NLua.Lua LuaEnvironment { get; }
 
         /// <summary>
         /// Gets this plugin's Lua table
@@ -37,17 +39,19 @@ namespace Oxide.Ext.Lua.Plugins
         // The plugin change watcher
         private FSWatcher watcher;
 
+        // The Lua extension
+        private LuaExtension luaExt;
+
         /// <summary>
         /// Initializes a new instance of the LuaPlugin class
         /// </summary>
         /// <param name="filename"></param>
-        /// <param name="lua"></param>
-        /// <param name="watcher"></param>
-        internal LuaPlugin(string filename, NLua.Lua lua, FSWatcher watcher)
+        internal LuaPlugin(string filename, LuaExtension luaExt, FSWatcher watcher)
         {
             // Store filename
             Filename = filename;
-            LuaEnvironment = lua;
+            this.luaExt = luaExt;
+            LuaEnvironment = luaExt.LuaEnvironment;
             this.watcher = watcher;
         }
 
@@ -106,6 +110,7 @@ namespace Oxide.Ext.Lua.Plugins
             if (pluginfunc == null) throw new Exception("LoadString returned null for some reason");
             LuaEnvironment.NewTable("PLUGIN");
             Table = LuaEnvironment["PLUGIN"] as LuaTable;
+            (LuaEnvironment["setmetatable"] as LuaFunction).Call(Table, luaExt.PluginMetatable);
             Name = Path.GetFileNameWithoutExtension(Filename);
             Table["Name"] = Name;
             pluginfunc.Call();
@@ -145,8 +150,89 @@ namespace Oxide.Ext.Lua.Plugins
             // Bind any base methods (we do it here because we don't want them to be hooked)
             BindBaseMethods();
 
+            // Deal with any attributes
+            LuaTable attribs = Table["_attribArr"] as LuaTable;
+            if (attribs != null)
+            {
+                int i = 0;
+                while (attribs[++i] != null)
+                {
+                    LuaTable attrib = attribs[i] as LuaTable;
+                    string attribName = attrib["_attribName"] as string;
+                    LuaFunction attribFunc = attrib["_func"] as LuaFunction;
+                    if (attribFunc != null && !string.IsNullOrEmpty(attribName))
+                    {
+                        HandleAttribute(attribName, attribFunc, attrib);
+                    }
+                }
+            }
+
             // Clean up
             LuaEnvironment["PLUGIN"] = null;
+        }
+
+        /// <summary>
+        /// Handles a method attribute
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="method"></param>
+        /// <param name="data"></param>
+        private void HandleAttribute(string name, LuaFunction method, LuaTable data)
+        {
+            // What type of attribute is it?
+            switch (name)
+            {
+                case "Command":
+                    // Parse data out of it
+                    List<string> cmdNames = new List<string>();
+                    int i = 0;
+                    while (data[++i] != null) cmdNames.Add(data[i] as string);
+                    string[] cmdNamesArr = cmdNames.Where((s) => !string.IsNullOrEmpty(s)).ToArray();
+                    string[] cmdPermsArr;
+                    if (data["permission"] is string)
+                    {
+                        cmdPermsArr = new string[] { data["permission"] as string };
+                    }
+                    else if (data["permission"] is LuaTable || data["permissions"] is LuaTable)
+                    {
+                        LuaTable permsTable = (data["permission"] as LuaTable) ?? (data["permissions"] as LuaTable);
+                        List<string> cmdPerms = new List<string>();
+                        i = 0;
+                        while (permsTable[++i] != null) cmdPerms.Add(permsTable[i] as string);
+                        cmdPermsArr = cmdPerms.Where((s) => !string.IsNullOrEmpty(s)).ToArray();
+                    }
+                    else
+                        cmdPermsArr = new string[0];
+
+                    // Register it
+                    AddCovalenceCommand(cmdNamesArr, cmdPermsArr, (cmd, type, caller, args) =>
+                    {
+                        HandleCommandCallback(method, cmd, type, caller, args);
+                        return true;
+                    });
+
+                    break;
+            }
+        }
+
+        private void HandleCommandCallback(LuaFunction func, string cmd, CommandType type, IPlayer caller, string[] args)
+        {
+            LuaEnvironment.NewTable("tmp");
+            LuaTable argsTable = LuaEnvironment["tmp"] as LuaTable;
+            LuaEnvironment["tmp"] = null;
+            for (int i = 0; i < args.Length; i++)
+            {
+                argsTable[i + 1] = args[i];
+            }
+            try
+            {
+                func.Call(Table, caller, argsTable);
+            }
+            catch (Exception)
+            {
+                // TODO: Error handling and stuff
+                throw;
+            }
         }
 
         /// <summary>
@@ -236,7 +322,7 @@ namespace Oxide.Ext.Lua.Plugins
         // An empty object array
         private static readonly object[] emptyargs;
 
-        // The method used to call a lua function
+        // The method used to call a Lua function
         private static MethodInfo LuaCallFunctionMethod;
 
         static LuaPlugin()
@@ -276,7 +362,7 @@ namespace Oxide.Ext.Lua.Plugins
         #endregion
 
         /// <summary>
-        /// Calls a lua function by the given name and returns the output
+        /// Calls a Lua function by the given name and returns the output
         /// </summary>
         /// <param name="name"></param>
         /// <param name="args"></param>
