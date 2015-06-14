@@ -138,7 +138,7 @@ namespace Oxide.Game.ReignOfKings
         {
 
         }
-
+        /*
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
@@ -214,5 +214,6 @@ namespace Oxide.Game.ReignOfKings
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
+        */
     }
 }
