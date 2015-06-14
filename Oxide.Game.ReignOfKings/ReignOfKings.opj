@@ -8,12 +8,12 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 27,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CodeHatch.Engine.Core.Gaming.Game",
+            "TypeName": "DedicatedServerBypass",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -21,14 +21,14 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "fShCud2RtT/oA6MFDuB+1/hdeeUCRbtO6LqBt+Ib/fY=",
+            "MSILHash": "n4tH0yXtXMMnWXtHPLW1kPUSb1E7nfR3vZnCwfEkTuU=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 15,
+            "InjectionIndex": 23,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -44,14 +44,14 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "+rRnY6P2uAFzlUpzzgLW2h5QckO02dzD/mPolNfOtb8=",
+            "MSILHash": "9J/+PTF39lWgMC7QK6bk2cWD0ATMujAqy0BNkPQwfBU=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 32,
+            "InjectionIndex": 52,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -67,7 +67,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "bz+BrYxzaHkLV/nmUEY4yp+TOHiSPTxYq7SLTm7XYtY=",
+            "MSILHash": "d4c+TlbU36+/brCeX7QTWT5zXNrlnsu5BXl4BwGchug=",
             "BaseHookName": null
           }
         },
@@ -113,14 +113,14 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "qbVPWq9pxGn6olvCQCd1pwFpiGYrl33xWTBAXzCa/4Q=",
+            "MSILHash": "uNh1HYbmxLpFAeMPvtb68CiaaTwGkzsvBvuXh5EErT8=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 59,
+            "InjectionIndex": 22,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -188,7 +188,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "Wq/UGNIYZ7YlQHg/K1zs2Fghdldn9/jIY82Pzamwibc=",
+            "MSILHash": "zICQWC+8BRNuVwkZRVwY/+7B8z9q+iSW6NmhNmCTTwo=",
             "BaseHookName": null
           }
         },
@@ -213,7 +213,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "5iYWLckhZ8ekFmSfai3aKSVIBIDYl0J+9NT7f05/MnY=",
+            "MSILHash": "sdQ7PlBJ19ldRfAvqM4jbtd0B7JhuI3ixCta4Cee03s=",
             "BaseHookName": null
           }
         },
@@ -295,7 +295,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 148,
+            "InjectionIndex": 170,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -313,7 +313,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerFirstSpawnEvent"
               ]
             },
-            "MSILHash": "aicvifxTi2OMe5SlVSXcvZ2nILs0dAhLRglrxVx/O9g=",
+            "MSILHash": "lqfZoS44kAbmukMYBzeVZXmleqkBkxaS3KioF1wGz9I=",
             "BaseHookName": null
           }
         },
@@ -388,7 +388,7 @@
                 "CodeHatch.Blocks.Networking.Events.CubeDestroyEvent"
               ]
             },
-            "MSILHash": "Wm6kOY6gq/feE2hAWbrjC1Hlo6ff0+0lR++XRTQ2qRE=",
+            "MSILHash": "dsUElMXBJ6DWumxh/47KppvzZczkzLMyA2CN5zS7BPc=",
             "BaseHookName": null
           }
         },
@@ -404,19 +404,20 @@
             "HookName": "OnLog",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Logger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
-              "Exposure": 0,
+              "Exposure": 3,
               "Name": "Log",
               "ReturnType": "System.Void",
               "Parameters": [
                 "Logger/LogType",
                 "System.Type",
                 "System.Object",
+                "System.Object[]",
                 "System.Object"
               ]
             },
-            "MSILHash": "Lmlq6rCtMIP6FADtry0HNy6TxJe3fZ8xQfXkgwxBG9U=",
+            "MSILHash": "SG7SgLG4XoDiSxOiKp7a4Q+O7i/mEIDiSUwGq1NLP2M=",
             "BaseHookName": null
           }
         },
@@ -517,6 +518,81 @@
               ]
             },
             "MSILHash": "bjTDVaxOuiYLQNkwCN6YwigZCZFdtypXzQNsDZbXtnw=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "GetTypeFromName [internal]",
+            "HookName": "IGetTypeFromName",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Core.ReflectionUtil",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetTypeFromName",
+              "ReturnType": "System.Type",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "6Dq3y3v6TTGtxR7aUP98lcOfaQfrSci7bJAw/pDySWM=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 3,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSleep",
+            "HookName": "OnPlayerSleep",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Networking.Events.Listeners.PlayerListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnPlayerSleep",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Networking.Events.Players.PlayerSleepEvent"
+              ]
+            },
+            "MSILHash": "hze/OwJ4tvWdsgWb1936bTcs8g2s9NVjeGOW4aifu3U=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 3,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnGadgetPlace",
+            "HookName": "OnGadgetPlace",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Networking.Events.Listeners.GadgetListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnGadgetPlace",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Networking.Events.Entities.Objects.Gadgets.GadgetPlaceEvent"
+              ]
+            },
+            "MSILHash": "7/p5rivSaHNrEJ3kx0t/vHsEVCqnuJat4I2zYHmDOqs=",
             "BaseHookName": null
           }
         }
