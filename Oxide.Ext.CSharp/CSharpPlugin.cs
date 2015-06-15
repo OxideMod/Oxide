@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -15,8 +16,8 @@ namespace Oxide.Plugins
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class InfoAttribute : Attribute
     {
-        public string Title { get; private set; }
-        public string Author { get; private set; }
+        public string Title { get; }
+        public string Author { get; }
         public VersionNumber Version { get; private set; }
         public int ResourceId { get; set; }
 
@@ -53,7 +54,7 @@ namespace Oxide.Plugins
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class DescriptionAttribute : Attribute
     {
-        public string Description { get; private set; }
+        public string Description { get; }
 
         public DescriptionAttribute(string Description)
         {
@@ -67,7 +68,7 @@ namespace Oxide.Plugins
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
     public class PluginReferenceAttribute : Attribute
     {
-        public string Name { get; private set; }
+        public string Name { get; }
 
         public PluginReferenceAttribute()
         {
@@ -273,7 +274,7 @@ namespace Oxide.Plugins
         /// Print an info message using the oxide root logger
         /// </summary>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void Puts(string format, params object[] args)
         {
             Interface.Oxide.LogInfo($"[{Title}] {format}", args);
@@ -283,7 +284,7 @@ namespace Oxide.Plugins
         /// Print a warning message using the oxide root logger
         /// </summary>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void PrintWarning(string format, params object[] args)
         {
             Interface.Oxide.LogWarning($"[{Title}] {format}", args);
@@ -293,7 +294,7 @@ namespace Oxide.Plugins
         /// Print an error message using the oxide root logger
         /// </summary>
         /// <param name="format"></param>
-        /// <param name="params"></param>
+        /// <param name="args"></param>
         protected void PrintError(string format, params object[] args)
         {
             Interface.Oxide.LogError($"[{Title}] {format}", args);
@@ -314,7 +315,7 @@ namespace Oxide.Plugins
         /// <param name="callback"></param>
         protected void QueueWorkerThread(Action<object> callback)
         {
-            System.Threading.ThreadPool.QueueUserWorkItem(context =>
+            ThreadPool.QueueUserWorkItem(context =>
             {
                 try
                 {

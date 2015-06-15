@@ -13,7 +13,7 @@ namespace Oxide.Ext.SQLite.Libraries
     {
         private readonly string _dataDirectory;
 
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         public SQLite()
         {

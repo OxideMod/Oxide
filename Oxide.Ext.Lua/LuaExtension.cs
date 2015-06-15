@@ -5,13 +5,13 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 using NLua;
+using NLua.Exceptions;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins.Watchers;
-
 using Oxide.Ext.Lua.Libraries;
 using Oxide.Ext.Lua.Plugins;
 
@@ -25,17 +25,17 @@ namespace Oxide.Ext.Lua
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "Lua"; } }
+        public override string Name => "Lua";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
         /// <summary>
         /// Gets the Lua environment
@@ -63,9 +63,9 @@ namespace Oxide.Ext.Lua
         public LuaExtension(ExtensionManager manager)
             : base(manager)
         {
-            ExceptionHandler.RegisterType(typeof(NLua.Exceptions.LuaScriptException), ex =>
+            ExceptionHandler.RegisterType(typeof(LuaScriptException), ex =>
             {
-                var luaex = (NLua.Exceptions.LuaScriptException) ex;
+                var luaex = (LuaScriptException) ex;
                 var outEx = luaex.IsNetException ? luaex.InnerException : luaex;
                 var match = Regex.Match(string.IsNullOrEmpty(luaex.Source) ? luaex.Message : luaex.Source, @"\[string ""(.+)""\]:(\d+): ");
                 if (match.Success)
@@ -225,7 +225,7 @@ end
                     if (!processed.Contains(method.Name))
                     {
                         // We need to check if this method is overloaded
-                        MethodInfo[] overloads = methods.Where((m) => m.Name == method.Name).ToArray();
+                        MethodInfo[] overloads = methods.Where(m => m.Name == method.Name).ToArray();
                         if (overloads.Length == 1)
                         {
                             // It's not, simply bind it
@@ -411,7 +411,6 @@ end
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
             foreach (var extension in Manager.GetAllExtensions())

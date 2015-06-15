@@ -11,12 +11,12 @@ namespace Oxide.Ext.Lua.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return true; } }
+        public override bool IsGlobal => true;
 
         /// <summary>
         /// Gets the logger that this library writes to
         /// </summary>
-        public Logger Logger { get; private set; }
+        public Logger Logger { get; }
 
         /// <summary>
         /// Initializes a new instance of the LuaGlobal library

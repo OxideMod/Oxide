@@ -98,27 +98,28 @@ namespace Oxide.Core.Configuration
         /// <returns></returns>
         public object this[string keyLevel1, string keyLevel2]
         {
-            get { return Get(new string[] { keyLevel1, keyLevel2 }); }
-            set { Set(new object[] { /* path */ keyLevel1, keyLevel2, /* value */ value }); }
+            get { return Get(keyLevel1, keyLevel2); }
+            set { Set(keyLevel1, keyLevel2, value); }
         }
 
         /// <summary>
         /// Gets or sets a nested setting on this config by key
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="key2"></param>
+        /// <param name="keyLevel1"></param>
+        /// <param name="keyLevel2"></param>
+        /// <param name="keyLevel3"></param>
         /// <returns></returns>
         public object this[string keyLevel1, string keyLevel2, string keyLevel3]
         {
-            get { return Get(new string[] { keyLevel1, keyLevel2, keyLevel3 }); }
-            set { Set(new object[] { /* path */ keyLevel1, keyLevel2, keyLevel3, /* value */ value }); }
+            get { return Get(keyLevel1, keyLevel2, keyLevel3); }
+            set { Set(keyLevel1, keyLevel2, keyLevel3, value); }
         }
 
         /// <summary>
         /// Converts a configuration value to another type
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="type"></param>
+        /// <param name="destinationType"></param>
         /// <returns></returns>
         public object ConvertValue(object value, Type destinationType)
         {
@@ -220,7 +221,7 @@ namespace Oxide.Core.Configuration
             return _keyvalues.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return _keyvalues.GetEnumerator();
         }

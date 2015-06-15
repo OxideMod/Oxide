@@ -1,6 +1,6 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 using NLua;
@@ -19,7 +19,7 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        private NLua.Lua LuaEnvironment { get; set; }
+        private NLua.Lua LuaEnvironment { get; }
 
         /// <summary>
         /// Gets this plugin's Lua table
@@ -29,7 +29,7 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Gets the object associated with this plugin
         /// </summary>
-        public override object Object { get { return Table; } }
+        public override object Object => Table;
 
         // All functions in this plugin
         private IDictionary<string, LuaFunction> functions;
@@ -41,6 +41,8 @@ namespace Oxide.Ext.Lua.Plugins
         /// Initializes a new instance of the LuaPlugin class
         /// </summary>
         /// <param name="filename"></param>
+        /// <param name="lua"></param>
+        /// <param name="watcher"></param>
         internal LuaPlugin(string filename, NLua.Lua lua, FSWatcher watcher)
         {
             // Store filename

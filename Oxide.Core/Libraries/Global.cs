@@ -10,7 +10,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return true; } }
+        public override bool IsGlobal => true;
 
         /// <summary>
         /// Returns a version structure
@@ -29,6 +29,7 @@ namespace Oxide.Core.Libraries
         /// Creates a new instance of the specified type
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="args"></param>
         /// <returns></returns>
         [LibraryFunction("new")]
         public object New(Type type, object[] args)

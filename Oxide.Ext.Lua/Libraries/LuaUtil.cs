@@ -14,7 +14,7 @@ namespace Oxide.Ext.Lua.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Converts the specified table to an object array

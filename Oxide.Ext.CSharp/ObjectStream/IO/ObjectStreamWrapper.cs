@@ -29,15 +29,9 @@ namespace ObjectStream.IO
             _outStream = outStream;
         }
 
-        public bool CanRead
-        {
-            get { return _run && _inStream.CanRead; }
-        }
+        public bool CanRead => _run && _inStream.CanRead;
 
-        public bool CanWrite
-        {
-            get { return _run && _outStream.CanWrite; }
-        }
+        public bool CanWrite => _run && _outStream.CanWrite;
 
         public void Close()
         {

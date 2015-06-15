@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
@@ -9,6 +11,8 @@ using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
+
+using Timer = Oxide.Core.Libraries.Timer;
 
 namespace Oxide.Core
 {
@@ -47,7 +51,7 @@ namespace Oxide.Core
         public string LogDirectory { get; private set; }
 
         // Gets the number of seconds since the server started
-        public float Now { get { return getTimeSinceStartup(); } }
+        public float Now => getTimeSinceStartup();
 
         /// <summary>
         /// This is true if the server is shutting down
@@ -245,8 +249,8 @@ namespace Oxide.Core
         /// <summary>
         /// Logs an exception to the root logger
         /// </summary>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
         /// <returns></returns>
         public void LogException(string message, Exception ex)
         {
@@ -296,7 +300,7 @@ namespace Oxide.Core
                 // Wait until all async plugins have finished loading
                 while (loader.LoadingPlugins.Count > 0)
                 {
-                    System.Threading.Thread.Sleep(25);
+                    Thread.Sleep(25);
                     OnFrame(Now - lastCall);
                     lastCall = Now;
                 }
@@ -618,7 +622,7 @@ namespace Oxide.Core
             }
         }
 
-        [System.Runtime.InteropServices.DllImport("kernel32", SetLastError = true)]
+        [DllImport("kernel32", SetLastError = true)]
         private static extern bool SetDllDirectory(string lpPathName);
     }
 }

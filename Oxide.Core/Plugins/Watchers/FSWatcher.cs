@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Security.Permissions;
 
 namespace Oxide.Core.Plugins.Watchers

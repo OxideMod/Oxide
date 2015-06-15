@@ -47,7 +47,7 @@ namespace Oxide.Core.Logging
         /// Processes the specified message
         /// </summary>
         /// <param name="message"></param>
-        protected override void ProcessMessage(Logger.LogMessage message)
+        protected override void ProcessMessage(LogMessage message)
         {
             // Write to the file
             writer.WriteLine(message.Message);

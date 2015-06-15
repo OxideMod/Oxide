@@ -26,7 +26,7 @@ namespace Oxide.Core.Extensions
         /// <summary>
         /// Gets the logger to which this extension manager writes
         /// </summary>
-        public CompoundLogger Logger { get; private set; }
+        public CompoundLogger Logger { get; }
 
         // All registered plugin loaders
         private IList<PluginLoader> pluginloaders;
@@ -154,7 +154,7 @@ namespace Oxide.Core.Extensions
                 }
 
                 // Create and register the extension
-                Extension extension = Activator.CreateInstance(extensiontype, new object[1] { this }) as Extension;
+                Extension extension = Activator.CreateInstance(extensiontype, this) as Extension;
                 extensions.Add(extension);
                 extension.Load();
 
@@ -206,7 +206,7 @@ namespace Oxide.Core.Extensions
         /// <returns></returns>
         public bool IsExtensionPresent(string name)
         {
-            return extensions.Any((e) => e.Name == name);
+            return extensions.Any(e => e.Name == name);
         }
 
         /// <summary>
@@ -218,7 +218,7 @@ namespace Oxide.Core.Extensions
         {
             try
             {
-                return extensions.Single((e) => e.Name == name);
+                return extensions.Single(e => e.Name == name);
             }
             catch (Exception)
             {

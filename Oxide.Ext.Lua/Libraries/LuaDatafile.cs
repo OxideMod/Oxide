@@ -16,12 +16,12 @@ namespace Oxide.Ext.Lua.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        public NLua.Lua LuaEnvironment { get; private set; }
+        public NLua.Lua LuaEnvironment { get; }
 
         // The data file map
         private Dictionary<DynamicConfigFile, LuaTable> datafilemap;
@@ -29,7 +29,7 @@ namespace Oxide.Ext.Lua.Libraries
         /// <summary>
         /// Initializes a new instance of the LuaDatafile class
         /// </summary>
-        /// <param name="logger"></param>
+        /// <param name="lua"></param>
         public LuaDatafile(NLua.Lua lua)
         {
             datafilemap = new Dictionary<DynamicConfigFile, LuaTable>();

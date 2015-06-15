@@ -8,7 +8,9 @@ using System.Runtime.CompilerServices;
 
 using Newtonsoft.Json;
 
+using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Core
 {
@@ -92,10 +94,10 @@ namespace Oxide.Core
             public void DetectModules(Assembly assembly)
             {
                 var assembly_name = assembly.GetName().Name;
-                var extension_type = assembly.GetTypes().FirstOrDefault(t => t.BaseType == typeof(Extensions.Extension));
+                var extension_type = assembly.GetTypes().FirstOrDefault(t => t.BaseType == typeof(Extension));
                 if (extension_type == null)
                 {
-                    var plugin_type = assembly.GetTypes().FirstOrDefault(t => IsTypeDerivedFrom(t, typeof(Plugins.Plugin)));
+                    var plugin_type = assembly.GetTypes().FirstOrDefault(t => IsTypeDerivedFrom(t, typeof(Plugin)));
                     if (plugin_type != null)
                     {
                         var plugin = Interface.Oxide.RootPluginManager.GetPlugin(plugin_type.Name);

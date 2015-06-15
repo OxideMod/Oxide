@@ -17,6 +17,7 @@ namespace Oxide.Ext.Lua
         /// Returns if the Lua table represents an array or not
         /// </summary>
         /// <param name="table"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
         public static bool IsArray(this LuaTable table, out int count)
         {

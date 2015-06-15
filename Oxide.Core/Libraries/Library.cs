@@ -14,7 +14,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Gets the name for the library function
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// Creates a library function using the methods name

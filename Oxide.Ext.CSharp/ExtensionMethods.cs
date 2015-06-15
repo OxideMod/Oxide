@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
+using Random = Oxide.Core.Random;
+
 namespace Oxide.Plugins
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace Oxide.Plugins
         /// <summary>
         /// Turns an array of strings into a sentence
         /// </summary>
-        /// <param name="strings"></param>
+        /// <param name="enumerable"></param>
         /// <returns></returns>
         public static string ToSentence(this IEnumerable<string> enumerable)
         {
@@ -57,7 +59,7 @@ namespace Oxide.Plugins
         /// </summary>
         public static object Sample(this object[] array)
         {
-            return array[Core.Random.Range(0, array.Length)];
+            return array[Random.Range(0, array.Length)];
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace Oxide.Plugins
         /// </summary>
         public static string Sample(this string[] array)
         {
-            return array[Core.Random.Range(0, array.Length)];
+            return array[Random.Range(0, array.Length)];
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace Oxide.Plugins
         /// </summary>
         public static int Sample(this int[] array)
         {
-            return array[Core.Random.Range(0, array.Length)];
+            return array[Random.Range(0, array.Length)];
         }
     }
 }

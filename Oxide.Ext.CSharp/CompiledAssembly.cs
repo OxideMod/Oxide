@@ -11,6 +11,9 @@ using Mono.Collections.Generic;
 
 using Oxide.Core;
 
+using MethodAttributes = Mono.Cecil.MethodAttributes;
+using MethodBody = Mono.Cecil.Cil.MethodBody;
+
 namespace Oxide.Plugins
 {
     public class CompiledAssembly
@@ -86,7 +89,7 @@ namespace Oxide.Plugins
 
             //Interface.Oxide.LogInfo("Patching plugin assembly: {0}", Name);
             isPatching = true;
-            ThreadPool.QueueUserWorkItem((_) =>
+            ThreadPool.QueueUserWorkItem(_ =>
             {
                 try
                 {
@@ -98,7 +101,7 @@ namespace Oxide.Plugins
                     var security_exception = definition.MainModule.Import(exception_constructor);
 
                     Action<TypeDefinition> patch_module_type = null;
-                    patch_module_type = (type) =>
+                    patch_module_type = type =>
                     {
                         foreach (var method in type.Methods)
                         {
@@ -109,8 +112,8 @@ namespace Oxide.Plugins
                             {
                                 if (method.HasPInvokeInfo)
                                 {
-                                    method.Attributes &= ~Mono.Cecil.MethodAttributes.PInvokeImpl;
-                                    var body = new Mono.Cecil.Cil.MethodBody(method);
+                                    method.Attributes &= ~MethodAttributes.PInvokeImpl;
+                                    var body = new MethodBody(method);
                                     body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "PInvoke access is restricted, you are not allowed to use PInvoke"));
                                     body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
                                     body.Instructions.Add(Instruction.Create(OpCodes.Throw));
@@ -123,8 +126,8 @@ namespace Oxide.Plugins
                                 foreach (var variable in method.Body.Variables)
                                 {
                                     if (IsNamespaceBlacklisted(variable.VariableType.FullName))
-                                    { 
-                                        var body = new Mono.Cecil.Cil.MethodBody(method);
+                                    {
+                                        var body = new MethodBody(method);
                                         body.Instructions.Add(Instruction.Create(OpCodes.Ldstr, "System access is restricted, you are not allowed to use " + variable.VariableType.FullName));
                                         body.Instructions.Add(Instruction.Create(OpCodes.Newobj, security_exception));
                                         body.Instructions.Add(Instruction.Create(OpCodes.Throw));

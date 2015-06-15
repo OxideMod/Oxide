@@ -42,9 +42,7 @@ namespace Oxide.Core.Logging
         /// <summary>
         /// Writes a message to the current logfile
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
+        /// <param name="msg"></param>
         internal override void Write(LogMessage msg)
         {
             lock (syncroot)

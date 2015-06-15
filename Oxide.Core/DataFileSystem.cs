@@ -17,7 +17,7 @@ namespace Oxide.Core
         /// <summary>
         /// Gets the directory that this system works in
         /// </summary>
-        public string Directory { get; private set; }
+        public string Directory { get; }
 
         // All currently loaded datafiles
         private readonly Dictionary<string, DynamicConfigFile> _datafiles;

@@ -12,17 +12,17 @@ namespace Oxide.Plugins
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
-        public override string Name { get { return "CSharp"; } }
+        public override string Name => "CSharp";
 
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
         /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
         public FSWatcher Watcher { get; private set; }
 
@@ -40,7 +40,6 @@ namespace Oxide.Plugins
         /// <summary>
         /// Loads this extension
         /// </summary>
-        /// <param name="manager"></param>
         public override void Load()
         {
             // Register our loader
@@ -64,7 +63,6 @@ namespace Oxide.Plugins
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        /// <param name="manager"></param>
         public override void OnModLoad()
         {
             loader.OnModLoaded();

@@ -16,14 +16,14 @@ namespace Oxide.Core
         /// <summary>
         /// Initializes a new instance of the CommandLine class
         /// </summary>
-        /// <param name="cmdline"></param>
+        /// <param name="commandline"></param>
         public CommandLine(string[] commandline)
         {
             string cmdline = string.Empty;
             string key = string.Empty;
 
             foreach (string str in commandline)
-                cmdline += "\"" + str.Trim(new[] { '/', '\\' }) + "\"";
+                cmdline += "\"" + str.Trim('/', '\\') + "\"";
 
             foreach (string str in Split(cmdline))
             {
@@ -81,7 +81,7 @@ namespace Oxide.Core
         public bool HasVariable(string name)
         {
             // Search
-            return variables.Any((v) => v.Key == name);
+            return variables.Any(v => v.Key == name);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Oxide.Core
         {
             try
             {
-                return variables.Single((v) => v.Key == name).Value;
+                return variables.Single(v => v.Key == name).Value;
             }
             catch (Exception)
             {

@@ -16,7 +16,6 @@ namespace Oxide.Core.Logging
         /// <summary>
         /// Initializes a new instance of the CompoundLogger class
         /// </summary>
-        /// <param name="loggers"></param>
         public CompoundLogger()
             : base(true)
         {

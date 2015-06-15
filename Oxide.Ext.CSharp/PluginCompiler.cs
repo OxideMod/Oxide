@@ -46,7 +46,7 @@ namespace Oxide.Plugins
             }
             BinaryPath = binary_path;
         }
-        
+
         private Process process;
         private Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
         private ObjectStreamClient<CompilerMessage> client;
@@ -61,12 +61,8 @@ namespace Oxide.Plugins
             public List<CompilablePlugin> plugins;
             public float startedAt;
             public float endedAt;
-            public string compiledName;
             public HashSet<string> references;
-            public float Duration
-            {
-                get { return endedAt - startedAt; }
-            }
+            public float Duration => endedAt - startedAt;
         }
 
         public PluginCompiler()
@@ -81,7 +77,7 @@ namespace Oxide.Plugins
             // Include references made by the CSharpPlugins project
             compilation.references = new HashSet<string>(CSharpPluginLoader.PluginReferences);
 
-            ThreadPool.QueueUserWorkItem((_) =>
+            ThreadPool.QueueUserWorkItem(_ =>
             {
                 try
                 {
@@ -166,7 +162,7 @@ namespace Oxide.Plugins
                         }
 
                         if (!Directory.Exists(include_path)) continue;
-                        
+
                         foreach (var reference in plugin.References)
                         {
                             if (!reference.StartsWith("Oxide.Ext.") && !reference.StartsWith("Oxide.Game.")) continue;

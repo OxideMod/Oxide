@@ -24,12 +24,12 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the delay between each repetition
             /// </summary>
-            public float Delay { get; private set; }
+            public float Delay { get; }
 
             /// <summary>
             /// Gets the callback delegate
             /// </summary>
-            public Action Callback { get; private set; }
+            public Action Callback { get; }
 
             /// <summary>
             /// Gets if this timer has been destroyed
@@ -39,7 +39,7 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the plugin to which this timer belongs, if any
             /// </summary>
-            public Plugin Owner { get; private set; }
+            public Plugin Owner { get; }
 
             // The next rep time
             internal float nextrep;
@@ -50,6 +50,7 @@ namespace Oxide.Core.Libraries
             /// <param name="repetitions"></param>
             /// <param name="delay"></param>
             /// <param name="callback"></param>
+            /// <param name="owner"></param>
             public TimerInstance(int repetitions, float delay, Action callback, Plugin owner)
             {
                 Repetitions = repetitions;

@@ -16,7 +16,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         /// <summary>
         /// Gets the logger that this library writes to
         /// </summary>
-        public Logger Logger { get; private set; }
+        public Logger Logger { get; }
 
         /// <summary>
         /// Initializes a new instance of the JavaScriptGlobal library

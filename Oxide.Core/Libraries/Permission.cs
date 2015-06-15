@@ -62,7 +62,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         // All registered permissions
         private readonly Dictionary<Plugin, HashSet<string>> permset;
@@ -427,7 +427,7 @@ namespace Oxide.Core.Libraries
         public void RevokeUserPermission(string userid, string perm)
         {
             if (string.IsNullOrEmpty(perm)) return;
-            
+
             // Get the user data
             var data = GetUserData(userid);
 

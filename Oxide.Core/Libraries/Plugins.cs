@@ -12,12 +12,12 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Gets the plugin manager
         /// </summary>
-        public PluginManager PluginManager { get; private set; }
+        public PluginManager PluginManager { get; }
 
         /// <summary>
         /// Initializes a new instance of the Plugins library

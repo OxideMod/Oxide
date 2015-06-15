@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
@@ -14,7 +14,7 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Gets the Lua environment
         /// </summary>
-        private NLua.Lua LuaEnvironment { get; set; }
+        private NLua.Lua LuaEnvironment { get; }
 
         /// <summary>
         /// Gets or sets the watcher
@@ -24,8 +24,8 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Gets the Lua Extension
         /// </summary>
-        private LuaExtension LuaExtension { get; set; }
-        
+        private LuaExtension LuaExtension { get; }
+
         /// <summary>
         /// Initializes a new instance of the LuaPluginLoader class
         /// </summary>
@@ -54,7 +54,6 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Loads a plugin using this loader
         /// </summary>
-        /// <param name="manager"></param>
         /// <param name="directory"></param>
         /// <param name="name"></param>
         /// <returns></returns>

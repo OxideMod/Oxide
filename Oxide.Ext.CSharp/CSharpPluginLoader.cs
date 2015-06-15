@@ -122,7 +122,7 @@ namespace Oxide.Plugins
         /// <summary>
         /// Called when the plugin manager is unloading a plugin that was loaded by this plugin loader
         /// </summary>
-        /// <param name="plugin"></param>
+        /// <param name="plugin_base"></param>
         public override void Unloading(Plugin plugin_base)
         {
             var plugin = plugin_base as CSharpPlugin;

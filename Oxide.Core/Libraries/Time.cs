@@ -10,7 +10,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         private static readonly DateTime epoch = new DateTime(1970, 1, 1);
 

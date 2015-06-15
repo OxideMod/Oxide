@@ -28,10 +28,7 @@ namespace Oxide.Ext.SQLite
             _args = args;
         }
 
-        public static Sql Builder
-        {
-            get { return new Sql(); }
-        }
+        public static Sql Builder => new Sql();
 
         public string SQL
         {

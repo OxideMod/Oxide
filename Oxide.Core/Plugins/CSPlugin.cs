@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 
+using Oxide.Core.Libraries;
+
 namespace Oxide.Core.Plugins
 {
     /// <summary>
@@ -13,7 +15,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Gets the name of the hook to... hook
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the HookMethod class
@@ -35,7 +37,7 @@ namespace Oxide.Core.Plugins
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetLibrary<T>(string name = null) where T : Libraries.Library
+        public static T GetLibrary<T>(string name = null) where T : Library
         {
             return Interface.Oxide.GetLibrary<T>(name);
         }

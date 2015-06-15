@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using System.IO;
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Oxide.Core;
 using Oxide.Core.Configuration;
@@ -36,8 +39,8 @@ namespace Oxide.Tests
         public void TestDynamicConfig()
         {
             const string inputfile = "{ \"x\": 10, \"y\": \"hello\", \"z\": [ 10, \"yo\" ], \"w\": { \"a\": 20, \"b\": [ 500, 600 ] } }";
-            string filename = System.IO.Path.GetTempFileName();
-            System.IO.File.WriteAllText(filename, inputfile);
+            string filename = Path.GetTempFileName();
+            File.WriteAllText(filename, inputfile);
 
             var cfg = ConfigFile.Load<DynamicConfigFile>(filename);
 
@@ -48,7 +51,7 @@ namespace Oxide.Tests
 
             TestConfigFile(cfg);
 
-            System.IO.File.Delete(filename);
+            File.Delete(filename);
         }
 
         private void TestConfigFile(DynamicConfigFile cfg)
@@ -56,7 +59,7 @@ namespace Oxide.Tests
             Assert.AreEqual(10, cfg["x"], "Failed cfg.x");
             Assert.AreEqual("hello", cfg["y"], "Failed cfg.y");
 
-            var list = cfg["z"] as System.Collections.Generic.List<object>;
+            var list = cfg["z"] as List<object>;
             Assert.AreNotEqual(null, list, "Failed cfg.z");
             if (list != null)
             {
@@ -68,7 +71,7 @@ namespace Oxide.Tests
                 }
             }
 
-            var dict = cfg["w"] as System.Collections.Generic.Dictionary<string, object>;
+            var dict = cfg["w"] as Dictionary<string, object>;
             Assert.AreNotEqual(null, dict, "Failed cfg.w");
             if (dict != null)
             {
@@ -80,7 +83,7 @@ namespace Oxide.Tests
                     Assert.AreEqual(20, tmp, "Failed cfg.w.a");
                     Assert.AreEqual(true, dict.TryGetValue("b", out tmp), "Failed cfg.w.b");
 
-                    list = tmp as System.Collections.Generic.List<object>;
+                    list = tmp as List<object>;
                     Assert.AreNotEqual(null, list, "Failed cfg.w.b");
                     if (list != null)
                     {

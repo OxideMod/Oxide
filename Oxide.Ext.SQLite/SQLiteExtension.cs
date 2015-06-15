@@ -9,11 +9,11 @@ namespace Oxide.Ext.SQLite
         {
         }
 
-        public override string Name { get { return "SQLite"; } }
+        public override string Name => "SQLite";
 
-        public override VersionNumber Version { get { return new VersionNumber(1, 0, OxideMod.Version.Patch); } }
+        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
 
-        public override string Author { get { return "Oxide Team"; } }
+        public override string Author => "Oxide Team";
 
         public override void Load()
         {

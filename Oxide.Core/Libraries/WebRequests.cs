@@ -19,7 +19,7 @@ namespace Oxide.Core.Libraries
         /// Specifies the HTTP request timeout in seconds
         /// </summary>
         public static float Timeout = 30f;
-        
+
         /// <summary>
         /// Represents a single WebRequest instance
         /// </summary>
@@ -28,7 +28,7 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the callback delegate
             /// </summary>
-            public Action<int, string> Callback { get; private set; }
+            public Action<int, string> Callback { get; }
 
             /// <summary>
             /// Overrides the default request timeout
@@ -43,8 +43,8 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the destination URL
             /// </summary>
-            public string URL { get; private set; }
-            
+            public string URL { get; }
+
             /// <summary>
             /// Gets or sets the request body
             /// </summary>
@@ -63,13 +63,13 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the plugin to which this web request belongs, if any
             /// </summary>
-            public Plugin Owner { get; private set; }
+            public Plugin Owner { get; }
 
             /// <summary>
             /// Gets the web request headers
             /// </summary>
             public Dictionary<string, string> RequestHeaders { get; set; }
-            
+
             private HttpWebRequest request = null;
 
             /// <summary>
@@ -85,7 +85,7 @@ namespace Oxide.Core.Libraries
                 Owner = owner;
                 if (Owner != null) Owner.OnRemovedFromManager += owner_OnRemovedFromManager;
             }
-            
+
             /// <summary>
             /// Used by the worker thread to start the request
             /// </summary>
@@ -205,7 +205,7 @@ namespace Oxide.Core.Libraries
                     }
                 });
             }
-            
+
             /// <summary>
             /// Called when the owner plugin was unloaded
             /// </summary>
@@ -221,7 +221,7 @@ namespace Oxide.Core.Libraries
                 }
             }
         }
-        
+
         private readonly Queue<WebRequest> queue = new Queue<WebRequest>();
         private readonly object syncroot = new object();
         private readonly Thread workerthread;

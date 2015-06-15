@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Oxide.Core.Logging;
 
@@ -15,7 +14,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Gets the logger to which this plugin manager writes
         /// </summary>
-        public Logger Logger { get; private set; }
+        public Logger Logger { get; }
 
         /// <summary>
         /// Gets or sets the path for plugin configs

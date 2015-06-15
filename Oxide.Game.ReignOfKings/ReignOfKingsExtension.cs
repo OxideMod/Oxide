@@ -13,6 +13,8 @@ using Oxide.Game.ReignOfKings.Libraries;
 
 using UnityEngine;
 
+using Network = uLink.Network;
+
 namespace Oxide.Game.ReignOfKings
 {
     /// <summary>
@@ -96,7 +98,6 @@ namespace Oxide.Game.ReignOfKings
             "[WARNING] Recieved a",
             "\"string button\" is empty;",
             "armorManager == null",
-            "cannot estimate angular velocity.",
             "eac_server.dll",
             "is missing a default constructor.",
             "linkedTo == null",
@@ -138,7 +139,7 @@ namespace Oxide.Game.ReignOfKings
         {
 
         }
-        /*
+
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
@@ -153,7 +154,7 @@ namespace Oxide.Game.ReignOfKings
             Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", GameInfo.VersionString, "(", GameInfo.Version, ") - ", GameInfo.VersionName);
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.Network.time <= 0) return "Total Sent: 0.0 b/s Total Receive: 0.0 b/s";
+                if (Network.time <= 0) return "Total Sent: 0.0 B/s Total Receive: 0.0 B/s";
                 var players = Server.AllPlayers;
                 double bytesSent = 0;
                 double bytesReceived = 0;
@@ -164,7 +165,7 @@ namespace Oxide.Game.ReignOfKings
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
                 }
-                return $"Total Sent: {FormatBytes(bytesSent)}/s Total Receive: {FormatBytes(bytesReceived)}/s";
+                return $"Total Sent: {bytesSent:0.0} B/s Total Receive: {bytesReceived:0.0} B/s";
             };
             Interface.Oxide.ServerConsole.Title = () => string.Concat(Server.PlayerCount, " | ", DedicatedServerBypass.Settings.ServerName);
             Interface.Oxide.ServerConsole.Completion = input =>
@@ -173,24 +174,6 @@ namespace Oxide.Game.ReignOfKings
                 if (input.StartsWith("/")) input = input.Remove(0, 1);
                 return CommandManager.RegisteredCommands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
             };
-        }
-
-        private static string FormatBytes(double bytes)
-        {
-            string type;
-            if (bytes > 1024*1024)
-            {
-                type = "mb";
-                bytes /= (1024*1024);
-            }
-            else if (bytes > 1024)
-            {
-                type = "kb";
-                bytes /= 1024;
-            }
-            else
-                type = "b";
-            return $"{bytes:0.0} {type}";
         }
 
         private void ServerConsoleOnInput(string input)
@@ -214,6 +197,5 @@ namespace Oxide.Game.ReignOfKings
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
-        */
     }
 }

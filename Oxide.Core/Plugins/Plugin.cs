@@ -82,7 +82,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Gets the object associated with this plugin
         /// </summary>
-        public virtual object Object { get { return this; } }
+        public virtual object Object => this;
 
         /// <summary>
         /// Gets the config file in use by this plugin
