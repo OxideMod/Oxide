@@ -16,7 +16,7 @@ namespace Oxide.Ext.Lua.Libraries
         /// <summary>
         /// Gets the logger that this library writes to
         /// </summary>
-        public Logger Logger { get; }
+        public Logger Logger { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the LuaGlobal library

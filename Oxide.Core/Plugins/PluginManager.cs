@@ -14,7 +14,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Gets the logger to which this plugin manager writes
         /// </summary>
-        public Logger Logger { get; }
+        public Logger Logger { get; private set; }
 
         /// <summary>
         /// Gets or sets the path for plugin configs

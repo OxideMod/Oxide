@@ -17,7 +17,7 @@ namespace Oxide.Ext.Python.Plugins
         /// <summary>
         /// Gets the Python engine
         /// </summary>
-        private ScriptEngine PythonEngine { get; }
+        private ScriptEngine PythonEngine { get; set; }
 
         /// <summary>
         /// Gets or sets the watcher
@@ -27,7 +27,7 @@ namespace Oxide.Ext.Python.Plugins
         /// <summary>
         /// Gets the Python Ext
         /// </summary>
-        private PythonExtension PythonExtension { get; }
+        private PythonExtension PythonExtension { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the PythonPluginLoader class

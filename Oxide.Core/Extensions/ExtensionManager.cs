@@ -26,7 +26,7 @@ namespace Oxide.Core.Extensions
         /// <summary>
         /// Gets the logger to which this extension manager writes
         /// </summary>
-        public CompoundLogger Logger { get; }
+        public CompoundLogger Logger { get; private set; }
 
         // All registered plugin loaders
         private IList<PluginLoader> pluginloaders;

@@ -17,7 +17,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Gets the plugin manager
         /// </summary>
-        public PluginManager PluginManager { get; }
+        public PluginManager PluginManager { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the Plugins library
