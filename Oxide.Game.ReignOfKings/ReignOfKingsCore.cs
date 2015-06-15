@@ -644,6 +644,24 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
+        /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies.
+        /// </summary>
+        /// <param name="fullTypeName"></param>
+        /// <returns></returns>
+        [HookMethod("IGetTypeFromName")]
+        private Type IGetTypeFromName(string fullTypeName)
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                if (assembly is System.Reflection.Emit.AssemblyBuilder) continue;
+                foreach (var type in assembly.GetExportedTypes())
+                    if (type.Name == fullTypeName)
+                        return type;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Called when a chat command was run
         /// </summary>
         /// <param name="e"></param>
@@ -765,7 +783,7 @@ namespace Oxide.Game.ReignOfKings
         {
             if (fileCounter.FolderLocationFromDataPath.Equals("/Managed/") && fileCounter.Folders.Length != 39)
             {
-                var folders = (string[]) FoldersField.GetValue(fileCounter); 
+                var folders = (string[]) FoldersField.GetValue(fileCounter);
                 Array.Resize(ref folders, 39);
                 FoldersField.SetValue(fileCounter, folders);
             }
