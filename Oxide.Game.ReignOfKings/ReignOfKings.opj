@@ -574,31 +574,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 3,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnGadgetPlace",
-            "HookName": "OnGadgetPlace",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CodeHatch.Networking.Events.Listeners.GadgetListener",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnGadgetPlace",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "CodeHatch.Networking.Events.Entities.Objects.Gadgets.GadgetPlaceEvent"
-              ]
-            },
-            "MSILHash": "7/p5rivSaHNrEJ3kx0t/vHsEVCqnuJat4I2zYHmDOqs=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
@@ -643,6 +618,31 @@
               ]
             },
             "MSILHash": "nKss1i5/JvKpqtutTsbF8Wq2BZKwvwLeulzIJiVK5T8=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 16,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnObjectDeploy",
+            "HookName": "OnObjectDeploy",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Modules.SocialSystem.ObjectSupplier",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnInstantiate",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Engine.Events.Prefab.NetworkInstantiateEvent"
+              ]
+            },
+            "MSILHash": "ckzM1ddgrV7blL4KogEfvfGuk8grDVKMGLduECZABa4=",
             "BaseHookName": null
           }
         }
