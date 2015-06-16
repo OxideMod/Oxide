@@ -1770,6 +1770,29 @@
             "MSILHash": "yHXbEgMiPSCNeEEH48Ty5l+loTQUWYPXjwWoLLERj+A=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 50,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l4",
+            "HookTypeName": "Simple",
+            "Name": "QuarryGather",
+            "HookName": "OnQuarryGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "MiningQuarry",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ProcessResources",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "BO8JaSNtz+Lg8PrbmD1uywK0WMJe+KVb2psRZh+bROA=",
+            "BaseHookName": null
+          }
         }
       ]
     }
