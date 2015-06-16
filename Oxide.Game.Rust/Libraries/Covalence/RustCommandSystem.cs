@@ -12,6 +12,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustCommandSystem : ICommandSystem
     {
+        // Default constructor
+        public RustCommandSystem()
+        {
+            Initialize();
+        }
+        
         // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustcommands;
 
