@@ -990,5 +990,29 @@ namespace Oxide.Game.Rust
         {
             return Interface.CallHook("OnWeaponFired", projectile, msg.player, component, projectiles);
         }
+
+        /// <summary>
+        /// Called when a player collects an item
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [HookMethod("IOnItemPickup")]
+        private object IOnItemPickup(BaseEntity.RPCMessage msg, Item item)
+        {
+            return Interface.CallHook("OnItemPickup", msg.player, item);
+        }
+
+        /// <summary>
+        /// Called when the player has hit something with a hammer
+        /// </summary>
+        /// <param name="hammer"></param>
+        /// <param name="info"></param>
+        [HookMethod("OnHammerAttack")]
+        private object OnHammerAttack(Hammer hammer, HitInfo info)
+        {
+            var ent = info.HitEntity as BuildingBlock;
+            return ent != null ? null : Interface.CallHook("OnHammerHit", hammer.ownerPlayer, info);
+        }
     }
 }

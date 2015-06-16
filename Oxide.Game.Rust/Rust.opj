@@ -1770,6 +1770,200 @@
             "MSILHash": "yHXbEgMiPSCNeEEH48Ty5l+loTQUWYPXjwWoLLERj+A=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 50,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l4",
+            "HookTypeName": "Simple",
+            "Name": "OnQuarryGather",
+            "HookName": "OnQuarryGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "MiningQuarry",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ProcessResources",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "BO8JaSNtz+Lg8PrbmD1uywK0WMJe+KVb2psRZh+bROA=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 12,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnHammerAttack [internal",
+            "HookName": "OnHammerAttack",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Hammer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoAttackShared",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "QQb8yhXuSPAVcv15f5fxRH7XZNCI9/kcxvd6gczjv4s=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 65,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l8",
+            "HookTypeName": "Simple",
+            "Name": "OnSurveyGather",
+            "HookName": "OnSurveyGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SurveyCharge",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Explode",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "xMgjDizEISO5VdObhHUY3RbWG635gn6b5HIDUrJK8bI=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 22,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l3",
+            "HookTypeName": "Simple",
+            "Name": "OnItemPickup",
+            "HookName": "IOnItemPickup",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CollectibleEntity",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Pickup",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "3jHlqWBa1f/hu+GVQyNXdodp8V9LiERoS0jDYwVftls=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 94,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnAirdrop",
+            "HookName": "OnAirdrop",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CargoPlane",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UpdateDropPosition",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "P9+qjKTfbIMj5VLwzXsxKIVQeyo1eMVgemHt1pcOt0k=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBearTrapTrigger",
+            "HookName": "OnBearTrapTrigger",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BearTrap",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ObjectEntered",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.GameObject"
+              ]
+            },
+            "MSILHash": "d7byajLmaBSp/+6V9g4JOF1VYA7Cig77zfht55n61pI=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 34,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBearTrapSnapped",
+            "HookName": "OnBearTrapSnapped",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BearTrap",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DelayedFire",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "beIINZBPLvQ+mVfs3BuE8euC0D9loQJtky8PfbIhUDA=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnRepair",
+            "HookName": "OnRepair",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoRepair",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "sfNomVbxDDeECRkW+xWFguV8BuKKAsFu2/7pGePUbAM=",
+            "BaseHookName": null
+          }
         }
       ]
     }
