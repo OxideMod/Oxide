@@ -8,20 +8,20 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 27,
+            "InjectionIndex": 100,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "DedicatedServerBypass",
+            "TypeName": "CodeHatch.Engine.Administration.SocketAdminConsole",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "Awake",
+              "Name": "OnEnable",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "n4tH0yXtXMMnWXtHPLW1kPUSb1E7nfR3vZnCwfEkTuU=",
+            "MSILHash": "MP7GNlkL3unJraJliFmYmJmaMfhzOFsE5/YFNdZ/+s8=",
             "BaseHookName": null
           }
         },
