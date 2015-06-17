@@ -11,6 +11,7 @@ using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
 using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
 
@@ -136,6 +137,28 @@ namespace Oxide.Ext.Python.Plugins
             PythonEngine.Operations.SetMember(Class, "Plugin", this);
 
             Globals = PythonEngine.Operations.GetMemberNames(Class);
+
+            foreach (var name in Globals)
+            {
+                object func;
+                if (!PythonEngine.Operations.TryGetMember(Class, name, out func) || !PythonEngine.Operations.IsCallable(func) || !PythonEngine.Operations.ContainsMember(func, "__dict__")) continue;
+                var dict = PythonEngine.Operations.GetMember<PythonDictionary>(func, "__dict__");
+                if (dict.ContainsKey("isCommand"))
+                {
+                    var names = ((IList<object>) dict["name"]).Cast<string>().ToArray();
+                    var perms = ((IList<object>) dict["permission"]).Cast<string>().ToArray();
+                    if (names.Length == 0)
+                    {
+                        Interface.Oxide.LogWarning("Command is missing name: {0} from plugin: {1}! Skipping...", name, Name);
+                        continue;
+                    }
+                    AddCovalenceCommand(names, perms, (cmd, type, caller, args) =>
+                    {
+                        PythonEngine.Operations.InvokeMember(Class, name, caller, args);
+                        return true;
+                    });
+                }
+            }
 
             // Bind any base methods (we do it here because we don't want them to be hooked)
             BindBaseMethods();
