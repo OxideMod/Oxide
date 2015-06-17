@@ -111,6 +111,32 @@ namespace Oxide.Ext.Python
             PythonEngine.GetBuiltinModule().RemoveVariable("open");
             PythonEngine.GetBuiltinModule().RemoveVariable("raw_input");
             PythonEngine.GetBuiltinModule().RemoveVariable("reload");
+
+            PythonEngine.Execute(
+@"class Command:
+    def __init__(self, *dec_args, **dec_kw):
+        self.dec_args = dec_args
+        self.dec_kw = dec_kw
+        self.name = list(self.dec_args)
+        self.permission = []
+        name = self.dec_kw.get('name', [])
+        if not isinstance(name, list):
+            name = [name]
+        self.name = self.name + name
+        permission = self.dec_kw.get('permission', [])
+        if not isinstance(permission, list):
+            permission = [permission]
+        self.permission = self.permission + permission
+        permission = self.dec_kw.get('permissions', [])
+        if not isinstance(permission, list):
+            permission = [permission]
+        self.permission = self.permission + permission
+    def __call__(self, f):
+        self.f = f
+        self.f.isCommand = True
+        self.f.name = self.name
+        self.f.permission = self.permission
+        return self.f", PythonEngine.GetBuiltinModule());
         }
 
         internal void InitializeTypes()

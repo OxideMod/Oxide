@@ -314,7 +314,14 @@ namespace Oxide.Core.Plugins
         protected void AddCovalenceCommand(string[] commands, string[] perms, CommandCallback callback)
         {
             foreach (var cmdName in commands)
+            {
+                if (commandInfos.ContainsKey(cmdName))
+                {
+                    Interface.Oxide.LogWarning("Plugin.AddCovalenceCommand command alias already exists: {0}", cmdName);
+                    continue;
+                }
                 commandInfos.Add(cmdName, new CommandInfo(commands, perms, callback));
+            }
         }
 
         private void RegisterWithCovalence()
