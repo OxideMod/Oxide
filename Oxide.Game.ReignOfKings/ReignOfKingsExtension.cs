@@ -4,16 +4,16 @@ using System.Linq;
 using System.Reflection;
 
 using CodeHatch.Build;
+using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
+using CodeHatch.Sockets;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Game.ReignOfKings.Libraries;
 
 using UnityEngine;
-
-using Network = uLink.Network;
 
 namespace Oxide.Game.ReignOfKings
 {
@@ -107,6 +107,8 @@ namespace Oxide.Game.ReignOfKings
             "with authkey System.Byte[]"
         };
 
+        private static readonly FieldInfo SocketServerField = typeof (SocketAdminConsole).GetField("_server", BindingFlags.NonPublic | BindingFlags.Instance);
+
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsExtension class
         /// </summary>
@@ -140,12 +142,17 @@ namespace Oxide.Game.ReignOfKings
         {
 
         }
-        /*
+
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
         public override void OnModLoad()
         {
+            if (!Interface.Oxide.CheckConsole()) return;
+            var socketAdminConsole = UnityEngine.Object.FindObjectOfType<SocketAdminConsole>();
+            var socketServer = (SocketServer) SocketServerField.GetValue(socketAdminConsole);
+            if (socketServer.Clients.Count > 0) return;
+            socketAdminConsole.enabled = false;
             if (!Interface.Oxide.EnableConsole()) return;
             //Logger.ReloadSettings();
             Application.logMessageReceived += HandleLog;
@@ -155,14 +162,14 @@ namespace Oxide.Game.ReignOfKings
             Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", GameInfo.VersionString, "(", GameInfo.Version, ") - ", GameInfo.VersionName);
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (Network.time <= 0) return "Total Sent: 0.0 b/s Total Receive: 0.0 b/s";
+                if (uLink.Network.time <= 0) return "Total Sent: 0.0 b/s Total Receive: 0.0 b/s";
                 var players = Server.AllPlayers;
                 double bytesSent = 0;
                 double bytesReceived = 0;
-                for (var i = 0; i < players.Count; i++)
+                foreach (var player in players)
                 {
-                    if (!players[i].Connection.IsConnected) continue;
-                    var statistics = players[i].Connection.Statistics;
+                    if (!player.Connection.IsConnected) continue;
+                    var statistics = player.Connection.Statistics;
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
                 }
@@ -216,6 +223,6 @@ namespace Oxide.Game.ReignOfKings
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
-        */
+
     }
 }

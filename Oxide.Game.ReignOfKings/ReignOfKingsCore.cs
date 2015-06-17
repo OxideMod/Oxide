@@ -181,7 +181,7 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="message"></param>
         /// <param name="context"></param>
         [HookMethod("OnLog")]
-        private void OnLog(Logger.LogType logType, Type type, object message, object context)
+        private void OnLog(Logger.LogType logType, Type type, object message, object[] formatObjects, object context)
         {
             if (Interface.Oxide.ServerConsole == null) return;
             var settings = Logger.GetSettings(type);
@@ -207,8 +207,12 @@ namespace Oxide.Game.ReignOfKings
             }
             object obj = message as string;
             if (obj == null && message is Exception)
-                obj = ((Exception) message).Message;
-            var str = (string)obj;
+                obj = ((Exception)message).Message;
+            string str;
+            if (formatObjects != null)
+                str = string.Format((string)message, formatObjects);
+            else
+                str = (string)obj;
             if (string.IsNullOrEmpty(str) || ReignOfKingsExtension.Filter.Any(str.Contains)) return;
             Interface.Oxide.ServerConsole.AddMessage(str, color);
         }
