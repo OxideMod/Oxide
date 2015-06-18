@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "duxytUjZ63dsldcVlddUlNVqB4g0PTMXPSApJT8a7G8=",
+            "MSILHash": "YmHUgEHK4U0SIv55/Epsez1y1/hasPA2/JiK/TgqUqg=",
             "BaseHookName": null
           }
         },
@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YpmBcj8ttFYM5A0uUEuB+EkjZzNaxJ4rlWS745k+06g=",
+            "MSILHash": "3vs6jTYU05v1eoNF4FRnUl8yIxQZN/5O9AcIpTBYmAw=",
             "BaseHookName": null
           }
         },
@@ -720,7 +720,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "ROO5mhc8jJIEznrt2QvSgy97KXXa4I/GEuMsqwhgoGo=",
+            "MSILHash": "1OMmvWdRx0jB9g8vJBokyOp2w2DRU2TBA5mRdCkv4Ag=",
             "BaseHookName": null
           }
         },
@@ -978,7 +978,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "t+GOOlQdkJeRzyr8n0v0gBEgx9Kr9mmQQHBC8YyDNw8=",
+            "MSILHash": "+eDgoVF4qa79HvmL716dTDu6GaLSgnet0TuAA0k5nYY=",
             "BaseHookName": null
           }
         },
@@ -1349,7 +1349,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "4/1094/a0BJRQXvokqiJVBnmrxa81pIryGNFDUyce6s=",
+            "MSILHash": "LIeO6t5EkfcCzVb+PjxIPFfU4anUKvI6iR1EAqReO0k=",
             "BaseHookName": null
           }
         },
@@ -1774,7 +1774,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 50,
+            "InjectionIndex": 57,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l4",
@@ -1790,7 +1790,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "BO8JaSNtz+Lg8PrbmD1uywK0WMJe+KVb2psRZh+bROA=",
+            "MSILHash": "ILY6LO7gXAeFgHlucldd98BQD9E0T3JpC5bU+w2w13M=",
             "BaseHookName": null
           }
         },
@@ -1961,7 +1961,32 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "sfNomVbxDDeECRkW+xWFguV8BuKKAsFu2/7pGePUbAM=",
+            "MSILHash": "mEATtXsdE4WbRZi4WcX9j7DxdoV2/HPoliys0MDseas=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 28,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnMiningQuarryEnabled",
+            "HookName": "OnMiningQuarryEnabled",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "MiningQuarry",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SetOn",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "9Y7eDU+pfyETPL37FSiEI/uPTShkl4wFQsESQtkZ/60=",
             "BaseHookName": null
           }
         }
