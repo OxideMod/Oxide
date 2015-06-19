@@ -1989,6 +1989,31 @@
             "MSILHash": "9Y7eDU+pfyETPL37FSiEI/uPTShkl4wFQsESQtkZ/60=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnGatherPlant",
+            "HookName": "OnGatherPlant",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlantEntity",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RPC_PickFruit",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "fqDAzTQOhYU9S2uCZSOlblqWRuPjkN/3L3ZcViPAwXM=",
+            "BaseHookName": null
+          }
         }
       ]
     }
