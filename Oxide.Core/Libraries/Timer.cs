@@ -24,7 +24,7 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the delay between each repetition
             /// </summary>
-            public float Delay { get; }
+            public float Delay { get; private set; }
 
             /// <summary>
             /// Gets the callback delegate
