@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Diagnostics;
 
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
@@ -90,6 +91,8 @@ namespace Oxide.Core
 
         public ServerConsole.ServerConsole ServerConsole;
 
+        private Stopwatch timer;
+
         /// <summary>
         /// Initializes a new instance of the OxideMod class
         /// </summary>
@@ -162,6 +165,14 @@ namespace Oxide.Core
 
             // Initialize covalence library after extensions (as it depends on things from within an ext)
             covalence.Initialize();
+
+            // If no clock has been defined, make our own
+            if (getTimeSinceStartup == null)
+            {
+                timer = new Stopwatch();
+                timer.Start();
+                getTimeSinceStartup = () => (float)timer.Elapsed.TotalSeconds;
+            }
 
             // Load all watchers
             foreach (var ext in extensionmanager.GetAllExtensions())
@@ -528,7 +539,7 @@ namespace Oxide.Core
             UpdatePluginWatchers();
 
             // Update extensions
-            onFrame(delta);
+            if (onFrame != null) onFrame(delta);
         }
 
         public void OnShutdown()
