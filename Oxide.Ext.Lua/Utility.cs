@@ -223,7 +223,10 @@ namespace Oxide.Ext.Lua
         {
             if (type.IsNested)
                 return GetTypeName(type.DeclaringType) + "+" + type.Name;
-            return type.Name;
+            else if (type.IsGenericType)
+                return type.Name.Substring(0, type.Name.IndexOf('`'));
+            else
+                return type.Name;
         }
 
         /// <summary>

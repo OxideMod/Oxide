@@ -54,7 +54,7 @@ namespace Oxide.Ext.Lua
         // Utility
         private LuaFunction setmetatable;
         private LuaTable overloadselectormeta;
-        private LuaTable typetablemeta;
+        private LuaTable typetablemeta, generictypetablemeta;
         private LuaTable libraryMetaTable;
 
         // The plugin change watcher
@@ -138,6 +138,18 @@ end
             typetablemeta = LuaEnvironment["tmp"] as LuaTable;
             LuaEnvironment["tmp"] = null;
 
+            LuaEnvironment.NewTable("tmp");
+            LuaEnvironment.LoadString(
+@"function tmp:__index( key )
+    if (type( key ) == 'table') then
+        local baseType = rawget( self, '_type' )
+        return util.SpecialiseType( baseType, key )
+    end
+end
+", "LuaExtension").Call();
+            generictypetablemeta = LuaEnvironment["tmp"] as LuaTable;
+            LuaEnvironment["tmp"] = null;
+
             LuaEnvironment.NewTable("libraryMetaTable");
             LuaEnvironment.LoadString(
 @"function libraryMetaTable:__index( key )
@@ -196,10 +208,7 @@ end
                 var nspacetable = GetNamespaceTable(Utility.GetNamespace(type));
 
                 // Bind the type
-                if (type.IsNested)
-                    nspacetable[Utility.GetTypeName(type)] = CreateTypeTable(type);
-                else
-                    nspacetable[type.Name] = CreateTypeTable(type);
+                nspacetable[Utility.GetTypeName(type)] = CreateTypeTable(type);
             }
         }
 
@@ -253,8 +262,14 @@ end
             // Set the type field
             tmp["_type"] = type;
 
+            // Is it generic?
+            if (type.IsGenericType)
+            {
+                // Setup metamethod
+                setmetatable.Call(tmp, generictypetablemeta);
+            }
             // Is it an enum?
-            if (type.IsEnum)
+            else if (type.IsEnum)
             {
                 // Set all enum fields
                 var fields = type.GetFields().Where(x => x.IsLiteral);

@@ -102,5 +102,27 @@ namespace Oxide.Ext.Lua.Libraries
             LuaEnvironment["_tmp_enumerable"] = null;
             return tbl;
         }
+
+        /// <summary>
+        /// Specialises the specified generic type
+        /// </summary>
+        /// <param name="baseType"></param>
+        /// <param name="argTable"></param>
+        /// <returns></returns>
+        [LibraryFunction("SpecialiseType")]
+        public Type SpecialiseType(Type baseType, LuaTable argTable)
+        {
+            int cnt;
+            if (!argTable.IsArray(out cnt)) throw new ArgumentException("Table is not an array", "argTable");
+            Type[] typeArgs = new Type[cnt];
+            for (int i = 0; i < cnt; i++)
+            {
+                object obj = argTable[i + 1];
+                if (obj is LuaTable) obj = (obj as LuaTable)["_type"];
+                if (!(obj is Type)) throw new ArgumentException("Item in table is not a Type", $"argTable[{i + 1}]");
+                typeArgs[i] = obj as Type;
+            }
+            return baseType.MakeGenericType(typeArgs);
+        }
     }
 }
