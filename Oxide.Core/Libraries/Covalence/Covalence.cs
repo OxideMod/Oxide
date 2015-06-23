@@ -133,7 +133,7 @@ namespace Oxide.Core.Libraries.Covalence
                 return;
             }
             List<Type> candidates = new List<Type>(
-                candidateSet.Where((t) => t.IsClass && !t.IsAbstract && t.FindInterfaces((m, o) => m == baseType, null).Length == 1)
+                candidateSet.Where((t) => t != null && t.IsClass && !t.IsAbstract && t.FindInterfaces((m, o) => m == baseType, null).Length == 1)
                 );
 
             // Select a candidate
