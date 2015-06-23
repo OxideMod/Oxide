@@ -7,7 +7,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// <summary>
     /// Represents a Rust connected player
     /// </summary>
-    public class RustLivePlayer : ILivePlayer
+    public class RustLivePlayer : ILivePlayer, IPlayerCharacter
     {
         private ulong steamid;
 
@@ -17,9 +17,19 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public IPlayer BasePlayer { get { return RustCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString()); } }
 
         /// <summary>
-        /// Gets a reference to this player's character, if available
+        /// Gets this player's in-game character, if available
         /// </summary>
-        public object Character { get; private set; }
+        public IPlayerCharacter Character { get; private set; }
+
+        /// <summary>
+        /// Gets the owner of this character
+        /// </summary>
+        public ILivePlayer Owner { get { return this; } }
+
+        /// <summary>
+        /// Gets the object that backs this character, if available
+        /// </summary>
+        public object Object { get; private set; }
 
         private BasePlayer rustPlayer;
 
@@ -27,7 +37,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             this.rustPlayer = rustPlayer;
             steamid = rustPlayer.net.connection.userid;
-            Character = rustPlayer;
+            Object = rustPlayer;
         }
 
         #region Administration
@@ -43,6 +53,30 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         #endregion
 
+        /// <summary>
+        /// Gets the position of this character
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        public void GetPosition(out float x, out float y, out float z)
+        {
+            var pos = rustPlayer.transform.position;
+            x = pos.x;
+            y = pos.y;
+            z = pos.z;
+        }
+
+        /// <summary>
+        /// Gets the position of this character
+        /// </summary>
+        /// <returns></returns>
+        public GenericPosition GetPosition()
+        {
+            var pos = rustPlayer.transform.position;
+            return new GenericPosition(pos.x, pos.y, pos.z);
+        }
+
         #region Manipulation
 
         /// <summary>
@@ -50,8 +84,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Kill()
         {
-            //var hitInfo = new HitInfo(rustPlayer, global::Rust.DamageType.Generic, rustPlayer.health, rustPlayer.GetComponent<UnityEngine.Transform>().position);
-            //rustPlayer.Hurt(hitInfo, false);
             rustPlayer.Die();
         }
 
@@ -63,7 +95,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="z"></param>
         public void Teleport(float x, float y, float z)
         {
-            // Presumably we can't just set the transform.position
+            if (rustPlayer.IsSpectating()) return;
+            var dest = new UnityEngine.Vector3(x, y, z);
+            rustPlayer.transform.position = dest;
+            rustPlayer.ClientRPCPlayer(null, rustPlayer, "ForcePositionTo", dest);
         }
 
         /// <summary>

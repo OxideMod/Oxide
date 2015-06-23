@@ -73,6 +73,7 @@
     <Compile Include="Libraries\Covalence\ICovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\ILivePlayer.cs" />
     <Compile Include="Libraries\Covalence\IPlayer.cs" />
+    <Compile Include="Libraries\Covalence\IPlayerCharacter.cs" />
     <Compile Include="Libraries\Covalence\IPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\IServer.cs" />
     <Compile Include="Libraries\Global.cs" />

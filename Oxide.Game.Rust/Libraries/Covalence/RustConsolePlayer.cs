@@ -30,9 +30,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public IPlayer BasePlayer { get { return this; } }
 
         /// <summary>
-        /// Gets a reference to this player's character, if available
+        /// Gets this player's in-game character, if available
         /// </summary>
-        public object Character { get { return null; } }
+        public IPlayerCharacter Character { get { return null; } }
 
         #region Permissions
 
