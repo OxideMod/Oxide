@@ -106,14 +106,18 @@ namespace Oxide.Core.Libraries.Covalence
             IEnumerable<Type> candidateSet = null;
             foreach (var ass in AppDomain.CurrentDomain.GetAssemblies())
             {
-                Type[] assTypes;
+                Type[] assTypes = null;
                 try
                 {
                     assTypes = ass.GetTypes();
                 }
-                catch (ReflectionTypeLoadException tlEx)
+                catch (ReflectionTypeLoadException rtlEx)
                 {
-                    assTypes = tlEx.Types;
+                    assTypes = rtlEx.Types;
+                }
+                catch (TypeLoadException tlEx)
+                {
+                    logger.Write(LogType.Warning, "Covalence: Type {0} could not be loaded from assembly '{1}': {2}", tlEx.TypeName, ass.FullName, tlEx);
                 }
                 if (assTypes != null)
                 {
