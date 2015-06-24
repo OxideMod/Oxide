@@ -104,8 +104,6 @@ namespace Oxide.Core.Libraries
                     request.ServicePoint.Expect100Continue = ServicePointManager.Expect100Continue;
                     request.ServicePoint.ConnectionLimit = ServicePointManager.DefaultConnectionLimit;
 
-                    if (RequestHeaders != null) request.SetRawHeaders(RequestHeaders);
-
                     // Optional request body for post requests
                     var data = new byte[0];
                     if (Body != null)
@@ -114,6 +112,8 @@ namespace Oxide.Core.Libraries
                         request.ContentLength = data.Length;
                         request.ContentType = "application/x-www-form-urlencoded";
                     }
+
+                    if (RequestHeaders != null) request.SetRawHeaders(RequestHeaders);
 
                     // Perform DNS lookup and connect (blocking)
                     if (data.Length > 0)
