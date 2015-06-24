@@ -143,7 +143,7 @@ end
 @"function tmp:__index( key )
     if (type( key ) == 'table') then
         local baseType = rawget( self, '_type' )
-        return util.SpecialiseType( baseType, key )
+        return util.SpecializeType( baseType, key )
     end
 end
 ", "LuaExtension").Call();
@@ -438,7 +438,7 @@ end
             if (string.IsNullOrEmpty(nspace)) return true;
             if (nspace == "System")
             {
-                if (type.IsValueType || type.Name == "String") return true;
+                if (type.IsValueType || type.Name == "String" || type.Name == "Convert") return true;
             }
             foreach (string whitelist in WhitelistNamespaces)
                 if (nspace.StartsWith(whitelist)) return true;

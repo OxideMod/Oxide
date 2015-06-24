@@ -30,7 +30,7 @@ namespace Oxide.Game.DeadLinger
         public override string Author => "Oxide Team";
 
         public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "UnityEngine" };
+        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
 
         private static readonly MethodInfo EvalInputString = typeof (DebugConsole).GetMethod("EvalInputString", BindingFlags.Instance | BindingFlags.NonPublic);
 

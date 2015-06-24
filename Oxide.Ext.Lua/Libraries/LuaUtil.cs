@@ -104,13 +104,13 @@ namespace Oxide.Ext.Lua.Libraries
         }
 
         /// <summary>
-        /// Specialises the specified generic type
+        /// Specializes the specified generic type
         /// </summary>
         /// <param name="baseType"></param>
         /// <param name="argTable"></param>
         /// <returns></returns>
-        [LibraryFunction("SpecialiseType")]
-        public Type SpecialiseType(Type baseType, LuaTable argTable)
+        [LibraryFunction("SpecializeType")]
+        public Type SpecializeType(Type baseType, LuaTable argTable)
         {
             int cnt;
             if (!argTable.IsArray(out cnt)) throw new ArgumentException("Table is not an array", "argTable");
