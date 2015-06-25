@@ -168,7 +168,18 @@ namespace Oxide.Core.Libraries
                     {
                         ResponseText = ex.Message.Trim('\r', '\n', ' ');
                         var response = ex.Response as HttpWebResponse;
-                        if (response != null) ResponseCode = (int)response.StatusCode;
+                        if (response != null)
+                        {
+                            try
+                            {
+                                using (var stream = response.GetResponseStream())
+                                    using (var reader = new StreamReader(stream))
+                                        ResponseText = reader.ReadToEnd();
+                            }
+                            catch (Exception)
+                            {}
+                            ResponseCode = (int)response.StatusCode;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -349,7 +360,6 @@ namespace Oxide.Core.Libraries
             "Connection",
             "Content-Length",
             "Content-Type",
-            "Date",
             "Expect",
             "Host",
             "If-Modified-Since",
