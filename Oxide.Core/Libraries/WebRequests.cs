@@ -360,6 +360,7 @@ namespace Oxide.Core.Libraries
             "Connection",
             "Content-Length",
             "Content-Type",
+            "Date",
             "Expect",
             "Host",
             "If-Modified-Since",
