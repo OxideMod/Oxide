@@ -196,7 +196,7 @@ end
         {
             if (_typesInit) return;
             _typesInit = true;
-            var filter = new Regex(@"\$|\<|\>", RegexOptions.Compiled);
+            var filter = new Regex(@"\$|\<|\>|\#=", RegexOptions.Compiled);
             // Bind all namespaces and types
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
                 .Where(AllowAssemblyAccess)
