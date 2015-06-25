@@ -19,7 +19,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             get
             {
-                return Server.identity;
+                return Server.hostname;
             }
         }
 
