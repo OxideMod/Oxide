@@ -33,12 +33,19 @@ namespace Oxide.Game.TheForest
 
         private static readonly string[] Filter =
         {
+            "****** Game Activation Sequence ******",
+            "Body Variation",
             "Game Activation Sequence step",
-            "planeCrash started",
             "Hull (UnityEngine.GameObject)",
-            "going black",
+            "Skin Variation",
+            "WakeFromKnockOut",
+            "attach: [",
+            "delaying initial",
             "disableFlying",
-            "WakeFromKnockOut"
+            "going black",
+            "planeCrash started",
+            "setFemale",
+            "setMale"
         };
 
         /// <summary>
