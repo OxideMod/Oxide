@@ -395,35 +395,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnLog [internal]",
-            "HookName": "OnLog",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Logger",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "Log",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "Logger/LogType",
-                "System.Type",
-                "System.Object",
-                "System.Object[]",
-                "System.Object"
-              ]
-            },
-            "MSILHash": "SG7SgLG4XoDiSxOiKp7a4Q+O7i/mEIDiSUwGq1NLP2M=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 14,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,

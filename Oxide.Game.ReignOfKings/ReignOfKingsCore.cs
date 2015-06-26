@@ -174,50 +174,6 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Logs to the Oxide console
-        /// </summary>
-        /// <param name="logType"></param>
-        /// <param name="type"></param>
-        /// <param name="message"></param>
-        /// <param name="context"></param>
-        [HookMethod("OnLog")]
-        private void OnLog(Logger.LogType logType, Type type, object message, object[] formatObjects, object context)
-        {
-            if (Interface.Oxide.ServerConsole == null) return;
-            var settings = Logger.GetSettings(type);
-            var color = ConsoleColor.Gray;
-            switch (logType)
-            {
-                case Logger.LogType.Exception:
-                case Logger.LogType.Assert:
-                case Logger.LogType.Error:
-                    if (!settings.ShowError) return;
-                    color = ConsoleColor.Red;
-                    break;
-                case Logger.LogType.Warning:
-                    if (!settings.ShowWarning) return;
-                    color = ConsoleColor.Yellow;
-                    break;
-                case Logger.LogType.Info:
-                    if (!settings.ShowInfo) return;
-                    break;
-                case Logger.LogType.Debug:
-                    if (!settings.ShowDebug) return;
-                    break;
-            }
-            object obj = message as string;
-            if (obj == null && message is Exception)
-                obj = ((Exception)message).Message;
-            string str;
-            if (formatObjects != null)
-                str = string.Format((string)message, formatObjects);
-            else
-                str = (string)obj;
-            if (string.IsNullOrEmpty(str) || ReignOfKingsExtension.Filter.Any(str.Contains)) return;
-            Interface.Oxide.ServerConsole.AddMessage(str, color);
-        }
-
-        /// <summary>
         /// Called when the "oxide.plugins" command has been executed
         /// </summary>
         /// <param name="player"></param>
