@@ -23,11 +23,18 @@ for d in Bundles/*; do
     cd $TRAVIS_BUILD_DIR
 done
 
-echo "Adding, committing, and deploying snapshots"
+echo "Adding and comitting snapshots"
 cd $HOME/Snapshots || die_with "Failed to change to snapshots directory!"
 git add . || die_with "Failed to add files for commit!"
 COMMIT_MESSAGE="Oxide build $TRAVIS_BUILD_NUMBER from https://github.com/$TRAVIS_REPO_SLUG/commit/${TRAVIS_COMMIT:0:7}"
 git commit -m "$COMMIT_MESSAGE" || die_with "Failed to commit files!"
-git push -q origin master >/dev/null || die_with "Failed to push snapshots to GitHub!"
+
+echo "Deploying snapshots"
+ATTEMPT=0
+until [ $ATTEMPT -ge 5 ]; do
+    git pull && git push -q origin master >/dev/null && break
+    ATTEMPT=$[$ATTEMPT+1]
+    sleep 15
+done || die_with "Failed to push snapshots to GitHub!"
 
 echo "Deployment cycle completed. Happy developing!"
