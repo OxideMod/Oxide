@@ -54,6 +54,7 @@ namespace Oxide.Plugins
         private Queue<CompilerMessage> compQueue;
         private volatile int lastId;
         private volatile bool ready;
+        private Core.Libraries.Timer.TimerInstance idleTimer;
 
         class Compilation
         {
@@ -279,7 +280,8 @@ namespace Oxide.Plugins
         {
             if (message == null)
             {
-                Interface.Oxide.LogWarning("Compiler died?");
+                process?.Close();
+                process = null;
                 return;
             }
             switch (message.Type)
@@ -309,6 +311,8 @@ namespace Oxide.Plugins
                     }
                     Interface.Oxide.NextTick(() => compilation.callback((byte[])message.Data, compilation.Duration));
                     pluginComp.Remove(message.Id);
+                    idleTimer?.Destroy();
+                    idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
                     break;
                 case CompilerMessageType.Error:
                     Interface.Oxide.LogError("Compilation error: {0}", message.Data);
