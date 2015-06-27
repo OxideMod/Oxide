@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "mPxiW9RrZsuJ2g/sCW1hXlvwDvHXU7MDeqHauH8TlJw=",
+            "MSILHash": "kODH+hRdSuYEF5M9NtWuhGjXYtucaAVKE3mHDRRv6qA=",
             "BaseHookName": null
           }
         },
@@ -978,7 +978,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "jcm+2E5rEXLv2fTVyW6hT9cocdHjW46Zx3xMzRr6a/w=",
+            "MSILHash": "iN09LTugHUEzGnxGn0sTjQYJZQdrIXVchO36khXC8ZI=",
             "BaseHookName": null
           }
         },
