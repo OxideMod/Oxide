@@ -13,6 +13,11 @@ namespace Oxide.Core
         public static OxideMod Oxide { get; private set; }
 
         /// <summary>
+        /// Gets or sets the debug callback to use
+        /// </summary>
+        public static NativeDebugCallback DebugCallback { get; set; }
+
+        /// <summary>
         /// Initializes Oxide
         /// </summary>
         public static void Initialize()
@@ -20,7 +25,7 @@ namespace Oxide.Core
             // Create if not already created
             if (Oxide == null)
             {
-                Oxide = new OxideMod();
+                Oxide = new OxideMod(DebugCallback);
                 Oxide.Load();
             }
         }
