@@ -280,8 +280,7 @@ namespace Oxide.Plugins
         {
             if (message == null)
             {
-                process?.Close();
-                process = null;
+                Interface.Oxide.NextTick(OnShutdown);
                 return;
             }
             switch (message.Type)
@@ -353,13 +352,11 @@ namespace Oxide.Plugins
             CheckCompilerBinary();
             if (BinaryPath == null || process != null && !process.HasExited) return;
             PurgeOldLogs();
-            ready = false;
-            process?.Close();
-            client?.Stop();
+            OnShutdown();
             var args = new [] {"/service", "/logPath:" + Interface.Oxide.LogDirectory};
-            process = new Process
+            try
             {
-                StartInfo =
+                process = Process.Start(new ProcessStartInfo
                 {
                     FileName = BinaryPath,
                     Arguments = string.Join(" ", args),
@@ -367,9 +364,13 @@ namespace Oxide.Plugins
                     UseShellExecute = false,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true
-                }
-            };
-            process.Start();
+                });
+            }
+            catch (Exception ex)
+            {
+                Interface.Oxide.LogException("Exception while starting compiler: ", ex);
+            }
+            if (process == null) return;
             client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
             client.Message += OnMessage;
             client.Error += OnError;
@@ -437,9 +438,13 @@ namespace Oxide.Plugins
 
         public void OnShutdown()
         {
+            ready = false;
+            process?.Close();
+            process = null;
             if (client == null) return;
             client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
             client.Stop();
+            client = null;
         }
     }
 }
