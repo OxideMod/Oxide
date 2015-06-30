@@ -62,7 +62,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="groupName"></param>
         /// <returns></returns>
         public bool BelongsToGroup(string groupName)
         {
@@ -73,13 +73,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
-        /// <param name="groupname"></param>
+        /// <param name="groupName"></param>
         public void AddToGroup(string groupName) { }
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
-        /// <param name="groupname"></param>
+        /// <param name="groupName"></param>
         public void RemoveFromGroup(string groupName) { }
 
         #endregion
@@ -144,12 +144,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Runs the specified console command on this player's client
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="args"></param>
         public void RunCommand(string command, params object[] args)
         {
             ConsoleSystem.Run.Server.Normal(command, args);
         }
 
         #endregion
-
     }
 }

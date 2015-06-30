@@ -7,7 +7,7 @@ using Oxide.Core.Libraries.Covalence;
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
     /// <summary>
-    /// Represents an Rust player, either connected or not
+    /// Represents a player, either connected or not
     /// </summary>
     public class RustPlayer : IPlayer, IEquatable<IPlayer>
     {
@@ -74,7 +74,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="groupName"></param>
         /// <returns></returns>
         public bool BelongsToGroup(string groupName)
         {
@@ -84,7 +84,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
-        /// <param name="groupname"></param>
+        /// <param name="groupName"></param>
         public void AddToGroup(string groupName)
         {
             libPerms.AddUserGroup(UniqueID, groupName);
@@ -93,7 +93,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
-        /// <param name="groupname"></param>
+        /// <param name="groupName"></param>
         public void RemoveFromGroup(string groupName)
         {
             libPerms.RemoveUserGroup(UniqueID, groupName);
@@ -116,7 +116,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             // Set to banned
             ServerUsers.Set(steamid, ServerUsers.UserGroup.Banned, Nickname, reason);
             ServerUsers.Save();
-            
+
             // TODO: Set a duration somehow
         }
 
@@ -195,6 +195,5 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         #endregion
-
     }
 }

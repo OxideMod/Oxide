@@ -8,7 +8,7 @@ using ConVar;
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
     /// <summary>
-    /// Represents the Rust server hosting the game instance
+    /// Represents the server hosting the game instance
     /// </summary>
     public class RustServer : IServer
     {
@@ -30,8 +30,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             get
             {
-                /*local ip = Steamworks.SteamGameServer.GetPublicIP()
-                ("%s.%s.%s.%s"):format(bit32.rshift(ip, 24), bit32.band(bit32.rshift(ip, 16), 0xff), bit32.band(bit32.rshift(ip, 8), 0xff), bit32.band(ip, 0xff))*/
                 uint ip = Steamworks.SteamGameServer.GetPublicIP();
                 if (ip == 0)
                     return null;
@@ -76,7 +74,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Runs the specified server command
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="args"></param>
         public void RunCommand(string command, params object[] args)
         {

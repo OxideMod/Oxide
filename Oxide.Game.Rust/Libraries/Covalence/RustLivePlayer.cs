@@ -5,7 +5,7 @@ using Oxide.Core.Libraries.Covalence;
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
     /// <summary>
-    /// Represents a Rust connected player
+    /// Represents a connected player
     /// </summary>
     public class RustLivePlayer : ILivePlayer, IPlayerCharacter
     {

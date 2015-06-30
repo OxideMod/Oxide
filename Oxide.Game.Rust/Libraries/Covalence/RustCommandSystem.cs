@@ -110,7 +110,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="cmd"></param>
         /// <param name="type"></param>
-        /// <param name="callback"></param>
         public void UnregisterCommand(string cmd, CommandType type)
         {
             // Initialize if needed

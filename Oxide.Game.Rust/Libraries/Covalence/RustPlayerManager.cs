@@ -19,7 +19,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         private IDictionary<string, PlayerRecord> playerData;
-
         private IDictionary<string, RustPlayer> players;
         private IDictionary<string, RustLivePlayer> livePlayers;
 
@@ -47,7 +46,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                 record.Nickname = nickname;
                 playerData[uniqueID] = record;
 
-                // Swap out rust player
+                // Swap out Rust player
                 players.Remove(uniqueID);
                 players.Add(uniqueID, new RustPlayer(steamid, nickname));
             }
@@ -59,7 +58,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                 record.Nickname = nickname;
                 playerData.Add(uniqueID, record);
 
-                // Create rust player
+                // Create Rust player
                 players.Add(uniqueID, new RustPlayer(steamid, nickname));
             }
 
@@ -195,6 +194,5 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         #endregion
-
     }
 }
