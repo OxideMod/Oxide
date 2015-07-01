@@ -1,5 +1,5 @@
 {
-    "ExtensionDirectory": "Content\\Managed",
+    "ExtensionDirectory": "TerrariaServer_Data\\Managed",
 
     "PluginDirectory": "plugins",
     "ConfigDirectory": "config",

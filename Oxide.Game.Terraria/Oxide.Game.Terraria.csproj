@@ -80,10 +80,9 @@
     <PropertyGroup>
       <GameName>Terraria</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>$(GameName)\Terraria_Data\Managed</ManagedDir>
+      <ManagedDir>$(GameName)\TerrariaServer_Data\Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
-      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />

@@ -6,6 +6,26 @@
       "AssemblyName": "TerrariaServer.exe",
       "Hooks": [
         {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Main",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "nVeCQshujWkB2T5O200h/RNQgt7VuKUaM88Eaau5qlc=",
+            "BaseHookName": null
+          }
+        },
+        {
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
@@ -17,14 +37,15 @@
             "HookName": "OnDedServ",
             "AssemblyName": "TerrariaServer.exe",
             "TypeName": "Terraria.Main",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DedServ",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "RPbngvAhUOgb1r8dTFag3sabxrrxmI7rwJDYtbeZNjM="
+            "MSILHash": "Jdl0BnuJG6duq2N2bcdJ3eJV3dCts6vajVJCDp5+PMU=",
+            "BaseHookName": null
           }
         },
         {
@@ -35,8 +56,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "QuitGame",
-            "HookName": "OnQuitGame",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "TerrariaServer.exe",
             "TypeName": "Terraria.Main",
             "Flagged": false,
@@ -46,95 +67,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "hJbMs1S+SDEsS4KGs17Jcf1V/jhG57LxSTTjSmHzbik="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "InitMap",
-            "HookName": "OnInitMap",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.Main",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "InitMap",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "3X7/OQZbOVKio0ciMC60cBJRv0ENxHaP+hej2TjtoLk="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "Initialize",
-            "HookName": "OnInitialize",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.Main",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "Initialize",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "kg8Ykav3/Hj6H1Hnk0+Y4Px8CBHn4qz0es+chfCxM/E="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "StartServer",
-            "HookName": "OnStartServer",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.Netplay",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "StartServer",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "NqojzM43wSpNHp+UurQ4t/4njBxGYTkFHzXQkLIzcg8="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "Init",
-            "HookName": "OnInit",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.Netplay",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Init",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "2EoZSTWn260otNKAg633bEwdg4taK0p4v3yJ8ZgcKio="
+            "MSILHash": "HgpTNpLbRJyQ3YlfaHDH/MlWbd2chkc5PXCGbJbSYf8=",
+            "BaseHookName": null
           }
         },
         {
@@ -149,14 +83,15 @@
             "HookName": "OnSpawn",
             "AssemblyName": "TerrariaServer.exe",
             "TypeName": "Terraria.Player",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Spawn",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "3j7JB3t2PVJM4swQuo8tkeBsj/7fgbLeKVEynshSHbE="
+            "MSILHash": "JIK/pk9LWGXIkrqlxXV0s1ywn7D4hHd49eBYK1ClYjQ=",
+            "BaseHookName": null
           }
         },
         {
@@ -171,7 +106,7 @@
             "HookName": "OnTeleport",
             "AssemblyName": "TerrariaServer.exe",
             "TypeName": "Terraria.Player",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Teleport",
@@ -181,51 +116,8 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "zIFbDKq6df8TebSSsYIObJ3E6OiIwfYJpwtv2jeOoH4="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "SaveAndQuit",
-            "HookName": "OnSaveAndQuit",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.WorldGen",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SaveAndQuit",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "6wXq/l0zIIe8LivsdFTXvFQ4ZZGSEMiQJvGwSVfEfS8="
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": ".ctor",
-            "HookName": "On.ctor",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.Player",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": ".ctor",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "FK7Y3Sw3eKl3KoSqWVcdXZD4p6syG28Y+sAHaX9bPsI="
+            "MSILHash": "zIFbDKq6df8TebSSsYIObJ3E6OiIwfYJpwtv2jeOoH4=",
+            "BaseHookName": null
           }
         },
         {
@@ -240,14 +132,15 @@
             "HookName": "OnPlaceThing",
             "AssemblyName": "TerrariaServer.exe",
             "TypeName": "Terraria.Player",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "PlaceThing",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "LoLxplt5DRJ586aCOGBLFjcNlaNKRHwDo4X7X1IS9lg="
+            "MSILHash": "CWbg5dyqtA31p06xcwk3JgsPKjzSQo2/w2H53JUvbt8=",
+            "BaseHookName": null
           }
         }
       ]
