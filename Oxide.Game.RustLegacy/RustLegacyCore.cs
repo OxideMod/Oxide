@@ -64,16 +64,24 @@ namespace Oxide.Game.RustLegacy
         {
             // Add our commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
+            cmdlib.AddConsoleCommand("global.plugins", this, "cmdPlugins");
             cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
+            cmdlib.AddConsoleCommand("global.load", this, "cmdLoad");
             cmdlib.AddConsoleCommand("oxide.unload", this, "cmdUnload");
+            cmdlib.AddConsoleCommand("global.unload", this, "cmdUnload");
             cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
+            cmdlib.AddConsoleCommand("global.reload", this, "cmdReload");
             cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
             cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
 
             cmdlib.AddConsoleCommand("oxide.group", this, "cmdGroup");
+            cmdlib.AddConsoleCommand("global.group", this, "cmdGroup");
             cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
+            cmdlib.AddConsoleCommand("global.usergroup", this, "cmdUserGroup");
             cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
+            cmdlib.AddConsoleCommand("global.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
+            cmdlib.AddConsoleCommand("global.revoke", this, "cmdRevoke");
 
             // Setup the default permission groups
             if (permission.IsLoaded)
