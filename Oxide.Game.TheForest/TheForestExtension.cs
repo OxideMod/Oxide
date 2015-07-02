@@ -35,9 +35,13 @@ namespace Oxide.Game.TheForest
         {
             "****** Game Activation Sequence ******",
             "Body Variation",
+            "CanResume:",
+            "DestroyPickup:",
             "Game Activation Sequence step",
             "Hull (UnityEngine.GameObject)",
             "Skin Variation",
+            "Skipped frame because",
+            "Skipped rendering frame because",
             "WakeFromKnockOut",
             "attach: [",
             "delaying initial",
