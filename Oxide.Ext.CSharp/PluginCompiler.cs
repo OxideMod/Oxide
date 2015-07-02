@@ -318,6 +318,8 @@ namespace Oxide.Plugins
                     var comp = pluginComp[message.Id];
                     Interface.Oxide.NextTick(() => comp.callback(null, 0));
                     pluginComp.Remove(message.Id);
+                    idleTimer?.Destroy();
+                    idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
                     break;
                 case CompilerMessageType.Ready:
                     connection.PushMessage(message);
@@ -350,6 +352,7 @@ namespace Oxide.Plugins
         private void CheckCompiler()
         {
             CheckCompilerBinary();
+            idleTimer?.Destroy();
             if (BinaryPath == null || process != null && !process.HasExited) return;
             PurgeOldLogs();
             OnShutdown();

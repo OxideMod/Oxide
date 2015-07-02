@@ -18,15 +18,16 @@ namespace ObjectStream.IO
         where TWrite : class
     {
         private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter { Binder = new BindChanger() };
-        private readonly Stream _inStream;
-        private readonly Stream _outStream;
+        private Stream _inStream;
+        private Stream _outStream;
 
-        private bool _run = true;
+        private bool _run;
 
         public ObjectStreamWrapper(Stream inStream, Stream outStream)
         {
             _inStream = inStream;
             _outStream = outStream;
+            _run = true;
         }
 
         public bool CanRead => _run && _inStream.CanRead;
@@ -35,9 +36,18 @@ namespace ObjectStream.IO
 
         public void Close()
         {
+            if (!_run) return;
             _run = false;
-            _inStream.Close();
-            _outStream.Close();
+            try
+            {
+                _inStream.Close();
+            }
+            catch (Exception) {}
+            try
+            {
+                _outStream.Close();
+            }
+            catch (Exception) { }
         }
 
         public TRead ReadObject()
