@@ -228,6 +228,11 @@ namespace Oxide.Plugins
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
+                if (!File.Exists(string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference.Name)))
+                {
+                    Interface.Oxide.LogWarning("Reference {0}.dll from {1}.dll not found.", reference.Name, assembly.GetName().Name);
+                    continue;
+                }
                 compilation.references.Add(reference.Name);
                 plugin.References.Add(reference.Name);
             }

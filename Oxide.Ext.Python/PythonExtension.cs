@@ -69,8 +69,8 @@ namespace Oxide.Ext.Python
         public PythonExtension(ExtensionManager manager)
             : base(manager)
         {
-            var assem = AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == "IronPython");
-            var types = Utility.GetAllTypesFromAssembly(assem).Where(t => t.IsSubclassOf(typeof (Exception)));
+            var assem = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => assembly.GetName().Name == "IronPython" || assembly.GetName().Name == "Microsoft.Scripting");
+            var types = assem.SelectMany(Utility.GetAllTypesFromAssembly).Where(t => t.IsSubclassOf(typeof (Exception)));
             foreach (var type in types)
             {
                 ExceptionHandler.RegisterType(type, ex => PythonEngine.GetService<ExceptionOperations>().FormatException(ex));
