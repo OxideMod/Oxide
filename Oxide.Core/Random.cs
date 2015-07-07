@@ -46,7 +46,7 @@
         /// <param name="max"></param>
         public static float Range(float min, float max)
         {
-            return (float)Range(min, max);
+            return (float)Range((double)min, (double)max);
         }
     }
 }
