@@ -6,12 +6,12 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 using IronPython.Runtime;
+using IronPython.Runtime.Exceptions;
 
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
 using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
 
@@ -255,7 +255,15 @@ namespace Oxide.Ext.Python.Plugins
         {
             object func;
             if (!Globals.Contains(name) || !PythonEngine.Operations.TryGetMember(Class, name, out func) || !PythonEngine.Operations.IsCallable(func)) return null;
-            return PythonEngine.Operations.InvokeMember(Class, name, args ?? new object[]{});
+            try
+            {
+                return PythonEngine.Operations.InvokeMember(Class, name, args ?? new object[]{});
+            }
+            catch (Exception e)
+            {
+                var message = string.Format("Failed to call {0} ({1}: {2}){3}{4}", name, e.GetType().Name, e.Message, Environment.NewLine, e.StackTrace);
+                throw new RuntimeException(message, e);
+            }
         }
     }
 }
