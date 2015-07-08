@@ -142,9 +142,9 @@ namespace Oxide.Ext.MySql.Libraries
                     _workevent.WaitOne();
                 }
                 MySqlQuery query;
-                lock (_syncroot) query = _queue.Dequeue();
-                if (query.Handle()) continue;
-                lock (_syncroot) _queue.Enqueue(query);
+                lock (_syncroot) query = _queue.Peek();
+                if (!query.Handle()) continue;
+                lock (_syncroot) _queue.Dequeue();
             }
         }
 
