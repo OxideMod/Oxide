@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "bjhJmqN/zdbYVCPlWIXecn1vq7zOI3+54enBT9DixXg=",
+            "MSILHash": "z2B243BCRivINwt07HzRvSeSDeILJeQz0dvNLadlMWo=",
             "BaseHookName": null
           }
         },
@@ -597,7 +597,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 68,
+            "InjectionIndex": 69,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l4",
@@ -616,7 +616,7 @@
                 "UnityEngine.Ray"
               ]
             },
-            "MSILHash": "LEofJLpBgpPQfsjEv3/AL/3eJJLNg0bo6OAVitb3CTg=",
+            "MSILHash": "Z5OlfFSKnZKuRij1ocVaFYX7gtd9NgTrhz6rC3cOQIQ=",
             "BaseHookName": null
           }
         },
@@ -979,7 +979,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "/7kSKDMax52Yf05taHb/eABsDt8aor1lpH4i0lyv5/Q=",
+            "MSILHash": "rEE9IwgM74+62QM0i1Apd9HCm0mBgIaSGpkkiQArgZY=",
             "BaseHookName": null
           }
         },
