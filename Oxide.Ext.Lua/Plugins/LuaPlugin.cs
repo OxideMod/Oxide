@@ -105,25 +105,25 @@ namespace Oxide.Ext.Lua.Plugins
         public void Load()
         {
             // Load the plugin into a table
-            string source = File.ReadAllText(Filename);
-            LuaFunction pluginfunc = LuaEnvironment.LoadString(source, Path.GetFileName(Filename));
+            var source = File.ReadAllText(Filename);
+            var pluginfunc = LuaEnvironment.LoadString(source, Path.GetFileName(Filename));
             if (pluginfunc == null) throw new Exception("LoadString returned null for some reason");
             LuaEnvironment.NewTable("PLUGIN");
-            Table = LuaEnvironment["PLUGIN"] as LuaTable;
-            (LuaEnvironment["setmetatable"] as LuaFunction).Call(Table, luaExt.PluginMetatable);
+            Table = (LuaTable) LuaEnvironment["PLUGIN"];
+            ((LuaFunction) LuaEnvironment["setmetatable"]).Call(Table, luaExt.PluginMetatable);
             Name = Path.GetFileNameWithoutExtension(Filename);
             Table["Name"] = Name;
             pluginfunc.Call();
 
             // Read plugin attributes
-            if (Table["Title"] == null || !(Table["Title"] is string)) throw new Exception("Plugin is missing title");
-            if (Table["Author"] == null || !(Table["Author"] is string)) throw new Exception("Plugin is missing author");
-            if (Table["Version"] == null || !(Table["Version"] is VersionNumber)) throw new Exception("Plugin is missing version");
+            if (!(Table["Title"] is string)) throw new Exception("Plugin is missing title");
+            if (!(Table["Author"] is string)) throw new Exception("Plugin is missing author");
+            if (!(Table["Version"] is VersionNumber)) throw new Exception("Plugin is missing version");
             Title = (string)Table["Title"];
             Author = (string)Table["Author"];
             Version = (VersionNumber)Table["Version"];
             if (Table["Description"] is string) Description = (string)Table["Description"];
-            if (Table["ResourceId"] is int) ResourceId = (int)Table["ResourceId"];
+            if (Table["ResourceId"] is double) ResourceId = (int)(double)Table["ResourceId"];
             if (Table["HasConfig"] is bool) HasConfig = (bool)Table["HasConfig"];
 
             // Set attributes
