@@ -240,10 +240,21 @@ namespace Oxide.Plugins
 
         public void Compile(List<CompilablePlugin> plugins, Action<byte[], float> callback)
         {
-            CheckCompiler();
-            if (BinaryPath == null) return;
             var currentId = lastId++;
             pluginComp[currentId] = new Compilation {callback = callback, plugins = plugins};
+            if (!CheckCompiler())
+            {
+                foreach (var value in pluginComp.Values)
+                {
+                    foreach (var plugin in value.plugins)
+                    {
+                        plugin.CompilerErrors = "Compiler couldn't be started.";
+                    }
+                    Interface.Oxide.NextTick(() => value.callback(new byte[0], 0));
+                }
+                pluginComp.Clear();
+                return;
+            }
 
             ResolveReferences(currentId, () =>
             {
@@ -354,14 +365,15 @@ namespace Oxide.Plugins
             catch (Exception) { }
         }
 
-        private void CheckCompiler()
+        private bool CheckCompiler()
         {
             CheckCompilerBinary();
             idleTimer?.Destroy();
-            if (BinaryPath == null || process != null && !process.HasExited) return;
+            if (BinaryPath == null) return false;
+            if (process != null && !process.HasExited) return true;
             PurgeOldLogs();
             OnShutdown();
-            var args = new [] {"/service", "/logPath:" + Interface.Oxide.LogDirectory};
+            var args = new [] {"/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory)};
             try
             {
                 process = Process.Start(new ProcessStartInfo
@@ -378,11 +390,12 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.LogException("Exception while starting compiler: ", ex);
             }
-            if (process == null) return;
+            if (process == null) return false;
             client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
             client.Message += OnMessage;
             client.Error += OnError;
             client.Start();
+            return true;
         }
 
         private bool CacheScriptLines(CompilablePlugin plugin)
@@ -453,6 +466,15 @@ namespace Oxide.Plugins
             client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
             client.Stop();
             client = null;
+        }
+
+        private static string EscapeArgument(string arg)
+        {
+            if (string.IsNullOrEmpty(arg))
+                return "\"\"";
+            arg = Regex.Replace(arg, @"(\\*)" + "\"", @"$1\$0");
+            arg = Regex.Replace(arg, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"");
+            return arg;
         }
     }
 }
