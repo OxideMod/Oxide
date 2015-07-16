@@ -539,7 +539,14 @@ namespace Oxide.Core
             UpdatePluginWatchers();
 
             // Update extensions
-            if (onFrame != null) onFrame(delta);
+            try
+            {
+                onFrame?.Invoke(delta);
+            }
+            catch (Exception ex)
+            {
+                LogException($"{ex.GetType().Name} while invoke OnFrame in extensions", ex);
+            }
         }
 
         public void OnShutdown()

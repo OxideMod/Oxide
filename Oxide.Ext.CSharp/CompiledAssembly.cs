@@ -162,12 +162,8 @@ namespace Oxide.Plugins
                                     {
                                         var method_call = instruction.Operand as MethodReference;
                                         var full_namespace = method_call.DeclaringType.FullName;
-
-                                        if (full_namespace == "System.Type" && method_call.Name == "GetType")
-                                            if (instruction.Previous.OpCode == OpCodes.Ldstr)
-                                                full_namespace = instruction.Previous.Operand as string;
-
-                                        if (IsNamespaceBlacklisted(full_namespace))
+                                        
+                                        if ((full_namespace == "System.Type" && method_call.Name == "GetType") || IsNamespaceBlacklisted(full_namespace))
                                         {
                                             for (var n = 0; n < method.Parameters.Count; n++)
                                                 instructions.Insert(i++, Instruction.Create(OpCodes.Pop));

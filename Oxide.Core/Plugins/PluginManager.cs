@@ -150,9 +150,8 @@ namespace Oxide.Core.Plugins
 
             // Is there a return value?
             if (returncount == 0) return null;
-            if (returncount == 1) return finalvalue;
 
-            if (finalvalue != null)
+            if (returncount > 1 && finalvalue != null)
             {
                 // Notify log of hook conflict
                 string[] conflicts = new string[returncount];
@@ -162,7 +161,7 @@ namespace Oxide.Core.Plugins
                     if (values[i] != null && values[i] != finalvalue)
                         conflicts[j++] = plugins[i].Name;
                 }
-                Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
+                if (j > 1) Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
             }
             return finalvalue;
         }

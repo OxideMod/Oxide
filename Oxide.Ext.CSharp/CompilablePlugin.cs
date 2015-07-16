@@ -49,7 +49,7 @@ namespace Oxide.Plugins
             return LastModifiedAt != last_modified_at;
         }
 
-        public void Compile(Action<bool> callback)
+        public void Compile(Action<bool> callback, bool queue_compilation = true)
         {
             if (compilationQueuedAt > 0f)
             {
@@ -58,7 +58,7 @@ namespace Oxide.Plugins
                 RemoteLogger.Debug($"Plugin compilation is already queued: {ScriptName} ({ago:0.000} ago)");
                 return;
             }
-            if (CompiledAssembly != null && !HasBeenModified())
+            if (queue_compilation && CompiledAssembly != null && !HasBeenModified())
             {
                 if (!CompiledAssembly.IsBatch || CompiledAssembly.CompilablePlugins.All(pl => pl.IsReloading))
                 {
@@ -69,7 +69,7 @@ namespace Oxide.Plugins
             }
             compileCallback = callback;
             compilationQueuedAt = Interface.Oxide.Now;
-            Extension.CompilationRequested(this);
+            if (queue_compilation) Extension.CompilationRequested(this);
         }
 
         public void LoadPlugin(Action<CSharpPlugin> callback = null)
@@ -185,8 +185,8 @@ namespace Oxide.Plugins
         private void InitFailed(string message = null)
         {
             if (message != null) Interface.Oxide.LogError(message);
-            OnPluginFailed();
             if (loadCallback != null) loadCallback(null);
+            OnPluginFailed();
         }
 
         private void CheckLastModificationTime()
