@@ -37,7 +37,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// </summary>
         public override object Object => Class;
 
-        private IList<string> Globals;
+        private Dictionary<string, ICallable> Globals;
 
         // The plugin change watcher
         private readonly FSWatcher watcher;
@@ -143,18 +143,18 @@ namespace Oxide.Ext.JavaScript.Plugins
             // Set attributes
             Class.FastAddProperty("Plugin", JsValue.FromObject(JavaScriptEngine, this), true, false, true);
 
-            Globals = new List<string>();
+            Globals = new Dictionary<string, ICallable>();
             foreach (var property in Class.Properties)
             {
                 var callable = property.Value.Value?.TryCast<ICallable>();
-                if (callable != null) Globals.Add(property.Key);
+                if (callable != null) Globals.Add(property.Key, callable);
             }
             foreach (var property in Class.Prototype.Properties)
             {
                 var callable = property.Value.Value?.TryCast<ICallable>();
-                if (callable != null) Globals.Add(property.Key);
+                if (callable != null) Globals.Add(property.Key, callable);
             }
-            if (!HasConfig) HasConfig = Globals.Contains("LoadDefaultConfig");
+            if (!HasConfig) HasConfig = Globals.ContainsKey("LoadDefaultConfig");
 
             // Bind any base methods (we do it here because we don't want them to be hooked)
             BindBaseMethods();
@@ -203,14 +203,14 @@ namespace Oxide.Ext.JavaScript.Plugins
             base.HandleAddedToManager(manager);
 
             // Subscribe all our hooks
-            foreach (string key in Globals)
+            foreach (string key in Globals.Keys)
                 Subscribe(key);
 
             // Add us to the watcher
             watcher.AddMapping(Name);
 
             // Let the plugin know that it's loading
-            CallFunction("Init", null);
+            OnCallHook("Init", null);
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         public override void HandleRemovedFromManager(PluginManager manager)
         {
             // Let plugin know that it's unloading
-            CallFunction("Unload", null);
+            OnCallHook("Unload", null);
 
             // Remove us from the watcher
             watcher.RemoveMapping(Name);
@@ -237,21 +237,9 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <returns></returns>
         protected override object OnCallHook(string hookname, object[] args)
         {
-            // Call it
-            return CallFunction(hookname, args);
-        }
-
-        /// <summary>
-        /// Calls a function by the given name and returns the output
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private object CallFunction(string name, object[] args)
-        {
-            var callable = Class.Get(name).TryCast<ICallable>();
-            if (!Globals.Contains(name) || !Class.HasProperty(name) || callable == null) return null;
-            return callable.Call(Class, args != null ? args.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() : new JsValue[] {}).ToObject();
+            ICallable callable;
+            if (!Globals.TryGetValue(hookname, out callable)) return null;
+            return callable?.Call(Class, args != null ? args.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() : new JsValue[] {}).ToObject();
         }
     }
 }
