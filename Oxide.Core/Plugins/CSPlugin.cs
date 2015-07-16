@@ -143,8 +143,7 @@ namespace Oxide.Core.Plugins
                 try
                 {
                     // Call method with the correct number of arguments
-                    var value = method.Invoke(this, hook_args);
-                    if (value != null) return_value = value;
+                    return_value = method.Invoke(this, hook_args);
                 }
                 catch (TargetInvocationException ex)
                 {

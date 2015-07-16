@@ -136,12 +136,14 @@ namespace Oxide.Ext.Python.Plugins
             // Set attributes
             PythonEngine.Operations.SetMember(Class, "Plugin", this);
 
-            Globals = PythonEngine.Operations.GetMemberNames(Class);
-
-            foreach (var name in Globals)
+            Globals = new List<string>();
+            var globals = PythonEngine.Operations.GetMemberNames(Class);
+            foreach (var name in globals)
             {
                 object func;
-                if (!PythonEngine.Operations.TryGetMember(Class, name, out func) || !PythonEngine.Operations.IsCallable(func) || !PythonEngine.Operations.ContainsMember(func, "__dict__")) continue;
+                if (!PythonEngine.Operations.TryGetMember(Class, name, out func) || !PythonEngine.Operations.IsCallable(func)) continue;
+                Globals.Add(name);
+                if (!PythonEngine.Operations.ContainsMember(func, "__dict__")) continue;
                 var dict = PythonEngine.Operations.GetMember<PythonDictionary>(func, "__dict__");
                 if (dict.ContainsKey("isCommand"))
                 {
@@ -214,7 +216,7 @@ namespace Oxide.Ext.Python.Plugins
             watcher.AddMapping(Name);
 
             // Let the plugin know that it's loading
-            CallFunction("Init", null);
+            OnCallHook("Init", null);
         }
 
         /// <summary>
@@ -224,7 +226,7 @@ namespace Oxide.Ext.Python.Plugins
         public override void HandleRemovedFromManager(PluginManager manager)
         {
             // Let plugin know that it's unloading
-            CallFunction("Unload", null);
+            OnCallHook("Unload", null);
 
             // Remove us from the watcher
             watcher.RemoveMapping(Name);
@@ -241,27 +243,14 @@ namespace Oxide.Ext.Python.Plugins
         /// <returns></returns>
         protected override object OnCallHook(string hookname, object[] args)
         {
-            // Call it
-            return CallFunction(hookname, args);
-        }
-
-        /// <summary>
-        /// Calls a Python function by the given name and returns the output
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private object CallFunction(string name, object[] args)
-        {
-            object func;
-            if (!Globals.Contains(name) || !PythonEngine.Operations.TryGetMember(Class, name, out func) || !PythonEngine.Operations.IsCallable(func)) return null;
+            if (!Globals.Contains(hookname)) return null;
             try
             {
-                return PythonEngine.Operations.InvokeMember(Class, name, args ?? new object[]{});
+                return PythonEngine.Operations.InvokeMember(Class, hookname, args ?? new object[]{});
             }
             catch (Exception e)
             {
-                var message = string.Format("Failed to call {0} ({1}: {2}){3}{4}", name, e.GetType().Name, e.Message, Environment.NewLine, e.StackTrace);
+                var message = string.Format("Failed to call {0} ({1}: {2}){3}{4}", hookname, e.GetType().Name, e.Message, Environment.NewLine, e.StackTrace);
                 throw new RuntimeException(message, e);
             }
         }

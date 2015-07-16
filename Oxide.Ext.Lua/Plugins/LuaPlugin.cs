@@ -286,7 +286,7 @@ namespace Oxide.Ext.Lua.Plugins
             watcher.AddMapping(Name);
 
             // Let the plugin know that it's loading
-            CallFunction("Init", null);
+            OnCallHook("Init", null);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace Oxide.Ext.Lua.Plugins
         public override void HandleRemovedFromManager(PluginManager manager)
         {
             // Let plugin know that it's unloading
-            CallFunction("Unload", null);
+            OnCallHook("Unload", null);
 
             // Remove us from the watcher
             watcher.RemoveMapping(Name);
@@ -313,76 +313,28 @@ namespace Oxide.Ext.Lua.Plugins
         /// <returns></returns>
         protected override object OnCallHook(string hookname, object[] args)
         {
-            // Call it
-            return CallFunction(hookname, args);
-        }
-
-        #region Lua CallFunction Hack
-
-        // An empty object array
-        private static readonly object[] emptyargs;
-
-        // The method used to call a Lua function
-        private static MethodInfo LuaCallFunctionMethod;
-
-        static LuaPlugin()
-        {
-            // Initialize
-            emptyargs = new object[0];
-
-            // Load the method
-            Type[] sig = new Type[] { typeof(object), typeof(object[]), typeof(Type[]) };
-            LuaCallFunctionMethod = typeof(NLua.Lua).GetMethod("CallFunction", BindingFlags.NonPublic | BindingFlags.Instance, null, sig, null);
-            if (LuaCallFunctionMethod == null) throw new Exception("Lua CallFunction hack failed!");
-        }
-
-        /// <summary>
-        /// Calls a Lua function with the specified arguments
-        /// </summary>
-        /// <param name="func"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private object CallLuaFunction(LuaFunction func, object[] args)
-        {
-            object[] invokeargs = new object[3] { func, args, null };
+            LuaFunction func;
+            if (!functions.TryGetValue(hookname, out func)) return null;
             try
             {
-                object[] returnvalues = LuaCallFunctionMethod.Invoke(LuaEnvironment, invokeargs) as object[];
+                object[] returnvalues;
+                if (args != null && args.Length > 0)
+                {
+                    var realargs = new object[args.Length + 1];
+                    realargs[0] = Table;
+                    Array.Copy(args, 0, realargs, 1, args.Length);
+                    returnvalues = func.Call(realargs);
+                }
+                else
+                    returnvalues = func.Call(Table);
                 if (returnvalues == null || returnvalues.Length == 0)
                     return null;
-                else
-                    return returnvalues[0];
+                return returnvalues[0];
             }
             catch (TargetInvocationException ex)
             {
                 throw ex.InnerException;
             }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Calls a Lua function by the given name and returns the output
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private object CallFunction(string name, object[] args)
-        {
-            LuaFunction func;
-            if (!functions.TryGetValue(name, out func)) return null;
-            object[] realargs;
-            if (args == null)
-            {
-                realargs = new object[] { Table };
-            }
-            else
-            {
-                realargs = new object[args.Length + 1];
-                realargs[0] = Table;
-                Array.Copy(args, 0, realargs, 1, args.Length);
-            }
-            return CallLuaFunction(func, realargs);
         }
     }
 }
