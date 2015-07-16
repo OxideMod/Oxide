@@ -136,6 +136,7 @@ namespace Oxide.Core.Plugins
             object[] values = new object[plugins.Count];
             int returncount = 0;
             object finalvalue = null;
+            Plugin finalplugin = null;
             for (int i = 0; i < plugins.Count; i++)
             {
                 // Call the hook
@@ -144,6 +145,7 @@ namespace Oxide.Core.Plugins
                 {
                     values[i] = value;
                     finalvalue = value;
+                    finalplugin = plugins[i];
                     returncount++;
                 }
             }
@@ -161,7 +163,11 @@ namespace Oxide.Core.Plugins
                     if (values[i] != null && values[i] != finalvalue)
                         conflicts[j++] = plugins[i].Name;
                 }
-                if (j > 1) Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
+                if (j > 0)
+                {
+                    conflicts[j] = finalplugin.Name;
+                    Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
+                }
             }
             return finalvalue;
         }

@@ -303,7 +303,6 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintError(string format, params object[] args)
         {
-            var message = args.Length > 0 ? string.Format(format, args) : format;
             Interface.Oxide.LogError("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
         }
 
