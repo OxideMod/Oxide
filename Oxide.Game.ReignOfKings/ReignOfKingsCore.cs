@@ -242,10 +242,7 @@ namespace Oxide.Game.ReignOfKings
 
             foreach (var name in args)
             {
-                if (string.IsNullOrEmpty(name)) continue;
-                // Load
-                Interface.Oxide.LoadPlugin(name);
-                pluginmanager.GetPlugin(name);
+                if (string.IsNullOrEmpty(name) || !Interface.Oxide.LoadPlugin(name)) continue;
                 if (!loadingPlugins.ContainsKey(name)) loadingPlugins.Add(name, player);
             }
         }
@@ -282,6 +279,11 @@ namespace Oxide.Game.ReignOfKings
 
                 // Unload
                 var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    SendPlayerMessage(player, "Plugin '{0}' not loaded.", name);
+                    continue;
+                }
                 Interface.Oxide.UnloadPlugin(name);
                 SendPlayerMessage(player, "Unloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             }
@@ -296,6 +298,8 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("cmdReload")]
         private void cmdReload(Player player, string command, string[] args)
         {
+            if (!PermissionsLoaded(player)) return;
+
             if (!HasPermission(player, "admin")) return;
 
             // Check arg 1 exists
@@ -317,6 +321,11 @@ namespace Oxide.Game.ReignOfKings
 
                 // Reload
                 var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    SendPlayerMessage(player, "Plugin '{0}' not loaded.", name);
+                    continue;
+                }
                 Interface.Oxide.ReloadPlugin(name);
                 SendPlayerMessage(player, "Reloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             }
@@ -598,7 +607,7 @@ namespace Oxide.Game.ReignOfKings
         /// <returns></returns>
         private bool HasPermission(Player player, string perm)
         {
-            if (RoKPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm) || player.IsServer) return true;
+            if (serverInitialized && RoKPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm) || player.IsServer) return true;
             SendPlayerMessage(player, "You don't have permission to use this command.");
             return false;
         }
