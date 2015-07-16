@@ -13,15 +13,27 @@ namespace Oxide.Plugins
     {
         public static string[] DefaultReferences = { "mscorlib", "System", "System.Core", "System.Data", "Oxide.Core", "Oxide.Ext.CSharp" };
         public static HashSet<string> PluginReferences = new HashSet<string>(DefaultReferences);
+        private static Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
+        private static CSharpExtension extension;
 
-        private CSharpExtension extension;
-        private Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
+        public static CompilablePlugin GetCompilablePlugin(string directory, string name)
+        {
+            var class_name = Regex.Replace(Regex.Replace(name, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
+            CompilablePlugin plugin;
+            if (!plugins.TryGetValue(class_name, out plugin))
+            {
+                plugin = new CompilablePlugin(extension, directory, name);
+                plugins[class_name] = plugin;
+            }
+            return plugin;
+        }
+        
         private List<CompilablePlugin> compilationQueue = new List<CompilablePlugin>();
         private PluginCompiler compiler;
 
         public CSharpPluginLoader(CSharpExtension extension)
         {
-            this.extension = extension;
+            CSharpPluginLoader.extension = extension;
             PluginCompiler.CheckCompilerBinary();
             compiler = new PluginCompiler();
         }
@@ -63,7 +75,7 @@ namespace Oxide.Plugins
             // Let the Oxide core know that this plugin will be loading asynchronously
             LoadingPlugins.Add(name);
 
-            var compilable_plugin = GetCompilablePlugin(extension, directory, name);
+            var compilable_plugin = GetCompilablePlugin(directory, name);
             compilable_plugin.Compile(compiled =>
             {
                 // Load the plugin assembly if it was successfully compiled
@@ -95,7 +107,7 @@ namespace Oxide.Plugins
         public override void Reload(string directory, string name)
         {
             // Attempt to compile the plugin before unloading the old version
-            var compilable_plugin = GetCompilablePlugin(extension, directory, name);
+            var compilable_plugin = GetCompilablePlugin(directory, name);
             if (compilable_plugin.IsReloading)
             {
                 Interface.Oxide.LogDebug("Reload requested for plugin which is already reloading: {0}", name);
@@ -192,18 +204,6 @@ namespace Oxide.Plugins
                     }
                 }
             });
-        }
-
-        private CompilablePlugin GetCompilablePlugin(CSharpExtension extension, string directory, string name)
-        {
-            var class_name = Regex.Replace(Regex.Replace(name, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
-            CompilablePlugin plugin;
-            if (!plugins.TryGetValue(class_name, out plugin))
-            {
-                plugin = new CompilablePlugin(extension, directory, name);
-                plugins[class_name] = plugin;
-            }
-            return plugin;
         }
 
         public void OnShutdown()

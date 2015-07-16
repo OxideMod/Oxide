@@ -143,6 +143,12 @@ namespace Oxide.Plugins
                 this.GenericArguments = FieldType.GetGenericArguments();
             }
 
+            public bool HasValidConstructor(params Type[] argument_types)
+            {
+                var type = GenericArguments[1];
+                return type.GetConstructor(new Type[0]) != null || type.GetConstructor(argument_types) != null;
+            }
+
             public object Value => Field.GetValue(Plugin);
 
             public bool LookupMethod(string method_name, params Type[] argument_types)
@@ -277,7 +283,7 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void Puts(string format, params object[] args)
         {
-            Interface.Oxide.LogInfo($"[{Title}] {format}", args);
+            Interface.Oxide.LogInfo("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
         }
 
         /// <summary>
@@ -287,7 +293,7 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintWarning(string format, params object[] args)
         {
-            Interface.Oxide.LogWarning($"[{Title}] {format}", args);
+            Interface.Oxide.LogWarning("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
         }
 
         /// <summary>
@@ -297,7 +303,8 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintError(string format, params object[] args)
         {
-            Interface.Oxide.LogError($"[{Title}] {format}", args);
+            var message = args.Length > 0 ? string.Format(format, args) : format;
+            Interface.Oxide.LogError("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
         }
 
         /// <summary>
