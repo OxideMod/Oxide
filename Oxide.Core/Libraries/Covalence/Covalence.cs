@@ -152,7 +152,7 @@ namespace Oxide.Core.Libraries.Covalence
                     if (i > 1) sb.Append(',');
                     sb.Append(candidates[i].FullName);
                 }
-                logger.Write(LogType.Warning, "Multiple Covalence providers found! Using {0}. (Also found {1})");
+                logger.Write(LogType.Warning, "Multiple Covalence providers found! Using {0}. (Also found {1})", selectedCandidate, sb);
             }
             else
                 selectedCandidate = candidates[0];
@@ -160,7 +160,7 @@ namespace Oxide.Core.Libraries.Covalence
             // Create it
             try
             {
-                provider = Activator.CreateInstance(selectedCandidate) as ICovalenceProvider;
+                provider = (ICovalenceProvider) Activator.CreateInstance(selectedCandidate);
             }
             catch (Exception ex)
             {
@@ -188,6 +188,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="callback"></param>
         public void RegisterCommand(string cmd, CommandCallback callback)
         {
+            if (cmdSystem == null) return;
             try
             {
                 cmdSystem.RegisterCommand(cmd, CommandType.Chat, callback);
@@ -203,9 +204,9 @@ namespace Oxide.Core.Libraries.Covalence
         /// Unregisters a command (chat + console)
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="callback"></param>
         public void UnregisterCommand(string cmd)
         {
+            if (cmdSystem == null) return;
             logger.Write(LogType.Debug, "Covalence is unregistering command '{0}'!", cmd);
             cmdSystem.UnregisterCommand(cmd, CommandType.Chat);
             cmdSystem.UnregisterCommand(cmd, CommandType.Console);
