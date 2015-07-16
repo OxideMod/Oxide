@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ZUmvpqdhV9KWIDIUZkCO6EnZkdUZHZFRauT1IqxyWCw=",
+            "MSILHash": "/dD30EfYQJb4YXQeRNf+zZxvsf6RfrjsquUTcP+NP9Q=",
             "BaseHookName": null
           }
         },
@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "z2B243BCRivINwt07HzRvSeSDeILJeQz0dvNLadlMWo=",
+            "MSILHash": "K1sfK9jzCBK13Z+2ExbEax5PmjWFSC09PbAL+msXmoo=",
             "BaseHookName": null
           }
         },
@@ -168,7 +168,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 25,
+            "InjectionIndex": 32,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -186,14 +186,14 @@
                 "Item"
               ]
             },
-            "MSILHash": "sCbquSKHspIXA+8Xa+sF0zMr0DXVBqIsI8u/cJZyr/8=",
+            "MSILHash": "VzZNlOgsBfWZ6xXn3XUt7WpxqILBVTXo+IL06nc/3EI=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 38,
+            "InjectionIndex": 35,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -211,7 +211,7 @@
                 "Item"
               ]
             },
-            "MSILHash": "O+SxrcIb02XF3+qByHvqGYi3d3DhvQ5eJ1+cB1gzArk=",
+            "MSILHash": "9iF3D5BlcqAPf6IuhOJVarxrZBsUhAr9i3RXjPMS1E4=",
             "BaseHookName": null
           }
         },
@@ -464,7 +464,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "3khIy8QRoeLUeq63XsJwu5daBVi7jBW64KJ+K5uHeDw=",
+            "MSILHash": "HgYnvj1boUioretsl88hbapEinrxqzHMiFL8l7WD7Rc=",
             "BaseHookName": null
           }
         },
@@ -727,7 +727,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 103,
+            "InjectionIndex": 116,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -748,7 +748,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "35/GPcNr4VHgKH2PCots3YJ0tfmfuma47cWG+qB2Ky8=",
+            "MSILHash": "cwYJltkaihbVBmfGfyQ78NOyDmLmP0gwX/oOks7Jm/M=",
             "BaseHookName": null
           }
         },
@@ -979,7 +979,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "rEE9IwgM74+62QM0i1Apd9HCm0mBgIaSGpkkiQArgZY=",
+            "MSILHash": "rdRPFgjl2bHvJ0D6C+m1roLMzIoM0Lh1uESPqjWM+Sk=",
             "BaseHookName": null
           }
         },
@@ -1426,7 +1426,7 @@
                 "ItemCraftTask"
               ]
             },
-            "MSILHash": "TeYT0hH01iBiB/0A6snCYGZjdAFapVz+UqsJXdo0lFY=",
+            "MSILHash": "Y0dkiBYoX4x6J8gLflLDV/WTXVKPrspj+Z5czxtnFQc=",
             "BaseHookName": null
           }
         },
@@ -1962,7 +1962,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "mc7QMoMdQlWi8HVMjuoI0MAosYtnihHJYpdXDHXiH/U=",
+            "MSILHash": "n4/pl5EL4vue+cJfdYMtQzqc2UQmF0mcw/8nC1JFTyU=",
             "BaseHookName": null
           }
         },
