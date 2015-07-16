@@ -75,15 +75,24 @@ namespace Oxide.Game.ReignOfKings
         {
             // Add our commands
             cmdlib.AddChatCommand("oxide.plugins", this, "cmdPlugins");
+            cmdlib.AddChatCommand("plugins", this, "cmdPlugins");
             cmdlib.AddChatCommand("oxide.load", this, "cmdLoad");
+            cmdlib.AddChatCommand("load", this, "cmdLoad");
             cmdlib.AddChatCommand("oxide.unload", this, "cmdUnload");
+            cmdlib.AddChatCommand("unload", this, "cmdUnload");
             cmdlib.AddChatCommand("oxide.reload", this, "cmdReload");
+            cmdlib.AddChatCommand("reload", this, "cmdReload");
             cmdlib.AddChatCommand("oxide.version", this, "cmdVersion");
+            cmdlib.AddChatCommand("version", this, "cmdVersion");
 
             cmdlib.AddChatCommand("oxide.group", this, "cmdGroup");
+            cmdlib.AddChatCommand("group", this, "cmdGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "cmdUserGroup");
+            cmdlib.AddChatCommand("usergroup", this, "cmdUserGroup");
             cmdlib.AddChatCommand("oxide.grant", this, "cmdGrant");
+            cmdlib.AddChatCommand("grant", this, "cmdGrant");
             cmdlib.AddChatCommand("oxide.revoke", this, "cmdRevoke");
+            cmdlib.AddChatCommand("revoke", this, "cmdRevoke");
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "reign of kings");
