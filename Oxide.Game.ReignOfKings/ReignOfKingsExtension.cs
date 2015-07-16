@@ -108,6 +108,7 @@ namespace Oxide.Game.ReignOfKings
         };
 
         private static readonly FieldInfo SocketServerField = typeof (SocketAdminConsole).GetField("_server", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo MessagesField = typeof (Console).GetField("m_messages", BindingFlags.NonPublic | BindingFlags.Static);
 
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsExtension class
@@ -205,12 +206,11 @@ namespace Oxide.Game.ReignOfKings
         private void ServerConsoleOnInput(string input)
         {
             if (!input.StartsWith("/")) input = "/" + input;
-            var messages = (List<Console.Message>)typeof(Console).GetField("m_messages", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            var messages = (List<Console.Message>) MessagesField.GetValue(null);
             messages.Clear();
-            if (CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, input))
-            {
-                Interface.Oxide.ServerConsole.AddMessage(Console.CurrentOutput.TrimEnd('\n', '\r'));
-            }
+            if (!CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, input)) return;
+            var output = Console.CurrentOutput.TrimEnd('\n', '\r');
+            if (!string.IsNullOrEmpty(output)) Interface.Oxide.ServerConsole.AddMessage(output);
         }
 
         private void HandleLog(string message, string stackTrace, LogType type)
