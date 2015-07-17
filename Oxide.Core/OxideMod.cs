@@ -535,9 +535,6 @@ namespace Oxide.Core
 
             if (ServerConsole != null) ServerConsole.Update();
 
-            // Update plugin change watchers
-            UpdatePluginWatchers();
-
             // Update extensions
             try
             {
@@ -583,16 +580,6 @@ namespace Oxide.Core
         }
 
         #region Plugin Change Watchers
-
-        /// <summary>
-        /// Updates all plugin change watchers
-        /// </summary>
-        private void UpdatePluginWatchers()
-        {
-            foreach (var watcher in extensionmanager.GetPluginChangeWatchers())
-                watcher.UpdateChangeStatus();
-        }
-
         /// <summary>
         /// Called when a plugin watcher has reported a change in a plugin source
         /// </summary>

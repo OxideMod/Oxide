@@ -25,11 +25,6 @@
         public event PluginRemoveEvent OnPluginRemoved;
 
         /// <summary>
-        /// Checks to see if changes have been made and fires the OnPluginSourceChanged as needed
-        /// </summary>
-        public abstract void UpdateChangeStatus();
-
-        /// <summary>
         /// Fires the OnPluginSourceChanged event
         /// </summary>
         /// <param name="name"></param>

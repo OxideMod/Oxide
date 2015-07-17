@@ -2,6 +2,8 @@
 using System.IO;
 using System.Security.Permissions;
 
+using Oxide.Core.Libraries;
+
 namespace Oxide.Core.Plugins.Watchers
 {
     /// <summary>
@@ -9,17 +11,21 @@ namespace Oxide.Core.Plugins.Watchers
     /// </summary>
     public sealed class FSWatcher : PluginChangeWatcher
     {
+        class QueuedChanges : HashSet<WatcherChangeTypes>
+        {
+            public Timer.TimerInstance timer;
+        }
+
         // The filesystem watcher
         private FileSystemWatcher watcher;
 
         // The plugin list
-        private ICollection<string> watchedplugins;
+        private ICollection<string> watchedPlugins;
 
-        // The syncroot
-        private object syncroot;
+        // Changes are buffered briefly to avoid duplicate events
+        private Dictionary<string, QueuedChanges> changeQueue;
 
-        // The file changes queue
-        private Queue<FileChange> filechanges;
+        private Timer timers;
 
         /// <summary>
         /// Initializes a new instance of the FSWatcher class
@@ -28,12 +34,10 @@ namespace Oxide.Core.Plugins.Watchers
         /// <param name="filter"></param>
         public FSWatcher(string directory, string filter)
         {
-            // Initialize
-            watchedplugins = new HashSet<string>();
-            filechanges = new Queue<FileChange>();
-            syncroot = new object();
-
-            // Load watcher
+            watchedPlugins = new HashSet<string>();
+            changeQueue = new Dictionary<string, QueuedChanges>();
+            timers = Interface.Oxide.GetLibrary<Timer>();
+            
             LoadWatcher(directory, filter);
         }
 
@@ -53,7 +57,6 @@ namespace Oxide.Core.Plugins.Watchers
             watcher.Deleted += watcher_Changed;
             watcher.Error += watcher_Error;
             watcher.EnableRaisingEvents = true;
-            //Interface.Oxide.LogDebug("FSWatcher started '{0}' {1}", directory, filter);
         }
 
         /// <summary>
@@ -62,9 +65,7 @@ namespace Oxide.Core.Plugins.Watchers
         /// <param name="name"></param>
         public void AddMapping(string name)
         {
-            //filename = Path.GetFullPath(filename);
-            //Interface.Oxide.LogDebug("Added mapping '{0}'", filename);
-            watchedplugins.Add(name);
+            watchedPlugins.Add(name);
         }
 
         /// <summary>
@@ -73,8 +74,7 @@ namespace Oxide.Core.Plugins.Watchers
         /// <param name="name"></param>
         public void RemoveMapping(string name)
         {
-            //filename = Path.GetFullPath(filename);
-            watchedplugins.Remove(name);
+            watchedPlugins.Remove(name);
         }
 
         /// <summary>
@@ -84,27 +84,54 @@ namespace Oxide.Core.Plugins.Watchers
         /// <param name="e"></param>
         private void watcher_Changed(object sender, FileSystemEventArgs e)
         {
-            //string filename = Path.Combine(e.FullPath, e.Name);
-            string name = Path.GetFileNameWithoutExtension(e.Name);
-            //Interface.Oxide.LogDebug(filename);
+            var name = Path.GetFileNameWithoutExtension(e.Name);
+            QueuedChanges queued_changes;
+            if (!changeQueue.TryGetValue(name, out queued_changes))
+            {
+                queued_changes = new QueuedChanges();
+                changeQueue[name] = queued_changes;
+            }
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Changed:
-                    lock (syncroot)
-                        filechanges.Enqueue(new FileChange(name, e.ChangeType));
-                    //Interface.Oxide.LogDebug("Changed plugin {0}", name);
+                    if (!queued_changes.Contains(WatcherChangeTypes.Created))
+                        queued_changes.Add(e.ChangeType);
                     break;
                 case WatcherChangeTypes.Created:
-                    lock (syncroot)
-                        filechanges.Enqueue(new FileChange(name, e.ChangeType));
-                    //Interface.Oxide.LogDebug("New plugin {0}", name);
+                    if (queued_changes.Remove(WatcherChangeTypes.Deleted))
+                        queued_changes = new QueuedChanges { WatcherChangeTypes.Changed };
+                    else
+                        queued_changes = new QueuedChanges { e.ChangeType };
                     break;
                 case WatcherChangeTypes.Deleted:
-                    lock (syncroot)
-                        filechanges.Enqueue(new FileChange(name, e.ChangeType));
-                    //Interface.Oxide.LogDebug("Deleted plugin {0}", name);
+                    queued_changes = new QueuedChanges { e.ChangeType };
                     break;
             }
+            queued_changes.timer?.Destroy();
+            queued_changes.timer = timers.Once(.1f, () =>
+            {
+                queued_changes.timer = null;
+                foreach (var change_type in queued_changes)
+                {
+                    switch (change_type)
+                    {
+                        case WatcherChangeTypes.Changed:
+                            if (watchedPlugins.Contains(name))
+                                FirePluginSourceChanged(name);
+                            else
+                                FirePluginAdded(name);
+                            break;
+                        case WatcherChangeTypes.Created:
+                            FirePluginAdded(name);
+                            break;
+                        case WatcherChangeTypes.Deleted:
+                            if (watchedPlugins.Contains(name))
+                                FirePluginRemoved(name);
+                            break;
+                    }
+                }
+                changeQueue.Remove(name);
+            });
         }
 
         private void watcher_Error(object sender, ErrorEventArgs e)
@@ -114,38 +141,6 @@ namespace Oxide.Core.Plugins.Watchers
                 Interface.Oxide.LogError("FSWatcher error: {0}", e.GetException());
                 RemoteLogger.Exception("FSWatcher error", e.GetException());
             });
-        }
-
-        /// <summary>
-        /// Fires all change events
-        /// </summary>
-        public override void UpdateChangeStatus()
-        {
-            lock (syncroot)
-            {
-                while (filechanges.Count > 0)
-                {
-                    FileChange fileChange = filechanges.Dequeue();
-                    //Interface.Oxide.LogDebug(filename);
-
-                    switch (fileChange.ChangeType)
-                    {
-                        case WatcherChangeTypes.Changed:
-                            if (watchedplugins.Contains(fileChange.Name))
-                                FirePluginSourceChanged(fileChange.Name);
-                            else
-                                FirePluginAdded(fileChange.Name);
-                            break;
-                        case WatcherChangeTypes.Created:
-                            FirePluginAdded(fileChange.Name);
-                            break;
-                        case WatcherChangeTypes.Deleted:
-                            if (watchedplugins.Contains(fileChange.Name))
-                                FirePluginRemoved(fileChange.Name);
-                            break;
-                    }
-                }
-            }
         }
     }
 }
