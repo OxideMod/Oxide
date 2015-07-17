@@ -133,15 +133,33 @@ namespace Oxide.Plugins
                                 {
                                     var dependency_name = match.Groups[1].Value;
                                     Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
+                                    plugin.Requires.Add(dependency_name);
                                     if (!compilation.plugins.Any(pl => pl.Name == dependency_name))
                                     {
                                         var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(compilation.plugins[0].Directory, dependency_name);
+                                        if (compilable_plugin.IsReloading)
+                                        {
+                                            Interface.Oxide.LogDebug("Dependency is already reloading: " + dependency_name);
+                                            continue;
+                                        }
+                                        compilable_plugin.IsReloading = true;
                                         compilable_plugin.OnCompilationStarted(this);
                                         compilable_plugin.Compile((compiled) =>
                                         {
-
+                                            if (!compiled)
+                                            {
+                                                Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", dependency_name);
+                                                compilable_plugin.IsReloading = false;
+                                                return;
+                                            }
+                                            Interface.Oxide.UnloadPlugin(dependency_name);
+                                            // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
+                                            Interface.Oxide.NextTick(() =>
+                                            {
+                                                if (!Interface.Oxide.LoadPlugin(dependency_name)) compilable_plugin.IsReloading = false;
+                                            });
                                         }, false);
-                                        compilation.plugins.Add(compilable_plugin);
+                                        compilation.plugins.Insert(0, compilable_plugin);
                                     }
                                     continue;
                                 }
@@ -332,7 +350,13 @@ namespace Oxide.Plugins
                                 var script_name = file_name.Substring(0, file_name.Length - 3);
                                 var compilable_plugin = compilation.plugins.SingleOrDefault(pl => pl.ScriptName == script_name);
                                 if (compilable_plugin == null)
+                                {
                                     Interface.Oxide.LogError("Unable to resolve script error to plugin: " + line);
+                                    continue;
+                                }
+                                var missing_requirements = compilable_plugin.Requires.Where(name => compilation.plugins.Single(pl => pl.Name == name).CompilerErrors != null).ToArray();
+                                if (missing_requirements.Length > 0)
+                                    compilable_plugin.CompilerErrors = $"{compilable_plugin.ScriptName}'s dependencies: {missing_requirements.ToSentence()}";
                                 else
                                     compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
                             }

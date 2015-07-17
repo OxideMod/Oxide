@@ -19,6 +19,7 @@ namespace Oxide.Plugins
         public string ScriptPath;
         public string[] ScriptLines;
         public Encoding ScriptEncoding;
+        public HashSet<string> Requires = new HashSet<string>();
         public HashSet<string> References = new HashSet<string>();
         public HashSet<string> IncludePaths = new HashSet<string>();
         public string CompilerErrors;
@@ -60,7 +61,7 @@ namespace Oxide.Plugins
             }
             if (queue_compilation && CompiledAssembly != null && !HasBeenModified())
             {
-                if (!CompiledAssembly.IsBatch || CompiledAssembly.CompilablePlugins.All(pl => pl.IsReloading))
+                if (CompiledAssembly.IsLoading || !CompiledAssembly.IsBatch || CompiledAssembly.CompilablePlugins.All(pl => pl.IsReloading))
                 {
                     //Interface.Oxide.LogDebug("Plugin is already compiled: {0}", Name);
                     callback(true);

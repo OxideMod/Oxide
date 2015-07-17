@@ -139,6 +139,12 @@ namespace Oxide.Plugins
         {
             var plugin = plugin_base as CSharpPlugin;
             LoadedPlugins.Remove(plugin.Name);
+            // Unload plugins which require this plugin first
+            foreach (var compilable_plugin in plugins.Values)
+            {
+                if (compilable_plugin.Requires.Contains(plugin.Name))
+                    Interface.Oxide.UnloadPlugin(compilable_plugin.Name);
+            }
         }
 
         /// <summary>
@@ -147,13 +153,22 @@ namespace Oxide.Plugins
         /// <param name="plugin"></param>
         public void CompilationRequested(CompilablePlugin plugin)
         {
-            compilationQueue.Add(plugin);
-            if (compilationQueue.Count > 1) return;
-            Interface.Oxide.NextTick(() =>
+            if (compilationQueue.Count < 1)
             {
-                CompileAssembly(compilationQueue.ToArray());
-                compilationQueue.Clear();
-            });
+                Interface.Oxide.NextTick(() =>
+                {
+                    CompileAssembly(compilationQueue.ToArray());
+                    compilationQueue.Clear();
+                });
+            }
+            compilationQueue.Add(plugin);
+            // Enqueue compilation of any plugins which depend on this plugin
+            foreach (var compilable_plugin in plugins.Values.Where(pl => pl.Requires.Contains(plugin.Name)))
+            {
+                if (compilationQueue.Contains(compilable_plugin)) continue;
+                compilable_plugin.CompiledAssembly = null;
+                Reload(Interface.Oxide.PluginDirectory, compilable_plugin.Name);
+            }
         }
 
         private void CompileAssembly(CompilablePlugin[] plugs)
