@@ -212,7 +212,7 @@ namespace Oxide.Core.Libraries
                     }
                     catch (Exception ex)
                     {
-                        Interface.Oxide.LogException("Exception raised in web request callback", ex);
+                        Interface.Oxide.LogException($"Web request callback raised an exception in '{Owner.Name}' plugin", ex);
                     }
                 });
             }
