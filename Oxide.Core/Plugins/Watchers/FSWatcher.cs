@@ -91,7 +91,22 @@ namespace Oxide.Core.Plugins.Watchers
                 queued_changes = new QueuedChanges();
                 changeQueue[name] = queued_changes;
             }
-            queued_changes.Add(e.ChangeType);
+            switch (e.ChangeType)
+            {
+                case WatcherChangeTypes.Changed:
+                    if (!queued_changes.Contains(WatcherChangeTypes.Created))
+                        queued_changes.Add(e.ChangeType);
+                    break;
+                case WatcherChangeTypes.Created:
+                    if (queued_changes.Remove(WatcherChangeTypes.Deleted))
+                        queued_changes = new QueuedChanges { WatcherChangeTypes.Changed };
+                    else
+                        queued_changes = new QueuedChanges { e.ChangeType };
+                    break;
+                case WatcherChangeTypes.Deleted:
+                    queued_changes = new QueuedChanges { e.ChangeType };
+                    break;
+            }
             queued_changes.timer?.Destroy();
             queued_changes.timer = timers.Once(.1f, () =>
             {
