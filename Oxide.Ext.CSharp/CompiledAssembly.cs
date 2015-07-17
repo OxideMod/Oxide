@@ -22,6 +22,7 @@ namespace Oxide.Plugins
         public string[] PluginNames;
         public byte[] RawAssembly;
         public Assembly LoadedAssembly;
+        public bool IsLoading;
         public bool IsBatch => CompilablePlugins.Length > 1;
 
         private List<Action<bool>> loadCallbacks = new List<Action<bool>>();
@@ -54,6 +55,7 @@ namespace Oxide.Plugins
                 return;
             }
 
+            IsLoading = true;
             loadCallbacks.Add(callback);
             if (isPatching) return;
 
@@ -65,7 +67,9 @@ namespace Oxide.Plugins
                 //Interface.Oxide.LogInfo("Patching {0} took {1}ms", Name, Math.Round((Interface.Oxide.Now - started_at) * 1000f));
                 if (raw_assembly == null)
                 {
-                    callback(false);
+                    foreach (var cb in loadCallbacks) cb(true);
+                    loadCallbacks.Clear();
+                    IsLoading = false;
                     return;
                 }
 
@@ -74,6 +78,8 @@ namespace Oxide.Plugins
 
                 foreach (var cb in loadCallbacks) cb(true);
                 loadCallbacks.Clear();
+                
+                IsLoading = false;
             });
         }
 
