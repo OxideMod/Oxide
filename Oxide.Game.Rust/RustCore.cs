@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -544,16 +545,25 @@ namespace Oxide.Game.Rust
             }
         }
 
-        private BasePlayer FindPlayer(string nameOrIdOrIp)
+        private static BasePlayer FindPlayer(string nameOrIdOrIp)
         {
-            var player = BasePlayer.Find(nameOrIdOrIp);
-            if (player == null)
+            foreach (var activePlayer in BasePlayer.activePlayerList)
             {
-                ulong id;
-                if (ulong.TryParse(nameOrIdOrIp, out id))
-                    player = BasePlayer.FindSleeping(id);
+                if (activePlayer.userID.ToString() == nameOrIdOrIp)
+                    return activePlayer;
+                if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
+                    return activePlayer;
+                if (activePlayer.net?.connection != null && activePlayer.net.connection.ipaddress == nameOrIdOrIp)
+                    return activePlayer;
             }
-            return player;
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (sleepingPlayer.userID.ToString() == nameOrIdOrIp)
+                    return sleepingPlayer;
+                if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
+                    return sleepingPlayer;
+            }
+            return null;
         }
 
         /// <summary>
