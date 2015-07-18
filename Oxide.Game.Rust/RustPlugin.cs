@@ -127,7 +127,8 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintToConsole(BasePlayer player, string format, params object[] args)
         {
-            player.SendConsoleCommand("echo " + (args.Length > 0 ? string.Format(format, args) : format));
+            if (player?.net != null)
+                player.SendConsoleCommand("echo " + (args.Length > 0 ? string.Format(format, args) : format));
         }
 
         /// <summary>
@@ -149,7 +150,8 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintToChat(BasePlayer player, string format, params object[] args)
         {
-            player.SendConsoleCommand("chat.add", 0, args.Length > 0 ? string.Format(format, args) : format, 1f);
+            if (player?.net != null)
+                player.SendConsoleCommand("chat.add", 0, args.Length > 0 ? string.Format(format, args) : format, 1f);
         }
 
         /// <summary>
@@ -174,7 +176,7 @@ namespace Oxide.Plugins
             var message = args.Length > 0 ? string.Format(format, args) : format;
 
             var player = arg.connection?.player as BasePlayer;
-            if (player != null)
+            if (player?.net != null)
             {
                 player.SendConsoleCommand("echo " + message);
                 return;
@@ -205,7 +207,7 @@ namespace Oxide.Plugins
             var message = args.Length > 0 ? string.Format(format, args) : format;
 
             var player = arg.connection?.player as BasePlayer;
-            if (player != null)
+            if (player?.net != null)
             {
                 player.SendConsoleCommand("echo " + message);
                 return;
@@ -225,7 +227,7 @@ namespace Oxide.Plugins
             var message = args.Length > 0 ? string.Format(format, args) : format;
 
             var player = arg.connection?.player as BasePlayer;
-            if (player != null)
+            if (player?.net != null)
             {
                 player.SendConsoleCommand("echo " + message);
                 return;
