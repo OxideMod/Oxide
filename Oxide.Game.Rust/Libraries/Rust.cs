@@ -94,6 +94,7 @@ namespace Oxide.Game.Rust.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(BasePlayer player, string name, string message = null, string userid = "0")
         {
+            if (player?.net == null) return;
             if (message != null)
             {
                 player.SendConsoleCommand("chat.add", userid, $"<color=orange>{name}</color>: {message}", 1.0);
