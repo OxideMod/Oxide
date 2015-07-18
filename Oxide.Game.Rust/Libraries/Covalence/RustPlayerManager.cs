@@ -94,6 +94,20 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets an offline player given their unique ID
+        /// </summary>
+        /// <param name="uniqueID"></param>
+        /// <returns></returns>
+        public IPlayer this[int id]
+        {
+            get
+            {
+                RustPlayer player;
+                return players.TryGetValue(id.ToString(), out player) ? player : null;
+            }
+        }
+
+        /// <summary>
         /// Gets all offline players
         /// </summary>
         /// <returns></returns>
@@ -103,35 +117,32 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Finds a single offline player given a partial name (multiple matches returns null)
+        /// Gets all offline players
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IPlayer> All => players.Values.Cast<IPlayer>();
+
+        /// <summary>
+        /// Finds an offline player matching a partial name (case insensitive, null if multiple matches unless exact)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
         public IPlayer FindPlayer(string partialName)
         {
-            // Pull 1 item and ONLY 1 item
-            // TODO: If there's an exact match, just return that regardless?
-            // That, or sort the sequence by how close the match is and return the best item
-            try
-            {
-                return FindPlayers(partialName).Single();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var name = partialName.ToLower();
+            var players = FindPlayers(partialName);
+            return players.SingleOrDefault() ?? players.FirstOrDefault(pl => pl.Nickname.ToLower() == name);
         }
 
         /// <summary>
-        /// Finds any number of offline players given a partial name
+        /// Finds any number of offline players given a partial name (case insensitive)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
-            return players.Values
-                .Where((p) => p.Nickname.Contains(partialName))
-                .Cast<IPlayer>();
+            var name = partialName.ToLower();
+            return players.Values.Where(p => p.Nickname.ToLower().Contains(name)).Cast<IPlayer>();
         }
 
         #endregion
@@ -162,35 +173,32 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Finds a single online player given a partial name (wildcards accepted, multiple matches returns null)
+        /// Gets all online players
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ILivePlayer> Online => livePlayers.Values.Cast<ILivePlayer>();
+
+        /// <summary>
+        /// Finds a single online player matching a partial name (case insensitive, null if multiple matches unless exact)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
         public ILivePlayer FindOnlinePlayer(string partialName)
         {
-            // Pull 1 item and ONLY 1 item
-            // TODO: If there's an exact match, just return that regardless?
-            // That, or sort the sequence by how close the match is and return the best item
-            try
-            {
-                return FindOnlinePlayers(partialName).Single();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            var name = partialName.ToLower();
+            var players = FindOnlinePlayers(partialName);
+            return players.SingleOrDefault() ?? players.FirstOrDefault(pl => pl.BasePlayer.Nickname.ToLower() == name);
         }
 
         /// <summary>
-        /// Finds any number of online players given a partial name (wildcards accepted)
+        /// Finds any number of online players given a partial name (case insensitive)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
         public IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName)
         {
-            return livePlayers.Values
-                .Where((p) => p.BasePlayer.Nickname.Contains(partialName))
-                .Cast<ILivePlayer>();
+            var name = partialName.ToLower();
+            return livePlayers.Values.Where(p => p.BasePlayer.Nickname.ToLower().Contains(name)).Cast<ILivePlayer>();
         }
 
         #endregion
