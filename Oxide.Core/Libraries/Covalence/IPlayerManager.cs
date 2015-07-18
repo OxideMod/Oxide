@@ -19,10 +19,23 @@ namespace Oxide.Core.Libraries.Covalence
         IPlayer GetPlayer(string uniqueID);
 
         /// <summary>
+        /// Gets an offline player given their unique ID
+        /// </summary>
+        /// <param name="uniqueID"></param>
+        /// <returns></returns>
+        IPlayer this[int id] { get; }
+
+        /// <summary>
         /// Gets all offline players
         /// </summary>
         /// <returns></returns>
         IEnumerable<IPlayer> GetAllPlayers();
+
+        /// <summary>
+        /// Gets all offline players
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IPlayer> All { get; }
 
         /// <summary>
         /// Finds a single offline player given a partial name (wildcards accepted, multiple matches returns null)
@@ -54,6 +67,12 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         /// <returns></returns>
         IEnumerable<ILivePlayer> GetAllOnlinePlayers();
+
+        /// <summary>
+        /// Gets all online players
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ILivePlayer> Online { get; }
 
         /// <summary>
         /// Finds a single online player given a partial name (wildcards accepted, multiple matches returns null)
