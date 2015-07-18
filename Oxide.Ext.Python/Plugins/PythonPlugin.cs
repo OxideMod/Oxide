@@ -42,7 +42,7 @@ namespace Oxide.Ext.Python.Plugins
         /// </summary>
         public override object Object => Class;
 
-        private IList<string> Globals;
+        private Dictionary<string, object> Globals;
 
         // The plugin change watcher
         private readonly FSWatcher watcher;
@@ -136,13 +136,13 @@ namespace Oxide.Ext.Python.Plugins
             // Set attributes
             PythonEngine.Operations.SetMember(Class, "Plugin", this);
 
-            Globals = new List<string>();
+            Globals = new Dictionary<string, object>();
             var globals = PythonEngine.Operations.GetMemberNames(Class);
             foreach (var name in globals)
             {
                 object func;
                 if (!PythonEngine.Operations.TryGetMember(Class, name, out func) || !PythonEngine.Operations.IsCallable(func)) continue;
-                Globals.Add(name);
+                Globals.Add(name, func);
                 if (!PythonEngine.Operations.ContainsMember(func, "__dict__")) continue;
                 var dict = PythonEngine.Operations.GetMember<PythonDictionary>(func, "__dict__");
                 if (dict.ContainsKey("isCommand"))
@@ -154,9 +154,10 @@ namespace Oxide.Ext.Python.Plugins
                         Interface.Oxide.LogWarning("Command is missing name: {0} from plugin: {1}! Skipping...", name, Name);
                         continue;
                     }
+                    var funcToCall = func;
                     AddCovalenceCommand(names, perms, (cmd, type, caller, args) =>
                     {
-                        PythonEngine.Operations.InvokeMember(Class, name, caller, args);
+                        PythonEngine.Operations.Invoke(funcToCall, caller, args);
                         return true;
                     });
                 }
@@ -209,7 +210,7 @@ namespace Oxide.Ext.Python.Plugins
             base.HandleAddedToManager(manager);
 
             // Subscribe all our hooks
-            foreach (string key in Globals)
+            foreach (string key in Globals.Keys)
                 Subscribe(key);
 
             // Add us to the watcher
@@ -243,10 +244,11 @@ namespace Oxide.Ext.Python.Plugins
         /// <returns></returns>
         protected override object OnCallHook(string hookname, object[] args)
         {
-            if (!Globals.Contains(hookname)) return null;
+            object func;
+            if (!Globals.TryGetValue(hookname, out func)) return null;
             try
             {
-                return PythonEngine.Operations.InvokeMember(Class, hookname, args ?? new object[]{});
+                return PythonEngine.Operations.Invoke(func, args ?? new object[]{});
             }
             catch (Exception e)
             {
