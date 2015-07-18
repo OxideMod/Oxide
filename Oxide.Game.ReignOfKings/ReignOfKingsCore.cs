@@ -772,5 +772,17 @@ namespace Oxide.Game.ReignOfKings
                 FoldersField.SetValue(fileCounter, folders);
             }
         }
+
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(Player player)
+        {
+            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+        }
+
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(Player player)
+        {
+            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+        }
     }
 }
