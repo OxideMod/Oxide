@@ -93,6 +93,7 @@ namespace Oxide.Plugins
                     {
                         plugin.References.Clear();
                         plugin.IncludePaths.Clear();
+                        plugin.Requires.Clear();
 
                         bool parsingNamespace = false;
                         for (var i = 0; i < plugin.ScriptLines.Length; i++)
@@ -498,12 +499,18 @@ namespace Oxide.Plugins
         public void OnShutdown()
         {
             ready = false;
-            process?.Close();
+            var ended_process = process;
             process = null;
             if (client == null) return;
             client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
             client.Stop();
             client = null;
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                Thread.Sleep(5000);
+                // Calling Close can block up to 60 seconds on certain machines
+                if (!ended_process.HasExited) ended_process.Close();
+            });
         }
 
         private static string EscapeArgument(string arg)
