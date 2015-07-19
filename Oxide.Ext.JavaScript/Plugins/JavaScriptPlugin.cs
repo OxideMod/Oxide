@@ -25,12 +25,12 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Gets the JavaScript Engine
         /// </summary>
-        private Engine JavaScriptEngine { get; }
+        protected Engine JavaScriptEngine { get; }
 
         /// <summary>
         /// Gets this plugin's JavaScript Class
         /// </summary>
-        private ObjectInstance Class { get; set; }
+        protected ObjectInstance Class { get; set; }
 
         /// <summary>
         /// Gets the object associated with this plugin
@@ -116,12 +116,11 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Loads this plugin
         /// </summary>
-        public void Load()
+        public virtual void Load()
         {
             // Load the plugin
-            string code = File.ReadAllText(Filename);
             Name = Path.GetFileNameWithoutExtension(Filename);
-            JavaScriptEngine.Execute(code, new ParserOptions { Source = Path.GetFileName(Filename) });
+            LoadSource();
             if (JavaScriptEngine.GetValue(Name).TryCast<ObjectInstance>() == null) throw new Exception("Plugin is missing main object");
             Class = JavaScriptEngine.GetValue(Name).AsObject();
             if (!Class.HasProperty("Name"))
@@ -158,6 +157,12 @@ namespace Oxide.Ext.JavaScript.Plugins
 
             // Bind any base methods (we do it here because we don't want them to be hooked)
             BindBaseMethods();
+        }
+
+        protected virtual void LoadSource()
+        {
+            var source = File.ReadAllText(Filename);
+            JavaScriptEngine.Execute(source, new ParserOptions { Source = Path.GetFileName(Filename) });
         }
 
         /// <summary>

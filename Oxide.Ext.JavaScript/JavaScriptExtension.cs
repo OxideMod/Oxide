@@ -47,12 +47,12 @@ namespace Oxide.Ext.JavaScript
         /// Gets the JavaScript engine
         /// </summary>
         private Engine JavaScriptEngine { get; set; }
-
-        // The plugin change watcher
-        private FSWatcher watcher;
-
-        // The plugin loader
+        
+        // The js plugin loader
         private JavaScriptPluginLoader loader;
+
+        // The coffee plugin loader
+        private CoffeeScriptPluginLoader coffeeLoader;
 
         /// <summary>
         /// Initializes a new instance of the JavaScript class
@@ -73,13 +73,6 @@ namespace Oxide.Ext.JavaScript
                 var parserEx = (ParserException)ex;
                 return string.Format("File: {0} Line: {1} Column: {2} {3}:{4}{5}", parserEx.Source, parserEx.LineNumber, parserEx.Column, parserEx.Description, Environment.NewLine, parserEx.StackTrace);
             });
-        }
-
-        /// <summary>
-        /// Loads this extension
-        /// </summary>
-        public override void Load()
-        {
         }
 
         /// <summary>
@@ -170,10 +163,13 @@ namespace Oxide.Ext.JavaScript
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-            // Register the watcher
-            watcher = new FSWatcher(plugindir, "*.js");
+            // Register the watchers
+            var watcher = new FSWatcher(plugindir, "*.js");
             Manager.RegisterPluginChangeWatcher(watcher);
             loader.Watcher = watcher;
+            watcher = new FSWatcher(plugindir, "*.coffee");
+            Manager.RegisterPluginChangeWatcher(watcher);
+            coffeeLoader.Watcher = watcher;
         }
 
         /// <summary>
@@ -192,9 +188,13 @@ namespace Oxide.Ext.JavaScript
             // Setup JavaScript instance
             InitializeJavaScript();
 
-            // Register the loader
+            // Register the js loader
             loader = new JavaScriptPluginLoader(JavaScriptEngine);
             Manager.RegisterPluginLoader(loader);
+
+            // Register the coffee loader
+            coffeeLoader = new CoffeeScriptPluginLoader(JavaScriptEngine);
+            Manager.RegisterPluginLoader(coffeeLoader);
 
             // Bind JavaScript specific libraries
             LoadLibrary(new JavaScriptGlobal(Manager.Logger), "");
