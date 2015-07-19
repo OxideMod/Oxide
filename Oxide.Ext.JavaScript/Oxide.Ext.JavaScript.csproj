@@ -65,7 +65,9 @@
     <Compile Include="Libraries\JavaScriptGlobal.cs" />
     <Compile Include="Libraries\JavaScriptWebRequests.cs" />
     <Compile Include="LibraryWrapper.cs" />
+    <Compile Include="Plugins\CoffeeScriptPlugin.cs" />
     <Compile Include="Plugins\JavaScriptPlugin.cs" />
+    <Compile Include="Plugins\CoffeeScriptPluginLoader.cs" />
     <Compile Include="Plugins\JavaScriptPluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility.cs" />
@@ -75,6 +77,9 @@
       <Project>{67F65F5D-A62A-4752-849D-BFF30D828107}</Project>
       <Name>Oxide.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\coffee-script.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
