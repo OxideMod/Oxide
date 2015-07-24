@@ -303,6 +303,10 @@ namespace Oxide.Ext.Lua.Plugins
 
             // Call base
             base.HandleRemovedFromManager(manager);
+
+            Table.Dispose();
+            LuaEnvironment.DeleteObject(this);
+            LuaEnvironment.DoString("collectgarbage()");
         }
 
         /// <summary>
