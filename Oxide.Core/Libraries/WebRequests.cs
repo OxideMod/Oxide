@@ -63,7 +63,7 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the plugin to which this web request belongs, if any
             /// </summary>
-            public Plugin Owner { get; }
+            public Plugin Owner { get; protected set; }
 
             /// <summary>
             /// Gets the web request headers
@@ -71,6 +71,8 @@ namespace Oxide.Core.Libraries
             public Dictionary<string, string> RequestHeaders { get; set; }
 
             private HttpWebRequest request = null;
+            private WaitHandle waitHandle = null;
+            private RegisteredWaitHandle registeredWaitHandle = null;
 
             /// <summary>
             /// Initializes a new instance of the WebRequest class
@@ -190,18 +192,24 @@ namespace Oxide.Core.Libraries
                     request.Abort();
                     OnComplete();
                 }, null);
-                ThreadPool.RegisterWaitForSingleObject(result.AsyncWaitHandle, OnTimeout, null, request.Timeout, true);
+                waitHandle = result.AsyncWaitHandle;
+                registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(waitHandle, OnTimeout, null, request.Timeout, true);
             }
 
             private void OnTimeout(object state, bool timed_out)
             {
                 if (timed_out && request != null) request.Abort();
-                if (Owner != null) Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
+                if (Owner != null)
+                {
+                    Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
+                    Owner = null;
+                }
             }
 
             private void OnComplete()
             {
                 if (Owner != null) Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
+                if (registeredWaitHandle != null) registeredWaitHandle.Unregister(waitHandle);
                 Interface.Oxide.NextTick(() =>
                 {
                     if (request == null) return;
@@ -216,6 +224,7 @@ namespace Oxide.Core.Libraries
                         if (Owner) message += $" in '{Owner.Name}' plugin";
                         Interface.Oxide.LogException(message, ex);
                     }
+                    Owner = null;
                 });
             }
 
