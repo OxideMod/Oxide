@@ -74,11 +74,13 @@
     <Compile Include="ObjectStream\ObjectStreamClient.cs" />
     <Compile Include="ObjectStream\ObjectStreamConnection.cs" />
     <Compile Include="ObjectStream\Threading\Worker.cs" />
+    <Compile Include="Covalence\Plugin.cs" />
     <Compile Include="PluginCompiler.cs" />
     <Compile Include="PluginTimers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility.cs" />
     <None Include="Plugins\SamplePlugin.cs" />
+    <None Include="Plugins\CovalenceSamplePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
