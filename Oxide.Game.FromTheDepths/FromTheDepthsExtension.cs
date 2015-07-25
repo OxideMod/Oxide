@@ -51,8 +51,6 @@ namespace Oxide.Game.FromTheDepths
         /// </summary>
         public override void Load()
         {
-            IsGameExtension = true;
-
             // Register our loader
             Manager.RegisterPluginLoader(new FromTheDepthsPluginLoader());
 

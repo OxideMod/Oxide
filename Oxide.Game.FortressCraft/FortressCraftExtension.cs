@@ -51,8 +51,6 @@ namespace Oxide.Game.FortressCraft
         /// </summary>
         public override void Load()
         {
-            IsGameExtension = true;
-
             // Register our loader
             Manager.RegisterPluginLoader(new FortressCraftPluginLoader());
 

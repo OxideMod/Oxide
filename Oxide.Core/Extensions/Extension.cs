@@ -40,6 +40,7 @@
         public Extension(ExtensionManager manager)
         {
             Manager = manager;
+            IsGameExtension = GetType().FullName.StartsWith("Oxide.Game.");
         }
 
         /// <summary>

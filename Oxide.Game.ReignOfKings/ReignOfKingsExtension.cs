@@ -125,8 +125,6 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         public override void Load()
         {
-            IsGameExtension = true;
-
             // Register our loader
             Manager.RegisterPluginLoader(new ReignOfKingsPluginLoader());
 

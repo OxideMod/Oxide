@@ -85,8 +85,6 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public override void Load()
         {
-            IsGameExtension = true;
-
             // Register our loader
             Manager.RegisterPluginLoader(new RustLegacyPluginLoader());
 

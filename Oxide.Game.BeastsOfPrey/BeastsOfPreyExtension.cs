@@ -51,8 +51,6 @@ namespace Oxide.Game.BeastsOfPrey
         /// </summary>
         public override void Load()
         {
-            IsGameExtension = true;
-
             // Register our loader
             Manager.RegisterPluginLoader(new BeastsOfPreyPluginLoader());
 
