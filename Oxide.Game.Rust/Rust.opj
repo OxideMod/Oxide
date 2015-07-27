@@ -1997,7 +1997,7 @@
             "InjectionIndex": 13,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l0",
+            "ArgumentString": "this, l0, a0",
             "HookTypeName": "Simple",
             "Name": "OnPlantGather",
             "HookName": "OnPlantGather",
