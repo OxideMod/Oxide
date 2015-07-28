@@ -9,7 +9,7 @@
 
         protected void PrintToChat(string name, string message)
         {
-            GameManager.Instance.GameMessageServer(message, name);
+            GameManager.Instance.GameMessageServer(null, message, name);
         }
     }
 }

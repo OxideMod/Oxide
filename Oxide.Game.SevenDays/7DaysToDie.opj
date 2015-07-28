@@ -1,6 +1,6 @@
 {
   "Name": "7 Days to Die",
-  "TargetDirectory": "D:\\Servers\\Game\\7DaysToDie\\Latest\\7DaysToDie_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\7DaysToDie\\7DaysToDieServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp",
@@ -8,7 +8,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 94,
+            "InjectionIndex": 74,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -21,14 +21,14 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "r2tp/EtRw+k28aSEe8FkNbPh1BJUvvwZtnCsrQvgDs8=",
+            "MSILHash": "yzm7MsiJhD/AZCwWju1wJz27P6zqX3EUO0MsB9o1JE0=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 95,
+            "InjectionIndex": 75,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -44,14 +44,14 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "r2tp/EtRw+k28aSEe8FkNbPh1BJUvvwZtnCsrQvgDs8=",
+            "MSILHash": "yzm7MsiJhD/AZCwWju1wJz27P6zqX3EUO0MsB9o1JE0=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 99,
+            "InjectionIndex": 108,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -67,7 +67,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "SL6ziHKVA49KoMMmLpKE7cr5aRQVdgvjyZSoKLaovaY=",
+            "MSILHash": "qN00byxbbvrtANPEkGKkVZmu5lmIN1OK55TkY8R5bxs=",
             "BaseHookName": null
           }
         },
@@ -90,14 +90,14 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Et/a0r7e0PEhbWhXjoGbKj1ByikqqEoNXPVCfRI1PuA=",
+            "MSILHash": "4cGqsU4fGNZczI3S+dhTM5M4Ql1Pkua/NK2xgwC0xAY=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 124,
+            "InjectionIndex": 128,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -115,14 +115,14 @@
                 "Entity"
               ]
             },
-            "MSILHash": "pzslO/TGE/T0V2BgrIPjW//DZ2srNBzdj1uZHjsObFk=",
+            "MSILHash": "v+Qrazch9iVYa7brhnj17yXo+SRNLfHeZs9kzkdG708=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 331,
+            "InjectionIndex": 335,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l9",
@@ -142,14 +142,14 @@
                 "PlayerProfile"
               ]
             },
-            "MSILHash": "AnsTWWQkyazyT4RphLbGpt+nC0L9qoq7C3XbhNzg2QU=",
+            "MSILHash": "5rKKsMIMX2KpzS7THPq9j3MW9ZN528N9S0mhMYLMSOY=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 15,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -167,7 +167,7 @@
                 "ClientInfo"
               ]
             },
-            "MSILHash": "wkVwJlZ9lGX/3MLfaihrV0ckxq2rXPs0SZnGTImcKrY=",
+            "MSILHash": "kTK63dqKN/4u5qVy0So5FfTxentzVpfrZ3BupdE9Zmo=",
             "BaseHookName": null
           }
         },
@@ -192,34 +192,7 @@
                 "RespawnType"
               ]
             },
-            "MSILHash": "bnMZ0OJqr9XxI13eI0+0f5f+0uPCWyhFQhe2HYf2dUk=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0",
-            "HookTypeName": "Simple",
-            "Name": "OnEntityTakeDamage",
-            "HookName": "OnEntityTakeDamage",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "EntityFightable",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "DamageEntity",
-              "ReturnType": "System.Int32",
-              "Parameters": [
-                "DamageSource",
-                "System.Int32",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "i2M/QqdzK85axMBUKOxvsWueXMUrVBMTQHl2wDNozvc=",
+            "MSILHash": "WKumKS/DH0cwuB+Mx9jLy8tttBpm/yntL7feEzsgd5U=",
             "BaseHookName": null
           }
         },
@@ -244,7 +217,7 @@
                 "System.UInt32"
               ]
             },
-            "MSILHash": "rJi8JrTTBpNlxqSDg+hRTtWykm7KiQW6BPkoHzRFmzU=",
+            "MSILHash": "DbhUwrfBOrJLhEGK9t9hcaiAK1WOz5sIoxcEfQ2WBx0=",
             "BaseHookName": null
           }
         },
@@ -269,7 +242,7 @@
                 "DamageResponse"
               ]
             },
-            "MSILHash": "bG6hZZGlCFI1mrTnQcDaPhSGldv2rq3+3WyaFfci5Qg=",
+            "MSILHash": "2u4taGCAtKc7p+Ww80tonXvaWQiU7OtF6gjcxuZncps=",
             "BaseHookName": null
           }
         },
@@ -294,58 +267,7 @@
                 "AIAirDrop/scl0002"
               ]
             },
-            "MSILHash": "mli4NRLXPdd6jNQlGiGzVFCumgT4rOlnek+0U0TfmvE=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnDoorUse",
-            "HookName": "OnDoorUse",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TileEntitySecureDoorBase",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "IsUserAllowed",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "System.String"
-              ]
-            },
-            "MSILHash": "U/XgjqhvS+vznkwndxeRaMAAZmm7BIew013TAOWum0o=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerChat",
-            "HookName": "OnPlayerChat",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "GameMessageServer",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String",
-                "System.String"
-              ]
-            },
-            "MSILHash": "W8T9s5k9RZ8lsyjAwtnbz9hou3mCll3uK/OnjZhsT8Q=",
+            "MSILHash": "FGhQzIud7YHTr6OKe4fB3bkBDKsAumoQhX9MbhL40ho=",
             "BaseHookName": null
           }
         },
@@ -368,14 +290,14 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "jgTulrYmFR+06L4AmZGBwJTdDrXVirqlqf/k6caQZ/A=",
+            "MSILHash": "emQfa0JwyOVflVXC9tNjI0Lsw8Sb5JS1E4/k8kipm2M=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 7,
+            "InjectionIndex": 8,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -394,7 +316,87 @@
                 "System.String"
               ]
             },
-            "MSILHash": "UbsWNlK6DeHU8nWj5YXWr6zL2Jhz3HQQUe/tzuVWnzQ=",
+            "MSILHash": "PcV19Vn0WkzDrHnqTX2ixGXKabfI3OmKsOtsrWJPwnA=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a2, a1",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerChat",
+            "HookName": "OnPlayerChat",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GameMessageServer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ClientInfo",
+                "System.String",
+                "System.String"
+              ]
+            },
+            "MSILHash": "3jCR+vKMylw7wiFlKxmDHagx32j0Kr3S3aqMn0NkleI=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDoorUse",
+            "HookName": "OnDoorUse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TileEntitySecure",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "IsUserAllowed",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "6Ekmqc4o6jWm6XAbV+rg6eonp8Xdb4c3vQBYSV3Kdu8=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnEntityTakeDamage",
+            "HookName": "OnEntityTakeDamage",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityAlive",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DamageEntity",
+              "ReturnType": "System.Int32",
+              "Parameters": [
+                "DamageSource",
+                "System.Int32",
+                "System.Boolean",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "mrvYUpwGDdiQPk9QRqsTZOR8wwSKHwH+aB2ZVAcKzoY=",
             "BaseHookName": null
           }
         }

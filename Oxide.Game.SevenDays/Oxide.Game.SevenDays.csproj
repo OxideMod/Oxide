@@ -83,7 +83,7 @@
     <PropertyGroup>
       <GameName>7DaysToDie</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>$(GameName)\7DaysToDie_Data\Managed</ManagedDir>
+      <ManagedDir>$(GameName)\7DaysToDieServer_Data\Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
       <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp.dll; $(TargetDir)\UnityEngine.dll" />

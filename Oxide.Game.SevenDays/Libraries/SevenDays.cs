@@ -23,11 +23,11 @@ namespace Oxide.Game.SevenDays.Libraries
             if (!GameManager.Instance) return;
 
             if (message != null)
-                GameManager.Instance.GameMessageServer(message, name);
+                GameManager.Instance.GameMessageServer(null, message, name);
             else
             {
                 message = name;
-                GameManager.Instance.GameMessageServer(message, "SERVER");
+                GameManager.Instance.GameMessageServer(null, message, "SERVER");
             }
         }
     }

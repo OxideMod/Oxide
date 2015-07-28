@@ -113,7 +113,7 @@ namespace Oxide.Game.SevenDays
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(GamePrefs.GetString(EnumGamePrefs.ServerName));
             //Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
-            Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", cl000c.cCompatibilityVersion, ", Oxide: ", OxideMod.Version.ToString());
+            Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", Constants.cCompatibilityVersion, ", Oxide: ", OxideMod.Version.ToString());
             //Interface.Oxide.ServerConsole.Status1Right = () => ();
             Interface.Oxide.ServerConsole.Completion = input =>
             {

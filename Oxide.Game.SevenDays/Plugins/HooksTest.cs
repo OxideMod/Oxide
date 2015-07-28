@@ -69,16 +69,14 @@ namespace Oxide.Plugins
             PrintToChat(player.EntityName + " has connected!");
         }
 
-        private void OnPlayerDisconnected(ClientInfo client)
+        private void OnPlayerDisconnected(EntityPlayer player)
         {
             HookCalled("OnPlayerDisconnected");
-
-            var player = (EntityPlayer)GameManager.Instance.World.GetEntity(client.entityId);
             PrintWarning("{0} has disconnected!", player.EntityName);
             PrintToChat(player.EntityName + " has disconnected!");
         }
 
-        private void OnPlayerChat(string message, string name)
+        private void OnPlayerChat(string name, string message)
         {
             HookCalled("OnPlayerChat");
             PrintWarning($"{name} : {message}");
@@ -155,7 +153,7 @@ namespace Oxide.Plugins
             //PrintWarning($"Airdrop inbound! The plane is flying from {airdrop.start} to {airdrop.end}");
         }
 
-        private void OnDoorUse(TileEntitySecureDoorBase door, string steamId)
+        private void OnDoorUse(TileEntitySecure door, string steamId)
         {
             HookCalled("OnDoorUse");
             PrintWarning($"A door was used by a player with the Steam ID {steamId}. Owner: {door.GetOwner()} Permission to use: {door.GetUsers().Contains(steamId)}");
