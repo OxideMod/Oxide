@@ -790,6 +790,28 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when a player arms a trap (currently only BearTrap)
+        /// </summary>
+        /// <param name="trap"></param>
+        /// <param name="player"></param>
+        [HookMethod("IOnTrapArm")]
+        private object IOnTrapArm(BearTrap trap, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnTrapArm", trap, msg.player);
+        }
+
+        /// <summary>
+        /// Called when a player disarms a trap (currently only Landmine)
+        /// </summary>
+        /// <param name="trap"></param>
+        /// <param name="player"></param>
+        [HookMethod("IOnTrapDisarm")]
+        private object IOnTrapDisarm(Landmine trap, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnTrapDisarm", trap, msg.player);
+        }
+
+        /// <summary>
         /// Called when the player upgrades a BuildingBlock
         /// </summary>
         /// <param name="block"></param>
@@ -1078,9 +1100,9 @@ namespace Oxide.Game.Rust
         /// This is used to handle the deprecated hook OnMiningQuarryEnabled
         /// </summary>
         [HookMethod("OnQuarryEnabled")]
-        private object OnQuarryEnabled()
+        private object OnQuarryEnabled(MiningQuarry quarry)
         {
-            return Interface.CallDeprecatedHook("OnMiningQuarryEnabled");
+            return Interface.CallDeprecatedHook("OnMiningQuarryEnabled", quarry);
         }
 
         /// <summary>

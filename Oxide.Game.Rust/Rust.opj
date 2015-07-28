@@ -2026,52 +2026,6 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnTrapArm",
-            "HookName": "OnTrapArm",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "BaseTrap",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Arm",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "dJm2yH8E3bV6Sc3f05rNI+cFjf+odEwfTw+OuTqMMVQ=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 1,
-            "ArgumentString": "",
-            "HookTypeName": "Simple",
-            "Name": "OnTrapArmed",
-            "HookName": "OnTrapArmed",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "BearTrap",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Armed",
-              "ReturnType": "System.Boolean",
-              "Parameters": []
-            },
-            "MSILHash": "H+TwKHZd/k1utM9VDku9CULPbhd+3lIQesYJmy3VmhE=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -2089,6 +2043,56 @@
               ]
             },
             "MSILHash": "+u2GCtSHTDWu7iqcjcFKh98FNKhbrQfPRx+LI73xrGk=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnTrapDisarm [internal]",
+            "HookName": "IOnTrapDisarm",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Landmine",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RPC_Disarm",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "6jJ4ejSeZ4lfjhv/LLpAj80MsjysaPk8U9IewAmXPsY=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnTrapArm [internal]",
+            "HookName": "IOnTrapArm",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BearTrap",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RPC_Arm",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "K/jY5Smck2eN7hve/tkAwFzt4oSOux7jFX3zwQW3M/g=",
             "BaseHookName": null
           }
         }
