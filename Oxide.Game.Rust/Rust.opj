@@ -2050,8 +2050,8 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 13,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
             "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
             "Name": "IOnTrapDisarm [internal]",
@@ -2074,9 +2074,9 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 4,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
+            "ArgumentBehavior": 3,
             "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
             "Name": "IOnTrapArm [internal]",
