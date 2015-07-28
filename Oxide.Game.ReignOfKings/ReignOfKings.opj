@@ -1,6 +1,6 @@
 {
   "Name": "Reign of Kings",
-  "TargetDirectory": "D:\\Servers\\Game\\ReignOfKings\\Latest\\ROK_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\ReignOfKings\\ROK_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp",
@@ -200,8 +200,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnPlayerChat",
-            "HookName": "OnPlayerChat",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Networking.Events.Listeners.PlayerListener",
             "Flagged": false,

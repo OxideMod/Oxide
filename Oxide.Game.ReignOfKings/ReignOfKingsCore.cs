@@ -640,6 +640,19 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
+        /// Called when a chat message was sent
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        [HookMethod("IOnPlayerChat")]
+        private object IOnPlayerChat(PlayerEvent e)
+        {
+            if (e.SenderId == 9999999999) return null;
+
+            return Interface.CallHook("OnPlayerChat", e);
+        }
+
+        /// <summary>
         /// Called when a chat command was run
         /// </summary>
         /// <param name="e"></param>
