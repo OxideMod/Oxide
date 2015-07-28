@@ -25,6 +25,8 @@ namespace Oxide.Plugins
                 PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
         }
 
+        #region Plugin Hooks
+
         private void Init()
         {
             hookCount = hooks.Count;
@@ -49,11 +51,9 @@ namespace Oxide.Plugins
             // TODO: Unload plugin and store state in config
         }
 
-        private void ModifyTags(string oldtags)
-        {
-            HookCalled("ModifyTags");
-            // TODO: Modify tags, either remove or add
-        }
+        #endregion
+
+        #region Server Hooks
 
         private void BuildServerTags(IList<string> tags)
         {
@@ -98,6 +98,10 @@ namespace Oxide.Plugins
             // TODO: Print command messages
         }
 
+        #endregion
+
+        #region Player Hooks
+
         private void OnUserApprove(Network.Connection connection)
         {
             HookCalled("OnUserApprove");
@@ -114,10 +118,16 @@ namespace Oxide.Plugins
             // TODO: Print player connected
         }
 
-        private void OnPlayerDisconnected(BasePlayer player)
+        private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
             HookCalled("OnPlayerDisconnected");
             // TODO: Print player disconnected
+        }
+
+        private void OnPlayerInit(BasePlayer player)
+        {
+            HookCalled("OnPlayerInit");
+            // TODO: Force admin to spawn/wakeup
         }
 
         private void OnFindSpawnPoint()
@@ -134,60 +144,32 @@ namespace Oxide.Plugins
             // TODO: Give admin items for testing
         }
 
+        private void OnPlayerChat(ConsoleSystem.Arg arg)
+        {
+            HookCalled("OnPlayerChat");
+        }
+
+        private void OnPlayerLoot(PlayerLoot lootInventory, BaseEntity targetEntity)
+        //private void OnPlayerLoot(PlayerLoot lootInventory, BasePlayer targetPlayer)
+        //private void OnPlayerLoot(PlayerLoot lootInventory, Item targetItem)
+        {
+            HookCalled("OnPlayerLoot");
+        }
+
+        private void OnPlayerInput(BasePlayer player, InputState input)
+        {
+            HookCalled("OnPlayerInput");
+        }
+
         private void OnRunPlayerMetabolism(PlayerMetabolism metabolism)
         {
             HookCalled("OnRunPlayerMetabolism");
             // TODO: Print new metabolism values
         }
 
-        private void OnItemCraft(ItemCraftTask item)
-        {
-            HookCalled("OnItemCraft");
-            // TODO: Print item crafting
-        }
+        #endregion
 
-        private void OnItemDeployed(Deployer deployer, BaseEntity deployedEntity)
-        {
-            HookCalled("OnItemDeployed");
-            // TODO: Print item deployed
-        }
-
-        private void OnItemAddedToContainer(ItemContainer container, Item item)
-        {
-            HookCalled("OnItemAddedToContainer");
-            // TODO: Print item added
-        }
-
-        private void OnItemRemovedFromContainer(ItemContainer container, Item item)
-        {
-            HookCalled("OnItemRemovedToContainer");
-            // TODO: Print item removed
-        }
-
-        private void OnConsumableUse(Item item)
-        {
-            HookCalled("OnConsumableUse");
-            // TODO: Print consumable item used
-        }
-
-        private void OnConsumeFuel(BaseOven oven, Item fuel, ItemModBurnable burnable)
-        {
-            HookCalled("OnConsumeFuel");
-            // TODO: Print fuel consumed
-        }
-
-        private void OnGather(ResourceDispenser dispenser, BaseEntity entity, Item item)
-        {
-            HookCalled("OnGather");
-            // TODO: Print item to be gathered
-        }
-
-        private void CanUseDoor(BasePlayer player, BaseLock door)
-        //private void CanUseDoor(BasePlayer player, CodeLock doorCode)
-        //private void CanUseDoor(BasePlayer player, KeyLock doorKey)
-        {
-            HookCalled("CanUseDoor");
-        }
+        #region Entity Hooks
 
         private void OnEntityTakeDamage(MonoBehaviour entity, HitInfo hitInfo)
         {
@@ -221,42 +203,139 @@ namespace Oxide.Plugins
             HookCalled("OnEntitySpawned");
         }
 
-        private void OnPlayerInit(BasePlayer player)
+        #endregion
+
+        #region Item Hooks
+
+        private void OnItemCraft(ItemCraftTask item)
         {
-            HookCalled("OnPlayerInit");
-            // TODO: Force admin to spawn/wakeup
+            HookCalled("OnItemCraft");
+            // TODO: Print item crafting
         }
 
-        private void OnPlayerChat(ConsoleSystem.Arg arg)
+        private void OnItemDeployed(Deployer deployer, BaseEntity deployedEntity)
         {
-            HookCalled("OnPlayerChat");
+            HookCalled("OnItemDeployed");
+            // TODO: Print item deployed
         }
 
-        private void OnPlayerLoot(PlayerLoot lootInventory, BaseEntity targetEntity)
-        //private void OnPlayerLoot(PlayerLoot lootInventory, BasePlayer targetPlayer)
-        //private void OnPlayerLoot(PlayerLoot lootInventory, Item targetItem)
+        private void OnItemPickup(BasePlayer player, Item item)
         {
-            HookCalled("OnPlayerLoot");
+            HookCalled("OnItemPickup");
         }
 
-        private void OnPlayerInput(BasePlayer player, InputState input)
+        private void OnItemAddedToContainer(ItemContainer container, Item item)
         {
-            HookCalled("OnPlayerInput");
+            HookCalled("OnItemAddedToContainer");
+            // TODO: Print item added
         }
 
-        private void OnBuildingBlockUpgrade(BuildingBlock block, BasePlayer player, BuildingGrade.Enum grade)
+        private void OnItemRemovedFromContainer(ItemContainer container, Item item)
         {
-            HookCalled("OnBuildingBlockUpgrade");
+            HookCalled("OnItemRemovedToContainer");
+            // TODO: Print item removed
         }
 
-        private void OnBuildingBlockRotate(BuildingBlock block, BasePlayer player)
+        private void OnConsumableUse(Item item)
         {
-            HookCalled("OnBuildingBlockRotate");
+            HookCalled("OnConsumableUse");
+            // TODO: Print consumable item used
         }
 
-        private void OnBuildingBlockDemolish(BuildingBlock block, BasePlayer player)
+        private void OnConsumeFuel(BaseOven oven, Item fuel, ItemModBurnable burnable)
         {
-            HookCalled("OnBuildingBlockDemolish");
+            HookCalled("OnConsumeFuel");
+            // TODO: Print fuel consumed
+        }
+
+        private void OnDispenserGather(ResourceDispenser dispenser, BaseEntity entity, Item item)
+        {
+            HookCalled("OnDispenserGather");
+            // TODO: Print item to be gathered
+        }
+
+        private void OnPlantGather(PlantEntity plant, Item item, BasePlayer player)
+        {
+            HookCalled("OnPlantGather");
+            // TODO: Print item to be gathered
+        }
+
+        private void OnSurveyGather(SurveyCharge surveyCharge, Item item)
+        {
+            HookCalled("OnSurveyGather");
+        }
+
+        private void OnQuarryGather(MiningQuarry miningQuarry, Item item)
+        {
+            HookCalled("OnQuarryGather");
+        }
+
+        private void OnQuarryEnabled()
+        {
+            HookCalled("OnQuarryEnabled");
+        }
+
+        private void OnTrapArm(BaseTrap trap)
+        {
+            HookCalled("OnTrapArm");
+        }
+
+        private void OnTrapArmed(BaseTrap trap, GameObject go)
+        {
+            HookCalled("OnTrapArmed");
+        }
+
+        private void OnTrapSnapped(BaseTrap trap, GameObject go)
+        {
+            HookCalled("OnTrapSnapped");
+        }
+
+        private void OnTrapTrigger(BaseTrap trap)
+        {
+            HookCalled("OnTrapTrigger");
+        }
+
+        #endregion
+
+        #region Structure Hooks
+
+        private void CanUseDoor(BasePlayer player, BaseLock door)
+        //private void CanUseDoor(BasePlayer player, CodeLock doorCode)
+        //private void CanUseDoor(BasePlayer player, KeyLock doorKey)
+        {
+            HookCalled("CanUseDoor");
+        }
+
+        private void OnStructureDemolish(BuildingBlock block, BasePlayer player)
+        {
+            HookCalled("OnStructureDemolish");
+        }
+
+        private void OnStructureRepair(BuildingBlock block, BasePlayer player)
+        {
+            HookCalled("OnStructureRepair");
+        }
+
+        private void OnStructureRotate(BuildingBlock block, BasePlayer player)
+        {
+            HookCalled("OnStructureRotate");
+        }
+
+        private void OnStructureUpgrade(BuildingBlock block, BasePlayer player, BuildingGrade.Enum grade)
+        {
+            HookCalled("OnStructureUpgrade");
+        }
+
+        private void OnHammerHit(BasePlayer player, HitInfo info)
+        {
+            HookCalled("OnHammerHit");
+        }
+
+        #endregion
+
+        private void OnAirdrop(CargoPlane plane, Vector3 dropLocation)
+        {
+            HookCalled("OnAirdrop");
         }
     }
 }

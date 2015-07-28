@@ -26,6 +26,17 @@ namespace Oxide.Core
         }
 
         /// <summary>
+        /// Calls the specified deprecated hook
+        /// </summary>
+        /// <param name="hookname"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static object CallDeprecatedHook(string hookname, params object[] args)
+        {
+            return Oxide.CallDeprecatedHook(hookname, args);
+        }
+
+        /// <summary>
         /// Calls the specified hook
         /// </summary>
         /// <param name="hookname"></param>
