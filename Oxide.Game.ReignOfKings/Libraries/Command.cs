@@ -72,7 +72,7 @@ namespace Oxide.Game.ReignOfKings.Libraries
             {
                 var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                var msg = $"{new_plugin_name} has replaced the {command_name} chat command which was previously registered by {previous_plugin_name}";
+                var msg = $"{new_plugin_name} has replaced the '{command_name}' chat command previously registered by {previous_plugin_name}";
                 Interface.Oxide.LogWarning(msg);
             }
 
@@ -87,7 +87,7 @@ namespace Oxide.Game.ReignOfKings.Libraries
             if (CommandManager.RegisteredCommands.ContainsKey(command_name))
             {
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                var msg = $"{new_plugin_name} has replaced the {command_name} chat command";
+                var msg = $"{new_plugin_name} has replaced the '{command_name}' chat command";
                 Interface.Oxide.LogWarning(msg);
             }
             CommandManager.RegisteredCommands[command_name] = commandAttribute;

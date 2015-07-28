@@ -102,7 +102,7 @@ namespace Oxide.Game.RustLegacy.Libraries
                 // This is a custom command which was already registered by another plugin
                 var previous_plugin_name = cmd.PluginCallbacks[0].Plugin?.Name ?? "An unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                var msg = $"{new_plugin_name} has replaced the {name} console command which was previously registered by {previous_plugin_name}";
+                var msg = $"{new_plugin_name} has replaced the '{name}' console command previously registered by {previous_plugin_name}";
                 Interface.Oxide.LogWarning(msg);
                 consoleCommands.Remove(full_name);
             }
@@ -131,7 +131,7 @@ namespace Oxide.Game.RustLegacy.Libraries
             {
                 var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
                 var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                var msg = $"{new_plugin_name} has replaced the {command_name} chat command which was previously registered by {previous_plugin_name}";
+                var msg = $"{new_plugin_name} has replaced the '{command_name}' chat command previously registered by {previous_plugin_name}";
                 Interface.Oxide.LogWarning(msg);
             }
 
