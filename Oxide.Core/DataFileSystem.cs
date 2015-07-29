@@ -60,12 +60,14 @@ namespace Oxide.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static void CreateSubdirectory(string name)
+        public DataFileSystem CreateSubdirectory(string name)
         {
             string directoryPath = Path.Combine(Directory, SanitiseName(name));
             CheckPath(directoryPath);
             
             System.IO.Directory.CreateDirectory(directoryPath);
+            
+            return new DataFileSystem(directoryPath);
         }
 
         /// <summary>
