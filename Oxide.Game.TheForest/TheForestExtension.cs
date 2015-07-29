@@ -39,6 +39,8 @@ namespace Oxide.Game.TheForest
             "DestroyPickup:",
             "Game Activation Sequence step",
             "Hull (UnityEngine.GameObject)",
+            "LobbyCreated param.m_eResult=k_EResult",
+            "Refreshing Input Mapping Icons",
             "Skin Variation",
             "Skipped frame because",
             "Skipped rendering frame because",
@@ -47,9 +49,11 @@ namespace Oxide.Game.TheForest
             "delaying initial",
             "disableFlying",
             "going black",
+            "null texture passed to GUI.DrawTexture",
             "planeCrash started",
             "setFemale",
-            "setMale"
+            "setMale",
+            "started steam server"
         };
 
         /// <summary>

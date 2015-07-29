@@ -1,6 +1,6 @@
 {
   "Name": "The Forest",
-  "TargetDirectory": "D:\\Servers\\Game\\TheForest\\Latest\\TheForest_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\TheForest\\TheForest_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp",
@@ -8,27 +8,30 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 42,
+            "InjectionIndex": 20,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamServerStarter",
+            "TypeName": "CoopSteamServer",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "BoltStartDone",
-              "ReturnType": "System.Void",
-              "Parameters": []
+              "Name": "Start",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.Action",
+                "System.Action"
+              ]
             },
-            "MSILHash": "K1/tD3fXxu4gVWNc/o03MHDa05qiXY/8G1nI3Xt+X04=",
+            "MSILHash": "X4UtaOA5VLIijIYHLEbQbYGWUrgGvqJIgvqijy2ODsc=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 44,
+            "InjectionIndex": 21,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -36,81 +39,34 @@
             "Name": "InitLogging [internal]",
             "HookName": "InitLogging",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamServerStarter",
+            "TypeName": "CoopSteamServer",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "BoltStartDone",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "K1/tD3fXxu4gVWNc/o03MHDa05qiXY/8G1nI3Xt+X04=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnEntityFrozen",
-            "HookName": "OnEntityFrozen",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopClientCallbacks",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "EntityFrozen",
-              "ReturnType": "System.Void",
+              "Name": "Start",
+              "ReturnType": "System.Boolean",
               "Parameters": [
-                "BoltEntity"
+                "System.Action",
+                "System.Action"
               ]
             },
-            "MSILHash": "Yw6fSe52d3Hx6yh1586gpFSHaKgVmmX7h2PRhbzXHV4=",
+            "MSILHash": "X4UtaOA5VLIijIYHLEbQbYGWUrgGvqJIgvqijy2ODsc=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnEntityThawed",
-            "HookName": "OnEntityThawed",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopClientCallbacks",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "EntityThawed",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "BoltEntity"
-              ]
-            },
-            "MSILHash": "msmvI9GkBFKZd+q7MfQhs8nMTEzIKpMbuVV9IAzM4sQ=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "InjectionIndex": 11,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "OnPlayerChat",
             "HookName": "OnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopServerCallbacks",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "OnEvent",
@@ -127,15 +83,15 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopPlayerCallbacks",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "Connected",
@@ -153,14 +109,14 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnPlayerDisconnected",
             "HookName": "OnPlayerDisconnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopPlayerCallbacks",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "Disconnected",
@@ -169,7 +125,7 @@
                 "BoltConnection"
               ]
             },
-            "MSILHash": "Zvg4oW+UI0zjLANDlbqKU0a0jALnVkhz+ehbxV7sjmA=",
+            "MSILHash": "BAYkqKR9XQnzLNHjKp2qRhTqMGrctv10VdJFN+iehTE=",
             "BaseHookName": null
           }
         },
