@@ -65,7 +65,7 @@ namespace Oxide.Core
             string directoryPath = Path.Combine(Directory, SanitiseName(name));
             CheckPath(directoryPath);
             
-            Directory.CreateDirectory(directoryPath);
+            System.IO.Directory.CreateDirectory(directoryPath);
         }
 
         /// <summary>
