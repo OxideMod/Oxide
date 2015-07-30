@@ -868,7 +868,7 @@
             "HookName": "OnRunCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleSystem/Run",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 3,
               "Name": "Internal",
@@ -894,7 +894,7 @@
             "HookName": "OnRunCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleSystem/Run",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 3,
               "Name": "Unrestricted",
