@@ -1112,7 +1112,7 @@ namespace Oxide.Game.Rust
         /// <param name="trap"></param>
         /// <param name="go"></param>
         [HookMethod("OnTrapSnapped")]
-        private object OnTrapSnapped(BearTrap trap, GameObject go)
+        private object OnTrapSnapped(BaseTrapTrigger trap, GameObject go)
         {
             return Interface.CallDeprecatedHook("OnBearTrapSnapped", trap, go);
         }
