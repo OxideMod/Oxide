@@ -45,7 +45,7 @@ namespace Oxide.Core
         public static object CallHook(string hookname, params object[] args)
         {
             // Call into Oxide core
-            return Oxide.CallHook(hookname, args);
+            return Oxide?.CallHook(hookname, args);
         }
 
         /// <summary>
