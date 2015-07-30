@@ -394,7 +394,17 @@ namespace Oxide.Core
             LogInfo("Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
             {
+                plugin.Loader?.PluginErrors.Remove(plugin.Name);
                 RootPluginManager.AddPlugin(plugin);
+                if (plugin.Loader != null)
+                {
+                    if (plugin.Loader.PluginErrors.ContainsKey(plugin.Name))
+                    {
+                        UnloadPlugin(plugin.Name);
+                        return false;
+                    }
+                }
+                plugin.IsLoaded = true;
                 CallHook("OnPluginLoaded", plugin);
                 return true;
             }
@@ -424,7 +434,8 @@ namespace Oxide.Core
             RootPluginManager.RemovePlugin(plugin);
 
             // Let other plugins know that this plugin has been unloaded
-            CallHook("OnPluginUnloaded", plugin);
+            if (plugin.IsLoaded) CallHook("OnPluginUnloaded", plugin);
+            plugin.IsLoaded = false;
 
             LogInfo("Unloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             return true;

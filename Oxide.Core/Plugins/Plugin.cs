@@ -101,6 +101,11 @@ namespace Oxide.Core.Plugins
         /// </summary>
         public event PluginManagerEvent OnAddedToManager, OnRemovedFromManager;
 
+        /// <summary>
+        /// Has this plugins Init/Loaded hook been called
+        /// </summary>
+        public bool IsLoaded { get; internal set; }
+
         // Used to measure time spent in this plugin
         private float startedAt;
         private float stoppedAt;

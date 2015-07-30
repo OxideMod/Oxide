@@ -10,6 +10,13 @@ using Oxide.Core.Plugins.Watchers;
 
 namespace Oxide.Plugins
 {
+    public class PluginLoadFailure : Exception
+    {
+        public PluginLoadFailure(string reason) : base()
+        {
+        }
+    }
+
     /// <summary>
     /// Allows configuration of plugin info using an attribute above the plugin class
     /// </summary>
@@ -243,14 +250,25 @@ namespace Oxide.Plugins
 
             foreach (var name in pluginReferenceFields.Keys)
                 pluginReferenceFields[name].SetValue(this, manager.GetPlugin(name));
-
-            CallHook("Loaded", null);
+            
+            try
+            {
+                OnCallHook("Loaded", new object[0]);
+            }
+            catch (Exception ex)
+            {
+                Interface.Oxide.LogException("Failed to initialize plugin " + Name, ex);
+                Loader.PluginErrors[Name] = ex.Message;
+            }
         }
 
         public override void HandleRemovedFromManager(PluginManager manager)
         {
-            CallHook("Unloaded", null);
-            CallHook("Unload", null);
+            if (IsLoaded)
+            {
+                CallHook("Unloaded", null);
+                CallHook("Unload", null);
+            }
 
             Watcher.RemoveMapping(Name);
 
@@ -258,6 +276,15 @@ namespace Oxide.Plugins
                 pluginReferenceFields[name].SetValue(this, null);
 
             base.HandleRemovedFromManager(manager);
+        }
+
+        /// <summary>
+        /// Called from Init/Loaded callback to set a failure reason and unload the plugin
+        /// </summary>
+        /// <param name="reason"></param>
+        public void SetFailState(string reason)
+        {
+            throw new PluginLoadFailure(reason);
         }
 
         [HookMethod("OnPluginLoaded")]

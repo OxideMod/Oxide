@@ -81,9 +81,17 @@ namespace Oxide.Core.Plugins
             // Subscribe us
             foreach (string hookname in hooks.Keys)
                 Subscribe(hookname);
-
-            // Let the plugin know that it's loading
-            CallHook("Init", null);
+            
+            try
+            {
+                // Let the plugin know that it's loading
+                OnCallHook("Init", new object[0]);
+            }
+            catch (Exception ex)
+            {
+                Interface.Oxide.LogException("Failed to initialize plugin " + Name, ex);
+                if (Loader != null) Loader.PluginErrors[Name] = ex.Message;
+            }
         }
 
         protected void AddHookMethod(string name, MethodInfo method)
