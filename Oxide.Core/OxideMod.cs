@@ -467,7 +467,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public object CallHook(string hookname, params object[] args)
         {
-            // Forward the call to the plugin manager
+            if (RootPluginManager == null) return null;
             return RootPluginManager.CallHook(hookname, args);
         }
 
@@ -479,6 +479,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public object CallDeprecatedHook(string hookname, params object[] args)
         {
+            if (RootPluginManager == null) return null;
             return RootPluginManager.CallDeprecatedHook(hookname, args);
         }
 
