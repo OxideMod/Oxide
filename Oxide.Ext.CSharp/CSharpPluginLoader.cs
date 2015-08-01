@@ -181,6 +181,12 @@ namespace Oxide.Plugins
                 {
                     var plugin_names = plugins.Select(pl => pl.Name);
                     var standalone_plugins = plugins.Where(pl => !pl.Requires.Any(r => plugin_names.Contains(r))).ToArray();
+                    foreach (var plugin in standalone_plugins) plugins.Remove(plugin);
+                    foreach (var plugin in plugins)
+                    {
+                        plugin.OnCompilationFailed();
+                        PluginErrors[plugin.Name] = "Batch containing dependencies failed to compile";
+                    }
                     if (standalone_plugins.Length < 1)
                     {
                         Interface.Oxide.LogError($"A batch of {plugins.Count} plugins failed to compile");
