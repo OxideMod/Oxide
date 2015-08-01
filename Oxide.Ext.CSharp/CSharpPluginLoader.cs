@@ -177,11 +177,17 @@ namespace Oxide.Plugins
             var plugins = new List<CompilablePlugin>(plugs);
             compiler.Compile(plugins, (raw_assembly, duration) =>
             {
-                //var plugin_names = compiler.Plugins.Select(p => p.Name).ToSentence();
                 if (plugins.Count > 1 && raw_assembly == null)
                 {
+                    var plugin_names = plugins.Select(pl => pl.Name);
+                    var standalone_plugins = plugins.Where(pl => !pl.Requires.Any(r => plugin_names.Contains(r))).ToArray();
+                    if (standalone_plugins.Length < 1)
+                    {
+                        Interface.Oxide.LogError($"A batch of {plugins.Count} plugins failed to compile");
+                        return;
+                    }
                     Interface.Oxide.LogError($"A batch of {plugins.Count} plugins failed to compile, attempting to compile separately");
-                    foreach (var plugin in plugins) CompileAssembly(new[] { plugin });
+                    foreach (var plugin in standalone_plugins) CompileAssembly(new[] { plugin });
                     return;
                 }
                 if (raw_assembly == null)

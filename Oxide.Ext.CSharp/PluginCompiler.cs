@@ -64,6 +64,12 @@ namespace Oxide.Plugins
             public float endedAt;
             public HashSet<string> references;
             public float Duration => endedAt - startedAt;
+
+            public bool DidPluginSucceed(string name)
+            {
+                var compilable_plugin = plugins.SingleOrDefault(pl => pl.Name == name);
+                return compilable_plugin != null && compilable_plugin.CompilerErrors == null;
+            }
         }
 
         public PluginCompiler()
@@ -355,7 +361,7 @@ namespace Oxide.Plugins
                                     Interface.Oxide.LogError("Unable to resolve script error to plugin: " + line);
                                     continue;
                                 }
-                                var missing_requirements = compilable_plugin.Requires.Where(name => compilation.plugins.Single(pl => pl.Name == name).CompilerErrors != null).ToArray();
+                                var missing_requirements = compilable_plugin.Requires.Where(name => !compilation.DidPluginSucceed(name)).ToArray();
                                 if (missing_requirements.Length > 0)
                                     compilable_plugin.CompilerErrors = $"{compilable_plugin.ScriptName}'s dependencies: {missing_requirements.ToSentence()}";
                                 else
