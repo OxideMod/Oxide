@@ -16,6 +16,7 @@ namespace Oxide.Plugins
 {
     public class PluginCompiler
     {
+        public static bool AutoShutdown = true;
         public static string BinaryPath;
 
         public static void CheckCompilerBinary()
@@ -372,7 +373,7 @@ namespace Oxide.Plugins
                     Interface.Oxide.NextTick(() => compilation.callback((byte[])message.Data, compilation.Duration));
                     pluginComp.Remove(message.Id);
                     idleTimer?.Destroy();
-                    idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
+                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
                     break;
                 case CompilerMessageType.Error:
                     Interface.Oxide.LogError("Compilation error: {0}", message.Data);
@@ -380,7 +381,7 @@ namespace Oxide.Plugins
                     Interface.Oxide.NextTick(() => comp.callback(null, 0));
                     pluginComp.Remove(message.Id);
                     idleTimer?.Destroy();
-                    idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
+                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
                     break;
                 case CompilerMessageType.Ready:
                     connection.PushMessage(message);

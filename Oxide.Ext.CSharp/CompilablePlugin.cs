@@ -7,12 +7,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using Oxide.Core;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Plugins
 {
     public class CompilablePlugin
     {
         public CSharpExtension Extension;
+        public CSharpPluginLoader Loader;
         public string Name;
         public string Directory;
         public string ScriptName;
@@ -33,9 +35,10 @@ namespace Oxide.Plugins
         private Action<bool> compileCallback;
         private float compilationQueuedAt;
 
-        public CompilablePlugin(CSharpExtension extension, string directory, string name)
+        public CompilablePlugin(CSharpExtension extension, CSharpPluginLoader loader, string directory, string name)
         {
             Extension = extension;
+            Loader = loader;
             Directory = directory;
             ScriptName = name;
             Name = Regex.Replace(Regex.Replace(ScriptName, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
@@ -138,6 +141,7 @@ namespace Oxide.Plugins
 
                 plugin.SetPluginInfo(ScriptName, ScriptPath);
                 plugin.Watcher = Extension.Watcher;
+                plugin.Loader = Loader;
 
                 if (!Interface.Oxide.PluginLoaded(plugin))
                 {

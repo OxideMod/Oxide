@@ -13,6 +13,7 @@ namespace Oxide.Plugins
     {
         public static string[] DefaultReferences = { "mscorlib", "System", "System.Core", "System.Data", "Oxide.Core", "Oxide.Ext.CSharp" };
         public static HashSet<string> PluginReferences = new HashSet<string>(DefaultReferences);
+        public static CSharpPluginLoader Instance;
         private static Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
         private static CSharpExtension extension;
 
@@ -22,7 +23,7 @@ namespace Oxide.Plugins
             CompilablePlugin plugin;
             if (!plugins.TryGetValue(class_name, out plugin))
             {
-                plugin = new CompilablePlugin(extension, directory, name);
+                plugin = new CompilablePlugin(extension, Instance, directory, name);
                 plugins[class_name] = plugin;
             }
             return plugin;
@@ -33,6 +34,7 @@ namespace Oxide.Plugins
 
         public CSharpPluginLoader(CSharpExtension extension)
         {
+            Instance = this;
             CSharpPluginLoader.extension = extension;
             PluginCompiler.CheckCompilerBinary();
             compiler = new PluginCompiler();
@@ -83,11 +85,7 @@ namespace Oxide.Plugins
                     compilable_plugin.LoadPlugin(plugin =>
                     {
                         LoadingPlugins.Remove(name);
-                        if (plugin != null)
-                        {
-                            plugin.Loader = this;
-                            LoadedPlugins[compilable_plugin.Name] = plugin;
-                        }
+                        if (plugin != null) LoadedPlugins[compilable_plugin.Name] = plugin;
                     });
                 else
                 {
@@ -207,14 +205,21 @@ namespace Oxide.Plugins
                 }
                 else
                 {
-                    var compiled_plugins = plugins.Where(pl => pl.CompilerErrors == null).ToArray();
-                    CompiledAssembly compiled_assembly = null;
-                    if (compiled_plugins.Length > 0)
+                    var compiled_plugins = plugins.Where(pl => pl.CompilerErrors == null).ToList();
+                    var compiled_names = compiled_plugins.Select(pl => pl.Name).ToArray();
+                    compiled_plugins.RemoveAll(plugin =>
                     {
-                        var compiled_names = compiled_plugins.Select(pl => pl.Name).ToSentence();
-                        var verb = compiled_plugins.Length > 1 ? "were" : "was";
-                        Interface.Oxide.LogInfo($"{compiled_names} {verb} compiled successfully in {Math.Round(duration * 1000f)}ms");
-                        compiled_assembly = new CompiledAssembly(compiled_plugins, raw_assembly);
+                        var failed_names = plugin.Requires.Where(name => !compiled_names.Contains(name)).ToArray();
+                        if (failed_names.Length < 1) return false;
+                        PluginErrors[plugin.Name] = "Dependencies failed to compile: " + failed_names.ToSentence();
+                        return true;
+                    });
+                    CompiledAssembly compiled_assembly = null;
+                    if (compiled_plugins.Count > 0)
+                    {
+                        var verb = compiled_plugins.Count > 1 ? "were" : "was";
+                        Interface.Oxide.LogInfo($"{compiled_names.ToSentence()} {verb} compiled successfully in {Math.Round(duration * 1000f)}ms");
+                        compiled_assembly = new CompiledAssembly(compiled_plugins.ToArray(), raw_assembly);
                     }
                     foreach (var plugin in plugins)
                     {
