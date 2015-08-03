@@ -20,6 +20,7 @@ namespace Oxide.Plugins
     {
         public CompilablePlugin[] CompilablePlugins;
         public string[] PluginNames;
+        public string Name;
         public byte[] RawAssembly;
         public Assembly LoadedAssembly;
         public bool IsLoading;
@@ -40,8 +41,9 @@ namespace Oxide.Plugins
             "System.Security.Cryptography"
         };
 
-        public CompiledAssembly(CompilablePlugin[] plugins, byte[] raw_assembly)
+        public CompiledAssembly(string name, CompilablePlugin[] plugins, byte[] raw_assembly)
         {
+            Name = name;
             CompilablePlugins = plugins;
             RawAssembly = raw_assembly;
             PluginNames = CompilablePlugins.Select(pl => pl.Name).ToArray();

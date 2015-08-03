@@ -173,7 +173,7 @@ namespace Oxide.Plugins
         {
             foreach (var pl in plugs) pl.OnCompilationStarted(compiler);
             var plugins = new List<CompilablePlugin>(plugs);
-            compiler.Compile(plugins, (raw_assembly, duration) =>
+            compiler.Compile(plugins, (assembly_name, raw_assembly, duration) =>
             {
                 if (plugins.Count > 1 && raw_assembly == null)
                 {
@@ -219,7 +219,7 @@ namespace Oxide.Plugins
                     {
                         var verb = compiled_plugins.Count > 1 ? "were" : "was";
                         Interface.Oxide.LogInfo($"{compiled_names.ToSentence()} {verb} compiled successfully in {Math.Round(duration * 1000f)}ms");
-                        compiled_assembly = new CompiledAssembly(compiled_plugins.ToArray(), raw_assembly);
+                        compiled_assembly = new CompiledAssembly(assembly_name, compiled_plugins.ToArray(), raw_assembly);
                     }
                     foreach (var plugin in plugins)
                     {
