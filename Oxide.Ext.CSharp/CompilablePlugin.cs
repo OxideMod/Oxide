@@ -7,12 +7,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using Oxide.Core;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Plugins
 {
     public class CompilablePlugin
     {
         public CSharpExtension Extension;
+        public CSharpPluginLoader Loader;
         public string Name;
         public string Directory;
         public string ScriptName;
@@ -27,27 +29,24 @@ namespace Oxide.Plugins
         public CompiledAssembly LastGoodAssembly;
         public DateTime LastModifiedAt;
         public DateTime LastCompiledAt;
+        public bool IsCompilationNeeded;
         public bool IsReloading;
 
         private Action<CSharpPlugin> loadCallback;
         private Action<bool> compileCallback;
         private float compilationQueuedAt;
 
-        public CompilablePlugin(CSharpExtension extension, string directory, string name)
+        public byte[] ScriptSource => ScriptEncoding.GetBytes(string.Join(Environment.NewLine, ScriptLines));
+
+        public CompilablePlugin(CSharpExtension extension, CSharpPluginLoader loader, string directory, string name)
         {
             Extension = extension;
+            Loader = loader;
             Directory = directory;
             ScriptName = name;
             Name = Regex.Replace(Regex.Replace(ScriptName, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
             ScriptPath = string.Format("{0}\\{1}.cs", Directory, ScriptName);
             CheckLastModificationTime();
-        }
-
-        public bool HasBeenModified()
-        {
-            var last_modified_at = LastModifiedAt;
-            CheckLastModificationTime();
-            return LastModifiedAt != last_modified_at;
         }
 
         public void Compile(Action<bool> callback, bool queue_compilation = true)
@@ -138,6 +137,7 @@ namespace Oxide.Plugins
 
                 plugin.SetPluginInfo(ScriptName, ScriptPath);
                 plugin.Watcher = Extension.Watcher;
+                plugin.Loader = Loader;
 
                 if (!Interface.Oxide.PluginLoaded(plugin))
                 {
@@ -158,6 +158,7 @@ namespace Oxide.Plugins
 
         public void OnCompilationSucceeded(CompiledAssembly compiled_assembly)
         {
+            IsCompilationNeeded = false;
             compilationQueuedAt = 0f;
             CompiledAssembly = compiled_assembly;
             compileCallback(true);
@@ -165,6 +166,7 @@ namespace Oxide.Plugins
 
         public void OnCompilationFailed()
         {
+            IsCompilationNeeded = false;
             compilationQueuedAt = 0f;
             LastCompiledAt = default(DateTime);
             compileCallback(false);
@@ -190,16 +192,36 @@ namespace Oxide.Plugins
             OnPluginFailed();
         }
 
+        public bool IsCompiledAssemblyOutdated()
+        {
+            var last_modified_at = GetLastModificationTime();
+            return last_modified_at != default(DateTime) && last_modified_at != LastCompiledAt;
+        }
+
+        public bool HasBeenModified()
+        {
+            var last_modified_at = LastModifiedAt;
+            CheckLastModificationTime();
+            return LastModifiedAt != last_modified_at;
+        }
+
         private void CheckLastModificationTime()
         {
             if (!File.Exists(ScriptPath)) return;
+            var modified_time = GetLastModificationTime();
+            if (modified_time != default(DateTime)) LastModifiedAt = modified_time;
+        }
+
+        private DateTime GetLastModificationTime()
+        {
             try
             {
-                LastModifiedAt = File.GetLastWriteTime(ScriptPath);
+                return File.GetLastWriteTime(ScriptPath);
             }
             catch (IOException ex)
             {
                 Interface.Oxide.LogError("IOException while checking plugin: {0} ({1})", ScriptName, ex.Message);
+                return default(DateTime);
             }
         }
     }

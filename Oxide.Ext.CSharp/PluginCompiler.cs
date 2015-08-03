@@ -16,6 +16,7 @@ namespace Oxide.Plugins
 {
     public class PluginCompiler
     {
+        public static bool AutoShutdown = true;
         public static string BinaryPath;
 
         public static void CheckCompilerBinary()
@@ -58,12 +59,33 @@ namespace Oxide.Plugins
 
         class Compilation
         {
-            public Action<byte[], float> callback;
+            public string name;
+            public Action<string, byte[], float> callback;
             public List<CompilablePlugin> plugins;
             public float startedAt;
             public float endedAt;
-            public HashSet<string> references;
+            public HashSet<CompilerFile> references;
+            public HashSet<string> referencedPlugins = new HashSet<string>();
             public float Duration => endedAt - startedAt;
+
+            public void Started()
+            {
+                startedAt = Interface.Oxide.Now;
+                name = (plugins.Count == 1 ? plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 10000000f) + ".dll";
+            }
+
+            public void Completed(byte[] raw_assembly = null)
+            {
+                endedAt = Interface.Oxide.Now;
+                Interface.Oxide.NextTick(() => callback(name, raw_assembly, Duration));
+            }
+
+            public bool IncludesRequiredPlugin(string name)
+            {
+                if (referencedPlugins.Contains(name)) return true;
+                var compilable_plugin = plugins.SingleOrDefault(pl => pl.Name == name);
+                return compilable_plugin != null && compilable_plugin.CompilerErrors == null;
+            }
         }
 
         public PluginCompiler()
@@ -75,13 +97,18 @@ namespace Oxide.Plugins
         public void ResolveReferences(int currentId, Action callback)
         {
             var compilation = pluginComp[currentId];
-            // Include references made by the CSharpPlugins project
-            compilation.references = new HashSet<string>(CSharpPluginLoader.PluginReferences);
 
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 try
                 {
+                    compilation.referencedPlugins.Clear();
+
+                    // Include references made by the CSharpPlugins project
+                    compilation.references = new HashSet<CompilerFile>(
+                        CSharpPluginLoader.PluginReferences.Select(name => new CompilerFile(Interface.Oxide.ExtensionDirectory, name + ".dll"))
+                    );
+
                     CacheAllScripts(compilation.plugins);
 
                     var extension_names = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
@@ -129,38 +156,67 @@ namespace Oxide.Plugins
                             else
                             {
                                 // Include explicit plugin dependencies defined by magic comments in script
-                                match = Regex.Match(line, @"^//\s*Requires:\s*(\S+)\s*$", RegexOptions.IgnoreCase);
+                                match = Regex.Match(line, @"^//\s*Requires:\s*(\S+?)(\.cs)?\s*$", RegexOptions.IgnoreCase);
                                 if (match.Success)
                                 {
                                     var dependency_name = match.Groups[1].Value;
-                                    Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
                                     plugin.Requires.Add(dependency_name);
+                                    var directory = compilation.plugins[0].Directory;
+                                    if (!File.Exists($"{directory}\\{dependency_name}.cs"))
+                                    {
+                                        var message = $"{plugin.Name} plugin requires missing dependency: {dependency_name}";
+                                        Interface.Oxide.LogError(message);
+                                        plugin.CompilerErrors = message;
+                                        RemovePlugin(compilation.plugins, plugin);
+                                        break;
+                                    }
+                                    Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
                                     if (!compilation.plugins.Any(pl => pl.Name == dependency_name))
                                     {
-                                        var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(compilation.plugins[0].Directory, dependency_name);
-                                        if (compilable_plugin.IsReloading)
+                                        // The dependency is not currently a plugin which is added to this compilation
+                                        var dependency_plugin = CSharpPluginLoader.GetCompilablePlugin(directory, dependency_name);
+                                        if (dependency_plugin.IsReloading)
                                         {
                                             Interface.Oxide.LogDebug("Dependency is already reloading: " + dependency_name);
                                             continue;
                                         }
-                                        compilable_plugin.IsReloading = true;
-                                        compilable_plugin.OnCompilationStarted(this);
-                                        compilable_plugin.Compile((compiled) =>
+                                        if (dependency_plugin.CompiledAssembly != null && !dependency_plugin.CompiledAssembly.CompilablePlugins.Any(pl => pl.IsCompiledAssemblyOutdated()))
                                         {
-                                            if (!compiled)
+                                            // The dependency already has a compiled assembly which is up to date
+                                            compilation.referencedPlugins.Add(dependency_plugin.Name);
+                                            var compiled_dependency = dependency_plugin.CompiledAssembly;
+                                            if (compilation.references.Any(r => r.Name == compiled_dependency.Name))
                                             {
-                                                Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", dependency_name);
-                                                compilable_plugin.IsReloading = false;
-                                                return;
+                                                Interface.Oxide.LogDebug($"Dependency is already compiled: {dependency_name} (already referenced)");
                                             }
-                                            Interface.Oxide.UnloadPlugin(dependency_name);
-                                            // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
-                                            Interface.Oxide.NextTick(() =>
+                                            else
+                                            { 
+                                                Interface.Oxide.LogDebug($"Dependency is already compiled: {dependency_name} (adding as reference)");
+                                                compilation.references.Add(new CompilerFile(compiled_dependency.Name, compiled_dependency.RawAssembly));
+                                            }
+                                        }
+                                        else
+                                        {
+                                            // The dependency needs to be compiled
+                                            dependency_plugin.IsReloading = true;
+                                            dependency_plugin.OnCompilationStarted(this);
+                                            dependency_plugin.Compile((compiled) =>
                                             {
-                                                if (!Interface.Oxide.LoadPlugin(dependency_name)) compilable_plugin.IsReloading = false;
-                                            });
-                                        }, false);
-                                        compilation.plugins.Insert(0, compilable_plugin);
+                                                if (!compiled)
+                                                {
+                                                    Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", dependency_name);
+                                                    dependency_plugin.IsReloading = false;
+                                                    return;
+                                                }
+                                                Interface.Oxide.UnloadPlugin(dependency_name);
+                                                // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
+                                                Interface.Oxide.NextTick(() =>
+                                                {
+                                                    if (!Interface.Oxide.LoadPlugin(dependency_name)) dependency_plugin.IsReloading = false;
+                                                });
+                                            }, false);
+                                            compilation.plugins.Insert(0, dependency_plugin);
+                                        }
                                     }
                                     continue;
                                 }
@@ -255,35 +311,36 @@ namespace Oxide.Plugins
                 return;
             }
 
-            compilation.references.Add(assembly_name);
+            compilation.references.Add(new CompilerFile(Interface.Oxide.ExtensionDirectory, assembly_name + ".dll"));
             plugin.References.Add(assembly_name);
 
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
-                if (!File.Exists(string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference.Name)))
+                var reference_path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference.Name);
+                if (!File.Exists(reference_path))
                 {
                     Interface.Oxide.LogWarning("Reference {0}.dll from {1}.dll not found.", reference.Name, assembly.GetName().Name);
                     continue;
                 }
-                compilation.references.Add(reference.Name);
+                compilation.references.Add(new CompilerFile(Interface.Oxide.ExtensionDirectory, reference.Name + ".dll"));
                 plugin.References.Add(reference.Name);
             }
         }
 
-        public void Compile(List<CompilablePlugin> plugins, Action<byte[], float> callback)
+        public void Compile(List<CompilablePlugin> plugins, Action<string, byte[], float> callback)
         {
             var currentId = lastId++;
-            pluginComp[currentId] = new Compilation {callback = callback, plugins = plugins};
+            pluginComp[currentId] = new Compilation { callback = callback, plugins = plugins };
             if (!CheckCompiler())
             {
-                foreach (var value in pluginComp.Values)
+                foreach (var compilation in pluginComp.Values)
                 {
-                    foreach (var plugin in value.plugins)
+                    foreach (var plugin in compilation.plugins)
                     {
                         plugin.CompilerErrors = "Compiler couldn't be started.";
                     }
-                    Interface.Oxide.NextTick(() => value.callback(new byte[0], 0));
+                    compilation.Completed();
                 }
                 pluginComp.Clear();
                 return;
@@ -300,20 +357,16 @@ namespace Oxide.Plugins
         private void SpawnCompiler(int currentId)
         {
             var compilation = pluginComp[currentId];
-            compilation.startedAt = Interface.Oxide.Now;
-            var referenceFiles = new List<CompilerFile>(compilation.references.Count);
-            referenceFiles.AddRange(compilation.references.Select(reference_name => new CompilerFile { Name = reference_name + ".dll", Data = File.ReadAllBytes(Path.Combine(Interface.Oxide.ExtensionDirectory, reference_name + ".dll")) }));
-
-            var sourceFiles = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Distinct().Select(includePath => new CompilerFile { Name = Path.GetFileName(includePath), Data = File.ReadAllBytes(includePath) }).ToList();
-            sourceFiles.AddRange(compilation.plugins.Select(plugin => new CompilerFile { Name = plugin.ScriptName + ".cs", Data = plugin.ScriptEncoding.GetBytes(string.Join(Environment.NewLine, plugin.ScriptLines)) }));
-
+            compilation.Started();
+            var source_files = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Distinct().Select(path => new CompilerFile(path)).ToList();
+            source_files.AddRange(compilation.plugins.Select(plugin => new CompilerFile(plugin.ScriptName + ".cs", plugin.ScriptSource)));
             var compilerData = new CompilerData
             {
-                OutputFile = (compilation.plugins.Count == 1 ? compilation.plugins[0].Name : "plugins_") + Math.Round(Interface.Oxide.Now * 10000000f) + ".dll",
-                SourceFiles = sourceFiles.ToArray(),
-                ReferenceFiles = referenceFiles.ToArray()
+                OutputFile = compilation.name,
+                SourceFiles = source_files.ToArray(),
+                ReferenceFiles = compilation.references.ToArray()
             };
-            var message = new CompilerMessage {Id = currentId, Data = compilerData, Type = CompilerMessageType.Compile};
+            var message = new CompilerMessage { Id = currentId, Data = compilerData, Type = CompilerMessageType.Compile };
             if (ready)
                 client.PushMessage(message);
             else
@@ -355,26 +408,25 @@ namespace Oxide.Plugins
                                     Interface.Oxide.LogError("Unable to resolve script error to plugin: " + line);
                                     continue;
                                 }
-                                var missing_requirements = compilable_plugin.Requires.Where(name => compilation.plugins.Single(pl => pl.Name == name).CompilerErrors != null).ToArray();
-                                if (missing_requirements.Length > 0)
+                                var missing_requirements = compilable_plugin.Requires.Where(name => !compilation.IncludesRequiredPlugin(name));
+                                if (missing_requirements.Any())
                                     compilable_plugin.CompilerErrors = $"{compilable_plugin.ScriptName}'s dependencies: {missing_requirements.ToSentence()}";
                                 else
                                     compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
                             }
                         }
                     }
-                    Interface.Oxide.NextTick(() => compilation.callback((byte[])message.Data, compilation.Duration));
+                    compilation.Completed((byte[])message.Data);
                     pluginComp.Remove(message.Id);
                     idleTimer?.Destroy();
-                    idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
+                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
                     break;
                 case CompilerMessageType.Error:
                     Interface.Oxide.LogError("Compilation error: {0}", message.Data);
-                    var comp = pluginComp[message.Id];
-                    Interface.Oxide.NextTick(() => comp.callback(null, 0));
+                    pluginComp[message.Id].Completed();
                     pluginComp.Remove(message.Id);
                     idleTimer?.Destroy();
-                    idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
+                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
                     break;
                 case CompilerMessageType.Ready:
                     connection.PushMessage(message);
@@ -393,10 +445,10 @@ namespace Oxide.Plugins
             //clear old logs
             try
             {
-                var filePaths = Directory.GetFiles(Interface.Oxide.RootDirectory, "*.txt").Where(f =>
+                var filePaths = Directory.GetFiles(Interface.Oxide.LogDirectory, "*.txt").Where(f =>
                 {
                     var fileName = Path.GetFileName(f);
-                    return fileName != null && fileName.StartsWith("compiler_log_");
+                    return fileName != null && fileName.StartsWith("compiler_");
                 });
                 foreach (var filePath in filePaths)
                     File.Delete(filePath);
@@ -492,8 +544,13 @@ namespace Oxide.Plugins
 
         private void RemovePlugin(List<CompilablePlugin> plugins, CompilablePlugin plugin)
         {
-            plugins.Remove(plugin);
+            if (!plugins.Remove(plugin)) return;
             plugin.OnCompilationFailed();
+            // Remove plugins which are required by this plugin if they are only being compiled for this requirement
+            foreach (var required_plugin in plugins.Where(pl => !pl.IsCompilationNeeded && plugin.Requires.Contains(pl.Name)).ToArray())
+            {
+                if (!plugins.Any(pl => pl.Requires.Contains(required_plugin.Name))) RemovePlugin(plugins, required_plugin);
+            }
         }
 
         public void OnShutdown()
