@@ -136,38 +136,50 @@ namespace Oxide.Plugins
                             else
                             {
                                 // Include explicit plugin dependencies defined by magic comments in script
-                                match = Regex.Match(line, @"^//\s*Requires:\s*(\S+)\s*$", RegexOptions.IgnoreCase);
+                                match = Regex.Match(line, @"^//\s*Requires:\s*(\S+?)(\.cs)?\s*$", RegexOptions.IgnoreCase);
                                 if (match.Success)
                                 {
                                     var dependency_name = match.Groups[1].Value;
-                                    Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
                                     plugin.Requires.Add(dependency_name);
-                                    if (!compilation.plugins.Any(pl => pl.Name == dependency_name))
+                                    var directory = compilation.plugins[0].Directory;
+                                    if (File.Exists($"{directory}\\{dependency_name}.cs"))
                                     {
-                                        var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(compilation.plugins[0].Directory, dependency_name);
-                                        if (compilable_plugin.IsReloading)
+                                        Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
+                                        if (!compilation.plugins.Any(pl => pl.Name == dependency_name))
                                         {
-                                            Interface.Oxide.LogDebug("Dependency is already reloading: " + dependency_name);
-                                            continue;
-                                        }
-                                        compilable_plugin.IsReloading = true;
-                                        compilable_plugin.OnCompilationStarted(this);
-                                        compilable_plugin.Compile((compiled) =>
-                                        {
-                                            if (!compiled)
+                                            var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(directory, dependency_name);
+                                            if (compilable_plugin.IsReloading)
                                             {
-                                                Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", dependency_name);
-                                                compilable_plugin.IsReloading = false;
-                                                return;
+                                                Interface.Oxide.LogDebug("Dependency is already reloading: " + dependency_name);
+                                                continue;
                                             }
-                                            Interface.Oxide.UnloadPlugin(dependency_name);
-                                            // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
-                                            Interface.Oxide.NextTick(() =>
+                                            compilable_plugin.IsReloading = true;
+                                            compilable_plugin.OnCompilationStarted(this);
+                                            compilable_plugin.Compile((compiled) =>
                                             {
-                                                if (!Interface.Oxide.LoadPlugin(dependency_name)) compilable_plugin.IsReloading = false;
-                                            });
-                                        }, false);
-                                        compilation.plugins.Insert(0, compilable_plugin);
+                                                if (!compiled)
+                                                {
+                                                    Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", dependency_name);
+                                                    compilable_plugin.IsReloading = false;
+                                                    return;
+                                                }
+                                                Interface.Oxide.UnloadPlugin(dependency_name);
+                                                // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
+                                                Interface.Oxide.NextTick(() =>
+                                                {
+                                                    if (!Interface.Oxide.LoadPlugin(dependency_name)) compilable_plugin.IsReloading = false;
+                                                });
+                                            }, false);
+                                            compilation.plugins.Insert(0, compilable_plugin);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var message = $"{plugin.Name} plugin requires dependency: {dependency_name} (dependency does not exist)";
+                                        Interface.Oxide.LogError(message);
+                                        plugin.CompilerErrors = message;
+                                        RemovePlugin(compilation.plugins, plugin);
+                                        break;
                                     }
                                     continue;
                                 }
