@@ -544,8 +544,13 @@ namespace Oxide.Plugins
 
         private void RemovePlugin(List<CompilablePlugin> plugins, CompilablePlugin plugin)
         {
-            plugins.Remove(plugin);
+            if (!plugins.Remove(plugin)) return;
             plugin.OnCompilationFailed();
+            // Remove plugins which are required by this plugin if they are only being compiled for this requirement
+            foreach (var required_plugin in plugins.Where(pl => !pl.IsCompilationNeeded && plugin.Requires.Contains(pl.Name)).ToArray())
+            {
+                if (!plugins.Any(pl => pl.Requires.Contains(required_plugin.Name))) RemovePlugin(plugins, required_plugin);
+            }
         }
 
         public void OnShutdown()

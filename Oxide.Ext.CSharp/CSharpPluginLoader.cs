@@ -159,6 +159,7 @@ namespace Oxide.Plugins
                     compilationQueue.Clear();
                 });
             }
+            plugin.IsCompilationNeeded = true;
             compilationQueue.Add(plugin);
             // Enqueue compilation of any plugins which depend on this plugin
             foreach (var compilable_plugin in plugins.Values.Where(pl => pl.Requires.Contains(plugin.Name)))

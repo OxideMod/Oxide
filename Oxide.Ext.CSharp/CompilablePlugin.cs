@@ -29,6 +29,7 @@ namespace Oxide.Plugins
         public CompiledAssembly LastGoodAssembly;
         public DateTime LastModifiedAt;
         public DateTime LastCompiledAt;
+        public bool IsCompilationNeeded;
         public bool IsReloading;
 
         private Action<CSharpPlugin> loadCallback;
@@ -157,6 +158,7 @@ namespace Oxide.Plugins
 
         public void OnCompilationSucceeded(CompiledAssembly compiled_assembly)
         {
+            IsCompilationNeeded = false;
             compilationQueuedAt = 0f;
             CompiledAssembly = compiled_assembly;
             compileCallback(true);
@@ -164,6 +166,7 @@ namespace Oxide.Plugins
 
         public void OnCompilationFailed()
         {
+            IsCompilationNeeded = false;
             compilationQueuedAt = 0f;
             LastCompiledAt = default(DateTime);
             compileCallback(false);
