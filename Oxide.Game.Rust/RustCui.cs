@@ -4,6 +4,7 @@ using System.ComponentModel;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,14 +13,19 @@ namespace Oxide.Game.Rust.Cui
 {
     public static class CuiHelper
     {
-        public static string CreateJson(List<CuiElement> elements)
+        public static string ToJson(List<CuiElement> elements, bool format = false)
         {
             return JsonConvert.SerializeObject(elements,
-                Formatting.Indented,
+                format ? Formatting.Indented : Formatting.None,
                 new JsonSerializerSettings
                 {
                     DefaultValueHandling = DefaultValueHandling.Ignore
                 });
+        }
+
+        public static List<CuiElement> FromJson(string json)
+        {
+            return JsonConvert.DeserializeObject<List<CuiElement>>(json);
         }
 
         public static string GetGuid()
@@ -30,14 +36,14 @@ namespace Oxide.Game.Rust.Cui
         public static bool AddUi(BasePlayer player, List<CuiElement> elements)
         {
             if (player?.net == null) return false;
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", CreateJson(elements));
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", ToJson(elements));
             return true;
         }
 
         public static bool DestroyUi(BasePlayer player, string elem)
         {
             if (player?.net == null) return false;
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo { connection = player.net.connection }, null, "DestroyUI", elem);
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", elem);
             return true;
         }
 
@@ -54,7 +60,6 @@ namespace Oxide.Game.Rust.Cui
 
     public class CuiElementContainer : List<CuiElement>
     {
-
         public string Add(CuiButton button, string parent = "Overlay", string name = null)
         {
             if (string.IsNullOrEmpty(name)) name = CuiHelper.GetGuid();
@@ -125,7 +130,7 @@ namespace Oxide.Game.Rust.Cui
 
         public override string ToString()
         {
-            return CuiHelper.CreateJson(this);
+            return CuiHelper.ToJson(this);
         }
     }
 
@@ -166,6 +171,7 @@ namespace Oxide.Game.Rust.Cui
         public float FadeOut { get; set; }
     }
 
+    [JsonConverter(typeof (ComponentConverter))]
     public interface ICuiComponent
     {
         [JsonProperty("type")]
@@ -225,7 +231,7 @@ namespace Oxide.Game.Rust.Cui
         public string Color { get; set; } = "1.0 1.0 1.0 1.0";
 
         [DefaultValue(Image.Type.Simple)]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof (StringEnumConverter))]
         [JsonProperty("imagetype")]
         public Image.Type ImageType { get; set; } = Image.Type.Simple;
 
@@ -283,7 +289,7 @@ namespace Oxide.Game.Rust.Cui
 
         //How the Image is draw.
         [DefaultValue(Image.Type.Simple)]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof (StringEnumConverter))]
         [JsonProperty("imagetype")]
         public Image.Type ImageType { get; set; } = Image.Type.Simple;
 
@@ -337,5 +343,56 @@ namespace Oxide.Game.Rust.Cui
         [DefaultValue("1.0 1.0")]
         [JsonProperty("offsetmax")]
         public string OffsetMax { get; set; } = "1.0 1.0";
+    }
+
+    public class ComponentConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var jObject = JObject.Load(reader);
+            var typeName = jObject["type"].ToString();
+            Type type;
+            switch (typeName)
+            {
+                case "UnityEngine.UI.Text":
+                    type = typeof (CuiTextComponent);
+                    break;
+                case "UnityEngine.UI.Image":
+                    type = typeof (CuiImageComponent);
+                    break;
+                case "UnityEngine.UI.RawImage":
+                    type = typeof (CuiRawImageComponent);
+                    break;
+                case "UnityEngine.UI.Button":
+                    type = typeof (CuiButtonComponent);
+                    break;
+                case "UnityEngine.UI.Outline":
+                    type = typeof (CuiOutlineComponent);
+                    break;
+                case "NeedsCursor":
+                    type = typeof (CuiNeedsCursorComponent);
+                    break;
+                case "RectTransform":
+                    type = typeof (CuiRectTransformComponent);
+                    break;
+                default:
+                    return null;
+            }
+            var target = Activator.CreateInstance(type);
+            serializer.Populate(jObject.CreateReader(), target);
+            return target;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof (ICuiComponent);
+        }
+
+        public override bool CanWrite => false;
     }
 }
