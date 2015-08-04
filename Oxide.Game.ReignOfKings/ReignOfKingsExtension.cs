@@ -62,9 +62,11 @@ namespace Oxide.Game.ReignOfKings
             "Destroying self because the given entity is",
             "Failed to apply setting to DrawDistanceQuality",
             "Flow controller warning:",
+            "FORM IS UnityEngine.WWWForm",
             "HDR RenderTexture",
             "HDR and MultisampleAntiAliasing",
             "Instantiating Base and Dedicated",
+            "IT WORKED???",
             "Load Server GUID:",
             "Loading: ",
             "Lobby query failed.",
@@ -79,7 +81,6 @@ namespace Oxide.Game.ReignOfKings
             "Save Server GUID:",
             "Serialization settings set successfully",
             "Server has connected.",
-            "ServerLobbyModule.cs",
             "Setting breakpad minidump AppID",
             "Standard Deviation:",
             "SteamInitializeFailed",
@@ -104,6 +105,9 @@ namespace Oxide.Game.ReignOfKings
             "linkedTo == null",
             "m_guiCamera == null",
             "melee == null",
+            "in ServerLobbyModule",
+            "online is True",
+            "this is a local server",
             "with authkey System.Byte[]"
         };
 
