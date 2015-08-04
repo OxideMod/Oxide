@@ -143,12 +143,12 @@ namespace Oxide.Ext.JavaScript.Plugins
             Class.FastAddProperty("Plugin", JsValue.FromObject(JavaScriptEngine, this), true, false, true);
 
             Globals = new Dictionary<string, ICallable>();
-            foreach (var property in Class.Properties)
+            foreach (var property in Class.GetOwnProperties())
             {
                 var callable = property.Value.Value?.TryCast<ICallable>();
                 if (callable != null) Globals.Add(property.Key, callable);
             }
-            foreach (var property in Class.Prototype.Properties)
+            foreach (var property in Class.Prototype.GetOwnProperties())
             {
                 var callable = property.Value.Value?.TryCast<ICallable>();
                 if (callable != null) Globals.Add(property.Key, callable);

@@ -24,7 +24,7 @@ namespace Oxide.Ext.JavaScript
         public static void SetConfigFromObject(DynamicConfigFile config, ObjectInstance objectInstance)
         {
             config.Clear();
-            foreach (var property in objectInstance.Properties)
+            foreach (var property in objectInstance.GetOwnProperties())
             {
                 var value = property.Value.Value?.ToObject();
                 if (value != null) config[property.Key] = value;
