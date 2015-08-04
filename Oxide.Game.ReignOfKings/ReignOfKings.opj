@@ -113,7 +113,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "LvxvI3OvS6r1F9oMcCOg5TN/1wsopNSRomkhNdVFAH8=",
+            "MSILHash": "dAH0MH5Mb0o5rHmw3cgA3CDz5NyaSd3t3lAJJnURfCE=",
             "BaseHookName": null
           }
         },
@@ -188,7 +188,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "EGfIunDuj8Zg+p9uE2Sj8J8jiYSv/vErn3UKQhJ4gpE=",
+            "MSILHash": "WVBUrEkQc4fjfrCffdpDeUIxUPVvIBDzGE+n4w/Qpbo=",
             "BaseHookName": null
           }
         },
