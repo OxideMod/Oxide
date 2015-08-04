@@ -284,7 +284,12 @@ namespace Oxide.Core.Configuration
                             dict[propname] = reader.Value;
                             break;
                         case JsonToken.Integer:
-                            dict[propname] = Convert.ToInt32(reader.Value);
+                            var value = reader.Value.ToString();
+                            int result;
+                            if (int.TryParse(value, out result))
+                                dict[propname] = result;
+                            else
+                                dict[propname] = value;
                             break;
                         case JsonToken.StartObject:
                             dict[propname] = serializer.Deserialize<Dictionary<string, object>>(reader);
@@ -321,7 +326,12 @@ namespace Oxide.Core.Configuration
                             list.Add(reader.Value);
                             break;
                         case JsonToken.Integer:
-                            list.Add(Convert.ToInt32(reader.Value));
+                            var value = reader.Value.ToString();
+                            int result;
+                            if (int.TryParse(value, out result))
+                                list.Add(result);
+                            else
+                                list.Add(value);
                             break;
                         case JsonToken.StartObject:
                             list.Add(serializer.Deserialize<Dictionary<string, object>>(reader));
