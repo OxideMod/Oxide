@@ -640,6 +640,19 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
+        /// Called when a player connects to the server
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("IOnPlayerConnected")]
+        private object IOnPlayerConnected(Player player)
+        {
+            if (player.Id == 9999999999) return null;
+
+            return Interface.CallHook("OnPlayerConnected", player);
+        }
+
+        /// <summary>
         /// Called when a chat message was sent
         /// </summary>
         /// <param name="e"></param>
