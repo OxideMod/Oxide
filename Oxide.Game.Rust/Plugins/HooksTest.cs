@@ -37,7 +37,7 @@ namespace Oxide.Plugins
 
         public void Loaded()
         {
-
+            HookCalled("Loaded");
         }
 
         protected override void LoadDefaultConfig()
@@ -275,22 +275,17 @@ namespace Oxide.Plugins
             HookCalled("OnQuarryEnabled");
         }
 
-        private void OnTrapArm(BaseTrap trap)
+        private void OnTrapArm(BearTrap trap)
         {
             HookCalled("OnTrapArm");
         }
 
-        private void OnTrapArmed(BaseTrap trap, GameObject go)
-        {
-            HookCalled("OnTrapArmed");
-        }
-
-        private void OnTrapSnapped(BaseTrap trap, GameObject go)
+        private void OnTrapSnapped(BaseTrapTrigger trap, GameObject go)
         {
             HookCalled("OnTrapSnapped");
         }
 
-        private void OnTrapTrigger(BaseTrap trap)
+        private void OnTrapTrigger(BaseTrap trap, GameObject go)
         {
             HookCalled("OnTrapTrigger");
         }

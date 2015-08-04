@@ -1001,6 +1001,7 @@ namespace Oxide.Game.Rust
         /// Called when a player gathers a plant
         /// </summary>
         /// <param name="msg"></param>
+        /// <param name="entity"></param>
         /// <param name="item"></param>
         /// <returns></returns>
         [HookMethod("IOnPlantGather")]
