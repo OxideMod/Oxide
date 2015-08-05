@@ -106,6 +106,17 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Check if player is admin
+        /// </summary>
+        /// <returns></returns>
+        private static bool IsAdmin(ConsoleSystem.Arg arg)
+        {
+            if (arg.Player() == null || arg.Player().IsAdmin()) return true;
+            arg.ReplyWith("You are not an admin.");
+            return false;
+        }
+
+        /// <summary>
         /// Called when the server is first initialized
         /// </summary>
         [HookMethod("OnServerInitialized")]
@@ -125,6 +136,7 @@ namespace Oxide.Game.Rust
         {
             if (!Interface.Oxide.CheckConsole(true)) return null;
             serverConsole.enabled = false;
+            UnityEngine.Object.Destroy(serverConsole);
             typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, null);
             RustExtension.EnableConsole();
             return false;
@@ -165,7 +177,7 @@ namespace Oxide.Game.Rust
         [HookMethod("cmdPlugins")]
         private void cmdPlugins(ConsoleSystem.Arg arg)
         {
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
 
             var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
@@ -202,7 +214,7 @@ namespace Oxide.Game.Rust
         [HookMethod("cmdLoad")]
         private void cmdLoad(ConsoleSystem.Arg arg)
         {
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
@@ -232,7 +244,7 @@ namespace Oxide.Game.Rust
         [HookMethod("cmdUnload")]
         private void cmdUnload(ConsoleSystem.Arg arg)
         {
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
@@ -262,7 +274,7 @@ namespace Oxide.Game.Rust
         [HookMethod("cmdReload")]
         private void cmdReload(ConsoleSystem.Arg arg)
         {
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
@@ -314,7 +326,7 @@ namespace Oxide.Game.Rust
         {
             if (!PermissionsLoaded(arg)) return;
 
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
             // Check 2 args exists
             if (!arg.HasArgs(2))
             {
@@ -399,7 +411,7 @@ namespace Oxide.Game.Rust
         {
             if (!PermissionsLoaded(arg)) return;
 
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
@@ -452,7 +464,7 @@ namespace Oxide.Game.Rust
         {
             if (!PermissionsLoaded(arg)) return;
 
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
@@ -463,6 +475,12 @@ namespace Oxide.Game.Rust
             var mode = arg.GetString(0);
             var name = arg.GetString(1);
             var perm = arg.GetString(2);
+
+            if (!permission.PermissionExists(perm))
+            {
+                arg.ReplyWith("Permission '" + perm + "' doesn't exist");
+                return;
+            }
 
             if (mode.Equals("group"))
             {
@@ -503,7 +521,7 @@ namespace Oxide.Game.Rust
         {
             if (!PermissionsLoaded(arg)) return;
 
-            if (arg.Player() != null && !arg.Player().IsAdmin()) return;
+            if (!IsAdmin(arg)) return;
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
@@ -514,6 +532,12 @@ namespace Oxide.Game.Rust
             var mode = arg.GetString(0);
             var name = arg.GetString(1);
             var perm = arg.GetString(2);
+
+            if (!permission.PermissionExists(perm))
+            {
+                arg.ReplyWith("Permission '" + perm + "' doesn't exist");
+                return;
+            }
 
             if (mode.Equals("group"))
             {
