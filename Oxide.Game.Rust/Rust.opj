@@ -446,7 +446,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 38,
+            "InjectionIndex": 41,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0, a1",
@@ -601,7 +601,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 69,
+            "InjectionIndex": 68,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l4",
@@ -627,7 +627,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 72,
+            "InjectionIndex": 71,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l2",
@@ -1164,7 +1164,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 36,
+            "InjectionIndex": 35,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0",
@@ -1412,7 +1412,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 62,
+            "InjectionIndex": 70,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, l0",
@@ -1535,7 +1535,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 13,
+            "InjectionIndex": 46,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": "",
