@@ -208,13 +208,6 @@ namespace Oxide.Plugins
                 {
                     var compiled_plugins = plugins.Where(pl => pl.CompilerErrors == null).ToList();
                     var compiled_names = compiled_plugins.Select(pl => pl.Name).ToArray();
-                    compiled_plugins.RemoveAll(plugin =>
-                    {
-                        var failed_names = plugin.Requires.Where(name => !compiled_names.Contains(name)).ToArray();
-                        if (failed_names.Length < 1) return false;
-                        PluginErrors[plugin.Name] = "Dependencies failed to compile: " + failed_names.ToSentence();
-                        return true;
-                    });
                     CompiledAssembly compiled_assembly = null;
                     if (compiled_plugins.Count > 0)
                     {
