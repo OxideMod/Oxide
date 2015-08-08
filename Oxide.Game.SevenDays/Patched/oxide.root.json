@@ -1,5 +1,5 @@
 {
-    "ExtensionDirectory": "7DaysToDie_Data\\Managed",
+    "ExtensionDirectory": "7DaysToDieServer_Data\\Managed",
 
     "PluginDirectory": "plugins",
     "ConfigDirectory": "config",

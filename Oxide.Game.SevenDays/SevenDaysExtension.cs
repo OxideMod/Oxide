@@ -33,6 +33,7 @@ namespace Oxide.Game.SevenDays
 
         private static readonly string[] Filter =
         {
+            "* SKY INITIALIZED",
             "Awake done",
             "Biomes image size",
             "Command line arguments:",
@@ -43,9 +44,10 @@ namespace Oxide.Game.SevenDays
             "HDR Render",
             "HDR and MultisampleAntiAliasing",
             "INF Cleanup",
+            "INF Disconnect",
             "INF GMA.",
             "INF GOM.",
-            "INF Disconnect",
+            "INF OnApplicationQuit",
             "INF WSD.",
             "Load key config",
             "Loading permissions file at",
@@ -60,14 +62,15 @@ namespace Oxide.Game.SevenDays
             "Setting breakpad minidump AppID",
             "StartAsServer",
             "StartGame",
-            "INF OnApplicationQuit",
             "Started thread",
+            "Weather Packages Created",
             "World.Cleanup",
             "World.Load:",
             "World.Unload",
             "WorldStaticData.Init()",
+            "[EAC] Log:",
             "[NET] ServerShutdown",
-            "[Steamworks.NET] NET: Server",
+            "[Steamworks.NET]",
             "createWorld() done",
             "createWorld:"
         };
@@ -112,9 +115,9 @@ namespace Oxide.Game.SevenDays
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(GamePrefs.GetString(EnumGamePrefs.ServerName));
-            //Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
-            Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", Constants.cCompatibilityVersion, ", Oxide: ", OxideMod.Version.ToString());
-            //Interface.Oxide.ServerConsole.Status1Right = () => ();
+            Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", GameManager.Instance.World.Players.list.Count.ToString(), "/", GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount).ToString());
+            Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", GamePrefs.GetString(EnumGamePrefs.GameVersion), ", Oxide: ", OxideMod.Version.ToString());
+            Interface.Oxide.ServerConsole.Title = () => string.Concat(GameManager.Instance.World.Players.list.Count.ToString(), " | ", GamePrefs.GetString(EnumGamePrefs.ServerName));
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;

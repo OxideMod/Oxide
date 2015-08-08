@@ -35,7 +35,7 @@ namespace Oxide.Game.SevenDays
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "7 days to die");
-            RemoteLogger.SetTag("protocol", Constants.cCompatibilityVersion.ToLower());
+            RemoteLogger.SetTag("protocol", GamePrefs.GetString(EnumGamePrefs.GameVersion));
         }
 
         /// <summary>
