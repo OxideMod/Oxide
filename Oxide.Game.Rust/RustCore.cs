@@ -621,9 +621,16 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
-        [HookMethod("OnUserApprove")]
-        private object OnUserApprove(Connection connection)
+        [HookMethod("IOnUserApprove")]
+        private object IOnUserApprove(Connection connection)
         {
+            // Reject invalid connections
+            if (connection.userid == 0 || connection.username == null)
+            {
+                ConnectionAuth.Reject(connection, "Your Steam ID or username is invalid");
+                return true;
+            }
+
             // Call out and see if we should reject
             object canlogin = Interface.CallHook("CanClientLogin", connection);
             if (canlogin != null)
@@ -642,7 +649,7 @@ namespace Oxide.Game.Rust
                 ConnectionAuth.Reject(connection, canlogin.ToString());
                 return true;
             }
-            return null;
+            return Interface.CallHook("OnUserApprove", connection);
         }
 
         /// <summary>
@@ -901,7 +908,7 @@ namespace Oxide.Game.Rust
         private object IOnLoseCondition(Item item, float amount)
         {
             var arguments = new object[] { item, amount };
-            Interface.Oxide.CallHook("OnLoseCondition", arguments);
+            Interface.CallHook("OnLoseCondition", arguments);
             amount = (float)arguments[1];
             float condition = item.condition;
             item.condition -= amount;
@@ -924,7 +931,7 @@ namespace Oxide.Game.Rust
         private object OnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
             if (isPlayerTakingDamage) return null;
-            if (Interface.Oxide.CallHook("OnEntityTakeDamage", player, info) != null) return true;
+            if (Interface.CallHook("OnEntityTakeDamage", player, info) != null) return true;
             isPlayerTakingDamage = true;
             player.OnAttacked(info);
             isPlayerTakingDamage = false;
@@ -942,7 +949,7 @@ namespace Oxide.Game.Rust
         private object OnBasePlayerHurt(BasePlayer entity, HitInfo info)
         {
             if (isPlayerTakingDamage) return null;
-            return Interface.Oxide.CallHook("OnEntityTakeDamage", entity, info);
+            return Interface.CallHook("OnEntityTakeDamage", entity, info);
         }
 
         /// <summary>
@@ -955,7 +962,7 @@ namespace Oxide.Game.Rust
         private object OnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
         {
             if (entity is BasePlayer) return null;
-            return Interface.Oxide.CallHook("OnEntityTakeDamage", entity, info);
+            return Interface.CallHook("OnEntityTakeDamage", entity, info);
         }
 
         /// <summary>

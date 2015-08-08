@@ -112,7 +112,7 @@
     </PropertyGroup>
     <ItemGroup>
       <GameFiles Include="$(ProjectDir)\Files\**\*.*" />
-      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\UnityEngine.dll" />
+      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\UnityEngine*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />
