@@ -10,8 +10,11 @@ namespace Oxide.Core.ServerConsole
         private readonly List<string> _inputHistory = new List<string>();
         private int _inputHistoryIndex;
         private float _nextUpdate;
-        public event Action<string> OnInputText;
-        public string[] StatusText = {string.Empty, string.Empty, string.Empty};
+        internal event Action<string> OnInputText;
+        internal string[] StatusTextLeft = { string.Empty, string.Empty, string.Empty, string.Empty };
+        internal string[] StatusTextRight = { string.Empty, string.Empty, string.Empty, string.Empty };
+        internal ConsoleColor[] StatusTextLeftColor = { ConsoleColor.White, ConsoleColor.White, ConsoleColor.White, ConsoleColor.White };
+        internal ConsoleColor[] StatusTextRightColor = { ConsoleColor.White, ConsoleColor.White, ConsoleColor.White, ConsoleColor.White };
 
         public int LineWidth => Console.BufferWidth;
 
@@ -30,14 +33,16 @@ namespace Oxide.Core.ServerConsole
         public void RedrawInputLine()
         {
             if (_nextUpdate - 0.45f > Interface.Oxide.Now) return;
-            Console.ForegroundColor = ConsoleColor.White;
             Console.CursorTop = Console.CursorTop + 1;
-            for (var i = 0; i < StatusText.Length; i++)
+            for (var i = 0; i < StatusTextLeft.Length; i++)
             {
                 Console.CursorLeft = 0;
-                Console.Write(StatusText[i].PadRight(LineWidth));
+                Console.ForegroundColor = StatusTextLeftColor[i];
+                Console.Write(StatusTextLeft[i]);
+                Console.ForegroundColor = StatusTextRightColor[i];
+                Console.Write(StatusTextRight[i].PadRight(LineWidth - StatusTextLeft[i].Length));
             }
-            Console.CursorTop = Console.CursorTop - (StatusText.Length + 1);
+            Console.CursorTop = Console.CursorTop - (StatusTextLeft.Length + 1);
             Console.CursorLeft = 0;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Green;
@@ -75,7 +80,7 @@ namespace Oxide.Core.ServerConsole
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Enter:
-                    ClearLine(StatusText.Length);
+                    ClearLine(StatusTextLeft.Length);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine(string.Concat("> ", InputString));
                     _inputHistory.Insert(0, InputString);
@@ -124,7 +129,7 @@ namespace Oxide.Core.ServerConsole
                     if (results == null || results.Length == 0) return;
                     if (results.Length > 1)
                     {
-                        ClearLine(StatusText.Length + 1);
+                        ClearLine(StatusTextLeft.Length + 1);
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         var lowestDiff = results.Max(r => r.Length);
                         for (var index = 0; index < results.Length; index++)
