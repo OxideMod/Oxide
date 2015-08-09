@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Oxide.Core.ServerConsole
@@ -6,6 +7,8 @@ namespace Oxide.Core.ServerConsole
     public class ConsoleInput
     {
         public string InputString = string.Empty;
+        private readonly List<string> _inputHistory = new List<string>();
+        private int _inputHistoryIndex;
         private float _nextUpdate;
         public event Action<string> OnInputText;
         public string[] StatusText = {string.Empty, string.Empty, string.Empty};
@@ -68,12 +71,15 @@ namespace Oxide.Core.ServerConsole
                 return;
             }
             var consoleKeyInfo = Console.ReadKey();
+            if (consoleKeyInfo.Key != ConsoleKey.DownArrow && consoleKeyInfo.Key != ConsoleKey.UpArrow) _inputHistoryIndex = 0;
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Enter:
                     ClearLine(StatusText.Length);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine(string.Concat("> ", InputString));
+                    _inputHistory.Insert(0, InputString);
+                    if (_inputHistory.Count > 50) _inputHistory.RemoveRange(50, _inputHistory.Count - 50);
                     var str = InputString;
                     InputString = string.Empty;
                     if (OnInputText != null) OnInputText(str);
@@ -86,6 +92,31 @@ namespace Oxide.Core.ServerConsole
                     return;
                 case ConsoleKey.Escape:
                     InputString = string.Empty;
+                    RedrawInputLine();
+                    return;
+                case ConsoleKey.UpArrow:
+                    if (_inputHistory.Count == 0) return;
+                    if (_inputHistoryIndex < 0) _inputHistoryIndex = 0;
+                    if (_inputHistoryIndex >= _inputHistory.Count - 1)
+                    {
+                        _inputHistoryIndex = _inputHistory.Count - 1;
+                        InputString = _inputHistory[_inputHistoryIndex];
+                        RedrawInputLine();
+                        return;
+                    }
+                    InputString = _inputHistory[_inputHistoryIndex++];
+                    RedrawInputLine();
+                    return;
+                case ConsoleKey.DownArrow:
+                    if (_inputHistory.Count == 0) return;
+                    if (_inputHistoryIndex >= _inputHistory.Count - 1) _inputHistoryIndex = _inputHistory.Count - 2;
+                    if (_inputHistoryIndex < 0)
+                    {
+                        InputString = string.Empty;
+                        RedrawInputLine();
+                        return;
+                    }
+                    InputString = _inputHistory[_inputHistoryIndex--];
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Tab:
