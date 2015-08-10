@@ -112,12 +112,53 @@ namespace Oxide.Game.SevenDays
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(GamePrefs.GetString(EnumGamePrefs.ServerName));
-            Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", GameManager.Instance.World.Players.list.Count.ToString(), "/", GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount).ToString());
-            Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", GamePrefs.GetString(EnumGamePrefs.GameVersion), ", Oxide: ", OxideMod.Version.ToString());
-            Interface.Oxide.ServerConsole.Title = () => string.Concat(GameManager.Instance.World.Players.list.Count.ToString(), " | ", GamePrefs.GetString(EnumGamePrefs.ServerName));
+
+            Interface.Oxide.ServerConsole.Title = () =>
+            {
+                var players = GameManager.Instance.World.Players.list.Count.ToString();
+                var hostname = GamePrefs.GetString(EnumGamePrefs.ServerName);
+                return string.Concat(players, " | ", hostname);
+            };
+
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var hostname = GamePrefs.GetString(EnumGamePrefs.ServerName);
+                return string.Concat(" ", hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                // TODO: FPS and server uptime
+                return "";
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = GameManager.Instance.World.Players.list.Count.ToString();
+                var playerLimit = GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount).ToString();
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                // TODO: Network in/out
+                return "";
+            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                // TODO: Game time, entities, weather?
+                return "";
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = GamePrefs.GetString(EnumGamePrefs.GameVersion);
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for 7 Days to Die ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
+
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;

@@ -25,7 +25,7 @@ namespace Oxide.Core.ServerConsole
         public void ClearLine(int numLines)
         {
             Console.CursorLeft = 0;
-            Console.Write(new string(' ', LineWidth*numLines));
+            Console.Write(new string(' ', LineWidth * numLines));
             Console.CursorTop = Console.CursorTop - numLines;
             Console.CursorLeft = 0;
         }
@@ -40,7 +40,7 @@ namespace Oxide.Core.ServerConsole
                 Console.ForegroundColor = StatusTextLeftColor[i];
                 Console.Write(StatusTextLeft[i]);
                 Console.ForegroundColor = StatusTextRightColor[i];
-                Console.Write(StatusTextRight[i].PadRight(LineWidth - StatusTextLeft[i].Length));
+                Console.Write(StatusTextRight[i].PadRight(LineWidth));
             }
             Console.CursorTop = Console.CursorTop - (StatusTextLeft.Length + 1);
             Console.CursorLeft = 0;

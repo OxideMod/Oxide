@@ -152,20 +152,46 @@ namespace Oxide.Game.ReignOfKings
         public override void OnModLoad()
         {
             if (!Interface.Oxide.CheckConsole()) return;
+
             var socketAdminConsole = UnityEngine.Object.FindObjectOfType<SocketAdminConsole>();
             var socketServer = (SocketServer) SocketServerField.GetValue(socketAdminConsole);
             if (socketServer.Clients.Count > 0) return;
             socketAdminConsole.enabled = false;
+
             if (!Interface.Oxide.EnableConsole()) return;
-            //Logger.ReloadSettings();
+
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat("Game Time: ", GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown", " Weather: ", Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown");
-            Interface.Oxide.ServerConsole.Status1Right = () => string.Concat("Players: ", Server.PlayerCount, "/", Server.PlayerLimit, " Frame Rate: ", Mathf.RoundToInt(1f / Time.smoothDeltaTime), " FPS");
-            Interface.Oxide.ServerConsole.Status2Left = () => string.Concat("Version: ", GameInfo.VersionString, "(", GameInfo.Version, ") - ", GameInfo.VersionName);
+
+            Interface.Oxide.ServerConsole.Title = () =>
+            {
+                var players = Server.PlayerCount;
+                var hostname = DedicatedServerBypass.Settings.ServerName;
+                return string.Concat(players, " | ", hostname);
+            };
+
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var hostname = DedicatedServerBypass.Settings.ServerName;
+                return string.Concat(" ", hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                // TODO: Server uptime
+                return string.Concat(fps, "fps");
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = Server.PlayerCount;
+                var playerLimit = Server.PlayerLimit;
+                // TODO: Sleeper count
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.Network.time <= 0) return "Total Sent: 0.0 b/s Total Receive: 0.0 b/s";
+                if (uLink.Network.time <= 0) return "0.0b/s in, 0.0b/s out";
                 var players = Server.AllPlayers;
                 double bytesSent = 0;
                 double bytesReceived = 0;
@@ -176,9 +202,23 @@ namespace Oxide.Game.ReignOfKings
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
                 }
-                return $"Total Sent: {FormatBytes(bytesSent)}/s Total Receive: {FormatBytes(bytesReceived)}/s";
+                return string.Concat(FormatBytes(bytesReceived), "/s in, ", FormatBytes(bytesSent), "/s out");
             };
-            Interface.Oxide.ServerConsole.Title = () => string.Concat(Server.PlayerCount, " | ", DedicatedServerBypass.Settings.ServerName);
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var gameTime = GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown";
+                var weather = Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown";
+                return string.Concat(" ", gameTime, ", Weather: ", weather);
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = GameInfo.VersionName;
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for Reign of Kings ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
+
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
@@ -202,7 +242,7 @@ namespace Oxide.Game.ReignOfKings
             }
             else
                 type = "b";
-            return $"{bytes:0.0} {type}";
+            return $"{bytes:0.0}{type}";
         }
 
         private void ServerConsoleOnInput(string input)

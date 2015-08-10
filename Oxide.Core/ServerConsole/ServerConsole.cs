@@ -11,14 +11,14 @@ namespace Oxide.Core.ServerConsole
 
         public event Action<string> Input;
 
+        public Func<string> Title;
+
         public Func<string> Status1Left;
         public Func<string> Status1Right;
         public Func<string> Status2Left;
         public Func<string> Status2Right;
         public Func<string> Status3Left;
         public Func<string> Status3Right;
-
-        public Func<string> Title;
 
         public Func<string, string[]> Completion
         {
@@ -31,20 +31,15 @@ namespace Oxide.Core.ServerConsole
             get { return _input.StatusTextLeftColor[1]; }
             set { _input.StatusTextLeftColor[1] = value; }
         }
-        public ConsoleColor Status2LeftColor
-        {
-            get { return _input.StatusTextLeftColor[2]; }
-            set { _input.StatusTextLeftColor[2] = value; }
-        }
-        public ConsoleColor Status3LeftColor
-        {
-            get { return _input.StatusTextLeftColor[3]; }
-            set { _input.StatusTextLeftColor[3] = value; }
-        }
         public ConsoleColor Status1RightColor
         {
             get { return _input.StatusTextRightColor[1]; }
             set { _input.StatusTextRightColor[1] = value; }
+        }
+        public ConsoleColor Status2LeftColor
+        {
+            get { return _input.StatusTextLeftColor[2]; }
+            set { _input.StatusTextLeftColor[2] = value; }
         }
         public ConsoleColor Status2RightColor
         {
@@ -56,6 +51,13 @@ namespace Oxide.Core.ServerConsole
             get { return _input.StatusTextRightColor[3]; }
             set { _input.StatusTextRightColor[3] = value; }
         }
+        public ConsoleColor Status3LeftColor
+        {
+            get { return _input.StatusTextLeftColor[3]; }
+            set { _input.StatusTextLeftColor[3] = value; }
+        }
+
+        private string title => Title != null ? Title() : null;
 
         private string status1Left => Status1Left != null ? Status1Left() : "status1left";
         private string status1Right => (Status1Right != null ? Status1Right() : "status1right").PadLeft(_input.LineWidth - 1);
@@ -63,8 +65,6 @@ namespace Oxide.Core.ServerConsole
         private string status2Right => (Status2Right != null ? Status2Right() : "status2right").PadLeft(_input.LineWidth - 1);
         private string status3Left => Status3Left != null ? Status3Left() : "status3left";
         private string status3Right => (Status3Right != null ? Status3Right() : "status3right").PadLeft(_input.LineWidth - 1);
-
-        private string title => Title != null ? Title() : null;
 
         private static string GetStatusRight(int leftLength, string right)
         {
