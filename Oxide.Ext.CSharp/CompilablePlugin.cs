@@ -45,7 +45,7 @@ namespace Oxide.Plugins
             Directory = directory;
             ScriptName = name;
             Name = Regex.Replace(Regex.Replace(ScriptName, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
-            ScriptPath = string.Format("{0}\\{1}.cs", Directory, ScriptName);
+            ScriptPath = Path.Combine(Directory, string.Format("{0}.cs", ScriptName));
             CheckLastModificationTime();
         }
 
@@ -75,7 +75,7 @@ namespace Oxide.Plugins
         public void LoadPlugin(Action<CSharpPlugin> callback = null)
         {
             if (CompiledAssembly == null)
-            { 
+            {
                 Interface.Oxide.LogError("Load called before a compiled assembly exists: " + Name);
                 RemoteLogger.Error("Load called before a compiled assembly exists: " + Name);
                 IsReloading = false;

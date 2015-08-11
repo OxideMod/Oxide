@@ -191,7 +191,7 @@ namespace Oxide.Ext.SQLite.Libraries
             foreach (var connection in _connections)
             {
                 if (connection.Value.Plugin != sender) continue;
-                if (connection.Value.Con.State != ConnectionState.Closed)
+                if (connection.Value.Con?.State != ConnectionState.Closed)
                     Interface.Oxide.LogWarning("Unclosed sqlite connection ({0}), by plugin '{1}', closing...", connection.Value.ConnectionString, connection.Value.Plugin?.Name ?? "null");
                 connection.Value.Con?.Close();
                 connection.Value.Plugin = null;
