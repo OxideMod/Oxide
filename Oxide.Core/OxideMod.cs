@@ -115,16 +115,16 @@ namespace Oxide.Core
                 rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
                 if (string.IsNullOrEmpty(varname) || commandline.HasVariable(varname))
                 {
-                    InstanceDirectory = Path.Combine(RootDirectory, string.Format(format, commandline.GetVariable(varname)));
+                    InstanceDirectory = Path.Combine(RootDirectory, CleanPath(string.Format(format, commandline.GetVariable(varname))));
                     break;
                 }
             }
             if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
-            ExtensionDirectory = Path.Combine(RootDirectory, rootconfig.ExtensionDirectory);
-            PluginDirectory = Path.Combine(InstanceDirectory, rootconfig.PluginDirectory);
-            DataDirectory = Path.Combine(InstanceDirectory, rootconfig.DataDirectory);
-            LogDirectory = Path.Combine(InstanceDirectory, rootconfig.LogDirectory);
-            ConfigDirectory = Path.Combine(InstanceDirectory, rootconfig.ConfigDirectory);
+            ExtensionDirectory = Path.Combine(RootDirectory, CleanPath(rootconfig.ExtensionDirectory));
+            PluginDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.PluginDirectory));
+            DataDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.DataDirectory));
+            LogDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.LogDirectory));
+            ConfigDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.ConfigDirectory));
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
@@ -624,6 +624,11 @@ namespace Oxide.Core
 
         #endregion
 
+        private static string CleanPath(string path)
+        {
+            return path?.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+        }
+
         private static void RegisterLibrarySearchPath(string path)
         {
             switch (Environment.OSVersion.Platform)
@@ -639,6 +644,7 @@ namespace Oxide.Core
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
                     var currentLdLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH") ?? string.Empty;
+                    path = "." + Path.PathSeparator + path;
                     var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : currentLdLibraryPath + Path.PathSeparator + path;
                     Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", newLdLibraryPath);
                     break;

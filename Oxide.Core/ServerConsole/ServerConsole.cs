@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Oxide.Core.ServerConsole
 {
@@ -74,7 +75,7 @@ namespace Oxide.Core.ServerConsole
         public void AddMessage(string message, ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
-            _input.ClearLine(_input.StatusTextLeft.Length);
+            _input.ClearLine(_input.StatusTextLeft.Length + message.Count(c => c == '\n'));
             Console.WriteLine(message);
             _input.RedrawInputLine();
             Console.ForegroundColor = ConsoleColor.Gray;

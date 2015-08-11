@@ -9,7 +9,7 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "data\\oxide",
+        "Data\\oxide",
         "oxide"
     ]
 }

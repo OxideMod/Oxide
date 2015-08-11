@@ -29,21 +29,37 @@ namespace Oxide.Plugins
                 BinaryPath = binary_path;
                 return;
             }
-            if (!File.Exists(root_directory + @"\monosgen-2.0.dll"))
+            switch (Environment.OSVersion.Platform)
             {
-                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find monosgen-2.0.dll!");
-                return;
-            }
-            if (!File.Exists(root_directory + @"\msvcr120.dll") && !File.Exists(Environment.SystemDirectory + @"\msvcr120.dll"))
-            {
-                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find msvcr120.dll!");
-                return;
-            }
-            binary_path = root_directory + @"\CSharpCompiler.exe";
-            if (!File.Exists(binary_path))
-            {
-                Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
-                return;
+                case PlatformID.Win32NT:
+                case PlatformID.Win32S:
+                case PlatformID.Win32Windows:
+                    if (!File.Exists(root_directory + @"\monosgen-2.0.dll"))
+                    {
+                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find monosgen-2.0.dll!");
+                        return;
+                    }
+                    if (!File.Exists(root_directory + @"\msvcr120.dll") && !File.Exists(Environment.SystemDirectory + @"\msvcr120.dll"))
+                    {
+                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find msvcr120.dll!");
+                        return;
+                    }
+                    binary_path = root_directory + @"\CSharpCompiler.exe";
+                    if (!File.Exists(binary_path))
+                    {
+                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
+                        return;
+                    }
+                    break;
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    binary_path = root_directory + @"/CSharpCompiler";
+                    if (!File.Exists(binary_path))
+                    {
+                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler!");
+                        return;
+                    }
+                    break;
             }
             BinaryPath = binary_path;
         }
@@ -114,7 +130,7 @@ namespace Oxide.Plugins
                     var extension_names = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
                     var game_extension_ns = Interface.Oxide.GetAllExtensions().SingleOrDefault(ext => ext.IsGameExtension)?.GetType().Namespace;
                     var new_game_ext = game_extension_ns != null && game_extension_ns.Contains(".Game.");
-                    var include_path = Interface.Oxide.PluginDirectory + "\\Include";
+                    var include_path = Path.Combine(Interface.Oxide.PluginDirectory, "Include");
 
                     foreach (var plugin in compilation.plugins.ToArray())
                     {
@@ -162,7 +178,7 @@ namespace Oxide.Plugins
                                     var dependency_name = match.Groups[1].Value;
                                     plugin.Requires.Add(dependency_name);
                                     var directory = compilation.plugins[0].Directory;
-                                    if (!File.Exists($"{directory}\\{dependency_name}.cs"))
+                                    if (!File.Exists($"{directory}{Path.DirectorySeparatorChar}{dependency_name}.cs"))
                                     {
                                         var message = $"{plugin.Name} plugin requires missing dependency: {dependency_name}";
                                         Interface.Oxide.LogError(message);
@@ -190,7 +206,7 @@ namespace Oxide.Plugins
                                                 Interface.Oxide.LogDebug($"Dependency is already compiled: {dependency_name} (already referenced)");
                                             }
                                             else
-                                            { 
+                                            {
                                                 Interface.Oxide.LogDebug($"Dependency is already compiled: {dependency_name} (adding as reference)");
                                                 compilation.references.Add(new CompilerFile(compiled_dependency.Name, compiled_dependency.RawAssembly));
                                             }
@@ -257,7 +273,7 @@ namespace Oxide.Plugins
                             if (extension_names.Contains(name)) continue;
                             if (Directory.Exists(include_path))
                             {
-                                var include_file_path = include_path + "\\Ext." + name + ".cs";
+                                var include_file_path = Path.Combine(include_path, "Ext." + name + ".cs");
                                 if (File.Exists(include_file_path))
                                 {
                                     plugin.IncludePaths.Add(include_file_path);
@@ -284,7 +300,7 @@ namespace Oxide.Plugins
         private void AddReference(int currentId, CompilablePlugin plugin, string assembly_name)
         {
             var compilation = pluginComp[currentId];
-            var path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, assembly_name);
+            var path = Path.Combine(Interface.Oxide.ExtensionDirectory, string.Format("{0}.dll", assembly_name));
             if (!File.Exists(path))
             {
                 if (assembly_name.StartsWith("Oxide.Ext."))
@@ -317,7 +333,7 @@ namespace Oxide.Plugins
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
-                var reference_path = string.Format("{0}\\{1}.dll", Interface.Oxide.ExtensionDirectory, reference.Name);
+                var reference_path = Path.Combine(Interface.Oxide.ExtensionDirectory, string.Format("{0}.dll", reference.Name));
                 if (!File.Exists(reference_path))
                 {
                     Interface.Oxide.LogWarning("Reference {0}.dll from {1}.dll not found.", reference.Name, assembly.GetName().Name);
@@ -412,7 +428,7 @@ namespace Oxide.Plugins
                                 if (missing_requirements.Any())
                                     compilable_plugin.CompilerErrors = $"{compilable_plugin.ScriptName}'s dependencies: {missing_requirements.ToSentence()}";
                                 else
-                                    compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + "\\", string.Empty);
+                                    compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + Path.DirectorySeparatorChar, string.Empty);
                             }
                         }
                     }
