@@ -86,13 +86,18 @@ namespace Oxide.Game.Rust.Libraries
         {
             public readonly string Name;
             public readonly Plugin Plugin;
-            public readonly string CallbackName;
+            private readonly Action<BasePlayer, string, string[]> _callback;
 
-            public ChatCommand(string name, Plugin plugin, string callback_name)
+            public ChatCommand(string name, Plugin plugin, Action<BasePlayer, string, string[]> callback)
             {
                 Name = name;
                 Plugin = plugin;
-                CallbackName = callback_name;
+                _callback = callback;
+            }
+
+            public void HandleCommand(BasePlayer sender, string name, string[] args)
+            {
+                _callback?.Invoke(sender, name, args);
             }
         }
 
@@ -113,15 +118,26 @@ namespace Oxide.Game.Rust.Libraries
             consoleCommands = new Dictionary<string, ConsoleCommand>();
             chatCommands = new Dictionary<string, ChatCommand>();
         }
-                
+
         /// <summary>
         /// Adds a chat command
         /// </summary>
         /// <param name="name"></param>
         /// <param name="plugin"></param>
-        /// <param name="callbackname"></param>
+        /// <param name="callback_name"></param>
         [LibraryFunction("AddChatCommand")]
         public void AddChatCommand(string name, Plugin plugin, string callback_name)
+        {
+            AddChatCommand(name, plugin, (player, command, args) => plugin.CallHook(callback_name, player, command, args));
+        }
+
+        /// <summary>
+        /// Adds a chat command
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="plugin"></param>
+        /// <param name="callback"></param>
+        public void AddChatCommand(string name, Plugin plugin, Action<BasePlayer, string, string[]> callback)
         {
             var command_name = name.ToLowerInvariant();
 
@@ -134,17 +150,15 @@ namespace Oxide.Game.Rust.Libraries
                 Core.Interface.Oxide.LogWarning(msg);
             }
 
-            cmd = new ChatCommand(command_name, plugin, callback_name);
+            cmd = new ChatCommand(command_name, plugin, callback);
 
             // Add the new command to collections
             chatCommands[command_name] = cmd;
 
             // Hook the unload event
-            if (plugin)
-            {
-                plugin.OnRemovedFromManager -= plugin_OnRemovedFromManager;
-                plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
-            }
+            if (plugin == null) return;
+            plugin.OnRemovedFromManager -= plugin_OnRemovedFromManager;
+            plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
         }
 
         /// <summary>
@@ -156,7 +170,7 @@ namespace Oxide.Game.Rust.Libraries
         [LibraryFunction("AddConsoleCommand")]
         public void AddConsoleCommand(string name, Plugin plugin, string callback_name)
         {
-            AddConsoleCommand(name, plugin, (arg) => plugin.Call(callback_name, arg) != null);
+            AddConsoleCommand(name, plugin, arg => plugin.CallHook(callback_name, arg) != null);
         }
 
         /// <summary>
@@ -222,7 +236,7 @@ namespace Oxide.Game.Rust.Libraries
                 rustcommands[cmd.RustCommand.namefull] = cmd.RustCommand;
                 ConsoleSystem.Index.GetAll().Add(cmd.RustCommand);
             }
-            
+
             consoleCommands[full_name] = cmd;
         }
 
@@ -237,7 +251,7 @@ namespace Oxide.Game.Rust.Libraries
             ChatCommand cmd;
             if (!chatCommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
 
-            cmd.Plugin.CallHook(cmd.CallbackName, sender, name, args);
+            cmd.HandleCommand(sender, name, args);
 
             return true;
         }
