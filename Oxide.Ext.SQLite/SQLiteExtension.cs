@@ -15,9 +15,11 @@ namespace Oxide.Ext.SQLite
 
         public override string Author => "Oxide Team";
 
+        private Libraries.SQLite _sqlite;
+
         public override void Load()
         {
-            Manager.RegisterLibrary("SQLite", new Libraries.SQLite());
+            Manager.RegisterLibrary("SQLite", _sqlite = new Libraries.SQLite());
         }
 
         public override void LoadPluginWatchers(string plugindir)
@@ -26,6 +28,11 @@ namespace Oxide.Ext.SQLite
 
         public override void OnModLoad()
         {
+        }
+
+        public override void OnShutdown()
+        {
+            _sqlite?.Shutdown();
         }
     }
 }

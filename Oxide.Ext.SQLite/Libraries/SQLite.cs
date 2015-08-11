@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Ext.SQLite.Libraries
 {
@@ -15,18 +18,199 @@ namespace Oxide.Ext.SQLite.Libraries
 
         public override bool IsGlobal => false;
 
+        private readonly Queue<SQLiteQuery> _queue = new Queue<SQLiteQuery>();
+        private readonly object _syncroot = new object();
+        private readonly AutoResetEvent _workevent = new AutoResetEvent(false);
+        private readonly HashSet<Connection> _runningConnections = new HashSet<Connection>();
+        private bool _running = true;
+        private readonly Dictionary<string, Connection> _connections = new Dictionary<string, Connection>();
+
+        /// <summary>
+        /// Represents a single MySqlQuery instance
+        /// </summary>
+        public class SQLiteQuery
+        {
+            /// <summary>
+            /// Gets the callback delegate
+            /// </summary>
+            public Action<List<Dictionary<string, object>>> Callback { get; internal set; }
+
+            /// <summary>
+            /// Gets the callback delegate
+            /// </summary>
+            public Action<int> CallbackNonQuery { get; internal set; }
+
+            /// <summary>
+            /// Gets the sql
+            /// </summary>
+            public Sql Sql { get; internal set; }
+
+            /// <summary>
+            /// Gets the connection
+            /// </summary>
+            public Connection Connection { get; internal set; }
+
+            /// <summary>
+            /// Gets the non query
+            /// </summary>
+            public bool NonQuery { get; internal set; }
+
+            public SQLite Lib { get; internal set; }
+
+            private SQLiteCommand _cmd;
+            private SQLiteConnection _connection;
+
+            private void Cleanup()
+            {
+                if (_cmd != null)
+                {
+                    _cmd.Dispose();
+                    _cmd = null;
+                }
+                _connection = null;
+            }
+
+            public void Handle()
+            {
+                List<Dictionary<string, object>> list = null;
+                var nonQueryResult = 0;
+                try
+                {
+                    _connection = Connection.Con;
+                    if (_connection.State == ConnectionState.Closed)
+                        _connection.Open();
+                    _cmd = _connection.CreateCommand();
+                    _cmd.CommandText = Sql.SQL;
+                    Sql.AddParams(_cmd, Sql.Arguments, "@");
+                    if (NonQuery)
+                        nonQueryResult = _cmd.ExecuteNonQuery();
+                    else
+                    {
+                        using (var reader = _cmd.ExecuteReader())
+                        {
+                            list = new List<Dictionary<string, object>>();
+                            while (reader.Read())
+                            {
+                                var dict = new Dictionary<string, object>();
+                                for (var i = 0; i < reader.FieldCount; i++)
+                                {
+                                    dict.Add(reader.GetName(i), reader.GetValue(i));
+                                }
+                                list.Add(dict);
+                            }
+                        }
+                    }
+                    Cleanup();
+                }
+                catch (Exception ex)
+                {
+                    Interface.Oxide.LogException("Exception raised in sqlite handle", ex);
+                    Cleanup();
+                }
+                Interface.Oxide.NextTick(() =>
+                {
+                    try
+                    {
+                        if (!NonQuery)
+                            Callback(list);
+                        else
+                            CallbackNonQuery?.Invoke(nonQueryResult);
+                    }
+                    catch (Exception ex)
+                    {
+                        Interface.Oxide.LogException("Exception raised in sqlite command callback", ex);
+                    }
+                });
+            }
+        }
+
+        /// <summary>
+        /// The worker thread method
+        /// </summary>
+        private void Worker()
+        {
+            while (_running)
+            {
+                if (_queue.Count < 1)
+                {
+                    foreach (var connection in _runningConnections)
+                        if (!connection.ConnectionPersistent) CloseDb(connection);
+                    _runningConnections.Clear();
+                    _workevent.Reset();
+                    _workevent.WaitOne();
+                }
+                SQLiteQuery query;
+                lock (_syncroot) query = _queue.Dequeue();
+                query.Handle();
+                _runningConnections.Add(query.Connection);
+            }
+        }
+
         public SQLite()
         {
             _dataDirectory = Interface.GetMod().DataDirectory;
+            new Thread(Worker) { IsBackground = true }.Start();
         }
 
         [LibraryFunction("OpenDb")]
-        public SQLiteConnection OpenDb(string file)
+        public Connection OpenDb(string file, Plugin plugin, bool persistent = false)
         {
+            if (string.IsNullOrEmpty(file)) return null;
             var filename = Path.Combine(_dataDirectory, file);
             if (!filename.StartsWith(_dataDirectory, StringComparison.Ordinal))
                 throw new Exception("Only access to oxide directory!");
-            return new SQLiteConnection(string.Format("Data Source={0};Version=3;", filename));
+            var conStr = $"Data Source={filename};Version=3;";
+            Connection connection;
+            if (_connections.TryGetValue(conStr, out connection))
+            {
+                if (plugin != connection.Plugin)
+                {
+                    Interface.Oxide.LogWarning("Already open connection ({0}), by plugin '{1}'...", conStr, connection.Plugin);
+                    return null;
+                }
+                Interface.Oxide.LogWarning("Already open connection ({0}), using existing instead...", conStr);
+            }
+            else
+            {
+                connection = new Connection(conStr, persistent)
+                {
+                    Plugin = plugin,
+                    Con = new SQLiteConnection(conStr)
+                };
+                _connections[conStr] = connection;
+            }
+            if (plugin == null) return connection;
+            plugin.OnRemovedFromManager -= OnRemovedFromManager;
+            plugin.OnRemovedFromManager += OnRemovedFromManager;
+            return connection;
+        }
+
+        private void OnRemovedFromManager(Plugin sender, PluginManager manager)
+        {
+            var toRemove = new List<string>();
+            foreach (var connection in _connections)
+            {
+                if (connection.Value.Plugin != sender) continue;
+                if (connection.Value.Con.State != ConnectionState.Closed)
+                    Interface.Oxide.LogWarning("Unclosed sqlite connection ({0}), by plugin '{1}', closing...", connection.Value.ConnectionString, connection.Value.Plugin?.Name ?? "null");
+                connection.Value.Con?.Close();
+                connection.Value.Plugin = null;
+                toRemove.Add(connection.Key);
+            }
+            foreach (var conStr in toRemove)
+                _connections.Remove(conStr);
+            sender.OnRemovedFromManager -= OnRemovedFromManager;
+        }
+
+        [LibraryFunction("CloseDb")]
+        public void CloseDb(Connection db)
+        {
+            if (db == null) return;
+            _connections.Remove(db.ConnectionString);
+            if (db.Plugin != null && _connections.Values.All(c => c.Plugin != db.Plugin))
+                db.Plugin.OnRemovedFromManager -= OnRemovedFromManager;
+            db.Con?.Close();
+            db.Plugin = null;
         }
 
         [LibraryFunction("NewSql")]
@@ -36,109 +220,55 @@ namespace Oxide.Ext.SQLite.Libraries
         }
 
         [LibraryFunction("Query")]
-        public IEnumerable<Dictionary<string, object>> Query(Sql sql, SQLiteConnection db)
+        public void Query(Sql sql, Connection db, Action<List<Dictionary<string, object>>> callback)
         {
-            try
+            var query = new SQLiteQuery
             {
-                db.Open();
-                using (var cmd = db.CreateCommand())
-                {
-                    cmd.CommandText = sql.SQL;
-                    Sql.AddParams(cmd, sql.Arguments, "@");
-                    using (var dataReader = cmd.ExecuteReader())
-                    {
-                        var list = new List<Dictionary<string, object>>();
-                        while (dataReader.Read())
-                        {
-                            var dict = new Dictionary<string, object>();
-                            for (var i = 0; i < dataReader.FieldCount; i++)
-                            {
-                                dict.Add(dataReader.GetName(i), dataReader.GetValue(i));
-                            }
-                            list.Add(dict);
-                        }
-                        return list;
-                    }
-                }
-            }
-            finally
-            {
-                db.Close();
-            }
+                Sql = sql,
+                Connection = db,
+                Callback = callback,
+                Lib = this
+            };
+            lock (_syncroot) _queue.Enqueue(query);
+            _workevent.Set();
         }
 
         [LibraryFunction("ExecuteNonQuery")]
-        public int ExecuteNonQuery(Sql sql, SQLiteConnection db)
+        public void ExecuteNonQuery(Sql sql, Connection db, Action<int> callback = null)
         {
-            try
+            var query = new SQLiteQuery
             {
-                db.Open();
-                using (var cmd = db.CreateCommand())
-                {
-                    cmd.CommandText = sql.SQL;
-                    Sql.AddParams(cmd, sql.Arguments, "@");
-                    return cmd.ExecuteNonQuery();
-                }
-            }
-            finally
-            {
-                db.Close();
-            }
+                Sql = sql,
+                Connection = db,
+                CallbackNonQuery = callback,
+                NonQuery = true,
+                Lib = this
+            };
+            lock (_syncroot) _queue.Enqueue(query);
+            _workevent.Set();
         }
 
         [LibraryFunction("Insert")]
-        public int Insert(Sql sql, SQLiteConnection db)
+        public void Insert(Sql sql, Connection db, Action<int> callback = null)
         {
-            return ExecuteNonQuery(sql, db);
+            ExecuteNonQuery(sql, db, callback);
         }
 
         [LibraryFunction("Update")]
-        public int Update(Sql sql, SQLiteConnection db)
+        public void Update(Sql sql, Connection db, Action<int> callback = null)
         {
-            return ExecuteNonQuery(sql, db);
+            ExecuteNonQuery(sql, db, callback);
         }
 
         [LibraryFunction("Delete")]
-        public int Delete(Sql sql, SQLiteConnection db)
+        public void Delete(Sql sql, Connection db, Action<int> callback = null)
         {
-            return ExecuteNonQuery(sql, db);
+            ExecuteNonQuery(sql, db, callback);
         }
 
-        public T ExecuteScalar<T>(Sql sql, SQLiteConnection db)
+        internal void Shutdown()
         {
-            try
-            {
-                db.Open();
-                using (var cmd = db.CreateCommand())
-                {
-                    cmd.CommandText = sql.SQL;
-                    Sql.AddParams(cmd, sql.Arguments, "@");
-                    var val = cmd.ExecuteScalar();
-                    return (T) Convert.ChangeType(val, typeof (T));
-                }
-            }
-            finally
-            {
-                db.Close();
-            }
-        }
-
-        [LibraryFunction("ExecuteScalar")]
-        public string ExecuteScalar(Sql sql, SQLiteConnection db)
-        {
-            return ExecuteScalar<string>(sql, db);
-        }
-
-        [LibraryFunction("First")]
-        public Dictionary<string, object> First(Sql sql, SQLiteConnection db)
-        {
-            return Query(sql, db).First();
-        }
-
-        [LibraryFunction("FirstOrDefault")]
-        public Dictionary<string, object> FirstOrDefault(Sql sql, SQLiteConnection db)
-        {
-            return Query(sql, db).FirstOrDefault();
+            _running = false;
         }
     }
 }

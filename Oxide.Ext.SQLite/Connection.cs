@@ -1,15 +1,15 @@
-﻿using System.Security.Permissions;
-using MySql.Data.MySqlClient;
+﻿using System.Data.SQLite;
+using System.Security.Permissions;
 using Oxide.Core.Plugins;
 
-namespace Oxide.Ext.MySql
+namespace Oxide.Ext.SQLite
 {
     [ReflectionPermission(SecurityAction.Deny, Flags = ReflectionPermissionFlag.AllFlags)]
     public sealed class Connection
     {
         internal string ConnectionString { get; set; }
         internal bool ConnectionPersistent { get; set; }
-        internal MySqlConnection Con { get; set; }
+        internal SQLiteConnection Con { get; set; }
         internal Plugin Plugin { get; set; }
 
         public Connection(string connection, bool persistent)
