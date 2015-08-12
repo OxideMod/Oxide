@@ -104,7 +104,9 @@ namespace Oxide.Ext.SQLite.Libraries
                 }
                 catch (Exception ex)
                 {
-                    Interface.Oxide.LogException("Exception raised in sqlite handle", ex);
+                    var message = "Sqlite handle raised an exception";
+                    if (Connection?.Plugin != null) message += $" in '{Connection.Plugin.Name} v{Connection.Plugin.Version}' plugin";
+                    Interface.Oxide.LogException(message, ex);
                     Cleanup();
                 }
                 Interface.Oxide.NextTick(() =>
@@ -118,7 +120,9 @@ namespace Oxide.Ext.SQLite.Libraries
                     }
                     catch (Exception ex)
                     {
-                        Interface.Oxide.LogException("Exception raised in sqlite command callback", ex);
+                        var message = "Sqlite command callback raised an exception";
+                        if (Connection?.Plugin != null) message += $" in '{Connection.Plugin.Name} v{Connection.Plugin.Version}' plugin";
+                        Interface.Oxide.LogException(message, ex);
                     }
                 });
             }

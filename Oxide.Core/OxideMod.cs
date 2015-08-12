@@ -411,7 +411,7 @@ namespace Oxide.Core
             catch (Exception ex)
             {
                 if (plugin.Loader != null) plugin.Loader.PluginErrors[plugin.Name] = ex.Message;
-                LogException("Failed to initialize plugin " + plugin.Name, ex);
+                LogException($"Failed to initialize plugin '{plugin.Name} v{plugin.Version}'", ex);
                 return false;
             }
         }
@@ -465,7 +465,7 @@ namespace Oxide.Core
         /// <param name="message"></param>
         private void plugin_OnError(Plugin sender, string message)
         {
-            LogError("{0}: {1}", sender.Name, message);
+            LogError("{0} v{1}: {2}", sender.Name, sender.Version, message);
         }
 
         #endregion

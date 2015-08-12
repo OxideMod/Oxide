@@ -250,14 +250,14 @@ namespace Oxide.Plugins
 
             foreach (var name in pluginReferenceFields.Keys)
                 pluginReferenceFields[name].SetValue(this, manager.GetPlugin(name));
-            
+
             try
             {
                 OnCallHook("Loaded", new object[0]);
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogException("Failed to initialize plugin " + Name, ex);
+                Interface.Oxide.LogException($"Failed to initialize plugin '{Name} v{Version}'", ex);
                 Loader.PluginErrors[Name] = ex.Message;
             }
         }
@@ -356,7 +356,7 @@ namespace Oxide.Plugins
                 }
                 catch (Exception ex)
                 {
-                    RaiseError("Exception in " + Name + " plugin worker thread: " + ex.ToString());
+                    RaiseError($"Exception in '{Name} v{Version}' plugin worker thread: {ex.ToString()}");
                 }
             });
         }

@@ -81,7 +81,7 @@ namespace Oxide.Core.Plugins
             // Subscribe us
             foreach (string hookname in hooks.Keys)
                 Subscribe(hookname);
-            
+
             try
             {
                 // Let the plugin know that it's loading
@@ -89,7 +89,7 @@ namespace Oxide.Core.Plugins
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogException("Failed to initialize plugin " + Name, ex);
+                Interface.Oxide.LogException($"Failed to initialize plugin '{Name} v{Version}'", ex);
                 if (Loader != null) Loader.PluginErrors[Name] = ex.Message;
             }
         }

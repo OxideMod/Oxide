@@ -189,7 +189,7 @@ namespace Oxide.Core.Plugins
             if (!lastDeprecatedWarningAt.TryGetValue(name, out last_warning_at) || now - last_warning_at > 300f)
             {
                 lastDeprecatedWarningAt[name] = now;
-                Interface.Oxide.LogWarning("{0} plugin is using deprecated hook: {1}", plugins[0].Name, name);
+                Interface.Oxide.LogWarning("'{0} v{1}' plugin is using deprecated hook: {2}", plugins[0].Name, plugins[0].Version, name);
             }
 
             return CallHook(name, args);
