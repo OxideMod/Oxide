@@ -195,7 +195,7 @@ namespace Oxide.Core.Plugins
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogException(string.Format("Failed to call hook '{0}' on plugin '{1}'", hookname, Title), ex);
+                Interface.Oxide.LogException($"Failed to call hook '{hookname}' on plugin '{Name} v{Version}'", ex);
                 return null;
             }
             finally
@@ -205,13 +205,13 @@ namespace Oxide.Core.Plugins
                 {
                     stoppedAt = Interface.Oxide.Now;
                     if (stoppedAt - startedAt > 0.5)
-                        Interface.Oxide.LogWarning(string.Format("CallHook '{0}' on plugin '{1}' took: {2:0}ms", hookname, Title, (stoppedAt - startedAt) * 1000));
+                        Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took: {(stoppedAt - startedAt)*1000:0}ms");
                     sum += stoppedAt - startedAt;
                     if (stoppedAt - averageAt > 10)
                     {
                         sum /= stoppedAt - averageAt;
                         if (sum > 0.25)
-                            Interface.Oxide.LogWarning(string.Format("CallHook '{0}' on plugin '{1}' took average: {2:0}ms", hookname, Title, sum * 1000));
+                            Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took average: {sum*1000:0}ms");
                         sum = 0;
                         averageAt = 0;
                     }

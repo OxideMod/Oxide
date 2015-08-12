@@ -107,7 +107,9 @@ namespace Oxide.Ext.MySql.Libraries
                 }
                 catch (Exception ex)
                 {
-                    Interface.Oxide.LogException("Exception raised in mysql handle", ex);
+                    var message = "MySql handle raised an exception";
+                    if (Connection?.Plugin != null) message += $" in '{Connection.Plugin.Name} v{Connection.Plugin.Version}' plugin";
+                    Interface.Oxide.LogException(message, ex);
                     Cleanup();
                 }
                 Interface.Oxide.NextTick(() =>
@@ -121,7 +123,9 @@ namespace Oxide.Ext.MySql.Libraries
                     }
                     catch (Exception ex)
                     {
-                        Interface.Oxide.LogException("Exception raised in mysql command callback", ex);
+                        var message = "MySql command callback raised an exception";
+                        if (Connection?.Plugin != null) message += $" in '{Connection.Plugin.Name} v{Connection.Plugin.Version}' plugin";
+                        Interface.Oxide.LogException(message, ex);
                     }
                 });
                 return true;

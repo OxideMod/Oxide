@@ -147,7 +147,9 @@ namespace Oxide.Core.Libraries
                 catch (Exception ex)
                 {
                     ResponseText = ex.Message.Trim('\r', '\n', ' ');
-                    Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
+                    var message = $"Web request produced exception (Url: {URL})";
+                    if (Owner) message += $" in '{Owner.Name} v{Owner.Version}' plugin";
+                    Interface.Oxide.LogException(message, ex);
                     if (request != null) request.Abort();
                     OnComplete();
                 }
@@ -186,7 +188,9 @@ namespace Oxide.Core.Libraries
                     catch (Exception ex)
                     {
                         ResponseText = ex.Message.Trim('\r', '\n', ' ');
-                        Interface.Oxide.LogException(string.Format("Web request produced exception (Url: {0})", URL), ex);
+                        var message = $"Web request produced exception (Url: {URL})";
+                        if (Owner) message += $" in '{Owner.Name} v{Owner.Version}' plugin";
+                        Interface.Oxide.LogException(message, ex);
                     }
                     if (request == null) return;
                     request.Abort();
@@ -221,7 +225,7 @@ namespace Oxide.Core.Libraries
                     catch (Exception ex)
                     {
                         var message = "Web request callback raised an exception";
-                        if (Owner) message += $" in '{Owner.Name}' plugin";
+                        if (Owner) message += $" in '{Owner.Name} v{Owner.Version}' plugin";
                         Interface.Oxide.LogException(message, ex);
                     }
                     Owner = null;

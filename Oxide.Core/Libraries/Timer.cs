@@ -96,8 +96,8 @@ namespace Oxide.Core.Libraries
                 catch (Exception ex)
                 {
                     Destroy();
-                    var error_message = string.Format("Failed to run a {0:0.00} timer", Delay);
-                    if (Owner) error_message += " in " + Owner.Name;
+                    var error_message = $"Failed to run a {Delay:0.00} timer";
+                    if (Owner) error_message += $" in '{Owner.Name} v{Owner.Version}'";
                     Interface.Oxide.LogException(error_message, ex);
                 }
 
