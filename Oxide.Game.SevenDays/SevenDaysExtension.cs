@@ -118,7 +118,7 @@ namespace Oxide.Game.SevenDays
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
-                var players = GameManager.Instance.World.Players.list.Count.ToString();
+                var players = GameManager.Instance?.World?.Players?.Count;
                 var hostname = GamePrefs.GetString(EnumGamePrefs.ServerName);
                 return string.Concat(players, " | ", hostname);
             };
@@ -130,15 +130,21 @@ namespace Oxide.Game.SevenDays
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                // TODO: FPS and server uptime
-                return "";
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
             };
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = GameManager.Instance.World.Players.list.Count.ToString();
-                var playerLimit = GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount).ToString();
-                return string.Concat(" ", players, "/", playerLimit, " players");
+                var players = GameManager.Instance?.World?.Players?.Count;
+                var playerLimit = GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount);
+                //var sleepersCount = ;
+                //var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
+                var entitiesCount = GameManager.Instance?.World?.Entities?.Count;
+                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
+                return string.Concat(" ", players, "/", playerLimit, " players, ", entities);
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
@@ -148,14 +154,17 @@ namespace Oxide.Game.SevenDays
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                // TODO: Game time, entities, weather?
-                return "";
+                if (GameManager.Instance == null || GameManager.Instance.World == null) return string.Empty;
+                TimeSpan t = TimeSpan.FromSeconds(GameManager.Instance.World.GetWorldTime());
+                DateTime time = DateTime.Today.Add(t);
+                var gameTime = time.ToString("h:mm tt").ToLower();
+                return string.Concat(" ", gameTime);
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
                 var gameVersion = GamePrefs.GetString(EnumGamePrefs.GameVersion);
                 var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for 7 Days to Die ", gameVersion);
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 

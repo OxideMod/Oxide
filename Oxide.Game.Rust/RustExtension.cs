@@ -184,15 +184,18 @@ namespace Oxide.Game.Rust
             {
                 var fps = Performance.frameRate;
                 var uptime = Number.FormatSeconds((int)Time.realtimeSinceStartup);
-                return string.Concat(fps, "fps, ", uptime, string.Empty);
+                return string.Concat(fps, "fps, ", uptime);
             };
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = BasePlayer.activePlayerList.Count;
                 var playerLimit = (Net.sv == null ? 0 : Net.sv.maxConnections);
-                var sleepers = BasePlayer.sleepingPlayerList.Count;
-                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, sleepers.Equals(1) ? " sleeper" : " sleepers");
+                var sleeperCount = BasePlayer.sleepingPlayerList.Count;
+                var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
+                var entitiesCount = BaseNetworkable.serverEntities.Count;
+                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
+                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
@@ -205,15 +208,14 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 // TODO: World/map name, size, and seed
-                var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt");
-                var entities = BaseNetworkable.serverEntities.Count;
-                return string.Concat(" ", gameTime, ", Entities: ", entities);
+                var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
+                return string.Concat(" ", gameTime);
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
                 var gameVersion = typeof(Protocol).GetField("network").GetValue(null).ToString();
                 var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for Rust ", gameVersion);
+                return string.Concat("Oxide ", oxideVersion, " for Protocol ", gameVersion);
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 

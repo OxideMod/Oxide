@@ -178,20 +178,24 @@ namespace Oxide.Game.ReignOfKings
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                // TODO: Server uptime
-                return string.Concat(fps, "fps");
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
             };
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = Server.PlayerCount;
                 var playerLimit = Server.PlayerLimit;
-                // TODO: Sleeper count
-                return string.Concat(" ", players, "/", playerLimit, " players");
+                var sleepersCount = CodeHatch.StarForge.Sleeping.PlayerSleeperObject.AllSleeperObjects.Count;
+                var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
+                var entitiesCount = CodeHatch.Engine.Core.Cache.Entity.GetAll().Count;
+                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
+                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.Network.time <= 0) return "0.0b/s in, 0.0b/s out";
+                if (uLink.Network.time <= 0) return "0b/s in, 0b/s out";
                 var players = Server.AllPlayers;
                 double bytesSent = 0;
                 double bytesReceived = 0;
@@ -215,7 +219,7 @@ namespace Oxide.Game.ReignOfKings
             {
                 var gameVersion = GameInfo.VersionName;
                 var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for Reign of Kings ", gameVersion);
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
@@ -242,7 +246,7 @@ namespace Oxide.Game.ReignOfKings
             }
             else
                 type = "b";
-            return $"{bytes:0.0}{type}";
+            return $"{bytes:0}{type}";
         }
 
         private void ServerConsoleOnInput(string input)
