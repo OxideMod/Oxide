@@ -155,8 +155,8 @@ namespace Oxide.Core.Extensions
 
                 // Create and register the extension
                 Extension extension = Activator.CreateInstance(extensiontype, this) as Extension;
-                extensions.Add(extension);
                 extension.Load();
+                extensions.Add(extension);
 
                 // Log extension loaded
                 Logger.Write(LogType.Info, "Loaded extension {0} v{1} by {2}", extension.Name, extension.Version, extension.Author);
@@ -186,8 +186,17 @@ namespace Oxide.Core.Extensions
                 }
                 LoadExtension(Path.Combine(directory, file));
             }
-            foreach (var ext in extensions)
-                ext.OnModLoad();
+            foreach (var ext in extensions.ToArray())
+                try
+                {
+                    ext.OnModLoad();
+                }
+                catch (Exception ex)
+                {
+                    extensions.Remove(ext);
+                    Logger.WriteException(string.Format("Failed OnModLoad extension {0} v{1}", ext.Name, ext.Version), ex);
+                    RemoteLogger.Exception(string.Format("Failed OnModLoad extension {0} v{1}", ext.Name, ext.Version), ex);
+                }
         }
 
         /// <summary>
