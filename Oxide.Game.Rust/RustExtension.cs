@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -207,9 +206,8 @@ namespace Oxide.Game.Rust
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                // TODO: World/map name, size, and seed
                 var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
-                return string.Concat(" ", gameTime);
+                return string.Concat(" ", gameTime, ", ", ConVar.Server.level, " [", ConVar.Server.worldsize, ", ", ConVar.Server.seed, "]");
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
