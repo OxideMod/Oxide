@@ -111,7 +111,7 @@ namespace Oxide.Core.Plugins
         /// <param name="name"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected override object OnCallHook(string name, object[] args)
+        protected sealed override object OnCallHook(string name, object[] args)
         {
             List<MethodInfo> methods;
             if (!hooks.TryGetValue(name, out methods)) return null;
