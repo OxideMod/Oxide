@@ -246,7 +246,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 8,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -258,11 +258,14 @@
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "Respawn",
+              "Name": "RespawnAt",
               "ReturnType": "System.Void",
-              "Parameters": []
+              "Parameters": [
+                "UnityEngine.Vector3",
+                "UnityEngine.Quaternion"
+              ]
             },
-            "MSILHash": "PnykUTXAX5N0I5bMDPnQf0MXeF0haWDLpskvmoELK0s=",
+            "MSILHash": "lLNctPyPoqCVibbYR+b1UnPeoPis20U+ybH0XtndFZ4=",
             "BaseHookName": null
           }
         },
