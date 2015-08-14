@@ -595,8 +595,8 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="oldtags"></param>
         /// <returns></returns>
-        [HookMethod("ModifyTags")]
-        private string ModifyTags(string oldtags)
+        [HookMethod("IModifyTags")]
+        private string IModifyTags(string oldtags)
         {
             // We're going to call out and build a list of all tags to use
             var taglist = new List<string>(oldtags.Split(','));
