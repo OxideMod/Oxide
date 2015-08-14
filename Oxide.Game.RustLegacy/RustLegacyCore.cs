@@ -752,30 +752,6 @@ namespace Oxide.Game.RustLegacy
         }
 
         /// <summary>
-        /// Called when the GetClientMove packed is received for a player
-        /// Checking the player position in the packet to prevent harmful packets crashing the server
-        /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="origin"></param>
-        /// <param name="encoded"></param>
-        /// <param name="stateFlags"></param>
-        /// <param name="info"></param>
-        [HookMethod("IOnGetClientMove")]
-        private object IOnGetClientMove(HumanController controller, Vector3 origin, int encoded, ushort stateFlags, uLink.NetworkMessageInfo info)
-        {
-            if (float.IsNaN(origin.x) || float.IsInfinity(origin.x) ||
-                float.IsNaN(origin.y) || float.IsInfinity(origin.y) ||
-                float.IsNaN(origin.z) || float.IsInfinity(origin.z))
-            {
-                Interface.Oxide.LogInfo($"Kicked {controller.netUser.displayName} [{controller.netUser.userID}] for sending bad packets for GetClientMove.");
-                controller.netUser.Kick(NetError.Facepunch_Kick_Violation, true);
-                return false;
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Called when an AI moves
         /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
         /// </summary>
@@ -795,6 +771,31 @@ namespace Oxide.Game.RustLegacy
                 TakeDamage.KillSelf(ai.GetComponent<IDBase>());
                 Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
             }
+        }
+
+        /// <summary>
+        /// Called when the GetClientMove packed is received for a player
+        /// Checking the player position in the packet to prevent harmful packets crashing the server
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="origin"></param>
+        /// <param name="encoded"></param>
+        /// <param name="stateFlags"></param>
+        /// <param name="info"></param>
+        [HookMethod("IOnGetClientMove")]
+        private object IOnGetClientMove(HumanController controller, Vector3 origin, int encoded, ushort stateFlags, uLink.NetworkMessageInfo info)
+        {
+            if (float.IsNaN(origin.x) || float.IsInfinity(origin.x) ||
+                float.IsNaN(origin.y) || float.IsInfinity(origin.y) ||
+                float.IsNaN(origin.z) || float.IsInfinity(origin.z))
+            {
+                Interface.Oxide.LogInfo($"Banned {controller.netUser.displayName} [{controller.netUser.userID}] for sending bad packets (possible teleport hack)");
+                BanList.Add(controller.netUser.userID, controller.netUser.displayName, "Sending bad packets (possible teleport hack)");
+                controller.netUser.Kick(NetError.ConnectionBanned, true);
+                return false;
+            }
+
+            return null;
         }
 
         /// <summary>
