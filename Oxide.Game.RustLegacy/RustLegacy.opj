@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iqQKEMx5qMp9S74+Rzjw3q+XKs61q5DNJZ7yUDJj6X8=",
+            "MSILHash": "7iVtg/bpIqwFz7+vQqcwUW6jlrzElI5du3p+Y60GSjM=",
             "BaseHookName": null
           }
         },
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iqQKEMx5qMp9S74+Rzjw3q+XKs61q5DNJZ7yUDJj6X8=",
+            "MSILHash": "7iVtg/bpIqwFz7+vQqcwUW6jlrzElI5du3p+Y60GSjM=",
             "BaseHookName": null
           }
         },
@@ -70,7 +70,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "VDfokLeOPlp60Lca6zopT7qLD6RasjN+ocQEtQ2t0Qc=",
+            "MSILHash": "LfxsfVOyLYpdMn2t4W0i+hsXpRE9sL1ESi9Q0XEvn/I=",
             "BaseHookName": null
           }
         },
@@ -95,7 +95,7 @@
                 "UnityEngine.Vector3"
               ]
             },
-            "MSILHash": "afUhiD/VnXxr3CXCDkwbDMV8bap38toUZbY3TmMk2hE=",
+            "MSILHash": "S2yoVky4RWw71R2i31mvZVhxsvYcDku/FZ6isRfF9/o=",
             "BaseHookName": null
           }
         },
@@ -118,7 +118,7 @@
               "ReturnType": "StructureMaster/DecayStatus",
               "Parameters": []
             },
-            "MSILHash": "jcmqo2/NYvI3fU0GRYVjiuQrUWAY2209j4oX9xDqkQw=",
+            "MSILHash": "1IZr+5cupcX96geh6H0KOncnvIHezo9qQOc6EfVR+Ho=",
             "BaseHookName": null
           }
         },
@@ -145,7 +145,7 @@
                 "System.UInt64"
               ]
             },
-            "MSILHash": "igKujps8ekfyjlggC3F4VMuCANSmSRNOGfUjxfqOuN0=",
+            "MSILHash": "pn59MFOF07zNbcKg/nwCL688lIUAe1HKOHlTmuRLUto=",
             "BaseHookName": null
           }
         },
@@ -168,7 +168,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "MvVvPmgaEjkz3uv/LGWMixwEXo0IlL1vMF9dCa76mEc=",
+            "MSILHash": "eBr1ektSE4qkPjF6YAXebPzMJSlMZ2HUj30Q72XFmSg=",
             "BaseHookName": null
           }
         },
@@ -193,7 +193,7 @@
                 "IInventoryItem"
               ]
             },
-            "MSILHash": "wxHfOQjaKqYoJc5XMfSE6l2AEslhYMlGl75hkPq69I4=",
+            "MSILHash": "Q1a06utOa4nm6YEP2BwWU1Hm4iH4djgfrGKieJK7bN4=",
             "BaseHookName": null
           }
         },
@@ -219,7 +219,7 @@
                 "IInventoryItem"
               ]
             },
-            "MSILHash": "wUjgPnw4+XHM8Lq+z/YzopIordR6gfKhecV9q1o4dTo=",
+            "MSILHash": "MRARJtLIarrpMY6AiJUFxVxqjAvnXfYXgeJb93y71Qw=",
             "BaseHookName": null
           }
         },
@@ -245,7 +245,7 @@
                 "IInventoryItem"
               ]
             },
-            "MSILHash": "r5DoINTry/k2yXzoB6TePXpjw4eLuWcYsKHFwE9OEkc=",
+            "MSILHash": "itot1Z1wC1nvMg6rE/9kHjYYHSnWCsoIXsj7lRqomPs=",
             "BaseHookName": null
           }
         },
@@ -270,7 +270,7 @@
                 "IBlueprintItem"
               ]
             },
-            "MSILHash": "5umpM8bLjLF5xRRzKCUwsqfTWA9tUrgURlUvNV43Ras=",
+            "MSILHash": "rhgwtRt+H6Dv5OVK/knMULiuK531fXac94sobqkM1Rw=",
             "BaseHookName": null
           }
         },
@@ -282,8 +282,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l8, l0",
             "HookTypeName": "Simple",
-            "Name": "OnStructurePlaced [internal]",
-            "HookName": "OnStructurePlaced",
+            "Name": "IOnStructureBuilt [internal]",
+            "HookName": "IOnStructureBuilt",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "StructureComponentDataBlock",
             "Flagged": false,
@@ -297,7 +297,7 @@
                 "uLink.NetworkMessageInfo&"
               ]
             },
-            "MSILHash": "aWDYtVdnGIpLXBXn37/S+gTU1gaUoqOGvVxVs9EtZ/4=",
+            "MSILHash": "nL/FQ9TKbClVCUDdUW1SI8zLTp2uVDJBgNW63uQAo7M=",
             "BaseHookName": null
           }
         },
@@ -309,8 +309,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l0 => l0",
             "HookTypeName": "Simple",
-            "Name": "ModifyTags [internal]",
-            "HookName": "ModifyTags",
+            "Name": "IModifyTags [internal]",
+            "HookName": "IModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Rust.Steam.Server",
             "Flagged": false,
@@ -320,7 +320,7 @@
               "ReturnType": "System.String",
               "Parameters": []
             },
-            "MSILHash": "yFi6ZcptUuHiJaFyypR8/D9z5te0dwetqk9BrbvnloI=",
+            "MSILHash": "eRdK7MTGBpUJ7RwefOdl4tKMLdvBm68Q+3nVglAwDTQ=",
             "BaseHookName": null
           }
         },
@@ -345,7 +345,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "P9Iu6I61807PVASukzcsB9aW7+yiTMaR+XCOzEVCZtQ=",
+            "MSILHash": "GnOuwgB2ugu3v4gb7XB/6WdgEPMra0VVIxFZfohvOeM=",
             "BaseHookName": null
           }
         },
@@ -370,7 +370,7 @@
                 "NetUser"
               ]
             },
-            "MSILHash": "2aDPb8GYotx3iwh11cZCUJuLfGlMLJqMl1sNMtuWKAw=",
+            "MSILHash": "HXUoxG6IuT2ff73Gnq4tU9S57PDqexwQ3g15tuG32GU=",
             "BaseHookName": null
           }
         },
@@ -397,7 +397,7 @@
                 "RustProto.Avatar"
               ]
             },
-            "MSILHash": "/J9uYTzSNmD12XrTOsCAU216+3U/WZztfwV9Xo/7IH4=",
+            "MSILHash": "H7Duc8/AlTI2KyTcwQcUHXL5fgAMuiHlclidaj+iO5g=",
             "BaseHookName": null
           }
         },
@@ -423,7 +423,7 @@
                 "Controllable"
               ]
             },
-            "MSILHash": "Lkx6ML47f8k9w+UcTX8QwNsRL2VX+g7800QPI+blQQE=",
+            "MSILHash": "qaybCO95JK6Y3Al3132vRx2DrMntbutPnJBlp/O8mpw=",
             "BaseHookName": null
           }
         },
@@ -446,7 +446,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "gIffjuDlrq+hNObmpPj8mySitD1AGjfV1y964Ip1ZP0=",
+            "MSILHash": "xffkTIaQARf90il62rylHiVmrPAHfXAbQrHYP5fj88M=",
             "BaseHookName": null
           }
         },
@@ -458,8 +458,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l0,a0,this",
             "HookTypeName": "Simple",
-            "Name": "OnUserApprove",
-            "HookName": "OnUserApprove",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionAcceptor",
             "Flagged": false,
@@ -471,7 +471,7 @@
                 "uLink.NetworkPlayerApproval"
               ]
             },
-            "MSILHash": "Ygpp4Clqgb70E/esMkKP04LD1PwWFevmaoVBfMv6zjU=",
+            "MSILHash": "CnmQP1Icge5S9Qx0Kx3afF8hshkFb7tgA0MpK5gccFw=",
             "BaseHookName": null
           }
         },
@@ -496,7 +496,7 @@
                 "ConsoleSystem/Arg&"
               ]
             },
-            "MSILHash": "3WS/cKvvnIHc1ZcRfbblg052PEhD43TAciklPY6V3GY=",
+            "MSILHash": "D+SNQLZAu1h9q887bYqu6ZC46PyVl+A9elZsvqKFpSo=",
             "BaseHookName": null
           }
         },
@@ -508,8 +508,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l8, l0",
             "HookTypeName": "Simple",
-            "Name": "OnItemDeployedByPlayer [internal]",
-            "HookName": "OnItemDeployedByPlayer",
+            "Name": "IOnItemDeployed [internal]",
+            "HookName": "IOnItemDeployed",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "DeployableItemDataBlock",
             "Flagged": false,
@@ -523,7 +523,7 @@
                 "uLink.NetworkMessageInfo&"
               ]
             },
-            "MSILHash": "on2ggggWdZBCF5fdT93kUJqxD2+9wtyCjHekUKzZKWQ=",
+            "MSILHash": "KF+2wmzeFWOhnpKt1jMGPRdUcuelLj0qU2778yHwI1Y=",
             "BaseHookName": null
           }
         },
@@ -535,8 +535,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l0,  l5 => l5",
             "HookTypeName": "Simple",
-            "Name": "OnClientSpeak [internal]",
-            "HookName": "OnClientSpeak",
+            "Name": "IOnPlayerVoice [internal]",
+            "HookName": "IOnPlayerVoice",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VoiceCom",
             "Flagged": false,
@@ -549,7 +549,7 @@
                 "System.Byte[]"
               ]
             },
-            "MSILHash": "eK219usO/nC+uOAaL53sehHFy8b1dnEmVtVze+BHci0=",
+            "MSILHash": "lRGPZP8plhLfvl3CE3NCwiq4UT541gqnktbZUGo+MAY=",
             "BaseHookName": null
           }
         },
@@ -561,8 +561,8 @@
             "ArgumentBehavior": 3,
             "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "OnProcessDamageEvent [internal]",
-            "HookName": "OnProcessDamageEvent",
+            "Name": "IOnProcessDamageEvent [internal]",
+            "HookName": "IOnProcessDamageEvent",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TakeDamage",
             "Flagged": false,
@@ -574,7 +574,7 @@
                 "DamageEvent&"
               ]
             },
-            "MSILHash": "7hNttjyuHRPHqGvwEHPHuq+Kj4EITeJhgON75yZCnsI=",
+            "MSILHash": "4RmI0n6m7vZy7x0iOWeLFMWQ4TNmf5zSxvGCiX0zL5I=",
             "BaseHookName": null
           }
         },
@@ -599,7 +599,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "6LUKwQwP44pzTqPdMDmN7zpByRKgAQm8sQmYT0o31dI=",
+            "MSILHash": "CRWJTnUr3SKgxShiXNVO6wrfYEnOOcVasPkgRpK2Oo4=",
             "BaseHookName": null
           }
         },
@@ -611,8 +611,8 @@
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "GetClientMove [internal]",
-            "HookName": "OnGetClientMove",
+            "Name": "IOnGetClientMove [internal]",
+            "HookName": "IOnGetClientMove",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HumanController",
             "Flagged": false,
@@ -627,7 +627,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "SMXZIs9bOO8nnCm7zfC2tFxG3Ir9uy3kgMvjEIN2N28=",
+            "MSILHash": "DToIg6WBON5urrKVC0qFBtbjkUb6bietRyrycSbRimI=",
             "BaseHookName": null
           }
         },
@@ -639,8 +639,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "OnAIMovement [internal]",
-            "HookName": "OnAIMovement",
+            "Name": "IOnAIMovement [internal]",
+            "HookName": "IOnAIMovement",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseAIMovement",
             "Flagged": false,
@@ -653,7 +653,7 @@
                 "System.UInt64"
               ]
             },
-            "MSILHash": "wT5kgzcFBGm8B1iAkh7q0fpHB0T2CvPPaKxl00wMypc=",
+            "MSILHash": "+u2GCtSHTDWu7iqcjcFKh98FNKhbrQfPRx+LI73xrGk=",
             "BaseHookName": null
           }
         },
@@ -665,8 +665,8 @@
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnRecieveNetwork [internal]",
-            "HookName": "OnRecieveNetwork",
+            "Name": "IOnRecieveNetwork [internal]",
+            "HookName": "IOnRecieveNetwork",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Metabolism",
             "Flagged": false,
@@ -683,7 +683,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "w3Hua4lxgvlenn3kztW5TjyvHi3CyR6mlrbWxwj8mpk=",
+            "MSILHash": "qDCF8ydMGtRraEzpDbOFELKJx5VWgw771Nr2MCQXZc8=",
             "BaseHookName": null
           }
         }
