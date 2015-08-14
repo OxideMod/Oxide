@@ -625,7 +625,7 @@ namespace Oxide.Game.Rust
         private object IOnUserApprove(Connection connection)
         {
             // Reject invalid connections
-            if (connection.userid == 0 || connection.username == null)
+            if (connection.userid == 0 || string.IsNullOrEmpty(connection.username))
             {
                 ConnectionAuth.Reject(connection, "Your Steam ID or username is invalid");
                 return true;
