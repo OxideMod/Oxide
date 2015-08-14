@@ -45,7 +45,7 @@ namespace Oxide.Core.Configuration
         /// <summary>
         /// Sets defaults for oxide configuration
         /// </summary>
-        public OxideConfig()
+        public OxideConfig(string filename) : base(filename)
         {
             PluginDirectory = "plugins";
             ConfigDirectory = "config";

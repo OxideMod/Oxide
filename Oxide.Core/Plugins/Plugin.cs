@@ -266,13 +266,12 @@ namespace Oxide.Core.Plugins
         /// </summary>
         protected virtual void LoadConfig()
         {
-            string configpath = Path.Combine(Manager.ConfigPath, string.Format("{0}.json", Name));
-            Config = new DynamicConfigFile();
-            if (File.Exists(configpath))
+            Config = new DynamicConfigFile(Path.Combine(Manager.ConfigPath, string.Format("{0}.json", Name)));
+            if (Config.Exists())
             {
                 try
                 {
-                    Config.Load(configpath);
+                    Config.Load();
                 }
                 catch (Exception ex)
                 {
@@ -301,10 +300,9 @@ namespace Oxide.Core.Plugins
         protected virtual void SaveConfig()
         {
             if (Config == null) return;
-            string configpath = Path.Combine(Manager.ConfigPath, string.Format("{0}.json", Name));
             try
             {
-                Config.Save(configpath);
+                Config.Save();
             }
             catch (Exception ex)
             {

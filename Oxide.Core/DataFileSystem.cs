@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -48,6 +47,22 @@ namespace Oxide.Core
         }
 
         /// <summary>
+        /// Check if datafile exists
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool ExistsDatafile(string name)
+        {
+            DynamicConfigFile datafile;
+            if (!_datafiles.TryGetValue(name, out datafile))
+            {
+                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name))));
+                _datafiles.Add(name, datafile);
+            }
+            return datafile.Exists();
+        }
+
+        /// <summary>
         /// Gets a datafile
         /// </summary>
         /// <param name="name"></param>
@@ -58,23 +73,20 @@ namespace Oxide.Core
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile))
             {
-                datafile = new DynamicConfigFile();
+                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name))));
                 _datafiles.Add(name, datafile);
             }
 
-            // Generate the filename
-            string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
-
             // Does it exist?
-            if (File.Exists(filename))
+            if (datafile.Exists())
             {
                 // Load it
-                datafile.Load(filename);
+                datafile.Load();
             }
             else
             {
                 // Just make a new one
-                datafile.Save(filename);
+                datafile.Save();
             }
 
             return datafile;
@@ -89,47 +101,20 @@ namespace Oxide.Core
             // Get the datafile
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile)) return;
-
-            // Generate the filename
-            string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
-
             // Save it
-            datafile.Save(filename);
+            datafile.Save();
         }
 
         public T ReadObject<T>(string name)
         {
-            string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
-            CheckPath(filename);
-            T customObject;
-            if (File.Exists(filename))
-            {
-                customObject = JsonConvert.DeserializeObject<T>(File.ReadAllText(filename), _settings);
-            }
-            else
-            {
-                customObject = (T)Activator.CreateInstance(typeof(T));
-                WriteObject(name, customObject);
-            }
-            return customObject;
+            var datafile = GetDatafile(name);
+            return datafile.ReadObject<T>();
         }
 
-        public void WriteObject<T>(string name, T Object)
+        public void WriteObject<T>(string name, T Object, bool sync = false)
         {
-            string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
-            CheckPath(filename);
-            File.WriteAllText(filename, JsonConvert.SerializeObject(Object, Formatting.Indented, _settings));
-        }
-
-        /// <summary>
-        /// Check if file path is in chroot directory
-        /// </summary>
-        /// <param name="filename"></param>
-        private void CheckPath(string filename)
-        {
-            string path = Path.GetFullPath(filename);
-            if (!path.StartsWith(Directory, StringComparison.Ordinal))
-                throw new Exception("Only access to oxide directory!");
+            var datafile = GetDatafile(name);
+            datafile.WriteObject(Object, sync);
         }
     }
 }
