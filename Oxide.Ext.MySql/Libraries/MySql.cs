@@ -72,8 +72,9 @@ namespace Oxide.Ext.MySql.Libraries
                 var nonQueryResult = 0;
                 try
                 {
-                    if (_result == null)
-                    {
+                    if (Connection == null) throw new Exception("Connection is null");
+                    //if (_result == null)
+                    //{
                         _connection = Connection.Con;
                         if (_connection.State == ConnectionState.Closed)
                             _connection.Open();
@@ -81,8 +82,9 @@ namespace Oxide.Ext.MySql.Libraries
                         _cmd.CommandText = Sql.SQL;
                         Sql.AddParams(_cmd, Sql.Arguments, "@");
                         _result = NonQuery ? _cmd.BeginExecuteNonQuery() : _cmd.BeginExecuteReader();
-                    }
-                    if (!_result.IsCompleted) return false;
+                    //}
+                    _result.AsyncWaitHandle.WaitOne();
+                    //if (!_result.IsCompleted) return false;
                     if (NonQuery)
                         nonQueryResult = _cmd.EndExecuteNonQuery(_result);
                     else
@@ -146,19 +148,20 @@ namespace Oxide.Ext.MySql.Libraries
                 lock (_syncroot)
                 {
                     if (_queue.Count > 0)
-                        query = _queue.Peek();
+                        query = _queue.Dequeue();
                     else
                     {
                         foreach (var connection in _runningConnections)
-                            if (!connection.ConnectionPersistent) CloseDb(connection);
+                            if (connection != null && !connection.ConnectionPersistent) CloseDb(connection);
                         _runningConnections.Clear();
                     }
                 }
                 if (query != null)
                 {
-                    if (!query.Handle()) continue;
-                    _runningConnections.Add(query.Connection);
-                    lock (_syncroot) _queue.Dequeue();
+                    query.Handle();
+                    //if (!query.Handle()) continue;
+                    if (query.Connection != null) _runningConnections.Add(query.Connection);
+                    //lock (_syncroot) _queue.Dequeue();
                 }
                 else
                     _workevent.WaitOne();
