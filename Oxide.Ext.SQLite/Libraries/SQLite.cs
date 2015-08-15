@@ -74,6 +74,7 @@ namespace Oxide.Ext.SQLite.Libraries
                 var nonQueryResult = 0;
                 try
                 {
+                    if (Connection == null) throw new Exception("Connection is null");
                     _connection = Connection.Con;
                     if (_connection.State == ConnectionState.Closed)
                         _connection.Open();
@@ -141,14 +142,14 @@ namespace Oxide.Ext.SQLite.Libraries
                     else
                     {
                         foreach (var connection in _runningConnections)
-                            if (!connection.ConnectionPersistent) CloseDb(connection);
+                            if (connection != null && !connection.ConnectionPersistent) CloseDb(connection);
                         _runningConnections.Clear();
                     }
                 }
                 if (query != null)
                 {
                     query.Handle();
-                    _runningConnections.Add(query.Connection);
+                    if (query.Connection != null) _runningConnections.Add(query.Connection);
                 }
                 else
                     _workevent.WaitOne();
