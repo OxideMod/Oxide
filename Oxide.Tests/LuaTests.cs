@@ -61,7 +61,7 @@ namespace Oxide.Tests
                 }
             }
 
-            cfg = new DynamicConfigFile();
+            cfg = new DynamicConfigFile(Path.GetTempFileName());
             Utility.SetConfigFromTable(cfg, tbl);
 
             TestConfigFile(cfg);
@@ -119,7 +119,7 @@ namespace Oxide.Tests
             lua.LoadString("TeleportData = { AdminTP = {}, Test = 3, ABC=4 }", "test").Call();
 
             LuaTable tdata = lua["TeleportData"] as LuaTable;
-            DynamicConfigFile cfgfile = new DynamicConfigFile();
+            DynamicConfigFile cfgfile = new DynamicConfigFile(Path.GetTempFileName());
             Utility.SetConfigFromTable(cfgfile, tdata);
 
             Assert.AreEqual(3, cfgfile["Test"], "Failed TeleportData.Test");
@@ -128,7 +128,7 @@ namespace Oxide.Tests
             //Assert.IsInstanceOfType(cfgfile["AdminTP"], typeof(List<string, object>), "Failed TeleportData.AdminTP");
 
             string tmp = Path.GetTempFileName();
-            cfgfile.Save(tmp);
+            cfgfile.Save();
 
             string text = File.ReadAllText(tmp);
             File.Delete(tmp);

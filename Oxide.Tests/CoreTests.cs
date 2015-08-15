@@ -46,7 +46,7 @@ namespace Oxide.Tests
 
             TestConfigFile(cfg);
 
-            cfg.Save(filename);
+            cfg.Save();
             cfg = ConfigFile.Load<DynamicConfigFile>(filename);
 
             TestConfigFile(cfg);

@@ -20,7 +20,7 @@ namespace Oxide.Core.Configuration
         /// <summary>
         /// Initializes a new instance of the DynamicConfigFile class
         /// </summary>
-        public DynamicConfigFile()
+        public DynamicConfigFile(string filename) : base(filename)
         {
             _keyvalues = new Dictionary<string, object>();
             var converter = new KeyValuesConverter();
@@ -33,21 +33,62 @@ namespace Oxide.Core.Configuration
         /// Loads this config from the specified file
         /// </summary>
         /// <param name="filename"></param>
-        public override void Load(string filename)
+        public override void Load(string filename = null)
         {
-            CheckPath(filename);
-            string source = File.ReadAllText(filename);
+            CheckPath(filename ?? Filename);
+            string source = File.ReadAllText(filename ?? Filename);
             _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(source, _settings);
+        }
+
+        /// <summary>
+        /// Loads this config from the specified file
+        /// </summary>
+        /// <param name="filename"></param>
+        public T ReadObject<T>(string filename = null)
+        {
+            CheckPath(filename ?? Filename);
+            T customObject;
+            if (Exists())
+            {
+                var source = File.ReadAllText(filename ?? Filename);
+                customObject = JsonConvert.DeserializeObject<T>(source, _settings);
+            }
+            else
+            {
+                customObject = Activator.CreateInstance<T>();
+                WriteObject(customObject);
+            }
+            return customObject;
         }
 
         /// <summary>
         /// Saves this config to the specified file
         /// </summary>
         /// <param name="filename"></param>
-        public override void Save(string filename)
+        public override void Save(string filename = null)
         {
-            CheckPath(filename);
-            File.WriteAllText(filename, JsonConvert.SerializeObject(_keyvalues, Formatting.Indented, _settings));
+            CheckPath(filename ?? Filename);
+            File.WriteAllText(filename ?? Filename, JsonConvert.SerializeObject(_keyvalues, Formatting.Indented, _settings));
+        }
+
+        /// <summary>
+        /// Saves this config to the specified file
+        /// </summary>
+        /// <param name="sync"></param>
+        /// <param name="filename"></param>
+        /// <param name="config"></param>
+        public void WriteObject<T>(T config, bool sync = false, string filename = null)
+        {
+            CheckPath(filename ?? Filename);
+            var json = JsonConvert.SerializeObject(config, Formatting.Indented, _settings);
+            File.WriteAllText(filename ?? Filename, json);
+            if (sync) _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(json, _settings);
+        }
+
+        public bool Exists(string filename = null)
+        {
+            CheckPath(filename ?? Filename);
+            return File.Exists(filename ?? Filename);
         }
 
         /// <summary>

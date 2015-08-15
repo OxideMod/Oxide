@@ -52,8 +52,6 @@ namespace Oxide.Ext.MySql.Libraries
             /// </summary>
             public bool NonQuery { get; internal set; }
 
-            public MySql Lib { get; internal set; }
-
             private MySqlCommand _cmd;
             private MySqlConnection _connection;
             private IAsyncResult _result;
@@ -144,19 +142,26 @@ namespace Oxide.Ext.MySql.Libraries
         {
             while (_running)
             {
-                if (_queue.Count < 1)
+                MySqlQuery query = null;
+                lock (_syncroot)
                 {
-                    foreach (var connection in _runningConnections)
-                        if (!connection.ConnectionPersistent) CloseDb(connection);
-                    _runningConnections.Clear();
-                    _workevent.Reset();
-                    _workevent.WaitOne();
+                    if (_queue.Count > 0)
+                        query = _queue.Peek();
+                    else
+                    {
+                        foreach (var connection in _runningConnections)
+                            if (!connection.ConnectionPersistent) CloseDb(connection);
+                        _runningConnections.Clear();
+                    }
                 }
-                MySqlQuery query;
-                lock (_syncroot) query = _queue.Peek();
-                if (!query.Handle()) continue;
-                _runningConnections.Add(query.Connection);
-                lock (_syncroot) _queue.Dequeue();
+                if (query != null)
+                {
+                    if (!query.Handle()) continue;
+                    _runningConnections.Add(query.Connection);
+                    lock (_syncroot) _queue.Dequeue();
+                }
+                else
+                    _workevent.WaitOne();
             }
         }
 
@@ -236,11 +241,11 @@ namespace Oxide.Ext.MySql.Libraries
             {
                 Sql = sql,
                 Connection = db,
-                Callback = callback,
-                Lib = this
+                Callback = callback
             };
             lock (_syncroot) _queue.Enqueue(query);
             _workevent.Set();
+
         }
 
         [LibraryFunction("ExecuteNonQuery")]
@@ -251,8 +256,7 @@ namespace Oxide.Ext.MySql.Libraries
                 Sql = sql,
                 Connection = db,
                 CallbackNonQuery = callback,
-                NonQuery = true,
-                Lib = this
+                NonQuery = true
             };
             lock (_syncroot) _queue.Enqueue(query);
             _workevent.Set();

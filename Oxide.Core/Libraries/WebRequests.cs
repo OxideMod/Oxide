@@ -295,11 +295,6 @@ namespace Oxide.Core.Libraries
             {
                 while (!shutdown)
                 {
-                    if (queue.Count < 1)
-                    {
-                        workevent.Reset();
-                        workevent.WaitOne();
-                    }
                     int workerThreads, completionPortThreads;
                     ThreadPool.GetAvailableThreads(out workerThreads, out completionPortThreads);
                     if (workerThreads <= maxWorkerThreads || completionPortThreads <= maxCompletionPortThreads)
@@ -311,7 +306,10 @@ namespace Oxide.Core.Libraries
                     lock (syncroot)
                         if (queue.Count > 0)
                             request = queue.Dequeue();
-                    if (request != null) request.Start();
+                    if (request != null)
+                        request.Start();
+                    else
+                        workevent.WaitOne();
                 }
             }
             catch (Exception ex)

@@ -55,8 +55,6 @@ namespace Oxide.Ext.SQLite.Libraries
             /// </summary>
             public bool NonQuery { get; internal set; }
 
-            public SQLite Lib { get; internal set; }
-
             private SQLiteCommand _cmd;
             private SQLiteConnection _connection;
 
@@ -135,18 +133,25 @@ namespace Oxide.Ext.SQLite.Libraries
         {
             while (_running)
             {
-                if (_queue.Count < 1)
+                SQLiteQuery query = null;
+                lock (_syncroot)
                 {
-                    foreach (var connection in _runningConnections)
-                        if (!connection.ConnectionPersistent) CloseDb(connection);
-                    _runningConnections.Clear();
-                    _workevent.Reset();
-                    _workevent.WaitOne();
+                    if (_queue.Count > 0)
+                        query = _queue.Dequeue();
+                    else
+                    {
+                        foreach (var connection in _runningConnections)
+                            if (!connection.ConnectionPersistent) CloseDb(connection);
+                        _runningConnections.Clear();
+                    }
                 }
-                SQLiteQuery query;
-                lock (_syncroot) query = _queue.Dequeue();
-                query.Handle();
-                _runningConnections.Add(query.Connection);
+                if (query != null)
+                {
+                    query.Handle();
+                    _runningConnections.Add(query.Connection);
+                }
+                else
+                    _workevent.WaitOne();
             }
         }
 
@@ -230,8 +235,7 @@ namespace Oxide.Ext.SQLite.Libraries
             {
                 Sql = sql,
                 Connection = db,
-                Callback = callback,
-                Lib = this
+                Callback = callback
             };
             lock (_syncroot) _queue.Enqueue(query);
             _workevent.Set();
@@ -245,8 +249,7 @@ namespace Oxide.Ext.SQLite.Libraries
                 Sql = sql,
                 Connection = db,
                 CallbackNonQuery = callback,
-                NonQuery = true,
-                Lib = this
+                NonQuery = true
             };
             lock (_syncroot) _queue.Enqueue(query);
             _workevent.Set();
