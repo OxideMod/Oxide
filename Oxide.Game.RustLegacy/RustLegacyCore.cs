@@ -657,7 +657,7 @@ namespace Oxide.Game.RustLegacy
         private object IOnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
         {
             // Reject invalid connections
-            if (connection.UserID == 0 || connection.UserName == null)
+            if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
             {
                 approval.Deny(uLink.NetworkConnectionError.ConnectionBanned);
                 return false;
