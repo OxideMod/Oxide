@@ -2097,6 +2097,29 @@
             "MSILHash": "K/jY5Smck2eN7hve/tkAwFzt4oSOux7jFX3zwQW3M/g=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 15,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this",
+            "HookTypeName": "Simple",
+            "Name": "OnEntityLeaveAll",
+            "HookName": "OnEntityLeaveAll",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseEntity",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RemoveFromTriggers",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "sC6BVjs5aTaPZeS0IoScOFIwu+RPneX3NT34mWx6MLU=",
+            "BaseHookName": null
+          }
         }
       ]
     }
