@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -43,7 +44,11 @@ namespace Oxide.Core
         /// <returns></returns>
         private static string SanitiseName(string name)
         {
-            return Regex.Replace(name, @"[/:,\\]", "_");
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            name = name.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+            name = Regex.Replace(name, @"[:,]", "_");
+            name = Regex.Replace(name, @"\.+", @"\.");
+            return name.TrimStart('.', Path.DirectorySeparatorChar);
         }
 
         /// <summary>
@@ -53,10 +58,11 @@ namespace Oxide.Core
         /// <returns></returns>
         public bool ExistsDatafile(string name)
         {
+            name = SanitiseName(name);
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile))
             {
-                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name))));
+                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", name)));
                 _datafiles.Add(name, datafile);
             }
             return datafile.Exists();
@@ -69,11 +75,12 @@ namespace Oxide.Core
         /// <returns></returns>
         public DynamicConfigFile GetDatafile(string name)
         {
+            name = SanitiseName(name);
             // See if it already exists
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile))
             {
-                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name))));
+                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", name)));
                 _datafiles.Add(name, datafile);
             }
 
@@ -98,6 +105,7 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public void SaveDatafile(string name)
         {
+            name = SanitiseName(name);
             // Get the datafile
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile)) return;
@@ -107,14 +115,16 @@ namespace Oxide.Core
 
         public T ReadObject<T>(string name)
         {
-            var datafile = GetDatafile(name);
-            return datafile.ReadObject<T>();
+            if (ExistsDatafile(name))
+                return GetDatafile(name).ReadObject<T>();
+            var instance = Activator.CreateInstance<T>();
+            WriteObject(name, instance);
+            return instance;
         }
 
         public void WriteObject<T>(string name, T Object, bool sync = false)
         {
-            var datafile = GetDatafile(name);
-            datafile.WriteObject(Object, sync);
+            GetDatafile(name).WriteObject(Object, sync);
         }
     }
 }

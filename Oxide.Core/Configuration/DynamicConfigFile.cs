@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Oxide.Core.Configuration
 {
@@ -68,6 +69,8 @@ namespace Oxide.Core.Configuration
         public override void Save(string filename = null)
         {
             CheckPath(filename ?? Filename);
+            var dir = Path.GetDirectoryName(filename ?? Filename);
+            if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
             File.WriteAllText(filename ?? Filename, JsonConvert.SerializeObject(_keyvalues, Formatting.Indented, _settings));
         }
 
@@ -304,12 +307,16 @@ namespace Oxide.Core.Configuration
             {
                 // Get the dictionary to populate
                 Dictionary<string, object> dict = existingValue as Dictionary<string, object> ?? new Dictionary<string, object>();
-
+                if (reader.TokenType != JsonToken.StartObject)
+                {
+                    JArray.Load(reader);
+                    return dict;
+                }
                 // Read until end of object
                 while (reader.Read() && reader.TokenType != JsonToken.EndObject)
                 {
                     // Read property name
-                    if (reader.TokenType != JsonToken.PropertyName) Throw("Unexpected token");
+                    if (reader.TokenType != JsonToken.PropertyName) Throw("Unexpected token: " + reader.TokenType);
                     string propname = reader.Value as string;
                     if (!reader.Read()) Throw("Unexpected end of json");
 
@@ -339,7 +346,7 @@ namespace Oxide.Core.Configuration
                             dict[propname] = serializer.Deserialize<List<object>>(reader);
                             break;
                         default:
-                            Throw("Unexpected token");
+                            Throw("Unexpected token: " + reader.TokenType);
                             break;
                     }
                 }
@@ -381,7 +388,7 @@ namespace Oxide.Core.Configuration
                             list.Add(serializer.Deserialize<List<object>>(reader));
                             break;
                         default:
-                            Throw("Unexpected token");
+                            Throw("Unexpected token: " + reader.TokenType);
                             break;
                     }
                 }
@@ -411,7 +418,7 @@ namespace Oxide.Core.Configuration
                 // Simply loop through and serialise
                 foreach (var pair in dict.OrderBy(i => i.Key))
                 {
-                    writer.WritePropertyName(pair.Key);
+                    writer.WritePropertyName(pair.Key, true);
                     serializer.Serialize(writer, pair.Value);
                 }
 
