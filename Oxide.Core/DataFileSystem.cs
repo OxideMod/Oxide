@@ -37,6 +37,39 @@ namespace Oxide.Core
         }
 
         /// <summary>
+        /// Checks if data file exists without creating one
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool DatafileExists(string name)
+        {
+            string filename = Path.Combine(Directory, string.Format("{0}.json", SanitiseName(name)));
+            CheckPath(filename);
+            
+            if (File.Exists(filename))
+            {
+                return true;   
+            }
+            
+            return false;
+        }
+        
+        /// <summary>
+        /// Allows you to create a subdirectory
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public DataFileSystem CreateSubdirectory(string name)
+        {
+            string directoryPath = Path.Combine(Directory, SanitiseName(name));
+            CheckPath(directoryPath);
+            
+            System.IO.Directory.CreateDirectory(directoryPath);
+            
+            return new DataFileSystem(directoryPath);
+        }
+
+        /// <summary>
         /// Makes the specified name safe for use in a filename
         /// </summary>
         /// <param name="name"></param>
