@@ -35,7 +35,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            //RemoteLogger.SetTag("protocol", cl000c.cCompatibilityVersion.ToLower());
+            RemoteLogger.SetTag("protocol", "0.22"); // TODO: Grab version/protocol
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Oxide.Game.TheForest
             if (serverInitialized) return;
             serverInitialized = true;
             // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
+            RemoteLogger.SetTag("hostname", CoopLobby.Instance?.Info.Name.Split("()".ToCharArray())[0]);
         }
 
         /// <summary>

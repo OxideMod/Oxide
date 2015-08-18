@@ -95,7 +95,51 @@ namespace Oxide.Game.TheForest
             if (!Interface.Oxide.EnableConsole()) return;
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            // TODO: Add status information
+
+            Interface.Oxide.ServerConsole.Title = () =>
+            {
+                var players = CoopLobby.Instance?.MemberCount;
+                var hostname = CoopLobby.Instance?.Info?.Name.Split("()".ToCharArray())[0];
+                return string.Concat(players, " | ", hostname);
+            };
+
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var hostname = CoopLobby.Instance?.Info.Name.Split("()".ToCharArray())[0];
+                return string.Concat(" ", hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = CoopLobby.Instance?.MemberCount;
+                var playerLimit = CoopLobby.Instance?.Info?.MemberLimit;
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                // TODO: Network in/out
+                return "";
+            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                //var gameTime = TheForestAtmosphere.Instance?.TimeOfDay; // TODO: Fix NRE and format
+                return string.Concat(" "/*, gameTime*/);
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = "0.22"; // TODO: Grab version/protocol
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)
