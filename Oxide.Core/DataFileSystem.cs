@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 
 using Newtonsoft.Json;
 
@@ -38,27 +37,13 @@ namespace Oxide.Core
         }
 
         /// <summary>
-        /// Makes the specified name safe for use in a filename
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private static string SanitiseName(string name)
-        {
-            if (string.IsNullOrEmpty(name)) return string.Empty;
-            name = name.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-            name = Regex.Replace(name, @"[:,]", "_");
-            name = Regex.Replace(name, @"\.+", ".");
-            return name.TrimStart('.', Path.DirectorySeparatorChar);
-        }
-
-        /// <summary>
         /// Check if datafile exists
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public bool ExistsDatafile(string name)
         {
-            name = SanitiseName(name);
+            name = DynamicConfigFile.SanitiseName(name);
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile))
             {
@@ -75,7 +60,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public DynamicConfigFile GetDatafile(string name)
         {
-            name = SanitiseName(name);
+            name = DynamicConfigFile.SanitiseName(name);
             // See if it already exists
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile))
@@ -105,7 +90,7 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public void SaveDatafile(string name)
         {
-            name = SanitiseName(name);
+            name = DynamicConfigFile.SanitiseName(name);
             // Get the datafile
             DynamicConfigFile datafile;
             if (!_datafiles.TryGetValue(name, out datafile)) return;

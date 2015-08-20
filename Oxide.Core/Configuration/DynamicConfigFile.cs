@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -36,8 +37,8 @@ namespace Oxide.Core.Configuration
         /// <param name="filename"></param>
         public override void Load(string filename = null)
         {
-            CheckPath(filename ?? Filename);
-            string source = File.ReadAllText(filename ?? Filename);
+            filename = CheckPath(filename ?? Filename);
+            string source = File.ReadAllText(filename);
             _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(source, _settings);
         }
 
@@ -47,11 +48,11 @@ namespace Oxide.Core.Configuration
         /// <param name="filename"></param>
         public T ReadObject<T>(string filename = null)
         {
-            CheckPath(filename ?? Filename);
+            filename = CheckPath(filename ?? Filename);
             T customObject;
             if (Exists())
             {
-                var source = File.ReadAllText(filename ?? Filename);
+                var source = File.ReadAllText(filename);
                 customObject = JsonConvert.DeserializeObject<T>(source, _settings);
             }
             else
@@ -68,10 +69,10 @@ namespace Oxide.Core.Configuration
         /// <param name="filename"></param>
         public override void Save(string filename = null)
         {
-            CheckPath(filename ?? Filename);
-            var dir = Path.GetDirectoryName(filename ?? Filename);
+            filename = CheckPath(filename ?? Filename);
+            var dir = GetDirectoryName(filename);
             if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            File.WriteAllText(filename ?? Filename, JsonConvert.SerializeObject(_keyvalues, Formatting.Indented, _settings));
+            File.WriteAllText(filename, JsonConvert.SerializeObject(_keyvalues, Formatting.Indented, _settings));
         }
 
         /// <summary>
@@ -82,27 +83,60 @@ namespace Oxide.Core.Configuration
         /// <param name="config"></param>
         public void WriteObject<T>(T config, bool sync = false, string filename = null)
         {
-            CheckPath(filename ?? Filename);
+            filename = CheckPath(filename ?? Filename);
             var json = JsonConvert.SerializeObject(config, Formatting.Indented, _settings);
-            File.WriteAllText(filename ?? Filename, json);
+            File.WriteAllText(filename, json);
             if (sync) _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(json, _settings);
         }
 
         public bool Exists(string filename = null)
         {
-            CheckPath(filename ?? Filename);
-            return File.Exists(filename ?? Filename);
+            filename = CheckPath(filename ?? Filename);
+            return File.Exists(filename);
         }
 
         /// <summary>
         /// Check if file path is in chroot directory
         /// </summary>
         /// <param name="filename"></param>
-        private void CheckPath(string filename)
+        private string CheckPath(string filename)
         {
-            string path = Path.GetFullPath(filename);
+            filename = SanitiseName(filename);
+            var path = Path.GetFullPath(filename);
             if (!path.StartsWith(_chroot, StringComparison.Ordinal))
                 throw new Exception("Only access to oxide directory!");
+            return filename;
+        }
+
+        /// <summary>
+        /// Makes the specified name safe for use in a filename
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string SanitiseName(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return string.Empty;
+            name = name.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+            name = Regex.Replace(name, "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]", "_");
+            name = Regex.Replace(name, @"\.+", ".");
+            return name.TrimStart('.', Path.DirectorySeparatorChar);
+        }
+
+        /// <summary>
+        /// Gets the path only
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string GetDirectoryName(string name)
+        {
+            try
+            {
+                return name.Substring(0, name.LastIndexOf(Path.DirectorySeparatorChar));
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
