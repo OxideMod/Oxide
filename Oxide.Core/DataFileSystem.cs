@@ -47,7 +47,7 @@ namespace Oxide.Core
             if (string.IsNullOrEmpty(name)) return string.Empty;
             name = name.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
             name = Regex.Replace(name, @"[:,]", "_");
-            name = Regex.Replace(name, @"\.+", @"\.");
+            name = Regex.Replace(name, @"\.+", ".");
             return name.TrimStart('.', Path.DirectorySeparatorChar);
         }
 
