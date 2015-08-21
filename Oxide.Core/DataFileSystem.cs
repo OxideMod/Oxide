@@ -36,6 +36,16 @@ namespace Oxide.Core
             _settings.Converters.Add(converter);
         }
 
+        public DynamicConfigFile GetFile(string name)
+        {
+            name = DynamicConfigFile.SanitiseName(name);
+            DynamicConfigFile datafile;
+            if (_datafiles.TryGetValue(name, out datafile)) return datafile;
+            datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", name)));
+            _datafiles.Add(name, datafile);
+            return datafile;
+        }
+
         /// <summary>
         /// Check if datafile exists
         /// </summary>
@@ -43,14 +53,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public bool ExistsDatafile(string name)
         {
-            name = DynamicConfigFile.SanitiseName(name);
-            DynamicConfigFile datafile;
-            if (!_datafiles.TryGetValue(name, out datafile))
-            {
-                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", name)));
-                _datafiles.Add(name, datafile);
-            }
-            return datafile.Exists();
+            return GetFile(name).Exists();
         }
 
         /// <summary>
@@ -60,14 +63,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public DynamicConfigFile GetDatafile(string name)
         {
-            name = DynamicConfigFile.SanitiseName(name);
-            // See if it already exists
-            DynamicConfigFile datafile;
-            if (!_datafiles.TryGetValue(name, out datafile))
-            {
-                datafile = new DynamicConfigFile(Path.Combine(Directory, string.Format("{0}.json", name)));
-                _datafiles.Add(name, datafile);
-            }
+            var datafile = GetFile(name);
 
             // Does it exist?
             if (datafile.Exists())
@@ -90,18 +86,14 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public void SaveDatafile(string name)
         {
-            name = DynamicConfigFile.SanitiseName(name);
-            // Get the datafile
-            DynamicConfigFile datafile;
-            if (!_datafiles.TryGetValue(name, out datafile)) return;
             // Save it
-            datafile.Save();
+            GetFile(name).Save();
         }
 
         public T ReadObject<T>(string name)
         {
             if (ExistsDatafile(name))
-                return GetDatafile(name).ReadObject<T>();
+                return GetFile(name).ReadObject<T>();
             var instance = Activator.CreateInstance<T>();
             WriteObject(name, instance);
             return instance;
@@ -109,7 +101,7 @@ namespace Oxide.Core
 
         public void WriteObject<T>(string name, T Object, bool sync = false)
         {
-            GetDatafile(name).WriteObject(Object, sync);
+            GetFile(name).WriteObject(Object, sync);
         }
     }
 }
