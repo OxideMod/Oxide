@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ObjectStream.IO
@@ -17,9 +18,9 @@ namespace ObjectStream.IO
         where TRead : class
         where TWrite : class
     {
-        private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter { Binder = new BindChanger() };
-        private Stream _inStream;
-        private Stream _outStream;
+        private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter { Binder = new BindChanger(), AssemblyFormat = FormatterAssemblyStyle.Simple };
+        private readonly Stream _inStream;
+        private readonly Stream _outStream;
 
         private bool _run;
 

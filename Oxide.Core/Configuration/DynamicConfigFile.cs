@@ -25,9 +25,8 @@ namespace Oxide.Core.Configuration
         public DynamicConfigFile(string filename) : base(filename)
         {
             _keyvalues = new Dictionary<string, object>();
-            var converter = new KeyValuesConverter();
             _settings = new JsonSerializerSettings();
-            _settings.Converters.Add(converter);
+            _settings.Converters.Add(new KeyValuesConverter());
             _chroot = Interface.GetMod().InstanceDirectory;
         }
 
@@ -53,7 +52,7 @@ namespace Oxide.Core.Configuration
             if (Exists())
             {
                 var source = File.ReadAllText(filename);
-                customObject = JsonConvert.DeserializeObject<T>(source, _settings);
+                customObject = JsonConvert.DeserializeObject<T>(source);
             }
             else
             {
@@ -84,7 +83,7 @@ namespace Oxide.Core.Configuration
         public void WriteObject<T>(T config, bool sync = false, string filename = null)
         {
             filename = CheckPath(filename ?? Filename);
-            var json = JsonConvert.SerializeObject(config, Formatting.Indented, _settings);
+            var json = JsonConvert.SerializeObject(config, Formatting.Indented);
             File.WriteAllText(filename, json);
             if (sync) _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(json, _settings);
         }
@@ -341,7 +340,7 @@ namespace Oxide.Core.Configuration
             {
                 // Get the dictionary to populate
                 Dictionary<string, object> dict = existingValue as Dictionary<string, object> ?? new Dictionary<string, object>();
-                if (reader.TokenType != JsonToken.StartObject)
+                if (reader.TokenType == JsonToken.StartArray)
                 {
                     JArray.Load(reader);
                     return dict;

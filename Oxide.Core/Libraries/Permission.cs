@@ -163,14 +163,28 @@ namespace Oxide.Core.Libraries
             name = name.ToLower();
             if (owner == null)
             {
-                foreach (var value in permset.Values)
+                if (permset.Count > 0)
                 {
-                    if (value.Contains(name)) return true;
+                    if (name.Equals("*")) return true;
+                    if (name.EndsWith("*"))
+                    {
+                        name = name.TrimEnd('*');
+                        return permset.Values.SelectMany(v => v).Any(p => p.StartsWith(name));
+                    }
                 }
-                return false;
+                return permset.Values.Any(v => v.Contains(name));
             }
             HashSet<string> set;
             if (!permset.TryGetValue(owner, out set)) return false;
+            if (set.Count > 0)
+            {
+                if (name.Equals("*")) return true;
+                if (name.EndsWith("*"))
+                {
+                    name = name.TrimEnd('*');
+                    return set.Any(p => p.StartsWith(name));
+                }
+            }
             return set.Contains(name);
         }
 
@@ -413,8 +427,32 @@ namespace Oxide.Core.Libraries
             // Get the user data
             var data = GetUserData(userid);
 
+            perm = perm.ToLower();
+
+            if (perm.EndsWith("*"))
+            {
+                HashSet<string> perms;
+                if (owner == null)
+                    perms = new HashSet<string>(permset.Values.SelectMany(v => v));
+                else if (!permset.TryGetValue(owner, out perms))
+                    return;
+                if (perm.Equals("*"))
+                {
+                    if (!perms.Aggregate(false, (c, s) => c | data.Perms.Add(s)))
+                        return;
+                }
+                else
+                {
+                    perm = perm.TrimEnd('*');
+                    if (!perms.Where(s => s.StartsWith(perm)).Aggregate(false, (c, s) => c | data.Perms.Add(s)))
+                        return;
+                }
+                SaveUsers();
+                return;
+            }
+
             // Add the perm and save
-            if (!data.Perms.Add(perm.ToLower())) return;
+            if (!data.Perms.Add(perm)) return;
             SaveUsers();
         }
 
@@ -430,6 +468,13 @@ namespace Oxide.Core.Libraries
 
             // Get the user data
             var data = GetUserData(userid);
+
+            if (perm.Equals("*"))
+            {
+                data.Perms.Clear();
+                SaveUsers();
+                return;
+            }
 
             // Remove the perm and save
             if (!data.Perms.Remove(perm.ToLower())) return;
