@@ -279,7 +279,7 @@ namespace Oxide.Game.RustLegacy
             // Show the versions
             if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
             {
-                arg.ReplyWith($"Oxide Version: {oxide}, Rust Protocol: {protocol}");
+                arg.ReplyWith($"Oxide version: {oxide}, Rust Protocol: {protocol}");
             }
         }
 

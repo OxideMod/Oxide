@@ -358,7 +358,7 @@ namespace Oxide.Game.ReignOfKings
             // Show the versions
             if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
             {
-                SendPlayerMessage(player, "Oxide Version: " + oxide + ", Reign of Kings version: " + protocol);
+                SendPlayerMessage(player, "Oxide version: " + oxide + ", Reign of Kings version: " + protocol);
             }
         }
 
