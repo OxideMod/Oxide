@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "mOMNmNe8vJvZWjGcTmewgYWHoRgn2CLmAbD64JtFytw=",
+            "MSILHash": "1wSB2AfjLkc3kWGqVUiG08cIYku37KN4OlpvyTiBzmE=",
             "BaseHookName": null
           }
         },
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "mOMNmNe8vJvZWjGcTmewgYWHoRgn2CLmAbD64JtFytw=",
+            "MSILHash": "1wSB2AfjLkc3kWGqVUiG08cIYku37KN4OlpvyTiBzmE=",
             "BaseHookName": null
           }
         },
@@ -370,7 +370,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "owgRU2hWfGEXRCqZ9y0NgtOnPxvd9Fsymb+bpd/q5cQ=",
+            "MSILHash": "UBu+jARfu2d7bVzftVj+IxGpWEAaIDMcniytuuJgO7Y=",
             "BaseHookName": null
           }
         },
@@ -386,7 +386,7 @@
             "HookName": "OnRunCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionManager",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "ServerConsoleCommand",
