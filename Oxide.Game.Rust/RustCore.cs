@@ -1054,6 +1054,28 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when a player opened a door
+        /// </summary>
+        /// <param name="door"></param>
+        /// <param name="msg"></param>
+        [HookMethod("IOnDoorOpened")]
+        private object IOnDoorOpened(Door door, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnDoorOpened", door, msg.player);
+        }
+
+        /// <summary>
+        /// Called when a player closed a door
+        /// </summary>
+        /// <param name="door"></param>
+        /// <param name="msg"></param>
+        [HookMethod("IOnDoorClosed")]
+        private object IOnDoorClosed(Door door, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnDoorClosed", door, msg.player);
+        }
+
+        /// <summary>
         /// Called when a player uses a door
         /// This is used to handle the deprecated hook CanOpenDoor
         /// </summary>
