@@ -1,0 +1,14 @@
+{
+    "ExtensionDirectory": "Build\\Managed",
+
+    "PluginDirectory": "plugins",
+    "ConfigDirectory": "config",
+    "DataDirectory": "data",
+    "LogDirectory": "logs",
+
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "oxide"
+    ]
+}

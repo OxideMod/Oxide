@@ -1,0 +1,54 @@
+{
+  "Name": "Interstellar Rift",
+  "TargetDirectory": "D:\\Servers\\Game\\InterstellarRift\\Build",
+  "Manifests": [
+    {
+      "AssemblyName": "IR.exe",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 33,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "IR.exe",
+            "TypeName": "Game.Program",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Init",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "GIGz4amVMonxPQ20/5Ajy/bkkDpqJf6Rpe9FPBApsOQ=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 34,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "IR.exe",
+            "TypeName": "Game.Program",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Init",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "GIGz4amVMonxPQ20/5Ajy/bkkDpqJf6Rpe9FPBApsOQ=",
+            "BaseHookName": null
+          }
+        }
+      ]
+    }
+  ]
+}
