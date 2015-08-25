@@ -97,12 +97,12 @@
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
       <NativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.*" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.Cecil.dll" />
-      <PatchedFiles Include="$(ProjectDir)\Patched\*.dll; $(ProjectDir)\Patched\*.exe" />
+      <PatchedFiles Include="$(ProjectDir)\Patched\*.exe" />
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
     </ItemGroup>
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
     <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(ManagedDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
   </Target>
 </Project>

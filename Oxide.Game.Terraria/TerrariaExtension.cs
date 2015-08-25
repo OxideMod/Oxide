@@ -23,8 +23,8 @@ namespace Oxide.Game.Terraria
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
+        public override string[] WhitelistAssemblies => new[] { "mscorlib", "Oxide.Core", "System", "System.Core" };
+        public override string[] WhitelistNamespaces => new[] { "System.Collections", "System.Security.Cryptography", "System.Text" };
 
         private static readonly string[] Filter =
         {

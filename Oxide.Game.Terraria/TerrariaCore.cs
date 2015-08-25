@@ -67,7 +67,7 @@ namespace Oxide.Game.Terraria
         private void OnPluginLoaded(Plugin plugin)
         {
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore")
+            if (!loggingInitialized)
                 InitializeLogging();
         }
 
