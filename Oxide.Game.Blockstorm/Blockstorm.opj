@@ -1,10 +1,53 @@
 {
   "Name": "Blockstorm",
-  "TargetDirectory": "D:\\Servers\\Game\\Blockstorm\\Latest\\Blockstorm_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Blockstorm\\Blockstorm_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp",
       "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DedicatedServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Start",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "BY1qaxWL8EgMI+g4Gy+DbL3YRIF2F6/29NRmKi1oYLI=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DedicatedServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Start",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "BY1qaxWL8EgMI+g4Gy+DbL3YRIF2F6/29NRmKi1oYLI=",
+            "BaseHookName": null
+          }
+        },
         {
           "Type": "Simple",
           "Hook": {
@@ -24,7 +67,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "hjbgYxLVZYw7UayDQ4UPvYKFwksrZUl5QCjihdBTk3U=",
+            "MSILHash": "icSYo/qQdTF8GVTRuR8fAnNUranmcFMePuAZP3z+QdU=",
             "BaseHookName": null
           }
         },
@@ -36,8 +79,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "Close",
-            "HookName": "OnClose",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerManager",
             "Flagged": false,
@@ -47,45 +90,57 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "jmSeb9iWrQywBXWe+IXOYNCxZjyfR0NGvWcUSr3AJ0w=",
+            "MSILHash": "prT7+pUUMW8Gty749lzkazi1EsCpJwBXkytkcm5twGM=",
             "BaseHookName": null
           }
         },
         {
-          "Type": "InitOxide",
+          "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "HookTypeName": "Initialize Oxide",
-            "Name": "InitOxide [internal]",
-            "HookName": "InitOxide",
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Server",
+            "TypeName": "ServerManager",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
-              "Name": ".ctor",
+              "Exposure": 0,
+              "Name": "OnPlayerConnected",
               "ReturnType": "System.Void",
               "Parameters": [
-                "System.Int32",
-                "System.Net.IPAddress",
-                "System.UInt16",
-                "System.UInt16",
-                "System.Int32",
-                "System.String",
-                "System.String",
-                "System.String",
-                "System.Boolean",
-                "System.Boolean",
-                "System.Int32",
-                "System.Int32",
-                "System.Int32",
-                "System.String",
-                "System.String",
-                "System.UInt32",
-                "System.UInt64"
+                "GamePlayer"
               ]
             },
-            "MSILHash": "y2JNRoQJ0zk2geMScfKdDfpub0cKI5GqVFoAFIOgsnc=",
+            "MSILHash": "38tCJVyRMwuslflRlR1aiB4uT5LiHZ8mj4vM2esLQc4=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnPlayerDisconnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "GamePlayer"
+              ]
+            },
+            "MSILHash": "p0v15+mXVMXQFbBhnxLolHc9BYkQhhiiht+Q55TOtF4=",
             "BaseHookName": null
           }
         }

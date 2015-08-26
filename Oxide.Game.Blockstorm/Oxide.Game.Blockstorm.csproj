@@ -82,32 +82,49 @@
   <Target Name="AfterBuild">
     <PropertyGroup>
       <GameName>Blockstorm</GameName>
+      <GameNameLinux>$(GameName)_Linux</GameNameLinux>
+      <ManagedDir>Blockstorm_Data\Managed</ManagedDir>
+      <ManagedDirLinux>blockstormServer_Data\Managed</ManagedDirLinux>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>$(GameName)\Blockstorm_Data\Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
-      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp.dll; $(TargetDir)\UnityEngine.dll" />
+      <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*" />
+      <LinuxGameFiles Include="$(ProjectDir)\Files\Linux\**\*.*" />
+      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\UnityEngine*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.JavaScript\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.JavaScript\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
+      <LinuxFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\KeraLua.dll" />
+      <LinuxFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.so; $(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.MySql\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.MySql\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
+      <LinuxFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.so" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\UnityEngine.dll" />
-      <NativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.*" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.Cecil.dll" />
-      <PatchedFiles Include="$(ProjectDir)\Patched\*.dll; $(ProjectDir)\Patched\*.exe" />
+      <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.Cecil.dll" />
+      <LinuxNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Linux\*.*" />
+      <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
     </ItemGroup>
-    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(ManagedDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(WinGameFiles)" DestinationFiles="@(WinGameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(WinFiles)" DestinationFiles="@(WinFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(WinNativeFiles)" DestinationFiles="@(WinNativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+
+    <Copy SourceFiles="@(LinuxGameFiles)" DestinationFiles="@(LinuxGameFiles->'$(BundleDir)\$(GameNameLinux)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameNameLinux)\$(ManagedDirLinux)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(LinuxFiles)" DestinationFiles="@(LinuxFiles->'$(BundleDir)\$(GameNameLinux)\$(ManagedDirLinux)\%(RecursiveDir)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFiles="@(LinuxNativeFiles->'$(BundleDir)\$(GameNameLinux)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameNameLinux)\$(ManagedDirLinux)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameNameLinux)\%(Filename)%(Extension)')" ContinueOnError="false" SkipUnchangedFiles="false" />
   </Target>
 </Project>

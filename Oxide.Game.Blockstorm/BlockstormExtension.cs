@@ -33,7 +33,15 @@ namespace Oxide.Game.Blockstorm
 
         private static readonly string[] Filter =
         {
-
+            "Buffer size",
+            "Clean up after player",
+            "Client connected:",
+            "Client disconnected:",
+            "Client started on port",
+            "Connecting to Master Server",
+            "Creating character:",
+            "Ending auth session",
+            "The server has a public address"
         };
 
         /// <summary>
@@ -73,14 +81,65 @@ namespace Oxide.Game.Blockstorm
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            // TODO: Add status information
+
+            var commandLineParser = new CommandLineParser();
+            var serverConfig = "serverConfig";
+            if (commandLineParser.method_1("config"))
+                serverConfig = commandLineParser.method_2("config");
+            DedicatedServerConfiguration dedicatedServerConfiguration = new DedicatedServerConfiguration();
+            dedicatedServerConfiguration.method_0(serverConfig, AssetsCollection.instance);
+
+            Interface.Oxide.ServerConsole.Title = () =>
+            {
+                var players = FpsMultiplayerGame.instance.playersList.method_5().Count;
+                var hostname = dedicatedServerConfiguration.string_10;
+                return string.Concat(players, " | ", hostname);
+            };
+
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                return string.Concat(" ", dedicatedServerConfiguration.string_10);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = FpsMultiplayerGame.instance.playersList.method_5().Count;
+                var playerLimit = dedicatedServerConfiguration.int_1.ToString();
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                // TODO: Network in/out
+                return "";
+            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                // TODO: Server game time, map name
+                return "";
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = Constants.smethod_0();
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for Version ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO
+            // TODO: Handle console input
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
