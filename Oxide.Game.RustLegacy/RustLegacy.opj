@@ -557,31 +557,6 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 3,
-            "ArgumentString": "",
-            "HookTypeName": "Simple",
-            "Name": "IOnProcessDamageEvent [internal]",
-            "HookName": "IOnProcessDamageEvent",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TakeDamage",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "ProcessDamageEvent",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "DamageEvent&"
-              ]
-            },
-            "MSILHash": "4RmI0n6m7vZy7x0iOWeLFMWQ4TNmf5zSxvGCiX0zL5I=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -684,6 +659,161 @@
               ]
             },
             "MSILHash": "qDCF8ydMGtRraEzpDbOFELKJx5VWgw771Nr2MCQXZc8=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 3,
+            "ArgumentString": "this, a0 => a0",
+            "HookTypeName": "Simple",
+            "Name": "ModifyDamage",
+            "HookName": "ModifyDamage",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TakeDamage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "ProcessDamageEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "DamageEvent&"
+              ]
+            },
+            "MSILHash": "4RmI0n6m7vZy7x0iOWeLFMWQ4TNmf5zSxvGCiX0zL5I=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 42,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this, l0, l1 => l1",
+            "HookTypeName": "Simple",
+            "Name": "OnGather",
+            "HookName": "OnGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ResourceTarget",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoGather",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "Inventory",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "kcoSMRom7l5d9neZXbtMSZIbnJ2GtMtywiQPi/qO6LQ=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 41,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnKilled",
+            "HookName": "OnKilled",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TakeDamage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "ProcessDamageEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "DamageEvent&"
+              ]
+            },
+            "MSILHash": "4RmI0n6m7vZy7x0iOWeLFMWQ4TNmf5zSxvGCiX0zL5I=",
+            "BaseHookName": "ModifyDamage"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 66,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnHurt",
+            "HookName": "OnHurt",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TakeDamage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "ProcessDamageEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "DamageEvent&"
+              ]
+            },
+            "MSILHash": "4RmI0n6m7vZy7x0iOWeLFMWQ4TNmf5zSxvGCiX0zL5I=",
+            "BaseHookName": "OnKilled"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 159,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpawned",
+            "HookName": "OnPlayerSpawned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManagement",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SpawnPlayer",
+              "ReturnType": "Character",
+              "Parameters": [
+                "PlayerClient",
+                "System.Boolean",
+                "RustProto.Avatar"
+              ]
+            },
+            "MSILHash": "H7Duc8/AlTI2KyTcwQcUHXL5fgAMuiHlclidaj+iO5g=",
+            "BaseHookName": "OnPlayerSpawn"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 187,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l5, l11, l14 => l14",
+            "HookTypeName": "Simple",
+            "Name": "IOnTreeGather",
+            "HookName": "IOnTreeGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "MeleeWeaponDataBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoAction1",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.BitStream",
+                "ItemRepresentation",
+                "uLink.NetworkMessageInfo&"
+              ]
+            },
+            "MSILHash": "AxlmHSGtBJvZt/SjX1xP93PbcW/BKNbXSnwqz0qpgIk=",
             "BaseHookName": null
           }
         }

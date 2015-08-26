@@ -186,5 +186,11 @@ namespace Oxide.Game.RustLegacy.Libraries
         {
             return Inventory.Slot.Preference.Define(startSlotKind, stack, flags);
         }
+
+        [LibraryFunction("GetCharacter")]
+        public Character GetCharacter(NetUser netUser) => RustLegacyCore.GetCharacter(netUser);
+
+        [LibraryFunction("GetInventory")]
+        public PlayerInventory GetInventory(NetUser netUser) => RustLegacyCore.GetInventory(netUser);
     }
 }
