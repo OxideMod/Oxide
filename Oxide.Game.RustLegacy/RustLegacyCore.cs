@@ -36,8 +36,14 @@ namespace Oxide.Game.RustLegacy
         // Cache the VoiceCom.playerList field info
         private readonly FieldInfo playerList = typeof(VoiceCom).GetField("playerList", BindingFlags.Static | BindingFlags.NonPublic);
 
-        // Cache the DamageEvent.takenodamage field info
-        readonly FieldInfo takenodamage = typeof(TakeDamage).GetField("takenodamage", BindingFlags.NonPublic | BindingFlags.Instance);
+        // Cache some player information
+        private static Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
+
+        public class PlayerData
+        {
+            public Character character;
+            public PlayerInventory inventory;
+        }
 
         // Last Metabolism hacker notification time
         float lastWarningAt;
@@ -514,6 +520,10 @@ namespace Oxide.Game.RustLegacy
             return null;
         }
 
+        public static Character GetCharacter(NetUser netUser) => playerData[netUser].character ?? null;
+
+        public static PlayerInventory GetInventory(NetUser netUser) => playerData[netUser].inventory ?? null;
+
         /// <summary>
         /// Called when the server wants to know what tags to use
         /// </summary>
@@ -687,6 +697,31 @@ namespace Oxide.Game.RustLegacy
             permission.AddUserGroup(userId, DefaultGroups[0]);
         }
 
+        [HookMethod("OnPlayerSpawned")]
+        private void OnPlayerSpawned(PlayerClient playerClient)
+        {
+            var netUser = playerClient.netUser;
+            if (!playerData.ContainsKey(netUser))
+                playerData.Add(netUser, new PlayerData());
+            playerData[netUser].character = playerClient.controllable.GetComponent<Character>();
+            playerData[netUser].inventory = playerClient.controllable.GetComponent<PlayerInventory>();
+        }
+
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(uLink.NetworkPlayer player)
+        {
+            // Delay removing player until OnPlayerDisconnect has fired in plugins
+            var netUser = player.GetLocalData() as NetUser;
+            if (netUser != null)
+            {
+                Interface.Oxide.NextTick(() =>
+                {
+                    if (playerData.ContainsKey(netUser))
+                        playerData.Remove(netUser);
+                });
+            }
+        }
+
         /// <summary>
         /// Called when a user is speaking
         /// </summary>
@@ -721,34 +756,6 @@ namespace Oxide.Game.RustLegacy
         private object IOnItemDeployed(DeployableObject component, IDeployableItem item)
         {
             return Interface.CallHook("OnItemDeployed", component, item.controllable.netUser);
-        }
-
-        /// <summary>
-        /// Called when damage is processed
-        /// </summary>
-        /// <param name="takedamage"></param>
-        /// <param name="damage"></param>
-        [HookMethod("IOnProcessDamageEvent")]
-        private object IOnProcessDamageEvent(TakeDamage takedamage, DamageEvent damage)
-        {
-            var dmg = Interface.CallHook("ModifyDamage", takedamage, damage);
-            if (dmg is DamageEvent)
-                damage = (DamageEvent)dmg;
-            if ((bool)takenodamage.GetValue(takedamage)) return null;
-
-            var lifeStatus = damage.status;
-            if (lifeStatus == LifeStatus.WasKilled)
-            {
-                takedamage.health = 0f;
-                Interface.CallHook("OnKilled", takedamage, damage);
-            }
-            else if (lifeStatus == LifeStatus.IsAlive)
-            {
-                takedamage.health -= damage.amount;
-                Interface.CallHook("OnHurt", takedamage, damage);
-            }
-
-            return damage;
         }
 
         /// <summary>
@@ -819,6 +826,15 @@ namespace Oxide.Game.RustLegacy
                 Interface.Oxide.LogInfo("An attempt to use a metabolism hack was prevented.");
             }
             return false;
+        }
+
+        [HookMethod("IOnTreeGather")]
+        private object IOnTreeGather(IMeleeWeaponItem weapon, ResourceTarget resourceNode, int amount)
+        {
+            var value = Interface.CallHook("OnGather", weapon.inventory, resourceNode, null, amount);
+            if (value is int)
+                return value;
+            return null;
         }
     }
 }
