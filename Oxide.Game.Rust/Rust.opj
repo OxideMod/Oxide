@@ -1708,7 +1708,7 @@
             "InjectionIndex": 41,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0, l2, l0",
+            "ArgumentString": "this, a0, l3, l1",
             "HookTypeName": "Simple",
             "Name": "IOnWeaponFired [internal]",
             "HookName": "IOnWeaponFired",
