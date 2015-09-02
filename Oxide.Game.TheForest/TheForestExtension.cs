@@ -48,6 +48,7 @@ namespace Oxide.Game.TheForest
             "attach: [",
             "delaying initial",
             "disableFlying",
+            "enabled part 2",
             "going black",
             "null texture passed to GUI.DrawTexture",
             "planeCrash started",
@@ -98,6 +99,7 @@ namespace Oxide.Game.TheForest
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
+                if (CoopLobby.Instance == null) return string.Empty;
                 var players = CoopLobby.Instance?.MemberCount;
                 var hostname = CoopLobby.Instance?.Info?.Name.Split("()".ToCharArray())[0];
                 return string.Concat(players, " | ", hostname);
@@ -105,6 +107,7 @@ namespace Oxide.Game.TheForest
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
+                if (CoopLobby.Instance == null) return string.Empty;
                 var hostname = CoopLobby.Instance?.Info.Name.Split("()".ToCharArray())[0];
                 return string.Concat(" ", hostname);
             };
@@ -118,6 +121,7 @@ namespace Oxide.Game.TheForest
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
+                if (CoopLobby.Instance == null) return string.Empty;
                 var players = CoopLobby.Instance?.MemberCount;
                 var playerLimit = CoopLobby.Instance?.Info?.MemberLimit;
                 return string.Concat(" ", players, "/", playerLimit, " players");
@@ -135,7 +139,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.22"; // TODO: Grab version/protocol
+                var gameVersion = "0.23"; // TODO: Grab version/protocol
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };

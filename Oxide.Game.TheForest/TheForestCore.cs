@@ -35,7 +35,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("protocol", "0.22"); // TODO: Grab version/protocol
+            RemoteLogger.SetTag("protocol", "0.23"); // TODO: Grab version/protocol
         }
 
         /// <summary>
