@@ -1036,7 +1036,7 @@ namespace Oxide.Game.Rust
         /// <param name="item"></param>
         /// <returns></returns>
         [HookMethod("IOnPlantGather")]
-        private object IOnPlantGather(BaseEntity.RPCMessage msg, BaseEntity entity, Item item)
+        private object IOnPlantGather(BaseEntity.RPCMessage msg, PlantEntity entity, Item item)
         {
             return Interface.CallHook("OnPlantGather", entity, item, msg.player);
         }
