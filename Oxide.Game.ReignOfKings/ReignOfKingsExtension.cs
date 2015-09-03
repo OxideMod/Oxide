@@ -252,8 +252,7 @@ namespace Oxide.Game.ReignOfKings
         private void ServerConsoleOnInput(string input)
         {
             if (!input.StartsWith("/")) input = "/" + input;
-            var messages = (List<Console.Message>) MessagesField.GetValue(null);
-            messages.Clear();
+            Console.Messages.Clear();
             if (!CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, input)) return;
             var output = Console.CurrentOutput.TrimEnd('\n', '\r');
             if (!string.IsNullOrEmpty(output)) Interface.Oxide.ServerConsole.AddMessage(output);
