@@ -90,7 +90,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "J6/Byq+eQg4mOeZDx8NJAstzBQZQT1ABK4JWuugBb1A=",
+            "MSILHash": "elMOFjJv6lWNOmRjBVbn8ZRfQoC76+TsCbS05HVLjPY=",
             "BaseHookName": null
           }
         },
@@ -984,7 +984,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "XH00nA5LciLDf/Mb1akXCJFDpVxQVrhAaCreFMdVIcQ=",
+            "MSILHash": "02kxgMOB6zZZAckdW/kfQAUhmYSsta0IA7t1eDlI0cI=",
             "BaseHookName": null
           }
         },
@@ -2095,6 +2095,31 @@
               ]
             },
             "MSILHash": "K/jY5Smck2eN7hve/tkAwFzt4oSOux7jFX3zwQW3M/g=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 73,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnMapImageUpdated",
+            "HookName": "OnMapImageUpdated",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "MapEntity",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ImageUpdate",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "PSXNUr3e8iRB6b2yxr9ejObYuiD1zT0MatYOZX5YHZU=",
             "BaseHookName": null
           }
         }
