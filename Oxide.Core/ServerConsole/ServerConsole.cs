@@ -60,12 +60,17 @@ namespace Oxide.Core.ServerConsole
 
         private string title => Title != null ? Title() : null;
 
-        private string status1Left => Status1Left != null ? Status1Left() : "status1left";
-        private string status1Right => (Status1Right != null ? Status1Right() : "status1right").PadLeft(_input.LineWidth - 1);
-        private string status2Left => Status2Left != null ? Status2Left() : "status2left";
-        private string status2Right => (Status2Right != null ? Status2Right() : "status2right").PadLeft(_input.LineWidth - 1);
-        private string status3Left => Status3Left != null ? Status3Left() : "status3left";
-        private string status3Right => (Status3Right != null ? Status3Right() : "status3right").PadLeft(_input.LineWidth - 1);
+        private string status1Left => GetStatusValue(Status1Left);
+        private string status1Right => GetStatusValue(Status1Right).PadLeft(_input.LineWidth - 1);
+        private string status2Left => GetStatusValue(Status2Left);
+        private string status2Right => GetStatusValue(Status2Right).PadLeft(_input.LineWidth - 1);
+        private string status3Left => GetStatusValue(Status3Left);
+        private string status3Right => GetStatusValue(Status3Right).PadLeft(_input.LineWidth - 1);
+
+        private static string GetStatusValue(Func<string> status)
+        {
+            return status != null ? status() ?? string.Empty : "empty";
+        }
 
         private static string GetStatusRight(int leftLength, string right)
         {
