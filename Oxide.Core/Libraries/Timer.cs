@@ -137,7 +137,7 @@ namespace Oxide.Core.Libraries
 
             if (timers.Count < 1) return;
 
-            timers.RemoveAll(t => t.Destroyed);
+            timers.RemoveAll(t => t == null || t.Destroyed);
 
             var expired = timers.TakeWhile(t => t.nextrep <= now).ToArray();
             if (expired.Length > 0)

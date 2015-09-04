@@ -38,7 +38,7 @@ namespace Oxide.Core.ServerConsole
             {
                 Console.CursorLeft = 0;
                 Console.ForegroundColor = StatusTextLeftColor[i];
-                Console.Write(StatusTextLeft[i]);
+                Console.Write(StatusTextLeft[i].Substring(0, Math.Min(StatusTextLeft[i].Length, LineWidth - 1)));
                 Console.ForegroundColor = StatusTextRightColor[i];
                 Console.Write(StatusTextRight[i].PadRight(LineWidth));
             }

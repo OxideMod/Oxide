@@ -99,6 +99,8 @@ namespace Oxide.Core
         public void Load()
         {
             RootDirectory = Environment.CurrentDirectory;
+            if (RootDirectory.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)))
+                RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
             // Create the commandline
             commandline = new CommandLine(Environment.GetCommandLineArgs());
