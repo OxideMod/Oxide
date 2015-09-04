@@ -112,7 +112,8 @@ namespace Oxide.Plugins
 
         public void ResolveReferences(int currentId, Action callback)
         {
-            var compilation = pluginComp[currentId];
+            Compilation compilation;
+            if (!pluginComp.TryGetValue(currentId, out compilation)) return;
 
             ThreadPool.QueueUserWorkItem(_ =>
             {
@@ -299,7 +300,8 @@ namespace Oxide.Plugins
 
         private void AddReference(int currentId, CompilablePlugin plugin, string assembly_name)
         {
-            var compilation = pluginComp[currentId];
+            Compilation compilation;
+            if (!pluginComp.TryGetValue(currentId, out compilation)) return;
             var path = Path.Combine(Interface.Oxide.ExtensionDirectory, string.Format("{0}.dll", assembly_name));
             if (!File.Exists(path))
             {
@@ -350,15 +352,7 @@ namespace Oxide.Plugins
             pluginComp[currentId] = new Compilation { callback = callback, plugins = plugins };
             if (!CheckCompiler())
             {
-                foreach (var compilation in pluginComp.Values)
-                {
-                    foreach (var plugin in compilation.plugins)
-                    {
-                        plugin.CompilerErrors = "Compiler couldn't be started.";
-                    }
-                    compilation.Completed();
-                }
-                pluginComp.Clear();
+                AbortCompilation();
                 return;
             }
 
@@ -370,9 +364,21 @@ namespace Oxide.Plugins
             });
         }
 
+        private void AbortCompilation()
+        {
+            foreach (var compilation in pluginComp.Values)
+            {
+                foreach (var plugin in compilation.plugins)
+                    plugin.CompilerErrors = "Compiler couldn't be started.";
+                compilation.Completed();
+            }
+            pluginComp.Clear();
+        }
+
         private void SpawnCompiler(int currentId)
         {
-            var compilation = pluginComp[currentId];
+            Compilation compilation;
+            if (!pluginComp.TryGetValue(currentId, out compilation)) return;
             compilation.Started();
             var source_files = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Distinct().Select(path => new CompilerFile(path)).ToList();
             source_files.AddRange(compilation.plugins.Select(plugin => new CompilerFile(plugin.ScriptName + ".cs", plugin.ScriptSource)));
@@ -435,14 +441,14 @@ namespace Oxide.Plugins
                     compilation.Completed((byte[])message.Data);
                     pluginComp.Remove(message.Id);
                     idleTimer?.Destroy();
-                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
+                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnAutoShutdown);
                     break;
                 case CompilerMessageType.Error:
                     Interface.Oxide.LogError("Compilation error: {0}", message.Data);
                     pluginComp[message.Id].Completed();
                     pluginComp.Remove(message.Id);
                     idleTimer?.Destroy();
-                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnShutdown);
+                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, OnAutoShutdown);
                     break;
                 case CompilerMessageType.Ready:
                     connection.PushMessage(message);
@@ -483,26 +489,41 @@ namespace Oxide.Plugins
             var args = new [] {"/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory)};
             try
             {
-                process = Process.Start(new ProcessStartInfo
+                process = new Process
                 {
-                    FileName = BinaryPath,
-                    Arguments = string.Join(" ", args),
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true
-                });
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = BinaryPath,
+                        Arguments = string.Join(" ", args),
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true
+                    },
+                    EnableRaisingEvents = true
+                };
+                process.Exited += ProcessOnExited;
+                process.Start();
             }
             catch (Exception ex)
             {
                 Interface.Oxide.LogException("Exception while starting compiler: ", ex);
             }
-            if (process == null) return false;
+            if (process == null || process.HasExited) return false;
             client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
             client.Message += OnMessage;
             client.Error += OnError;
             client.Start();
             return true;
+        }
+
+        private void ProcessOnExited(object sender, EventArgs eventArgs)
+        {
+            Interface.Oxide.NextTick(() =>
+            {
+                AbortCompilation();
+                OnShutdown();
+            });
         }
 
         private bool CacheScriptLines(CompilablePlugin plugin)
@@ -569,6 +590,12 @@ namespace Oxide.Plugins
             }
         }
 
+        private void OnAutoShutdown()
+        {
+            if (process != null) process.Exited -= ProcessOnExited;
+            OnShutdown();
+        }
+
         public void OnShutdown()
         {
             ready = false;
@@ -578,6 +605,7 @@ namespace Oxide.Plugins
             client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
             client.Stop();
             client = null;
+            if (ended_process == null) return;
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 Thread.Sleep(5000);
