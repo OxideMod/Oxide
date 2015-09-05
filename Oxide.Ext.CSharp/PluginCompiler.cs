@@ -352,7 +352,7 @@ namespace Oxide.Plugins
             pluginComp[currentId] = new Compilation { callback = callback, plugins = plugins };
             if (!CheckCompiler())
             {
-                AbortCompilation();
+                AbortCompilation("Compiler couldn't be started.");
                 return;
             }
 
@@ -364,12 +364,12 @@ namespace Oxide.Plugins
             });
         }
 
-        private void AbortCompilation()
+        private void AbortCompilation(string message)
         {
             foreach (var compilation in pluginComp.Values)
             {
                 foreach (var plugin in compilation.plugins)
-                    plugin.CompilerErrors = "Compiler couldn't be started.";
+                    plugin.CompilerErrors = message;
                 compilation.Completed();
             }
             pluginComp.Clear();
@@ -404,7 +404,11 @@ namespace Oxide.Plugins
         {
             if (message == null)
             {
-                Interface.Oxide.NextTick(OnShutdown);
+                Interface.Oxide.NextTick(() =>
+                {
+                    AbortCompilation("Compiler disconnected.");
+                    OnAutoShutdown();
+                });
                 return;
             }
             switch (message.Type)
@@ -485,7 +489,7 @@ namespace Oxide.Plugins
             if (BinaryPath == null) return false;
             if (process != null && !process.HasExited) return true;
             PurgeOldLogs();
-            OnShutdown();
+            OnAutoShutdown();
             var args = new [] {"/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory)};
             try
             {
@@ -509,7 +513,7 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.LogException("Exception while starting compiler: ", ex);
             }
-            if (process == null || process.HasExited) return false;
+            if (process == null) return false;
             client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
             client.Message += OnMessage;
             client.Error += OnError;
@@ -521,8 +525,8 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.NextTick(() =>
             {
-                AbortCompilation();
-                OnShutdown();
+                AbortCompilation("Compiler closed.");
+                OnAutoShutdown();
             });
         }
 
@@ -602,6 +606,8 @@ namespace Oxide.Plugins
             var ended_process = process;
             process = null;
             if (client == null) return;
+            client.Message -= OnMessage;
+            client.Error -= OnError;
             client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
             client.Stop();
             client = null;
