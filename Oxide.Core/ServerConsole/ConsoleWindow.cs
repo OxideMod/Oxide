@@ -60,9 +60,14 @@ namespace Oxide.Core.ServerConsole
             if (title != null) SetConsoleTitle(title);
         }
 
-        public void Initialize()
+        public bool Initialize()
         {
             if (!AttachConsole(ATTACH_PARENT_PROCESS)) AllocConsole();
+            if (GetConsoleWindow() == IntPtr.Zero)
+            {
+                FreeConsole();
+                return false;
+            }
             _oldOutput = Console.Out;
             _oldEncoding = Console.OutputEncoding;
             SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
@@ -78,13 +83,17 @@ namespace Oxide.Core.ServerConsole
                 outStream = Console.OpenStandardOutput();
             }
             Console.SetOut(new StreamWriter(outStream, Encoding.UTF8) { AutoFlush = true });
+            return true;
         }
 
         public void Shutdown()
         {
-            Console.SetOut(_oldOutput);
-            SetConsoleOutputCP((uint)_oldEncoding.CodePage);
-            Console.OutputEncoding = _oldEncoding;
+            if (_oldOutput != null) Console.SetOut(_oldOutput);
+            if (_oldEncoding != null)
+            {
+                SetConsoleOutputCP((uint) _oldEncoding.CodePage);
+                Console.OutputEncoding = _oldEncoding;
+            }
             FreeConsole();
         }
     }

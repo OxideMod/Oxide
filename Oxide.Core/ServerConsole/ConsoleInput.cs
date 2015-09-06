@@ -32,7 +32,7 @@ namespace Oxide.Core.ServerConsole
 
         public void RedrawInputLine()
         {
-            if (_nextUpdate - 0.45f > Interface.Oxide.Now) return;
+            if (_nextUpdate - 0.45f > Interface.Oxide.Now || LineWidth <= 0) return;
             Console.CursorTop = Console.CursorTop + 1;
             for (var i = 0; i < StatusTextLeft.Length; i++)
             {
