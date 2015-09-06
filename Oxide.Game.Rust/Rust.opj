@@ -1593,7 +1593,7 @@
             "HookName": "IOnEnableServerConsole",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerConsole",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnEnable",
@@ -1616,7 +1616,7 @@
             "HookName": "IOnDisableServerConsole",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerConsole",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnDisable",
