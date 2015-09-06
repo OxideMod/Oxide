@@ -68,8 +68,14 @@ namespace Oxide.Game.Terraria
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+
             // TODO: Add console log handling
             // TODO: Add status information
+        }
+
+        private static void ServerConsoleOnInput(string input)
+        {
+            // TODO: Handle console input
         }
     }
 }
