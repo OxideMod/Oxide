@@ -1,0 +1,276 @@
+{
+  "Name": "Hurtworld",
+  "TargetDirectory": "D:\\Servers\\Game\\Hurtworld\\Game\\Client_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Start",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "F5E2NKmcERbRlFtThxBg1KnC3WW+vFqB2kaSmFlks8I=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Start",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "F5E2NKmcERbRlFtThxBg1KnC3WW+vFqB2kaSmFlks8I=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SaveServer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "Tpby1OO32DsakSpwV7QRz5ZvZ0ZMmVDSUvvRhwn7g3Y=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Quit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "xqvhhsd3/qNa6BdTA7ulTP+1Nk525Rfq+PprgZc1ocI=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerConnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "RT9T20Nf/6NuqoV9jxT08NstD1hwhuvte+7mqrbtKb0=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerDisconnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "f/ahDlXCdthLu4XKJv30ZkexjnyzWXg8Pk9iKIn1TDo=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnFindSpawnPoint",
+            "HookName": "OnFindSpawnPoint",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetRandomSpawnPoint",
+              "ReturnType": "UnityEngine.Vector3",
+              "Parameters": []
+            },
+            "MSILHash": "9Jm/NmSq76xnQe/6NATssGstXMBN/1OlV5fQfmw8lzU=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 18,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "OnRunCommand",
+            "HookName": "OnRunCommand",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConsoleManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ExecuteCommandRaw",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "GXPUyAdIgHXDTAoqBRLo/8iaWvRduDv6JkrQUYGSUw0=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 8,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, a1, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerChat",
+            "HookName": "OnPlayerChat",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ChatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SendText",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "YTj5QU+sLBgYTUC/O6yqnfnHawCl03ztZZ9+NDuEp9g=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 16,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "LoadServer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "AZsPtqgrez7FbrIb+tEbcQI9274eVIvvHLjXYoBZpuM=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPostToSlack",
+            "HookName": "OnPostToSlack",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PostToSlackREST",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PostMessage",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "3rsiLwEbPi+PZk/yZFjMx3rvqOk4lqMKH6KKBhoVzok=",
+            "BaseHookName": null
+          }
+        }
+      ]
+    }
+  ]
+}
