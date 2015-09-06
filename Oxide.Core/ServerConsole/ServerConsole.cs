@@ -7,6 +7,7 @@ namespace Oxide.Core.ServerConsole
     {
         private readonly ConsoleWindow _console = new ConsoleWindow();
         private readonly ConsoleInput _input = new ConsoleInput();
+        private bool _init;
         private float _nextUpdate;
         private float _nextTitleUpdate;
 
@@ -88,13 +89,15 @@ namespace Oxide.Core.ServerConsole
 
         public void OnDisable()
         {
+            if (!_init) return;
             _input.OnInputText -= OnInputText;
             _console.Shutdown();
         }
 
         public void OnEnable()
         {
-            _console.Initialize();
+            if (!_console.Initialize()) return;
+            _init = true;
             _input.OnInputText += OnInputText;
             _input.ClearLine(1);
             _input.ClearLine(Console.WindowHeight);
@@ -116,18 +119,12 @@ namespace Oxide.Core.ServerConsole
             for (var i = 0; i < objects.Length; i++)
             {
                 if (i%2 != 0)
-                {
                     Console.Write((string) objects[i]);
-                }
                 else
-                {
                     Console.ForegroundColor = (ConsoleColor) ((int) objects[i]);
-                }
             }
             if (Console.CursorLeft != 0)
-            {
                 Console.CursorTop = Console.CursorTop + 1;
-            }
             Interface.Oxide.ServerConsole._input.RedrawInputLine();
         }
 
