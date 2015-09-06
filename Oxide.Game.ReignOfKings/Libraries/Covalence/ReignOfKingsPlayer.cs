@@ -1,14 +1,19 @@
 ﻿using System;
+
 using CodeHatch.Engine.Networking;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
+    /// <summary>
+    /// Represents a player, either connected or not
+    /// </summary>
     class ReignOfKingsPlayer : IPlayer, IEquatable<IPlayer>
     {
-        private static Permission _libPerms;
+        private static Permission libPerms;
         private readonly ulong steamid;
 
         /// <summary>
@@ -28,12 +33,16 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         internal ReignOfKingsPlayer(ulong steamID, string nickname)
         {
-            if (_libPerms == null) _libPerms = Interface.Oxide.GetLibrary<Permission>();
+            // Get perms library
+            if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
+            // Store user details
             Nickname = nickname;
             steamid = steamID;
             UniqueID = steamID.ToString();
         }
+
+        #region Permissions
 
         /// <summary>
         /// Gets if this player has the specified permission
@@ -42,7 +51,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public bool HasPermission(string perm)
         {
-            return _libPerms.UserHasPermission(UniqueID, perm);
+            return libPerms.UserHasPermission(UniqueID, perm);
         }
 
         /// <summary>
@@ -51,7 +60,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="perm"></param>
         public void GrantPermission(string perm)
         {
-            _libPerms.GrantUserPermission(UniqueID, perm, null);
+            libPerms.GrantUserPermission(UniqueID, perm, null);
         }
 
         /// <summary>
@@ -60,7 +69,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="perm"></param>
         public void RevokePermission(string perm)
         {
-            _libPerms.RevokeUserPermission(UniqueID, perm);
+            libPerms.RevokeUserPermission(UniqueID, perm);
         }
 
         /// <summary>
@@ -70,7 +79,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public bool BelongsToGroup(string groupName)
         {
-            return _libPerms.UserHasGroup(UniqueID, groupName);
+            return libPerms.UserHasGroup(UniqueID, groupName);
         }
 
         /// <summary>
@@ -79,7 +88,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="groupName"></param>
         public void AddToGroup(string groupName)
         {
-            _libPerms.AddUserGroup(UniqueID, groupName);
+            libPerms.AddUserGroup(UniqueID, groupName);
         }
 
         /// <summary>
@@ -88,8 +97,12 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="groupName"></param>
         public void RemoveFromGroup(string groupName)
         {
-            _libPerms.RemoveUserGroup(UniqueID, groupName);
+            libPerms.RemoveUserGroup(UniqueID, groupName);
         }
+
+        #endregion
+
+        #region Administration
 
         public void Ban(string reason, TimeSpan duration)
         {
@@ -105,9 +118,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         public TimeSpan BanTimeRemaining => new DateTime(Server.GetBannedPlayerFromPlayerId(steamid).ExpireDate) - DateTime.Now;
 
+        #endregion
+
+        #region Operator Overloads
+
         public bool Equals(IPlayer other)
         {
             return UniqueID == other.UniqueID;
         }
+
+        #endregion
     }
 }

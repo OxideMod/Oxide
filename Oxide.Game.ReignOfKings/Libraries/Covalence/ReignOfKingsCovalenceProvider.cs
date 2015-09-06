@@ -2,8 +2,14 @@
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
+    /// <summary>
+    /// Provides Covalence functionality for the game "Reign of Kings"
+    /// </summary>
     class ReignOfKingsCovalenceProvider : ICovalenceProvider
     {
+        /// <summary>
+        /// Gets the name of the game for which this provider provides
+        /// </summary>
         public string GameName => "ReignOfKings";
 
         /// <summary>
@@ -26,16 +32,28 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             Instance = this;
         }
 
+        /// <summary>
+        /// Creates the game-specific server object
+        /// </summary>
+        /// <returns></returns>
         public IServer CreateServer()
         {
             return new ReignOfKingsServer();
         }
 
+        /// <summary>
+        /// Creates the game-specific player manager object
+        /// </summary>
+        /// <returns></returns>
         public IPlayerManager CreatePlayerManager()
         {
             return PlayerManager = new ReignOfKingsPlayerManager();
         }
 
+        /// <summary>
+        /// Creates the game-specific command system provider object
+        /// </summary>
+        /// <returns></returns>
         public ICommandSystem CreateCommandSystemProvider()
         {
             return CommandSystem = new ReignOfKingsCommandSystem();

@@ -1,15 +1,28 @@
-﻿using CodeHatch.Common;
-using CodeHatch.Engine.Behaviours;
-using CodeHatch.Engine.Networking;
+﻿using System.Linq;
 
-using Oxide.Core.Libraries.Covalence;
+using CodeHatch.Common;
+using CodeHatch.Engine.Behaviours;
+using CodeHatch.Engine.Core.Commands;
+using CodeHatch.Engine.Networking;
 
 using UnityEngine;
 
+using Oxide.Core.Libraries.Covalence;
+
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
+    /// <summary>
+    /// Represents a connected player
+    /// </summary>
     class ReignOfKingsLivePlayer : ILivePlayer, IPlayerCharacter
     {
+        #region Information
+
+        private readonly ulong steamid;
+
+        /// <summary>
+        /// Gets the base player of this player
+        /// </summary>
         public IPlayer BasePlayer => ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
 
         /// <summary>
@@ -28,7 +41,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public object Object { get; private set; }
 
         private Player player;
-        private readonly ulong steamid;
 
         internal ReignOfKingsLivePlayer(Player player)
         {
@@ -37,21 +49,64 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             Object = player;
         }
 
+        #endregion
+
+        #region Administration
+
+        /// <summary>
+        /// Kicks this player from the game
+        /// </summary>
+        /// <param name="reason"></param>
         public void Kick(string reason)
         {
             Server.Kick(player, reason);
         }
 
+        /// <summary>
+        /// Causes this player's character to die
+        /// </summary>
+        public void Kill()
+        {
+            player.Kill();
+        }
+
+        /// <summary>
+        /// Teleports this player's character to the specified position
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        public void Teleport(float x, float y, float z)
+        {
+            player.CurrentCharacter.Entity.GetOrCreate<CharacterTeleport>().Teleport(new Vector3(x, y, z));
+        }
+
+        #endregion
+
+        #region Chat and Commands
+
+        /// <summary>
+        /// Sends a chat message to this player's client
+        /// </summary>
+        /// <param name="message"></param>
         public void SendChatMessage(string message)
         {
             player.SendMessage(message);
         }
 
+        /// <summary>
+        /// Runs the specified console command on this player's client
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
         public void RunCommand(string command, params object[] args)
         {
-            //TODO
-            //CommandManager.ExecuteCommand(steamid, command);
+            CommandManager.ExecuteCommand(steamid, command + " " + string.Join(" ", args.ToList().ConvertAll(a => (string)a).ToArray()));
         }
+
+        #endregion
+
+        #region Location
 
         public void GetPosition(out float x, out float y, out float z)
         {
@@ -67,14 +122,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
-        public void Kill()
-        {
-            player.Kill();
-        }
-
-        public void Teleport(float x, float y, float z)
-        {
-            player.CurrentCharacter.Entity.GetOrCreate<CharacterTeleport>().Teleport(new Vector3(x, y, z));
-        }
+        #endregion
     }
 }

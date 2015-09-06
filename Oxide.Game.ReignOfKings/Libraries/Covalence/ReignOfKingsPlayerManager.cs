@@ -9,9 +9,11 @@ using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
+    /// <summary>
+    /// Represents a generic player manager
+    /// </summary>
     class ReignOfKingsPlayerManager : IPlayerManager
     {
-
         private struct PlayerRecord
         {
             public string Nickname;
@@ -79,6 +81,13 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             livePlayers.Remove(ply.Id.ToString());
         }
 
+        #region Offline Players
+
+        /// <summary>
+        /// Gets an offline player using their unique ID
+        /// </summary>
+        /// <param name="uniqueID"></param>
+        /// <returns></returns>
         public IPlayer GetPlayer(string uniqueID)
         {
             ReignOfKingsPlayer player;
@@ -88,7 +97,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets an offline player given their unique ID
+        /// Gets an offline player using their unique ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -101,6 +110,10 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             }
         }
 
+        /// <summary>
+        /// Gets all offline players
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<IPlayer> GetAllPlayers()
         {
             return players.Values.Cast<IPlayer>();
@@ -112,11 +125,21 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<IPlayer> All => players.Values.Cast<IPlayer>();
 
+        /// <summary>
+        /// Finds an offline player matching a partial name (case insensitive, null if multiple matches unless exact)
+        /// </summary>
+        /// <param name="partialName"></param>
+        /// <returns></returns>
         public IPlayer FindPlayer(string partialName)
         {
             return FindPlayers(partialName).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Finds any number of offline players given a partial name (case insensitive)
+        /// </summary>
+        /// <param name="partialName"></param>
+        /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
             return players.Values
@@ -124,6 +147,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
                 .Cast<IPlayer>();
         }
 
+        #endregion
+
+        #region Online Players
+
+        /// <summary>
+        /// Gets an online player given their unique ID
+        /// </summary>
+        /// <param name="uniqueID"></param>
+        /// <returns></returns>
         public ILivePlayer GetOnlinePlayer(string uniqueID)
         {
             ReignOfKingsLivePlayer player;
@@ -132,6 +164,10 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             return null;
         }
 
+        /// <summary>
+        /// Gets all online players
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<ILivePlayer> GetAllOnlinePlayers()
         {
             return livePlayers.Values.Cast<ILivePlayer>();
@@ -143,16 +179,28 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<ILivePlayer> Online => livePlayers.Values.Cast<ILivePlayer>();
 
+        /// <summary>
+        /// Finds a single online player matching a partial name (case insensitive, null if multiple matches unless exact)
+        /// </summary>
+        /// <param name="partialName"></param>
+        /// <returns></returns>
         public ILivePlayer FindOnlinePlayer(string partialName)
         {
             return FindOnlinePlayers(partialName).SingleOrDefault();
         }
 
+        /// <summary>
+        /// Finds any number of online players given a partial name (case insensitive)
+        /// </summary>
+        /// <param name="partialName"></param>
+        /// <returns></returns>
         public IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName)
         {
             return livePlayers.Values
                             .Where(p => p.BasePlayer.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0)
                             .Cast<ILivePlayer>();
         }
+
+        #endregion
     }
 }

@@ -655,5 +655,23 @@ namespace Oxide.Core
 
         [DllImport("kernel32", SetLastError = true)]
         private static extern bool SetDllDirectory(string lpPathName);
+
+        public static string FormatBytes(double bytes)
+        {
+            string type;
+            if (bytes > 1024 * 1024)
+            {
+                type = "mb";
+                bytes /= (1024 * 1024);
+            }
+            else if (bytes > 1024)
+            {
+                type = "kb";
+                bytes /= 1024;
+            }
+            else
+                type = "b";
+            return $"{bytes:0}{type}";
+        }
     }
 }
