@@ -13,6 +13,8 @@ namespace Oxide.Game.Blockstorm
     /// </summary>
     public class BlockstormExtension : Extension
     {
+        public static DedicatedServerConfiguration dedicatedServerConfiguration { get; } = new DedicatedServerConfiguration();
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -89,7 +91,6 @@ namespace Oxide.Game.Blockstorm
             var serverConfig = "serverConfig";
             if (commandLineParser.method_1("config"))
                 serverConfig = commandLineParser.method_2("config");
-            DedicatedServerConfiguration dedicatedServerConfiguration = new DedicatedServerConfiguration();
             dedicatedServerConfiguration.method_0(serverConfig, AssetsCollection.instance);
 
             Interface.Oxide.ServerConsole.Title = () =>
@@ -101,7 +102,8 @@ namespace Oxide.Game.Blockstorm
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
-                return string.Concat(" ", dedicatedServerConfiguration.string_10);
+                var hostname = dedicatedServerConfiguration.string_10;
+                return string.Concat(" ", hostname);
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {

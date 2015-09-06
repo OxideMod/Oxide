@@ -35,7 +35,7 @@ namespace Oxide.Game.Blockstorm
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "blockstorm");
-            //RemoteLogger.SetTag("protocol", );
+            RemoteLogger.SetTag("protocol", Constants.smethod_0());
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Oxide.Game.Blockstorm
             if (serverInitialized) return;
             serverInitialized = true;
             // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", );
+            RemoteLogger.SetTag("hostname", BlockstormExtension.dedicatedServerConfiguration.string_10);
         }
 
         /// <summary>
