@@ -114,10 +114,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="reason"></param>
         public void Kick(string reason) { }
 
-        #endregion
-
-        #region Manipulation
-
         /// <summary>
         /// Causes this player's character to die
         /// </summary>
@@ -130,6 +126,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="y"></param>
         /// <param name="z"></param>
         public void Teleport(float x, float y, float z) { }
+
+        #endregion
+
+        #region Chat and Commands
 
         /// <summary>
         /// Sends a chat message to this player's client

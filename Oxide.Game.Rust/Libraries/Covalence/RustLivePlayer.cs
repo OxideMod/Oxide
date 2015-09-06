@@ -9,7 +9,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustLivePlayer : ILivePlayer, IPlayerCharacter
     {
-        private ulong steamid;
+        #region Information
+
+        private readonly ulong steamid;
 
         /// <summary>
         /// Gets the base player of this player
@@ -31,14 +33,16 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public object Object { get; private set; }
 
-        private BasePlayer rustPlayer;
+        private BasePlayer player;
 
-        internal RustLivePlayer(BasePlayer rustPlayer)
+        internal RustLivePlayer(BasePlayer player)
         {
-            this.rustPlayer = rustPlayer;
-            steamid = rustPlayer.net.connection.userid;
-            Object = rustPlayer;
+            this.player = player;
+            steamid = player.net.connection.userid;
+            Object = player;
         }
+
+        #endregion
 
         #region Administration
 
@@ -48,10 +52,57 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="reason"></param>
         public void Kick(string reason)
         {
-            rustPlayer.Kick(reason);
+            player.Kick(reason);
+        }
+
+        /// <summary>
+        /// Causes this player's character to die
+        /// </summary>
+        public void Kill()
+        {
+            player.Die();
+        }
+
+        /// <summary>
+        /// Teleports this player's character to the specified position
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        public void Teleport(float x, float y, float z)
+        {
+            if (player.IsSpectating()) return;
+            var dest = new UnityEngine.Vector3(x, y, z);
+            player.transform.position = dest;
+            player.ClientRPCPlayer(null, player, "ForcePositionTo", dest);
         }
 
         #endregion
+
+        #region Chat and Commands
+
+        /// <summary>
+        /// Sends a chat message to this player's client
+        /// </summary>
+        /// <param name="message"></param>
+        public void SendChatMessage(string message)
+        {
+            player.ChatMessage(message);
+        }
+
+        /// <summary>
+        /// Runs the specified console command on this player's client
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        public void RunCommand(string command, params object[] args)
+        {
+            player.SendConsoleCommand(command, args);
+        }
+
+        #endregion
+
+        #region Location
 
         /// <summary>
         /// Gets the position of this character
@@ -61,7 +112,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="z"></param>
         public void GetPosition(out float x, out float y, out float z)
         {
-            var pos = rustPlayer.transform.position;
+            var pos = player.transform.position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -73,50 +124,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition GetPosition()
         {
-            var pos = rustPlayer.transform.position;
+            var pos = player.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);
-        }
-
-        #region Manipulation
-
-        /// <summary>
-        /// Causes this player's character to die
-        /// </summary>
-        public void Kill()
-        {
-            rustPlayer.Die();
-        }
-
-        /// <summary>
-        /// Teleports this player's character to the specified position
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        public void Teleport(float x, float y, float z)
-        {
-            if (rustPlayer.IsSpectating()) return;
-            var dest = new UnityEngine.Vector3(x, y, z);
-            rustPlayer.transform.position = dest;
-            rustPlayer.ClientRPCPlayer(null, rustPlayer, "ForcePositionTo", dest);
-        }
-
-        /// <summary>
-        /// Sends a chat message to this player's client
-        /// </summary>
-        /// <param name="message"></param>
-        public void SendChatMessage(string message)
-        {
-            rustPlayer.ChatMessage(message);
-        }
-
-        /// <summary>
-        /// Runs the specified console command on this player's client
-        /// </summary>
-        /// <param name="command"></param>
-        public void RunCommand(string command, params object[] args)
-        {
-            rustPlayer.SendConsoleCommand(command, args);
         }
 
         #endregion

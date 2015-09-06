@@ -80,7 +80,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Offline Players
 
         /// <summary>
-        /// Gets an offline player given their unique ID
+        /// Gets an offline player using their unique ID
         /// </summary>
         /// <param name="uniqueID"></param>
         /// <returns></returns>
@@ -94,9 +94,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets an offline player given their unique ID
+        /// Gets an offline player using their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         public IPlayer this[int id]
         {

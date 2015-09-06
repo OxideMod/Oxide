@@ -12,6 +12,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     public class RustPlayer : IPlayer, IEquatable<IPlayer>
     {
         private Permission libPerms;
+        private readonly ulong steamid;
 
         /// <summary>
         /// Gets the last-known nickname for this player
@@ -28,12 +29,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public ILivePlayer ConnectedPlayer { get { return RustCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(UniqueID); } }
 
-        private ulong steamid;
-
         internal RustPlayer(ulong steamID, string nickname)
         {
             // Get perms library
-            libPerms = Interface.GetMod().GetLibrary<Permission>();
+            if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
             Nickname = nickname;
@@ -136,13 +135,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets if this player is banned
         /// </summary>
-        public bool IsBanned
-        {
-            get
-            {
-                return ServerUsers.Is(steamid, ServerUsers.UserGroup.Banned);
-            }
-        }
+        public bool IsBanned => ServerUsers.Is(steamid, ServerUsers.UserGroup.Banned);
 
         /// <summary>
         /// Gets the amount of time remaining on this player's ban

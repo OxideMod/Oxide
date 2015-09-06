@@ -19,7 +19,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
         
         // A reference to Rust's internal command dictionary
-        private IDictionary<string, ConsoleSystem.Command> rustcommands;
+        private IDictionary<string, ConsoleSystem.Command> rustCommands;
 
         // Chat command handler
         private ChatCommandHandler chatCommandHandler;
@@ -35,7 +35,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         private void Initialize()
         {
-            rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
+            rustCommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
             registeredChatCommands = new Dictionary<string, CommandCallback>();
             chatCommandHandler = new ChatCommandHandler(ChatCommandCallback, registeredChatCommands.ContainsKey);
             consolePlayer = new RustConsolePlayer();
@@ -59,24 +59,27 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public void RegisterCommand(string cmd, CommandType type, CommandCallback callback)
         {
             // Initialize if needed
-            if (rustcommands == null) Initialize();
+            if (rustCommands == null) Initialize();
+
+            // Convert to lowercase
+            var command_name = cmd.ToLowerInvariant();
 
             // Is it a console command?
             if (type == CommandType.Console)
             {
                 // Check if it already exists
-                if (rustcommands.ContainsKey(cmd))
+                if (rustCommands.ContainsKey(command_name))
                 {
-                    throw new CommandAlreadyExistsException(cmd);
+                    throw new CommandAlreadyExistsException(command_name);
                 }
 
                 // Register it
-                string[] splitName = cmd.Split('.');
-                rustcommands.Add(cmd, new ConsoleSystem.Command
+                string[] splitName = command_name.Split('.');
+                rustCommands.Add(command_name, new ConsoleSystem.Command
                 {
                     name = splitName.Length >= 2 ? splitName[1] : splitName[0],
                     parent = splitName.Length >= 2 ? splitName[0] : string.Empty,
-                    namefull = cmd,
+                    namefull = command_name,
                     isCommand = true,
                     isUser = true,
                     isAdmin = true,
@@ -85,13 +88,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     Call = (arg) =>
                     {
                         if (arg == null) return;
-                        callback(cmd, CommandType.Console, consolePlayer, ExtractArgs(arg));
+                        callback(command_name, CommandType.Console, consolePlayer, ExtractArgs(arg));
                     }
                 });
             }
             else if (type == CommandType.Chat)
             {
-                registeredChatCommands.Add(cmd, callback);
+                registeredChatCommands.Add(command_name, callback);
             }
         }
 
@@ -113,13 +116,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public void UnregisterCommand(string cmd, CommandType type)
         {
             // Initialize if needed
-            if (rustcommands == null) Initialize();
+            if (rustCommands == null) Initialize();
 
             // Is it a console command?
             if (type == CommandType.Console)
             {
                 // Unregister it
-                rustcommands.Remove(cmd);
+                rustCommands.Remove(cmd);
             }
             else if (type == CommandType.Chat)
             {

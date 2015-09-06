@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
 
-using Oxide.Core.Libraries.Covalence;
-
 using ConVar;
+
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -12,16 +12,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustServer : IServer
     {
+        #region Information
+
         /// <summary>
         /// Gets the public-facing name of the server
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return Server.hostname;
-            }
-        }
+        public string Name => Server.hostname;
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -41,13 +37,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing network port of the server, if known
         /// </summary>
-        public ushort Port
-        {
-            get
-            {
-                return (ushort)Server.port;
-            }
-        }
+        public ushort Port => (ushort)Server.port;
+
+        #endregion
 
         private ServerMgr mgr;
 
@@ -59,7 +51,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             mgr = ServerMgr.Instance;
         }
 
-        #region Console
+        #region Console and Commands
 
         /// <summary>
         /// Prints the specified message to the server console
@@ -67,7 +59,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="message"></param>
         public void Print(string message)
         {
-            //logger.Write(LogType.Info, message != null ? message.ToString() : "null");
             UnityEngine.Debug.Log(message);
         }
 

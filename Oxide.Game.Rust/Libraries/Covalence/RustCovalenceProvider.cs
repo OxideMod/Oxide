@@ -12,7 +12,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName { get { return "Rust"; } }
+        public string GameName => "Rust";
 
         /// <summary>
         /// Gets the singleton instance of this provider
