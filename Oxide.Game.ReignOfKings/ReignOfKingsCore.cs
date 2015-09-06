@@ -144,8 +144,6 @@ namespace Oxide.Game.ReignOfKings
         private static void SendPlayerMessage(Player player, string format, params object[] args)
         {
             if (player.IsServer)
-                Interface.Oxide.LogInfo(format, args);
-            else
                 player.SendMessage("[950415]Oxide[FFFFFF]: " + format, args);
         }
 
@@ -687,7 +685,7 @@ namespace Oxide.Game.ReignOfKings
             string[] args;
             ParseChatCommand(message, out cmd, out args);
             if (cmd == null) return null;
-            
+
             Interface.CallHook("OnPlayerCommand", e.Player, cmd, args);
 
             // handle it
