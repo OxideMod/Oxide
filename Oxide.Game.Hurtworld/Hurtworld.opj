@@ -99,10 +99,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 26,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1, a0",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
@@ -124,10 +124,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 31,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, a0",
             "HookTypeName": "Simple",
             "Name": "OnPlayerDisconnected",
             "HookName": "OnPlayerDisconnected",
@@ -267,6 +267,31 @@
               ]
             },
             "MSILHash": "3rsiLwEbPi+PZk/yZFjMx3rvqOk4lqMKH6KKBhoVzok=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPostToSlack",
+            "HookName": "OnPostToSlack",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PostToSlackREST",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PostMessage",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "PostToSlackREST/SlackRequestObject"
+              ]
+            },
+            "MSILHash": "HZoACIEH3f3XmjQgROO3MTbF/mhR4V2CW+2hQWehU0E=",
             "BaseHookName": null
           }
         }
