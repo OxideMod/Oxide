@@ -60,8 +60,7 @@ namespace Oxide.Plugins
                     return;
                 }
                 OnLoadingStarted();
-                var was_modified = HasBeenModified();
-                if (CompiledAssembly != null && !was_modified)
+                if (CompiledAssembly != null && !HasBeenModified())
                 {
                     if (CompiledAssembly.IsLoading || !CompiledAssembly.IsBatch || CompiledAssembly.CompilablePlugins.All(pl => pl.IsLoading))
                     {

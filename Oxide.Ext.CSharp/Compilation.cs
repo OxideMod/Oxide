@@ -364,7 +364,7 @@ namespace Oxide.Plugins
 
         private void CacheModifiedScripts()
         {
-            var modified_plugins = plugins.Where(pl => pl.HasBeenModified()).ToArray();
+            var modified_plugins = plugins.Where(pl => pl.HasBeenModified() || pl.LastCachedScriptAt < pl.LastModifiedAt).ToArray();
             if (modified_plugins.Length < 1) return;
             foreach (var plugin in modified_plugins)
                 CacheScriptLines(plugin);
