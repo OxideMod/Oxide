@@ -1,5 +1,9 @@
 ﻿using Oxide.Core;
 using Oxide.Core.Plugins;
+using Oxide.Game.Hurtworld.Libraries;
+using System.Collections.Generic;
+using System.Text;
+using uLink;
 
 namespace Oxide.Game.Hurtworld
 {
@@ -11,7 +15,7 @@ namespace Oxide.Game.Hurtworld
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
-
+        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
         /// </summary>
@@ -71,6 +75,98 @@ namespace Oxide.Game.Hurtworld
                 InitializeLogging();
         }
 
+        [HookMethod("OnRunCommand")]
+        private object OnRunCommand(string commandParam)
+        {
+            // Sanity checks
+            if (commandParam == null || commandParam.Trim().Length == 0) return null;
+            return cmdlib.HandleConsoleCommand(commandParam);
+        }
+
+
+        [HookMethod("OnPlayerChat")]
+        private object OnPlayerChat(PlayerIdentity identity, NetworkMessageInfo info, string message)
+        {
+            
+            if (message.Trim().Length <= 1) return true;
+            var str = message.Substring(0, 1);
+            // Is it a chat command?
+            if (str.Equals("/") || str.Equals("!"))
+            {
+
+                // Get the arg string
+                var argstr = message.Substring(1);
+                
+
+                // Parse it
+                string chatcmd;
+                string[] args;
+                ParseChatCommand(argstr, out chatcmd, out args);
+                if (chatcmd == null) return null;
+
+                // Handle it
+                if (!cmdlib.HandleChatCommand(identity, info, chatcmd, args))
+                {
+                    ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Server Unknown command {chatcmd}</color>", info.sender);
+                    return true;
+                }
+                return true;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Parses the specified chat command
+        /// </summary>
+        /// <param name="argstr"></param>
+        /// <param name="cmd"></param>
+        /// <param name="args"></param>
+        private void ParseChatCommand(string argstr, out string cmd, out string[] args)
+        {
+            var arglist = new List<string>();
+            var sb = new StringBuilder();
+            var inlongarg = false;
+            foreach (var c in argstr)
+            {
+                if (c == '"')
+                {
+                    if (inlongarg)
+                    {
+                        var arg = sb.ToString().Trim();
+                        if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
+                        sb = new StringBuilder();
+                        inlongarg = false;
+                    }
+                    else
+                    {
+                        inlongarg = true;
+                    }
+                }
+                else if (char.IsWhiteSpace(c) && !inlongarg)
+                {
+                    var arg = sb.ToString().Trim();
+                    if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
+                    sb = new StringBuilder();
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            if (sb.Length > 0)
+            {
+                var arg = sb.ToString().Trim();
+                if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
+            }
+            if (arglist.Count == 0)
+            {
+                cmd = null;
+                args = null;
+                return;
+            }
+            cmd = arglist[0];
+            arglist.RemoveAt(0);
+            args = arglist.ToArray();
+        }
         /// <summary>
         /// Starts the logging
         /// </summary>

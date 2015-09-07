@@ -5,6 +5,7 @@ using Oxide.Core;
 using Oxide.Core.Extensions;
 
 using UnityEngine;
+using Oxide.Game.Hurtworld.Libraries;
 
 namespace Oxide.Game.Hurtworld
 {
@@ -63,6 +64,7 @@ namespace Oxide.Game.Hurtworld
             Manager.RegisterPluginLoader(new HurtworldPluginLoader());
 
             // Register our libraries
+            Manager.RegisterLibrary("Command", new Command());
             Manager.RegisterLibrary("hurt", new Libraries.Hurtworld());
         }
 
@@ -148,7 +150,7 @@ namespace Oxide.Game.Hurtworld
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO: Handle console input
+            ConsoleManager.Instance.ExecuteCommand(input);
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
