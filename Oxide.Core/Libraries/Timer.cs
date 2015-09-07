@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 using Oxide.Core.Plugins;
 
@@ -11,6 +12,8 @@ namespace Oxide.Core.Libraries
     /// </summary>
     public class Timer : Library
     {
+        private readonly Thread mainThread = Thread.CurrentThread;
+
         /// <summary>
         /// Represents a single timer instance
         /// </summary>
@@ -139,12 +142,24 @@ namespace Oxide.Core.Libraries
 
             timers.RemoveAll(t => t == null || t.Destroyed);
 
-            var expired = timers.TakeWhile(t => t.nextrep <= now).ToArray();
-            if (expired.Length > 0)
+            var expired = new List<TimerInstance>();
+            var count = timers.Count();
+            for (var i = 0; i < count; i++)
             {
-                timers.RemoveRange(0, expired.Length);
+                var timer = timers[i];
+                if (timer != null && timer.nextrep > now) break;
+                expired.Add(timer);
+            }
+            if (expired.Count > 0)
+            {
+                timers.RemoveRange(0, expired.Count);
                 foreach (var timer in expired)
                 {
+                    if (timer == null)
+                    {
+                        Interface.Oxide.LogWarning($"A null timer instance was removed from the timer queue!");
+                        continue;
+                    }
                     timer.Update();
                     // Add the timer back to the queue if it needs to fire again
                     if (!timer.Destroyed) InsertTimer(timer);
@@ -155,7 +170,10 @@ namespace Oxide.Core.Libraries
         private TimerInstance AddTimer(int repetitions, float delay, Action callback, Plugin owner = null)
         {
             var timer = new TimerInstance(repetitions, delay, callback, owner);
-            InsertTimer(timer);
+            if (Thread.CurrentThread == mainThread)
+                InsertTimer(timer);
+            else
+                Interface.Oxide.NextTick(() => InsertTimer(timer));
             return timer;
         }
 
