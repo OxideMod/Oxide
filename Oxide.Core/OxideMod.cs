@@ -449,12 +449,22 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public bool ReloadPlugin(string name)
         {
-            var loader = extensionmanager.GetPluginLoaders().FirstOrDefault(l => l.ScanDirectory(PluginDirectory).Contains(name));
+            var is_nested = false;
+            var directory = PluginDirectory;
+            if (name.Contains("\\"))
+            {
+                is_nested = true;
+                var sub_path = Path.GetDirectoryName(name);
+                directory = Path.Combine(directory, sub_path);
+                name = name.Substring(sub_path.Length + 1);
+            }
+            var loader = extensionmanager.GetPluginLoaders().FirstOrDefault(l => l.ScanDirectory(directory).Contains(name));
             if (loader != null)
             {
-                loader.Reload(PluginDirectory, name);
+                loader.Reload(directory, name);
                 return true;
             }
+            if (is_nested) return false;
             UnloadPlugin(name);
             LoadPlugin(name);
             return true;

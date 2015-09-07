@@ -21,7 +21,9 @@ namespace Oxide.Plugins
         public CompilablePlugin[] CompilablePlugins;
         public string[] PluginNames;
         public string Name;
+        public DateTime CompiledAt;
         public byte[] RawAssembly;
+        public float Duration;
         public Assembly LoadedAssembly;
         public bool IsLoading;
         public bool IsBatch => CompilablePlugins.Length > 1;
@@ -41,11 +43,12 @@ namespace Oxide.Plugins
             "System.Security.Cryptography"
         };
 
-        public CompiledAssembly(string name, CompilablePlugin[] plugins, byte[] raw_assembly)
+        public CompiledAssembly(string name, CompilablePlugin[] plugins, byte[] raw_assembly, float duration)
         {
             Name = name;
             CompilablePlugins = plugins;
             RawAssembly = raw_assembly;
+            Duration = duration;
             PluginNames = CompilablePlugins.Select(pl => pl.Name).ToArray();
         }
 
@@ -61,12 +64,8 @@ namespace Oxide.Plugins
             loadCallbacks.Add(callback);
             if (isPatching) return;
 
-            //Interface.Oxide.LogDebug("Loading plugins: {0}", PluginNames.ToSentence());
-
-            //var started_at = Interface.Oxide.Now;
             PatchAssembly(raw_assembly =>
             {
-                //Interface.Oxide.LogInfo("Patching {0} took {1}ms", Name, Math.Round((Interface.Oxide.Now - started_at) * 1000f));
                 if (raw_assembly == null)
                 {
                     foreach (var cb in loadCallbacks) cb(true);
@@ -254,6 +253,11 @@ namespace Oxide.Plugins
                     });
                 }
             });
+        }
+
+        public bool IsOutdated()
+        {
+            return CompilablePlugins.Any(pl => pl.GetLastModificationTime() != CompiledAt);
         }
 
         private bool IsNamespaceBlacklisted(string full_namespace)

@@ -28,7 +28,9 @@ namespace Oxide.Plugins
             }
             return plugin;
         }
-        
+
+        public override string FileExtension => ".cs";
+
         private List<CompilablePlugin> compilationQueue = new List<CompilablePlugin>();
         private PluginCompiler compiler;
 
@@ -45,11 +47,12 @@ namespace Oxide.Plugins
             // Include references to all loaded game extensions and any assemblies they reference
             foreach (var extension in Interface.Oxide.GetAllExtensions())
             {
-                if (!extension.IsGameExtension) continue;
+                if (extension == null || !extension.IsGameExtension) continue;
                 var assembly = extension.GetType().Assembly;
+                if (assembly == null) continue;
                 PluginReferences.Add(assembly.GetName().Name);
                 foreach (var reference in assembly.GetReferencedAssemblies())
-                    PluginReferences.Add(reference.Name);
+                    if (reference != null) PluginReferences.Add(reference.Name);
             }
         }
 
@@ -68,35 +71,19 @@ namespace Oxide.Plugins
         /// <returns></returns>
         public override Plugin Load(string directory, string name)
         {
-            if (LoadingPlugins.Contains(name))
+            var compilable_plugin = GetCompilablePlugin(directory, name);
+            if (compilable_plugin.IsLoading)
             {
-                Interface.Oxide.LogDebug("Plugin is already being loaded: {0}", name);
+                Interface.Oxide.LogDebug("Load requested for plugin which is already loading: " + compilable_plugin.Name);
                 return null;
             }
 
-            // Let the Oxide core know that this plugin will be loading asynchronously
-            LoadingPlugins.Add(name);
-
-            var compilable_plugin = GetCompilablePlugin(directory, name);
-            compilable_plugin.Compile(compiled =>
-            {
-                // Load the plugin assembly if it was successfully compiled
-                if (compiled)
-                    compilable_plugin.LoadPlugin(plugin =>
-                    {
-                        LoadingPlugins.Remove(name);
-                        if (plugin != null) LoadedPlugins[compilable_plugin.Name] = plugin;
-                    });
-                else
-                {
-                    LoadingPlugins.Remove(name);
-                    compilable_plugin.IsReloading = false;
-                }
-            });
+            // Attempt to compile the plugin before unloading the old version
+            Load(compilable_plugin);
 
             return null;
         }
-
+        
         /// <summary>
         /// Attempt to asynchronously compile plugin and only reload if successful
         /// </summary>
@@ -104,29 +91,28 @@ namespace Oxide.Plugins
         /// <param name="name"></param>
         public override void Reload(string directory, string name)
         {
-            // Attempt to compile the plugin before unloading the old version
-            var compilable_plugin = GetCompilablePlugin(directory, name);
-            if (compilable_plugin.IsReloading)
+            if (Regex.Match(directory, @"\\Include\b", RegexOptions.IgnoreCase).Success)
             {
-                Interface.Oxide.LogDebug("Reload requested for plugin which is already reloading: {0}", name);
+                name = $"Oxide.{name}";
+                foreach (var plugin in plugins.Values)
+                {
+                    if (!plugin.References.Contains(name)) continue;
+                    Interface.Oxide.LogInfo($"Reloading {plugin.Name} because it references updated include file: {name}");
+                    plugin.LastModifiedAt = DateTime.Now;
+                    Load(plugin);
+                }
                 return;
             }
-            compilable_plugin.IsReloading = true;
-            compilable_plugin.Compile(compiled =>
+
+            var compilable_plugin = GetCompilablePlugin(directory, name);
+            if (compilable_plugin.IsLoading)
             {
-                if (!compiled)
-                {
-                    Interface.Oxide.LogError("Plugin failed to compile: {0} (leaving previous version loaded)", name);
-                    compilable_plugin.IsReloading = false;
-                    return;
-                }
-                Interface.Oxide.UnloadPlugin(name);
-                // Delay load by a frame so that all plugins in a batch can be unloaded before the assembly is loaded
-                Interface.Oxide.NextTick(() =>
-                {
-                    if (!Interface.Oxide.LoadPlugin(name)) compilable_plugin.IsReloading = false;
-                });
-            });
+                Interface.Oxide.LogDebug("Reload requested for plugin which is already loading: " + compilable_plugin.Name);
+                return;
+            }
+
+            // Attempt to compile the plugin before unloading the old version
+            Load(compilable_plugin);
         }
 
         /// <summary>
@@ -145,12 +131,54 @@ namespace Oxide.Plugins
             }
         }
 
+        public void Load(CompilablePlugin plugin)
+        {
+            plugin.Compile(compiled =>
+            {
+                if (!compiled)
+                {
+                    PluginLoadingCompleted(plugin);
+                    return;
+                }
+                var missing_requirements = plugin.Requires.Where(r => !LoadedPlugins.ContainsKey(r));
+                if (missing_requirements.Any())
+                {
+                    var loading_requirements = plugin.Requires.Where(r => LoadingPlugins.Contains(r));
+                    if (loading_requirements.Any())
+                    {
+                        Interface.Oxide.LogDebug(plugin.Name + " plugin is waiting for requirements to be loaded: " + loading_requirements.ToSentence());
+                    }
+                    else
+                    {
+                        Interface.Oxide.LogError($"{plugin.Name} plugin requires missing dependencies: {missing_requirements.ToSentence()}");
+                        PluginErrors[plugin.Name] = $"Missing dependencies: {missing_requirements.ToSentence()}";
+                        PluginLoadingCompleted(plugin);
+                    }
+                }
+                else
+                {
+                    Interface.Oxide.UnloadPlugin(plugin.Name);
+                    plugin.LoadPlugin(pl =>
+                    {
+                        if (pl != null) LoadedPlugins[pl.Name] = pl;
+                        PluginLoadingCompleted(plugin);
+                    });
+                }
+            });
+        }
+
         /// <summary>
         /// Called when a CompilablePlugin wants to be compiled
         /// </summary>
         /// <param name="plugin"></param>
         public void CompilationRequested(CompilablePlugin plugin)
         {
+            if (Compilation.Current != null)
+            {
+                Interface.Oxide.LogDebug("Adding plugin to outstanding compilation: " + plugin.Name);
+                Compilation.Current.Add(plugin);
+                return;
+            }
             if (compilationQueue.Count < 1)
             {
                 Interface.Oxide.NextTick(() =>
@@ -159,67 +187,63 @@ namespace Oxide.Plugins
                     compilationQueue.Clear();
                 });
             }
-            plugin.IsCompilationNeeded = true;
             compilationQueue.Add(plugin);
-            // Enqueue compilation of any plugins which depend on this plugin
-            foreach (var compilable_plugin in plugins.Values.Where(pl => pl.Requires.Contains(plugin.Name)))
+        }
+
+        public void PluginLoadingStarted(CompilablePlugin plugin)
+        {
+            // Let the Oxide core know that this plugin will be loading asynchronously
+            LoadingPlugins.Add(plugin.Name);
+            plugin.IsLoading = true;
+        }
+
+        private void PluginLoadingCompleted(CompilablePlugin plugin)
+        {
+            LoadingPlugins.Remove(plugin.Name);
+            plugin.IsLoading = false;
+            foreach (var loading_name in LoadingPlugins.ToArray())
             {
-                if (compilationQueue.Contains(compilable_plugin)) continue;
-                compilable_plugin.CompiledAssembly = null;
-                Reload(Interface.Oxide.PluginDirectory, compilable_plugin.Name);
+                var loading_plugin = GetCompilablePlugin(plugin.Directory, loading_name);
+                if (loading_plugin.IsLoading && loading_plugin.Requires.Contains(plugin.Name))
+                    Load(loading_plugin);
             }
         }
 
-        private void CompileAssembly(CompilablePlugin[] plugs)
+        private void CompileAssembly(CompilablePlugin[] plugins)
         {
-            foreach (var pl in plugs) pl.OnCompilationStarted(compiler);
-            var plugins = new List<CompilablePlugin>(plugs);
-            compiler.Compile(plugins, (assembly_name, raw_assembly, duration) =>
+            compiler.Compile(plugins, compilation =>
             {
-                if (plugins.Count > 1 && raw_assembly == null)
+                if (compilation.compiledAssembly == null)
                 {
-                    var plugin_names = plugins.Select(pl => pl.Name);
-                    var standalone_plugins = plugins.Where(pl => !pl.Requires.Any(r => plugin_names.Contains(r))).ToArray();
-                    foreach (var plugin in standalone_plugins) plugins.Remove(plugin);
-                    foreach (var plugin in plugins)
+                    foreach (var plugin in compilation.plugins)
                     {
                         plugin.OnCompilationFailed();
-                        PluginErrors[plugin.Name] = "Batch containing dependencies failed to compile";
+                        PluginErrors[plugin.Name] = "Failed to compile: " + plugin.CompilerErrors;
+                        Interface.Oxide.LogError("{0} plugin failed to compile!", plugin.ScriptName);
+                        Interface.Oxide.LogError(plugin.CompilerErrors);
+                        RemoteLogger.Warning($"{plugin.ScriptName} plugin failed to compile!\n{plugin.CompilerErrors}");
                     }
-                    if (standalone_plugins.Length < 1)
-                    {
-                        Interface.Oxide.LogError($"A batch of {plugins.Count} plugins failed to compile");
-                        return;
-                    }
-                    Interface.Oxide.LogError($"A batch of {plugins.Count} plugins failed to compile, attempting to compile separately");
-                    foreach (var plugin in standalone_plugins) CompileAssembly(new[] { plugin });
-                    return;
-                }
-                if (raw_assembly == null)
-                {
-                    var plugin = plugins[0];
-                    plugin.OnCompilationFailed();
-                    PluginErrors[plugin.Name] = "Failed to compile: " + plugin.CompilerErrors;
-                    Interface.Oxide.LogError("{0} plugin failed to compile!", plugin.ScriptName);
-                    Interface.Oxide.LogError(plugin.CompilerErrors);
-                    RemoteLogger.Warning($"{plugin.ScriptName} plugin failed to compile!\n{plugin.CompilerErrors}");
                 }
                 else
                 {
-                    var compiled_plugins = plugins.Where(pl => pl.CompilerErrors == null).ToList();
-                    var compiled_names = compiled_plugins.Select(pl => pl.Name).ToArray();
-                    CompiledAssembly compiled_assembly = null;
-                    if (compiled_plugins.Count > 0)
+                    if (compilation.plugins.Count > 0)
                     {
-                        var verb = compiled_plugins.Count > 1 ? "were" : "was";
-                        Interface.Oxide.LogInfo($"{compiled_names.ToSentence()} {verb} compiled successfully in {Math.Round(duration * 1000f)}ms");
-                        compiled_assembly = new CompiledAssembly(assembly_name, compiled_plugins.ToArray(), raw_assembly);
+                        var compiled_names = compilation.plugins.Select(pl => pl.Name).ToArray();
+                        var verb = compilation.plugins.Count > 1 ? "were" : "was";
+                        Interface.Oxide.LogInfo($"{compiled_names.ToSentence()} {verb} compiled successfully in {Math.Round(compilation.duration * 1000f)}ms");
                     }
-                    foreach (var plugin in plugins)
+                    foreach (var plugin in compilation.plugins)
                     {
                         if (plugin.CompilerErrors == null)
                         {
-                            plugin.OnCompilationSucceeded(compiled_assembly);
+                            Interface.Oxide.UnloadPlugin(plugin.Name);
+                        }
+                    }
+                    foreach (var plugin in compilation.plugins)
+                    {
+                        if (plugin.CompilerErrors == null)
+                        {
+                            plugin.OnCompilationSucceeded(compilation.compiledAssembly);
                         }
                         else
                         {
@@ -234,7 +258,7 @@ namespace Oxide.Plugins
 
         public void OnShutdown()
         {
-            compiler.OnShutdown();
+            compiler.Shutdown();
         }
     }
 }
