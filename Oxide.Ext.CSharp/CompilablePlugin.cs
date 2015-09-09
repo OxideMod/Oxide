@@ -11,10 +11,6 @@ namespace Oxide.Plugins
         
         public CompiledAssembly LastGoodAssembly;
         public bool IsLoading;
-
-        private Action<CSharpPlugin> loadCallback;
-        private Action<bool> compileCallback;
-        private float compilationQueuedAt;
         
         public CompilablePlugin(CSharpExtension extension, CSharpPluginLoader loader, string directory, string name)
             : base(extension, loader, directory, name)

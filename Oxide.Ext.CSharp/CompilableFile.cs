@@ -31,9 +31,9 @@ namespace Oxide.Plugins
         public DateTime LastCompiledAt;
         public bool IsCompilationNeeded;
 
-        private Action<CSharpPlugin> loadCallback;
-        private Action<bool> compileCallback;
-        private float compilationQueuedAt;
+        protected Action<CSharpPlugin> loadCallback;
+        protected Action<bool> compileCallback;
+        protected float compilationQueuedAt;
 
         public byte[] ScriptSource => ScriptEncoding.GetBytes(string.Join(Environment.NewLine, ScriptLines));
 
