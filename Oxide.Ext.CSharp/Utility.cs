@@ -48,7 +48,7 @@ namespace Oxide.Plugins
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => dictionary.GetEnumerator();
         public bool ContainsKey(TKey key) => dictionary.ContainsKey(key);
         public bool Contains(KeyValuePair<TKey, TValue> item) => dictionary.Contains(item);
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) => dictionary.CopyTo(array, arrayIndex);
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int index) => dictionary.CopyTo(array, index);
         public bool TryGetValue(TKey key, out TValue value) => dictionary.TryGetValue(key, out value);
         public void Add(TKey key, TValue value) => dictionary.Add(key, value);
         public void Add(KeyValuePair<TKey, TValue> item) => dictionary.Add(item);

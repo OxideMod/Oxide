@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO;
 
 namespace Oxide.Core.Plugins
 {
@@ -11,7 +13,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Stores the names of plugins which are currently loading asynchronously
         /// </summary>
-        public List<string> LoadingPlugins { get; } = new List<string>();
+        public ConcurrentHashSet<string> LoadingPlugins { get; } = new ConcurrentHashSet<string>();
 
         /// <summary>
         /// Optional loaded plugin instances used by loaders which need to be notified before a plugin is unloaded
@@ -29,13 +31,20 @@ namespace Oxide.Core.Plugins
         public virtual Type[] CorePlugins { get; } = new Type[0];
 
         /// <summary>
+        /// Stores the plugin file extension which this loader supports
+        /// </summary>
+        public virtual string FileExtension { get; }
+
+        /// <summary>
         /// Scans the specified directory and returns a set of plugin names for plugins that this loader can load
         /// </summary>
         /// <param name="directory"></param>
         /// <returns></returns>
         public virtual IEnumerable<string> ScanDirectory(string directory)
         {
-            return new string[0];
+            if (FileExtension == null) yield break;
+            foreach (string file in Directory.GetFiles(directory, "*" + FileExtension))
+                yield return Path.GetFileNameWithoutExtension(file);
         }
 
         /// <summary>

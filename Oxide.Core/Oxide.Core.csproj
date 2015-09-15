@@ -101,6 +101,7 @@
     <Compile Include="ServerConsole\ConsoleInput.cs" />
     <Compile Include="ServerConsole\ConsoleWindow.cs" />
     <Compile Include="ServerConsole\ServerConsole.cs" />
+    <Compile Include="Utility.cs" />
     <Compile Include="VersionNumber.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
