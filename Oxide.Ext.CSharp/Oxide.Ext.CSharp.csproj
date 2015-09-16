@@ -50,8 +50,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Cecil">
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -63,6 +68,7 @@
     <Compile Include="CSharpPluginLoader.cs" />
     <Compile Include="CompilablePlugin.cs" />
     <Compile Include="CompiledAssembly.cs" />
+    <Compile Include="DirectCallMethod.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="ObjectStream\Data\CompilerData.cs" />
     <Compile Include="ObjectStream\Data\CompilerFile.cs" />

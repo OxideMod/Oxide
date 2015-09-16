@@ -187,6 +187,8 @@ namespace Oxide.Plugins
         protected HashSet<PluginFieldInfo> onlinePlayerFields = new HashSet<PluginFieldInfo>();
         private Dictionary<string, FieldInfo> pluginReferenceFields = new Dictionary<string, FieldInfo>();
 
+        private bool hookDispatchFallback;
+
         public bool HookedOnFrame
         {
             get; private set;
@@ -251,6 +253,13 @@ namespace Oxide.Plugins
             foreach (var name in pluginReferenceFields.Keys)
                 pluginReferenceFields[name].SetValue(this, manager.GetPlugin(name));
 
+            /*var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(Interface.Oxide.PluginDirectory, Name);
+            if (compilable_plugin != null && compilable_plugin.CompiledAssembly != null)
+            {
+                System.IO.File.WriteAllBytes(Interface.Oxide.PluginDirectory + "\\" + Name + ".dump", compilable_plugin.CompiledAssembly.PatchedAssembly);
+                Interface.Oxide.LogWarning($"The raw assembly has been dumped to Plugins/{Name}.dump");
+            }*/
+
             try
             {
                 OnCallHook("Loaded", new object[0]);
@@ -276,6 +285,39 @@ namespace Oxide.Plugins
                 pluginReferenceFields[name].SetValue(this, null);
 
             base.HandleRemovedFromManager(manager);
+        }
+
+        public virtual bool DirectCallHook(string name, out object ret, object[] args)
+        {
+            ret = null;
+            return false;
+        }
+
+        protected override object InvokeMethod(MethodInfo method, object[] args)
+        {
+            //TODO ignore base_ methods for now
+            if (!hookDispatchFallback && !method.Name.StartsWith("base_"))
+            {
+                try
+                {
+                    object ret;
+                    if (DirectCallHook(method.Name, out ret, args)) return ret;
+                    PrintWarning("Unable to call hook directly: " + method.Name);
+                }
+                catch (InvalidProgramException ex)
+                {
+                    Interface.Oxide.LogError("Hook dispatch failure detected, falling back to reflection based dispatch. " + ex.ToString());
+                    var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(Interface.Oxide.PluginDirectory, Name);
+                    if (compilable_plugin != null && compilable_plugin.CompiledAssembly != null)
+                    {
+                        System.IO.File.WriteAllBytes(Interface.Oxide.PluginDirectory + "\\" + Name + ".dump", compilable_plugin.CompiledAssembly.PatchedAssembly);
+                        Interface.Oxide.LogWarning($"The invalid raw assembly has been dumped to Plugins/{Name}.dump");
+                    }
+                    hookDispatchFallback = true;
+                }
+            }
+
+            return method.Invoke(this, args);
         }
 
         /// <summary>

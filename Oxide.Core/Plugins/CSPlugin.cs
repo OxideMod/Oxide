@@ -151,7 +151,7 @@ namespace Oxide.Core.Plugins
                 try
                 {
                     // Call method with the correct number of arguments
-                    return_value = method.Invoke(this, hook_args);
+                    return_value = InvokeMethod(method, hook_args);
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -172,6 +172,11 @@ namespace Oxide.Core.Plugins
             }
 
             return return_value;
+        }
+
+        protected virtual object InvokeMethod(MethodInfo method, object[] args)
+        {
+            return method.Invoke(this, args);
         }
     }
 }

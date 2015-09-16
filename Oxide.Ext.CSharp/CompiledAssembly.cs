@@ -7,9 +7,11 @@ using System.Threading;
 
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 using Mono.Collections.Generic;
 
 using Oxide.Core;
+using Oxide.Ext.CSharp;
 
 using MethodAttributes = Mono.Cecil.MethodAttributes;
 using MethodBody = Mono.Cecil.Cil.MethodBody;
@@ -23,6 +25,7 @@ namespace Oxide.Plugins
         public string Name;
         public DateTime CompiledAt;
         public byte[] RawAssembly;
+        public byte[] PatchedAssembly;
         public float Duration;
         public Assembly LoadedAssembly;
         public bool IsLoading;
@@ -79,7 +82,7 @@ namespace Oxide.Plugins
 
                 foreach (var cb in loadCallbacks) cb(true);
                 loadCallbacks.Clear();
-                
+
                 IsLoading = false;
             });
         }
@@ -169,7 +172,7 @@ namespace Oxide.Plugins
                                     {
                                         var method_call = instruction.Operand as MethodReference;
                                         var full_namespace = method_call.DeclaringType.FullName;
-                                        
+
                                         if ((full_namespace == "System.Type" && method_call.Name == "GetType") || IsNamespaceBlacklisted(full_namespace))
                                         {
                                             for (var n = 0; n < method.Parameters.Count; n++)
@@ -188,7 +191,8 @@ namespace Oxide.Plugins
 
                             if (changed_method)
                             {
-                                //Interface.Oxide.LogDebug("Updating {0} instruction offsets: {1}", instructions.Count, method.FullName);
+                                method.Body?.OptimizeMacros();
+                                /*//Interface.Oxide.LogDebug("Updating {0} instruction offsets: {1}", instructions.Count, method.FullName);
                                 int curoffset = 0;
                                 for (var i = 0; i < instructions.Count; i++)
                                 {
@@ -198,7 +202,7 @@ namespace Oxide.Plugins
                                     instruction.Offset = curoffset;
                                     curoffset += instruction.GetSize();
                                     //Interface.Oxide.LogDebug("    {0}", instruction.ToString());
-                                }
+                                }*/
                             }
                         }
                         foreach (var nested_type in type.NestedTypes)
@@ -219,6 +223,10 @@ namespace Oxide.Plugins
                                     var plugin = CompilablePlugins.SingleOrDefault(p => p.Name == type.Name);
                                     plugin.CompilerErrors = "Primary constructor in main class must be public";
                                 }
+                                else
+                                {
+                                    new DirectCallMethod(definition.MainModule, type);
+                                }
                             }
                             else
                             {
@@ -228,18 +236,33 @@ namespace Oxide.Plugins
                         }
                     }
 
-                    byte[] patched_assembly;
+                    //TODO why is there no error on boot using this?
+                    foreach (var type in definition.MainModule.Types)
+                    {
+                        if (type.Namespace != "Oxide.Plugins" || !PluginNames.Contains(type.Name)) continue;
+                        foreach (var m in type.Methods.Where(m => !m.IsStatic && !m.HasGenericParameters && !m.ReturnType.IsGenericParameter && !m.IsSetter && !m.IsGetter))
+                        {
+                            foreach (var parameter in m.Parameters)
+                            {
+                                foreach (var attribute in parameter.CustomAttributes)
+                                {
+                                    //Interface.Oxide.LogInfo(m.FullName + " - " + parameter.Name + " - " + attribute.Constructor.FullName);
+                                }
+                            }
+                        }
+                    }
+
                     using (var stream = new MemoryStream())
                     {
                         definition.Write(stream);
-                        patched_assembly = stream.ToArray();
+                        PatchedAssembly = stream.ToArray();
                     }
 
                     Interface.Oxide.NextTick(() =>
                     {
                         isPatching = false;
                         //Interface.Oxide.LogDebug("Patching {0} assembly took {1:0.00} ms", ScriptName, Interface.Oxide.Now - started_at);
-                        callback(patched_assembly);
+                        callback(PatchedAssembly);
                     });
                 }
                 catch (Exception ex)
