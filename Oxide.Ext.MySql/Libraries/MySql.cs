@@ -70,6 +70,7 @@ namespace Oxide.Ext.MySql.Libraries
             {
                 List<Dictionary<string, object>> list = null;
                 var nonQueryResult = 0;
+                var lastInsertRowId = 0L;
                 try
                 {
                     if (Connection == null) throw new Exception("Connection is null");
@@ -103,6 +104,7 @@ namespace Oxide.Ext.MySql.Libraries
                             }
                         }
                     }
+                    lastInsertRowId = _cmd.LastInsertedId;
                     Cleanup();
                 }
                 catch (Exception ex)
@@ -116,6 +118,7 @@ namespace Oxide.Ext.MySql.Libraries
                 {
                     try
                     {
+                        Connection.LastInsertRowId = lastInsertRowId;
                         if (!NonQuery)
                             Callback(list);
                         else
