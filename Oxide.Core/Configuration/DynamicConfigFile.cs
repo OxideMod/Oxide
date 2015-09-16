@@ -15,6 +15,7 @@ namespace Oxide.Core.Configuration
     /// </summary>
     public class DynamicConfigFile : ConfigFile, IEnumerable<KeyValuePair<string, object>>
     {
+        public JsonSerializerSettings Settings { get; set; } = new JsonSerializerSettings();
         private Dictionary<string, object> _keyvalues;
         private readonly JsonSerializerSettings _settings;
         private readonly string _chroot;
@@ -52,7 +53,7 @@ namespace Oxide.Core.Configuration
             if (Exists())
             {
                 var source = File.ReadAllText(filename);
-                customObject = JsonConvert.DeserializeObject<T>(source);
+                customObject = JsonConvert.DeserializeObject<T>(source, Settings);
             }
             else
             {
@@ -83,7 +84,7 @@ namespace Oxide.Core.Configuration
         public void WriteObject<T>(T config, bool sync = false, string filename = null)
         {
             filename = CheckPath(filename ?? Filename);
-            var json = JsonConvert.SerializeObject(config, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(config, Formatting.Indented, Settings);
             File.WriteAllText(filename, json);
             if (sync) _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(json, _settings);
         }
