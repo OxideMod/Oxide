@@ -107,7 +107,11 @@ namespace Oxide.Plugins
 
         internal void CheckLastModificationTime()
         {
-            if (!File.Exists(ScriptPath)) return;
+            if (!File.Exists(ScriptPath))
+            {
+                LastModifiedAt = default(DateTime);
+                return;
+            }
             var modified_time = GetLastModificationTime();
             if (modified_time != default(DateTime)) LastModifiedAt = modified_time;
         }

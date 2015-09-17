@@ -6,7 +6,7 @@ using System.Linq;
 namespace Oxide.Core
 {
     /// <summary>
-    /// A partially thread-safe HashSet (interating is not thread-safe)
+    /// A partially thread-safe HashSet (iterating is not thread-safe)
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ConcurrentHashSet<T> : ICollection<T>
