@@ -116,9 +116,10 @@ namespace Oxide.Ext.MySql.Libraries
                 }
                 Interface.Oxide.NextTick(() =>
                 {
+                    Connection?.Plugin?.TrackStart();
                     try
                     {
-                        Connection.LastInsertRowId = lastInsertRowId;
+                        if (Connection != null) Connection.LastInsertRowId = lastInsertRowId;
                         if (!NonQuery)
                             Callback(list);
                         else
@@ -130,6 +131,7 @@ namespace Oxide.Ext.MySql.Libraries
                         if (Connection?.Plugin != null) message += $" in '{Connection.Plugin.Name} v{Connection.Plugin.Version}' plugin";
                         Interface.Oxide.LogException(message, ex);
                     }
+                    Connection?.Plugin?.TrackEnd();
                 });
                 return true;
             }

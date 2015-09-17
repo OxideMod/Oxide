@@ -106,7 +106,10 @@ namespace Oxide.Core.Plugins
         /// </summary>
         public bool IsLoaded { get; internal set; }
 
+        public float TotalHookTime { get; internal set; }
+
         // Used to measure time spent in this plugin
+        private float trackStartAt;
         private float startedAt;
         private float stoppedAt;
         private float averageAt;
@@ -188,6 +191,7 @@ namespace Oxide.Core.Plugins
                 startedAt = Interface.Oxide.Now;
                 if (averageAt < 1) averageAt = startedAt;
             }
+            TrackStart();
             nestcount++;
             try
             {
@@ -201,12 +205,14 @@ namespace Oxide.Core.Plugins
             finally
             {
                 nestcount--;
+                TrackEnd();
                 if (!IsCorePlugin && nestcount == 0)
                 {
                     stoppedAt = Interface.Oxide.Now;
-                    if (stoppedAt - startedAt > 0.5)
-                        Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took: {(stoppedAt - startedAt)*1000:0}ms");
-                    sum += stoppedAt - startedAt;
+                    var runTime = stoppedAt - startedAt;
+                    if (runTime > 0.5)
+                        Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took: {(runTime)*1000:0}ms");
+                    sum += runTime;
                     if (stoppedAt - averageAt > 10)
                     {
                         sum /= stoppedAt - averageAt;
@@ -257,6 +263,29 @@ namespace Oxide.Core.Plugins
         {
             if (OnError != null)
                 OnError(this, message);
+        }
+
+        public void TrackStart()
+        {
+            if (IsCorePlugin || nestcount > 0) return;
+            if (trackStartAt > 0)
+            {
+                //Interface.Oxide.LogWarning($"Already tracking on plugin '{Name} v{Version}'");
+                return;
+            }
+            trackStartAt = Interface.Oxide.Now;
+        }
+
+        public void TrackEnd()
+        {
+            if (IsCorePlugin || nestcount > 0) return;
+            if (trackStartAt <= 0)
+            {
+                //Interface.Oxide.LogWarning($"Not tracking on plugin '{Name} v{Version}'");
+                return;
+            }
+            TotalHookTime += Interface.Oxide.Now - trackStartAt;
+            trackStartAt = 0;
         }
 
         #region Config

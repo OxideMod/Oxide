@@ -75,8 +75,13 @@ namespace Oxide.Game.Rust.Libraries
 
             public void HandleCommand(ConsoleSystem.Arg arg)
             {
-                for (var i = 0; i < PluginCallbacks.Count; i++)
-                    if (PluginCallbacks[i].Callback(arg)) return;
+                foreach (var pluginCallback in PluginCallbacks)
+                {
+                    pluginCallback.Plugin?.TrackStart();
+                    var result = pluginCallback.Callback(arg);
+                    pluginCallback.Plugin?.TrackEnd();
+                    if (result) return;
+                }
 
                 OriginalCallback?.Invoke(arg);
             }
@@ -97,7 +102,9 @@ namespace Oxide.Game.Rust.Libraries
 
             public void HandleCommand(BasePlayer sender, string name, string[] args)
             {
+                Plugin?.TrackStart();
                 _callback?.Invoke(sender, name, args);
+                Plugin?.TrackEnd();
             }
         }
 

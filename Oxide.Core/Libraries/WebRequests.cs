@@ -218,6 +218,7 @@ namespace Oxide.Core.Libraries
                 {
                     if (request == null) return;
                     request = null;
+                    Owner?.TrackStart();
                     try
                     {
                         Callback(ResponseCode, ResponseText);
@@ -228,6 +229,7 @@ namespace Oxide.Core.Libraries
                         if (Owner) message += $" in '{Owner.Name} v{Owner.Version}' plugin";
                         Interface.Oxide.LogException(message, ex);
                     }
+                    Owner?.TrackEnd();
                     Owner = null;
                 });
             }
