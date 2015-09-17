@@ -106,8 +106,18 @@ namespace Oxide.Plugins
                     {
                         if (Current == null) Current = this;
 
-                        PreparseScript(plugin);
-                        ResolveReferences(plugin);
+                        if (!CacheScriptLines(plugin) || plugin.ScriptLines.Length < 1)
+                        {
+                            plugin.References.Clear();
+                            plugin.IncludePaths.Clear();
+                            plugin.Requires.Clear();
+                            Interface.Oxide.LogWarning("Plugin script is empty: " + plugin.Name);
+                        }
+                        else if (plugins.Add(plugin))
+                        {
+                            PreparseScript(plugin);
+                            ResolveReferences(plugin);
+                        }
 
                         CacheModifiedScripts();
 
@@ -129,19 +139,6 @@ namespace Oxide.Plugins
 
         private void PreparseScript(CompilablePlugin plugin)
         {
-            if (plugin.ScriptLines == null) CacheScriptLines(plugin);
-
-            if (plugin.ScriptLines.Length < 1)
-            {
-                plugin.References.Clear();
-                plugin.IncludePaths.Clear();
-                plugin.Requires.Clear();
-                Interface.Oxide.LogWarning("Plugin script is empty: " + plugin.Name);
-                return;
-            }
-
-            if (!plugins.Add(plugin)) return;
-
             plugin.References.Clear();
             plugin.IncludePaths.Clear();
             plugin.Requires.Clear();
@@ -364,7 +361,7 @@ namespace Oxide.Plugins
 
         private void CacheModifiedScripts()
         {
-            var modified_plugins = plugins.Where(pl => pl.HasBeenModified() || pl.LastCachedScriptAt < pl.LastModifiedAt).ToArray();
+            var modified_plugins = plugins.Where(pl => pl.ScriptLines == null || pl.HasBeenModified() || pl.LastCachedScriptAt != pl.LastModifiedAt).ToArray();
             if (modified_plugins.Length < 1) return;
             foreach (var plugin in modified_plugins)
                 CacheScriptLines(plugin);
