@@ -83,20 +83,16 @@ namespace Oxide.Game.Hurtworld
             return cmdlib.HandleConsoleCommand(commandParam);
         }
 
-
         [HookMethod("OnPlayerChat")]
         private object OnPlayerChat(PlayerIdentity identity, NetworkMessageInfo info, string message)
         {
-            
             if (message.Trim().Length <= 1) return true;
             var str = message.Substring(0, 1);
             // Is it a chat command?
             if (str.Equals("/") || str.Equals("!"))
             {
-
                 // Get the arg string
                 var argstr = message.Substring(1);
-                
 
                 // Parse it
                 string chatcmd;
@@ -114,6 +110,7 @@ namespace Oxide.Game.Hurtworld
             }
             return null;
         }
+
         /// <summary>
         /// Parses the specified chat command
         /// </summary>
@@ -167,6 +164,7 @@ namespace Oxide.Game.Hurtworld
             arglist.RemoveAt(0);
             args = arglist.ToArray();
         }
+
         /// <summary>
         /// Starts the logging
         /// </summary>
