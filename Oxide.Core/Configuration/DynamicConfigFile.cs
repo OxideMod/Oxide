@@ -84,6 +84,8 @@ namespace Oxide.Core.Configuration
         public void WriteObject<T>(T config, bool sync = false, string filename = null)
         {
             filename = CheckPath(filename ?? Filename);
+            var dir = GetDirectoryName(filename);
+            if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
             var json = JsonConvert.SerializeObject(config, Formatting.Indented, Settings);
             File.WriteAllText(filename, json);
             if (sync) _keyvalues = JsonConvert.DeserializeObject<Dictionary<string, object>>(json, _settings);
