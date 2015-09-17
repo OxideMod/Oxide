@@ -243,7 +243,7 @@ namespace Oxide.Plugins
         /// <param name="destination"></param>
         protected void ForcePlayerPosition(BasePlayer player, Vector3 destination)
         {
-            player.transform.position = destination;
+            player.MovePosition(destination);
             if (!player.IsSpectating() || Vector3.Distance(player.transform.position, destination) > 25.0)
                 player.ClientRPCPlayer(null, player, "ForcePositionTo", destination);
             else
