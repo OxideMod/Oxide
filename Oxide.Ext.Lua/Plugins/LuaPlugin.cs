@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using NLua;
 
@@ -106,6 +107,7 @@ namespace Oxide.Ext.Lua.Plugins
         {
             // Load the plugin into a table
             var source = File.ReadAllText(Filename);
+            if (Regex.IsMatch(source, @"PLUGIN\.Version\s*=\s*[\'|""]", RegexOptions.IgnoreCase)) throw new Exception("Plugin version is a string, Oxide 1.18 plugins are not compatible with Oxide 2");
             var pluginfunc = LuaEnvironment.LoadString(source, Path.GetFileName(Filename));
             if (pluginfunc == null) throw new Exception("LoadString returned null for some reason");
             LuaEnvironment.NewTable("PLUGIN");
