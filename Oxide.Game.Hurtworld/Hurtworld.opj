@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "F5E2NKmcERbRlFtThxBg1KnC3WW+vFqB2kaSmFlks8I=",
+            "MSILHash": "DTvQG/vKnmmsyEVS3WUEyBPBR+YbI/ql+9pLapSG2Hw=",
             "BaseHookName": null
           }
         },
@@ -44,32 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "F5E2NKmcERbRlFtThxBg1KnC3WW+vFqB2kaSmFlks8I=",
-            "BaseHookName": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerSave",
-            "HookName": "OnServerSave",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SaveServer",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String"
-              ]
-            },
-            "MSILHash": "Tpby1OO32DsakSpwV7QRz5ZvZ0ZMmVDSUvvRhwn7g3Y=",
+            "MSILHash": "DTvQG/vKnmmsyEVS3WUEyBPBR+YbI/ql+9pLapSG2Hw=",
             "BaseHookName": null
           }
         },
@@ -142,7 +117,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "f/ahDlXCdthLu4XKJv30ZkexjnyzWXg8Pk9iKIn1TDo=",
+            "MSILHash": "/XnsZ35heqjUF0RdzEEmUtAGRA2fIlSPGaHvorED2eg=",
             "BaseHookName": null
           }
         },
@@ -165,7 +140,7 @@
               "ReturnType": "UnityEngine.Vector3",
               "Parameters": []
             },
-            "MSILHash": "9Jm/NmSq76xnQe/6NATssGstXMBN/1OlV5fQfmw8lzU=",
+            "MSILHash": "HdYzznf0wVpO9DUij1mAKplc1XqN3xp/u35Z25Kpwps=",
             "BaseHookName": null
           }
         },
@@ -190,7 +165,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "GXPUyAdIgHXDTAoqBRLo/8iaWvRduDv6JkrQUYGSUw0=",
+            "MSILHash": "ElFX+LdyPAdabpq7AphU92NqhY+jqL1BRfdQq7RUUh4=",
             "BaseHookName": null
           }
         },
@@ -223,7 +198,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 16,
+            "InjectionIndex": 7,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -292,6 +267,32 @@
               ]
             },
             "MSILHash": "HZoACIEH3f3XmjQgROO3MTbF/mhR4V2CW+2hQWehU0E=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameSerializer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SaveServer",
+              "ReturnType": "System.Collections.IEnumerator",
+              "Parameters": [
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "jZMfyu6iGCy9vHS+yyRydMKtAZ91ID8/0pgCrPKffWw=",
             "BaseHookName": null
           }
         }
