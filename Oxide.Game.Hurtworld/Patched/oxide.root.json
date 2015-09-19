@@ -1,5 +1,5 @@
 {
-    "ExtensionDirectory": "Client_Data\\Managed",
+    "ExtensionDirectory": "Server_Data\\Managed",
 
     "PluginDirectory": "plugins",
     "ConfigDirectory": "config",

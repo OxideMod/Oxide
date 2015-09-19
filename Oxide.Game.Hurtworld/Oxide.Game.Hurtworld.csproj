@@ -96,7 +96,7 @@
     <PropertyGroup>
       <GameName>Hurtworld</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <DataDir>$(GameName)\Client_Data</DataDir>
+      <DataDir>$(GameName)\Server_Data</DataDir>
       <ManagedDir>$(DataDir)\Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
