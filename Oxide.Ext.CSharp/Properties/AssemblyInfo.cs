@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Oxide.Ext.CSharp")]
-[assembly: AssemblyDescription("CSharp plugins which can be compiled and reloaded at runtime")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Oxide Team")]
+[assembly: AssemblyCompany("Oxide")]
 [assembly: AssemblyProduct("Oxide.Ext.CSharp")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright © Oxide 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
