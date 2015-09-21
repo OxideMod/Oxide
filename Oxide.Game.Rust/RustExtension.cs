@@ -30,7 +30,7 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
+        public override VersionNumber Version => new VersionNumber(1, 0, 0);
 
         /// <summary>
         /// Gets the author of this extension
