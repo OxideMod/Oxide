@@ -18,7 +18,7 @@ namespace Oxide.Ext.SQLite
 
         public override string Name => "SQLite";
 
-        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
+        public override VersionNumber Version => new VersionNumber(1, 0, 0);
 
         public override string Author => "Oxide Team";
 

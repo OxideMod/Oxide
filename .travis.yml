@@ -7,7 +7,9 @@ before_install:
   - MONO_PATH=`echo /opt/mono-*/lib/mono` && sudo ln -s $TRAVIS_BUILD_DIR/Mono/2.0 $MONO_PATH/2.0 && sudo ln -s $TRAVIS_BUILD_DIR/Mono/xbuild-frameworks/.NETFramework/v3.5 $MONO_PATH/xbuild-frameworks/.NETFramework/v3.5
 
 # Add build number to version
-before_script: sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
+before_script: 
+  - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
+  - for file in */ ; do file="${file%/*}"; file="$file/${file##*.}Extension.cs"; if [[ -e "$file" ]]; then sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" "$file"; fi done
 
 # Build the project
 solution: Oxide.sln

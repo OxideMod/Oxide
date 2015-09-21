@@ -11,7 +11,7 @@ namespace Oxide.Ext.MySql
 
         public override string Name => "MySql";
 
-        public override VersionNumber Version => new VersionNumber(1, 0, OxideMod.Version.Patch);
+        public override VersionNumber Version => new VersionNumber(1, 0, 0);
 
         public override string Author => "Oxide Team";
 
