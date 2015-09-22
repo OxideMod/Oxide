@@ -100,7 +100,8 @@
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll"
         Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
-      <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*" />
+      <WinGameFiles Include="$(ProjectDir)\Files\**\*.*"
+        Exclude="$(ProjectDir)\Files\Linux\**" />
       <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe"
         Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.Cecil.dll" />
     </ItemGroup>
