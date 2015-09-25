@@ -113,7 +113,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "XD9Zoq3Rj9xkHe48vMU3lS67t24VccrLkvpZdmdf6D0=",
+            "MSILHash": "Gu7wyJB9p3aD6F6Zqcq1xK9C2GlIyab52/azOZDeuBs=",
             "BaseHookName": null
           }
         },
@@ -188,7 +188,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "uMW/nZwKM7lfucVScgUnztj6skOXKILyXh6o78aEJZU=",
+            "MSILHash": "Xo9cOAObH8Rek8qeasxiAjT1EOG0iHphluU3HkzVWcE=",
             "BaseHookName": null
           }
         },
@@ -213,7 +213,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "cfyp8m6vvzUAYEK5bA13Pup64/fE78rxdY+3PRnT/To=",
+            "MSILHash": "B4o8IDY03Yu9W3TgNp7U4M7iAwpUVumCwUS+jIzaEUc=",
             "BaseHookName": null
           }
         },
