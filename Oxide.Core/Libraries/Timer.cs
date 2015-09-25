@@ -92,6 +92,7 @@ namespace Oxide.Core.Libraries
 
                 nextrep += Delay;
 
+                Owner?.TrackStart();
                 try
                 {
                     Callback();
@@ -103,6 +104,7 @@ namespace Oxide.Core.Libraries
                     if (Owner) error_message += $" in '{Owner.Name} v{Owner.Version}'";
                     Interface.Oxide.LogException(error_message, ex);
                 }
+                Owner?.TrackEnd();
 
                 if (Repetitions > 0)
                 {

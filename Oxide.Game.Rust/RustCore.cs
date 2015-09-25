@@ -201,7 +201,7 @@ namespace Oxide.Game.Rust
             var output = $"[Oxide] Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
             var number = 1;
             foreach (var plugin in loaded_plugins)
-                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
+                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
             foreach (var plugin_name in unloaded_plugin_errors.Keys)
                 output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
             arg.ReplyWith(output);
