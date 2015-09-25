@@ -119,7 +119,7 @@
       <WinGameFiles Include="$(ProjectDir)\Files\**\*.*"
         Exclude="$(ProjectDir)\Files\Linux\**" />
       <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe"
-        Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.Cecil.dll" />
+        Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="$(ProjectDir)\Dependencies\Assembly-CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Assembly-CSharp_Original.dll" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
