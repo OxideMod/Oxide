@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Oxide")]
 [assembly: AssemblyProduct("Oxide.Game.Hurtworld")]
-[assembly: AssemblyCopyright("Copyright © Oxide 2015")]
+[assembly: AssemblyCopyright("Copyright (c) 2015 Oxide")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
