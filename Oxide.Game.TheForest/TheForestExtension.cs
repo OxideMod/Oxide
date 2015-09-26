@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 using Oxide.Core;
@@ -38,13 +39,19 @@ namespace Oxide.Game.TheForest
             "CanResume:",
             "DestroyPickup:",
             "Game Activation Sequence step",
+            "HDR RenderTexture format is not supported on this platform",
             "Hull (UnityEngine.GameObject)",
+            "Image Effects are not supported on this platform",
+            "Joystick count=",
             "LobbyCreated param.m_eResult=k_EResult",
             "Refreshing Input Mapping Icons",
+            "Reloading Input Mapping",
             "Skin Variation",
             "Skipped frame because",
             "Skipped rendering frame because",
+            "The referenced script on this Behaviour is missing!",
             "WakeFromKnockOut",
+            "[AmplifyMotion] Initialization failed",
             "attach: [",
             "delaying initial",
             "disableFlying",
@@ -56,6 +63,48 @@ namespace Oxide.Game.TheForest
             "setMale",
             "started steam server"
         };
+
+        private static readonly string[] LogFilter =
+        {
+            "BMGlyph",
+            "BMSymbol",
+            "BetterList",
+            "Image Effects are not supported on this platform",
+            "TweenAlpha",
+            "TweenColor",
+            "TweenScale",
+            "TweenTransform",
+            "UIBasicSprite",
+            "UIButton",
+            "UICamera",
+            "UIDragScrollView",
+            "UIDrawCall",
+            "UIGeometry",
+            "UIGrid",
+            "UIInput",
+            "UIKeyNavigation",
+            "UILabel",
+            "UIPanel",
+            "UIPlaySound",
+            "UIPlayTween",
+            "UIPopupList",
+            "UIProgressBar",
+            "UIRect",
+            "UIRoot",
+            "UIScrollBar",
+            "UIScrollView",
+            "UISlider",
+            "UISprite",
+            "UITexture",
+            "UIToggle",
+            "UITweener",
+            "UIWidget",
+            "UIWidget",
+            "[AmplifyMotion] Initialization failed"
+        };
+
+        private const string LogFileName = "output_log.txt";
+        private TextWriter _logWriter;
 
         /// <summary>
         /// Initializes a new instance of the TheForestExtension class
@@ -94,13 +143,28 @@ namespace Oxide.Game.TheForest
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
-            Application.logMessageReceived += HandleLog;
+
+            // Disable client audio
+            //Camera.main.gameObject.GetComponent<AudioListener>().enabled = false; // Causes server to not start
+            PlayerPrefs.SetFloat("Volume", 0F); // This doesn't seem to work for some/all
+            PlayerPrefs.SetFloat("MusicVolume", 0F); // This doesn't seem to work some/all
+
+            // Limit FPS to reduce cpu usage
+            PlayerPrefs.SetInt("MaxFrameRate2", 256); //Application.targetFrameRate = 256;
+
+            if (File.Exists(LogFileName)) File.Delete(LogFileName);
+            var logStream = File.AppendText(LogFileName);
+            logStream.AutoFlush = true;
+            _logWriter = TextWriter.Synchronized(logStream);
+
+            Application.logMessageReceivedThreaded += HandleLog;
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 if (CoopLobby.Instance == null) return string.Empty;
-                var players = CoopLobby.Instance?.MemberCount;
+                var players = CoopLobby.Instance?.MemberCount - 1;
                 var hostname = CoopLobby.Instance?.Info?.Name.Split("()".ToCharArray())[0];
                 return string.Concat(players, " | ", hostname);
             };
@@ -122,7 +186,7 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 if (CoopLobby.Instance == null) return string.Empty;
-                var players = CoopLobby.Instance?.MemberCount;
+                var players = CoopLobby.Instance?.MemberCount - 1;
                 var playerLimit = CoopLobby.Instance?.Info?.MemberLimit;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
@@ -146,14 +210,41 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        private static void ServerConsoleOnInput(string input)
+        public override void OnShutdown()
         {
-            // TODO
+            _logWriter?.Flush();
+            _logWriter?.Close();
         }
 
-        private static void HandleLog(string message, string stackTrace, LogType type)
+        private void ServerConsoleOnInput(string input)
         {
-            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
+            // TODO
+            if (string.IsNullOrEmpty(input)) return;
+            if (input.Equals("coop")) //CoopSteamManager: Initialize / CoopSteamServer: .cctor
+            {
+                var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
+                coop.OnCoOp();
+                coop.OnMpHost();
+                coop.OnNewGame();
+            }
+            if (input.Equals("host")) //CoopSteamNGUI: OpenScreen LobbySetup
+            {
+                var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
+                coop.OnHostLobbySetup();
+            }
+            if (input.Equals("start")) //CoopLobbyManager: LobbyEnter Steamworks.LobbyEnter_t //ready for clients...on player connected start?
+            {
+                var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
+                coop.OnHostStartGame();
+            }
+        }
+
+        private void HandleLog(string message, string stackTrace, LogType type)
+        {
+            if (string.IsNullOrEmpty(message)/* || LogFilter.Any(message.StartsWith)*/) return;
+            _logWriter.WriteLine(message);
+            if (!string.IsNullOrEmpty(stackTrace)) _logWriter.WriteLine(stackTrace);
+            if (Filter.Any(message.StartsWith)) return;
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

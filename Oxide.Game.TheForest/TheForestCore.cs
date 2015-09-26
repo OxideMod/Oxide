@@ -1,4 +1,8 @@
-﻿using Oxide.Core;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+
+using Oxide.Core;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.TheForest
@@ -78,6 +82,46 @@ namespace Oxide.Game.TheForest
         {
             loggingInitialized = true;
             CallHook("InitLogging", null);
+        }
+
+        /// <summary>
+        /// Initializes the server
+        /// </summary>
+        [HookMethod("InitServer")]
+        private void InitServer()
+        {
+            Interface.Oxide.LogInfo("InitServer");
+            Interface.Oxide.NextTick(() =>
+            {
+                Interface.Oxide.LogInfo("InitServer NextTick");
+
+                var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
+                coop.OnCoOp();
+                coop.OnMpHost();
+                coop.OnNewGame();
+            });
+        }
+
+        /// <summary>
+        /// Initializes the server lobby
+        /// </summary>
+        [HookMethod("InitLobby")]
+        private void InitLobby(CoopSteamNGUI ngui, Enum screen)
+        {
+            Interface.Oxide.LogInfo("InitLobby");
+
+            Type type = typeof(CoopSteamNGUI).GetNestedTypes(BindingFlags.NonPublic).FirstOrDefault(x => x.IsEnum && x.Name.Equals("Screens"));
+            Interface.Oxide.LogInfo("Type: {0}", type);
+            object enumValue = type.GetField("LobbySetup", BindingFlags.Static | BindingFlags.Public).GetValue(null);
+            Interface.Oxide.LogInfo("Screen: {0} Value: {0} Name: {1}", Convert.ToInt32(screen), (int)enumValue, Enum.GetName(type, enumValue));
+            if (Convert.ToInt32(screen) != (int)enumValue) return;
+            Interface.Oxide.NextTick(() =>
+            {
+                Interface.Oxide.LogInfo("InitLobby NextTick");
+
+                var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
+                coop.OnHostLobbySetup();
+            });
         }
     }
 }

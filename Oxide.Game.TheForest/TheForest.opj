@@ -3,54 +3,101 @@
   "TargetDirectory": "D:\\Servers\\Game\\TheForest\\TheForest_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp-firstpass",
       "Hooks": [
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 20,
+            "InjectionIndex": 0,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamServer",
+            "AssemblyName": "Assembly-CSharp-firstpass.dll",
+            "TypeName": "FMOD_Listener",
             "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "Start",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "System.Action",
-                "System.Action"
-              ]
+              "Exposure": 0,
+              "Name": ".cctor",
+              "ReturnType": "System.Void",
+              "Parameters": []
             },
-            "MSILHash": "X4UtaOA5VLIijIYHLEbQbYGWUrgGvqJIgvqijy2ODsc=",
+            "MSILHash": "YNE4tO3V7hzwIl163HBptzDOuv0WW0AxsTNO8o4caRE=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 21,
+            "InjectionIndex": 1,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "InitLogging [internal]",
             "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp-firstpass.dll",
+            "TypeName": "FMOD_Listener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": ".cctor",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "YNE4tO3V7hzwIl163HBptzDOuv0WW0AxsTNO8o4caRE=",
+            "BaseHookName": "InitOxide [internal]"
+          }
+        }
+      ]
+    },
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitServer [internal]",
+            "HookName": "InitServer",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamServer",
+            "TypeName": "CoopSteamManager",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "Start",
-              "ReturnType": "System.Boolean",
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "X8ya66e/+TZOR0Ohwh/SzZrrrDDdpp3lO5kZJCSypbk=",
+            "BaseHookName": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 44,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLobby [internal]",
+            "HookName": "InitLobby",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamNGUI",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OpenScreen",
+              "ReturnType": "System.Void",
               "Parameters": [
-                "System.Action",
-                "System.Action"
+                "CoopSteamNGUI/Screens"
               ]
             },
-            "MSILHash": "X4UtaOA5VLIijIYHLEbQbYGWUrgGvqJIgvqijy2ODsc=",
+            "MSILHash": "Xdj4r6uA0S4pAJoRuJeo9c5kU8JtJDzunyxKegZbzyo=",
             "BaseHookName": null
           }
         },
