@@ -143,11 +143,9 @@ namespace Oxide.Core
             RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
 
             // Create the loggers
-            //filelogger = new RotatingFileLogger();
-            //filelogger.Directory = LogDirectory;
             RootLogger = new CompoundLogger();
+            RootLogger.AddLogger(new RotatingFileLogger { Directory = LogDirectory });
             if (debugCallback != null) RootLogger.AddLogger(new CallbackLogger(debugCallback));
-            //RootLogger.AddLogger(filelogger);
 
             // Log Oxide core loading
             LogInfo("Loading Oxide core v{0}...", Version);
