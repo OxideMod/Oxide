@@ -59,7 +59,7 @@ namespace Oxide.Core.ServerConsole
             set { _input.StatusTextLeftColor[3] = value; }
         }
 
-        private string title => Title != null ? Title() : null;
+        private string title => Title?.Invoke();
 
         private string status1Left => GetStatusValue(Status1Left);
         private string status1Right => GetStatusValue(Status1Right).PadLeft(_input.LineWidth - 1);
@@ -102,14 +102,19 @@ namespace Oxide.Core.ServerConsole
             _input.ClearLine(1);
             _input.ClearLine(Console.WindowHeight);
             for (var i = 0; i < Console.WindowHeight; i++)
-            {
                 Console.WriteLine();
-            }
         }
 
         private void OnInputText(string obj)
         {
-            if (Input != null) Input(obj);
+            try
+            {
+                Input?.Invoke(obj);
+            }
+            catch (Exception e)
+            {
+                Interface.Oxide.LogException("OnInputText: ", e);
+            }
         }
 
         public static void PrintColoured(params object[] objects)
@@ -130,6 +135,7 @@ namespace Oxide.Core.ServerConsole
 
         public void Update()
         {
+            if (!_init) return;
             UpdateStatus();
             _input.Update();
             if (_nextTitleUpdate > Interface.Oxide.Now) return;

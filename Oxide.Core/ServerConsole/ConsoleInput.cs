@@ -33,27 +33,34 @@ namespace Oxide.Core.ServerConsole
         public void RedrawInputLine()
         {
             if (_nextUpdate - 0.45f > Interface.Oxide.Now || LineWidth <= 0) return;
-            Console.CursorTop = Console.CursorTop + 1;
-            for (var i = 0; i < StatusTextLeft.Length; i++)
+            try
             {
+                Console.CursorTop = Console.CursorTop + 1;
+                for (var i = 0; i < StatusTextLeft.Length; i++)
+                {
+                    Console.CursorLeft = 0;
+                    Console.ForegroundColor = StatusTextLeftColor[i];
+                    Console.Write(StatusTextLeft[i].Substring(0, Math.Min(StatusTextLeft[i].Length, LineWidth - 1)));
+                    Console.ForegroundColor = StatusTextRightColor[i];
+                    Console.Write(StatusTextRight[i].PadRight(LineWidth));
+                }
+                Console.CursorTop = Console.CursorTop - (StatusTextLeft.Length + 1);
                 Console.CursorLeft = 0;
-                Console.ForegroundColor = StatusTextLeftColor[i];
-                Console.Write(StatusTextLeft[i].Substring(0, Math.Min(StatusTextLeft[i].Length, LineWidth - 1)));
-                Console.ForegroundColor = StatusTextRightColor[i];
-                Console.Write(StatusTextRight[i].PadRight(LineWidth));
-            }
-            Console.CursorTop = Console.CursorTop - (StatusTextLeft.Length + 1);
-            Console.CursorLeft = 0;
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Green;
-            ClearLine(1);
-            if (InputString.Length == 0)
-            {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Green;
+                ClearLine(1);
+                if (InputString.Length == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    return;
+                }
+                Console.Write(InputString.Length >= LineWidth - 2 ? InputString.Substring(InputString.Length - (LineWidth - 2)) : InputString);
                 Console.ForegroundColor = ConsoleColor.Gray;
-                return;
             }
-            Console.Write(InputString.Length >= LineWidth - 2 ? InputString.Substring(InputString.Length - (LineWidth - 2)) : InputString);
-            Console.ForegroundColor = ConsoleColor.Gray;
+            catch (Exception e)
+            {
+                Interface.Oxide.LogException("RedrawInputLine: ", e);
+            }
         }
 
         public void Update()
@@ -66,10 +73,7 @@ namespace Oxide.Core.ServerConsole
             }
             try
             {
-                if (!Console.KeyAvailable)
-                {
-                    return;
-                }
+                if (!Console.KeyAvailable) return;
             }
             catch (Exception)
             {
@@ -87,7 +91,7 @@ namespace Oxide.Core.ServerConsole
                     if (_inputHistory.Count > 50) _inputHistory.RemoveRange(50, _inputHistory.Count - 50);
                     var str = InputString;
                     InputString = string.Empty;
-                    if (OnInputText != null) OnInputText(str);
+                    OnInputText?.Invoke(str);
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Backspace:
@@ -115,13 +119,7 @@ namespace Oxide.Core.ServerConsole
                 case ConsoleKey.DownArrow:
                     if (_inputHistory.Count == 0) return;
                     if (_inputHistoryIndex >= _inputHistory.Count - 1) _inputHistoryIndex = _inputHistory.Count - 2;
-                    if (_inputHistoryIndex < 0)
-                    {
-                        InputString = string.Empty;
-                        RedrawInputLine();
-                        return;
-                    }
-                    InputString = _inputHistory[_inputHistoryIndex--];
+                    InputString = _inputHistoryIndex < 0 ? string.Empty : _inputHistory[_inputHistoryIndex--];
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Tab:
