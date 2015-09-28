@@ -145,12 +145,10 @@ namespace Oxide.Game.TheForest
             if (!Interface.Oxide.EnableConsole()) return;
 
             // Disable client audio
-            //Camera.main.gameObject.GetComponent<AudioListener>().enabled = false; // Causes server to not start
-            PlayerPrefs.SetFloat("Volume", 0F); // This doesn't seem to work for some/all
-            PlayerPrefs.SetFloat("MusicVolume", 0F); // This doesn't seem to work some/all
+            TheForestCore.DisableAudio();
 
             // Limit FPS to reduce cpu usage
-            PlayerPrefs.SetInt("MaxFrameRate2", 256); //Application.targetFrameRate = 256;
+            PlayerPrefs.SetInt("MaxFrameRate2", 60); //Application.targetFrameRate = 256;
 
             if (File.Exists(LogFileName)) File.Delete(LogFileName);
             var logStream = File.AppendText(LogFileName);
@@ -226,16 +224,23 @@ namespace Oxide.Game.TheForest
                 coop.OnCoOp();
                 coop.OnMpHost();
                 coop.OnNewGame();
+                TheForestCore.DisableAudio();
             }
             if (input.Equals("host")) //CoopSteamNGUI: OpenScreen LobbySetup
             {
                 var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
                 coop.OnHostLobbySetup();
+                TheForestCore.DisableAudio();
             }
             if (input.Equals("start")) //CoopLobbyManager: LobbyEnter Steamworks.LobbyEnter_t //ready for clients...on player connected start?
             {
                 var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
                 coop.OnHostStartGame();
+                TheForestCore.DisableAudio();
+            }
+            if (input.Equals("audio"))
+            {
+                TheForestCore.DisableAudio();
             }
         }
 

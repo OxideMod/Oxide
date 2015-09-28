@@ -198,6 +198,29 @@
             "MSILHash": "/owflklXcVJ2YaOOWJBl9YUY6BAZwymKL+aADA73x2U=",
             "BaseHookName": null
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 14,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnBeginPlaneCrash [internal]",
+            "HookName": "IOnBeginPlaneCrash",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TriggerCutScene",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "beginPlaneCrash",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "qssXRfRmXsl9/8bQooUNEzCyHVH4SkRNeYfdFDpzvlg=",
+            "BaseHookName": null
+          }
         }
       ]
     }
