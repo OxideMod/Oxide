@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Oxide.Core.Libraries.Covalence
+﻿namespace Oxide.Core.Libraries.Covalence
 {
     /// <summary>
     /// Represents a source of commands

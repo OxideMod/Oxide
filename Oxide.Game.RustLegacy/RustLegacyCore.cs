@@ -190,7 +190,7 @@ namespace Oxide.Game.RustLegacy
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: oxide.load *|<pluginname>+");
+                arg.ReplyWith("Syntax: load *|<pluginname>+");
                 return;
             }
 
@@ -220,7 +220,7 @@ namespace Oxide.Game.RustLegacy
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: oxide.unload *|<pluginname>+");
+                arg.ReplyWith("Syntax: unload *|<pluginname>+");
                 return;
             }
 
@@ -250,7 +250,7 @@ namespace Oxide.Game.RustLegacy
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: oxide.reload *|<pluginname>+");
+                arg.ReplyWith("Syntax: reload *|<pluginname>+");
                 return;
             }
 
@@ -302,7 +302,7 @@ namespace Oxide.Game.RustLegacy
             // Check 2 args exists
             if (!arg.HasArgs(2))
             {
-                arg.ReplyWith("Syntax: oxide.group <add|remove|set> <name> [title] [rank]");
+                arg.ReplyWith("Syntax: group <add|remove|set> <name> [title] [rank]");
                 return;
             }
 
@@ -357,7 +357,7 @@ namespace Oxide.Game.RustLegacy
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: oxide.usergroup <add|remove> <username> <groupname>");
+                arg.ReplyWith("Syntax: usergroup <add|remove> <username> <groupname>");
                 return;
             }
 
@@ -416,7 +416,7 @@ namespace Oxide.Game.RustLegacy
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: oxide.grant <group|user> <name|id> <permission>");
+                arg.ReplyWith("Syntax: grant <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -467,7 +467,7 @@ namespace Oxide.Game.RustLegacy
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: oxide.revoke <group|user> <name|id> <permission>");
+                arg.ReplyWith("Syntax: revoke <group|user> <name|id> <permission>");
                 return;
             }
 

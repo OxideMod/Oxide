@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 
 namespace Oxide.Core.Libraries.Covalence

@@ -9,16 +9,16 @@ using CodeHatch.Common;
 using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
+using RoKPermissions = CodeHatch.Permissions;
+
+using UnityEngine;
+using Network = uLink.Network;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+
 using Oxide.Game.ReignOfKings.Libraries;
-
-using UnityEngine;
-
-using Network = uLink.Network;
-using RoKPermissions = CodeHatch.Permissions;
 
 namespace Oxide.Game.ReignOfKings
 {
@@ -73,7 +73,7 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("Init")]
         private void Init()
         {
-            // Add our commands
+            // Add general commands
             cmdlib.AddChatCommand("oxide.plugins", this, "cmdPlugins");
             cmdlib.AddChatCommand("plugins", this, "cmdPlugins");
             cmdlib.AddChatCommand("oxide.load", this, "cmdLoad");
@@ -85,6 +85,7 @@ namespace Oxide.Game.ReignOfKings
             cmdlib.AddChatCommand("oxide.version", this, "cmdVersion");
             cmdlib.AddChatCommand("version", this, "cmdVersion");
 
+            // Add permission commands
             cmdlib.AddChatCommand("oxide.group", this, "cmdGroup");
             cmdlib.AddChatCommand("group", this, "cmdGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "cmdUserGroup");
@@ -237,7 +238,7 @@ namespace Oxide.Game.ReignOfKings
             // Check arg 1 exists
             if (args.Length < 1)
             {
-                SendPlayerMessage(player, "Syntax: oxide.load *|<pluginname>+");
+                SendPlayerMessage(player, "Syntax: load *|<pluginname>+");
                 return;
             }
 
@@ -270,7 +271,7 @@ namespace Oxide.Game.ReignOfKings
             // Check arg 1 exists
             if (args.Length < 1)
             {
-                SendPlayerMessage(player, "Syntax: oxide.unload *|<pluginname>+");
+                SendPlayerMessage(player, "Syntax: unload *|<pluginname>+");
                 return;
             }
 
@@ -312,7 +313,7 @@ namespace Oxide.Game.ReignOfKings
             // Check arg 1 exists
             if (args.Length < 1)
             {
-                SendPlayerMessage(player, "Syntax: oxide.reload *|<pluginname>+");
+                SendPlayerMessage(player, "Syntax: reload *|<pluginname>+");
                 return;
             }
 
@@ -376,7 +377,7 @@ namespace Oxide.Game.ReignOfKings
             // Check 2 args exists
             if (args.Length < 2)
             {
-                SendPlayerMessage(player, "Syntax: oxide.group <add|remove|set> <name> [title] [rank]");
+                SendPlayerMessage(player, "Syntax: group <add|remove|set> <name> [title] [rank]");
                 return;
             }
 
@@ -436,7 +437,7 @@ namespace Oxide.Game.ReignOfKings
             // Check 3 args exists
             if (args.Length < 3)
             {
-                SendPlayerMessage(player, "Syntax: oxide.usergroup <add|remove> <username> <groupname>");
+                SendPlayerMessage(player, "Syntax: usergroup <add|remove> <username> <groupname>");
                 return;
             }
 
@@ -492,7 +493,7 @@ namespace Oxide.Game.ReignOfKings
             // Check 3 args exists
             if (args.Length < 3)
             {
-                SendPlayerMessage(player, "Syntax: oxide.grant <group|user> <name|id> <permission>");
+                SendPlayerMessage(player, "Syntax: grant <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -546,7 +547,7 @@ namespace Oxide.Game.ReignOfKings
             // Check 3 args exists
             if (args.Length < 3)
             {
-                SendPlayerMessage(player, "Syntax: oxide.revoke <group|user> <name|id> <permission>");
+                SendPlayerMessage(player, "Syntax: revoke <group|user> <name|id> <permission>");
                 return;
             }
 

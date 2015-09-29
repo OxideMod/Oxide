@@ -1,5 +1,4 @@
-﻿using System;
-namespace Oxide.Core.Libraries.Covalence
+﻿namespace Oxide.Core.Libraries.Covalence
 {
     /// <summary>
     /// Specifies a provider for core game-specific covalence functionality

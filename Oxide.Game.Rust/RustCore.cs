@@ -27,13 +27,13 @@ namespace Oxide.Game.Rust
 
         // The permission lib
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" };
+        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
         // The command lib
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // Track when the server has been initialized
-        private bool ServerInitialized;
+        private bool serverInitialized;
 
         // Cache the serverInput field info
         private readonly FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -59,7 +59,7 @@ namespace Oxide.Game.Rust
         [HookMethod("Init")]
         private void Init()
         {
-            // Add our commands
+            // Add general commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
             cmdlib.AddConsoleCommand("global.plugins", this, "cmdPlugins");
             cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
@@ -71,6 +71,7 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
             cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
 
+            // Add permission commands
             cmdlib.AddConsoleCommand("oxide.group", this, "cmdGroup");
             cmdlib.AddConsoleCommand("global.group", this, "cmdGroup");
             cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
@@ -89,6 +90,7 @@ namespace Oxide.Game.Rust
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
             }
+
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust");
             RemoteLogger.SetTag("protocol", typeof(Protocol).GetField("network").GetValue(null).ToString());
@@ -122,8 +124,8 @@ namespace Oxide.Game.Rust
         [HookMethod("OnServerInitialized")]
         private void OnServerInitialized()
         {
-            if (ServerInitialized) return;
-            ServerInitialized = true;
+            if (serverInitialized) return;
+            serverInitialized = true;
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
         }
@@ -168,7 +170,7 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
-            if (ServerInitialized) plugin.CallHook("OnServerInitialized");
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         /// <summary>
@@ -218,7 +220,7 @@ namespace Oxide.Game.Rust
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: oxide.load *|<pluginname>+");
+                arg.ReplyWith("Syntax: load *|<pluginname>+");
                 return;
             }
 
@@ -248,7 +250,7 @@ namespace Oxide.Game.Rust
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: oxide.unload *|<pluginname>+");
+                arg.ReplyWith("Syntax: unload *|<pluginname>+");
                 return;
             }
 
@@ -278,7 +280,7 @@ namespace Oxide.Game.Rust
             // Check arg 1 exists
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: oxide.reload *|<pluginname>+");
+                arg.ReplyWith("Syntax: reload *|<pluginname>+");
                 return;
             }
 
@@ -330,9 +332,9 @@ namespace Oxide.Game.Rust
             // Check 2 args exists
             if (!arg.HasArgs(2))
             {
-                var reply = "Syntax: oxide.group <add|set> <name> [title] [rank]\n";
-                reply += "Syntax: oxide.group <remove|show> <name>\n";
-                reply += "Syntax: oxide.group <parent> <name> <parentName>";
+                var reply = "Syntax: group <add|set> <name> [title] [rank]\n";
+                reply += "Syntax: group <remove|show> <name>\n";
+                reply += "Syntax: group <parent> <name> <parentName>";
                 arg.ReplyWith(reply);
                 return;
             }
@@ -415,7 +417,7 @@ namespace Oxide.Game.Rust
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: oxide.usergroup <add|remove> <username> <groupname>");
+                arg.ReplyWith("Syntax: usergroup <add|remove> <username> <groupname>");
                 return;
             }
 
@@ -468,7 +470,7 @@ namespace Oxide.Game.Rust
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: oxide.grant <group|user> <name|id> <permission>");
+                arg.ReplyWith("Syntax: grant <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -525,7 +527,7 @@ namespace Oxide.Game.Rust
             // Check 3 args exists
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: oxide.revoke <group|user> <name|id> <permission>");
+                arg.ReplyWith("Syntax: revoke <group|user> <name|id> <permission>");
                 return;
             }
 
