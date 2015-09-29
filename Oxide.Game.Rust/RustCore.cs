@@ -813,11 +813,11 @@ namespace Oxide.Game.Rust
         /// Called when the player has been melee attacked
         /// </summary>
         /// <param name="melee"></param>
-        /// <param name="hitinfo"></param>
-        [HookMethod("OnMeleeAttack")]
-        private object OnMeleeAttack(BaseMelee melee, HitInfo hitinfo)
+        /// <param name="info"></param>
+        [HookMethod("IOnMeleeAttack")]
+        private object IOnMeleeAttack(BaseMelee melee, HitInfo info)
         {
-            return Interface.CallHook("OnPlayerAttack", melee.ownerPlayer, hitinfo);
+            return Interface.CallHook("OnPlayerAttack", melee.ownerPlayer, info);
         }
 
         /// <summary>
@@ -927,8 +927,8 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="player"></param>
         /// <param name="info"></param>
-        [HookMethod("OnBasePlayerAttacked")]
-        private object OnBasePlayerAttacked(BasePlayer player, HitInfo info)
+        [HookMethod("IOnBasePlayerAttacked")]
+        private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
             if (isPlayerTakingDamage) return null;
             if (Interface.CallHook("OnEntityTakeDamage", player, info) != null) return true;
@@ -945,8 +945,8 @@ namespace Oxide.Game.Rust
         /// <param name="entity"></param>
         /// <param name="info"></param>
         /// <returns></returns>
-        [HookMethod("OnBasePlayerHurt")]
-        private object OnBasePlayerHurt(BasePlayer entity, HitInfo info)
+        [HookMethod("IOnBasePlayerHurt")]
+        private object IOnBasePlayerHurt(BasePlayer entity, HitInfo info)
         {
             if (isPlayerTakingDamage) return null;
             return Interface.CallHook("OnEntityTakeDamage", entity, info);
@@ -958,8 +958,8 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="info"></param>
-        [HookMethod("OnBaseCombatEntityHurt")]
-        private object OnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
+        [HookMethod("IOnBaseCombatEntityHurt")]
+        private object IOnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
         {
             if (entity is BasePlayer) return null;
             return Interface.CallHook("OnEntityTakeDamage", entity, info);
