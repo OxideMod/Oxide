@@ -104,17 +104,17 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
 
         public void Ban(string reason, TimeSpan duration)
         {
-            // TODO
+            // TODO: Implement once supported
         }
 
         public void Unban()
         {
-            // TODO
+            // TODO: Implement once supported
         }
 
         public bool IsBanned => false; // TODO: Implement once supported
 
-        public TimeSpan BanTimeRemaining => null; // Implement once supported
+        public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // Implement once supported
 
         #endregion
 

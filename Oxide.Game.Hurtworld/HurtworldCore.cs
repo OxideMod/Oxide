@@ -1,9 +1,13 @@
-﻿using Oxide.Core;
-using Oxide.Core.Plugins;
-using Oxide.Game.Hurtworld.Libraries;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
+
 using uLink;
+
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
+
+using Oxide.Game.Hurtworld.Libraries;
 
 namespace Oxide.Game.Hurtworld
 {
@@ -12,10 +16,20 @@ namespace Oxide.Game.Hurtworld
     /// </summary>
     public class HurtworldCore : CSPlugin
     {
+        // The pluginmanager
+        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
+
+        // The permission lib
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The command lib
+        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
-        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
+
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
         /// </summary>
@@ -103,7 +117,7 @@ namespace Oxide.Game.Hurtworld
                 // Handle it
                 if (!cmdlib.HandleChatCommand(identity, info, chatcmd, args))
                 {
-                    ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Server Unknown command {chatcmd}</color>", info.sender);
+                    ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Unknown command: {chatcmd}</color>", info.sender);
                     return true;
                 }
                 return true;

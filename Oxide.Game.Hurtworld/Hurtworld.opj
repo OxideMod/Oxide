@@ -1,6 +1,6 @@
 {
   "Name": "Hurtworld",
-  "TargetDirectory": "D:\\Servers\\Game\\Hurtworld\\Game\\Server_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Hurtworld\\hurtworld_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DTvQG/vKnmmsyEVS3WUEyBPBR+YbI/ql+9pLapSG2Hw=",
+            "MSILHash": "qh3bCbCx0v6mnOEasdtv9ye8nw9TrinOp7QarOb0igs=",
             "BaseHookName": null
           }
         },
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DTvQG/vKnmmsyEVS3WUEyBPBR+YbI/ql+9pLapSG2Hw=",
+            "MSILHash": "qh3bCbCx0v6mnOEasdtv9ye8nw9TrinOp7QarOb0igs=",
             "BaseHookName": null
           }
         },
@@ -74,7 +74,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 26,
+            "InjectionIndex": 45,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l1, a0",
@@ -92,14 +92,14 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "RT9T20Nf/6NuqoV9jxT08NstD1hwhuvte+7mqrbtKb0=",
+            "MSILHash": "uk99uZkzRSgf6FkYJ6zBU2QAk8uZyT4voSxp7bBY+jk=",
             "BaseHookName": null
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 31,
+            "InjectionIndex": 29,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0, a0",
@@ -117,7 +117,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "/XnsZ35heqjUF0RdzEEmUtAGRA2fIlSPGaHvorED2eg=",
+            "MSILHash": "lXsKCqv34GRYH8ArdbC2pfi/9WUKP6VSXX3YKU6R9Uo=",
             "BaseHookName": null
           }
         },
@@ -165,7 +165,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "ElFX+LdyPAdabpq7AphU92NqhY+jqL1BRfdQq7RUUh4=",
+            "MSILHash": "KWXkDOpAyhF8EyJ85jHiRsMxiJQDrmOs4HHPmzVByek=",
             "BaseHookName": null
           }
         },
@@ -292,7 +292,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "jZMfyu6iGCy9vHS+yyRydMKtAZ91ID8/0pgCrPKffWw=",
+            "MSILHash": "LuZwn7NL35cfkmaKAVFmNv07iDtSFEG9z9CfnXFqLRQ=",
             "BaseHookName": null
           }
         }

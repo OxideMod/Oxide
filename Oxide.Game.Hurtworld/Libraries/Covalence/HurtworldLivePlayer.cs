@@ -1,6 +1,4 @@
-﻿using System;
-
-using Oxide.Core.Libraries.Covalence;
+﻿using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -11,12 +9,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     {
         #region Information
 
-        private readonly Guid guid;
+        private readonly ulong steamid;
 
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer => HurtworldCovalenceProvider.Instance.PlayerManager.GetPlayer(guid.ToString());
+        public IPlayer BasePlayer => HurtworldCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
 
         /// <summary>
         /// Gets this player's in-game character, if available
@@ -38,7 +36,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         internal HurtworldLivePlayer(PlayerIdentity player)
         {
             this.player = player;
-            guid = player.PlayerGuid; // TODO: Switch to steamid once implemented
+            steamid = (ulong)player.SteamId;
             Object = player;
         }
 
@@ -52,7 +50,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="reason"></param>
         public void Kick(string reason)
         {
-            GameManager.Instance?.KickPlayer(guid.ToString(), reason);
+            GameManager.Instance.KickPlayer(steamid.ToString(), reason);
         }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public void Kill()
         {
             // TODO
-            //GameManager.Instance?.KillPlayer(info);
+            //GameManager.Instance.KillPlayer(info);
         }
 
         /// <summary>
@@ -73,6 +71,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public void Teleport(float x, float y, float z)
         {
             // TODO
+            //TeleportPlayer(string fromPlayer, string toPlayer, NetworkMessageInfo info)
         }
 
         #endregion
@@ -109,7 +108,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
 
         public GenericPosition GetPosition()
         {
-            // TODO
+            var pos = playerEntity.transform.position;
+            return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
         #endregion

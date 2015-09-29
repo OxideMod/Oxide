@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using uLink;
+
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
@@ -68,15 +70,15 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             Interface.Oxide.DataFileSystem.WriteObject("oxide.covalence.playerdata", playerData);
         }
 
-        internal void NotifyPlayerConnect(Player ply)
+        internal void NotifyPlayerConnect(PlayerIdentity ply)
         {
-            NotifyPlayerJoin(ply.Id, ply.Name);
-            livePlayers[ply.Id.ToString()] = new HurtworldLivePlayer(ply);
+            NotifyPlayerJoin((ulong)ply.SteamId, ply.Name);
+            livePlayers[ply.SteamId.ToString()] = new HurtworldLivePlayer(ply);
         }
 
-        internal void NotifyPlayerDisconnect(Player ply)
+        internal void NotifyPlayerDisconnect(NetworkPlayer ply)
         {
-            livePlayers.Remove(ply.Id.ToString());
+            livePlayers.Remove(ply.id.ToString());
         }
 
         #region Offline Players

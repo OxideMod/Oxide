@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Net;
+﻿using System.Net;
 
 using Oxide.Core.Libraries.Covalence;
 
@@ -47,7 +46,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="args"></param>
         public void RunCommand(string command, params object[] args)
         {
-            // TODO
+            ConsoleManager.Instance.ExecuteCommand(string.Concat(command, args));
         }
 
         #endregion

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
 
-using UnityEngine;
 using Oxide.Game.Hurtworld.Libraries;
 
 namespace Oxide.Game.Hurtworld
@@ -65,7 +66,7 @@ namespace Oxide.Game.Hurtworld
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("hurt", new Libraries.Hurtworld());
+            Manager.RegisterLibrary("Hurt", new Libraries.Hurtworld());
         }
 
         /// <summary>
