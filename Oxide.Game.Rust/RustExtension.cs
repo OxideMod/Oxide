@@ -182,7 +182,7 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Performance.frameRate;
-                var uptime = Number.FormatSeconds((int)Time.realtimeSinceStartup);
+                var uptime = Number.FormatSeconds((ulong)Time.realtimeSinceStartup);
                 return string.Concat(fps, "fps, ", uptime);
             };
 
