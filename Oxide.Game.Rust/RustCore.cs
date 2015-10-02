@@ -27,7 +27,7 @@ namespace Oxide.Game.Rust
 
         // The permission lib
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" };
 
         // The command lib
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();

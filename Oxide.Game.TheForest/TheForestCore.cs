@@ -89,11 +89,14 @@ namespace Oxide.Game.TheForest
             CallHook("InitLogging", null);
         }
 
+        /// <summary>
+        /// Disables the audio output
+        /// </summary>
         public static void DisableAudio()
         {
             PlayerPrefs.SetFloat("Sound", 0f);
             PlayerPrefs.SetFloat("Volume", 0f); // This doesn't seem to work for some/all
-            PlayerPrefs.SetFloat("MusicVolume", 0f); // This doesn't seem to work some/all
+            PlayerPrefs.SetFloat("MusicVolume", 0f); // This doesn't seem to work for some/all
             MainMenuAudio.FadeOut();
             AudioListener.pause = true;
             AudioListener.volume = 0f;

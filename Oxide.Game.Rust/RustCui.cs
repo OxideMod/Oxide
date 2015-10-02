@@ -36,16 +36,16 @@ namespace Oxide.Game.Rust.Cui
         public static bool AddUi(BasePlayer player, List<CuiElement> elements)
         {
             if (player?.net == null) return false;
-            var objects = new Facepunch.ObjectList?(new Facepunch.ObjectList(ToJson(elements)));
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", objects);
+            var obj = new Facepunch.ObjectList?(new Facepunch.ObjectList(ToJson(elements)));
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", obj);
             return true;
         }
 
         public static bool DestroyUi(BasePlayer player, string elem)
         {
             if (player?.net == null) return false;
-            var objects = new Facepunch.ObjectList?(new Facepunch.ObjectList(elem));
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", objects);
+            var obj = new Facepunch.ObjectList?(new Facepunch.ObjectList(elem));
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", obj);
             return true;
         }
 
