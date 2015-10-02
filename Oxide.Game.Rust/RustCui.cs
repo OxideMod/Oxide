@@ -32,21 +32,36 @@ namespace Oxide.Game.Rust.Cui
         {
             return Guid.NewGuid().ToString().Replace("-", string.Empty);
         }
+        
+        public static bool AddUi(Network.Connection connection, string json) 
+        {
+            if (player?.net == null) return false;
+            var obj = new Facepunch.ObjectList?(new Facepunch.ObjectList(json));
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = connection}, null, "AddUI", obj);
+            return true;
+        }
+        
+        public static bool AddUi(BasePlayer player, string json) 
+        {
+            return AddUi(player.net.connection, json);
+        }
 
         public static bool AddUi(BasePlayer player, List<CuiElement> elements)
         {
+            return AddUi(player.net.connection, ToJson(elements));
+        }
+        
+        public static bool DestroyUi(Network.Connection connection, string elem)
+        {
             if (player?.net == null) return false;
-            var obj = new Facepunch.ObjectList?(new Facepunch.ObjectList(ToJson(elements)));
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "AddUI", obj);
+            var obj = new Facepunch.ObjectList?(new Facepunch.ObjectList(elem));
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = connection}, null, "DestroyUI", obj);
             return true;
         }
 
         public static bool DestroyUi(BasePlayer player, string elem)
         {
-            if (player?.net == null) return false;
-            var obj = new Facepunch.ObjectList?(new Facepunch.ObjectList(elem));
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", obj);
-            return true;
+            return DestroyUi(player.net.connection, elem);
         }
 
         public static void SetColor(this ICuiColor elem, Color color)
