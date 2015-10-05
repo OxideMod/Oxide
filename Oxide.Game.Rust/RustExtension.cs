@@ -233,6 +233,7 @@ namespace Oxide.Game.Rust
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
             {

@@ -1078,6 +1078,28 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when a player is authorized by a cupboard
+        /// </summary>
+        /// <param name="privilege"></param>
+        /// <param name="msg"></param>
+        [HookMethod("IOnCupboardAuthorize")]
+        private object IOnCupboardAuthorize(BuildingPrivlidge priviledge, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnCupboardAuthorize", priviledge, msg.player);
+        }
+
+        /// <summary>
+        /// Called when a player is deauthorized by a cupboard
+        /// </summary>
+        /// <param name="privilege"></param>
+        /// <param name="msg"></param>
+        [HookMethod("IOnCupboardDeauthorize")]
+        private object IOnCupboardDeauthorize(BuildingPrivlidge priviledge, BaseEntity.RPCMessage msg)
+        {
+            return Interface.CallHook("OnCupboardDeauthorize", priviledge, msg.player);
+        }
+
+        /// <summary>
         /// Called when a player uses a door
         /// This is used to handle the deprecated hook CanOpenDoor
         /// </summary>

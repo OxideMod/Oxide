@@ -2288,6 +2288,114 @@
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 36,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l1, a2",
+            "HookTypeName": "Simple",
+            "Name": "OnBlueprintReveal",
+            "HookName": "OnBlueprintReveal",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ItemModReveal",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ServerCommand",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Item",
+                "System.String",
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "5WuaDpRgSsTYjq3GFmRqQzTOZjgodfA9InDYyh4je64=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 29,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l1, a2",
+            "HookTypeName": "Simple",
+            "Name": "OnItemUpgrade",
+            "HookName": "OnItemUpgrade",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ItemModUpgrade",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ServerCommand",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Item",
+                "System.String",
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "8arFdX3pCFf8ekzKtHZKhvKN0QWEgtPoZbpROEqxDXE=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "IOnCupboardAuthorize [internal]",
+            "HookName": "IOnCupboardAuthorize",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingPrivlidge",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "AddSelfAuthorize",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "47zufOhbJZdQlbWMyyFi3or7HvTeIqLYQfSKVAW38Qs=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnCupboardDeauthorize [internal]",
+            "HookName": "IOnCupboardDeauthorize",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingPrivlidge",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RemoveSelfAuthorize",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "uvUSkTRVak4l9PdvR2mX1Dz6x5wM8+dh0FY2Oef+JzQ=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
         }
       ]
     }
