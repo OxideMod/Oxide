@@ -761,7 +761,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 143,
+            "InjectionIndex": 147,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -782,7 +782,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "/LGO4Xf2oK7fc890y3y4jRzh9rLR3Ub4X8X2BUZltO0=",
+            "MSILHash": "4o+JYv5kVyOBUEC98jQCECKW7AQA7WfaPdNNtn9WNmY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1665,7 +1665,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "/m2mXbZi/CGYAG4eX9A3YYIYTd4RqQKLUZkalMheHYU=",
+            "MSILHash": "R0vtT+2yd+JvhrzUGvMf0JcNej3cDJXanAzirL3ZtGc=",
             "BaseHookName": null,
             "HookCategory": "Console"
           }
@@ -2208,6 +2208,85 @@
             "MSILHash": "PSXNUr3e8iRB6b2yxr9ejObYuiD1zT0MatYOZX5YHZU=",
             "BaseHookName": null,
             "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 25,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemCraftCancelled",
+            "HookName": "OnItemCraftCancelled",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ItemCrafter",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CancelTask",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.Int32",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "bMsuPP0mRYUK7KI7RXBIa0FO6NOVMu2/VM+s+tbM00k=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 23,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnNewConnection",
+            "HookName": "OnNewConnection",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConnectionAuth",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnNewConnection",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Network.Connection"
+              ]
+            },
+            "MSILHash": "YEHza3JWB1MAHlAGjg1cRZZmsZM5UjKMN2JOhVcsK7w=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 285,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l3",
+            "HookTypeName": "Simple",
+            "Name": "OnResourceDepositCreated",
+            "HookName": "OnResourceDepositCreated",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ResourceDepositManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CreateFromPosition",
+              "ReturnType": "ResourceDepositManager/ResourceDeposit",
+              "Parameters": [
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "fOUgk5uYUUb5WfFF1MIi5f77/bPnQ6p0wuikXLNbtxE=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         }
       ]
