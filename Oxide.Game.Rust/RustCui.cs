@@ -20,7 +20,7 @@ namespace Oxide.Game.Rust.Cui
                 new JsonSerializerSettings
                 {
                     DefaultValueHandling = DefaultValueHandling.Ignore
-                });
+                }).Replace("\\n", "\n");
         }
 
         public static List<CuiElement> FromJson(string json)
