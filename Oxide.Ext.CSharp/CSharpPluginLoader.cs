@@ -58,7 +58,7 @@ namespace Oxide.Plugins
 
         public override IEnumerable<string> ScanDirectory(string directory)
         {
-            if (PluginCompiler.BinaryPath == null) yield break;
+            if (PluginCompiler.BinaryPath == null || !Directory.Exists(directory)) yield break;
             foreach (string file in Directory.GetFiles(directory, "*.cs"))
                 yield return Path.GetFileNameWithoutExtension(file);
         }

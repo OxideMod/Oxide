@@ -112,6 +112,8 @@ namespace Oxide.Plugins
                             plugin.IncludePaths.Clear();
                             plugin.Requires.Clear();
                             Interface.Oxide.LogWarning("Plugin script is empty: " + plugin.Name);
+                            RemovePlugin(plugin);
+
                         }
                         else if (plugins.Add(plugin))
                         {
@@ -336,14 +338,14 @@ namespace Oxide.Plugins
                         plugin.LastCachedScriptAt = plugin.LastModifiedAt;
                         using (var reader = File.OpenText(plugin.ScriptPath))
                         {
-                            var list = new List<string>();
+                            var lines = new List<string>();
                             while (!reader.EndOfStream)
-                                list.Add(reader.ReadLine());
-                            plugin.ScriptLines = list.ToArray();
+                                lines.Add(reader.ReadLine());
+                            plugin.ScriptLines = lines.ToArray();
                             plugin.ScriptEncoding = reader.CurrentEncoding;
                         }
-                        plugins.Remove(plugin);
-                        queuedPlugins.Add(plugin);
+                        if (plugins.Remove(plugin))
+                            queuedPlugins.Add(plugin);
                     }
                     return true;
                 }

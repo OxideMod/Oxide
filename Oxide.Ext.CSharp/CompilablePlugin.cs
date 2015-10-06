@@ -127,6 +127,11 @@ namespace Oxide.Plugins
                 Interface.Oxide.LogInfo("No previous version to rollback plugin: {0}", ScriptName);
                 return;
             }
+            if (CompiledAssembly == LastGoodAssembly)
+            {
+                Interface.Oxide.LogInfo("Previous version of plugin failed to load: {0}", ScriptName);
+                return;
+            }
             Interface.Oxide.LogInfo("Rolling back plugin to last good version: {0}", ScriptName);
             CompiledAssembly = LastGoodAssembly;
             CompilerErrors = null;

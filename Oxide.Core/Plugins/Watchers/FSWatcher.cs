@@ -114,7 +114,7 @@ namespace Oxide.Core.Plugins.Watchers
                     break;
             }
             queued_changes.timer?.Destroy();
-            queued_changes.timer = timers.Once(.1f, () =>
+            queued_changes.timer = timers.Once(.2f, () =>
             {
                 queued_changes.timer = null;
                 foreach (var change_type in queued_changes)
