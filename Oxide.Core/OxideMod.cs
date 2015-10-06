@@ -81,6 +81,7 @@ namespace Oxide.Core
 
         // Thread safe NextTick callback queue
         private List<Action> nextTickQueue = new List<Action>();
+        private List<Action> lastTickQueue = new List<Action>();
         private object nextTickLock = new object();
 
         // Allow extensions to register a method to be called every frame
@@ -541,7 +542,8 @@ namespace Oxide.Core
                 lock (nextTickLock)
                 {
                     queued = nextTickQueue;
-                    nextTickQueue = new List<Action>();
+                    nextTickQueue = lastTickQueue;
+                    lastTickQueue = queued;
                 }
                 for (var i = 0; i < queued.Count; i++)
                 {
@@ -554,6 +556,7 @@ namespace Oxide.Core
                         LogException("Exception while calling NextTick callback", ex);
                     }
                 }
+                queued.Clear();
             }
 
             // Update libraries
