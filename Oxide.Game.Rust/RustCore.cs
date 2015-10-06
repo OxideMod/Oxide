@@ -507,7 +507,7 @@ namespace Oxide.Game.Rust
                 {
                     userId = player.userID.ToString();
                     name = player.displayName;
-                    permission.GetUserData(name).LastSeenNickname = name;
+                    permission.GetUserData(userId).LastSeenNickname = name;
                 }
                 permission.GrantUserPermission(userId, perm, null);
                 arg.ReplyWith("User '" + name + "' granted permission: " + perm);
@@ -564,7 +564,7 @@ namespace Oxide.Game.Rust
                 {
                     userId = player.userID.ToString();
                     name = player.displayName;
-                    permission.GetUserData(name).LastSeenNickname = name;
+                    permission.GetUserData(userId).LastSeenNickname = name;
                 }
                 permission.RevokeUserPermission(userId, perm);
                 arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
