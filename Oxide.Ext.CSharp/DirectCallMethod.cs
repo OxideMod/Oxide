@@ -129,9 +129,9 @@ namespace Oxide.Ext.CSharp
                     if (!current_node.Edges.TryGetValue(letter, out next_node))
                     {
                         next_node = new Node { Parent = current_node, Char = letter };
-                        if (i == method_name.Length) next_node.Name = method_name;
                         current_node.Edges[letter] = next_node;
                     }
+                    if (i == method_name.Length) next_node.Name = method_name;
                     current_node = next_node;
                 }
             }
