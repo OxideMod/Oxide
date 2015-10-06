@@ -62,7 +62,7 @@ namespace Oxide.Game.Rust.Cui
 
     public class CuiElementContainer : List<CuiElement>
     {
-        public string Add(CuiButton button, string parent = "Overlay", string name = null)
+        public string Add(CuiButton button, string parent = "HUD/Overlay", string name = null)
         {
             if (string.IsNullOrEmpty(name)) name = CuiHelper.GetGuid();
             Add(new CuiElement
@@ -90,7 +90,7 @@ namespace Oxide.Game.Rust.Cui
             return name;
         }
 
-        public string Add(CuiLabel label, string parent = "Overlay", string name = null)
+        public string Add(CuiLabel label, string parent = "HUD/Overlay", string name = null)
         {
             if (string.IsNullOrEmpty(name)) name = CuiHelper.GetGuid();
             Add(new CuiElement
@@ -106,7 +106,7 @@ namespace Oxide.Game.Rust.Cui
             return name;
         }
 
-        public string Add(CuiPanel panel, string parent = "Overlay", string name = null)
+        public string Add(CuiPanel panel, string parent = "HUD/Overlay", string name = null)
         {
             if (string.IsNullOrEmpty(name)) name = CuiHelper.GetGuid();
             var element = new CuiElement
@@ -164,7 +164,7 @@ namespace Oxide.Game.Rust.Cui
         public string Name { get; set; } = "AddUI CreatedPanel";
 
         [JsonProperty("parent")]
-        public string Parent { get; set; } = "Overlay";
+        public string Parent { get; set; } = "HUD/Overlay";
 
         [JsonProperty("components")]
         public List<ICuiComponent> Components { get; } = new List<ICuiComponent>();
