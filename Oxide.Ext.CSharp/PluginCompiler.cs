@@ -116,11 +116,7 @@ namespace Oxide.Plugins
 
         private void EnqueueCompilation(Compilation compilation)
         {
-            if (compilation.plugins.Count < 1)
-            {
-                Interface.Oxide.LogWarning("EnqueueCompilation called for a compilation which contains no plugins");
-                return;
-            }
+            if (compilation.plugins.Count < 1) return;
             if (!CheckCompiler())
             {
                 OnCompilerFailed("Compiler couldn't be started.");
