@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+
+using ProtoBuf;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -11,6 +15,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustPlayerManager : IPlayerManager
     {
+        [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord
         {
             public string Nickname;
@@ -24,7 +29,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         internal void Initialize()
         {
             // Load player data
-            playerData = Interface.GetMod().DataFileSystem.ReadObject<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
             players = new Dictionary<string, RustPlayer>();
             foreach (var pair in playerData)
             {
@@ -62,7 +68,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             }
 
             // Save
-            Interface.GetMod().DataFileSystem.WriteObject("oxide.covalence.playerdata", playerData);
+            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
         }
 
         internal void NotifyPlayerConnect(BasePlayer ply)
