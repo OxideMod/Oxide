@@ -12,9 +12,10 @@ namespace Oxide.Core.Plugins.Watchers
     /// </summary>
     public sealed class FSWatcher : PluginChangeWatcher
     {
-        class QueuedChanges : HashSet<WatcherChangeTypes>
+        class QueuedChange
         {
-            public Timer.TimerInstance timer;
+            internal WatcherChangeTypes type;
+            internal Timer.TimerInstance timer;
         }
 
         // The filesystem watcher
@@ -24,7 +25,7 @@ namespace Oxide.Core.Plugins.Watchers
         private ICollection<string> watchedPlugins;
 
         // Changes are buffered briefly to avoid duplicate events
-        private Dictionary<string, QueuedChanges> changeQueue;
+        private Dictionary<string, QueuedChange> changeQueue;
 
         private Timer timers;
 
@@ -36,7 +37,7 @@ namespace Oxide.Core.Plugins.Watchers
         public FSWatcher(string directory, string filter)
         {
             watchedPlugins = new HashSet<string>();
-            changeQueue = new Dictionary<string, QueuedChanges>();
+            changeQueue = new Dictionary<string, QueuedChange>();
             timers = Interface.Oxide.GetLibrary<Timer>();
             
             LoadWatcher(directory, filter);
@@ -91,58 +92,60 @@ namespace Oxide.Core.Plugins.Watchers
             var watcher = (FileSystemWatcher)sender;
             var length = e.FullPath.Length - watcher.Path.Length - Path.GetExtension(e.Name).Length - 1;
             var sub_path = e.FullPath.Substring(watcher.Path.Length + 1, length);
-            QueuedChanges queued_changes;
-            if (!changeQueue.TryGetValue(sub_path, out queued_changes))
+            QueuedChange change;
+            if (!changeQueue.TryGetValue(sub_path, out change))
             {
-                queued_changes = new QueuedChanges();
-                changeQueue[sub_path] = queued_changes;
+                change = new QueuedChange();
+                changeQueue[sub_path] = change;
             }
+            change.timer?.Destroy();
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Changed:
-                    if (!queued_changes.Contains(WatcherChangeTypes.Created))
-                        queued_changes.Add(e.ChangeType);
+                    if (change.type != WatcherChangeTypes.Created)
+                        change.type = WatcherChangeTypes.Changed;
                     break;
                 case WatcherChangeTypes.Created:
-                    if (queued_changes.Remove(WatcherChangeTypes.Deleted))
-                        queued_changes = new QueuedChanges { WatcherChangeTypes.Changed };
+                    if (change.type == WatcherChangeTypes.Deleted)
+                        change.type = WatcherChangeTypes.Changed;
                     else
-                        queued_changes = new QueuedChanges { e.ChangeType };
+                        change.type = WatcherChangeTypes.Created;
                     break;
                 case WatcherChangeTypes.Deleted:
-                    queued_changes = new QueuedChanges { e.ChangeType };
+                    if (change.type == WatcherChangeTypes.Created)
+                    {
+                        changeQueue.Remove(sub_path);
+                        return;
+                    }
+                    change.type = WatcherChangeTypes.Deleted;
                     break;
             }
-            queued_changes.timer?.Destroy();
-            queued_changes.timer = timers.Once(.2f, () =>
+            change.timer = timers.Once(.2f, () =>
             {
-                queued_changes.timer = null;
-                foreach (var change_type in queued_changes)
-                {
-                    if (Regex.Match(sub_path, @"Include\\", RegexOptions.IgnoreCase).Success)
-                    {
-                        if (change_type == WatcherChangeTypes.Created || change_type == WatcherChangeTypes.Changed)
-                            FirePluginSourceChanged(sub_path);
-                        continue;
-                    }
-                    switch (change_type)
-                    {
-                        case WatcherChangeTypes.Changed:
-                            if (watchedPlugins.Contains(sub_path))
-                                FirePluginSourceChanged(sub_path);
-                            else
-                                FirePluginAdded(sub_path);
-                            break;
-                        case WatcherChangeTypes.Created:
-                            FirePluginAdded(sub_path);
-                            break;
-                        case WatcherChangeTypes.Deleted:
-                            if (watchedPlugins.Contains(sub_path))
-                                FirePluginRemoved(sub_path);
-                            break;
-                    }
-                }
+                change.timer = null;
                 changeQueue.Remove(sub_path);
+                if (Regex.Match(sub_path, @"Include\\", RegexOptions.IgnoreCase).Success)
+                {
+                    if (change.type == WatcherChangeTypes.Created || change.type == WatcherChangeTypes.Changed)
+                        FirePluginSourceChanged(sub_path);
+                    return;
+                }
+                switch (change.type)
+                {
+                    case WatcherChangeTypes.Changed:
+                        if (watchedPlugins.Contains(sub_path))
+                            FirePluginSourceChanged(sub_path);
+                        else
+                            FirePluginAdded(sub_path);
+                        break;
+                    case WatcherChangeTypes.Created:
+                        FirePluginAdded(sub_path);
+                        break;
+                    case WatcherChangeTypes.Deleted:
+                        if (watchedPlugins.Contains(sub_path))
+                            FirePluginRemoved(sub_path);
+                        break;
+                }
             });
         }
 
