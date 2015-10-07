@@ -335,7 +335,6 @@ namespace Oxide.Plugins
                     plugin.CheckLastModificationTime();
                     if (plugin.LastCachedScriptAt != plugin.LastModifiedAt)
                     {
-                        plugin.LastCachedScriptAt = plugin.LastModifiedAt;
                         using (var reader = File.OpenText(plugin.ScriptPath))
                         {
                             var lines = new List<string>();
@@ -344,6 +343,7 @@ namespace Oxide.Plugins
                             plugin.ScriptLines = lines.ToArray();
                             plugin.ScriptEncoding = reader.CurrentEncoding;
                         }
+                        plugin.LastCachedScriptAt = plugin.LastModifiedAt;
                         if (plugins.Remove(plugin))
                             queuedPlugins.Add(plugin);
                     }
