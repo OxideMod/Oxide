@@ -53,8 +53,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net-full">
-      <HintPath>..\Dependencies\protobuf-net-full.dll</HintPath>
+    <Reference Include="protobuf-net">
+      <HintPath>Dependencies\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
