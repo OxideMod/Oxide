@@ -104,6 +104,11 @@ namespace Oxide.Plugins
 
         internal void OnCompilationFailed()
         {
+            if (timeoutTimer == null)
+            {
+                Interface.Oxide.LogWarning($"Ignored unexpected plugin compilation failure: {Name}");
+                return;
+            }
             timeoutTimer?.Destroy();
             timeoutTimer = null;
             compilationQueuedAt = 0f;
