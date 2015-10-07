@@ -100,7 +100,9 @@ namespace Oxide.Plugins
                     // Include references made by the CSharpPlugins project
                     foreach (var name in CSharpPluginLoader.PluginReferences)
                         references[name + ".dll"] = new CompilerFile(Interface.Oxide.ExtensionDirectory, name + ".dll");
-                                        
+
+                    Interface.Oxide.LogDebug("Preparing compilation");
+
                     CompilablePlugin plugin;
                     while (queuedPlugins.TryDequeue(out plugin))
                     {
@@ -113,21 +115,29 @@ namespace Oxide.Plugins
                             plugin.Requires.Clear();
                             Interface.Oxide.LogWarning("Plugin script is empty: " + plugin.Name);
                             RemovePlugin(plugin);
-
                         }
                         else if (plugins.Add(plugin))
                         {
+                            Interface.Oxide.LogDebug("Adding plugin to compilation: " + plugin.Name);
                             PreparseScript(plugin);
                             ResolveReferences(plugin);
+                        }
+                        else
+                        {
+                            Interface.Oxide.LogDebug("Plugin is already part of compilation: " + plugin.Name);
                         }
 
                         CacheModifiedScripts();
 
                         // We don't want the main thread to be able to add more plugins which could be missed
-                        if (queuedPlugins.Count == 0 && Current == this) { Current = null; }
+                        if (queuedPlugins.Count == 0 && Current == this)
+                        {
+                            Current = null;
+                            Interface.Oxide.LogDebug("Probably done preparing compilation: " + plugins.Select(p => p.Name).ToSentence());
+                        }
                     }
 
-                    //Interface.Oxide.LogDebug("Done preparing compilation: " + plugins.Select(p => p.Name).ToSentence());
+                    Interface.Oxide.LogDebug("Done preparing compilation: " + plugins.Select(p => p.Name).ToSentence());
 
                     callback();
                 }
