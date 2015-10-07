@@ -11,6 +11,7 @@ namespace Oxide.Plugins
 {
     public class CompilableFile
     {
+        private static Core.Libraries.Timer timer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>();
         private static object compileLock = new object();
 
         public CSharpExtension Extension;
@@ -34,6 +35,8 @@ namespace Oxide.Plugins
         protected Action<CSharpPlugin> loadCallback;
         protected Action<bool> compileCallback;
         protected float compilationQueuedAt;
+
+        private Core.Libraries.Timer.TimerInstance timeoutTimer;
 
         public byte[] ScriptSource => ScriptEncoding.GetBytes(string.Join(Environment.NewLine, ScriptLines));
 
@@ -80,10 +83,19 @@ namespace Oxide.Plugins
         {
             //Interface.Oxide.LogDebug("Compiling plugin: {0}", Name);
             LastCompiledAt = LastModifiedAt;
+            timeoutTimer?.Destroy();
+            timeoutTimer = timer.Once(60f, OnCompilationTimeout);
         }
 
         internal void OnCompilationSucceeded(CompiledAssembly compiled_assembly)
         {
+            if (timeoutTimer == null)
+            {
+                Interface.Oxide.LogWarning($"Ignored unexpected plugin compilation: {Name}");
+                return;
+            }
+            timeoutTimer?.Destroy();
+            timeoutTimer = null;
             IsCompilationNeeded = false;
             compilationQueuedAt = 0f;
             CompiledAssembly = compiled_assembly;
@@ -92,10 +104,19 @@ namespace Oxide.Plugins
 
         internal void OnCompilationFailed()
         {
+            timeoutTimer?.Destroy();
+            timeoutTimer = null;
             compilationQueuedAt = 0f;
             LastCompiledAt = default(DateTime);
             compileCallback?.Invoke(false);
             IsCompilationNeeded = false;
+        }
+
+        internal void OnCompilationTimeout()
+        {
+            Interface.Oxide.LogError("Timed out waiting for plugin to be compiled: " + Name);
+            CompilerErrors = "Timed out waiting for compilation";
+            OnCompilationFailed();
         }
 
         internal bool HasBeenModified()
