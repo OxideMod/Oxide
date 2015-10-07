@@ -206,7 +206,7 @@ namespace Oxide.Game.ReignOfKings
                     bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
                 }
-                return string.Concat(OxideMod.FormatBytes(bytesReceived), "/s in, ", OxideMod.FormatBytes(bytesSent), "/s out");
+                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () =>

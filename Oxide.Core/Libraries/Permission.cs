@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
-using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
+
+using ProtoBuf;
 
 namespace Oxide.Core.Libraries
 {
     /// <summary>
     /// Contains all data for a specified user
     /// </summary>
+    [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
     public class UserData
     {
         /// <summary>
@@ -31,6 +34,7 @@ namespace Oxide.Core.Libraries
     /// <summary>
     /// Contains all data for a specified group
     /// </summary>
+    [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
     public class GroupData
     {
         /// <summary>
@@ -94,18 +98,11 @@ namespace Oxide.Core.Libraries
         private void LoadFromDatafile()
         {
             // Initialize
-            try
-            {
-                userdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, UserData>>("oxide.users");
-                groupdata = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, GroupData>>("oxide.groups");
-                IsLoaded = true;
-            }
-            catch (Exception ex)
-            {
-                IsLoaded = false;
-                LastException = ex;
-                Interface.Oxide.LogError("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + ex.Message);
-            }
+            Utility.DatafileToProto<Dictionary<string, UserData>>("oxide.users");
+            Utility.DatafileToProto<Dictionary<string, GroupData>>("oxide.groups");
+            userdata = ProtoStorage.Load<Dictionary<string, UserData>>("oxide.users");
+            groupdata = ProtoStorage.Load<Dictionary<string, GroupData>>("oxide.groups");
+            IsLoaded = true;
         }
 
         /// <summary>
@@ -113,7 +110,7 @@ namespace Oxide.Core.Libraries
         /// </summary>
         private void SaveUsers()
         {
-            Interface.GetMod().DataFileSystem.WriteObject("oxide.users", userdata);
+            ProtoStorage.Save(userdata, "oxide.users");
         }
 
         /// <summary>
@@ -121,7 +118,17 @@ namespace Oxide.Core.Libraries
         /// </summary>
         private void SaveGroups()
         {
-            Interface.GetMod().DataFileSystem.WriteObject("oxide.groups", groupdata);
+            ProtoStorage.Save(groupdata, "oxide.groups");
+        }
+
+        public void CleanUp(Func<string, bool> validate)
+        {
+            if (!IsLoaded) return;
+            var invalid = userdata.Keys.Where(k => !validate(k)).ToArray();
+            if (invalid.Length <= 0) return;
+            foreach (var i in invalid)
+                userdata.Remove(i);
+            SaveUsers();
         }
 
         #region Permission Management
@@ -137,7 +144,7 @@ namespace Oxide.Core.Libraries
             if (string.IsNullOrEmpty(name)) return;
             if (PermissionExists(name))
             {
-                Interface.GetMod().RootLogger.Write(LogType.Warning, "Duplicate permission registered '{0}' (by plugin '{1}')", name, owner.Title);
+                Interface.Oxide.LogWarning("Duplicate permission registered '{0}' (by plugin '{1}')", name, owner.Title);
                 return;
             }
             HashSet<string> set;

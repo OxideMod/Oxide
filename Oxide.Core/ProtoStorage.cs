@@ -18,7 +18,7 @@ namespace Oxide.Core
 
         public static T Load<T>(params string[] sub_paths)
         {
-            var name = string.Join("\\", sub_paths).Replace("..", "");
+            var name = string.Join(Path.PathSeparator.ToString(), sub_paths).Replace("..", "");
             var path = Path.Combine(Interface.Oxide.DataDirectory, name + ".data");
             try
             {
@@ -39,7 +39,7 @@ namespace Oxide.Core
 
         public static void Save<T>(T data, params string[] sub_paths)
         {
-            var name = string.Join("\\", sub_paths).Replace("..", "");
+            var name = string.Join(Path.PathSeparator.ToString(), sub_paths).Replace("..", "");
             var path = Path.Combine(Interface.Oxide.DataDirectory, name + ".data");
             var directory = Path.GetDirectoryName(path);
             try
