@@ -30,7 +30,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
-            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, RustPlayer>();
             foreach (var pair in playerData)
             {

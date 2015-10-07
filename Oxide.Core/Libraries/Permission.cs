@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 
 using Oxide.Core.Plugins;
-
 using ProtoBuf;
 
 namespace Oxide.Core.Libraries
@@ -100,8 +99,8 @@ namespace Oxide.Core.Libraries
             // Initialize
             Utility.DatafileToProto<Dictionary<string, UserData>>("oxide.users");
             Utility.DatafileToProto<Dictionary<string, GroupData>>("oxide.groups");
-            userdata = ProtoStorage.Load<Dictionary<string, UserData>>("oxide.users");
-            groupdata = ProtoStorage.Load<Dictionary<string, GroupData>>("oxide.groups");
+            userdata = ProtoStorage.Load<Dictionary<string, UserData>>("oxide.users") ?? new Dictionary<string, UserData>();
+            groupdata = ProtoStorage.Load<Dictionary<string, GroupData>>("oxide.groups") ?? new Dictionary<string, GroupData>();
             IsLoaded = true;
         }
 
