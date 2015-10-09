@@ -30,8 +30,8 @@
         /// </summary>
         public ExtensionManager Manager { get; private set; }
 
-        public virtual string[] WhitelistAssemblies { get; protected set; }
-        public virtual string[] WhitelistNamespaces { get; protected set; }
+        public virtual string[] WhitelistAssemblies { get; protected set; } = new string[0];
+        public virtual string[] WhitelistNamespaces { get; protected set; } = new string[0];
 
         /// <summary>
         /// Initializes a new instance of the Extension class

@@ -51,6 +51,7 @@ namespace Oxide.Ext.Lua.Plugins
         {
             // Store filename
             Filename = filename;
+            Name = Core.Utility.GetFileNameWithoutExtension(Filename);
             this.luaExt = luaExt;
             LuaEnvironment = luaExt.LuaEnvironment;
             this.watcher = watcher;
@@ -103,7 +104,7 @@ namespace Oxide.Ext.Lua.Plugins
         /// <summary>
         /// Loads this plugin
         /// </summary>
-        public void Load()
+        public override void Load()
         {
             // Load the plugin into a table
             var source = File.ReadAllText(Filename);
@@ -113,7 +114,6 @@ namespace Oxide.Ext.Lua.Plugins
             LuaEnvironment.NewTable("PLUGIN");
             Table = (LuaTable) LuaEnvironment["PLUGIN"];
             ((LuaFunction) LuaEnvironment["setmetatable"]).Call(Table, luaExt.PluginMetatable);
-            Name = Path.GetFileNameWithoutExtension(Filename);
             Table["Name"] = Name;
             pluginfunc.Call();
 

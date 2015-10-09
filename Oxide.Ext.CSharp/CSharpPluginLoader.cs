@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -58,9 +57,10 @@ namespace Oxide.Plugins
 
         public override IEnumerable<string> ScanDirectory(string directory)
         {
-            if (PluginCompiler.BinaryPath == null || !Directory.Exists(directory)) yield break;
-            foreach (string file in Directory.GetFiles(directory, "*.cs"))
-                yield return Path.GetFileNameWithoutExtension(file);
+            if (PluginCompiler.BinaryPath == null) yield break;
+            var enumerable = base.ScanDirectory(directory);
+            foreach (var file in enumerable)
+                yield return file;
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Oxide.Plugins
 
             return null;
         }
-        
+
         /// <summary>
         /// Attempt to asynchronously compile plugin and only reload if successful
         /// </summary>

@@ -179,6 +179,14 @@ namespace Oxide.Core.Plugins
         }
 
         /// <summary>
+        /// Called when this plugin is loading
+        /// </summary>
+        public virtual void Load()
+        {
+
+        }
+
+        /// <summary>
         /// Calls a hook on this plugin
         /// </summary>
         /// <param name="hookname"></param>

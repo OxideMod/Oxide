@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Collections.Generic;
-
-using Oxide.Core.Plugins;
+﻿using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
 
 namespace Oxide.Ext.Lua.Plugins
@@ -25,7 +22,9 @@ namespace Oxide.Ext.Lua.Plugins
         /// Gets the Lua Extension
         /// </summary>
         private LuaExtension LuaExtension { get; set; }
-        
+
+        public override string FileExtension => ".lua";
+
         /// <summary>
         /// Initializes a new instance of the LuaPluginLoader class
         /// </summary>
@@ -38,17 +37,13 @@ namespace Oxide.Ext.Lua.Plugins
         }
 
         /// <summary>
-        /// Returns all plugins in the specified directory by plugin name
+        /// Gets a plugin given the specified filename
         /// </summary>
-        /// <param name="directory"></param>
+        /// <param name="filename"></param>
         /// <returns></returns>
-        public override IEnumerable<string> ScanDirectory(string directory)
+        protected override Plugin GetPlugin(string filename)
         {
-            // For now, we will only load single-file plugins
-            // In the future, we might want to accept multi-file plugins
-            // This might include zip files or folders that contain a number of .lua files making up one plugin
-            foreach (string file in Directory.GetFiles(directory, "*.lua"))
-                yield return Path.GetFileNameWithoutExtension(file);
+            return new LuaPlugin(filename, LuaExtension, Watcher);
         }
 
         /// <summary>
@@ -59,20 +54,8 @@ namespace Oxide.Ext.Lua.Plugins
         /// <returns></returns>
         public override Plugin Load(string directory, string name)
         {
-            // Get the filename
-            string filename = Path.Combine(directory, name + ".lua");
-
-            // Check it exists
-            if (!File.Exists(filename)) return null;
-
             LuaExtension.InitializeTypes();
-
-            // Create it
-            LuaPlugin plugin = new LuaPlugin(filename, LuaExtension, Watcher);
-            plugin.Load();
-
-            // Return it
-            return plugin;
+            return base.Load(directory, name);
         }
     }
 }

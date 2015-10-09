@@ -40,7 +40,7 @@ namespace Oxide.Core
         private static Dictionary<string, string> tags = new Dictionary<string, string>
         {
             { "arch", IntPtr.Size == 4 ? "x86" : "x64" },
-            { "game", Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) }
+            { "game", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) }
         };
 
         private class QueuedReport

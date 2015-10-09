@@ -57,6 +57,7 @@ namespace Oxide.Ext.Python.Plugins
         {
             // Store filename
             Filename = filename;
+            Name = Core.Utility.GetFileNameWithoutExtension(Filename);
             PythonEngine = engine;
             this.watcher = watcher;
         }
@@ -109,11 +110,10 @@ namespace Oxide.Ext.Python.Plugins
         /// <summary>
         /// Loads this plugin
         /// </summary>
-        public void Load()
+        public override void Load()
         {
             // Load the plugin
-            string code = File.ReadAllText(Filename);
-            Name = Path.GetFileNameWithoutExtension(Filename);
+            var code = File.ReadAllText(Filename);
             Scope = PythonEngine.CreateScope();
             var source = PythonEngine.CreateScriptSourceFromString(code, Path.GetFileName(Filename), SourceCodeKind.Statements);
             var compiled = source.Compile();
@@ -182,7 +182,7 @@ namespace Oxide.Ext.Python.Plugins
         /// <param name="pyname"></param>
         private void BindBaseMethod(string methodname, string pyname)
         {
-            MethodInfo method = GetType().GetMethod(methodname, BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic);
+            var method = GetType().GetMethod(methodname, BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic);
             var typeArgs = method.GetParameters()
                     .Select(p => p.ParameterType)
                     .ToList();
@@ -210,7 +210,7 @@ namespace Oxide.Ext.Python.Plugins
             base.HandleAddedToManager(manager);
 
             // Subscribe all our hooks
-            foreach (string key in Globals.Keys)
+            foreach (var key in Globals.Keys)
                 Subscribe(key);
 
             // Add us to the watcher
@@ -252,7 +252,7 @@ namespace Oxide.Ext.Python.Plugins
             }
             catch (Exception e)
             {
-                var message = string.Format("Failed to call {0} ({1}: {2}){3}{4}", hookname, e.GetType().Name, e.Message, Environment.NewLine, e.StackTrace);
+                var message = $"Failed to call {hookname} ({e.GetType().Name}: {e.Message}){Environment.NewLine}{e.StackTrace}";
                 throw new RuntimeException(message, e);
             }
         }

@@ -12,8 +12,8 @@ namespace Oxide.Core
         {
             var directory = Path.Combine(Interface.Oxide.DataDirectory, sub_directory.Replace("..", ""));
             if (!Directory.Exists(directory)) yield break;
-            foreach (string file in Directory.GetFiles(directory, "*.data"))
-                yield return Path.GetFileNameWithoutExtension(file);
+            foreach (var file in Directory.GetFiles(directory, "*.data"))
+                yield return Utility.GetFileNameWithoutExtension(file);
         }
 
         public static T Load<T>(params string[] sub_paths)

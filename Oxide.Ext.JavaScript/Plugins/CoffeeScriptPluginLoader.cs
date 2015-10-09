@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 using Jint;
@@ -28,6 +26,8 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// </summary>
         public FSWatcher Watcher { get; set; }
 
+        public override string FileExtension => ".coffee";
+
         /// <summary>
         /// Initializes a new instance of the CoffeeScriptPluginLoader class
         /// </summary>
@@ -35,43 +35,21 @@ namespace Oxide.Ext.JavaScript.Plugins
         public CoffeeScriptPluginLoader(Engine engine)
         {
             JavaScriptEngine = engine;
-            
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(compilerResourcePath))
-                using (StreamReader reader = new StreamReader(stream))
+
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(compilerResourcePath))
+                using (var reader = new StreamReader(stream))
                     engine.Execute(reader.ReadToEnd(), new ParserOptions { Source = "CoffeeScriptCompiler" });
             engine.Execute("function __CompileScript(name){return CoffeeScript.compile(name+\"=\\n\"+__CoffeeSource.replace(/^/gm, '  '),{bare: true})}");
         }
 
         /// <summary>
-        /// Returns all plugins in the specified directory by plugin name
+        /// Gets a plugin given the specified filename
         /// </summary>
-        /// <param name="directory"></param>
+        /// <param name="filename"></param>
         /// <returns></returns>
-        public override IEnumerable<string> ScanDirectory(string directory)
+        protected override Plugin GetPlugin(string filename)
         {
-            return Directory.GetFiles(directory, "*.coffee").Select(Path.GetFileNameWithoutExtension);
-        }
-
-        /// <summary>
-        /// Loads a plugin using this loader
-        /// </summary>
-        /// <param name="directory"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public override Plugin Load(string directory, string name)
-        {
-            // Get the filename
-            string filename = Path.Combine(directory, name + ".coffee");
-
-            // Check it exists
-            if (!File.Exists(filename)) return null;
-
-            // Create it
-            var plugin = new CoffeeScriptPlugin(filename, JavaScriptEngine, Watcher);
-            plugin.Load();
-
-            // Return it
-            return plugin;
+            return new CoffeeScriptPlugin(filename, JavaScriptEngine, Watcher);
         }
     }
 }
