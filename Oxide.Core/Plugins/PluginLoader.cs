@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 
+using Oxide.Core.Libraries;
+
 namespace Oxide.Core.Plugins
 {
     /// <summary>
@@ -41,9 +43,9 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public virtual IEnumerable<string> ScanDirectory(string directory)
         {
-            if (FileExtension == null) yield break;
-            foreach (string file in Directory.GetFiles(directory, "*" + FileExtension))
-                yield return Path.GetFileNameWithoutExtension(file);
+            if (FileExtension == null || !Directory.Exists(directory)) yield break;
+            foreach (var file in Directory.GetFiles(directory, "*" + FileExtension))
+                yield return Utility.GetFileNameWithoutExtension(file);
         }
 
         /// <summary>
@@ -54,7 +56,62 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public virtual Plugin Load(string directory, string name)
         {
+            if (LoadingPlugins.Contains(name))
+            {
+                Interface.Oxide.LogDebug("Load requested for plugin which is already loading: " + name);
+                return null;
+            }
+
+            var filename = Path.Combine(directory, name + FileExtension);
+            var plugin = GetPlugin(filename);
+            LoadingPlugins.Add(plugin.Name);
+            Interface.Oxide.NextTick(() => LoadPlugin(plugin));
+
             return null;
+        }
+
+        /// <summary>
+        /// Gets a plugin given the specified filename
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        protected virtual Plugin GetPlugin(string filename)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Loads a given plugin
+        /// </summary>
+        /// <param name="plugin"></param>
+        /// <param name="waitingForAccess"></param>
+        protected void LoadPlugin(Plugin plugin, bool waitingForAccess = false)
+        {
+            if (!File.Exists(plugin.Filename))
+            {
+                LoadingPlugins.Remove(plugin.Name);
+                Interface.Oxide.LogWarning("Script no longer exists: {0}", plugin.Name);
+                return;
+            }
+
+            try
+            {
+                plugin.Load();
+                Interface.Oxide.UnloadPlugin(plugin.Name);
+                LoadingPlugins.Remove(plugin.Name);
+                Interface.Oxide.PluginLoaded(plugin);
+            }
+            catch (IOException)
+            {
+                if (!waitingForAccess)
+                    Interface.Oxide.LogWarning("Waiting for another application to stop using script: {0}", plugin.Name);
+                Interface.Oxide.GetLibrary<Timer>().Once(.5f, () => LoadPlugin(plugin, true));
+            }
+            catch (Exception ex)
+            {
+                LoadingPlugins.Remove(plugin.Name);
+                Interface.Oxide.LogException($"Failed to load plugin {plugin.Name}", ex);
+            }
         }
 
         /// <summary>

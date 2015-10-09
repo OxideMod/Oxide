@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Microsoft.Scripting.Hosting;
+﻿using Microsoft.Scripting.Hosting;
 
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
@@ -29,6 +25,8 @@ namespace Oxide.Ext.Python.Plugins
         /// </summary>
         private PythonExtension PythonExtension { get; set; }
 
+        public override string FileExtension => ".py";
+
         /// <summary>
         /// Initializes a new instance of the PythonPluginLoader class
         /// </summary>
@@ -41,16 +39,13 @@ namespace Oxide.Ext.Python.Plugins
         }
 
         /// <summary>
-        /// Returns all plugins in the specified directory by plugin name
+        /// Gets a plugin given the specified filename
         /// </summary>
-        /// <param name="directory"></param>
+        /// <param name="filename"></param>
         /// <returns></returns>
-        public override IEnumerable<string> ScanDirectory(string directory)
+        protected override Plugin GetPlugin(string filename)
         {
-            // For now, we will only load single-file plugins
-            // In the future, we might want to accept multi-file plugins
-            // This might include zip files or folders that contain a number of .py files making up one plugin
-            return Directory.GetFiles(directory, "*.py").Select(Path.GetFileNameWithoutExtension);
+            return new PythonPlugin(filename, PythonEngine, Watcher);
         }
 
         /// <summary>
@@ -61,20 +56,8 @@ namespace Oxide.Ext.Python.Plugins
         /// <returns></returns>
         public override Plugin Load(string directory, string name)
         {
-            // Get the filename
-            string filename = Path.Combine(directory, name + ".py");
-
-            // Check it exists
-            if (!File.Exists(filename)) return null;
-
             PythonExtension.InitializeTypes();
-
-            // Create it
-            var plugin = new PythonPlugin(filename, PythonEngine, Watcher);
-            plugin.Load();
-
-            // Return it
-            return plugin;
+            return base.Load(directory, name);
         }
     }
 }

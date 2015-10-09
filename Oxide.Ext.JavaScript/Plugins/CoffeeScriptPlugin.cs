@@ -20,12 +20,11 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <param name="watcher"></param>
         internal CoffeeScriptPlugin(string filename, Engine engine, FSWatcher watcher) : base(filename, engine, watcher)
         {
-
+            Name = Core.Utility.GetFileNameWithoutExtension(Filename);
         }
 
         protected override void LoadSource()
         {
-            Name = Path.GetFileNameWithoutExtension(Filename);
             var source = File.ReadAllText(Filename);
             JavaScriptEngine.SetValue("__CoffeeSource", source);
             JavaScriptEngine.Execute($"eval(__CompileScript('{Name}'))", new ParserOptions { Source = Path.GetFileName(Filename) });

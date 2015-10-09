@@ -91,5 +91,48 @@ namespace Oxide.Core
                 type = "b";
             return $"{bytes:0}{type}";
         }
+
+        /// <summary>
+        /// Gets the path only
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static string GetDirectoryName(string name)
+        {
+            try
+            {
+                return name.Substring(0, name.LastIndexOf(Path.DirectorySeparatorChar));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static string GetFileNameWithoutExtension(string value)
+        {
+            var lastIndex = value.Length - 1;
+            for (var i = lastIndex; i >= 1; i--)
+            {
+                if (value[i] != '.') continue;
+                lastIndex = i - 1;
+                break;
+            }
+            var firstIndex = 0;
+            for (var i = lastIndex - 1; i >= 0; i--)
+            {
+                switch (value[i])
+                {
+                    case '/':
+                    case '\\':
+                        {
+                            firstIndex = i + 1;
+                            goto End;
+                        }
+                }
+            }
+            End:
+            return value.Substring(firstIndex, (lastIndex - firstIndex + 1));
+        }
     }
 }

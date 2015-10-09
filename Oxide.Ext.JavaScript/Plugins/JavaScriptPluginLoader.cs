@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using Jint;
+﻿using Jint;
 
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
@@ -24,6 +20,8 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// </summary>
         public FSWatcher Watcher { get; set; }
 
+        public override string FileExtension => ".js";
+
         /// <summary>
         /// Initializes a new instance of the JavaScriptPluginLoader class
         /// </summary>
@@ -34,38 +32,13 @@ namespace Oxide.Ext.JavaScript.Plugins
         }
 
         /// <summary>
-        /// Returns all plugins in the specified directory by plugin name
+        /// Gets a plugin given the specified filename
         /// </summary>
-        /// <param name="directory"></param>
+        /// <param name="filename"></param>
         /// <returns></returns>
-        public override IEnumerable<string> ScanDirectory(string directory)
+        protected override Plugin GetPlugin(string filename)
         {
-            // For now, we will only load single-file plugins
-            // In the future, we might want to accept multi-file plugins
-            // This might include zip files or folders that contain a number of .js files making up one plugin
-            return Directory.GetFiles(directory, "*.js").Select(Path.GetFileNameWithoutExtension);
-        }
-
-        /// <summary>
-        /// Loads a plugin using this loader
-        /// </summary>
-        /// <param name="directory"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public override Plugin Load(string directory, string name)
-        {
-            // Get the filename
-            string filename = Path.Combine(directory, name + ".js");
-
-            // Check it exists
-            if (!File.Exists(filename)) return null;
-
-            // Create it
-            JavaScriptPlugin plugin = new JavaScriptPlugin(filename, JavaScriptEngine, Watcher);
-            plugin.Load();
-
-            // Return it
-            return plugin;
+            return new JavaScriptPlugin(filename, JavaScriptEngine, Watcher);
         }
     }
 }

@@ -70,7 +70,7 @@ namespace Oxide.Core.Configuration
         public override void Save(string filename = null)
         {
             filename = CheckPath(filename ?? Filename);
-            var dir = GetDirectoryName(filename);
+            var dir = Utility.GetDirectoryName(filename);
             if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
             File.WriteAllText(filename, JsonConvert.SerializeObject(_keyvalues, Formatting.Indented, _settings));
         }
@@ -84,7 +84,7 @@ namespace Oxide.Core.Configuration
         public void WriteObject<T>(T config, bool sync = false, string filename = null)
         {
             filename = CheckPath(filename ?? Filename);
-            var dir = GetDirectoryName(filename);
+            var dir = Utility.GetDirectoryName(filename);
             if (dir != null && !Directory.Exists(dir)) Directory.CreateDirectory(dir);
             var json = JsonConvert.SerializeObject(config, Formatting.Indented, Settings);
             File.WriteAllText(filename, json);
@@ -122,23 +122,6 @@ namespace Oxide.Core.Configuration
             name = Regex.Replace(name, "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]", "_");
             name = Regex.Replace(name, @"\.+", ".");
             return name.TrimStart('.', Path.DirectorySeparatorChar);
-        }
-
-        /// <summary>
-        /// Gets the path only
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static string GetDirectoryName(string name)
-        {
-            try
-            {
-                return name.Substring(0, name.LastIndexOf(Path.DirectorySeparatorChar));
-            }
-            catch
-            {
-                return null;
-            }
         }
 
         /// <summary>

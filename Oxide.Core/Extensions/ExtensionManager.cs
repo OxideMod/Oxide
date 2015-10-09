@@ -130,7 +130,7 @@ namespace Oxide.Core.Extensions
         /// <param name="filename"></param>
         public void LoadExtension(string filename)
         {
-            string name = Path.GetFileNameWithoutExtension(filename);
+            string name = Utility.GetFileNameWithoutExtension(filename);
             try
             {
                 // Load the assembly

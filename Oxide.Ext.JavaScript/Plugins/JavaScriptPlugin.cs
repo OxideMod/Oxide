@@ -9,6 +9,7 @@ using Jint;
 using Jint.Native;
 using Jint.Native.Object;
 using Jint.Parser;
+using Jint.Runtime.Descriptors;
 using Jint.Runtime.Interop;
 
 using Oxide.Core;
@@ -52,6 +53,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         {
             // Store filename
             Filename = filename;
+            Name = Core.Utility.GetFileNameWithoutExtension(Filename);
             JavaScriptEngine = engine;
             this.watcher = watcher;
         }
@@ -116,10 +118,9 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <summary>
         /// Loads this plugin
         /// </summary>
-        public virtual void Load()
+        public override void Load()
         {
             // Load the plugin
-            Name = Path.GetFileNameWithoutExtension(Filename);
             LoadSource();
             if (JavaScriptEngine.GetValue(Name).TryCast<ObjectInstance>() == null) throw new Exception("Plugin is missing main object");
             Class = JavaScriptEngine.GetValue(Name).AsObject();
@@ -180,7 +181,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         /// <param name="jsname"></param>
         private void BindBaseMethod(string methodname, string jsname)
         {
-            MethodInfo method = GetType().GetMethod(methodname, BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic);
+            var method = GetType().GetMethod(methodname, BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic);
             var typeArgs = method.GetParameters()
                     .Select(p => p.ParameterType)
                     .ToList();
@@ -208,7 +209,7 @@ namespace Oxide.Ext.JavaScript.Plugins
             base.HandleAddedToManager(manager);
 
             // Subscribe all our hooks
-            foreach (string key in Globals.Keys)
+            foreach (var key in Globals.Keys)
                 Subscribe(key);
 
             // Add us to the watcher
@@ -232,6 +233,8 @@ namespace Oxide.Ext.JavaScript.Plugins
 
             // Call base
             base.HandleRemovedFromManager(manager);
+
+            Class.FastSetProperty("Plugin", PropertyDescriptor.Undefined);
         }
 
         /// <summary>
@@ -244,7 +247,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         {
             ICallable callable;
             if (!Globals.TryGetValue(hookname, out callable)) return null;
-            return callable?.Call(Class, args != null ? args.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() : new JsValue[] {}).ToObject();
+            return callable?.Call(Class, args?.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() ?? new JsValue[] {}).ToObject();
         }
     }
 }
