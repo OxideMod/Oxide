@@ -89,6 +89,11 @@ namespace Oxide.Game.Rust
                     var defaultGroup = DefaultGroups[i];
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
+                permission.CleanUp(s =>
+                {
+                    ulong temp;
+                    return ulong.TryParse(s, out temp);
+                });
             }
 
             // Configure remote logging
