@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using Oxide.Core.Plugins;
+
 using ProtoBuf;
 
 namespace Oxide.Core.Libraries
@@ -17,17 +17,17 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Gets or sets the last seen nickname for this user
         /// </summary>
-        public string LastSeenNickname { get; set; }
+        public string LastSeenNickname { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the individual permissions for this user
         /// </summary>
-        public HashSet<string> Perms { get; set; }
+        public HashSet<string> Perms { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Gets or sets the usergroup for this user
         /// </summary>
-        public HashSet<string> Groups { get; set; }
+        public HashSet<string> Groups { get; set; } = new HashSet<string>();
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Gets or sets the title of this group
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the rank of this group
@@ -49,12 +49,12 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Gets or sets the individual permissions for this group
         /// </summary>
-        public HashSet<string> Perms { get; set; }
+        public HashSet<string> Perms { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// Gets or sets the parent for this group
         /// </summary>
-        public string ParentGroup { get; set; }
+        public string ParentGroup { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -229,10 +229,7 @@ namespace Oxide.Core.Libraries
         {
             UserData data;
             if (!userdata.TryGetValue(userid, out data))
-            {
-                data = new UserData { LastSeenNickname = string.Empty, Groups = new HashSet<string>(), Perms = new HashSet<string>() };
-                userdata.Add(userid, data);
-            }
+                userdata.Add(userid, data = new UserData());
 
             // Return the data
             return data;
@@ -548,7 +545,7 @@ namespace Oxide.Core.Libraries
             if (GroupExists(name) || string.IsNullOrEmpty(name)) return false;
 
             // Create the data
-            var data = new GroupData { Title = title, Rank = rank, Perms = new HashSet<string>() };
+            var data = new GroupData { Title = title, Rank = rank };
 
             // Add it and save
             groupdata.Add(name.ToLower(), data);
