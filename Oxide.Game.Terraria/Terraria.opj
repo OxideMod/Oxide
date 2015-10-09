@@ -22,7 +22,8 @@
               "Parameters": []
             },
             "MSILHash": "jycKqafW9O1mqNCyiDRhXbFUs5GFOCJ+4TdAfWei8no=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -45,7 +46,8 @@
               "Parameters": []
             },
             "MSILHash": "jycKqafW9O1mqNCyiDRhXbFUs5GFOCJ+4TdAfWei8no=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -68,7 +70,8 @@
               "Parameters": []
             },
             "MSILHash": "EDdxK4UC0xqvyyWYcjbwsfEdBf3RJQHD8syh7ENeOf8=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
