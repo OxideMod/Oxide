@@ -13,7 +13,9 @@ namespace Oxide.Tests
         public void WhenYouGetNotExistingValueTypeSetting_ThenDefaultInstanceIsCreated()
         {
             //Given
-            var configFile = new DynamicConfigFile(string.Empty);
+            string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            File.WriteAllText(filename, "{}");
+            var configFile = ConfigFile.Load<DynamicConfigFile>(filename);
 
             //When
             var value = configFile.Get<int>("NotExistingSettingKey");
@@ -34,8 +36,8 @@ namespace Oxide.Tests
 
             TestConfigFile(cfg);
 
-            cfg.Save();
-            cfg.Load();
+            cfg.Save(filename);
+            cfg = ConfigFile.Load<DynamicConfigFile>(filename);
 
             TestConfigFile(cfg);
 

@@ -9,7 +9,7 @@ using Oxide.Core;
 using Oxide.Core.Configuration;
 using Utility = Oxide.Ext.Lua.Utility;
 
-struct TestStruct {}
+struct TestStruct { }
 
 namespace Oxide.Tests
 {
@@ -25,8 +25,7 @@ namespace Oxide.Tests
             string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
             File.WriteAllText(filename, inputfile);
 
-            var cfg = new DynamicConfigFile(filename);
-            cfg.Load();
+            var cfg = ConfigFile.Load<DynamicConfigFile>(filename);
 
             TestConfigFile(cfg); // This should always pass so long as the CoreTests pass
 
@@ -63,7 +62,8 @@ namespace Oxide.Tests
             }
 
             string tempFilename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
-            cfg = new DynamicConfigFile(tempFilename);
+            File.WriteAllText(tempFilename, "{}");
+            cfg = ConfigFile.Load<DynamicConfigFile>(tempFilename);
             Utility.SetConfigFromTable(cfg, tbl);
 
             TestConfigFile(cfg);
@@ -122,7 +122,8 @@ namespace Oxide.Tests
 
             LuaTable tdata = lua["TeleportData"] as LuaTable;
             string tempFilename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
-            DynamicConfigFile cfgfile = new DynamicConfigFile(tempFilename);
+            File.WriteAllText(tempFilename, "{}");
+            DynamicConfigFile cfgfile = ConfigFile.Load<DynamicConfigFile>(tempFilename);
             Utility.SetConfigFromTable(cfgfile, tdata);
 
             Assert.AreEqual(3, cfgfile["Test"], "Failed TeleportData.Test");
