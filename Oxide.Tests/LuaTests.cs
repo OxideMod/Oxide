@@ -5,9 +5,9 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using NLua;
-
+using Oxide.Core;
 using Oxide.Core.Configuration;
-using Oxide.Ext.Lua;
+using Utility = Oxide.Ext.Lua.Utility;
 
 struct TestStruct {}
 
@@ -22,10 +22,11 @@ namespace Oxide.Tests
             Lua lua = new Lua();
 
             const string inputfile = "{ \"x\": 10, \"y\": \"hello\", \"z\": [ 10, \"yo\" ], \"w\": { \"a\": 20, \"b\": [ 500, 600 ] } }";
-            string filename = Path.GetTempFileName();
+            string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
             File.WriteAllText(filename, inputfile);
 
-            var cfg = ConfigFile.Load<DynamicConfigFile>(filename);
+            var cfg = new DynamicConfigFile(filename);
+            cfg.Load();
 
             TestConfigFile(cfg); // This should always pass so long as the CoreTests pass
 
@@ -61,7 +62,8 @@ namespace Oxide.Tests
                 }
             }
 
-            cfg = new DynamicConfigFile(Path.GetTempFileName());
+            string tempFilename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            cfg = new DynamicConfigFile(tempFilename);
             Utility.SetConfigFromTable(cfg, tbl);
 
             TestConfigFile(cfg);
@@ -119,7 +121,8 @@ namespace Oxide.Tests
             lua.LoadString("TeleportData = { AdminTP = {}, Test = 3, ABC=4 }", "test").Call();
 
             LuaTable tdata = lua["TeleportData"] as LuaTable;
-            DynamicConfigFile cfgfile = new DynamicConfigFile(Path.GetTempFileName());
+            string tempFilename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            DynamicConfigFile cfgfile = new DynamicConfigFile(tempFilename);
             Utility.SetConfigFromTable(cfgfile, tdata);
 
             Assert.AreEqual(3, cfgfile["Test"], "Failed TeleportData.Test");
@@ -127,8 +130,8 @@ namespace Oxide.Tests
 
             //Assert.IsInstanceOfType(cfgfile["AdminTP"], typeof(List<string, object>), "Failed TeleportData.AdminTP");
 
-            string tmp = Path.GetTempFileName();
-            cfgfile.Save();
+            string tmp = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            cfgfile.Save(tmp);
 
             string text = File.ReadAllText(tmp);
             File.Delete(tmp);

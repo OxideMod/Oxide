@@ -181,12 +181,15 @@ namespace Oxide.Core.Configuration
         /// <summary>
         /// Converts a configuration value to another type
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="destinationType"></param>
+        /// <param name="value">configuration value</param>
+        /// <param name="destinationType">type to convert to</param>
         /// <returns></returns>
         public object ConvertValue(object value, Type destinationType)
         {
-            if (!destinationType.IsGenericType) return Convert.ChangeType(value, destinationType);
+            if (!destinationType.IsGenericType)
+                return destinationType.IsValueType 
+                    ? Activator.CreateInstance(destinationType)
+                    : Convert.ChangeType(value, destinationType);
 
             if (destinationType.GetGenericTypeDefinition() == typeof(List<>))
             {
