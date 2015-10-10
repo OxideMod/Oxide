@@ -99,6 +99,7 @@ namespace Oxide.Core.Plugins.Watchers
                 changeQueue[sub_path] = change;
             }
             change.timer?.Destroy();
+            change.timer = null;
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Changed:
@@ -120,32 +121,36 @@ namespace Oxide.Core.Plugins.Watchers
                     change.type = WatcherChangeTypes.Deleted;
                     break;
             }
-            change.timer = timers.Once(.2f, () =>
+            Interface.Oxide.NextTick(() =>
             {
-                change.timer = null;
-                changeQueue.Remove(sub_path);
-                if (Regex.Match(sub_path, @"Include\\", RegexOptions.IgnoreCase).Success)
+                change.timer?.Destroy();
+                change.timer = timers.Once(.2f, () =>
                 {
-                    if (change.type == WatcherChangeTypes.Created || change.type == WatcherChangeTypes.Changed)
-                        FirePluginSourceChanged(sub_path);
-                    return;
-                }
-                switch (change.type)
-                {
-                    case WatcherChangeTypes.Changed:
-                        if (watchedPlugins.Contains(sub_path))
+                    change.timer = null;
+                    changeQueue.Remove(sub_path);
+                    if (Regex.Match(sub_path, @"Include\\", RegexOptions.IgnoreCase).Success)
+                    {
+                        if (change.type == WatcherChangeTypes.Created || change.type == WatcherChangeTypes.Changed)
                             FirePluginSourceChanged(sub_path);
-                        else
+                        return;
+                    }
+                    switch (change.type)
+                    {
+                        case WatcherChangeTypes.Changed:
+                            if (watchedPlugins.Contains(sub_path))
+                                FirePluginSourceChanged(sub_path);
+                            else
+                                FirePluginAdded(sub_path);
+                            break;
+                        case WatcherChangeTypes.Created:
                             FirePluginAdded(sub_path);
-                        break;
-                    case WatcherChangeTypes.Created:
-                        FirePluginAdded(sub_path);
-                        break;
-                    case WatcherChangeTypes.Deleted:
-                        if (watchedPlugins.Contains(sub_path))
-                            FirePluginRemoved(sub_path);
-                        break;
-                }
+                            break;
+                        case WatcherChangeTypes.Deleted:
+                            if (watchedPlugins.Contains(sub_path))
+                                FirePluginRemoved(sub_path);
+                            break;
+                    }
+                });
             });
         }
 

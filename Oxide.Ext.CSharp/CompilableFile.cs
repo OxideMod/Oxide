@@ -84,7 +84,12 @@ namespace Oxide.Plugins
             //Interface.Oxide.LogDebug("Compiling plugin: {0}", Name);
             LastCompiledAt = LastModifiedAt;
             timeoutTimer?.Destroy();
-            timeoutTimer = timer.Once(60f, OnCompilationTimeout);
+            timeoutTimer = null;
+            Interface.Oxide.NextTick(() =>
+            {
+                timeoutTimer?.Destroy();
+                timeoutTimer = timer.Once(60f, OnCompilationTimeout);
+            });
         }
 
         internal void OnCompilationSucceeded(CompiledAssembly compiled_assembly)
