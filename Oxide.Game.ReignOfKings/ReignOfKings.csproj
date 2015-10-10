@@ -79,19 +79,19 @@
     <None Include="Plugins\HooksTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
+    <ProjectReference Include="..\Oxide.Core\Core.csproj">
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
-      <Name>Oxide.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Oxide.Ext.CSharp\Oxide.Ext.CSharp.csproj">
+    <ProjectReference Include="..\Oxide.Ext.CSharp\CSharp.csproj">
       <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
-      <Name>Oxide.Ext.CSharp</Name>
+      <Name>CSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <PropertyGroup>
-      <GameName>ReignOfKings</GameName>
+      <GameName>$(MSBuildProjectName)</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
       <ManagedDir>ROK_Data\Managed</ManagedDir>
     </PropertyGroup>
@@ -107,19 +107,14 @@
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\*.dll"
-        Exclude="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
-      <ManagedFiles Include="$(TargetDir)\*.dll"
-        Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\UnityEngine*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
+      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\UnityEngine*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll"
-        Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
+      <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
-      <WinGameFiles Include="$(ProjectDir)\Files\**\*.*"
-        Exclude="$(ProjectDir)\Files\Linux\**" />
-      <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe"
-        Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
+      <WinGameFiles Include="$(ProjectDir)\Files\**\*.*" Exclude="$(ProjectDir)\Files\Linux\**" />
+      <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="$(ProjectDir)\Dependencies\Assembly-CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Assembly-CSharp_Original.dll" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />

@@ -250,6 +250,7 @@ namespace Oxide.Game.TheForest
             _logWriter.WriteLine(message);
             if (!string.IsNullOrEmpty(stackTrace)) _logWriter.WriteLine(stackTrace);
             if (Filter.Any(message.StartsWith)) return;
+
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

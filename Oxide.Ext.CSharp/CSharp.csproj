@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{52C26C5B-23E5-48A2-B403-5FF5C898E91A}</ProjectGuid>
+    <ProjectGuid>{9103D682-D1AA-4A95-A499-896F551AAA62}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Ext.Unity</RootNamespace>
-    <AssemblyName>Oxide.Ext.Unity</AssemblyName>
+    <RootNamespace>Oxide.Ext.CSharp</RootNamespace>
+    <AssemblyName>Oxide.Ext.CSharp</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -50,28 +50,51 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="UnityEngine">
-      <HintPath>Dependencies\UnityEngine.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Mono.Cecil.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Mono.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logging\UnityLogger.cs" />
-    <Compile Include="Plugins\UnityCore.cs" />
-    <Compile Include="Plugins\UnityPluginLoader.cs" />
+    <Compile Include="CompilableFile.cs" />
+    <Compile Include="Compilation.cs" />
+    <Compile Include="CSharpExtension.cs" />
+    <Compile Include="CSharpPlugin.cs" />
+    <Compile Include="CSharpPluginLoader.cs" />
+    <Compile Include="CompilablePlugin.cs" />
+    <Compile Include="CompiledAssembly.cs" />
+    <Compile Include="DirectCallMethod.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="ObjectStream\Data\CompilerData.cs" />
+    <Compile Include="ObjectStream\Data\CompilerFile.cs" />
+    <Compile Include="ObjectStream\Data\CompilerLanguageVersion.cs" />
+    <Compile Include="ObjectStream\Data\CompilerMessage.cs" />
+    <Compile Include="ObjectStream\Data\CompilerMessageType.cs" />
+    <Compile Include="ObjectStream\Data\CompilerPlatform.cs" />
+    <Compile Include="ObjectStream\Data\CompilerTarget.cs" />
+    <Compile Include="ObjectStream\IO\BindChanger.cs" />
+    <Compile Include="ObjectStream\IO\ObjectStreamWrapper.cs" />
+    <Compile Include="ObjectStream\ObjectStreamClient.cs" />
+    <Compile Include="ObjectStream\ObjectStreamConnection.cs" />
+    <Compile Include="ObjectStream\Threading\Worker.cs" />
+    <Compile Include="Covalence\Plugin.cs" />
+    <Compile Include="PluginCompiler.cs" />
+    <Compile Include="PluginTimers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnityExtension.cs" />
-    <Compile Include="UnityScript.cs" />
+    <Compile Include="Utility.cs" />
+    <None Include="Plugins\SamplePlugin.cs" />
+    <None Include="Plugins\CovalenceSamplePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
+    <ProjectReference Include="..\Oxide.Core\Core.csproj">
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
-      <Name>Oxide.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Libraries\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

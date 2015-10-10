@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{87568E26-BF3C-4A14-A3C4-8B74616D6FA9}</ProjectGuid>
+    <ProjectGuid>{6536E9D6-6D5C-4A34-85AB-2BDD6D12A5E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Game.Rust</RootNamespace>
-    <AssemblyName>Oxide.Game.Rust</AssemblyName>
+    <RootNamespace>Oxide.Game.BeastsOfPrey</RootNamespace>
+    <AssemblyName>Oxide.Game.BeastsOfPrey</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -53,65 +53,37 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Oxide.Core\Dependencies\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>Dependencies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Dependencies\UnityEngine.UI.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\Command.cs" />
-    <Compile Include="Libraries\Covalence\RustCommandSystem.cs" />
-    <Compile Include="Libraries\Covalence\RustConsolePlayer.cs" />
-    <Compile Include="Libraries\Covalence\RustCovalenceProvider.cs" />
-    <Compile Include="Libraries\Covalence\RustLivePlayer.cs" />
-    <Compile Include="Libraries\Covalence\RustPlayer.cs" />
-    <Compile Include="Libraries\Covalence\RustPlayerManager.cs" />
-    <Compile Include="Libraries\Covalence\RustServer.cs" />
-    <Compile Include="Libraries\Rust.cs" />
+    <Compile Include="Libraries\BeastsOfPrey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RustCore.cs" />
-    <Compile Include="RustCui.cs" />
-    <Compile Include="RustExtension.cs" />
-    <Compile Include="RustPlugin.cs" />
-    <Compile Include="RustPluginLoader.cs" />
+    <Compile Include="BeastsOfPreyCore.cs" />
+    <Compile Include="BeastsOfPreyExtension.cs" />
+    <Compile Include="BeastsOfPreyPlugin.cs" />
+    <Compile Include="BeastsOfPreyPluginLoader.cs" />
     <None Include="Plugins\HooksTest.cs" />
-    <None Include="Plugins\SamplePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
+    <ProjectReference Include="..\Oxide.Core\Core.csproj">
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
-      <Name>Oxide.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Oxide.Ext.CSharp\Oxide.Ext.CSharp.csproj">
+    <ProjectReference Include="..\Oxide.Ext.CSharp\CSharp.csproj">
       <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
-      <Name>Oxide.Ext.CSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Oxide.Ext.Unity\Oxide.Ext.Unity.csproj">
-      <Project>{52c26c5b-23e5-48a2-b403-5ff5c898e91a}</Project>
-      <Name>Oxide.Ext.Unity</Name>
+      <Name>CSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <PropertyGroup>
-      <GameName>Rust</GameName>
+      <GameName>$(MSBuildProjectName)</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>RustDedicated_Data\Managed</ManagedDir>
+      <ManagedDir>BoPServer_Data\Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
@@ -125,23 +97,18 @@
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Python\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\*.dll"
-        Exclude="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
-      <ManagedFiles Include="$(TargetDir)\*.dll"
-        Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\UnityEngine*.dll" />
-      <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
+      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\UnityEngine*.dll" />
+      <PatchedFiles Include="$(ProjectDir)\Patched\*.exe" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll"
-        Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
+      <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
-      <WinGameFiles Include="$(ProjectDir)\Files\**\*.*"
-        Exclude="$(ProjectDir)\Files\Linux\**" />
-      <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe"
-        Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
+      <WinGameFiles Include="$(ProjectDir)\Files\**\*.*" Exclude="$(ProjectDir)\Files\Linux\**" />
+      <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinFiles)" DestinationFiles="@(WinFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinGameFiles)" DestinationFiles="@(WinGameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinNativeFiles)" DestinationFiles="@(WinNativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />

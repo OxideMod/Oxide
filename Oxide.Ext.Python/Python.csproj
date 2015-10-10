@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{18D00F0B-8CF3-4002-940A-4A8CA449A352}</ProjectGuid>
+    <ProjectGuid>{B05D4995-6E61-4E82-AC91-5A7B46EC9781}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Ext.Lua</RootNamespace>
-    <AssemblyName>Oxide.Ext.Lua</AssemblyName>
+    <RootNamespace>Oxide.Ext.Python</RootNamespace>
+    <AssemblyName>Oxide.Ext.Python</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -50,26 +50,39 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLua">
-      <HintPath>Dependencies\NLua.dll</HintPath>
+    <Reference Include="IronPython">
+      <HintPath>Dependencies\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules">
+      <HintPath>Dependencies\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>Dependencies\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Core">
+      <HintPath>Dependencies\Microsoft.Scripting.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\LuaDatafile.cs" />
-    <Compile Include="Libraries\LuaGlobal.cs" />
-    <Compile Include="Libraries\LuaUtil.cs" />
-    <Compile Include="LuaExtension.cs" />
-    <Compile Include="Plugins\LuaPlugin.cs" />
-    <Compile Include="Plugins\LuaPluginLoader.cs" />
+    <Compile Include="Libraries\PythonDatafile.cs" />
+    <Compile Include="Libraries\PythonUtil.cs" />
+    <Compile Include="Plugins\PythonPlugin.cs" />
+    <Compile Include="Plugins\PythonPluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PythonExtension.cs" />
+    <Compile Include="PythonLogger.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
+    <ProjectReference Include="..\Oxide.Core\Core.csproj">
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
-      <Name>Oxide.Core</Name>
+      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

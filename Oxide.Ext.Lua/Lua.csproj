@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D138493B-6F2E-4B9F-8F79-17B73422D87F}</ProjectGuid>
+    <ProjectGuid>{18D00F0B-8CF3-4002-940A-4A8CA449A352}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Ext.MySql</RootNamespace>
-    <AssemblyName>Oxide.Ext.MySql</AssemblyName>
+    <RootNamespace>Oxide.Ext.Lua</RootNamespace>
+    <AssemblyName>Oxide.Ext.Lua</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -50,24 +50,26 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data">
-      <HintPath>Dependencies\MySql.Data.dll</HintPath>
+    <Reference Include="NLua">
+      <HintPath>Dependencies\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection.cs" />
-    <Compile Include="Libraries\MySql.cs" />
-    <Compile Include="MySqlExtension.cs" />
+    <Compile Include="Libraries\LuaDatafile.cs" />
+    <Compile Include="Libraries\LuaGlobal.cs" />
+    <Compile Include="Libraries\LuaUtil.cs" />
+    <Compile Include="LuaExtension.cs" />
+    <Compile Include="Plugins\LuaPlugin.cs" />
+    <Compile Include="Plugins\LuaPluginLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sql.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Oxide.Core\Oxide.Core.csproj">
-      <Project>{67F65F5D-A62A-4752-849D-BFF30D828107}</Project>
-      <Name>Oxide.Core</Name>
+    <ProjectReference Include="..\Oxide.Core\Core.csproj">
+      <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
+      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
