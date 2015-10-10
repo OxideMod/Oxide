@@ -41,12 +41,12 @@ namespace ObjectStream.IO
             _run = false;
             try
             {
-                _inStream.Close();
+                _outStream.Close();
             }
-            catch (Exception) {}
+            catch (Exception) { }
             try
             {
-                _outStream.Close();
+                _inStream.Close();
             }
             catch (Exception) { }
         }

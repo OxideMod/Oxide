@@ -233,8 +233,6 @@ namespace Oxide.Ext.JavaScript.Plugins
 
             // Call base
             base.HandleRemovedFromManager(manager);
-
-            Class.FastSetProperty("Plugin", PropertyDescriptor.Undefined);
         }
 
         /// <summary>
