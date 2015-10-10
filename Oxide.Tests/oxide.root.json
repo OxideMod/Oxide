@@ -1,0 +1,16 @@
+{
+    "ExtensionDirectory": ".",
+
+    "PluginDirectory": "plugins",
+    "ConfigDirectory": "config",
+    "LangDirectory": "lang",
+    "DataDirectory": "data",
+    "LogDirectory": "logs",
+
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "server\\{server.identity}\\oxide",
+        "server\\my_server_identity\\oxide"
+    ]
+}

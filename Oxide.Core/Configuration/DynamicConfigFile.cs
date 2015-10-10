@@ -178,12 +178,36 @@ namespace Oxide.Core.Configuration
         /// <summary>
         /// Converts a configuration value to another type
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="destinationType"></param>
+        /// <param name="value">configuration value</param>
+        /// <param name="destinationType">type to convert to</param>
         /// <returns></returns>
         public object ConvertValue(object value, Type destinationType)
         {
-            if (!destinationType.IsGenericType) return Convert.ChangeType(value, destinationType);
+            if (!destinationType.IsGenericType)
+            {
+                if (value == null)
+                {
+                    return destinationType.IsValueType ? Activator.CreateInstance(destinationType) : null;
+                }
+
+                try
+                {
+                    // Try to convert to destinationType is value is Dictionary.
+                    var dictionary = value as Dictionary<string, object>;
+                    if (dictionary != null)
+                    {
+                        var jObject = JObject.FromObject(dictionary);
+                        return jObject.ToObject(destinationType);
+                    }
+
+                    return Convert.ChangeType(value, destinationType);
+                }
+                catch (ArgumentException) {}
+                catch (InvalidCastException) {}
+
+                return destinationType.IsValueType ? Activator.CreateInstance(destinationType) : null;
+            }
+
             if (destinationType.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var valueType = destinationType.GetGenericArguments()[0];
@@ -258,7 +282,7 @@ namespace Oxide.Core.Configuration
             if (!_keyvalues.TryGetValue(path[0], out val))
                 _keyvalues[path[0]] = val = new Dictionary<string, object>();
             for (var i = 1; i < path.Length - 1; i++)
-                val = (((Dictionary<string,object>)val)[path[i]] = new Dictionary<string, object>());
+                val = (((Dictionary<string, object>)val)[path[i]] = new Dictionary<string, object>());
             ((Dictionary<string, object>)val)[path[path.Length - 1]] = value;
         }
 

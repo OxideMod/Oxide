@@ -11,7 +11,7 @@ namespace Oxide.Core
     public sealed class CommandLine
     {
         // The flags and variables of this command line
-        private Dictionary<string, string> variables = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> variables = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the CommandLine class
@@ -26,27 +26,24 @@ namespace Oxide.Core
 
             foreach (string str in Split(cmdline))
             {
-                if (str.Length > 0)
+                if (string.IsNullOrEmpty(str)) continue;
+
+                var val = str;
+                if (str[0] == '-' || str[0] == '+')
                 {
-                    var val = str;
-                    if (str[0] == '-' || str[0] == '+')
-                    {
-                        if (key != string.Empty && !variables.ContainsKey(key)) variables.Add(key, string.Empty);
-                        key = val.Substring(1);
-                    }
-                    else if (key != string.Empty)
-                    {
-                        if (!variables.ContainsKey(key))
-                        {
-                            if (key.Contains("dir")) val = val.Replace('/', '\\');
-                            variables.Add(key, val);
-                        }
-                        key = string.Empty;
-                    }
+                    if (!variables.ContainsKey(key)) variables.Add(key, string.Empty);
+                    key = val.Substring(1);
+                }
+                else
+                {
+                    if (key.Contains("dir")) val = val.Replace('/', '\\');
+
+                    if (!variables.ContainsKey(key))
+                        variables.Add(key, string.Empty);
+                    else
+                        variables[key] = $"{variables[key]} {val}";
                 }
             }
-
-            if (key != string.Empty && !variables.ContainsKey(key)) variables.Add(key, string.Empty);
         }
 
         /// <summary>
