@@ -194,14 +194,28 @@ namespace Oxide.Plugins
                     compilation.Completed((byte[])message.Data);
                     compilations.Remove(message.Id);
                     idleTimer?.Destroy();
-                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, Shutdown);
+                    if (AutoShutdown)
+                    {
+                        Interface.Oxide.NextTick(() =>
+                        {
+                            idleTimer?.Destroy();
+                            if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, Shutdown);
+                        });
+                    }
                     break;
                 case CompilerMessageType.Error:
                     Interface.Oxide.LogError("Compilation error: {0}", message.Data);
                     compilations[message.Id].Completed();
                     compilations.Remove(message.Id);
                     idleTimer?.Destroy();
-                    if (AutoShutdown) idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, Shutdown);
+                    if (AutoShutdown)
+                    {
+                        Interface.Oxide.NextTick(() =>
+                        {
+                            idleTimer?.Destroy();
+                            idleTimer = Interface.Oxide.GetLibrary<Core.Libraries.Timer>().Once(60, Shutdown);
+                        });
+                    }
                     break;
                 case CompilerMessageType.Ready:
                     connection.PushMessage(message);
