@@ -291,13 +291,13 @@ namespace Oxide.Core.Libraries
         /// <param name="userid"></param>
         /// <returns></returns>
         [LibraryFunction("GetUserGroups")]
-        public HashSet<string> GetUserGroups(string userid)
+        public string[] GetUserGroups(string userid)
         {
             // First, get the user data
             var data = GetUserData(userid);
 
             // Return the group
-            return data.Groups;
+            return data.Groups.ToArray();
         }
 
         /// <summary>
@@ -336,6 +336,16 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
+        /// Returns the permissions which are registered
+        /// </summary>
+        /// <returns></returns>
+        [LibraryFunction("GetPermissions")]
+        public string[] GetPermissions()
+        {
+            return new HashSet<string>(permset.Values.SelectMany(v => v)).ToArray();
+        }
+
+        /// <summary>
         /// Set the group to which the specified user belongs
         /// </summary>
         /// <param name="userid"></param>
@@ -363,6 +373,13 @@ namespace Oxide.Core.Libraries
             if (!GroupExists(groupname)) return;
 
             var data = GetUserData(userid);
+            if (groupname.Equals("*"))
+            {
+                if (data.Groups.Count <= 0) return;
+                data.Groups.Clear();
+                SaveUsers();
+                return;
+            }
             if (!data.Groups.Remove(groupname.ToLower())) return;
             SaveUsers();
         }
@@ -390,7 +407,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("GroupExists")]
         public bool GroupExists(string groupname)
         {
-            return !string.IsNullOrEmpty(groupname) && groupdata.ContainsKey(groupname.ToLower());
+            return !string.IsNullOrEmpty(groupname) && (groupname.Equals("*") || groupdata.ContainsKey(groupname.ToLower()));
         }
 
         /// <summary>
@@ -474,6 +491,7 @@ namespace Oxide.Core.Libraries
 
             if (perm.Equals("*"))
             {
+                if (data.Perms.Count <= 0) return;
                 data.Perms.Clear();
                 SaveUsers();
                 return;
@@ -504,6 +522,28 @@ namespace Oxide.Core.Libraries
             GroupData data;
             if (!groupdata.TryGetValue(groupname.ToLower(), out data)) return;
 
+            if (perm.EndsWith("*"))
+            {
+                HashSet<string> perms;
+                if (owner == null)
+                    perms = new HashSet<string>(permset.Values.SelectMany(v => v));
+                else if (!permset.TryGetValue(owner, out perms))
+                    return;
+                if (perm.Equals("*"))
+                {
+                    if (!perms.Aggregate(false, (c, s) => c | data.Perms.Add(s)))
+                        return;
+                }
+                else
+                {
+                    perm = perm.TrimEnd('*');
+                    if (!perms.Where(s => s.StartsWith(perm)).Aggregate(false, (c, s) => c | data.Perms.Add(s)))
+                        return;
+                }
+                SaveGroups();
+                return;
+            }
+
             // Add the perm and save
             if (!data.Perms.Add(perm.ToLower())) return;
             SaveGroups();
@@ -522,6 +562,14 @@ namespace Oxide.Core.Libraries
             // Get the group data
             GroupData data;
             if (!groupdata.TryGetValue(groupname.ToLower(), out data)) return;
+
+            if (perm.Equals("*"))
+            {
+                if (data.Perms.Count <= 0) return;
+                data.Perms.Clear();
+                SaveGroups();
+                return;
+            }
 
             // Remove the perm and save
             if (!data.Perms.Remove(perm.ToLower())) return;
@@ -613,6 +661,20 @@ namespace Oxide.Core.Libraries
             data.Rank = rank;
             SaveGroups();
             return true;
+        }
+
+        /// <summary>
+        /// Gets the parent of the specified group
+        /// </summary>
+        /// <param name="groupname"></param>
+        [LibraryFunction("GetGroupParent")]
+        public string GetGroupParent(string groupname)
+        {
+            if (!GroupExists(groupname)) return string.Empty;
+            groupname = groupname.ToLower();
+
+            GroupData data;
+            return !groupdata.TryGetValue(groupname, out data) ? string.Empty : data.ParentGroup;
         }
 
         /// <summary>
