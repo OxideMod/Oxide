@@ -80,6 +80,8 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("global.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
             cmdlib.AddConsoleCommand("global.revoke", this, "cmdRevoke");
+            cmdlib.AddConsoleCommand("oxide.show", this, "cmdShow");
+            cmdlib.AddConsoleCommand("global.show", this, "cmdShow");
 
             if (permission.IsLoaded)
             {
@@ -338,7 +340,7 @@ namespace Oxide.Game.Rust
             if (!arg.HasArgs(2))
             {
                 var reply = "Syntax: group <add|set> <name> [title] [rank]\n";
-                reply += "Syntax: group <remove|show> <name>\n";
+                reply += "Syntax: group <remove> <name>\n";
                 reply += "Syntax: group <parent> <name> <parentName>";
                 arg.ReplyWith(reply);
                 return;
@@ -395,17 +397,6 @@ namespace Oxide.Game.Rust
                     arg.ReplyWith("Group '" + name + "' changed");
                 else
                     arg.ReplyWith("Group '" + name + "' failed to change");
-            }
-            else if (mode.Equals("show"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    arg.ReplyWith("Group '" + name + "' doesn't exist");
-                    return;
-                }
-                var result = "Group '" + name + "' permissions:\n";
-                result += string.Join(",", permission.GetGroupPermissions(name));
-                arg.ReplyWith(result);
             }
         }
 
@@ -573,6 +564,73 @@ namespace Oxide.Game.Rust
                 }
                 permission.RevokeUserPermission(userId, perm);
                 arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "show" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("cmdShow")]
+        private void cmdShow(ConsoleSystem.Arg arg)
+        {
+            if (!PermissionsLoaded(arg)) return;
+
+            if (!IsAdmin(arg)) return;
+
+            if (!arg.HasArgs())
+            {
+                var reply = "Syntax: show <group|user> <name>\n";
+                reply += "Syntax: show perms";
+                arg.ReplyWith(reply);
+                return;
+            }
+
+            var mode = arg.GetString(0);
+            var name = arg.GetString(1);
+
+            if (mode.Equals("perms"))
+            {
+                var result = "Permissions:\n";
+                result += string.Join(", ", permission.GetPermissions());
+                arg.ReplyWith(result);
+            }
+            else if (mode.Equals("user"))
+            {
+                var player = FindPlayer(name);
+                if (player == null && !permission.UserExists(name))
+                {
+                    arg.ReplyWith("User '" + name + "' not found");
+                    return;
+                }
+                var userId = name;
+                if (player != null)
+                {
+                    userId = player.userID.ToString();
+                    name = player.displayName;
+                    permission.GetUserData(userId).LastSeenNickname = name;
+                }
+                var result = "User '" + name + "' permissions:\n";
+                result += string.Join(", ", permission.GetUserPermissions(userId));
+                arg.ReplyWith(result);
+            }
+            else if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
+                var result = "Group '" + name + "' permissions:\n";
+                result += string.Join(", ", permission.GetGroupPermissions(name));
+                var parent = permission.GetGroupParent(name);
+                while (permission.GroupExists(parent))
+                {
+                    result = "\nParent group '" + parent + "' permissions:\n";
+                    result += string.Join(", ", permission.GetGroupPermissions(parent));
+                    parent = permission.GetGroupParent(name);
+                }
+                arg.ReplyWith(result);
             }
         }
 
