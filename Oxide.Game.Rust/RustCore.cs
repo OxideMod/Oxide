@@ -38,6 +38,8 @@ namespace Oxide.Game.Rust
         // Cache the serverInput field info
         private readonly FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        private readonly Dictionary<BasePlayer, InputState> playerInputState = new Dictionary<BasePlayer, InputState>();
+
         // Track if a BasePlayer.OnAttacked call is in progress
         private bool isPlayerTakingDamage;
 
@@ -843,12 +845,17 @@ namespace Oxide.Game.Rust
 
             // Do permission stuff
             var authLevel = player.net.connection.authLevel;
-            if (authLevel > DefaultGroups.Length || !permission.IsLoaded) return;
-            var userId = player.userID.ToString();
-            var userData = permission.GetUserData(userId);
-            userData.LastSeenNickname = player.displayName;
-            if (userData.Groups.Count > 0) return;
-            permission.AddUserGroup(userId, DefaultGroups[authLevel]);
+            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
+            {
+                var userId = player.userID.ToString();
+                var userData = permission.GetUserData(userId);
+                userData.LastSeenNickname = player.displayName;
+                if (userData.Groups.Count == 0)
+                    permission.AddUserGroup(userId, DefaultGroups[authLevel]);
+            }
+
+            // Cache serverInput for player so that reflection only needs to be used once
+            playerInputState[player] = (InputState)serverInputField.GetValue(player);
         }
 
         /// <summary>
@@ -860,6 +867,7 @@ namespace Oxide.Game.Rust
         {
             // Let covalence know
             Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+            playerInputState.Remove(player);
         }
 
         /// <summary>
@@ -871,7 +879,10 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerTick")]
         private object OnPlayerTick(BasePlayer player, PlayerTick msg)
         {
-            return Interface.CallHook("OnPlayerInput", player, serverInputField.GetValue(player));
+            InputState input;
+            if (playerInputState.TryGetValue(player, out input))
+                return Interface.CallHook("OnPlayerInput", player, input);
+            return null;
         }
 
         /// <summary>

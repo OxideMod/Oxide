@@ -120,6 +120,7 @@ namespace Oxide.Core.Libraries
         private float lastUpdateAt;
 
         private readonly List<TimerInstance> timers = new List<TimerInstance>();
+        private readonly List<TimerInstance> expiredTimers = new List<TimerInstance>();
 
         /// <summary>
         /// Updates all timers - called every server frame
@@ -141,21 +142,21 @@ namespace Oxide.Core.Libraries
             lastUpdateAt = now;
 
             if (timers.Count < 1) return;
+            
+            for (var i = timers.Count - 1; i >= 0; i--)
+                if (timers[i].Destroyed) timers.RemoveAt(i);
 
-            timers.RemoveAll(t => t == null || t.Destroyed);
-
-            var expired = new List<TimerInstance>();
-            var count = timers.Count();
+            var count = timers.Count;
             for (var i = 0; i < count; i++)
             {
                 var timer = timers[i];
                 if (timer != null && timer.nextrep > now) break;
-                expired.Add(timer);
+                expiredTimers.Add(timer);
             }
-            if (expired.Count > 0)
+            if (expiredTimers.Count > 0)
             {
-                timers.RemoveRange(0, expired.Count);
-                foreach (var timer in expired)
+                timers.RemoveRange(0, expiredTimers.Count);
+                foreach (var timer in expiredTimers)
                 {
                     if (timer == null)
                     {
@@ -166,6 +167,7 @@ namespace Oxide.Core.Libraries
                     // Add the timer back to the queue if it needs to fire again
                     if (!timer.Destroyed) InsertTimer(timer);
                 }
+                expiredTimers.Clear();
             }
         }
 
