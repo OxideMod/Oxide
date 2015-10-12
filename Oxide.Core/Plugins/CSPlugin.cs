@@ -85,7 +85,7 @@ namespace Oxide.Core.Plugins
             try
             {
                 // Let the plugin know that it's loading
-                OnCallHook("Init", new object[0]);
+                OnCallHook("Init", null);
             }
             catch (Exception ex)
             {

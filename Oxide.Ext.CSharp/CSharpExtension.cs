@@ -75,21 +75,15 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Called by a CompilablePlugin that wants to be compiled
-        /// </summary>
-        /// <param name="plugin"></param>
-        public void CompilationRequested(CompilablePlugin plugin)
-        {
-            loader.CompilationRequested(plugin);
-        }
-
-        /// <summary>
         /// Called by engine every server frame
         /// </summary>
         private void OnFrame(float delta)
         {
-            foreach (CSharpPlugin plugin in loader.LoadedPlugins.Values)
-                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", delta);
+            foreach (var kv in loader.LoadedPlugins)
+            {
+                var plugin = kv.Value as CSharpPlugin;
+                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", null);
+            }
         }
     }
 }
