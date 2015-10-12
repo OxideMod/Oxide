@@ -57,6 +57,11 @@ namespace Oxide.Core
         {
             var dfs = Interface.Oxide.DataFileSystem;
             if (!dfs.ExistsDatafile(name)) return;
+            if (ProtoStorage.Exists(name))
+            {
+                Interface.Oxide.LogWarning("Failed to import JSON file: {0} already exists.", name);
+                return;
+            }
             try
             {
                 var data = dfs.ReadObject<T>(name);
