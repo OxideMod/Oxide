@@ -79,10 +79,11 @@ namespace Oxide.Plugins
         /// </summary>
         private void OnFrame(float delta)
         {
+            var args = new object[] { delta };
             foreach (var kv in loader.LoadedPlugins)
             {
                 var plugin = kv.Value as CSharpPlugin;
-                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", null);
+                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", args);
             }
         }
     }
