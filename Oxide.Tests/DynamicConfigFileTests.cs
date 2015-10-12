@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Oxide.Core;
 using Oxide.Core.Configuration;
@@ -22,6 +23,91 @@ namespace Oxide.Tests
 
             //Then
             Assert.AreEqual(value, default(int));
+        }
+
+        [TestMethod]
+        public void WhenYouGetNotExistingRefTypeSetting_ThenNullShouldBeReturned()
+        {
+            //Given
+            string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            File.WriteAllText(filename, "{}");
+            var configFile = ConfigFile.Load<DynamicConfigFile>(filename);
+
+            //When
+            var value = configFile.Get<StringBuilder>("NotExistingSettingKey");
+
+            //Then
+            Assert.IsNull(value);
+        }
+
+        public class ConfigTestObject
+        {
+            public int a { get; set; }
+        }
+
+        [TestMethod]
+        public void WhenYouGetExistingValueSettingWithoutAnyFieldSpecified_ThenDefaultObjectShouldBeReturned()
+        {
+            //Given
+            string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            File.WriteAllText(filename, "{ \"a\": { \"a\":\"12\"} }");
+            var configFile = ConfigFile.Load<DynamicConfigFile>(filename);
+            var expectedValue = new ConfigTestObject() { a = 12 };
+
+            //When
+            var value = configFile.Get<ConfigTestObject>("a");
+
+            //Then
+            Assert.IsInstanceOfType(value, typeof(ConfigTestObject));
+            Assert.AreEqual(value.a, 12);
+        }
+
+        [TestMethod]
+        public void WhenYouGetSettingValueOfType_ThenInvalidCastExceptionShouldBeRaised()
+        {
+            //Given
+            string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            File.WriteAllText(filename, "{ \"a\": { \"bc\":\"12\"} }");
+            var configFile = ConfigFile.Load<DynamicConfigFile>(filename);
+
+            //When
+            var value = configFile.Get<ConfigTestObject>("a");
+
+            //Then
+            Assert.IsInstanceOfType(value, typeof(ConfigTestObject));
+            Assert.AreNotEqual(value.a, 12);
+        }
+
+        [TestMethod]
+        public void WhenYouGetExistingValueSettingThatIsConvertibleToTargetType_ThenExpectedValueOfCorrectTypeShouldBeReturned()
+        {
+            //Given
+            string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            File.WriteAllText(filename, "{ \"a\":\"12\" }");
+            var configFile = ConfigFile.Load<DynamicConfigFile>(filename);
+
+            //When
+            var value = configFile.Get<float>("a");
+
+            //Then
+            Assert.AreEqual(value, 12.0f);
+        }
+
+        [TestMethod]
+        public void WhenYouGetExistingSettingThatIsNotConvertibleToTargetType_ThenDefaultValueShouldBeReturned()
+        {
+            //Given
+            string filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            File.WriteAllText(filename, "{ \"a\":\"12\", \"b\" : { } }");
+            var configFile = ConfigFile.Load<DynamicConfigFile>(filename);
+
+            //When
+            var valTypeSettingValue = configFile.Get<StringBuilder>("a");
+            var refTypeSettingValue = configFile.Get<int>("b");
+
+            //Then
+            Assert.AreEqual(valTypeSettingValue, null);
+            Assert.AreEqual(refTypeSettingValue, default(int));
         }
 
         [TestMethod]

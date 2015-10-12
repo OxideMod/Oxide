@@ -187,9 +187,35 @@ namespace Oxide.Core.Configuration
         public object ConvertValue(object value, Type destinationType)
         {
             if (!destinationType.IsGenericType)
-                return destinationType.IsValueType 
+            {
+                if (value == null)
+                {
+                    return destinationType.IsValueType
+                        ? Activator.CreateInstance(destinationType)
+                        : null;
+                }
+
+                try
+                {
+                    // Try to convert to destinationType is value is Dictionary.
+                    var dictionary = value as Dictionary<string, object>;
+                if (dictionary != null)
+                {
+                    var jObject = JObject.FromObject(dictionary);
+                    return jObject.ToObject(destinationType);
+                }
+
+                    return Convert.ChangeType(value, destinationType);
+                }
+                catch (ArgumentException)
+                { }
+                catch (InvalidCastException)
+                { }
+
+                return destinationType.IsValueType
                     ? Activator.CreateInstance(destinationType)
-                    : Convert.ChangeType(value, destinationType);
+                    : null;
+            }
 
             if (destinationType.GetGenericTypeDefinition() == typeof(List<>))
             {
@@ -276,7 +302,7 @@ namespace Oxide.Core.Configuration
             if (!_keyvalues.TryGetValue(path[0], out val))
                 _keyvalues[path[0]] = val = new Dictionary<string, object>();
             for (var i = 1; i < path.Length - 1; i++)
-                val = (((Dictionary<string,object>)val)[path[i]] = new Dictionary<string, object>());
+                val = (((Dictionary<string, object>)val)[path[i]] = new Dictionary<string, object>());
             ((Dictionary<string, object>)val)[path[path.Length - 1]] = value;
         }
 
@@ -432,7 +458,7 @@ namespace Oxide.Core.Configuration
             if (value is Dictionary<string, object>)
             {
                 // Get the dictionary to write
-                var dict = (Dictionary<string, object>) value;
+                var dict = (Dictionary<string, object>)value;
 
                 // Start object
                 writer.WriteStartObject();
@@ -450,7 +476,7 @@ namespace Oxide.Core.Configuration
             else if (value is List<object>)
             {
                 // Get the list to write
-                var list = (List<object>) value;
+                var list = (List<object>)value;
 
                 // Start array
                 writer.WriteStartArray();
