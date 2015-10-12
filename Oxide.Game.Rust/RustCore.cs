@@ -614,6 +614,8 @@ namespace Oxide.Game.Rust
                 }
                 var result = "User '" + name + "' permissions:\n";
                 result += string.Join(", ", permission.GetUserPermissions(userId));
+                result += "\nUser '" + name + "' groups:\n";
+                result += string.Join(", ", permission.GetUserGroups(userId));
                 arg.ReplyWith(result);
             }
             else if (mode.Equals("group"))
