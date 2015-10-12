@@ -10,7 +10,7 @@ namespace Oxide.Core
     {
         public static IEnumerable<string> GetFiles(string sub_directory)
         {
-            var directory = Path.Combine(Interface.Oxide.DataDirectory, sub_directory.Replace("..", ""));
+            var directory = GetFileDataPath(sub_directory.Replace("..", ""));
             if (!Directory.Exists(directory)) yield break;
             foreach (var file in Directory.GetFiles(directory, "*.data"))
                 yield return Utility.GetFileNameWithoutExtension(file);
@@ -18,8 +18,8 @@ namespace Oxide.Core
 
         public static T Load<T>(params string[] sub_paths)
         {
-            var name = string.Join(Path.PathSeparator.ToString(), sub_paths).Replace("..", "");
-            var path = Path.Combine(Interface.Oxide.DataDirectory, name + ".data");
+            var name = GetFileName(sub_paths);
+            var path = GetFileDataPath(name);
             try
             {
                 if (File.Exists(path))
@@ -39,8 +39,8 @@ namespace Oxide.Core
 
         public static void Save<T>(T data, params string[] sub_paths)
         {
-            var name = string.Join(Path.PathSeparator.ToString(), sub_paths).Replace("..", "");
-            var path = Path.Combine(Interface.Oxide.DataDirectory, name + ".data");
+            var name = GetFileName(sub_paths);
+            var path = GetFileDataPath(name);
             var directory = Path.GetDirectoryName(path);
             try
             {
@@ -52,6 +52,21 @@ namespace Oxide.Core
             {
                 Interface.Oxide.LogException("Failed to save protobuf data to " + name, ex);
             }
+        }
+
+        public static bool Exists(params string[] sub_paths)
+        {
+            return File.Exists(GetFileDataPath(GetFileName(sub_paths)));
+        }
+
+        public static string GetFileName(params string[] sub_paths)
+        {
+            return string.Join(Path.PathSeparator.ToString(), sub_paths).Replace("..", "") + ".data";
+        }
+
+        public static string GetFileDataPath(string name)
+        {
+            return Path.Combine(Interface.Oxide.DataDirectory, name);
         }
     }
 }
