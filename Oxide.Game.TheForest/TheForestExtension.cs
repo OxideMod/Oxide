@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using UnityEngine;
 
 namespace Oxide.Game.TheForest
 {
@@ -156,7 +156,6 @@ namespace Oxide.Game.TheForest
             _logWriter = TextWriter.Synchronized(logStream);
 
             Application.logMessageReceivedThreaded += HandleLog;
-
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
             Interface.Oxide.ServerConsole.Title = () =>
@@ -201,7 +200,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.24b"; // TODO: Grab version/protocol
+                var gameVersion = "0.25b"; // TODO: Grab version/protocol
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
