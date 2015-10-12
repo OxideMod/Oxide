@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
 
+using BrilliantSkies.FromTheDepths.Game.UserInterfaces;
+using BrilliantSkies.FromTheDepths.Multiplayer;
+using BrilliantSkies.FromTheDepths.Planets;
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using UnityEngine;
 
 namespace Oxide.Game.FromTheDepths
 {
@@ -33,7 +36,7 @@ namespace Oxide.Game.FromTheDepths
 
         private static readonly string[] Filter =
         {
-            ""
+
         };
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace Oxide.Game.FromTheDepths
             Manager.RegisterPluginLoader(new FromTheDepthsPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("FromTheDepths", new Libraries.FromTheDepths());
+            Manager.RegisterLibrary("FTD", new Libraries.FromTheDepths());
         }
 
         /// <summary>
@@ -73,9 +76,82 @@ namespace Oxide.Game.FromTheDepths
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+
+            // Disable splash screens
+            Application.LoadLevel("Main menu");
+
+            // Disable client audio
+            StaticOptionsManager.musicVolume = 0f;
+            StaticOptionsManager.soundVolume = 0f;
+
+            // Set server options
+            StaticOptionsManager.gameName = "The Wulf Den";
+            StaticOptionsManager.gameComments = "Powered by Oxide";
+            StaticOptionsManager.gamePassword = "oxide";
+            StaticOptionsManager.playerLimit = 10;
+
+            // Start server
+            HostMenuGUI.Instance.HostGame();
+            InstanceSpecification selectedMapInstance = Planet.i.MultiplayerMaps.Instances[1];
+            HostMenuGUI.Instance.LaunchServer();
+            GameLobbyGUI.Instance.StartGame();
+
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            // TODO: Add status information
+
+            Interface.Oxide.ServerConsole.Title = () =>
+            {
+                if (MultiplayerManager.Instance == null) return string.Empty;
+                var players = MultiplayerManager.Instance.Players.PlayerCount;
+                var hostname = MultiplayerManager.Instance.GameDetails.Name;
+                return string.Concat(players, " | ", hostname);
+            };
+
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                if (MultiplayerManager.Instance == null) return string.Empty;
+                var hostname = MultiplayerManager.Instance.GameDetails.Name;
+                return string.Concat(" ", hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                if (MultiplayerManager.Instance == null) return string.Empty;
+                var players = MultiplayerManager.Instance.Players.PlayerCount;
+                var playerLimit = MultiplayerManager.Instance.GameDetails.PlayerLimit;
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
+            /*Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
+                var inbound = Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
+                var outbound = Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
+                return string.Concat(inbound, "/s in, ", outbound, "/s out");
+            };*/
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                if (GameTimer.Instance == null) return string.Empty;
+                TimeSpan t = TimeSpan.FromSeconds(GameTimer.Instance.GameTime);
+                DateTime time = DateTime.Today.Add(t);
+                var gameTime = time.ToString("h:mm tt").ToLower();
+                var map = string.Empty; // TODO: MPGameData.MapName
+                return string.Concat(" ", gameTime, ", ", map);
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = StaticOptionsManager.version;
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for Version ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)
@@ -86,6 +162,7 @@ namespace Oxide.Game.FromTheDepths
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
