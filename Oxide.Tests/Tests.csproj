@@ -56,7 +56,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLua">
-      <HintPath>..\Oxide.Ext.Lua\Dependencies\NLua.dll</HintPath>
+      <HintPath>..\Extensions\Oxide.Ext.Lua\Dependencies\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -86,7 +86,7 @@
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Oxide.Ext.Lua\Lua.csproj">
+    <ProjectReference Include="..\Extensions\Oxide.Ext.Lua\Lua.csproj">
       <Project>{18d00f0b-8cf3-4002-940a-4a8ca449a352}</Project>
       <Name>Lua</Name>
     </ProjectReference>

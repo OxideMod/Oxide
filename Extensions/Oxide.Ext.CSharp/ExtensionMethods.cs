@@ -15,14 +15,15 @@ namespace Oxide.Plugins
         /// <summary>
         /// Converts a string to title case
         /// </summary>
-        public static string Titleize(this string text)
-        {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text);
-        }
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string Titleize(this string text) => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text);
 
         /// <summary>
         /// Returns the last portion of a path separated by slashes
         /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string Basename(this string text)
         {
             var parts = text.Split('/', '\\');
@@ -49,33 +50,37 @@ namespace Oxide.Plugins
         /// <summary>
         /// Checks if a string array contains a specific string
         /// </summary>
-        public static bool Contains(this string[] array, string value)
-        {
-            return Array.Exists(array, str => str == value);
-        }
+        /// <param name="array"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool Contains(this string[] array, string value) => Array.Exists(array, str => str == value);
 
         /// <summary>
         /// Returns a random value from an array of objects
         /// </summary>
-        public static object Sample(this object[] array)
-        {
-            return array[Random.Range(0, array.Length)];
-        }
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static object Sample(this object[] array) => array[Random.Range(0, array.Length)];
 
         /// <summary>
         /// Returns a random value from an array of strings
         /// </summary>
-        public static string Sample(this string[] array)
-        {
-            return array[Random.Range(0, array.Length)];
-        }
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static string Sample(this string[] array) => array[Random.Range(0, array.Length)];
 
         /// <summary>
         /// Returns a random value from an array of integers
         /// </summary>
-        public static int Sample(this int[] array)
-        {
-            return array[Random.Range(0, array.Length)];
-        }
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static int Sample(this int[] array) => array[Random.Range(0, array.Length)];
+
+        /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string QuoteSafe(this string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
     }
 }
