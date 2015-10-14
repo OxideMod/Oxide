@@ -17,9 +17,9 @@ git config --global user.name "Travis" || die_with "Failed to configure git user
 
 echo "Cloning Snapshots repo using token"
 GIT_REPO="https://$GITHUB_TOKEN@github.com/$ORG_NAME/Snapshots.git"
-git clone --depth 1 $GIT_REPO $TRAVIS_BUILD_DIR/Snapshots >/dev/null || die_with "Failed to clone Snapshots repository!"
-cd $TRAVIS_BUILD_DIR/Snapshots || die_with "Failed to change to Snapshots directory!"
-​
+git clone --depth 1 $GIT_REPO $HOME/Snapshots >/dev/null || die_with "Failed to clone Snapshots repository!"
+cd $HOME/Snapshots || die_with "Failed to change to Snapshots directory!"
+
 ATTEMPT=0
 until [ $ATTEMPT -ge 5 ]; do
     echo "Fetching changes from Snapshots repository"
@@ -27,12 +27,11 @@ until [ $ATTEMPT -ge 5 ]; do
     git reset --hard origin/master
 
     echo "Bundling and compressing file(s) to Snapshots"
-    for d in Bundles/*; do
+    for d in $TRAVIS_BUILD_DIR/Bundles/*; do
         GAME="${d##*/}"
-            cp -vf $TRAVIS_BUILD_DIR/$REPO_NAME/bin/Release/$REPO_NAME.exe . || die_with "Failed to copy file(s) to Snapshots!"
-
-        cd $TRAVIS_BUILD_DIR/Bundles/$GAME && zip -FS -vr9 $REPO_NAME-$GAME.zip . || die_with "Failed to create game bundles!"
+        cd $TRAVIS_BUILD_DIR/Bundles/$GAME && zip -FS -vr9 $HOME/Snapshots/$REPO_NAME-$GAME.zip . || die_with "Failed to create game bundles!"
     done
+    cd $HOME/Snapshots || die_with "Failed to change to Snapshots directory!"
 
     echo "Adding and committing changes"
     git add . || die_with "Failed to add files for commit!"
