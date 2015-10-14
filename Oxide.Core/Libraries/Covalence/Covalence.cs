@@ -93,7 +93,7 @@ namespace Oxide.Core.Libraries.Covalence
         public Covalence()
         {
             // Get logger
-            logger = Interface.GetMod().RootLogger;
+            logger = Interface.Oxide.RootLogger;
         }
 
         /// <summary>

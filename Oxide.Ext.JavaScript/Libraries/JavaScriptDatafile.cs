@@ -46,7 +46,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         public ObjectInstance GetData(string name)
         {
             // Get the data file
-            DynamicConfigFile datafile = Interface.GetMod().DataFileSystem.GetDatafile(name);
+            DynamicConfigFile datafile = Interface.Oxide.DataFileSystem.GetDatafile(name);
             if (datafile == null) return null;
 
             // Check if it already exists
@@ -69,7 +69,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         public void SaveData(string name)
         {
             // Get the data file
-            DynamicConfigFile datafile = Interface.GetMod().DataFileSystem.GetDatafile(name);
+            DynamicConfigFile datafile = Interface.Oxide.DataFileSystem.GetDatafile(name);
             if (datafile == null) return;
 
             // Get the table
@@ -78,7 +78,7 @@ namespace Oxide.Ext.JavaScript.Libraries
 
             // Copy and save
             Utility.SetConfigFromObject(datafile, obj);
-            Interface.GetMod().DataFileSystem.SaveDatafile(name);
+            Interface.Oxide.DataFileSystem.SaveDatafile(name);
         }
     }
 }

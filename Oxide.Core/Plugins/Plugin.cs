@@ -366,7 +366,7 @@ namespace Oxide.Core.Plugins
 
         private void RegisterWithCovalence()
         {
-            var covalence = Interface.GetMod().GetLibrary<Covalence>();
+            var covalence = Interface.Oxide.GetLibrary<Covalence>();
             foreach (var pair in commandInfos)
             {
                 covalence.RegisterCommand(pair.Key, CovalenceCommandCallback);
@@ -403,7 +403,7 @@ namespace Oxide.Core.Plugins
 
         private void UnregisterWithCovalence()
         {
-            var covalence = Interface.GetMod().GetLibrary<Covalence>();
+            var covalence = Interface.Oxide.GetLibrary<Covalence>();
             foreach (var pair in commandInfos)
             {
                 covalence.UnregisterCommand(pair.Key);

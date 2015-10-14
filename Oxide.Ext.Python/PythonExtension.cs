@@ -100,7 +100,7 @@ namespace Oxide.Ext.Python
             PythonEngine = IronPython.Hosting.Python.CreateEngine();
 
             var paths = PythonEngine.GetSearchPaths();
-            paths.Add(Path.Combine(Interface.GetMod().InstanceDirectory, "Lib"));
+            paths.Add(Path.Combine(Interface.Oxide.InstanceDirectory, "Lib"));
             PythonEngine.SetSearchPaths(paths);
 
             PythonEngine.GetBuiltinModule().SetVariable("__import__", new ImportDelegate(DoImport));

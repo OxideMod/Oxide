@@ -163,7 +163,7 @@ namespace Oxide.Ext.SQLite.Libraries
 
         public SQLite()
         {
-            _dataDirectory = Interface.GetMod().DataDirectory;
+            _dataDirectory = Interface.Oxide.DataDirectory;
             new Thread(Worker) { IsBackground = true }.Start();
         }
 

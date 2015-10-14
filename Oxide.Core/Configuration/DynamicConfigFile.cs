@@ -28,7 +28,7 @@ namespace Oxide.Core.Configuration
             _keyvalues = new Dictionary<string, object>();
             _settings = new JsonSerializerSettings();
             _settings.Converters.Add(new KeyValuesConverter());
-            _chroot = Interface.GetMod().InstanceDirectory;
+            _chroot = Interface.Oxide.InstanceDirectory;
         }
 
         /// <summary>

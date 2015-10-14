@@ -22,8 +22,8 @@ namespace Oxide.Plugins
         {
             base.SetPluginInfo(name, path);
 
-            cmd = Interface.GetMod().GetLibrary<Command>("Command");
-            permission = Interface.GetMod().GetLibrary<Permission>("Permission");
+            cmd = Interface.Oxide.GetLibrary<Command>("Command");
+            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
         }
 
         public override void HandleAddedToManager(PluginManager manager)

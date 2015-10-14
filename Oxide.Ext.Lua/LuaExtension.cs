@@ -379,7 +379,7 @@ end
             LuaTable sftbl = tbl["_sftbl"] as LuaTable;
             if (sftbl == null)
             {
-                Interface.GetMod().RootLogger.Write(LogType.Warning, "Tried to access _sftbl on type table when reading but it doesn't exist!");
+                Interface.Oxide.RootLogger.Write(LogType.Warning, "Tried to access _sftbl on type table when reading but it doesn't exist!");
                 return null;
             }
             object prop = sftbl[keystr];
@@ -473,7 +473,7 @@ end
         /// <param name="path"></param>
         public void LoadLibrary(Library library, string path)
         {
-            //Interface.GetMod().RootLogger.Write(LogType.Debug, "Loading library '{0}' into Lua... (path is '{1}')", library.GetType().Name, path);
+            //Interface.Oxide.RootLogger.Write(LogType.Debug, "Loading library '{0}' into Lua... (path is '{1}')", library.GetType().Name, path);
 
             // Create the library table if it doesn't exist
             LuaTable libraryTable = LuaEnvironment[path] as LuaTable;
@@ -481,11 +481,11 @@ end
             {
                 LuaEnvironment.NewTable(path);
                 libraryTable = LuaEnvironment[path] as LuaTable;
-                //Interface.GetMod().RootLogger.Write(LogType.Debug, "Library table not found, creating one... {0}", libraryTable);
+                //Interface.Oxide.RootLogger.Write(LogType.Debug, "Library table not found, creating one... {0}", libraryTable);
             }
             else
             {
-                //Interface.GetMod().RootLogger.Write(LogType.Debug, "Library table found, using it... {0}", libraryTable);
+                //Interface.Oxide.RootLogger.Write(LogType.Debug, "Library table found, using it... {0}", libraryTable);
             }
 
             // Bind all methods
@@ -501,7 +501,7 @@ end
                 // Create properties table
                 LuaEnvironment.NewTable("tmp");
                 LuaTable propertiesTable = LuaEnvironment["tmp"] as LuaTable;
-                //Interface.GetMod().RootLogger.Write(LogType.Debug, "Made properties table {0}", propertiesTable);
+                //Interface.Oxide.RootLogger.Write(LogType.Debug, "Made properties table {0}", propertiesTable);
                 libraryTable["_properties"] = propertiesTable;
                 libraryTable["_object"] = library; // NOTE: Is this a security risk?
                 LuaEnvironment["tmp"] = null;
@@ -514,7 +514,7 @@ end
                 }
 
                 // Bind the metatable
-                //Interface.GetMod().RootLogger.Write(LogType.Debug, "setmetatable {0}", libraryMetaTable);
+                //Interface.Oxide.RootLogger.Write(LogType.Debug, "setmetatable {0}", libraryMetaTable);
                 (LuaEnvironment["setmetatable"] as LuaFunction).Call(libraryTable, libraryMetaTable);
             }
         }

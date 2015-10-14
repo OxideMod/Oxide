@@ -20,7 +20,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         [LibraryFunction("EnqueueGetHook")]
         public void EnqueueGet(string url, string callback, Plugin owner, Dictionary<string, string> headers = null)
         {
-            Interface.GetMod().GetLibrary<WebRequests>("WebRequests").EnqueueGet(url, (a,b) =>
+            Interface.Oxide.GetLibrary<WebRequests>("WebRequests").EnqueueGet(url, (a,b) =>
             {
                 owner.CallHook(callback, a, b);
             }, owner, headers);
@@ -37,7 +37,7 @@ namespace Oxide.Ext.JavaScript.Libraries
         [LibraryFunction("EnqueuePostHook")]
         public void EnqueuePost(string url, string postdata, string callback, Plugin owner, Dictionary<string, string> headers = null)
         {
-            Interface.GetMod().GetLibrary<WebRequests>("WebRequests").EnqueuePost(url, postdata, (a, b) =>
+            Interface.Oxide.GetLibrary<WebRequests>("WebRequests").EnqueuePost(url, postdata, (a, b) =>
             {
                 owner.CallHook(callback, a, b);
             }, owner, headers);

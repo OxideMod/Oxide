@@ -52,7 +52,7 @@ namespace Oxide.Ext.Unity.Plugins
         {
             // Create our logger and add it to the compound logger
             logger = new UnityLogger();
-            Interface.GetMod().RootLogger.AddLogger(logger);
+            Interface.Oxide.RootLogger.AddLogger(logger);
         }
     }
 }

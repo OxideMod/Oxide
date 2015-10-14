@@ -27,7 +27,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         internal ReignOfKingsPlayerManager()
         {
             // Load player data
-            playerData = Interface.GetMod().DataFileSystem.ReadObject<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            playerData = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
             players = new Dictionary<string, ReignOfKingsPlayer>();
             foreach (var pair in playerData)
             {

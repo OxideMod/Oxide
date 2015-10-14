@@ -45,7 +45,7 @@ namespace Oxide.Ext.Lua.Libraries
         public LuaTable GetDataTable(string name)
         {
             // Get the data file
-            DynamicConfigFile datafile = Interface.GetMod().DataFileSystem.GetDatafile(name);
+            DynamicConfigFile datafile = Interface.Oxide.DataFileSystem.GetDatafile(name);
             if (datafile == null) return null;
 
             // Check if it already exists
@@ -68,7 +68,7 @@ namespace Oxide.Ext.Lua.Libraries
         public void SaveDataTable(string name)
         {
             // Get the data file
-            DynamicConfigFile datafile = Interface.GetMod().DataFileSystem.GetDatafile(name);
+            DynamicConfigFile datafile = Interface.Oxide.DataFileSystem.GetDatafile(name);
             if (datafile == null) return;
 
             // Get the table
@@ -77,7 +77,7 @@ namespace Oxide.Ext.Lua.Libraries
 
             // Copy and save
             Utility.SetConfigFromTable(datafile, table);
-            Interface.GetMod().DataFileSystem.SaveDatafile(name);
+            Interface.Oxide.DataFileSystem.SaveDatafile(name);
         }
     }
 }

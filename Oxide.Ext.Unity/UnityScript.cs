@@ -25,7 +25,7 @@ namespace Oxide.Ext.Unity
 
         void Awake()
         {
-            oxideMod = Interface.GetMod();
+            oxideMod = Interface.Oxide;
 
             var event_info = typeof(Application).GetEvent("logMessageReceived");
             if (event_info == null)
