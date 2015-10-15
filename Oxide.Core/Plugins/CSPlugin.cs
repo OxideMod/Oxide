@@ -136,13 +136,19 @@ namespace Oxide.Core.Plugins
                     if (hook_args.Length > args_received)
                     {
                         // Create additional parameters for arguments excluded in this hook call
-                        for (var i = args_received; i < hook_args.Length; i++)
+                        for (var n = args_received; n < hook_args.Length; n++)
                         {
-                            var parameter = parameters[i];
+                            var parameter = parameters[n];
                             // Use the default value if one is provided by the method definition or the argument is a value type
-                            if (parameter.DefaultValue != DBNull.Value || parameter.ParameterType.IsValueType)
+                            if (parameter.DefaultValue != null && parameter.DefaultValue != DBNull.Value)
                             {
-                                hook_args[i] = parameter.DefaultValue == DBNull.Value ? Activator.CreateInstance(parameter.ParameterType) : parameter.DefaultValue;
+                                // Use the default value that was provided by the method definition
+                                hook_args[n] = parameter.DefaultValue;
+                            }
+                            else if (parameter.ParameterType.IsValueType)
+                            {
+                                // Use the default value for value types
+                                hook_args[n] = Activator.CreateInstance(parameter.ParameterType);
                             }
                         }
                     }
