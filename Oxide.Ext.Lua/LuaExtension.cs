@@ -216,6 +216,9 @@ end
                 // Bind the type
                 nspacetable[Utility.GetTypeName(type)] = CreateTypeTable(type);
             }
+            var bindingFlags = typeof (BindingFlags);
+            var nstable = (LuaTable) LuaEnvironment["_G"];
+            nstable[bindingFlags.Name] = CreateTypeTable(bindingFlags);
         }
 
         /// <summary>

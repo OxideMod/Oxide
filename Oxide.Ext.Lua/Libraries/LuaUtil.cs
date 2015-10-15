@@ -61,6 +61,41 @@ namespace Oxide.Ext.Lua.Libraries
         }
 
         /// <summary>
+        /// Bitwise Or the specified table elements
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        [LibraryFunction("BitwiseOr")]
+        public object BitwiseOr(LuaTable table)
+        {
+            // First of all, check it's actually an array
+            int size;
+            if (!table.IsArray(out size) || size == 0)
+            {
+                throw new InvalidOperationException("Specified table is not an array");
+            }
+
+            // Get the length
+            int result = -1;
+            Type type = null;
+
+            // Create the array
+            foreach (object key in table.Keys)
+            {
+                if (result < 0)
+                {
+                    result = (int)table[key];
+                    type = table[key].GetType();
+                    continue;
+                }
+                result |= (int)table[key];
+            }
+
+            // Return it
+            return Enum.ToObject(type, result);
+        }
+
+        /// <summary>
         /// Converts the specified object to the specified type and sets it on the array
         /// </summary>
         /// <param name="array"></param>
