@@ -210,7 +210,7 @@ namespace Oxide.Plugins
             }
             foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
             {
-                var info_attributes = method.GetCustomAttributes(typeof(HookMethod), true);
+                var info_attributes = method.GetCustomAttributes(typeof(HookMethodAttribute), true);
                 if (info_attributes.Length > 0) continue;
                 if (method.Name.Equals("OnFrame")) HookedOnFrame = true;
                 // Assume all private instance methods which are not explicitly hooked could be hooks

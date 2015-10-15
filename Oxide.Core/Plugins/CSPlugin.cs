@@ -10,7 +10,7 @@ namespace Oxide.Core.Plugins
     /// Indicates that the specified method should be a handler for a hook
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class HookMethod : Attribute
+    public class HookMethodAttribute : Attribute
     {
         /// <summary>
         /// Gets the name of the hook to... hook
@@ -21,7 +21,7 @@ namespace Oxide.Core.Plugins
         /// Initializes a new instance of the HookMethod class
         /// </summary>
         /// <param name="name"></param>
-        public HookMethod(string name)
+        public HookMethodAttribute(string name)
         {
             Name = name;
         }
