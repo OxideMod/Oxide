@@ -10,7 +10,7 @@ namespace Oxide.Core.Plugins
     /// Indicates that the specified method should be a handler for a hook
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class HookMethod : Attribute
+    public class HookMethodAttribute : Attribute
     {
         /// <summary>
         /// Gets the name of the hook to... hook
@@ -21,7 +21,7 @@ namespace Oxide.Core.Plugins
         /// Initializes a new instance of the HookMethod class
         /// </summary>
         /// <param name="name"></param>
-        public HookMethod(string name)
+        public HookMethodAttribute(string name)
         {
             Name = name;
         }
@@ -61,9 +61,9 @@ namespace Oxide.Core.Plugins
             {
                 foreach (var method in types[i].GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    var attr = method.GetCustomAttributes(typeof(HookMethod), true);
+                    var attr = method.GetCustomAttributes(typeof(HookMethodAttribute), true);
                     if (attr.Length < 1) continue;
-                    var hookmethod = attr[0] as HookMethod;
+                    var hookmethod = attr[0] as HookMethodAttribute;
                     AddHookMethod(hookmethod.Name, method);
                 }
             }
