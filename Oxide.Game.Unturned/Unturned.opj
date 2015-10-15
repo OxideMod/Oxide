@@ -1,0 +1,133 @@
+{
+  "Name": "Unturned",
+  "TargetDirectory": "D:\\Servers\\Game\\Unturned\\Unturned_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "disconnect",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "1H7WrX/uoI7ldr/bqQ+mAp0qO2WO1G5n7K6rZlcoLqg=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnCommandWindow [internal]",
+            "HookName": "IOnCommandWindow",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.CommandWindow",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": ".ctor",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "SDG.Unturned.Local"
+              ]
+            },
+            "MSILHash": "99N5UUncBSrRkGix0hoTO1G/JRS1qKEJeWRKIIO3L/U=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnLog [internal]",
+            "HookName": "IOnLog",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.CommandWindow",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Log",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Object",
+                "System.ConsoleColor"
+              ]
+            },
+            "MSILHash": "dh/z6MNt7SH3WVN3AO6+xwQUBNpd/+QPrrlrZZX8u7c=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "VKUK9M1bXWBG7+FM1U8iTSuQeI8Lj6cpan3p4MTPulE=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "VKUK9M1bXWBG7+FM1U8iTSuQeI8Lj6cpan3p4MTPulE=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
+          }
+        }
+      ]
+    }
+  ]
+}
