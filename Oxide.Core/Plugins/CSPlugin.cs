@@ -61,9 +61,9 @@ namespace Oxide.Core.Plugins
             {
                 foreach (var method in types[i].GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
                 {
-                    var attr = method.GetCustomAttributes(typeof(HookMethod), true);
+                    var attr = method.GetCustomAttributes(typeof(HookMethodAttribute), true);
                     if (attr.Length < 1) continue;
-                    var hookmethod = attr[0] as HookMethod;
+                    var hookmethod = attr[0] as HookMethodAttribute;
                     AddHookMethod(hookmethod.Name, method);
                 }
             }
