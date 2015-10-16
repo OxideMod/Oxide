@@ -9,7 +9,6 @@ using Jint;
 using Jint.Native;
 using Jint.Native.Object;
 using Jint.Parser;
-using Jint.Runtime.Descriptors;
 using Jint.Runtime.Interop;
 
 using Oxide.Core;
@@ -245,7 +244,7 @@ namespace Oxide.Ext.JavaScript.Plugins
         {
             ICallable callable;
             if (!Globals.TryGetValue(hookname, out callable)) return null;
-            return callable?.Call(Class, args?.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() ?? new JsValue[] {}).ToObject();
+            return callable.Call(Class, args != null ? args.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() : new JsValue[] {}).ToObject();
         }
     }
 }
