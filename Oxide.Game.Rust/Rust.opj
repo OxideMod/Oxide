@@ -2240,25 +2240,25 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 23,
-            "ReturnBehavior": 1,
+            "InjectionIndex": 25,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnNewConnection",
-            "HookName": "OnNewConnection",
+            "Name": "OnClientAuth",
+            "HookName": "OnClientAuth",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ConnectionAuth",
+            "TypeName": "ServerMgr",
             "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "OnNewConnection",
+              "Exposure": 0,
+              "Name": "OnClientAuth",
               "ReturnType": "System.Void",
               "Parameters": [
-                "Network.Connection"
+                "Network.Message"
               ]
             },
-            "MSILHash": "3PK7kcugmjSOg3gJ6n4VyWzLIEJg3IiBqugE6tqtJYA=",
+            "MSILHash": "VXC8VG/EzCW8frM3Twa9tTvBcwxIsbdit0IK5CUaP1s=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
