@@ -129,6 +129,15 @@ namespace Oxide.Core.Libraries
                 userdata.Remove(i);
             SaveUsers();
         }
+        
+        /// <summary>
+        /// Exports user/group data to json
+        /// </summary>
+        [LibraryFunction("Export")]
+        public void Export(string prefix = "auth") {
+            Interface.Oxide.DataFileSystem.WriteObject<Dictionary<string, GroupData>>(prefix + ".groups", groupdata);
+            Interface.Oxide.DataFileSystem.WriteObject<Dictionary<string, UserData>>(prefix + ".users", userdata);
+        }
 
         #region Permission Management
 
