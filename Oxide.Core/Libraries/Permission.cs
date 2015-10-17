@@ -135,6 +135,7 @@ namespace Oxide.Core.Libraries
         /// </summary>
         [LibraryFunction("Export")]
         public void Export(string prefix = "auth") {
+            if(!IsLoaded) return;
             Interface.Oxide.DataFileSystem.WriteObject<Dictionary<string, GroupData>>(prefix + ".groups", groupdata);
             Interface.Oxide.DataFileSystem.WriteObject<Dictionary<string, UserData>>(prefix + ".users", userdata);
         }
