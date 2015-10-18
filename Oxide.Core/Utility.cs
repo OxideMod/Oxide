@@ -106,6 +106,7 @@ namespace Oxide.Core
         {
             try
             {
+                name = name.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                 return name.Substring(0, name.LastIndexOf(Path.DirectorySeparatorChar));
             }
             catch
