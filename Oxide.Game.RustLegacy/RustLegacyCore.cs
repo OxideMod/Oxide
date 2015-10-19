@@ -376,7 +376,7 @@ namespace Oxide.Game.RustLegacy
             {
                 userId = player.userID.ToString();
                 name = player.displayName;
-                permission.GetUserData(userId).LastSeenNickname = name;
+                permission.UpdateNickname(userId, name);
             }
 
             if (!permission.GroupExists(group))
@@ -447,7 +447,7 @@ namespace Oxide.Game.RustLegacy
                 {
                     userId = player.userID.ToString();
                     name = player.displayName;
-                    permission.GetUserData(name).LastSeenNickname = name;
+                    permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
                 arg.ReplyWith("User '" + name + "' granted permission: " + perm);
@@ -498,7 +498,7 @@ namespace Oxide.Game.RustLegacy
                 {
                     userId = player.userID.ToString();
                     name = player.displayName;
-                    permission.GetUserData(name).LastSeenNickname = name;
+                    permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
                 arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
@@ -691,9 +691,8 @@ namespace Oxide.Game.RustLegacy
         {
             if (!permission.IsLoaded) return;
             var userId = player.userID.ToString();
-            var userData = permission.GetUserData(userId);
-            userData.LastSeenNickname = player.displayName;
-            if (userData.Groups.Count > 0) return;
+            permission.UpdateNickname(userId, player.displayName);
+            if (permission.UserHasAnyGroup(userId)) return;
             permission.AddUserGroup(userId, DefaultGroups[0]);
         }
 

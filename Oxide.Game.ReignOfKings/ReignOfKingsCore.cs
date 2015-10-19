@@ -456,7 +456,7 @@ namespace Oxide.Game.ReignOfKings
             {
                 userId = target.Id.ToString();
                 name = target.Name;
-                permission.GetUserData(userId).LastSeenNickname = name;
+                permission.UpdateNickname(userId, name);
             }
 
             if (!permission.GroupExists(group))
@@ -524,7 +524,7 @@ namespace Oxide.Game.ReignOfKings
                 {
                     userId = target.Id.ToString();
                     name = target.Name;
-                    permission.GetUserData(name).LastSeenNickname = name;
+                    permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
                 SendPlayerMessage(player, "User '" + name + "' granted permission: " + perm);
@@ -578,7 +578,7 @@ namespace Oxide.Game.ReignOfKings
                 {
                     userId = target.Id.ToString();
                     name = target.Name;
-                    permission.GetUserData(name).LastSeenNickname = name;
+                    permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
                 SendPlayerMessage(player, "User '" + name + "' revoked permission: " + perm);
@@ -759,7 +759,7 @@ namespace Oxide.Game.ReignOfKings
         {
             if (!permission.IsLoaded) return;
             var userId = e.Player.Id.ToString();
-            permission.GetUserData(userId).LastSeenNickname = e.Player.Name;
+            permission.UpdateNickname(userId, e.Player.Name);
 
             // Add player to default group
             if (permission.GroupExists("default"))

@@ -434,7 +434,8 @@ namespace Oxide.Game.Rust
             {
                 userId = player.userID.ToString();
                 name = player.displayName;
-                permission.GetUserData(userId).LastSeenNickname = name;
+                permission.UpdateNickname(userId, name);
+                name += $"({userId})";
             }
 
             if (!permission.GroupExists(group))
@@ -505,7 +506,8 @@ namespace Oxide.Game.Rust
                 {
                     userId = player.userID.ToString();
                     name = player.displayName;
-                    permission.GetUserData(userId).LastSeenNickname = name;
+                    permission.UpdateNickname(userId, name);
+                    name += $"({userId})";
                 }
                 permission.GrantUserPermission(userId, perm, null);
                 arg.ReplyWith("User '" + name + "' granted permission: " + perm);
@@ -562,7 +564,8 @@ namespace Oxide.Game.Rust
                 {
                     userId = player.userID.ToString();
                     name = player.displayName;
-                    permission.GetUserData(userId).LastSeenNickname = name;
+                    permission.UpdateNickname(userId, name);
+                    name += $"({userId})";
                 }
                 permission.RevokeUserPermission(userId, perm);
                 arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
@@ -610,7 +613,8 @@ namespace Oxide.Game.Rust
                 {
                     userId = player.userID.ToString();
                     name = player.displayName;
-                    permission.GetUserData(userId).LastSeenNickname = name;
+                    permission.UpdateNickname(userId, name);
+                    name += $"({userId})";
                 }
                 var result = "User '" + name + "' permissions:\n";
                 result += string.Join(", ", permission.GetUserPermissions(userId));
@@ -625,7 +629,9 @@ namespace Oxide.Game.Rust
                     arg.ReplyWith("Group '" + name + "' doesn't exist");
                     return;
                 }
-                var result = "Group '" + name + "' permissions:\n";
+                var result = "Group '" + name + "' users:\n";
+                result += string.Join(", ", permission.GetUsersInGroup(name));
+                result += "\nGroup '" + name + "' permissions:\n";
                 result += string.Join(", ", permission.GetGroupPermissions(name));
                 var parent = permission.GetGroupParent(name);
                 while (permission.GroupExists(parent))
@@ -634,6 +640,12 @@ namespace Oxide.Game.Rust
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
                     parent = permission.GetGroupParent(name);
                 }
+                arg.ReplyWith(result);
+            }
+            else if (mode.Equals("groups"))
+            {
+                var result = "Groups:\n";
+                result += string.Join(", ", permission.GetGroups());
                 arg.ReplyWith(result);
             }
         }
@@ -850,9 +862,8 @@ namespace Oxide.Game.Rust
             if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
             {
                 var userId = player.userID.ToString();
-                var userData = permission.GetUserData(userId);
-                userData.LastSeenNickname = player.displayName;
-                if (userData.Groups.Count == 0)
+                permission.UpdateNickname(userId, player.displayName);
+                if (!permission.UserHasAnyGroup(userId))
                     permission.AddUserGroup(userId, DefaultGroups[authLevel]);
             }
 

@@ -224,8 +224,7 @@ namespace Oxide.Core.Libraries
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        [LibraryFunction("GetUserData")]
-        public UserData GetUserData(string userid)
+        private UserData GetUserData(string userid)
         {
             UserData data;
             if (!userdata.TryGetValue(userid, out data))
@@ -233,6 +232,29 @@ namespace Oxide.Core.Libraries
 
             // Return the data
             return data;
+        }
+
+        /// <summary>
+        /// Updates the nickname
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <param name="nickname"></param>
+        [LibraryFunction("UpdateNickname")]
+        public void UpdateNickname(string userid, string nickname)
+        {
+            if (!UserExists(userid)) return;
+            GetUserData(userid).LastSeenNickname = nickname;
+        }
+
+        /// <summary>
+        /// Check if user has a group
+        /// </summary>
+        /// <param name="userid"></param>
+        [LibraryFunction("UserHasAnyGroup")]
+        public bool UserHasAnyGroup(string userid)
+        {
+            if (!UserExists(userid)) return false;
+            return GetUserData(userid).Groups.Count > 0;
         }
 
         /// <summary>
@@ -408,6 +430,29 @@ namespace Oxide.Core.Libraries
         public bool GroupExists(string groupname)
         {
             return !string.IsNullOrEmpty(groupname) && (groupname.Equals("*") || groupdata.ContainsKey(groupname.ToLower()));
+        }
+
+        /// <summary>
+        /// Returns existing groups
+        /// </summary>
+        /// <returns></returns>
+        [LibraryFunction("GetGroups")]
+        public string[] GetGroups()
+        {
+            return groupdata.Keys.ToArray();
+        }
+
+        /// <summary>
+        /// Returns users in that group
+        /// </summary>
+        /// <param name="groupname"></param>
+        /// <returns></returns>
+        [LibraryFunction("GetUsersInGroup")]
+        public string[] GetUsersInGroup(string groupname)
+        {
+            if (!GroupExists(groupname)) return null;
+            groupname = groupname.ToLower();
+            return userdata.Where(u => u.Value.Groups.Contains(groupname)).Select(u => $"{u.Key}({u.Value.LastSeenNickname})").ToArray();
         }
 
         /// <summary>
