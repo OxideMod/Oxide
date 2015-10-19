@@ -34,7 +34,7 @@ namespace Oxide.Game.DeadLinger
 
         private static readonly MethodInfo EvalInputString = typeof (DebugConsole).GetMethod("EvalInputString", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        private static readonly string[] Filter =
+        public static string[] Filter =
         {
             "CategoryReader Awake",
             "Content Template count:",

@@ -32,7 +32,7 @@ namespace Oxide.Game.TheForest
         public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
         public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "TheForest", "UnityEngine" };
 
-        private static readonly string[] Filter =
+        public static string[] Filter =
         {
             "****** Game Activation Sequence ******",
             "Body Variation",

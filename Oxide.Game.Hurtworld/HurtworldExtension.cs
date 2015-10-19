@@ -33,7 +33,7 @@ namespace Oxide.Game.Hurtworld
         public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
         public override string[] WhitelistNamespaces => new[] { "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
 
-        private static readonly string[] Filter =
+        public static string[] Filter =
         {
             ".",
             "adding player to group",

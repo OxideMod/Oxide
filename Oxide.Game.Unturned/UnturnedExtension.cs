@@ -33,7 +33,7 @@ namespace Oxide.Game.Unturned
         public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
         public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
 
-        public static readonly string[] Filter =
+        public static string[] Filter =
         {
             Provider.APP_VERSION
         };

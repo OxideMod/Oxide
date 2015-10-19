@@ -113,7 +113,7 @@
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
-      <WinGameFiles Include="$(ProjectDir)\Files\**\*.*" Exclude="$(ProjectDir)\Files\Linux\**" />
+      <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
       <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="$(ProjectDir)\Dependencies\Assembly-CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Assembly-CSharp_Original.dll" />

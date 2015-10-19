@@ -40,7 +40,7 @@ namespace Oxide.Game.ReignOfKings
         public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
         public override string[] WhitelistNamespaces => new[] { "CodeHatch", "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
 
-        internal static readonly string[] Filter =
+        public static string[] Filter =
         {
             "9999999999 has null AuthenticationKey!",
             "<color=magenta>[Entity]",

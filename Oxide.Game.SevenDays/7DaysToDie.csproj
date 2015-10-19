@@ -91,6 +91,7 @@
       <LinuxFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\KeraLua.dll" />
       <LinuxFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.so; $(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\*.dll" />
       <LinuxFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.so" />
+      <LinuxGameFiles Include="$(ProjectDir)\Files\Linux\**\*.*; $(ProjectDir)\Files\*.*" />
       <LinuxNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Linux\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
@@ -108,12 +109,13 @@
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Oxide.Ext.Lua\Dependencies\Linux\**" />
       <WinFiles Include="$(SolutionDir)\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
-      <WinGameFiles Include="$(ProjectDir)\Files\**\*.*" Exclude="$(ProjectDir)\Files\Linux\**" />
+      <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
       <WinNativeFiles Include="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameNameLinux)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(LinuxFiles)" DestinationFiles="@(LinuxFiles->'$(BundleDir)\$(GameNameLinux)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(LinuxGameFiles)" DestinationFiles="@(LinuxGameFiles->'$(BundleDir)\$(GameNameLinux)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(LinuxNativeFiles)" DestinationFiles="@(LinuxNativeFiles->'$(BundleDir)\$(GameNameLinux)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameNameLinux)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />

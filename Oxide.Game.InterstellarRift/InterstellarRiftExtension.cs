@@ -28,9 +28,9 @@ namespace Oxide.Game.InterstellarRift
         public override string[] WhitelistAssemblies => new[] { "mscorlib", "Oxide.Core", "System", "System.Core" };
         public override string[] WhitelistNamespaces => new[] { "System.Collections", "System.Security.Cryptography", "System.Text" };
 
-        private static readonly string[] Filter =
+        public static string[] Filter =
         {
-            ""
+
         };
 
         /// <summary>
