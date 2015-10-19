@@ -40,15 +40,17 @@ namespace Oxide.Game.Rust
         public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "Assembly-CSharp-firstpass", "DestMath", "mscorlib", "Oxide.Core", "Oxide.Game.Rust", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
         public override string[] WhitelistNamespaces => new[] { "ConVar", "Dest", "Facepunch", "Network", "Oxide.Game.Rust.Cui", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
 
-        private static readonly string[] Filter =
+        public static string[] Filter =
         {
             "AngryAnt Behave version",
+            "Failed to load plugin '1' (no source found)",
             "HDR RenderTexture format is not supported on this platform.",
             "Image Effects are not supported on this platform.",
             "The image effect Main Camera",
             "The image effect effect -",
             "Unable to find shaders",
             "Unsupported encoding: 'utf8'",
+            "[AmplifyColor] This image effect is not supported on this platform.",
             "[SpawnHandler] populationCounts"
         };
 

@@ -586,7 +586,7 @@ namespace Oxide.Game.Rust
             if (!arg.HasArgs())
             {
                 var reply = "Syntax: show <group|user> <name>\n";
-                reply += "Syntax: show perms";
+                reply += "Syntax: show <groups|perms>";
                 arg.ReplyWith(reply);
                 return;
             }
