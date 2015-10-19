@@ -61,7 +61,7 @@ namespace Oxide.Core
 
         public static string GetFileName(params string[] sub_paths)
         {
-            return string.Join(Path.PathSeparator.ToString(), sub_paths).Replace("..", "") + ".data";
+            return string.Join(Path.DirectorySeparatorChar.ToString(), sub_paths).Replace("..", "") + ".data";
         }
 
         public static string GetFileDataPath(string name)
