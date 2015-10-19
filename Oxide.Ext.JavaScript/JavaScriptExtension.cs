@@ -47,7 +47,7 @@ namespace Oxide.Ext.JavaScript
         /// Gets the JavaScript engine
         /// </summary>
         private Engine JavaScriptEngine { get; set; }
-        
+
         // The js plugin loader
         private JavaScriptPluginLoader loader;
 
@@ -85,7 +85,7 @@ namespace Oxide.Ext.JavaScript
             JavaScriptEngine.Global.FastSetProperty("importNamespace", new PropertyDescriptor(new ClrFunctionInstance(JavaScriptEngine, (thisObj, arguments) =>
             {
                 var nspace = TypeConverter.ToString(arguments.At(0));
-                if (string.IsNullOrEmpty(nspace) || WhitelistNamespaces.Any(nspace.StartsWith) || nspace.Equals("System"))
+                if (string.IsNullOrEmpty(nspace) || (WhitelistNamespaces?.Any(nspace.StartsWith) ?? false) || nspace.Equals("System"))
                 {
                     return new NamespaceReference(JavaScriptEngine, nspace);
                 }
@@ -98,9 +98,9 @@ namespace Oxide.Ext.JavaScript
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
-        internal bool AllowAssemblyAccess(Assembly assembly)
+        private bool AllowAssemblyAccess(Assembly assembly)
         {
-            return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
+            return WhitelistAssemblies?.Any(whitelist => assembly.GetName().Name.Equals(whitelist)) ?? false;
         }
 
         /// <summary>
