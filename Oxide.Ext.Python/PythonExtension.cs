@@ -167,7 +167,7 @@ namespace Oxide.Ext.Python
 
         private bool CheckModule(string moduleName, PythonTuple fromlist)
         {
-            if (WhitelistNamespaces.Any(moduleName.StartsWith)) return true;
+            if (WhitelistNamespaces?.Any(moduleName.StartsWith) ?? false) return true;
             if (moduleName.Equals("System")) return true;
             if (_allowedTypes.Contains(moduleName)) return true;
             if (WhitelistModules.Contains(moduleName)) return true;
@@ -182,7 +182,7 @@ namespace Oxide.Ext.Python
         /// <returns></returns>
         private bool AllowAssemblyAccess(Assembly assembly)
         {
-            return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
+            return WhitelistAssemblies?.Any(whitelist => assembly.GetName().Name.Equals(whitelist)) ?? false;
         }
 
         /// <summary>

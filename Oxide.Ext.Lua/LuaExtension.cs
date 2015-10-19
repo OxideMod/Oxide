@@ -428,7 +428,7 @@ end
         /// <returns></returns>
         private bool AllowAssemblyAccess(Assembly assembly)
         {
-            return WhitelistAssemblies.Any(whitelist => assembly.GetName().Name.Equals(whitelist));
+            return WhitelistAssemblies?.Any(whitelist => assembly.GetName().Name.Equals(whitelist)) ?? false;
         }
 
         /// <summary>
@@ -449,6 +449,7 @@ end
             {
                 if (type.IsValueType || type.Name == "String" || type.Name == "Convert") return true;
             }
+            if (WhitelistNamespaces == null) return false;
             foreach (string whitelist in WhitelistNamespaces)
                 if (nspace.StartsWith(whitelist)) return true;
             return false;
