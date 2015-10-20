@@ -736,28 +736,6 @@ namespace Oxide.Game.RustLegacy
         }
 
         /// <summary>
-        /// Called when a user places a structure in the world
-        /// </summary>
-        /// <param name="component"></param>
-        /// <param name="item"></param>
-        [HookMethod("IOnStructureBuilt")]
-        private object IOnStructureBuilt(StructureComponent component, IStructureComponentItem item)
-        {
-            return Interface.CallHook("OnStructureBuilt", component, item.controllable.netUser);
-        }
-
-        /// <summary>
-        /// Called when the user puts a deployable in the world
-        /// </summary>
-        /// <param name="component"></param>
-        /// <param name="item"></param>
-        [HookMethod("IOnItemDeployed")]
-        private object IOnItemDeployed(DeployableObject component, IDeployableItem item)
-        {
-            return Interface.CallHook("OnItemDeployed", component, item.controllable.netUser);
-        }
-
-        /// <summary>
         /// Called when an AI moves
         /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
         /// </summary>
