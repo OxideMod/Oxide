@@ -8,7 +8,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 100,
+            "InjectionIndex": 115,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -21,8 +21,9 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "sTaNVpxzFg/70RSWy8oP9JZ1b6BaHC3vO84v1wgU3sA=",
-            "BaseHookName": null
+            "MSILHash": "7c4AF5nt9Efr4Ino9oci06LoNGNzsmm4yF3yXtrRX9k=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -44,8 +45,9 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "/I2maewHj5z3Q+E2Eq/bqH+r/dOsZ6C/9ftxQkAqdeU=",
-            "BaseHookName": null
+            "MSILHash": "9QjQfMVP/91UxZHEayDKKSxFN35uWzsorzNs8aGydEI=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -68,7 +70,8 @@
               "Parameters": []
             },
             "MSILHash": "d4c+TlbU36+/brCeX7QTWT5zXNrlnsu5BXl4BwGchug=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -91,7 +94,8 @@
               "Parameters": []
             },
             "MSILHash": "S6S8qp2UNB0zeXPEbiw5dnQKLWpUiT+/yBCcdr5eOZk=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -113,8 +117,9 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Gu7wyJB9p3aD6F6Zqcq1xK9C2GlIyab52/azOZDeuBs=",
-            "BaseHookName": null
+            "MSILHash": "lZ2ztTNqJwstIa8pti8rEOQzbV+uiBhekrrto2OnvpM=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -139,7 +144,8 @@
               ]
             },
             "MSILHash": "rs2/N1BHlKJQbdF8Rs1EgME2XUhUdfN7czTi/jLJE54=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -164,7 +170,8 @@
               ]
             },
             "MSILHash": "Pyf9ztG8zl1L7fpCOXiUqAprGxe0dBMD8RCpVUaJ6pM=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -188,8 +195,9 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "Xo9cOAObH8Rek8qeasxiAjT1EOG0iHphluU3HkzVWcE=",
-            "BaseHookName": null
+            "MSILHash": "HJGDO2idrgXmtWSUKGM9DeMDibrIwbtofhomQkPHbeg=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -213,8 +221,9 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "B4o8IDY03Yu9W3TgNp7U4M7iAwpUVumCwUS+jIzaEUc=",
-            "BaseHookName": null
+            "MSILHash": "qsAVHR7vwfTNEgDt+t795lYn6VZH3qEY1Nk7LA6DTyA=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -239,7 +248,8 @@
               ]
             },
             "MSILHash": "ua6liC0Z8CwcNDTpeEE+HUyFl/oSgHi3ikUopletwRk=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         },
         {
@@ -264,7 +274,8 @@
               ]
             },
             "MSILHash": "ot3mdwjFeEk3W1TQAlFMatCMcNsTVKOLOJSNlicQdlo=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         },
         {
@@ -289,7 +300,8 @@
               ]
             },
             "MSILHash": "Z24w2YFFJdDFdX0NyTBy9+YW63LMaMlvBkaOYPWTeIk=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -314,7 +326,8 @@
               ]
             },
             "MSILHash": "LiPKTcBMYI+xB0TULd16frpC7fCwnAlfxk1/tWKlgoU=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -339,7 +352,8 @@
               ]
             },
             "MSILHash": "tqZ2yzMqAMuuB/4IKalrhg3gU0CCIWEsokVJaNw9xT4=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Structure"
           }
         },
         {
@@ -363,8 +377,9 @@
                 "CodeHatch.Blocks.Networking.Events.CubeDamageEvent"
               ]
             },
-            "MSILHash": "4B/U+vudsiyBu1tLXBUGeoZGUzAKjlrfPxkXKMxU+ZQ=",
-            "BaseHookName": null
+            "MSILHash": "kSc6XkCmaYldGA501cgYkapCgt/AFw7xKBwKlYnVi8c=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
           }
         },
         {
@@ -389,7 +404,8 @@
               ]
             },
             "MSILHash": "dsUElMXBJ6DWumxh/47KppvzZczkzLMyA2CN5zS7BPc=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Structure"
           }
         },
         {
@@ -414,7 +430,8 @@
               ]
             },
             "MSILHash": "KBOS9aviaFbfQ54OiMv9RjzhXMAszL4TBsqG0n5XyfQ=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -439,7 +456,8 @@
               ]
             },
             "MSILHash": "1YlIkW+X6RDvYBytg6P7vrtZMDJezbGfmHmIgGsqQzI=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -464,7 +482,8 @@
               ]
             },
             "MSILHash": "bjTDVaxOuiYLQNkwCN6YwigZCZFdtypXzQNsDZbXtnw=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -489,7 +508,8 @@
               ]
             },
             "MSILHash": "bjTDVaxOuiYLQNkwCN6YwigZCZFdtypXzQNsDZbXtnw=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -500,7 +520,7 @@
             "ArgumentBehavior": 2,
             "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "GetTypeFromName [internal]",
+            "Name": "IGetTypeFromName [internal]",
             "HookName": "IGetTypeFromName",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Core.ReflectionUtil",
@@ -514,7 +534,8 @@
               ]
             },
             "MSILHash": "6Dq3y3v6TTGtxR7aUP98lcOfaQfrSci7bJAw/pDySWM=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -539,7 +560,8 @@
               ]
             },
             "MSILHash": "hze/OwJ4tvWdsgWb1936bTcs8g2s9NVjeGOW4aifu3U=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -550,8 +572,8 @@
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnRecalculateHash [internal]",
-            "HookName": "OnRecalculateHash",
+            "Name": "IOnRecalculateHash [internal]",
+            "HookName": "IOnRecalculateHash",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Common.FileHasher",
             "Flagged": false,
@@ -564,7 +586,8 @@
               ]
             },
             "MSILHash": "ZETSqh1ouKlWrAU9j0KXfR4fmJXkqDnr17bltm7gpPI=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -575,8 +598,8 @@
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnCountFolder [internal]",
-            "HookName": "OnCountFolder",
+            "Name": "IOnCountFolder [internal]",
+            "HookName": "IOnCountFolder",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "FileCounter",
             "Flagged": false,
@@ -589,7 +612,8 @@
               ]
             },
             "MSILHash": "nKss1i5/JvKpqtutTsbF8Wq2BZKwvwLeulzIJiVK5T8=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -614,7 +638,8 @@
               ]
             },
             "MSILHash": "ckzM1ddgrV7blL4KogEfvfGuk8grDVKMGLduECZABa4=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Item"
           }
         }
       ]

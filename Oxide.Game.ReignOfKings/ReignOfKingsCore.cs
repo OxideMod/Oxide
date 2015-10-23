@@ -772,8 +772,8 @@ namespace Oxide.Game.ReignOfKings
         /// Called when the hash is recalculated
         /// </summary>
         /// <param name="fileHasher"></param>
-        [HookMethod("OnRecalculateHash")]
-        void OnRecalculateHash(FileHasher fileHasher)
+        [HookMethod("IOnRecalculateHash")]
+        void IOnRecalculateHash(FileHasher fileHasher)
         {
             if (fileHasher.FileLocationFromDataPath.Equals("/Managed/Assembly-CSharp.dll"))
                 fileHasher.FileLocationFromDataPath = "/Managed/Assembly-CSharp_Original.dll";
@@ -783,8 +783,8 @@ namespace Oxide.Game.ReignOfKings
         /// Called when the files are counted
         /// </summary>
         /// <param name="fileCounter"></param>
-        [HookMethod("OnCountFolder")]
-        void OnCountFolder(FileCounter fileCounter)
+        [HookMethod("IOnCountFolder")]
+        void IOnCountFolder(FileCounter fileCounter)
         {
             if (fileCounter.FolderLocationFromDataPath.Equals("/Managed/") && fileCounter.Folders.Length != 39)
             {

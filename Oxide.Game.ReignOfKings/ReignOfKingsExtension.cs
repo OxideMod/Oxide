@@ -6,7 +6,7 @@ using CodeHatch.Build;
 using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
-using CodeHatch.Sockets;
+using CodeHatch.Engine.Sockets;
 
 using UnityEngine;
 
