@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using UnityEngine;
 
@@ -44,17 +45,22 @@ namespace Oxide.Game.TheForest
             "Image Effects are not supported on this platform",
             "Joystick count=",
             "LobbyCreated param.m_eResult=k_EResult",
+            "OnApplicationFocus:",
             "Refreshing Input Mapping Icons",
             "Reloading Input Mapping",
+            "RewiredSpawner",
             "Skin Variation",
             "Skipped frame because",
             "Skipped rendering frame because",
             "The referenced script on this Behaviour is missing!",
             "WakeFromKnockOut",
+            "<color=red>Ceto",
+            "<color=yellow>Ceto",
             "[AmplifyMotion] Initialization failed",
             "attach: [",
             "delaying initial",
             "disableFlying",
+            "disablePlaneCrash",
             "enabled part 2",
             "going black",
             "null texture passed to GUI.DrawTexture",
@@ -69,7 +75,6 @@ namespace Oxide.Game.TheForest
             "BMGlyph",
             "BMSymbol",
             "BetterList",
-            "Image Effects are not supported on this platform",
             "TweenAlpha",
             "TweenColor",
             "TweenScale",
@@ -99,12 +104,11 @@ namespace Oxide.Game.TheForest
             "UIToggle",
             "UITweener",
             "UIWidget",
-            "UIWidget",
-            "[AmplifyMotion] Initialization failed"
+            "UIWidget"
         };
 
         private const string LogFileName = "output_log.txt";
-        private TextWriter _logWriter;
+        private TextWriter logWriter;
 
         /// <summary>
         /// Initializes a new instance of the TheForestExtension class
@@ -144,16 +148,27 @@ namespace Oxide.Game.TheForest
         {
             if (!Interface.Oxide.EnableConsole()) return;
 
-            // Disable client audio
+            // Override default server settings
+            var serverAddress = typeof(BoltInit).GetField("serverAddress", BindingFlags.NonPublic | BindingFlags.Instance);
+            var serverPort = typeof(BoltInit).GetField("serverPort", BindingFlags.NonPublic | BindingFlags.Instance);
+            var commandLine = new CommandLine(Environment.GetCommandLineArgs());
+            if (commandLine.HasVariable("ip")) serverAddress?.SetValue(commandLine.GetVariable("ip"), null);
+            if (commandLine.HasVariable("port")) serverPort?.SetValue(commandLine.GetVariable("port"), null);
+            if (commandLine.HasVariable("maxplayers")) PlayerPrefs.SetInt("MpGamePlayerCount", int.Parse(commandLine.GetVariable("maxplayers")));
+            if (commandLine.HasVariable("hostname")) PlayerPrefs.SetString("MpGameName", commandLine.GetVariable("hostname"));
+            if (commandLine.HasVariable("friendsonly"))  PlayerPrefs.SetInt("MpGameFriendsOnly", int.Parse(commandLine.GetVariable("friendsonly")));
+            PlayerPrefs.Save();
+
+            // Disable client audio for server
             TheForestCore.DisableAudio();
 
             // Limit FPS to reduce cpu usage
-            PlayerPrefs.SetInt("MaxFrameRate2", 60); //Application.targetFrameRate = 256;
+            PlayerPreferences.MaxFrameRate = 60;
 
             if (File.Exists(LogFileName)) File.Delete(LogFileName);
             var logStream = File.AppendText(LogFileName);
             logStream.AutoFlush = true;
-            _logWriter = TextWriter.Synchronized(logStream);
+            logWriter = TextWriter.Synchronized(logStream);
 
             Application.logMessageReceivedThreaded += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
@@ -162,14 +177,14 @@ namespace Oxide.Game.TheForest
             {
                 if (CoopLobby.Instance == null) return string.Empty;
                 var players = CoopLobby.Instance?.MemberCount - 1;
-                var hostname = CoopLobby.Instance?.Info?.Name.Split("()".ToCharArray())[0];
+                var hostname = CoopLobby.Instance?.Info.Name;
                 return string.Concat(players, " | ", hostname);
             };
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
                 if (CoopLobby.Instance == null) return string.Empty;
-                var hostname = CoopLobby.Instance?.Info.Name.Split("()".ToCharArray())[0];
+                var hostname = CoopLobby.Instance?.Info.Name;
                 return string.Concat(" ", hostname);
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>
@@ -184,23 +199,23 @@ namespace Oxide.Game.TheForest
             {
                 if (CoopLobby.Instance == null) return string.Empty;
                 var players = CoopLobby.Instance?.MemberCount - 1;
-                var playerLimit = CoopLobby.Instance?.Info?.MemberLimit;
+                var playerLimit = CoopLobby.Instance?.Info.MemberLimit;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 // TODO: Network in/out
-                return "";
+                return string.Empty;
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 //var gameTime = TheForestAtmosphere.Instance?.TimeOfDay; // TODO: Fix NRE and format
-                return string.Concat(" "/*, gameTime*/);
+                return string.Concat(string.Empty/*, gameTime*/);
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.25b"; // TODO: Grab version/protocol
+                var gameVersion = "0.26"; // TODO: Grab version/protocol
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
@@ -209,45 +224,22 @@ namespace Oxide.Game.TheForest
 
         public override void OnShutdown()
         {
-            _logWriter?.Flush();
-            _logWriter?.Close();
+            logWriter?.Flush();
+            logWriter?.Close();
         }
 
         private void ServerConsoleOnInput(string input)
         {
-            // TODO
             if (string.IsNullOrEmpty(input)) return;
-            if (input.Equals("coop")) //CoopSteamManager: Initialize / CoopSteamServer: .cctor
-            {
-                var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
-                coop.OnCoOp();
-                coop.OnMpHost();
-                coop.OnNewGame();
-                TheForestCore.DisableAudio();
-            }
-            if (input.Equals("host")) //CoopSteamNGUI: OpenScreen LobbySetup
-            {
-                var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
-                coop.OnHostLobbySetup();
-                TheForestCore.DisableAudio();
-            }
-            if (input.Equals("start")) //CoopLobbyManager: LobbyEnter Steamworks.LobbyEnter_t //ready for clients...on player connected start?
-            {
-                var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
-                coop.OnHostStartGame();
-                TheForestCore.DisableAudio();
-            }
-            if (input.Equals("audio"))
-            {
-                TheForestCore.DisableAudio();
-            }
+
+            // TODO: Server commands
         }
 
         private void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message)/* || LogFilter.Any(message.StartsWith)*/) return;
-            _logWriter.WriteLine(message);
-            if (!string.IsNullOrEmpty(stackTrace)) _logWriter.WriteLine(stackTrace);
+            logWriter.WriteLine(message);
+            if (!string.IsNullOrEmpty(stackTrace)) logWriter.WriteLine(stackTrace);
             if (Filter.Any(message.StartsWith)) return;
 
             var color = ConsoleColor.Gray;

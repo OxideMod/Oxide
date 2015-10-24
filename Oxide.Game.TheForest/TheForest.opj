@@ -63,8 +63,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "InitServer [internal]",
-            "HookName": "InitServer",
+            "Name": "IOnInitServer [internal]",
+            "HookName": "IOnInitServer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamManager",
             "Flagged": false,
@@ -84,11 +84,11 @@
           "Hook": {
             "InjectionIndex": 44,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 3,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "InitLobby [internal]",
-            "HookName": "InitLobby",
+            "Name": "IOnCoopSetup [internal]",
+            "HookName": "IOnCoopSetup",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamNGUI",
             "Flagged": false,
@@ -215,8 +215,8 @@
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnBeginPlaneCrash [internal]",
-            "HookName": "IOnBeginPlaneCrash",
+            "Name": "IOnPlaneCrash [internal]",
+            "HookName": "IOnPlaneCrash",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerCutScene",
             "Flagged": false,
@@ -227,6 +227,80 @@
               "Parameters": []
             },
             "MSILHash": "Iat7qpV2ckpOFf+TCt3SWRJJy9OF23Dd01WBh4Q1trA=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnGetHostname [internal]",
+            "HookName": "IOnGetHostname",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamNGUI",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "GetHostGameName",
+              "ReturnType": "System.String",
+              "Parameters": []
+            },
+            "MSILHash": "QEPB7qE4H5RU9fNoMcO8cIbkWrvQFYbc3wCUcL4CEjk=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnGetMaxPlayers [internal]",
+            "HookName": "IOnGetMaxPlayers",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamNGUI",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "GetHostPlayersMax",
+              "ReturnType": "System.Int32",
+              "Parameters": []
+            },
+            "MSILHash": "9f3HJFic1Jy60tP4fQYrvqzhT2g1i5LPRnWHhzLEkZo=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnLobbyReady [internal]",
+            "HookName": "IOnLobbyReady",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopLobbyManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "LobbyCreated",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Steamworks.LobbyCreated_t"
+              ]
+            },
+            "MSILHash": "FgTnr2rYKDZ/ern4lPxZTuOevmXzdHxHrgCQCH80MuA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
