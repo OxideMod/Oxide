@@ -149,7 +149,7 @@ namespace Oxide.Game.FromTheDepths
             {
                 var gameVersion = StaticOptionsManager.version;
                 var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for Version ", gameVersion);
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }

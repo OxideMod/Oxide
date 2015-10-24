@@ -215,7 +215,7 @@ namespace Oxide.Game.Rust
             {
                 var gameVersion = typeof(Protocol).GetField("network").GetValue(null).ToString();
                 var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for Protocol ", gameVersion);
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 

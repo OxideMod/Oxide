@@ -134,7 +134,7 @@ namespace Oxide.Game.Blockstorm
             {
                 var gameVersion = Constants.smethod_0();
                 var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for Version ", gameVersion);
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
