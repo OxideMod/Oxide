@@ -125,15 +125,12 @@ namespace Oxide.Game.Unturned
             {
                 var gameVersion = Provider.APP_VERSION;
                 var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for Version ", gameVersion);
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        private static void ServerConsoleOnInput(string input)
-        {
-            Commander.execute(CSteamID.Nil, input);
-        }
+        private static void ServerConsoleOnInput(string input) => Commander.execute(CSteamID.Nil, input);
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {

@@ -66,35 +66,13 @@ namespace Oxide.Game.Unturned
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown()
-        {
-            Interface.Oxide.OnShutdown();
-        }
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when the CommandWindow is instantiated
         /// </summary>
-        [HookMethod("IOnCommandWindow")]
-        private bool IOnCommandWindow()
-        {
-            var commandWindowField = typeof (Provider).GetField("commandWindow", BindingFlags.Static | BindingFlags.NonPublic);
-            Interface.Oxide.NextTick(() =>
-            {
-                commandWindowField?.SetValue(null, null);
-            });
-            return false;
-        }
-
-        /// <summary>
-        /// Called when the CommandWindow.Log is called
-        /// </summary>
-        [HookMethod("IOnLog")]
-        private void IOnLog(object text, ConsoleColor color)
-        {
-            var message = text?.ToString();
-            if (string.IsNullOrEmpty(message) || UnturnedExtension.Filter.Any(message.StartsWith)) return;
-            Interface.Oxide.ServerConsole.AddMessage(text.ToString(), color);
-        }
+        [HookMethod("IOnDedicatorAwake")]
+        private bool IOnDedicatorAwake() => false;
 
         /// <summary>
         /// Called when a plugin is loaded
@@ -104,8 +82,7 @@ namespace Oxide.Game.Unturned
         private void OnPluginLoaded(Plugin plugin)
         {
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore")
-                InitializeLogging();
+            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
         /// <summary>
