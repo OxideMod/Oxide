@@ -8,10 +8,11 @@ namespace Oxide.Core.Logging
     public sealed class CompoundLogger : Logger
     {
         // Loggers under this compound logger
-        private HashSet<Logger> subloggers;
+        private readonly HashSet<Logger> subloggers;
 
         // Any cached messages for new loggers
-        private List<LogMessage> messagecache;
+        private readonly List<LogMessage> messagecache;
+        private bool usecache;
 
         /// <summary>
         /// Initializes a new instance of the CompoundLogger class
@@ -22,6 +23,7 @@ namespace Oxide.Core.Logging
             // Initialize
             subloggers = new HashSet<Logger>();
             messagecache = new List<LogMessage>();
+            usecache = true;
         }
 
         /// <summary>
@@ -34,10 +36,7 @@ namespace Oxide.Core.Logging
             subloggers.Add(logger);
 
             // Write the message cache to it
-            for (int i = 0; i < messagecache.Count; i++)
-            {
-                logger.Write(messagecache[i]);
-            }
+            foreach (var t in messagecache) logger.Write(t);
         }
 
         /// <summary>
@@ -59,11 +58,19 @@ namespace Oxide.Core.Logging
         public override void Write(LogType type, string format, params object[] args)
         {
             // Write to all current subloggers
-            foreach (Logger logger in subloggers)
-                logger.Write(type, format, args);
+            foreach (var logger in subloggers) logger.Write(type, format, args);
 
             // Cache it for any loggers added late
-            messagecache.Add(CreateLogMessage(type, format, args));
+            if (usecache) messagecache.Add(CreateLogMessage(type, format, args));
+        }
+
+        /// <summary>
+        /// Disables logger message cache
+        /// </summary>
+        public void DisableCache()
+        {
+            usecache = false;
+            messagecache.Clear();
         }
     }
 }
