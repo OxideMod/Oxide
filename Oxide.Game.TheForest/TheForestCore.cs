@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Reflection;
 
+using Ceto;
 using ScionEngine;
+using Steamworks;
 using TheForest.UI;
 using TheForest.Utils;
 using UnityEngine;
@@ -84,6 +86,49 @@ namespace Oxide.Game.TheForest
         {
             loggingInitialized = true;
             CallHook("InitLogging", null);
+        }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="connection"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(BoltConnection connection)
+        {
+            if (connection == null) return;
+            var steamId = connection.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+            Interface.Oxide.LogInfo($"{steamId}/{name} joined");
+        }
+
+        /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="e"></param>
+        [HookMethod("OnPlayerChat")]
+        private void OnPlayerChat(ChatEvent e)
+        {
+            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == e.Sender);
+            if (player == null) return;
+            var steamId = player.source.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+            Interface.Oxide.LogInfo($"{name}: {e.Message}");
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="connection"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(BoltConnection connection)
+        {
+            if (connection == null) return;
+            var steamId = connection.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+            Interface.Oxide.LogInfo($"{steamId}/{name} quit");
         }
 
         /// <summary>
@@ -214,6 +259,16 @@ namespace Oxide.Game.TheForest
             foreach (var imageEffectOptimizer in imageEffectOptimizers) UnityEngine.Object.Destroy(imageEffectOptimizer);
             var scionPostProcesses = Resources.FindObjectsOfTypeAll<ScionPostProcess>();
             foreach (var scionPostProcess in scionPostProcesses) UnityEngine.Object.Destroy(scionPostProcess);
+            var projectedGrids = Resources.FindObjectsOfTypeAll<ProjectedGrid>();
+            foreach (var projectedGrid in projectedGrids) UnityEngine.Object.Destroy(projectedGrid);
+            var waveSpectra = Resources.FindObjectsOfTypeAll<WaveSpectrum>();
+            foreach (var waveSpectrum in waveSpectra) UnityEngine.Object.Destroy(waveSpectrum);
+            var planarReflections = Resources.FindObjectsOfTypeAll<PlanarReflection>();
+            foreach (var planarReflection in planarReflections) UnityEngine.Object.Destroy(planarReflection);
+            var underWaters = Resources.FindObjectsOfTypeAll<UnderWater>();
+            foreach (var underWater in underWaters) UnityEngine.Object.Destroy(underWater);
+            var oceans = Resources.FindObjectsOfTypeAll<Ocean>();
+            foreach (var ocean in oceans) UnityEngine.Object.Destroy(ocean);
             var behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
             foreach (var behaviour in behaviours)
             {
