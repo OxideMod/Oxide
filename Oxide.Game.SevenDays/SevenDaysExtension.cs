@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using UnityEngine;
 
 namespace Oxide.Game.SevenDays
 {
@@ -149,16 +149,14 @@ namespace Oxide.Game.SevenDays
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 // TODO: Network in/out
-                return "";
+                return string.Empty;
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return string.Empty;
-                TimeSpan t = TimeSpan.FromSeconds(GameManager.Instance.World.GetWorldTime());
-                DateTime time = DateTime.Today.Add(t);
-                var gameTime = time.ToString("h:mm tt").ToLower();
-                return string.Concat(" ", gameTime);
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(GameManager.Instance.World.GetWorldTime())).ToString("h:mm tt").ToLower();
+                return string.Concat(" ", time);
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {

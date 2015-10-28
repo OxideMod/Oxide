@@ -22,7 +22,8 @@
               "Parameters": []
             },
             "MSILHash": "1wSB2AfjLkc3kWGqVUiG08cIYku37KN4OlpvyTiBzmE=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -45,7 +46,8 @@
               "Parameters": []
             },
             "MSILHash": "1wSB2AfjLkc3kWGqVUiG08cIYku37KN4OlpvyTiBzmE=",
-            "BaseHookName": null
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
           }
         },
         {
@@ -68,7 +70,8 @@
               "Parameters": []
             },
             "MSILHash": "4KrI2R3SSlGY5cNqN+LEmHB9D+mhTZdUQLIrdkSq8Rk=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -91,7 +94,8 @@
               "Parameters": []
             },
             "MSILHash": "QOuxiMs2b1T6K9IrxU2aAy636Oa55654c/So23GFPUo=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -116,7 +120,8 @@
               ]
             },
             "MSILHash": "3qGEfo1R1pPz9CM2Ufc6mci2623t0wEPulL9t3MDOiQ=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         },
         {
@@ -143,7 +148,8 @@
               ]
             },
             "MSILHash": "QKW6NwXb8sh6L5KboRvrVRF63nc8rygC7joa/bDmaJQ=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -168,7 +174,8 @@
               ]
             },
             "MSILHash": "DXZ9jmdSUn15tvVEChhTyjs4xp/d1dvwmP7ETm4cQR8=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -193,7 +200,8 @@
               ]
             },
             "MSILHash": "bnMZ0OJqr9XxI13eI0+0f5f+0uPCWyhFQhe2HYf2dUk=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -221,7 +229,8 @@
               ]
             },
             "MSILHash": "ErPEVbs5hdDXCLs1JBBsFAarJHlrWeNGn8B+1DmaVAs=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         },
         {
@@ -246,7 +255,8 @@
               ]
             },
             "MSILHash": "sbBMIjrHQkqoQ7WovKDXy+rTFhIF1dAj1j4CTawhPq4=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -271,7 +281,8 @@
               ]
             },
             "MSILHash": "UVgyXv1gp7kbuES+npFOGuAz59SU/lTCoBPlVM/B2FM=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         },
         {
@@ -296,7 +307,8 @@
               ]
             },
             "MSILHash": "p7r/xDFJAGbKODU41RAhLPYmk8Hf8DU9oI730lbqDN0=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         },
         {
@@ -321,7 +333,8 @@
               ]
             },
             "MSILHash": "/YEDqTaCvuvI/P4DagfrZK1obb/tZM0FTo202sfDRGg=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Door"
           }
         },
         {
@@ -348,7 +361,8 @@
               ]
             },
             "MSILHash": "H3f9KFu15yymV7VpRPetr3iSH2anSjI2EXfdH9ayeZk=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         },
         {
@@ -371,7 +385,8 @@
               "Parameters": []
             },
             "MSILHash": "UBu+jARfu2d7bVzftVj+IxGpWEAaIDMcniytuuJgO7Y=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
@@ -397,7 +412,8 @@
               ]
             },
             "MSILHash": "QrIEoLxWZDGisfOwjnDmhqmZwaDIeKMYzcmF2kjOvUA=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
