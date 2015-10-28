@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -46,7 +47,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("protocol", "0.26"); // TODO: Grab version/protocol
+            RemoteLogger.SetTag("protocol", "0.26c"); // TODO: Grab version/protocol
         }
 
         /// <summary>
@@ -187,8 +188,8 @@ namespace Oxide.Game.TheForest
                 var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
                 coop.OnCoOp();
                 coop.OnMpHost();
-                coop.OnNewGame();
-                //coop.OnSlotSelection(1);
+                //coop.OnNewGame();
+                coop.OnSlotSelection(1);
             });
         }
 
@@ -219,6 +220,15 @@ namespace Oxide.Game.TheForest
             {
                 var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
                 coop.OnHostStartGame();
+
+                // TODO: Remove server's player, or subtract it from maxplayers and Steam stats
+
+                // Remove server from member list
+                CoopLobby.Instance?.SetCurrentMembers((int)(CoopLobby.Instance?.MemberCount - 1));
+
+                // Remove server player model/object
+                Scene.SceneTracker.allPlayers.Remove(LocalPlayer.GameObject);
+                //Scene.SceneTracker.planeCrash
             });
         }
 
@@ -234,25 +244,30 @@ namespace Oxide.Game.TheForest
         [HookMethod("IOnGetMaxPlayers")]
         private int IOnGetMaxPlayers() => PlayerPrefs.GetInt("MpGamePlayerCount");
 
+        /// <summary>
+        /// Disables the plane crash scene
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <returns></returns>
         [HookMethod("IOnPlaneCrash")]
-        private bool IOnPlaneCrash(TriggerCutScene triggerCutScene)
+        private bool IOnPlaneCrash(TriggerCutScene scene)
         {
-            var skipOpeningAnimationMethod = typeof(TriggerCutScene).GetMethod("skipOpeningAnimation", BindingFlags.NonPublic | BindingFlags.Instance);
-            var cleanUpMethod = typeof(TriggerCutScene).GetMethod("CleanUp", BindingFlags.NonPublic | BindingFlags.Instance);
+            var skipOpeningAnimation = typeof(TriggerCutScene).GetMethod("skipOpeningAnimation", BindingFlags.NonPublic | BindingFlags.Instance);
+            var cleanUp = typeof(TriggerCutScene).GetMethod("CleanUp", BindingFlags.NonPublic | BindingFlags.Instance);
             try
             {
                 var gameObject = GameObject.Find("PlayerPlanePosition");
                 if (gameObject) LocalPlayer.CamFollowHead.planePos = gameObject.transform;
-                skipOpeningAnimationMethod.Invoke(triggerCutScene, null);
-                cleanUpMethod.Invoke(triggerCutScene, null);
+                skipOpeningAnimation.Invoke(scene, null);
+                cleanUp.Invoke(scene, null);
             }
             catch (Exception e) { /*Interface.Oxide.LogException("OnTriggerCutSceneAwake: ", e);*/ }
-            triggerCutScene.CancelInvoke("beginPlaneCrash");
-            triggerCutScene.planeController.CancelInvoke("beginPlaneCrash");
-            triggerCutScene.planeController.enabled = false;
-            triggerCutScene.planeController.gameObject.SetActive(false);
-            triggerCutScene.enabled = false;
-            triggerCutScene.gameObject.SetActive(false);
+            scene.CancelInvoke("beginPlaneCrash");
+            scene.planeController.CancelInvoke("beginPlaneCrash");
+            scene.planeController.enabled = false;
+            scene.planeController.gameObject.SetActive(false);
+            scene.enabled = false;
+            scene.gameObject.SetActive(false);
             var amplifyMotionEffectBases = Resources.FindObjectsOfTypeAll<AmplifyMotionEffectBase>();
             foreach (var amplifyMotionEffectBase in amplifyMotionEffectBases) UnityEngine.Object.Destroy(amplifyMotionEffectBase);
             var imageEffectOptimizers = Resources.FindObjectsOfTypeAll<ImageEffectOptimizer>();
@@ -278,5 +293,25 @@ namespace Oxide.Game.TheForest
             }
             return false;
         }
+
+        /// <summary>
+        /// Overrides the default save path
+        /// </summary>
+        /// <returns></returns>
+        [HookMethod("IOnGetSavePath")]
+        private string IOnGetSavePath()
+        {
+            //var dir = Utility.GetDirectoryName(Interface.Oxide.RootDirectory + "\\saves\\");
+            var dir = Interface.Oxide.RootDirectory + "\\saves\\";
+            if (/*dir != null && */!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            return dir;
+        }
+
+        /// <summary>
+        /// Overrides the default save name
+        /// </summary>
+        /// <returns></returns>
+        [HookMethod("IOnGetSaveName")]
+        private string IOnGetSaveName() => TitleScreen.StartGameSetup.Slot + ".sav";
     }
 }

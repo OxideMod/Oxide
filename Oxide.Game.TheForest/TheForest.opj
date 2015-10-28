@@ -620,9 +620,9 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnRepairMaterialAdd",
@@ -640,7 +640,7 @@
             },
             "MSILHash": "nanswpSG1yz1UlI3+38Y13W4fqV+SBHTjitVu7+Lkx0=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -724,9 +724,9 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnIngredientAdd",
@@ -952,7 +952,7 @@
             },
             "MSILHash": "XlCdFQwL6HV+O8YWgP70rHPNuhGd+eIY9LlT08gFNC0=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -1132,7 +1132,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "Ne9Qkvi/hsZOpyX9wmWONL4svmF6zDniPBcF6ObOTeQ=",
+            "MSILHash": "qIek84CJcZHRLOJ2/wJ6LvX3mTPtkPi68O5oVtWzU30=",
             "BaseHookName": null,
             "HookCategory": "_WORKING"
           }
@@ -1290,7 +1290,7 @@
             },
             "MSILHash": "T8MMaaPNdGTv8AeWX+JTH1GhC+lIGv9yQrZE1LqkJZk=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -1342,15 +1342,15 @@
             },
             "MSILHash": "ggD4yjIldhdYTFxhuKSjN0jo/+Vcq9kskQGVayC+6Jo=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "InjectionIndex": 10,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnRabbitSpawn",
@@ -1368,7 +1368,7 @@
             },
             "MSILHash": "ZPk+9/Eh/7kW1pobjV223+xkzPw5Oa3PyboB3yUS+UY=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -1499,6 +1499,80 @@
             "MSILHash": "pO4pfSR/9YruUYwFIFfYJUfNwG6TMM3EKMLg8gqC1MA=",
             "BaseHookName": null,
             "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 3,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheForest.Save.PlayerSpawn",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SaveMpCharacter",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.GameObject"
+              ]
+            },
+            "MSILHash": "4eKJZQBa3XMyKu38jDs83aJlIJWsauWpawEPB7bzJaA=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnGetSaveName [internal]",
+            "HookName": "IOnGetSaveName",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheForest.Save.PlayerSpawn",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetClientSaveFileName",
+              "ReturnType": "System.String",
+              "Parameters": []
+            },
+            "MSILHash": "0UzETxolhalpBBEBoCWPb5Oi3vXDAKWuencpd/7Iah0=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnGetSavePath [internal]",
+            "HookName": "IOnGetSavePath",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheForest.Utils.SaveSlotUtils",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetMpClientLocalPath",
+              "ReturnType": "System.String",
+              "Parameters": []
+            },
+            "MSILHash": "ipW+WGNeAwVGsMuINcuoqtv6gDLXcy5TI9BjA8vk2dM=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
