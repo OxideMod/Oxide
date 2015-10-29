@@ -135,6 +135,7 @@ namespace Oxide.Game.Rust
         {
             if (serverInitialized) return;
             serverInitialized = true;
+
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
         }
@@ -148,7 +149,7 @@ namespace Oxide.Game.Rust
             if (!Interface.Oxide.CheckConsole(true)) return null;
             serverConsole.enabled = false;
             UnityEngine.Object.Destroy(serverConsole);
-            typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, null);
+            typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
             RustExtension.EnableConsole();
             return false;
         }
@@ -167,10 +168,7 @@ namespace Oxide.Game.Rust
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown()
-        {
-            Interface.Oxide.OnShutdown();
-        }
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when another plugin has been loaded
@@ -1118,7 +1116,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a player gathers a plant
+        /// Called when a player gathers from a plant
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="entity"></param>

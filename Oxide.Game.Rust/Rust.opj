@@ -93,7 +93,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "b5LxV9H7UcnIX4eH524Akt8rDnUKOEENMACTfy+xK0I=",
+            "MSILHash": "OMMqDTQeuRSGY0oJFwYPbAFdyyIRoZtRCeaI3yD4f3M=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -230,7 +230,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 29,
+            "InjectionIndex": 30,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -248,7 +248,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "2eDzWKdjcBRPgOU8lTmHKjqRolh4Sg7G+AltIDvUc5o=",
+            "MSILHash": "JTymSiDjWXD9lQn24Gl8mD+EvYprqBFrWBvHgZVa6Uc=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -863,7 +863,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "Q1SOSlJipxhjLYDwecU0A7vVcDrpf87pKR6M7YeJw/8=",
+            "MSILHash": "TZqDet6VozRcEUrXJcyNOHJHsmWdHvTu/u9C291HY2A=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1024,7 +1024,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "mJIYVQgyyYPSG3DBhqlmDqnCesA9sZDLeA2yS0mpxqU=",
+            "MSILHash": "fjHjYwDMCXuyUbA4PwYwxG481x+zq0ZKBU67RIMvDfE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1074,7 +1074,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "KnHcH291uh6flV+rROS2uZuR20jC4LHzfDMBCbDtQjo=",
+            "MSILHash": "ZEvjkUjah70L9jOAlERJLQsMuMDJYSSPMJeafPC1O70=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -1331,7 +1331,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "/02GNEvGigGO5How79JQwmCsmXqwRw42eJe2MFoCfYs=",
+            "MSILHash": "sLZ4FgIvwyUdmQj19pDy8CXkvgWypoEf/ZPHWWUrHD4=",
             "BaseHookName": null,
             "HookCategory": "Door"
           }
@@ -1357,7 +1357,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "S6tbJSmfqQLyjgznJiu4gJwZH3uj12dAYu++tuDYK/0=",
+            "MSILHash": "3CR81GLi0H++UXzkOYSgFiTmhGi8pHdXZTzZB69vqB0=",
             "BaseHookName": null,
             "HookCategory": "Door"
           }
@@ -1997,7 +1997,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "p5Ez6swfG4R045M6S0dA8glvVqGtacX1B7d2o+gNR54=",
+            "MSILHash": "vZDv/IE8+tj4etG6THju4JQ7NU3GmVDVCvXyPoxICzg=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2232,7 +2232,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "2KNm295h0Wf9Id2H6T70IDZdL1OWym+GLMF9iUzr6Co=",
+            "MSILHash": "kTeYlsAi8Mv6h4E2Pkgjs6Q8WsQQByxnfgQ7n/L00uY=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2258,7 +2258,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "nKtVQVEI7Fenuhm/AMASC83d7K7rgs4r3ke3khrn23k=",
+            "MSILHash": "PHI3/07Ui+OXvlZSEJsIM/Jkkj58brkc4rKQO73zMQI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2366,7 +2366,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "5rKtow8GYc4/TxgJapk2ae2A5PChFUOy2g1HGPyUV2Y=",
+            "MSILHash": "5edToZDkv9pFWNCrn8KOaxxuQQOsMlP4Yv3TRcM/gu4=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2392,7 +2392,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "0G6HBr4iJFv2AlTF1bqfh8+xJtRTUWDb0k6yXck7B20=",
+            "MSILHash": "IyJ800gLOwhhnCdzTI5wfAXwJfcD+213yWRF6mp/TzU=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }

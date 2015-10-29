@@ -6,7 +6,6 @@ using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-
 using Oxide.Game.Rust.Libraries;
 
 namespace Oxide.Plugins
@@ -15,6 +14,7 @@ namespace Oxide.Plugins
     {
         protected Command cmd;
         protected Permission permission;
+        protected Game.Rust.Libraries.Rust rust;
 
         public override void SetPluginInfo(string name, string path)
         {
@@ -22,6 +22,7 @@ namespace Oxide.Plugins
 
             cmd = Interface.Oxide.GetLibrary<Command>("Command");
             permission = Interface.Oxide.GetLibrary<Permission>("Permission");
+            rust = Interface.Oxide.GetLibrary<Game.Rust.Libraries.Rust>("Rust");
         }
 
         public override void HandleAddedToManager(PluginManager manager)
