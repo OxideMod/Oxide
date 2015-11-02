@@ -26,7 +26,7 @@
             },
             "MSILHash": "FEQq4C/L18Y4LFxbzfynK2BvTk7orsYwanPwJgQ5q90=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "Server"
           }
         },
         {
@@ -47,7 +47,7 @@
             },
             "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "Server"
           }
         },
         {
@@ -71,7 +71,7 @@
             },
             "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
             "BaseHookName": "InitOxide [internal]",
-            "HookCategory": null
+            "HookCategory": "Server"
           }
         },
         {
@@ -95,7 +95,7 @@
             },
             "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
             "BaseHookName": "InitLogging [internal]",
-            "HookCategory": null
+            "HookCategory": "Console"
           }
         }
       ]
