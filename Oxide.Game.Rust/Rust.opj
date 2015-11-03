@@ -1366,7 +1366,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 13,
-            "ReturnBehavior": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -2395,6 +2395,32 @@
             "MSILHash": "IyJ800gLOwhhnCdzTI5wfAXwJfcD+213yWRF6mp/TzU=",
             "BaseHookName": null,
             "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanNetworkTo",
+            "HookName": "CanNetworkTo",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseNetworkable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ShouldNetworkTo",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "P3Mx+v3adUs95vU27ANKY5mvZxgLUs14zJrrTfI5vlw=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         }
       ]
