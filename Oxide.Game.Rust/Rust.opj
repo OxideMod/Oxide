@@ -813,7 +813,7 @@
             },
             "MSILHash": "aI81KSLwXLau4c/NL/Kl6ZFxpI2ubF0EzWVwdgRYtVA=",
             "BaseHookName": null,
-            "HookCategory": "Item"
+            "HookCategory": "Entity"
           }
         },
         {
@@ -1871,7 +1871,7 @@
             },
             "MSILHash": "5xBQv72LjAWm3gIZH2yOsRGBf5Df3wZ3qpEz0Pyai7o=",
             "BaseHookName": null,
-            "HookCategory": "Item"
+            "HookCategory": "Entity"
           }
         },
         {
@@ -1921,7 +1921,7 @@
             },
             "MSILHash": "1DnqYgNJMEE1XaBEB4t37XmQhq9oEmJmOWuyJgpBWgc=",
             "BaseHookName": null,
-            "HookCategory": "Item"
+            "HookCategory": "Entity"
           }
         },
         {
@@ -2025,7 +2025,7 @@
             },
             "MSILHash": "Qxel9i1qPCVX4o8NiJojh3iVJeN/E5wUC5VQO9WkXfE=",
             "BaseHookName": null,
-            "HookCategory": "Item"
+            "HookCategory": "Entity"
           }
         },
         {
@@ -2051,7 +2051,7 @@
             },
             "MSILHash": "Appo48NKyV0xAhocQXknoc5l0u5zbRJS8RLrIpPh44g=",
             "BaseHookName": null,
-            "HookCategory": "Item"
+            "HookCategory": "Entity"
           }
         },
         {
@@ -2420,7 +2420,83 @@
             },
             "MSILHash": "P3Mx+v3adUs95vU27ANKY5mvZxgLUs14zJrrTfI5vlw=",
             "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnTurrentHasTarget",
+            "HookName": "OnTurrentHasTarget",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AutoTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HasTarget",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "CriNAlY4Ka19CLnlK8H+CEvDlFchxCEgub1BT9rD0D0=",
+            "BaseHookName": null,
             "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnTurrentSetTarget",
+            "HookName": "OnTurrentSetTarget",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AutoTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetTarget",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseCombatEntity"
+              ]
+            },
+            "MSILHash": "7QX22Dv2Xht53cKxd+dBxRprDwoo1AUWwZdaBaRMB1U=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanBeTargeted",
+            "HookName": "CanBeTargeted",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AutoTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ObjectVisible",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BaseCombatEntity"
+              ]
+            },
+            "MSILHash": "X4BflRmL9Oj7tTyu1dDe7CQTdc6QlJWUVsYVy7M9FKc=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]
