@@ -127,7 +127,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 26,
+            "InjectionIndex": 28,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0, a0",
@@ -146,7 +146,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "euCdkWIF2pVu/BHHmXxlZnqs2Fkl1qE6FIZVOIw+sTQ=",
+            "MSILHash": "GBs3h7AHXVYClhVVOOP23q8qJzjQpiqMnCLAajnIYQE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
