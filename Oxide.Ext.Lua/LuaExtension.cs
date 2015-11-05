@@ -549,7 +549,7 @@ end
             }
 
             // Bind Lua specific libraries
-            LoadLibrary(new LuaGlobal(Manager.Logger), "_G");
+            LoadLibrary(new LuaGlobal(LuaEnvironment, Manager.Logger), "_G");
             LuaEnvironment.NewTable("datafile");
             LoadLibrary(new LuaDatafile(LuaEnvironment), "datafile");
             if (LuaEnvironment["util"] == null)
