@@ -101,7 +101,26 @@ namespace Oxide.Core.Libraries
             Utility.DatafileToProto<Dictionary<string, GroupData>>("oxide.groups");
             userdata = ProtoStorage.Load<Dictionary<string, UserData>>("oxide.users") ?? new Dictionary<string, UserData>();
             groupdata = ProtoStorage.Load<Dictionary<string, GroupData>>("oxide.groups") ?? new Dictionary<string, GroupData>();
+            foreach (var pair in groupdata)
+            {
+                if (!string.IsNullOrEmpty(pair.Value.ParentGroup) && HasCircularParent(pair.Key, pair.Value.ParentGroup))
+                {
+                    Interface.Oxide.LogWarning("Detected circular parent group for '{0}'! Removing parent '{1}'", pair.Key, pair.Value.ParentGroup);
+                    pair.Value.ParentGroup = null;
+                }
+            }
             IsLoaded = true;
+        }
+
+        /// <summary>
+        /// Exports user/group data to json
+        /// </summary>
+        [LibraryFunction("Export")]
+        public void Export(string prefix = "auth")
+        {
+            if (!IsLoaded) return;
+            Interface.Oxide.DataFileSystem.WriteObject(prefix + ".groups", groupdata);
+            Interface.Oxide.DataFileSystem.WriteObject(prefix + ".users", userdata);
         }
 
         /// <summary>
@@ -747,6 +766,15 @@ namespace Oxide.Core.Libraries
             parent = parent.ToLower();
 
             if (!string.IsNullOrEmpty(data.ParentGroup) && data.ParentGroup.Equals(parent)) return true;
+            if (HasCircularParent(groupname, parent)) return false;
+            // Change and save
+            data.ParentGroup = parent;
+            SaveGroups();
+            return true;
+        }
+
+        private bool HasCircularParent(string groupname, string parent)
+        {
             //Get parent data
             GroupData parentData;
             if (!groupdata.TryGetValue(parent, out parentData)) return false;
@@ -755,14 +783,11 @@ namespace Oxide.Core.Libraries
             while (!string.IsNullOrEmpty(parentData.ParentGroup))
             {
                 //found itself?
-                if (!groups.Add(parentData.ParentGroup)) return false;
+                if (!groups.Add(parentData.ParentGroup)) return true;
                 //get next parent
                 if (!groupdata.TryGetValue(parent, out parentData)) return false;
             }
-            // Change and save
-            data.ParentGroup = parent;
-            SaveGroups();
-            return true;
+            return false;
         }
 
         #endregion

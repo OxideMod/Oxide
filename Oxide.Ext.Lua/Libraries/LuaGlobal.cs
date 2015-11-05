@@ -30,11 +30,24 @@ namespace Oxide.Ext.Lua.Libraries
         /// <summary>
         /// Prints a message
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="args"></param>
         [LibraryFunction("print")]
-        public void Print(object message)
+        public void Print(params object[] args)
         {
-            Logger.Write(LogType.Info, message != null ? message.ToString() : "null");
+            if (args.Length == 1)
+            {
+                Logger.Write(LogType.Info, args[0]?.ToString() ?? "null");
+            }
+            else
+            {
+                var message = string.Empty;
+                for (var i = 0; i <= args.Length; ++i)
+                {
+                    if (i > 0) message += "\t";
+                    message += args[i]?.ToString() ?? "null";
+                }
+                Logger.Write(LogType.Info, message);
+            }
         }
     }
 }
