@@ -34,7 +34,7 @@ namespace Oxide.Game.TheForest
 
         public static string[] Filter =
         {
-            /*"****** Game Activation Sequence ******",
+            "****** Game Activation Sequence ******",
             "65K cleanup",
             "<color=red>Ceto",
             "<color=yellow>Ceto",
@@ -83,7 +83,7 @@ namespace Oxide.Game.TheForest
             "setMale",
             "setting clothes",
             "spawner was destroyed",
-            "started steam server"*/
+            "started steam server"
         };
 
         private const string LogFileName = "output_log.txt"; // TODO: Add -logFile support
@@ -194,7 +194,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.26c"; // TODO: Grab version/protocol
+                var gameVersion = "0.26d"; // TODO: Grab version/protocol
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
