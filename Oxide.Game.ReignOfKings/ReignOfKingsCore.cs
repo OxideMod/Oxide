@@ -17,7 +17,6 @@ using Network = uLink.Network;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-
 using Oxide.Game.ReignOfKings.Libraries;
 
 namespace Oxide.Game.ReignOfKings
@@ -144,18 +143,14 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="args"></param>
         private static void SendPlayerMessage(Player player, string format, params object[] args)
         {
-            if (player.IsServer)
-                player.SendMessage("[950415]Oxide[FFFFFF]: " + format, args);
+            if (player.IsServer) player.SendMessage("[950415]Oxide[FFFFFF]: " + format, args);
         }
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown()
-        {
-            Interface.Oxide.OnShutdown();
-        }
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when a plugin is loaded

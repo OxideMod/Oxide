@@ -4,14 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using UnityEngine;
+using Object = UnityEngine.Object;
+
 using Oxide.Core;
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 using Oxide.Game.RustLegacy.Libraries;
-
-using UnityEngine;
-
-using Object = UnityEngine.Object;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -183,14 +182,12 @@ namespace Oxide.Game.RustLegacy
             ConsoleSystem.RegisterLogCallback(HandleLog, true);*/
         }
 
-        private void ServerConsoleOnInput(string input)
-        {
-            ConsoleSystem.Run(input, true);
-        }
+        private void ServerConsoleOnInput(string input) => ConsoleSystem.Run(input, true);
 
         private void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

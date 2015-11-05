@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using UnityEngine;
 
 namespace Oxide.Game.BeastsOfPrey
 {
@@ -73,8 +73,10 @@ namespace Oxide.Game.BeastsOfPrey
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole(true)) return;
+
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+
             // TODO: Add status information
         }
 

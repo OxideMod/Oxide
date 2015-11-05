@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using UnityEngine;
 
 namespace Oxide.Game.FortressCraft
 {
@@ -73,8 +73,10 @@ namespace Oxide.Game.FortressCraft
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+
             // TODO: Add status information
         }
 
@@ -86,6 +88,7 @@ namespace Oxide.Game.FortressCraft
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

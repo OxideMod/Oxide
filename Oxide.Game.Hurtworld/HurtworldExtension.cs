@@ -5,7 +5,6 @@ using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
 using Oxide.Game.Hurtworld.Libraries;
 
 namespace Oxide.Game.Hurtworld
@@ -66,7 +65,7 @@ namespace Oxide.Game.Hurtworld
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("Hurt", new Libraries.Hurtworld());
+            Manager.RegisterLibrary("Hurtworld", new Libraries.Hurtworld());
         }
 
         /// <summary>
@@ -87,7 +86,6 @@ namespace Oxide.Game.Hurtworld
 
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
@@ -149,10 +147,7 @@ namespace Oxide.Game.Hurtworld
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        private static void ServerConsoleOnInput(string input)
-        {
-            ConsoleManager.Instance.ExecuteCommand(input);
-        }
+        private static void ServerConsoleOnInput(string input) => ConsoleManager.Instance.ExecuteCommand(input);
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {

@@ -46,6 +46,7 @@ namespace Oxide.Game.BeastsOfPrey
         {
             if (serverInitialized) return;
             serverInitialized = true;
+
             // Configure the hostname after it has been set
             //RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
         }
@@ -54,10 +55,8 @@ namespace Oxide.Game.BeastsOfPrey
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown()
-        {
-            Interface.Oxide.OnShutdown();
-        }
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
 
         /// <summary>
         /// Called when a plugin is loaded
@@ -67,8 +66,7 @@ namespace Oxide.Game.BeastsOfPrey
         private void OnPluginLoaded(Plugin plugin)
         {
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore")
-                InitializeLogging();
+            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
         /// <summary>

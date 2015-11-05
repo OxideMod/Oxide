@@ -6,7 +6,6 @@ using uLink;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-
 using Oxide.Game.Hurtworld.Libraries;
 
 namespace Oxide.Game.Hurtworld
@@ -64,6 +63,7 @@ namespace Oxide.Game.Hurtworld
         {
             if (serverInitialized) return;
             serverInitialized = true;
+
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
         }
@@ -72,10 +72,8 @@ namespace Oxide.Game.Hurtworld
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown()
-        {
-            Interface.Oxide.OnShutdown();
-        }
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
 
         /// <summary>
         /// Called when a plugin is loaded
@@ -85,18 +83,28 @@ namespace Oxide.Game.Hurtworld
         private void OnPluginLoaded(Plugin plugin)
         {
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore")
-                InitializeLogging();
+            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
+        /// <summary>
+        /// Called when a console command was run
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         [HookMethod("OnRunCommand")]
-        private object OnRunCommand(string commandParam)
+        private object OnRunCommand(string arg)
         {
             // Sanity checks
-            if (commandParam == null || commandParam.Trim().Length == 0) return null;
-            return cmdlib.HandleConsoleCommand(commandParam);
+            if (arg == null || arg.Trim().Length == 0) return null;
+            return cmdlib.HandleConsoleCommand(arg);
         }
 
+        /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <param name="info"></param>
+        /// <param name="message"></param>
         [HookMethod("OnPlayerChat")]
         private object OnPlayerChat(PlayerIdentity identity, NetworkMessageInfo info, string message)
         {

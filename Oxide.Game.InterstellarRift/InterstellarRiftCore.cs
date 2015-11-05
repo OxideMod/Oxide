@@ -22,9 +22,6 @@ namespace Oxide.Game.InterstellarRift
             Title = "Interstellar Rift Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
-
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
-            if (plugins.Exists("unitycore")) InitializeLogging();
         }
 
         /// <summary>
@@ -46,6 +43,7 @@ namespace Oxide.Game.InterstellarRift
         {
             if (serverInitialized) return;
             serverInitialized = true;
+
             // Configure the hostname after it has been set
             //RemoteLogger.SetTag("hostname", );
         }
@@ -54,10 +52,7 @@ namespace Oxide.Game.InterstellarRift
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown()
-        {
-            Interface.Oxide.OnShutdown();
-        }
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when a plugin is loaded
@@ -67,8 +62,7 @@ namespace Oxide.Game.InterstellarRift
         private void OnPluginLoaded(Plugin plugin)
         {
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized)
-                InitializeLogging();
+            if (!loggingInitialized) InitializeLogging();
         }
 
         /// <summary>

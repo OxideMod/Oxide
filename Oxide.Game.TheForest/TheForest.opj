@@ -354,7 +354,7 @@
             },
             "MSILHash": "GO1e4wInJKaoEf37Yb7Mv7eb1wG6ByxXPEXxXVnvapY=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -588,7 +588,7 @@
             },
             "MSILHash": "D4Cq1n2DBhZczrojwtMg4V0dpMM6GqhWOQQDSKN9riY=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -698,9 +698,9 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnItemHolderTakeItem",
@@ -848,7 +848,7 @@
             },
             "MSILHash": "+/IcL0QlCSdUAG9rOhLRDBkAL+LQRkvcgzj1DlSYukM=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -900,7 +900,7 @@
             },
             "MSILHash": "I5nEGGax22uFbZwDrK/McbaogMNALjiYMThY9jq7TXk=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -1400,9 +1400,9 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "OnRabbitAdd",
@@ -1420,7 +1420,7 @@
             },
             "MSILHash": "n5faeUst8FJNR2C5GRmPdO6IPocNqxZO3NJ9tXAcN3E=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -1498,7 +1498,7 @@
             },
             "MSILHash": "pO4pfSR/9YruUYwFIFfYJUfNwG6TMM3EKMLg8gqC1MA=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WORKING"
           }
         },
         {
@@ -1726,6 +1726,54 @@
               "Parameters": []
             },
             "MSILHash": "uCJ4P8BPhlLk8jrjeUq/mNd87hR2D6IJSeNGVx+7EI0=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnToothChance",
+            "HookName": "OnToothChance",
+            "AssemblyName": "Assembly-UnityScript.dll",
+            "TypeName": "ToothChance",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Start",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "74rL6CAYOcQZE/Hd9YbJWGvDhY9a3RcvJssbNf9jwPs=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBushHit",
+            "HookName": "OnBushHit",
+            "AssemblyName": "Assembly-UnityScript.dll",
+            "TypeName": "CutBush",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Hit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "5+zGDtMVYUT3jjKqXVBWC0T+xFlpneH5plzim9x9rNE=",
             "BaseHookName": null,
             "HookCategory": null
           }

@@ -34,7 +34,7 @@ namespace Oxide.Game.TheForest
 
         public static string[] Filter =
         {
-            "****** Game Activation Sequence ******",
+            /*"****** Game Activation Sequence ******",
             "65K cleanup",
             "<color=red>Ceto",
             "<color=yellow>Ceto",
@@ -83,7 +83,7 @@ namespace Oxide.Game.TheForest
             "setMale",
             "setting clothes",
             "spawner was destroyed",
-            "started steam server"
+            "started steam server"*/
         };
 
         private const string LogFileName = "output_log.txt"; // TODO: Add -logFile support

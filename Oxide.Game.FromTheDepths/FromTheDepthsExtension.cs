@@ -3,7 +3,6 @@ using System.Linq;
 
 using BrilliantSkies.FromTheDepths.Game.UserInterfaces;
 using BrilliantSkies.FromTheDepths.Multiplayer;
-using BrilliantSkies.FromTheDepths.Planets;
 using UnityEngine;
 
 using Oxide.Core;
@@ -78,21 +77,21 @@ namespace Oxide.Game.FromTheDepths
             if (!Interface.Oxide.EnableConsole()) return;
 
             // Disable splash screens
-            Application.LoadLevel("Main menu");
+            //Application.LoadLevel("Main menu"); // TODO: Hit it with a hammer
 
             // Disable client audio
             StaticOptionsManager.musicVolume = 0f;
             StaticOptionsManager.soundVolume = 0f;
 
             // Set server options
-            StaticOptionsManager.gameName = "The Wulf Den";
-            StaticOptionsManager.gameComments = "Powered by Oxide";
-            StaticOptionsManager.gamePassword = "oxide";
-            StaticOptionsManager.playerLimit = 10;
+            StaticOptionsManager.gameName = "The Wulf Den"; // TODO: Switch to cmd argument
+            StaticOptionsManager.gameComments = "Powered by Oxide"; // TODO: Switch to cmd argument
+            StaticOptionsManager.gamePassword = "oxide"; // TODO: Switch to cmd argument
+            StaticOptionsManager.playerLimit = 10; // TODO: Switch to cmd argument
 
             // Start server
             HostMenuGUI.Instance.HostGame();
-            InstanceSpecification selectedMapInstance = Planet.i.MultiplayerMaps.Instances[1];
+            //var selectedMapInstance = Planet.i.MultiplayerMaps.Instances[1]; // TODO: ?
             HostMenuGUI.Instance.LaunchServer();
             GameLobbyGUI.Instance.StartGame();
 
@@ -139,11 +138,9 @@ namespace Oxide.Game.FromTheDepths
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 if (GameTimer.Instance == null) return string.Empty;
-                TimeSpan t = TimeSpan.FromSeconds(GameTimer.Instance.GameTime);
-                DateTime time = DateTime.Today.Add(t);
-                var gameTime = time.ToString("h:mm tt").ToLower();
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(GameTimer.Instance.GameTime)).ToString("h:mm tt").ToLower();
                 var map = string.Empty; // TODO: MPGameData.MapName
-                return string.Concat(" ", gameTime, ", ", map);
+                return string.Concat(" ", time, ", ", map);
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using UnityEngine;
 
 namespace Oxide.Game.Blockstorm
 {
@@ -65,7 +65,7 @@ namespace Oxide.Game.Blockstorm
             Manager.RegisterPluginLoader(new BlockstormPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("storm", new Libraries.Blockstorm());
+            Manager.RegisterLibrary("Storm", new Libraries.Blockstorm());
         }
 
         /// <summary>
@@ -122,13 +122,13 @@ namespace Oxide.Game.Blockstorm
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 // TODO: Network in/out
-                return "";
+                return string.Empty;
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 // TODO: Server game time, map name
-                return "";
+                return string.Empty;
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {

@@ -98,8 +98,10 @@ namespace Oxide.Game.DeadLinger
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+
             Application.LoadLevel("mainScene");
             // TODO: Add status information
         }
@@ -112,6 +114,7 @@ namespace Oxide.Game.DeadLinger
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

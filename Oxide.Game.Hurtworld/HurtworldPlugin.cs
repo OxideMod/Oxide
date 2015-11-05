@@ -12,6 +12,7 @@ namespace Oxide.Plugins
     {
         protected Command cmd;
         protected Permission permission;
+        protected Hurtworld hurtworld;
 
         public override void SetPluginInfo(string name, string path)
         {
@@ -19,6 +20,7 @@ namespace Oxide.Plugins
 
             cmd = Interface.Oxide.GetLibrary<Command>("Command");
             permission = Interface.Oxide.GetLibrary<Permission>("Permission");
+            hurtworld = Interface.Oxide.GetLibrary<Hurtworld>("Hurtworld");
         }
 
         public override void HandleAddedToManager(PluginManager manager)
@@ -29,7 +31,7 @@ namespace Oxide.Plugins
                 if (attributes.Length > 0)
                 {
                     var attribute = attributes[0] as ConsoleCommandAttribute;
-                    cmd.AddConsoleCommand(attribute.Command, this, method.Name);
+                    cmd.AddConsoleCommand(attribute?.Command, this, method.Name);
                     continue;
                 }
 
@@ -37,7 +39,7 @@ namespace Oxide.Plugins
                 if (attributes.Length > 0)
                 {
                     var attribute = attributes[0] as ChatCommandAttribute;
-                    cmd.AddChatCommand(attribute.Command, this, method.Name);
+                    cmd.AddChatCommand(attribute?.Command, this, method.Name);
                 }
             }
             base.HandleAddedToManager(manager);
