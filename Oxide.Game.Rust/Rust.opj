@@ -2498,6 +2498,82 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnHelicopterSetTarget",
+            "HookName": "OnHelicopterSetTarget",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "HelicopterTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetTarget",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseCombatEntity"
+              ]
+            },
+            "MSILHash": "hJmenfTdtPXjORLmt0ioruue5eyDKWVBTcxSIDcqmZY=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnHelicopterTarget",
+            "HookName": "OnHelicopterTarget",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "HelicopterTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HasTarget",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "uz3X/BU6/Yj+WQmLFoQDeGW6knz/EvY3z0tke7Ul6ew=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanBeTargeted",
+            "HookName": "CanBeTargeted",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "HelicopterTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InFiringArc",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BaseCombatEntity"
+              ]
+            },
+            "MSILHash": "RT3P7oKcvHqCnbrln0jCzNBQyS9bz5UZPcq/f+J0BCE=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ]
     }
