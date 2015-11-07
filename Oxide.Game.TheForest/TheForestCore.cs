@@ -224,10 +224,10 @@ namespace Oxide.Game.TheForest
                 // TODO: Remove server's player, or subtract it from maxplayers and Steam stats
 
                 // Remove server from member list
-                CoopLobby.Instance?.SetCurrentMembers((int)(CoopLobby.Instance?.MemberCount - 1));
+                //CoopLobby.Instance?.SetCurrentMembers((int)(CoopLobby.Instance?.MemberCount - 1));
 
                 // Remove server player model/object
-                Scene.SceneTracker.allPlayers.Remove(LocalPlayer.GameObject);
+                //Scene.SceneTracker.allPlayers.Remove(LocalPlayer.GameObject);
                 //Scene.SceneTracker.planeCrash
             });
         }
