@@ -155,15 +155,15 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 if (CoopLobby.Instance == null) return string.Empty;
-                var players = CoopLobby.Instance?.MemberCount;
-                var hostname = CoopLobby.Instance?.Info.Name;
+                var players = CoopLobby.Instance.MemberCount;
+                var hostname = CoopLobby.Instance.Info.Name;
                 return string.Concat(players, " | ", hostname);
             };
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
                 if (CoopLobby.Instance == null) return string.Empty;
-                var hostname = CoopLobby.Instance?.Info.Name;
+                var hostname = CoopLobby.Instance.Info.Name;
                 return string.Concat(" ", hostname);
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>
@@ -177,8 +177,8 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 if (CoopLobby.Instance == null) return string.Empty;
-                var players = CoopLobby.Instance?.MemberCount;
-                var playerLimit = CoopLobby.Instance?.Info.MemberLimit;
+                var players = CoopLobby.Instance.MemberCount;
+                var playerLimit = CoopLobby.Instance.Info.MemberLimit;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
