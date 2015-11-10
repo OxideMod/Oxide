@@ -87,8 +87,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnCoopSetup [internal]",
-            "HookName": "IOnCoopSetup",
+            "Name": "IOnLobbySetup [internal]",
+            "HookName": "IOnLobbySetup",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamNGUI",
             "Flagged": false,
@@ -135,7 +135,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 1,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -1601,6 +1601,32 @@
             "MSILHash": "2/59zWgea+1I/m5iHKfzBAKUSX22Jh/sfXKgAp8GvbM=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerInit",
+            "HookName": "OnPlayerInit",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopPlayerCallbacks",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "EntityAttached",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BoltEntity"
+              ]
+            },
+            "MSILHash": "Rb7jvnJfxLZRb+TGJm+cBZD3rSJ7APHcXqa6CrrKVQk=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]

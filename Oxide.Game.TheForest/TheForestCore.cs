@@ -91,20 +91,6 @@ namespace Oxide.Game.TheForest
         }
 
         /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="connection"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(BoltConnection connection)
-        {
-            if (connection == null) return;
-            var steamId = connection.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
-
-            Interface.Oxide.LogInfo($"{steamId}/{name} joined");
-        }
-
-        /// <summary>
         /// Called when the player sends a message
         /// </summary>
         /// <param name="e"></param>
@@ -117,6 +103,20 @@ namespace Oxide.Game.TheForest
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
 
             Interface.Oxide.LogInfo($"{name}: {e.Message}");
+        }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="connection"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(BoltConnection connection)
+        {
+            if (connection == null) return;
+            var steamId = connection.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+            Interface.Oxide.LogInfo($"{steamId}/{name} joined");
         }
 
         /// <summary>
@@ -189,15 +189,23 @@ namespace Oxide.Game.TheForest
                 var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
                 coop.OnCoOp();
                 coop.OnMpHost();
-                coop.OnSlotSelection((int)TitleScreen.StartGameSetup.Slot);
+                if (LevelSerializer.SavedGames.Count > 0)
+                {
+                    coop.OnLoad();
+                    coop.OnSlotSelection((int)TitleScreen.StartGameSetup.Slot);
+                    DisableAudio();
+                    return;
+                }
+                coop.OnNewGame();
+                DisableAudio();
             });
         }
 
         /// <summary>
         /// Sets up the coop lobby
         /// </summary>
-        [HookMethod("IOnCoopSetup")]
-        private void IOnCoopSetup(Enum screen)
+        [HookMethod("IOnLobbySetup")]
+        private void IOnLobbySetup(Enum screen)
         {
             var type = typeof(CoopSteamNGUI).GetNestedTypes(BindingFlags.NonPublic).FirstOrDefault(x => x.IsEnum && x.Name.Equals("Screens"));
             var enumValue = type?.GetField("LobbySetup", BindingFlags.Static | BindingFlags.Public)?.GetValue(null);
@@ -207,6 +215,7 @@ namespace Oxide.Game.TheForest
             {
                 var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
                 coop.OnHostLobbySetup();
+                DisableAudio();
             });
         }
 
