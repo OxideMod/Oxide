@@ -57,6 +57,7 @@ namespace Oxide.Game.TheForest
             "Refreshing Input Mapping Icons",
             "Reloading Input Mapping",
             "RewiredSpawner",
+            "Saving",
             "Skin Variation",
             "Skipped frame because",
             "Skipped rendering frame because",
@@ -70,6 +71,7 @@ namespace Oxide.Game.TheForest
             "all clients exited cave",
             "attach:",
             "attached:",
+            "can't use image filters",
             "client entered cave",
             "delaying initial",
             "disableFlying",
@@ -145,6 +147,8 @@ namespace Oxide.Game.TheForest
             if (commandLine.HasVariable("maxplayers")) PlayerPrefs.SetInt("MpGamePlayerCount", int.Parse(commandLine.GetVariable("maxplayers")));
             if (commandLine.HasVariable("hostname")) PlayerPrefs.SetString("MpGameName", commandLine.GetVariable("hostname"));
             if (commandLine.HasVariable("friendsonly"))  PlayerPrefs.SetInt("MpGameFriendsOnly", int.Parse(commandLine.GetVariable("friendsonly")));
+            if (commandLine.HasVariable("saveslot")) TitleScreen.StartGameSetup.Slot = (TitleScreen.GameSetup.Slots) int.Parse(commandLine.GetVariable("saveslot"));
+            //if (commandLine.HasVariable("saveinterval")) /* TODO */
 
             // Disable client audio for server
             TheForestCore.DisableAudio();

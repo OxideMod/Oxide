@@ -1504,60 +1504,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 3,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": "",
-            "HookTypeName": "Simple",
-            "Name": "OnServerSave",
-            "HookName": "OnServerSave",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TheForest.Save.PlayerSpawn",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SaveMpCharacter",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "UnityEngine.GameObject"
-              ]
-            },
-            "MSILHash": "4eKJZQBa3XMyKu38jDs83aJlIJWsauWpawEPB7bzJaA=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnGetSaveName [internal]",
-            "HookName": "IOnGetSaveName",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TheForest.Save.PlayerSpawn",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "GetClientSaveFileName",
-              "ReturnType": "System.String",
-              "Parameters": []
-            },
-            "MSILHash": "0UzETxolhalpBBEBoCWPb5Oi3vXDAKWuencpd/7Iah0=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1",
             "HookTypeName": "Simple",
             "Name": "IOnGetSavePath [internal]",
             "HookName": "IOnGetSavePath",
@@ -1566,11 +1516,89 @@
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "GetMpClientLocalPath",
+              "Name": "GetLocalSlotPath",
               "ReturnType": "System.String",
+              "Parameters": [
+                "TitleScreen/GameSetup/PlayerModes",
+                "TitleScreen/GameSetup/Slots"
+              ]
+            },
+            "MSILHash": "3IGi3edjIc7w6oHpJsLtyqp/B/J2cKu1JKhmYuEmYj8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerStats",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "JustSave",
+              "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ipW+WGNeAwVGsMuINcuoqtv6gDLXcy5TI9BjA8vk2dM=",
+            "MSILHash": "UVi+xO17oDRDronmJvhIQ3NQD9p0JPykkA4rxcupffU=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1",
+            "HookTypeName": "Simple",
+            "Name": "IOnGetSavePath [internal]",
+            "HookName": "IOnGetSavePath",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheForest.Utils.SaveSlotUtils",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetCloudSlotPath",
+              "ReturnType": "System.String",
+              "Parameters": [
+                "TitleScreen/GameSetup/PlayerModes",
+                "TitleScreen/GameSetup/Slots"
+              ]
+            },
+            "MSILHash": "7w/7LxQxw0GrODTKaucDmEb9UV4Y0O/R9rysgEGg/S8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamServerStarter",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "OnLoadingDone",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "2/59zWgea+1I/m5iHKfzBAKUSX22Jh/sfXKgAp8GvbM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

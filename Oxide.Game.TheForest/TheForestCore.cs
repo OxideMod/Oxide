@@ -9,6 +9,7 @@ using Steamworks;
 using TheForest.UI;
 using TheForest.Utils;
 using UnityEngine;
+using UnityStandardAssets.ImageEffects;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -188,8 +189,7 @@ namespace Oxide.Game.TheForest
                 var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
                 coop.OnCoOp();
                 coop.OnMpHost();
-                //coop.OnNewGame();
-                coop.OnSlotSelection(1);
+                coop.OnSlotSelection((int)TitleScreen.StartGameSetup.Slot);
             });
         }
 
@@ -220,15 +220,6 @@ namespace Oxide.Game.TheForest
             {
                 var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
                 coop.OnHostStartGame();
-
-                // TODO: Remove server's player, or subtract it from maxplayers and Steam stats
-
-                // Remove server from member list
-                //CoopLobby.Instance?.SetCurrentMembers((int)(CoopLobby.Instance?.MemberCount - 1));
-
-                // Remove server player model/object
-                //Scene.SceneTracker.allPlayers.Remove(LocalPlayer.GameObject);
-                //Scene.SceneTracker.planeCrash
             });
         }
 
@@ -262,16 +253,22 @@ namespace Oxide.Game.TheForest
                 cleanUp.Invoke(scene, null);
             }
             catch (Exception e) { /*Interface.Oxide.LogException("OnTriggerCutSceneAwake: ", e);*/ }
+
             scene.CancelInvoke("beginPlaneCrash");
             scene.planeController.CancelInvoke("beginPlaneCrash");
             scene.planeController.enabled = false;
             scene.planeController.gameObject.SetActive(false);
             scene.enabled = false;
             scene.gameObject.SetActive(false);
+
             var amplifyMotionEffectBases = Resources.FindObjectsOfTypeAll<AmplifyMotionEffectBase>();
             foreach (var amplifyMotionEffectBase in amplifyMotionEffectBases) UnityEngine.Object.Destroy(amplifyMotionEffectBase);
+            var imageEffectBases = Resources.FindObjectsOfTypeAll<ImageEffectBase>();
+            foreach (var imageEffectBase in imageEffectBases) UnityEngine.Object.Destroy(imageEffectBase);
             var imageEffectOptimizers = Resources.FindObjectsOfTypeAll<ImageEffectOptimizer>();
             foreach (var imageEffectOptimizer in imageEffectOptimizers) UnityEngine.Object.Destroy(imageEffectOptimizer);
+            var postEffectsBases = Resources.FindObjectsOfTypeAll<PostEffectsBase>();
+            foreach (var postEffectsBase in postEffectsBases) UnityEngine.Object.Destroy(postEffectsBase);
             var scionPostProcesses = Resources.FindObjectsOfTypeAll<ScionPostProcess>();
             foreach (var scionPostProcess in scionPostProcesses) UnityEngine.Object.Destroy(scionPostProcess);
             var projectedGrids = Resources.FindObjectsOfTypeAll<ProjectedGrid>();
@@ -291,6 +288,7 @@ namespace Oxide.Game.TheForest
                 behaviour.enabled = false;
                 behaviour.gameObject.SetActive(false);
             }
+
             return false;
         }
 
@@ -302,16 +300,10 @@ namespace Oxide.Game.TheForest
         private string IOnGetSavePath()
         {
             //var dir = Utility.GetDirectoryName(Interface.Oxide.RootDirectory + "\\saves\\");
-            var dir = Interface.Oxide.RootDirectory + "\\saves\\";
+            var dir = Interface.Oxide.RootDirectory + "\\saves\\" + TitleScreen.StartGameSetup.Slot + "\\";
             if (/*dir != null && */!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
             return dir;
         }
-
-        /// <summary>
-        /// Overrides the default save name
-        /// </summary>
-        /// <returns></returns>
-        [HookMethod("IOnGetSaveName")]
-        private string IOnGetSaveName() => TitleScreen.StartGameSetup.Slot + ".sav";
     }
 }
