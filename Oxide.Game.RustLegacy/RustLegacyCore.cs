@@ -775,12 +775,17 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("IOnGetClientMove")]
         private object IOnGetClientMove(HumanController controller, Vector3 origin, int encoded, ushort stateFlags, uLink.NetworkMessageInfo info)
         {
-            if (!float.IsNaN(origin.x) && !float.IsInfinity(origin.x) && !float.IsNaN(origin.y) &&
-                !float.IsInfinity(origin.y) && !float.IsNaN(origin.z) && !float.IsInfinity(origin.z)) return null;
-            Interface.Oxide.LogInfo($"Banned {controller.netUser.displayName} [{controller.netUser.userID}] for sending bad packets (possible teleport hack)");
-            BanList.Add(controller.netUser.userID, controller.netUser.displayName, "Sending bad packets (possible teleport hack)");
-            controller.netUser.Kick(NetError.ConnectionBanned, true);
-            return false;
+            if (float.IsNaN(origin.x) || float.IsInfinity(origin.x) ||
+                float.IsNaN(origin.y) || float.IsInfinity(origin.y) ||
+                float.IsNaN(origin.z) || float.IsInfinity(origin.z))
+            {
+                Interface.Oxide.LogInfo($"Banned {controller.netUser.displayName} [{controller.netUser.userID}] for sending bad packets (possible teleport hack)");
+                BanList.Add(controller.netUser.userID, controller.netUser.displayName, "Sending bad packets (possible teleport hack)");
+                controller.netUser.Kick(NetError.ConnectionBanned, true);
+                return false;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -798,10 +803,11 @@ namespace Oxide.Game.RustLegacy
         private object IOnRecieveNetwork(Metabolism metabolism, float calories, float water, float radiation, float antiradiation, float temperature, float poison)
         {
             var now = Interface.Oxide.Now;
-            if (!(now - lastWarningAt > 300f)) return false;
-            lastWarningAt = now;
-            Interface.Oxide.LogInfo("An attempt to use a metabolism hack was prevented.");
-            return false;
+            if (now - lastWarningAt > 300f)
+            {
+                lastWarningAt = now;
+                Interface.Oxide.LogInfo("An attempt to use a metabolism hack was prevented.");
+            }
         }
 
         /// <summary>
