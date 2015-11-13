@@ -378,9 +378,9 @@ namespace Oxide.Game.ReignOfKings
 
             var mode = args[0];
             var name = args[1];
-            var title = args[2];
+            var title = args.Length > 2 ? args[2] : string.Empty;
             int rank;
-            if (!int.TryParse(args[3], out rank))
+            if (args.Length < 4 || !int.TryParse(args[3], out rank))
                 rank = 0;
 
             if (mode.Equals("add"))
