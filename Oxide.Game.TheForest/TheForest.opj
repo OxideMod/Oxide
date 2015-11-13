@@ -386,7 +386,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 9,
+            "InjectionIndex": 12,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -404,7 +404,7 @@
                 "UnityEngine.Collider"
               ]
             },
-            "MSILHash": "Km90WAutRRFyS8QN9bI/Z/fdveZ05lyZUAMADDw58io=",
+            "MSILHash": "QOpSvJeWmv0157Fqg7QA5+xY2lvCiDUVKjvlYEg2lJI=",
             "BaseHookName": null,
             "HookCategory": "_WORKING"
           }
@@ -464,7 +464,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 14,
+            "InjectionIndex": 15,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -482,7 +482,7 @@
                 "UnityEngine.Collider"
               ]
             },
-            "MSILHash": "PoNqq3cyYjXfhpQabjb6iXFBtLqYGcnKP8DGXgLU9Dw=",
+            "MSILHash": "xtfdE0pvpqqxDgts3lv0ptTJInK029HjmwJOcQNzNB0=",
             "BaseHookName": null,
             "HookCategory": "_WORKING"
           }
@@ -1132,7 +1132,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "qIek84CJcZHRLOJ2/wJ6LvX3mTPtkPi68O5oVtWzU30=",
+            "MSILHash": "odyEllVhl8kDeOf2YhZlGjEzNNRT13T2rClgwzMH9/A=",
             "BaseHookName": null,
             "HookCategory": "_WORKING"
           }
@@ -1624,7 +1624,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "Rb7jvnJfxLZRb+TGJm+cBZD3rSJ7APHcXqa6CrrKVQk=",
+            "MSILHash": "bnGJZI4MAH9bblkrvmSfZukDKhBHXKcLuKYBFrh76Wg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
