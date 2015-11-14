@@ -2574,6 +2574,32 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 5,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0",
+            "HookTypeName": "Simple",
+            "Name": "CanBuild",
+            "HookName": "CanBuild",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Planner",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoBuild",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ProtoBuf.CreateBuilding"
+              ]
+            },
+            "MSILHash": "5y3YVaY25zgkD3ILA3njWoTd/kyRbsHZEe40uQ4dDdM=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ]
     }
