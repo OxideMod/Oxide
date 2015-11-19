@@ -612,7 +612,7 @@ namespace Oxide.Game.Rust
                     userId = player.userID.ToString();
                     name = player.displayName;
                     permission.UpdateNickname(userId, name);
-                    name += $"({userId})";
+                    name += $" ({userId})";
                 }
                 var result = "User '" + name + "' permissions:\n";
                 result += string.Join(", ", permission.GetUserPermissions(userId));
@@ -891,9 +891,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerTick(BasePlayer player, PlayerTick msg)
         {
             InputState input;
-            if (playerInputState.TryGetValue(player, out input))
-                return Interface.CallHook("OnPlayerInput", player, input);
-            return null;
+            return playerInputState.TryGetValue(player, out input) ? Interface.CallHook("OnPlayerInput", player, input) : null;
         }
 
         /// <summary>
