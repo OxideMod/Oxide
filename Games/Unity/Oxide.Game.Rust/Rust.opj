@@ -2626,6 +2626,30 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnItemContainerSave",
+            "HookName": "OnItemContainerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ItemContainer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Save",
+              "ReturnType": "ProtoBuf.ItemContainer",
+              "Parameters": []
+            },
+            "MSILHash": "G3mjO3VdveZfVvO+qQjtugfPdYzVdw46lsrHhfZ61YQ=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
         }
       ]
     }
