@@ -1471,6 +1471,32 @@
         {
           "Type": "Simple",
           "Hook": {
+            "InjectionIndex": 93,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l2, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnWeaponThrown",
+            "HookName": "OnWeaponThrown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseMelee",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CLProject",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "TVsKu/GxM9u90IFL2k3F534D65Wsw7r8BQGLOat6Cu8=",
+            "BaseHookName": null,
+            "HookCategory": "Weapon"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
             "InjectionIndex": 69,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
