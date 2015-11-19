@@ -81,6 +81,6 @@ namespace Oxide.Plugins
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string QuoteSafe(this string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
+        public static string Quote(this string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
     }
 }

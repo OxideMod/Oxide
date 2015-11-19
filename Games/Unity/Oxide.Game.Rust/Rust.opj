@@ -2656,6 +2656,84 @@
         {
           "Type": "Simple",
           "Hook": {
+            "InjectionIndex": 71,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanEquipItem",
+            "HookName": "CanEquipItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerInventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CanEquipItem",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "Item"
+              ]
+            },
+            "MSILHash": "so57srGKDG/0Ji42krZuLnMUDyk7+nc9WBteLXe4TCw=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 76,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanWearItem",
+            "HookName": "CanWearItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerInventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CanWearItem",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "Item"
+              ]
+            },
+            "MSILHash": "1ALdhqHCsqchdaPQeszK68DYLvMW7bRL8C6uFqMGCdU=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 162,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanAcceptItem",
+            "HookName": "CanAcceptItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ItemContainer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanAcceptItem",
+              "ReturnType": "ItemContainer/CanAcceptResult",
+              "Parameters": [
+                "Item"
+              ]
+            },
+            "MSILHash": "aRNy3SHsN6k4Skf0+kRRh3TAwMgcx39jkKHL6Ptz5+g=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
