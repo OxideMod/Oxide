@@ -636,7 +636,7 @@ namespace Oxide.Game.Rust
                 {
                     result = "\nParent group '" + parent + "' permissions:\n";
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
-                    parent = permission.GetGroupParent(name);
+                    parent = permission.GetGroupParent(parent);
                 }
                 arg.ReplyWith(result);
             }
