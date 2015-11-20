@@ -1476,8 +1476,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l2, l0",
             "HookTypeName": "Simple",
-            "Name": "OnWeaponThrown",
-            "HookName": "OnWeaponThrown",
+            "Name": "OnMeleeThrown",
+            "HookName": "OnMeleeThrown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseMelee",
             "Flagged": false,
@@ -2753,6 +2753,30 @@
             "MSILHash": "G3mjO3VdveZfVvO+qQjtugfPdYzVdw46lsrHhfZ61YQ=",
             "BaseHookName": null,
             "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 5,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerLootEnd",
+            "HookName": "OnPlayerLootEnd",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerLoot",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Clear",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "D9JQu8LOb2gkPId10W0jHzQFPgX9iJbUa1w1QcGQPNQ=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]
