@@ -84,7 +84,7 @@ namespace Oxide.Game.Rust.Libraries
         }
 
         /// <summary>
-        /// Sends a chat message
+        /// Sends a chat message to the player
         /// </summary>
         /// <param name="player"></param>
         /// <param name="name"></param>
