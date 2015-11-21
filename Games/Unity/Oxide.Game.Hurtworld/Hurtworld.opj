@@ -121,7 +121,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "lXsKCqv34GRYH8ArdbC2pfi/9WUKP6VSXX3YKU6R9Uo=",
+            "MSILHash": "pX/P4/SqzS6FbWEN/eIpKBNXI/Os/al8K5uqvhkZgwA=",
             "BaseHookName": null,
             "HookCategory": null
           }
@@ -145,7 +145,7 @@
               "ReturnType": "UnityEngine.Vector3",
               "Parameters": []
             },
-            "MSILHash": "HdYzznf0wVpO9DUij1mAKplc1XqN3xp/u35Z25Kpwps=",
+            "MSILHash": "z8mzr4NURaJlc6YFmkxctUsxeuruXcRxVXA1fTONvD8=",
             "BaseHookName": null,
             "HookCategory": null
           }
@@ -153,7 +153,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 18,
+            "InjectionIndex": 27,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -171,7 +171,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "KWXkDOpAyhF8EyJ85jHiRsMxiJQDrmOs4HHPmzVByek=",
+            "MSILHash": "j8ltu9oQUYUM34ZAh3QXDCsrwVwsbPQD3WCU34L9JSk=",
             "BaseHookName": null,
             "HookCategory": null
           }
@@ -303,7 +303,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "LuZwn7NL35cfkmaKAVFmNv07iDtSFEG9z9CfnXFqLRQ=",
+            "MSILHash": "JsFKQizW83qYYIsnKpgRcpYbr+5VyQd4wqTs4bX3ENU=",
             "BaseHookName": null,
             "HookCategory": null
           }
