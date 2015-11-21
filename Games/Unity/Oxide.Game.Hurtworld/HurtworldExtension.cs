@@ -133,7 +133,7 @@ namespace Oxide.Game.Hurtworld
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var time = EnvironmentManager.Instance.CurrentGameTime;
+                var time = TimeManager.Instance.GetCurrentGameTime();
                 var gameTime = $"{(time.Hour > 12 ? (time.Hour - 12) : time.Hour)}:{time.Minute:D2} {(time.Hour >= 12 ? "pm" : "am")}";
                 var map = GameManager.Instance?.ServerConfig?.Map ?? "Unknown";
                 return string.Concat(" ", gameTime, ", ", map);
