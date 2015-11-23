@@ -115,15 +115,13 @@ namespace Oxide.Game.Rust.Cui
             var element = new CuiElement
             {
                 Name = name,
-                Parent = parent,
-                Components =
-                {
-                    panel.Image,
-                    panel.RectTransform
-                }
+                Parent = parent
             };
+            if (panel.Image != null) element.Components.Add(panel.Image);
+            if (panel.RawImage != null) element.Components.Add(panel.RawImage);
+            element.Components.Add(panel.RectTransform);
             if (panel.CursorEnabled)
-                element.Components.Add(panel.NeedsCursor);
+                element.Components.Add(new CuiNeedsCursorComponent());
             Add(element);
             return name;
         }
@@ -148,9 +146,9 @@ namespace Oxide.Game.Rust.Cui
 
     public class CuiPanel
     {
-        public CuiImageComponent Image { get; } = new CuiImageComponent();
+        public CuiImageComponent Image { get; }
+        public CuiRawImageComponent RawImage { get; }
         public CuiRectTransformComponent RectTransform { get; } = new CuiRectTransformComponent();
-        public CuiNeedsCursorComponent NeedsCursor { get; } = new CuiNeedsCursorComponent();
         public bool CursorEnabled { get; set; }
     }
 
