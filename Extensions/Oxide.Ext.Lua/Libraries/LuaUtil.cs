@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using NLua;
 
@@ -58,6 +59,22 @@ namespace Oxide.Ext.Lua.Libraries
 
             // Return it
             return arr;
+        }
+
+        /// <summary>
+        /// Translates Lua Table to Dict
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        public object TableToLangDict(LuaTable table)
+        {
+            var dict = new Dictionary<string, string>();
+            foreach (var key in table.Keys)
+            {
+                if (key is string)
+                dict.Add((string)key, (string)table[key]);
+            }
+            return dict;
         }
 
         /// <summary>

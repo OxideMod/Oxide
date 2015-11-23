@@ -81,6 +81,7 @@
     <Compile Include="Libraries\Covalence\IPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\IServer.cs" />
     <Compile Include="Libraries\Global.cs" />
+    <Compile Include="Libraries\Lang.cs" />
     <Compile Include="Libraries\Library.cs" />
     <Compile Include="Libraries\Permission.cs" />
     <Compile Include="Libraries\Plugins.cs" />

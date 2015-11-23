@@ -52,6 +52,7 @@ namespace Oxide.Core
         public string PluginDirectory { get; private set; }
         public string ConfigDirectory { get; private set; }
         public string DataDirectory { get; private set; }
+        public string LangDirectory { get; private set; }
         public string LogDirectory { get; private set; }
 
         // Gets the number of seconds since the server started
@@ -73,7 +74,6 @@ namespace Oxide.Core
 
         // Various libraries
         private Timer libtimer;
-        private WebRequests libwebrequests;
         private Covalence covalence;
 
         // Extension implemented delegates
@@ -132,12 +132,14 @@ namespace Oxide.Core
             ExtensionDirectory = Path.Combine(RootDirectory, CleanPath(rootconfig.ExtensionDirectory));
             PluginDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.PluginDirectory));
             DataDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.DataDirectory));
+            LangDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.LangDirectory));
             LogDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.LogDirectory));
             ConfigDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.ConfigDirectory));
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
             if (!Directory.Exists(DataDirectory)) Directory.CreateDirectory(DataDirectory);
+            if (!Directory.Exists(LangDirectory)) Directory.CreateDirectory(LangDirectory);
             if (!Directory.Exists(LogDirectory)) Directory.CreateDirectory(LogDirectory);
             if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
 
@@ -164,7 +166,8 @@ namespace Oxide.Core
             extensionmanager.RegisterLibrary("Timer", libtimer = new Timer());
             extensionmanager.RegisterLibrary("Permission", new Permission());
             extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(RootPluginManager));
-            extensionmanager.RegisterLibrary("WebRequests", libwebrequests = new WebRequests());
+            extensionmanager.RegisterLibrary("WebRequests", new WebRequests());
+            extensionmanager.RegisterLibrary("Lang", new Lang());
             extensionmanager.RegisterLibrary("Covalence", covalence = new Covalence());
 
             // Load all extensions

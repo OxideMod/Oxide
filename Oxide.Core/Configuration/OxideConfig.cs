@@ -28,6 +28,11 @@ namespace Oxide.Core.Configuration
         public string DataDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets the directory to find lang files (relative to the instance path)
+        /// </summary>
+        public string LangDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the directory to find log files (relative to the instance path)
         /// </summary>
         public string LogDirectory { get; set; }
@@ -50,6 +55,7 @@ namespace Oxide.Core.Configuration
             PluginDirectory = "plugins";
             ConfigDirectory = "config";
             DataDirectory = "data";
+            LangDirectory = "lang";
             LogDirectory = "logs";
         }
 
