@@ -4,6 +4,7 @@
     "PluginDirectory": "plugins",
     "ConfigDirectory": "config",
     "DataDirectory": "data",
+    "LangDirectory": "lang",
     "LogDirectory": "logs",
 
     "InstanceCommandLines":
