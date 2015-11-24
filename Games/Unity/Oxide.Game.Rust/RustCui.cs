@@ -146,8 +146,8 @@ namespace Oxide.Game.Rust.Cui
 
     public class CuiPanel
     {
-        public CuiImageComponent Image { get; }
-        public CuiRawImageComponent RawImage { get; }
+        public CuiImageComponent Image { get; set; } = new CuiImageComponent();
+        public CuiRawImageComponent RawImage { get; set; }
         public CuiRectTransformComponent RectTransform { get; } = new CuiRectTransformComponent();
         public bool CursorEnabled { get; set; }
     }
