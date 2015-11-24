@@ -761,7 +761,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 144,
+            "InjectionIndex": 69,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -773,16 +773,11 @@
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "Initialize",
+              "Name": "OpenConnection",
               "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Boolean",
-                "System.String",
-                "System.Boolean",
-                "System.Boolean"
-              ]
+              "Parameters": []
             },
-            "MSILHash": "3zkC8L+yo3xcOdP/q9NryEfgQwZuZXCnwvXUz4w6ZlU=",
+            "MSILHash": "4EayHMS1hTO3uA0DaRiUXOQ0HKVp2pTNd82DIzl4SZs=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -2023,7 +2018,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "cZG8ujQiaBQd0SfiJEtGBvrdIpHQQufQfmndxiJWZYU=",
+            "MSILHash": "m77ksmK7rJD+QAkGmEpCf6NeqHG469XOWDW7V0xpoHs=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2729,30 +2724,6 @@
             "MSILHash": "aRNy3SHsN6k4Skf0+kRRh3TAwMgcx39jkKHL6Ptz5+g=",
             "BaseHookName": null,
             "HookCategory": "Item"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnItemContainerSave",
-            "HookName": "OnItemContainerSave",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ItemContainer",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Save",
-              "ReturnType": "ProtoBuf.ItemContainer",
-              "Parameters": []
-            },
-            "MSILHash": "G3mjO3VdveZfVvO+qQjtugfPdYzVdw46lsrHhfZ61YQ=",
-            "BaseHookName": null,
-            "HookCategory": null
           }
         },
         {
