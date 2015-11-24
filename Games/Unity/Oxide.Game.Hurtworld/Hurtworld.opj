@@ -67,9 +67,11 @@
               "Exposure": 2,
               "Name": "Quit",
               "ReturnType": "System.Void",
-              "Parameters": []
+              "Parameters": [
+                "System.Int32"
+              ]
             },
-            "MSILHash": "xqvhhsd3/qNa6BdTA7ulTP+1Nk525Rfq+PprgZc1ocI=",
+            "MSILHash": "qfkvJakSbOkdzeZd1IIXXBJtzASXXSOpVoA7kp0Jvh0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -121,7 +123,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "pX/P4/SqzS6FbWEN/eIpKBNXI/Os/al8K5uqvhkZgwA=",
+            "MSILHash": "t98x+zoMPVapHlfwFI8hIPNTb+Cn3FKz/wt+slqgKMQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -171,7 +173,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "j8ltu9oQUYUM34ZAh3QXDCsrwVwsbPQD3WCU34L9JSk=",
+            "MSILHash": "04J5h+3/F3088Lu5IVRpPYa75QvNmBmC61SkSKFLlQ0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -303,7 +305,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "JsFKQizW83qYYIsnKpgRcpYbr+5VyQd4wqTs4bX3ENU=",
+            "MSILHash": "60EzovViUz1wSm2KCWoGgtqqA4stDMzxaJkeuI4PePY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
