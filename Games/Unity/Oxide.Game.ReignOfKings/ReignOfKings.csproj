@@ -76,7 +76,7 @@
     <Compile Include="ReignOfKingsExtension.cs" />
     <Compile Include="ReignOfKingsPlugin.cs" />
     <Compile Include="ReignOfKingsPluginLoader.cs" />
-    <None Include="Plugins\HooksTest.cs" />
+    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

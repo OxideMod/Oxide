@@ -66,7 +66,7 @@
     <Compile Include="FortressCraftExtension.cs" />
     <Compile Include="FortressCraftPlugin.cs" />
     <Compile Include="FortressCraftPluginLoader.cs" />
-    <None Include="Plugins\HooksTest.cs" />
+    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

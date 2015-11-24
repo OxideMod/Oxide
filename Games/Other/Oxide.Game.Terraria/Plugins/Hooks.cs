@@ -4,6 +4,7 @@ using System.Linq;
 namespace Oxide.Plugins
 {
     [Info("Hooks Test", "Oxide Team", 0.1)]
+
     public class HooksTest : TerrariaPlugin
     {
         int hookCount = 0;

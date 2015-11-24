@@ -74,7 +74,7 @@
     <Compile Include="RustLegacyHooks.cs" />
     <Compile Include="RustLegacyPlugin.cs" />
     <Compile Include="RustLegacyPluginLoader.cs" />
-    <None Include="Plugins\HooksTest.cs" />
+    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

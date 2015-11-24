@@ -81,7 +81,7 @@
     <Compile Include="TheForestExtension.cs" />
     <Compile Include="TheForestPlugin.cs" />
     <Compile Include="TheForestPluginLoader.cs" />
-    <None Include="Plugins\HooksTest.cs" />
+    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">
