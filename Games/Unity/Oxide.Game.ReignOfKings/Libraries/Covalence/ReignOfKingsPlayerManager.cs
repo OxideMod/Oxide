@@ -29,41 +29,34 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             // Load player data
             playerData = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
             players = new Dictionary<string, ReignOfKingsPlayer>();
-            foreach (var pair in playerData)
-            {
-                players.Add(pair.Key, new ReignOfKingsPlayer(pair.Value.SteamID, pair.Value.Nickname));
-            }
+            foreach (var pair in playerData) players.Add(pair.Key, new ReignOfKingsPlayer(pair.Value.SteamID, pair.Value.Nickname));
             livePlayers = new Dictionary<string, ReignOfKingsLivePlayer>();
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
         {
-            string uniqueID = steamid.ToString();
+            var uniqueId = steamid.ToString();
 
             // Do they exist?
             PlayerRecord record;
-            if (playerData.TryGetValue(uniqueID, out record))
+            if (playerData.TryGetValue(uniqueId, out record))
             {
                 // Update
                 record.Nickname = nickname;
-                playerData[uniqueID] = record;
+                playerData[uniqueId] = record;
 
                 // Swap out Rust player
-                players.Remove(uniqueID);
-                players.Add(uniqueID, new ReignOfKingsPlayer(steamid, nickname));
+                players.Remove(uniqueId);
+                players.Add(uniqueId, new ReignOfKingsPlayer(steamid, nickname));
             }
             else
             {
                 // Insert
-                record = new PlayerRecord
-                {
-                    SteamID = steamid,
-                    Nickname = nickname
-                };
-                playerData.Add(uniqueID, record);
+                record = new PlayerRecord {SteamID = steamid, Nickname = nickname};
+                playerData.Add(uniqueId, record);
 
                 // Create Rust player
-                players.Add(uniqueID, new ReignOfKingsPlayer(steamid, nickname));
+                players.Add(uniqueId, new ReignOfKingsPlayer(steamid, nickname));
             }
 
             // Save
@@ -76,24 +69,19 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             livePlayers[ply.Id.ToString()] = new ReignOfKingsLivePlayer(ply);
         }
 
-        internal void NotifyPlayerDisconnect(Player ply)
-        {
-            livePlayers.Remove(ply.Id.ToString());
-        }
+        internal void NotifyPlayerDisconnect(Player ply) => livePlayers.Remove(ply.Id.ToString());
 
         #region Offline Players
 
         /// <summary>
         /// Gets an offline player using their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="uniqueId"></param>
         /// <returns></returns>
-        public IPlayer GetPlayer(string uniqueID)
+        public IPlayer GetPlayer(string uniqueId)
         {
             ReignOfKingsPlayer player;
-            if (players.TryGetValue(uniqueID, out player))
-                return player;
-            return null;
+            return players.TryGetValue(uniqueId, out player) ? player : null;
         }
 
         /// <summary>
@@ -114,10 +102,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Gets all offline players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> GetAllPlayers()
-        {
-            return players.Values.Cast<IPlayer>();
-        }
+        public IEnumerable<IPlayer> GetAllPlayers() => players.Values.Cast<IPlayer>();
 
         /// <summary>
         /// Gets all offline players
@@ -130,10 +115,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        public IPlayer FindPlayer(string partialName)
-        {
-            return FindPlayers(partialName).SingleOrDefault();
-        }
+        public IPlayer FindPlayer(string partialName) => FindPlayers(partialName).SingleOrDefault();
 
         /// <summary>
         /// Finds any number of offline players given a partial name (case insensitive)
@@ -142,9 +124,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
-            return players.Values
-                .Where(p => p.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0)
-                .Cast<IPlayer>();
+            return players.Values.Where(p => p.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
         }
 
         #endregion
@@ -159,19 +139,14 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public ILivePlayer GetOnlinePlayer(string uniqueID)
         {
             ReignOfKingsLivePlayer player;
-            if (livePlayers.TryGetValue(uniqueID, out player))
-                return player;
-            return null;
+            return livePlayers.TryGetValue(uniqueID, out player) ? player : null;
         }
 
         /// <summary>
         /// Gets all online players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ILivePlayer> GetAllOnlinePlayers()
-        {
-            return livePlayers.Values.Cast<ILivePlayer>();
-        }
+        public IEnumerable<ILivePlayer> GetAllOnlinePlayers() => livePlayers.Values.Cast<ILivePlayer>();
 
         /// <summary>
         /// Gets all online players
@@ -184,10 +159,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        public ILivePlayer FindOnlinePlayer(string partialName)
-        {
-            return FindOnlinePlayers(partialName).SingleOrDefault();
-        }
+        public ILivePlayer FindOnlinePlayer(string partialName) => FindOnlinePlayers(partialName).SingleOrDefault();
 
         /// <summary>
         /// Finds any number of online players given a partial name (case insensitive)
@@ -196,9 +168,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName)
         {
-            return livePlayers.Values
-                            .Where(p => p.BasePlayer.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0)
-                            .Cast<ILivePlayer>();
+            return livePlayers.Values.Where(p => p.BasePlayer.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<ILivePlayer>();
         }
 
         #endregion

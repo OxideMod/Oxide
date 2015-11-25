@@ -184,7 +184,6 @@ namespace Oxide.Game.ReignOfKings
         private void cmdPlugins(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-
             if (!HasPermission(player, "admin")) return;
 
             var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
@@ -223,7 +222,6 @@ namespace Oxide.Game.ReignOfKings
         private void cmdLoad(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-
             if (!HasPermission(player, "admin")) return;
 
             // Check arg 1 exists
@@ -256,7 +254,6 @@ namespace Oxide.Game.ReignOfKings
         private void cmdUnload(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-
             if (!HasPermission(player, "admin")) return;
 
             // Check arg 1 exists
@@ -298,7 +295,6 @@ namespace Oxide.Game.ReignOfKings
         private void cmdReload(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-
             if (!HasPermission(player, "admin")) return;
 
             // Check arg 1 exists
@@ -347,9 +343,7 @@ namespace Oxide.Game.ReignOfKings
 
             // Show the versions
             if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
-            {
                 SendPlayerMessage(player, "Oxide version: " + oxide + ", Reign of Kings version: " + protocol);
-            }
         }
 
         /// <summary>
@@ -362,7 +356,6 @@ namespace Oxide.Game.ReignOfKings
         private void cmdGroup(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-
             if (!HasPermission(player, "admin")) return;
 
             // Check 2 args exists
@@ -422,7 +415,6 @@ namespace Oxide.Game.ReignOfKings
         private void cmdUserGroup(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-
             if (!HasPermission(player, "admin")) return;
 
             // Check 3 args exists
@@ -478,7 +470,6 @@ namespace Oxide.Game.ReignOfKings
         private void cmdGrant(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-
             if (!HasPermission(player, "admin")) return;
 
             // Check 3 args exists
@@ -587,13 +578,12 @@ namespace Oxide.Game.ReignOfKings
             if (player == null)
             {
                 ulong id;
-                if (ulong.TryParse(nameOrIdOrIp, out id))
-                    player = Server.GetPlayerById(id);
+                if (ulong.TryParse(nameOrIdOrIp, out id)) player = Server.GetPlayerById(id);
             }
             if (player == null)
             {
-                foreach (var target in Server.ClientPlayers.Where(target => target.Connection.IpAddress == nameOrIdOrIp))
-                    player = target;
+                foreach (var target in Server.ClientPlayers)
+                    if (target.Connection.IpAddress == nameOrIdOrIp) player = target;
             }
             return player;
         }

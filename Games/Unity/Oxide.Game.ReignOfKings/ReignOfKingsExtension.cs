@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 
 using CodeHatch.Build;
+using CodeHatch.Common;
 using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
@@ -46,6 +47,7 @@ namespace Oxide.Game.ReignOfKings
             "<color=yellow>Transform",
             "A collider was found on a gameobject",
             "An error occured handling",
+            "Cannot find any Entities.",
             "Cannot retrieve Entity because the component",
             "Client owned object was not found to sync with id",
             "Could not attach to bone of type",
@@ -59,8 +61,11 @@ namespace Oxide.Game.ReignOfKings
             "Destroying DisableWithDistance",
             "Destroying self because the given entity is",
             "Failed to apply setting to DrawDistanceQuality",
+            "Finished loading...",
             "Flow controller warning:",
             "FORM IS UnityEngine.WWWForm",
+            "Game has started.",
+            "Handling user status UserAuthenticated:",
             "HDR RenderTexture",
             "HDR and MultisampleAntiAliasing",
             "Instantiating Base and Dedicated",
@@ -69,6 +74,7 @@ namespace Oxide.Game.ReignOfKings
             "Loading: ",
             "Lobby query failed.",
             "Maximum number of connections can't be higher than",
+            "Multiple audio items with name",
             "No AudioListener found in the scene",
             "Otherwise billboarding/lighting will not work correctly",
             "PlayerTracker: Tracker",
@@ -76,6 +82,7 @@ namespace Oxide.Game.ReignOfKings
             "Processing new connection...",
             "Registering user 9999999999 with authkey",
             "Registering... Success",
+            "Retrieving BiomeMap from Thrones Terrain",
             "Save Server GUID:",
             "Serialization settings set successfully",
             "Server has connected.",
@@ -157,6 +164,11 @@ namespace Oxide.Game.ReignOfKings
             if (!Interface.Oxide.EnableConsole()) return;
 
             Application.logMessageReceived += HandleLog;
+            Logger.DebugLogged += HandleLog;
+            Logger.InfoLogged += HandleLog;
+            Logger.WarningLogged += HandleLog;
+            Logger.ErrorLogged += HandleLog;
+            Logger.ExceptionLogged += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
             Interface.Oxide.ServerConsole.Title = () =>
@@ -234,6 +246,16 @@ namespace Oxide.Game.ReignOfKings
             if (!CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, input)) return;
             var output = Console.CurrentOutput.TrimEnd('\n', '\r');
             if (!string.IsNullOrEmpty(output)) Interface.Oxide.ServerConsole.AddMessage(output);
+        }
+
+        private void HandleLog(Exception message, object context, Type type)
+        {
+            HandleLog(message.ToString(), IDUtil.GetObjectIDString(context), LogType.Error);
+        }
+
+        private void HandleLog(string message, object context, Type type)
+        {
+            HandleLog(message, IDUtil.GetObjectIDString(context), LogType.Log);
         }
 
         private void HandleLog(string message, string stackTrace, LogType type)

@@ -4,7 +4,6 @@ using CodeHatch.Common;
 using CodeHatch.Engine.Behaviours;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
-
 using UnityEngine;
 
 using Oxide.Core.Libraries.Covalence;
@@ -57,18 +56,12 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Kicks this player from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason)
-        {
-            Server.Kick(player, reason);
-        }
+        public void Kick(string reason) => Server.Kick(player, reason);
 
         /// <summary>
         /// Causes this player's character to die
         /// </summary>
-        public void Kill()
-        {
-            player.Kill();
-        }
+        public void Kill() => player.Kill();
 
         /// <summary>
         /// Teleports this player's character to the specified position
@@ -89,10 +82,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        public void SendChatMessage(string message)
-        {
-            player.SendMessage(message);
-        }
+        public void SendChatMessage(string message) => player.SendMessage(message);
 
         /// <summary>
         /// Runs the specified console command on this player's client
