@@ -62,7 +62,7 @@
     <PropertyGroup>
       <GameName>Terraria</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>TerrariaServer_Data\Managed</ManagedDir>
+      <ManagedDir>Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
@@ -93,5 +93,7 @@
     <Copy SourceFiles="@(WinNativeFiles)" DestinationFiles="@(WinNativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" DestinationFiles="$(BundleDir)\$(GameName)\Oxide.Core.dll" />
     <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" />
+    <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" DestinationFiles="$(BundleDir)\$(GameName)\protobuf-net.dll" />
+    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" />
   </Target>
 </Project>

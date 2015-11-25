@@ -1,4 +1,8 @@
-﻿using Oxide.Core;
+﻿using System;
+
+using Terraria;
+
+using Oxide.Core;
 using Oxide.Core.Extensions;
 
 namespace Oxide.Game.Terraria
@@ -28,7 +32,6 @@ namespace Oxide.Game.Terraria
 
         public static string[] Filter =
         {
-
         };
 
         /// <summary>
@@ -38,7 +41,6 @@ namespace Oxide.Game.Terraria
         public TerrariaExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -59,7 +61,6 @@ namespace Oxide.Game.Terraria
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -70,7 +71,53 @@ namespace Oxide.Game.Terraria
             if (!Interface.Oxide.EnableConsole()) return;
 
             // TODO: Add console log handling
-            // TODO: Add status information
+
+            Interface.Oxide.ServerConsole.Title = () =>
+            {
+                var players = Main.numPlayers;
+                var hostname = Main.worldName;
+                return string.Concat(players, " | ", hostname);
+            };
+
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var hostname = Main.worldName;
+                return string.Concat(" ", hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Main.fpsCount; // Main.fpsTimer
+                var seconds = TimeSpan.FromSeconds(Main.time);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = Main.numPlayers; // Main.player.Count, NetPlay.Clients.Count
+                var playerLimit = Main.maxNetPlayers;
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                var bytesReceived = Utility.FormatBytes(Main.rxData);
+                var bytesSent = Utility.FormatBytes(Main.txData);
+                return Main.time <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out");
+            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
+                // TODO: More info
+                return string.Concat(" ", time);
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = Main.versionNumber;
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)

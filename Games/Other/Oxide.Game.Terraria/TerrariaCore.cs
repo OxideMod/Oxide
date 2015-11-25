@@ -1,4 +1,7 @@
-﻿using Oxide.Core;
+﻿using Terraria;
+
+using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.Terraria
@@ -8,6 +11,10 @@ namespace Oxide.Game.Terraria
     /// </summary>
     public class TerrariaCore : CSPlugin
     {
+        // The permission library
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
@@ -32,7 +39,7 @@ namespace Oxide.Game.Terraria
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "terraria");
-            //RemoteLogger.SetTag("protocol", cl000c.cCompatibilityVersion.ToLower());
+            RemoteLogger.SetTag("version", Main.versionNumber);
         }
 
         /// <summary>
@@ -45,7 +52,7 @@ namespace Oxide.Game.Terraria
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
+            RemoteLogger.SetTag("hostname", Main.worldName);
         }
 
         /// <summary>
@@ -53,7 +60,6 @@ namespace Oxide.Game.Terraria
         /// </summary>
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
 
         /// <summary>
         /// Called when a plugin is loaded
