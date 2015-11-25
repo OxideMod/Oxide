@@ -70,7 +70,6 @@ namespace Oxide.Game.ReignOfKings
             "Lobby query failed.",
             "Maximum number of connections can't be higher than",
             "No AudioListener found in the scene",
-            "NotSupportedException: The invoked member is not supported in a dynamic module.",
             "Otherwise billboarding/lighting will not work correctly",
             "PlayerTracker: Tracker",
             "Private RPC R was not sent",

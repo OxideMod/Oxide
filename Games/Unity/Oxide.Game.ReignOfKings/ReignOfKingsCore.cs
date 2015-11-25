@@ -10,7 +10,6 @@ using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
 using RoKPermissions = CodeHatch.Permissions;
-
 using UnityEngine;
 using Network = uLink.Network;
 
@@ -29,13 +28,13 @@ namespace Oxide.Game.ReignOfKings
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
-        // The permission lib
+        // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
 
-        // The RoK permission lib
+        // The RoK permission library
         private RoKPermissions.Permission RoKPerms;
 
-        // The command lib
+        // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // Track when the server has been initialized
@@ -96,7 +95,7 @@ namespace Oxide.Game.ReignOfKings
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "reign of kings");
-            RemoteLogger.SetTag("protocol", GameInfo.VersionName.ToLower());
+            RemoteLogger.SetTag("version", GameInfo.VersionName.ToLower());
         }
 
         /// <summary>
@@ -160,8 +159,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPluginLoaded(Plugin plugin)
         {
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore")
-                InitializeLogging();
+            if (!loggingInitialized && plugin.Name == "unitycore")  InitializeLogging();
             if (!loadingPlugins.ContainsKey(plugin.Name)) return;
             SendPlayerMessage(loadingPlugins[plugin.Name], "Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             loadingPlugins.Remove(plugin.Name);
@@ -210,10 +208,8 @@ namespace Oxide.Game.ReignOfKings
 
             var output = $"Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
             var number = 1;
-            foreach (var plugin in loaded_plugins)
-                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
-            foreach (var plugin_name in unloaded_plugin_errors.Keys)
-                output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            foreach (var plugin in loaded_plugins) output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
+            foreach (var plugin_name in unloaded_plugin_errors.Keys) output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
             SendPlayerMessage(player, output);
         }
 
@@ -623,17 +619,18 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("IGetTypeFromName")]
         private Type IGetTypeFromName(string fullTypeName)
         {
-            try
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                if (assembly is System.Reflection.Emit.AssemblyBuilder) continue;
+                try
                 {
-                    if (assembly is System.Reflection.Emit.AssemblyBuilder) continue;
-                    foreach (var type in assembly.GetExportedTypes().Where(type => type.Name == fullTypeName)) return type;
+                    foreach (var type in assembly.GetExportedTypes())
+                        if (type.Name == fullTypeName) return type;
                 }
-            }
-            catch
-            {
-                // Ignored, RoK issue
+                catch
+                {
+                    // Ignored
+                }
             }
             return null;
         }
@@ -644,12 +641,7 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <returns></returns>
         [HookMethod("IOnPlayerConnected")]
-        private object IOnPlayerConnected(Player player)
-        {
-            if (player.Id == 9999999999) return null;
-
-            return Interface.CallHook("OnPlayerConnected", player);
-        }
+        private object IOnPlayerConnected(Player player) => player.Id == 9999999999 ? null : Interface.CallHook("OnPlayerConnected", player);
 
         /// <summary>
         /// Called when a chat message was sent
@@ -657,12 +649,7 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="e"></param>
         /// <returns></returns>
         [HookMethod("IOnPlayerChat")]
-        private object IOnPlayerChat(PlayerEvent e)
-        {
-            if (e.SenderId == 9999999999) return null;
-
-            return Interface.CallHook("OnPlayerChat", e);
-        }
+        private object IOnPlayerChat(PlayerEvent e) => e.SenderId == 9999999999 ? null : Interface.CallHook("OnPlayerChat", e);
 
         /// <summary>
         /// Called when a chat command was run
@@ -689,7 +676,7 @@ namespace Oxide.Game.ReignOfKings
 
             Interface.CallHook("OnPlayerCommand", e.Player, cmd, args);
 
-            // handle it
+            // Handle it
             if (!cmdlib.HandleChatCommand(e.Player, cmd, args)) return null;
 
             // Handled
