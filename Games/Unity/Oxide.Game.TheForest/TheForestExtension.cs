@@ -98,7 +98,6 @@ namespace Oxide.Game.TheForest
         public TheForestExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -119,7 +118,6 @@ namespace Oxide.Game.TheForest
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -198,7 +196,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.27"; // TODO: Grab version/protocol
+                var gameVersion = "0.28c"; // TODO: Grab version
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
@@ -207,11 +205,9 @@ namespace Oxide.Game.TheForest
 
         public override void OnShutdown() => logWriter?.Close();
 
-        private void ServerConsoleOnInput(string input)
+        private static void ServerConsoleOnInput(string input)
         {
-            if (string.IsNullOrEmpty(input)) return;
-
-            // TODO: Server commands
+            // TODO: Handle console input
         }
 
         private void HandleLog(string message, string stackTrace, LogType type)

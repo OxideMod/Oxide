@@ -100,7 +100,7 @@
                 "CoopSteamNGUI/Screens"
               ]
             },
-            "MSILHash": "Xdj4r6uA0S4pAJoRuJeo9c5kU8JtJDzunyxKegZbzyo=",
+            "MSILHash": "g5EihOCrs74cdxotMyMUiZjoLL9YJc6o1/pWqAbOwmk=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -226,7 +226,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "VUIpS9nI6v62LsqAonTDthdGOGoPercU8Ndbg4mNFhs=",
+            "MSILHash": "ep1Omk53MHW0ox38M8vgqGvlWP1LQrHBBFfqpEto5zk=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -846,7 +846,7 @@
                 "TriggerLargeTrap"
               ]
             },
-            "MSILHash": "+/IcL0QlCSdUAG9rOhLRDBkAL+LQRkvcgzj1DlSYukM=",
+            "MSILHash": "KNZFpGUYrgJAoZ8mdf8vPdeCRKRf7mrPS7byrgit9Kw=",
             "BaseHookName": null,
             "HookCategory": "_WORKING"
           }
@@ -924,7 +924,7 @@
                 "ResetTrap"
               ]
             },
-            "MSILHash": "E9tEbj9MouudWuSnjq/vU9/vrATZ+LgVTi62HXxaJro=",
+            "MSILHash": "mtsyXflbA/q8xoV5xf94J48pd10aTUaScBpCBan2Tmo=",
             "BaseHookName": null,
             "HookCategory": null
           }
@@ -1132,7 +1132,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "odyEllVhl8kDeOf2YhZlGjEzNNRT13T2rClgwzMH9/A=",
+            "MSILHash": "5LbraVg/nZytj9+8MAX/Kr8H7/vW4QL6Eqb6GVSDPO4=",
             "BaseHookName": null,
             "HookCategory": "_WORKING"
           }
@@ -1158,7 +1158,7 @@
                 "SetCorpsePosition"
               ]
             },
-            "MSILHash": "orK1KyP2S5L9Z7TF5G6W4EPQWgUY5Ulx1ybpOLvGLs4=",
+            "MSILHash": "orTYHHhjh70cLltCC5vemzwm8Gp4ELXQ4iZMWjE4V3Q=",
             "BaseHookName": null,
             "HookCategory": "_WORKING"
           }
@@ -1624,7 +1624,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "bnGJZI4MAH9bblkrvmSfZukDKhBHXKcLuKYBFrh76Wg=",
+            "MSILHash": "43t1/Kc82SzvPAt3hs/85ZHzdgzfeUrb7dpndjgoWT4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
