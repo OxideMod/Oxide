@@ -7,12 +7,10 @@ using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Engine.Sockets;
-
 using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
 using Oxide.Game.ReignOfKings.Libraries;
 
 namespace Oxide.Game.ReignOfKings
@@ -72,6 +70,7 @@ namespace Oxide.Game.ReignOfKings
             "Lobby query failed.",
             "Maximum number of connections can't be higher than",
             "No AudioListener found in the scene",
+            "NotSupportedException: The invoked member is not supported in a dynamic module.",
             "Otherwise billboarding/lighting will not work correctly",
             "PlayerTracker: Tracker",
             "Private RPC R was not sent",
@@ -121,7 +120,6 @@ namespace Oxide.Game.ReignOfKings
         public ReignOfKingsExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -143,7 +141,6 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>

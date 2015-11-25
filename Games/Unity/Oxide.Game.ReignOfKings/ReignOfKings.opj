@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "84+0OEtqmLLPy6i54kJ42Y7C2Gs1Rcvc2IL2oU0ZBRc=",
+            "MSILHash": "ICZFa7o8ZNw4YejUYv9+/fudCLiSzROeteFuTeZTkZU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "9QjQfMVP/91UxZHEayDKKSxFN35uWzsorzNs8aGydEI=",
+            "MSILHash": "rn7xOMgjjN3jvXkC/rYAMDnzuQrVkPrS25S0O7TFO+c=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -53,7 +53,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 54,
+            "InjectionIndex": 59,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -69,7 +69,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "d4c+TlbU36+/brCeX7QTWT5zXNrlnsu5BXl4BwGchug=",
+            "MSILHash": "UTIs67YP4pIEV3+1x2gU42SeF18pDkCPi8OwrLIBCfw=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -117,7 +117,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YujaBxacdG63ymtY5TwlDVZR4J9++7HcWa1M2flj6z0=",
+            "MSILHash": "gws+PM1s4Azb7scIyLSopnoO31sRrGShuekqPChi/XU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -195,7 +195,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "T9uI+9RWOukztmDJfBBPN7r7DJ7zvIJsQTpxyYvxs5Y=",
+            "MSILHash": "vP2nEhbQh87iQs5pShdJ2bpYpQ6UbBCgFUHIRbvFtIc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -221,7 +221,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "HpJzXTzf2d9+odeI1eAZelm5kFO5eNTpkJUVJDLIcOw=",
+            "MSILHash": "ENInSxhAwzZIv4aoxYuChmpFEAed9+GmoB2TKDSVyqg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -559,7 +559,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerSleepEvent"
               ]
             },
-            "MSILHash": "hze/OwJ4tvWdsgWb1936bTcs8g2s9NVjeGOW4aifu3U=",
+            "MSILHash": "sqpa5aoSBvK9360G+1xPiA2I5m2fx460MhSxhm4VAlc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

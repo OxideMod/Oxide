@@ -616,19 +616,24 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies.
+        /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies
         /// </summary>
         /// <param name="fullTypeName"></param>
         /// <returns></returns>
         [HookMethod("IGetTypeFromName")]
         private Type IGetTypeFromName(string fullTypeName)
         {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            try
             {
-                if (assembly is System.Reflection.Emit.AssemblyBuilder) continue;
-                foreach (var type in assembly.GetExportedTypes())
-                    if (type.Name == fullTypeName)
-                        return type;
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (assembly is System.Reflection.Emit.AssemblyBuilder) continue;
+                    foreach (var type in assembly.GetExportedTypes().Where(type => type.Name == fullTypeName)) return type;
+                }
+            }
+            catch
+            {
+                // Ignored, RoK issue
             }
             return null;
         }
