@@ -1,7 +1,9 @@
-﻿using Oxide.Core;
-using Oxide.Core.Extensions;
+﻿using System;
 
 using Game.Configuration;
+
+using Oxide.Core;
+using Oxide.Core.Extensions;
 
 namespace Oxide.Game.InterstellarRift
 {
@@ -30,7 +32,6 @@ namespace Oxide.Game.InterstellarRift
 
         public static string[] Filter =
         {
-
         };
 
         /// <summary>
@@ -40,7 +41,6 @@ namespace Oxide.Game.InterstellarRift
         public InterstellarRiftExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -61,7 +61,6 @@ namespace Oxide.Game.InterstellarRift
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -71,14 +70,59 @@ namespace Oxide.Game.InterstellarRift
         {
             if (!Interface.Oxide.EnableConsole()) return;
 
+            // TODO: Add console log handling
+
             Interface.Oxide.ServerConsole.Title = () =>
             {
-                var hostname = Config.m_singleton.ServerName;
-                return string.Concat(hostname);
+                var players = string.Empty; // TODO
+                var hostname = Config.Singleton.ServerName;
+                return string.Concat(players, " | ", hostname);
             };
 
-            // TODO: Add console log handling
-            // TODO: Add status information
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var hostname = Config.Singleton.ServerName;
+                return string.Concat(" ", hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = string.Empty; // TODO
+                var seconds = TimeSpan.FromSeconds(0); // TODO
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = string.Empty; // TODO
+                var playerLimit = string.Empty; // TODO
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                var bytesReceived = Utility.FormatBytes(0); // TODO
+                var bytesSent = Utility.FormatBytes(0); // TODO
+                return null <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out"); // TODO
+            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(0)).ToString("h:mm tt").ToLower(); // TODO
+                // TODO: More info
+                return string.Concat(" ", time);
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = Globals.Version;
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
+        }
+
+        private static void ServerConsoleOnInput(string input)
+        {
+            // TODO: Handle console input
         }
     }
 }

@@ -2,7 +2,7 @@
 cls
 :start
 
-IR -server
+Build\IR -server
 
 @echo.
 @echo Restarting server...

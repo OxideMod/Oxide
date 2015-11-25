@@ -1,5 +1,5 @@
 {
-    "ExtensionDirectory": "Build\\Managed",
+    "ExtensionDirectory": ".",
 
     "PluginDirectory": "plugins",
     "ConfigDirectory": "config",

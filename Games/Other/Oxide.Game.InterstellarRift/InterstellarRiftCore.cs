@@ -1,4 +1,7 @@
-﻿using Oxide.Core;
+﻿using Game.Configuration;
+
+using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.InterstellarRift
@@ -8,6 +11,10 @@ namespace Oxide.Game.InterstellarRift
     /// </summary>
     public class InterstellarRiftCore : CSPlugin
     {
+        // The permission library
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
@@ -32,7 +39,7 @@ namespace Oxide.Game.InterstellarRift
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "interstellar rift");
-            //RemoteLogger.SetTag("protocol", );
+            RemoteLogger.SetTag("version", Globals.Version);
         }
 
         /// <summary>
@@ -45,7 +52,7 @@ namespace Oxide.Game.InterstellarRift
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", );
+            RemoteLogger.SetTag("hostname", global::Game.Configuration.Config.Singleton.ServerName);
         }
 
         /// <summary>

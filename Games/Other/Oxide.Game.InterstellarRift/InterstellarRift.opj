@@ -8,7 +8,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 33,
+            "InjectionIndex": 35,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -16,19 +16,20 @@
             "TypeName": "Game.Program",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
+              "Exposure": 2,
               "Name": "Init",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "GIGz4amVMonxPQ20/5Ajy/bkkDpqJf6Rpe9FPBApsOQ=",
-            "BaseHookName": null
+            "MSILHash": "Sv/Y+oufWFifX4BvQxocK2vhiMXgId9VwjUXq71bpYY=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 34,
+            "InjectionIndex": 36,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -39,13 +40,14 @@
             "TypeName": "Game.Program",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
+              "Exposure": 2,
               "Name": "Init",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "GIGz4amVMonxPQ20/5Ajy/bkkDpqJf6Rpe9FPBApsOQ=",
-            "BaseHookName": null
+            "MSILHash": "Sv/Y+oufWFifX4BvQxocK2vhiMXgId9VwjUXq71bpYY=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
           }
         }
       ]
