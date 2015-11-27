@@ -71,14 +71,17 @@ namespace Oxide.Core.Libraries
                 langFile = GetMessagesIntern(file);
                 if (langFile == null)
                 {
-                    if (userId != null && !lang.Equals(DefaultLang))
+                    if (userId != null && !lang.Equals(langData.Lang))
                         return GetMessage(key, plugin);
                     return key;
                 }
                 AddLangFile(file, langFile, plugin);
             }
             string message;
-            return langFile.TryGetValue(key, out message) ? message ?? key : key;
+            if (langFile.TryGetValue(key, out message)) return message ?? key;
+            if (userId != null && !lang.Equals(langData.Lang))
+                return GetMessage(key, plugin);
+            return key;
         }
 
         [LibraryFunction("GetMessages")]
@@ -105,15 +108,29 @@ namespace Oxide.Core.Libraries
         }
 
         [LibraryFunction("SetLanguage")]
-        public void SetLanguage(string lang, string userId = null)
+        public void SetLanguage(string lang, string userId)
         {
-            if (string.IsNullOrEmpty(lang)) return;
-            if (string.IsNullOrEmpty(userId))
-                langData.Lang = lang;
-            else if (langData.UserData.ContainsKey(userId) && lang.Equals(langData.Lang))
+            if (string.IsNullOrEmpty(lang) || string.IsNullOrEmpty(userId)) return;
+            string currentLang;
+            if (langData.UserData.TryGetValue(userId, out currentLang) && lang.Equals(currentLang)) return;
+            if (lang.Equals(langData.Lang))
                 langData.UserData.Remove(lang);
             else
                 langData.UserData[userId] = lang;
+            SaveData();
+        }
+
+        [LibraryFunction("GetServerLanguage")]
+        public string GetServerLanguage(string userId)
+        {
+            return langData.Lang;
+        }
+
+        [LibraryFunction("SetServerLanguage")]
+        public void SetServerLanguage(string lang)
+        {
+            if (string.IsNullOrEmpty(lang) || lang.Equals(langData.Lang)) return;
+            langData.Lang = lang;
             SaveData();
         }
 
