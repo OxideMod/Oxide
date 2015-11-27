@@ -1018,8 +1018,14 @@ namespace Oxide.Game.Rust
             if (isPlayerTakingDamage) return null;
             if (Interface.CallHook("OnEntityTakeDamage", player, info) != null) return true;
             isPlayerTakingDamage = true;
-            player.OnAttacked(info);
-            isPlayerTakingDamage = false;
+            try
+            {
+                player.OnAttacked(info);
+            }
+            finally
+            {
+                isPlayerTakingDamage = false;
+            }
             return true;
         }
 
