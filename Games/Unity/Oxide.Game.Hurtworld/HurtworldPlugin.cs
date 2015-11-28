@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 
 using Oxide.Core;
-using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 using Oxide.Game.Hurtworld.Libraries;
@@ -11,16 +10,14 @@ namespace Oxide.Plugins
     public abstract class HurtworldPlugin : CSharpPlugin
     {
         protected Command cmd;
-        protected Permission permission;
         protected Hurtworld hurtworld;
 
         public override void SetPluginInfo(string name, string path)
         {
             base.SetPluginInfo(name, path);
 
-            cmd = Interface.Oxide.GetLibrary<Command>("Command");
-            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
-            hurtworld = Interface.Oxide.GetLibrary<Hurtworld>("Hurtworld");
+            cmd = Interface.Oxide.GetLibrary<Command>();
+            hurtworld = Interface.Oxide.GetLibrary<Hurtworld>();
         }
 
         public override void HandleAddedToManager(PluginManager manager)

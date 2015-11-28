@@ -183,6 +183,7 @@ namespace Oxide.Plugins
 
         protected Core.Libraries.Lang lang = Interface.Oxide.GetLibrary<Core.Libraries.Lang>();
         protected Core.Libraries.Plugins plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
+        protected Core.Libraries.Permission permission = Interface.Oxide.GetLibrary<Core.Libraries.Permission>();
         protected PluginTimers timer;
 
         protected HashSet<PluginFieldInfo> onlinePlayerFields = new HashSet<PluginFieldInfo>();

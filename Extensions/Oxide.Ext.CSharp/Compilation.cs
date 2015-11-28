@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Linq;
-
-using Oxide.Core;
-
-using ObjectStream.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
+
+using ObjectStream.Data;
+
+using Oxide.Core;
 
 namespace Oxide.Plugins
 {
@@ -19,7 +19,7 @@ namespace Oxide.Plugins
         internal int id;
         internal string name;
         internal Action<Compilation> callback;
-        internal ConcurrentHashSet<CompilablePlugin> queuedPlugins = new ConcurrentHashSet<CompilablePlugin>();
+        internal ConcurrentHashSet<CompilablePlugin> queuedPlugins;
         internal HashSet<CompilablePlugin> plugins = new HashSet<CompilablePlugin>();
         internal float startedAt;
         internal float endedAt;
@@ -30,6 +30,7 @@ namespace Oxide.Plugins
 
         private string includePath;
         private string[] extensionNames;
+        private string gameExtensionName;
         private string gameExtensionNamespace;
         private bool newGameExtensionNamespace;
 
@@ -49,7 +50,9 @@ namespace Oxide.Plugins
 
             includePath = Path.Combine(Interface.Oxide.PluginDirectory, "Include");
             extensionNames = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
-            gameExtensionNamespace = Interface.Oxide.GetAllExtensions().SingleOrDefault(ext => ext.IsGameExtension)?.GetType().Namespace;
+            var gameExtension = Interface.Oxide.GetAllExtensions().SingleOrDefault(ext => ext.IsGameExtension);
+            gameExtensionName = gameExtension?.Name.ToUpper();
+            gameExtensionNamespace = gameExtension?.GetType().Namespace;
             newGameExtensionNamespace = gameExtensionNamespace != null && gameExtensionNamespace.Contains(".Game.");
         }
 
@@ -154,7 +157,7 @@ namespace Oxide.Plugins
             plugin.References.Clear();
             plugin.IncludePaths.Clear();
             plugin.Requires.Clear();
-            
+
             bool parsingNamespace = false;
             for (var i = 0; i < plugin.ScriptLines.Length; i++)
             {
@@ -327,7 +330,7 @@ namespace Oxide.Plugins
             if (!references.ContainsKey(filename)) references[filename] = new CompilerFile(Interface.Oxide.ExtensionDirectory, filename);
             plugin.References.Add(reference.Name);
         }
-        
+
         private bool CacheScriptLines(CompilablePlugin plugin)
         {
             var waiting_for_access = false;
@@ -350,6 +353,8 @@ namespace Oxide.Plugins
                             var lines = new List<string>();
                             while (!reader.EndOfStream)
                                 lines.Add(reader.ReadLine());
+                            if (!string.IsNullOrEmpty(gameExtensionName))
+                                lines.Insert(0, $"#define {gameExtensionName}");
                             plugin.ScriptLines = lines.ToArray();
                             plugin.ScriptEncoding = reader.CurrentEncoding;
                         }
