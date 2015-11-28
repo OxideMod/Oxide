@@ -4,8 +4,8 @@ using System.Reflection;
 using UnityEngine;
 
 using Oxide.Core;
-using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+
 using Oxide.Game.Rust.Libraries;
 
 namespace Oxide.Plugins
@@ -13,16 +13,14 @@ namespace Oxide.Plugins
     public abstract class RustPlugin : CSharpPlugin
     {
         protected Command cmd;
-        protected Permission permission;
         protected Game.Rust.Libraries.Rust rust;
 
         public override void SetPluginInfo(string name, string path)
         {
             base.SetPluginInfo(name, path);
 
-            cmd = Interface.Oxide.GetLibrary<Command>("Command");
-            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
-            rust = Interface.Oxide.GetLibrary<Game.Rust.Libraries.Rust>("Rust");
+            cmd = Interface.Oxide.GetLibrary<Command>();
+            rust = Interface.Oxide.GetLibrary<Game.Rust.Libraries.Rust>();
         }
 
         public override void HandleAddedToManager(PluginManager manager)

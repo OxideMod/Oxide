@@ -6,7 +6,6 @@ using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
 
 using Oxide.Core;
-using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.ReignOfKings.Libraries;
 
@@ -15,15 +14,13 @@ namespace Oxide.Plugins
     public abstract class ReignOfKingsPlugin : CSharpPlugin
     {
         protected Command cmd;
-        protected Permission permission;
         protected ReignOfKings rok;
 
         public override void SetPluginInfo(string name, string path)
         {
             base.SetPluginInfo(name, path);
 
-            cmd = Interface.Oxide.GetLibrary<Command>("Command");
-            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
+            cmd = Interface.Oxide.GetLibrary<Command>();
             rok = Interface.Oxide.GetLibrary<ReignOfKings>("RoK");
         }
 

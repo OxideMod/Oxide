@@ -2,7 +2,6 @@
 using System.Reflection;
 
 using Oxide.Core;
-using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.RustLegacy;
 using Oxide.Game.RustLegacy.Libraries;
@@ -14,15 +13,13 @@ namespace Oxide.Plugins
     public abstract class RustLegacyPlugin : CSharpPlugin
     {
         protected Command cmd;
-        protected Permission permission;
         protected RustLegacy rust;
 
         public override void SetPluginInfo(string name, string path)
         {
             base.SetPluginInfo(name, path);
 
-            cmd = Interface.Oxide.GetLibrary<Command>("Command");
-            permission = Interface.Oxide.GetLibrary<Permission>("Permission");
+            cmd = Interface.Oxide.GetLibrary<Command>();
             rust = Interface.Oxide.GetLibrary<RustLegacy>("Rust");
         }
 
