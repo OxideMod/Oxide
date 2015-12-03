@@ -16,15 +16,9 @@ namespace Oxide.Core.Plugins
     /// </summary>
     public abstract class Plugin
     {
-        public static implicit operator bool(Plugin plugin)
-        {
-            return plugin != null;
-        }
+        public static implicit operator bool(Plugin plugin) => plugin != null;
 
-        public static bool operator !(Plugin plugin)
-        {
-            return !(bool)plugin;
-        }
+        public static bool operator !(Plugin plugin) => !(bool)plugin;
 
         /// <summary>
         /// Gets the source file name, if any
@@ -150,10 +144,7 @@ namespace Oxide.Core.Plugins
         /// Subscribes this plugin to the specified hook
         /// </summary>
         /// <param name="hookname"></param>
-        protected void Subscribe(string hookname)
-        {
-            Manager.SubscribeToHook(hookname, this);
-        }
+        protected void Subscribe(string hookname) => Manager.SubscribeToHook(hookname, this);
 
         /// <summary>
         /// Called when this plugin has been added to the specified manager
@@ -163,7 +154,7 @@ namespace Oxide.Core.Plugins
         {
             Manager = manager;
             if (HasConfig) LoadConfig();
-            if (OnAddedToManager != null) OnAddedToManager(this, manager);
+            OnAddedToManager?.Invoke(this, manager);
             RegisterWithCovalence();
         }
 
@@ -175,7 +166,7 @@ namespace Oxide.Core.Plugins
         {
             UnregisterWithCovalence();
             if (Manager == manager) Manager = null;
-            if (OnRemovedFromManager != null) OnRemovedFromManager(this, manager);
+            OnRemovedFromManager?.Invoke(this, manager);
         }
 
         /// <summary>
@@ -183,7 +174,6 @@ namespace Oxide.Core.Plugins
         /// </summary>
         public virtual void Load()
         {
-
         }
 
         /// <summary>
@@ -218,14 +208,12 @@ namespace Oxide.Core.Plugins
                 {
                     stoppedAt = Interface.Oxide.Now;
                     var runTime = stoppedAt - startedAt;
-                    if (runTime > 0.5)
-                        Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took: {(runTime)*1000:0}ms");
+                    if (runTime > 0.5) Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took: {(runTime)*1000:0}ms");
                     sum += runTime;
                     if (stoppedAt - averageAt > 10)
                     {
                         sum /= stoppedAt - averageAt;
-                        if (sum > 0.25)
-                            Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took average: {sum*1000:0}ms");
+                        if (sum > 0.25) Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took average: {sum*1000:0}ms");
                         sum = 0;
                         averageAt = 0;
                     }
@@ -239,10 +227,7 @@ namespace Oxide.Core.Plugins
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object Call(string hookname, params object[] args)
-        {
-            return CallHook(hookname, args);
-        }
+        public object Call(string hookname, params object[] args) => CallHook(hookname, args);
 
         /// <summary>
         /// Calls a hook on this plugin and converts the return value to the specified type
@@ -251,9 +236,7 @@ namespace Oxide.Core.Plugins
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public T Call<T>(string hookname, params object[] args) {
-            return (T)Convert.ChangeType(CallHook(hookname, args), typeof(T));
-        }
+        public T Call<T>(string hookname, params object[] args) => (T)Convert.ChangeType(CallHook(hookname, args), typeof(T));
 
         /// <summary>
         /// Called when it's time to run a hook on this plugin
@@ -267,11 +250,7 @@ namespace Oxide.Core.Plugins
         /// Raises an error on this plugin
         /// </summary>
         /// <param name="message"></param>
-        public void RaiseError(string message)
-        {
-            if (OnError != null)
-                OnError(this, message);
-        }
+        public void RaiseError(string message) => OnError?.Invoke(this, message);
 
         public void TrackStart()
         {
@@ -303,7 +282,7 @@ namespace Oxide.Core.Plugins
         /// </summary>
         protected virtual void LoadConfig()
         {
-            Config = new DynamicConfigFile(Path.Combine(Manager.ConfigPath, string.Format("{0}.json", Name)));
+            Config = new DynamicConfigFile(Path.Combine(Manager.ConfigPath, $"{Name}.json"));
             if (Config.Exists())
             {
                 try
@@ -312,7 +291,7 @@ namespace Oxide.Core.Plugins
                 }
                 catch (Exception ex)
                 {
-                    RaiseError(string.Format("Failed to load config file (is the config file corrupt?) ({0})", ex.Message));
+                    RaiseError($"Failed to load config file (is the config file corrupt?) ({ex.Message})");
                 }
             }
             else
@@ -325,11 +304,7 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Populates the config with default settings
         /// </summary>
-        protected virtual void LoadDefaultConfig()
-        {
-            // Call LoadDefaultConfig if it was defined as a private hook
-            CallHook("LoadDefaultConfig", null);
-        }
+        protected virtual void LoadDefaultConfig() => CallHook("LoadDefaultConfig", null);
 
         /// <summary>
         /// Saves the config file for this plugin
@@ -343,7 +318,7 @@ namespace Oxide.Core.Plugins
             }
             catch (Exception ex)
             {
-                RaiseError(string.Format("Failed to save config file (does the config have illegal objects in it?) ({0})", ex.Message));
+                RaiseError($"Failed to save config file (does the config have illegal objects in it?) ({ex.Message})");
             }
         }
 
@@ -367,10 +342,7 @@ namespace Oxide.Core.Plugins
         private void RegisterWithCovalence()
         {
             var covalence = Interface.Oxide.GetLibrary<Covalence>();
-            foreach (var pair in commandInfos)
-            {
-                covalence.RegisterCommand(pair.Key, CovalenceCommandCallback);
-            }
+            foreach (var pair in commandInfos) covalence.RegisterCommand(pair.Key, CovalenceCommandCallback);
         }
 
         private bool CovalenceCommandCallback(string cmd, CommandType type, IPlayer caller, string[] args)
@@ -387,11 +359,9 @@ namespace Oxide.Core.Plugins
             }
             foreach (var perm in cmdInfo.PermissionsRequired)
             {
-                if (!caller.HasPermission(perm))
-                {
-                    caller.ConnectedPlayer?.SendChatMessage(string.Format("Missing permission '{0}' to run command '{1}'!", perm, cmd));
-                    return true;
-                }
+                if (caller.HasPermission(perm)) continue;
+                caller.ConnectedPlayer?.Message($"Missing permission '{perm}' to run command '{cmd}'!");
+                return true;
             }
 
             // Call it
@@ -404,10 +374,7 @@ namespace Oxide.Core.Plugins
         private void UnregisterWithCovalence()
         {
             var covalence = Interface.Oxide.GetLibrary<Covalence>();
-            foreach (var pair in commandInfos)
-            {
-                covalence.UnregisterCommand(pair.Key);
-            }
+            foreach (var pair in commandInfos) covalence.UnregisterCommand(pair.Key);
         }
 
         #endregion
