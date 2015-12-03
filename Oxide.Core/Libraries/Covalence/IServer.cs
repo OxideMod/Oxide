@@ -1,6 +1,5 @@
 ﻿using System.Net;
 
-
 namespace Oxide.Core.Libraries.Covalence
 {
     /// <summary>
@@ -23,21 +22,22 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         ushort Port { get; }
 
-        #region Console
+        /// <summary>
+        /// Gets the version number/build of the server
+        /// </summary>
+        string Version { get; }
 
         /// <summary>
-        /// Prints the specified message to the server console
+        /// Broadcasts a chat message to all players
         /// </summary>
         /// <param name="message"></param>
-        void Print(string message);
+        void Broadcast(string message);
 
         /// <summary>
         /// Runs the specified server command
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="args"></param>
         void RunCommand(string command, params object[] args);
-
-        #endregion
     }
 }

@@ -25,18 +25,19 @@
 
         #endregion
 
-        #region Manipulation
+        #region Chat and Commands
 
         /// <summary>
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        void SendChatMessage(string message);
+        void Message(string message);
 
         /// <summary>
         /// Runs the specified console command on this player's client
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="args"></param>
         void RunCommand(string command, params object[] args);
 
         #endregion

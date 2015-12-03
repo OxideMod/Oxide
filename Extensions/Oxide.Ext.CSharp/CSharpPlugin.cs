@@ -181,9 +181,11 @@ namespace Oxide.Plugins
 
         public FSWatcher Watcher;
 
+        protected Covalence covalence = Interface.Oxide.GetLibrary<Covalence>();
         protected Core.Libraries.Lang lang = Interface.Oxide.GetLibrary<Core.Libraries.Lang>();
         protected Core.Libraries.Plugins plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
         protected Core.Libraries.Permission permission = Interface.Oxide.GetLibrary<Core.Libraries.Permission>();
+        protected Core.Libraries.WebRequests webrequest = Interface.Oxide.GetLibrary<Core.Libraries.WebRequests>();
         protected PluginTimers timer;
 
         protected HashSet<PluginFieldInfo> onlinePlayerFields = new HashSet<PluginFieldInfo>();
