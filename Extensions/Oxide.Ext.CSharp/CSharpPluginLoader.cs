@@ -48,7 +48,6 @@ namespace Oxide.Plugins
             {
                 if (extension == null || !extension.IsGameExtension) continue;
                 var assembly = extension.GetType().Assembly;
-                if (assembly == null) continue;
                 PluginReferences.Add(assembly.GetName().Name);
                 foreach (var reference in assembly.GetReferencedAssemblies())
                     if (reference != null) PluginReferences.Add(reference.Name);
@@ -59,8 +58,7 @@ namespace Oxide.Plugins
         {
             if (PluginCompiler.BinaryPath == null) yield break;
             var enumerable = base.ScanDirectory(directory);
-            foreach (var file in enumerable)
-                yield return file;
+            foreach (var file in enumerable) yield return file;
         }
 
         /// <summary>
@@ -126,8 +124,7 @@ namespace Oxide.Plugins
             // Unload plugins which require this plugin first
             foreach (var compilable_plugin in plugins.Values)
             {
-                if (compilable_plugin.Requires.Contains(plugin.Name))
-                    Interface.Oxide.UnloadPlugin(compilable_plugin.Name);
+                if (compilable_plugin.Requires.Contains(plugin.Name)) Interface.Oxide.UnloadPlugin(compilable_plugin.Name);
             }
         }
 
@@ -256,9 +253,6 @@ namespace Oxide.Plugins
             });
         }
 
-        public void OnShutdown()
-        {
-            compiler.Shutdown();
-        }
+        public void OnShutdown() => compiler.Shutdown();
     }
 }

@@ -34,7 +34,6 @@ namespace Oxide.Plugins
         /// <param name="manager"></param>
         public CSharpExtension(ExtensionManager manager) : base(manager)
         {
-
         }
 
         /// <summary>
@@ -45,6 +44,7 @@ namespace Oxide.Plugins
             // Register our loader
             loader = new CSharpPluginLoader(this);
             Manager.RegisterPluginLoader(loader);
+
             // Register engine frame callback
             Interface.Oxide.OnFrame(OnFrame);
         }
@@ -63,10 +63,7 @@ namespace Oxide.Plugins
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
-        public override void OnModLoad()
-        {
-            loader.OnModLoaded();
-        }
+        public override void OnModLoad() => loader.OnModLoaded();
 
         public override void OnShutdown()
         {
@@ -83,7 +80,7 @@ namespace Oxide.Plugins
             foreach (var kv in loader.LoadedPlugins)
             {
                 var plugin = kv.Value as CSharpPlugin;
-                if (plugin.HookedOnFrame) plugin.CallHook("OnFrame", args);
+                if (plugin != null && plugin.HookedOnFrame) plugin.CallHook("OnFrame", args);
             }
         }
     }

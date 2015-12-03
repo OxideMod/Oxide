@@ -7,15 +7,14 @@ namespace Oxide.Plugins
 {
     public class CovalencePlugin : CSharpPlugin
     {
-        static Covalence covalence = Interface.Oxide.GetLibrary<Covalence>();
+        new static readonly Covalence covalence = Interface.Oxide.GetLibrary<Covalence>();
 
         protected string game = covalence.Game;
         protected IServer server = covalence.Server;
         protected IPlayerManager players = covalence.Players;
 
-        public CovalencePlugin() : base()
+        public CovalencePlugin()
         {
-            
         }
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace Oxide.Plugins
         /// <param name="format"></param>
         /// <param name="args"></param>
         protected void Log(string format, params object[] args)
-        {            
+        {
             Interface.Oxide.LogInfo("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
         }
 
@@ -52,9 +51,6 @@ namespace Oxide.Plugins
         /// Queue a callback to be called in the next server frame
         /// </summary>
         /// <param name="callback"></param>
-        protected void NextFrame(Action callback)
-        {
-            Interface.Oxide.NextTick(callback);
-        }
+        protected void NextFrame(Action callback) => Interface.Oxide.NextTick(callback);
     }
 }

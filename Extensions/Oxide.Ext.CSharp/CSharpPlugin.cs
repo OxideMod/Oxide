@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading;
 
 using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
 
@@ -12,7 +13,7 @@ namespace Oxide.Plugins
 {
     public class PluginLoadFailure : Exception
     {
-        public PluginLoadFailure(string reason) : base()
+        public PluginLoadFailure(string reason)
         {
         }
     }
@@ -20,7 +21,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Allows configuration of plugin info using an attribute above the plugin class
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class InfoAttribute : Attribute
     {
         public string Title { get; }
@@ -32,17 +33,17 @@ namespace Oxide.Plugins
         {
             this.Title = Title;
             this.Author = Author;
-            setVersion(Version);
+            SetVersion(Version);
         }
 
         public InfoAttribute(string Title, string Author, double Version)
         {
             this.Title = Title;
             this.Author = Author;
-            setVersion(Version.ToString());
+            SetVersion(Version.ToString());
         }
 
-        private void setVersion(string version)
+        private void SetVersion(string version)
         {
             var version_parts = version.Split('.').Select(part =>
             {
@@ -58,7 +59,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Allows plugins to specify a description of the plugin using an attribute above the plugin class
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class DescriptionAttribute : Attribute
     {
         public string Description { get; }
@@ -72,7 +73,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Indicates that the specified field should be a reference to another plugin when it is loaded
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class PluginReferenceAttribute : Attribute
     {
         public string Name { get; }
@@ -90,7 +91,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Indicates that the specified method should be a handler for a console command
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class ConsoleCommandAttribute : Attribute
     {
         public string Command { get; private set; }
@@ -104,7 +105,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Indicates that the specified method should be a handler for a chat command
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class ChatCommandAttribute : Attribute
     {
         public string Command { get; private set; }
@@ -118,7 +119,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Indicates that the specified Hash field should be used to automatically track online players
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class OnlinePlayersAttribute : Attribute
     {
         public OnlinePlayersAttribute()
@@ -144,10 +145,10 @@ namespace Oxide.Plugins
 
             public PluginFieldInfo(Plugin plugin, FieldInfo field)
             {
-                this.Plugin = plugin;
-                this.Field = field;
-                this.FieldType = field.FieldType;
-                this.GenericArguments = FieldType.GetGenericArguments();
+                Plugin = plugin;
+                Field = field;
+                FieldType = field.FieldType;
+                GenericArguments = FieldType.GetGenericArguments();
             }
 
             public bool HasValidConstructor(params Type[] argument_types)
@@ -198,7 +199,7 @@ namespace Oxide.Plugins
             get; private set;
         }
 
-        public CSharpPlugin() : base()
+        public CSharpPlugin()
         {
             timer = new PluginTimers(this);
 
@@ -254,8 +255,7 @@ namespace Oxide.Plugins
 
             if (Filename != null) Watcher.AddMapping(Name);
 
-            foreach (var name in pluginReferenceFields.Keys)
-                pluginReferenceFields[name].SetValue(this, manager.GetPlugin(name));
+            foreach (var name in pluginReferenceFields.Keys) pluginReferenceFields[name].SetValue(this, manager.GetPlugin(name));
 
             /*var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(Interface.Oxide.PluginDirectory, Name);
             if (compilable_plugin != null && compilable_plugin.CompiledAssembly != null)
@@ -285,8 +285,7 @@ namespace Oxide.Plugins
 
             Watcher.RemoveMapping(Name);
 
-            foreach (var name in pluginReferenceFields.Keys)
-                pluginReferenceFields[name].SetValue(this, null);
+            foreach (var name in pluginReferenceFields.Keys) pluginReferenceFields[name].SetValue(this, null);
 
             base.HandleRemovedFromManager(manager);
         }
@@ -351,16 +350,14 @@ namespace Oxide.Plugins
         void base_OnPluginLoaded(Plugin plugin)
         {
             FieldInfo field;
-            if (pluginReferenceFields.TryGetValue(plugin.Name, out field))
-                field.SetValue(this, plugin);
+            if (pluginReferenceFields.TryGetValue(plugin.Name, out field)) field.SetValue(this, plugin);
         }
 
         [HookMethod("OnPluginUnloaded")]
         void base_OnPluginUnloaded(Plugin plugin)
         {
             FieldInfo field;
-            if (pluginReferenceFields.TryGetValue(plugin.Name, out field))
-                field.SetValue(this, null);
+            if (pluginReferenceFields.TryGetValue(plugin.Name, out field)) field.SetValue(this, null);
         }
 
         /// <summary>
@@ -397,10 +394,7 @@ namespace Oxide.Plugins
         /// Queue a callback to be called in the next server tick
         /// </summary>
         /// <param name="callback"></param>
-        protected void NextTick(Action callback)
-        {
-            Interface.Oxide.NextTick(callback);
-        }
+        protected void NextTick(Action callback) => Interface.Oxide.NextTick(callback);
 
         /// <summary>
         /// Queues a callback to be called from a thread pool worker thread
