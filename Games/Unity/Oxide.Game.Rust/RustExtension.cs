@@ -12,7 +12,6 @@ using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
-
 using Oxide.Game.Rust.Libraries;
 
 namespace Oxide.Game.Rust
@@ -37,8 +36,16 @@ namespace Oxide.Game.Rust
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "Assembly-CSharp-firstpass", "DestMath", "mscorlib", "Oxide.Core", "Oxide.Game.Rust", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "ConVar", "Dest", "Facepunch", "Network", "Oxide.Game.Rust.Cui", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "Assembly-CSharp", "Assembly-CSharp-firstpass", "DestMath", "Facepunch.Network", "Facepunch.System", "Facepunch.UnityEngine",
+            "mscorlib", "Oxide.Core", "Oxide.Game.Rust", "protobuf-net", "RustBuild", "Rust.Data", "System", "System.Core", "UnityEngine"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "ConVar", "Dest", "Facepunch", "Network", "Oxide.Game.Rust.Cui", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections",
+            "System.Security.Cryptography", "System.Text", "UnityEngine"
+        };
 
         public static string[] Filter =
         {
@@ -78,7 +85,6 @@ namespace Oxide.Game.Rust
         public RustExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -151,7 +157,6 @@ namespace Oxide.Game.Rust
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -159,7 +164,6 @@ namespace Oxide.Game.Rust
         /// </summary>
         public override void OnModLoad()
         {
-
         }
 
         internal static void EnableConsole()
@@ -201,8 +205,8 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
-                var inbound = Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
-                var outbound = Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
+                var inbound = Number.FormatNumberShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
+                var outbound = Number.FormatNumberShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
                 return string.Concat(inbound, "/s in, ", outbound, "/s out");
             };
 
@@ -227,10 +231,7 @@ namespace Oxide.Game.Rust
             };
         }
 
-        private static void ServerConsoleOnInput(string input)
-        {
-            ConsoleSystem.Run.Server.Normal(input);
-        }
+        private static void ServerConsoleOnInput(string input) => ConsoleSystem.Run.Server.Normal(input);
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {

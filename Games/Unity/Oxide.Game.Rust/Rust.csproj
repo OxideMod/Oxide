@@ -31,30 +31,21 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.Network">
+      <HintPath>Dependencies\Facepunch.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.System">
+      <HintPath>Dependencies\Facepunch.System.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.UnityEngine">
+      <HintPath>Dependencies\Facepunch.UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
@@ -63,6 +54,9 @@
     <Reference Include="protobuf-net">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="Rust.Data">
+      <HintPath>Dependencies\Rust.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -126,7 +120,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
-      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\UnityEngine*.dll" />
+      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\Facepunch.*.dll; $(TargetDir)\Rust.*.dll; $(TargetDir)\UnityEngine*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\Linux\**" />

@@ -14,7 +14,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer { get { return RustCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString()); } }
+        public IPlayer BasePlayer => RustCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
 
         /// <summary>
         /// Gets this player's in-game character, if available
@@ -36,7 +36,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         internal RustLivePlayer(BasePlayer player)
         {
             this.player = player;
-            steamid = player.net.connection.userid;
+            steamid = player.userID;
             Object = player;
         }
 
@@ -48,18 +48,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Kicks this player from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason)
-        {
-            player.Kick(reason);
-        }
+        public void Kick(string reason) => player.Kick(reason);
 
         /// <summary>
         /// Causes this player's character to die
         /// </summary>
-        public void Kill()
-        {
-            player.Die();
-        }
+        public void Kill() => player.Die();
 
         /// <summary>
         /// Teleports this player's character to the specified position
@@ -70,6 +64,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public void Teleport(float x, float y, float z)
         {
             if (player.IsSpectating()) return;
+
             var dest = new UnityEngine.Vector3(x, y, z);
             player.transform.position = dest;
             player.ClientRPCPlayer(null, player, "ForcePositionTo", dest);
@@ -83,20 +78,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        public void SendChatMessage(string message)
-        {
-            player.ChatMessage(message);
-        }
+        public void Message(string message) => player.ChatMessage(message);
 
         /// <summary>
         /// Runs the specified console command on this player's client
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
-        {
-            player.SendConsoleCommand(command, args);
-        }
+        public void RunCommand(string command, params object[] args) => player.SendConsoleCommand(command, args);
 
         #endregion
 

@@ -17,6 +17,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         internal static RustCovalenceProvider Instance { get; private set; }
 
+        public RustCovalenceProvider()
+        {
+            Instance = this;
+        }
+
         /// <summary>
         /// Gets the player manager
         /// </summary>
@@ -27,19 +32,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public RustCommandSystem CommandSystem { get; private set; }
 
-        public RustCovalenceProvider()
-        {
-            Instance = this;
-        }
-
         /// <summary>
         /// Creates the game-specific server object
         /// </summary>
         /// <returns></returns>
-        public IServer CreateServer()
-        {
-            return new RustServer();
-        }
+        public IServer CreateServer() => new RustServer();
 
         /// <summary>
         /// Creates the game-specific player manager object
@@ -56,9 +53,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Creates the game-specific command system provider object
         /// </summary>
         /// <returns></returns>
-        public ICommandSystem CreateCommandSystemProvider()
-        {
-            return CommandSystem = new RustCommandSystem();
-        }
+        public ICommandSystem CreateCommandSystemProvider() => CommandSystem = new RustCommandSystem();
     }
 }

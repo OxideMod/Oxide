@@ -4,15 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using Facepunch;
 using Network;
-using ProtoBuf;
 using Rust;
 using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
-
 using Oxide.Game.Rust.Libraries;
 
 namespace Oxide.Game.Rust
@@ -25,11 +24,11 @@ namespace Oxide.Game.Rust
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
-        // The permission lib
+        // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" };
+        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" }; // TODO: Migrate to "player" to "default"
 
-        // The command lib
+        // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // Track when the server has been initialized
@@ -38,6 +37,7 @@ namespace Oxide.Game.Rust
         // Cache the serverInput field info
         private readonly FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        //
         private readonly Dictionary<BasePlayer, InputState> playerInputState = new Dictionary<BasePlayer, InputState>();
 
         // Track if a BasePlayer.OnAttacked call is in progress
@@ -53,6 +53,11 @@ namespace Oxide.Game.Rust
             Title = "Rust Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
+
+            // Cheat references in the default plugin reference list
+            var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
+            var fpSystem = Math.unixTimestamp; // Facepunch.System
+            var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
         }
 
         /// <summary>
@@ -71,7 +76,7 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
             cmdlib.AddConsoleCommand("global.reload", this, "cmdReload");
             cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
-            cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
+            //cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
 
             // Add permission commands
             cmdlib.AddConsoleCommand("oxide.group", this, "cmdGroup");
@@ -102,7 +107,7 @@ namespace Oxide.Game.Rust
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust");
-            RemoteLogger.SetTag("protocol", typeof(Protocol).GetField("network").GetValue(null).ToString());
+            RemoteLogger.SetTag("version", Protocol.printable);
         }
 
         /// <summary>
@@ -158,11 +163,7 @@ namespace Oxide.Game.Rust
         /// Called when ServerConsole is disabled
         /// </summary>
         [HookMethod("IOnDisableServerConsole")]
-        private object IOnDisableServerConsole()
-        {
-            if (!Interface.Oxide.CheckConsole(true)) return null;
-            return false;
-        }
+        private object IOnDisableServerConsole() => !Interface.Oxide.CheckConsole(true) ? (object) null : false;
 
         /// <summary>
         /// Called when the server is shutting down
@@ -314,7 +315,7 @@ namespace Oxide.Game.Rust
         private void cmdVersion(ConsoleSystem.Arg arg)
         {
             // Get the Rust network protocol version at runtime
-            var protocol = typeof(Protocol).GetField("network").GetValue(null).ToString();
+            var protocol = Protocol.printable;
 
             // Get the Oxide Core version
             var oxide = OxideMod.Version.ToString();
@@ -711,7 +712,7 @@ namespace Oxide.Game.Rust
             }
 
             // Call out and see if we should reject
-            object canlogin = Interface.CallHook("CanClientLogin", connection);
+            var canlogin = Interface.CallHook("CanClientLogin", connection);
             if (canlogin != null)
             {
                 // If it's a bool and it's true, let them in
@@ -751,14 +752,14 @@ namespace Oxide.Game.Rust
                 }
 
                 // Get the args
-                string str = arg.GetString(0, "text");
+                var str = arg.GetString(0, "text");
                 if (str.Length == 0) return null;
 
                 // Is it a chat command?
                 if (str[0] == '/' || str[0] == '!')
                 {
                     // Get the message
-                    string message = str.Substring(1);
+                    var message = str.Substring(1);
 
                     // Parse it
                     string cmd;
@@ -798,17 +799,17 @@ namespace Oxide.Game.Rust
         /// <param name="args"></param>
         private void ParseChatCommand(string argstr, out string cmd, out string[] args)
         {
-            List<string> arglist = new List<string>();
-            StringBuilder sb = new StringBuilder();
-            bool inlongarg = false;
-            for (int i = 0; i < argstr.Length; i++)
+            var arglist = new List<string>();
+            var sb = new StringBuilder();
+            var inlongarg = false;
+            for (var i = 0; i < argstr.Length; i++)
             {
-                char c = argstr[i];
+                var c = argstr[i];
                 if (c == '"')
                 {
                     if (inlongarg)
                     {
-                        string arg = sb.ToString().Trim();
+                        var arg = sb.ToString().Trim();
                         if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
                         sb = new StringBuilder();
                         inlongarg = false;
@@ -820,7 +821,7 @@ namespace Oxide.Game.Rust
                 }
                 else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
-                    string arg = sb.ToString().Trim();
+                    var arg = sb.ToString().Trim();
                     if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
                     sb = new StringBuilder();
                 }
@@ -831,7 +832,7 @@ namespace Oxide.Game.Rust
             }
             if (sb.Length > 0)
             {
-                string arg = sb.ToString().Trim();
+                var arg = sb.ToString().Trim();
                 if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
             }
             if (arglist.Count == 0)
@@ -861,8 +862,7 @@ namespace Oxide.Game.Rust
             {
                 var userId = player.userID.ToString();
                 permission.UpdateNickname(userId, player.displayName);
-                if (!permission.UserHasAnyGroup(userId))
-                    permission.AddUserGroup(userId, DefaultGroups[authLevel]);
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[authLevel]);
             }
 
             // Cache serverInput for player so that reflection only needs to be used once
@@ -895,96 +895,6 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when the player has been melee attacked
-        /// </summary>
-        /// <param name="melee"></param>
-        /// <param name="info"></param>
-        [HookMethod("IOnMeleeAttack")]
-        private object IOnMeleeAttack(BaseMelee melee, HitInfo info)
-        {
-            return Interface.CallHook("OnPlayerAttack", melee.ownerPlayer, info);
-        }
-
-        /// <summary>
-        /// Called when a player arms a trap (currently only BearTrap)
-        /// </summary>
-        /// <param name="trap"></param>
-        /// <param name="player"></param>
-        [HookMethod("IOnTrapArm")]
-        private object IOnTrapArm(BearTrap trap, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnTrapArm", trap, msg.player);
-        }
-
-        /// <summary>
-        /// Called when a player disarms a trap (currently only Landmine)
-        /// </summary>
-        /// <param name="trap"></param>
-        /// <param name="player"></param>
-        [HookMethod("IOnTrapDisarm")]
-        private object IOnTrapDisarm(Landmine trap, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnTrapDisarm", trap, msg.player);
-        }
-
-        /// <summary>
-        /// Called when the player upgrades a BuildingBlock
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="msg"></param>
-        /// <param name="grade"></param>
-        [HookMethod("IOnStructureUpgrade")]
-        private object IOnStructureUpgrade(BuildingBlock block, BaseEntity.RPCMessage msg, BuildingGrade.Enum grade)
-        {
-            return Interface.CallHook("OnStructureUpgrade", block, msg.player, grade);
-        }
-
-        /// <summary>
-        /// Called when the player demolishes a BuildingBlock
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="msg"></param>
-        [HookMethod("IOnStructureDemolish")]
-        private object IOnStructureDemolish(BuildingBlock block, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnStructureDemolish", block, msg.player);
-        }
-
-        /// <summary>
-        /// Called when the player rotates a BuildingBlock
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="msg"></param>
-        [HookMethod("IOnStructureRotate")]
-        private object IOnStructureRotate(BuildingBlock block, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnStructureRotate", block, msg.player);
-        }
-
-        /// <summary>
-        /// Called when a player locks a sign
-        /// </summary>
-        /// <param name="sign"></param>
-        /// <param name="msg"></param>
-        /// <returns></returns>
-        [HookMethod("IOnSignLocked")]
-        private object IOnSignLocked(Signage sign, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnSignLocked", sign, msg.player);
-        }
-
-        /// <summary>
-        /// Called when a player has changed a sign
-        /// </summary>
-        /// <param name="sign"></param>
-        /// <param name="msg"></param>
-        [HookMethod("IOnSignUpdated")]
-        private object IOnSignUpdated(Signage sign, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnSignUpdated", sign, msg.player);
-        }
-
-        /// <summary>
         /// Called when an item loses durability
         /// </summary>
         /// <param name="item"></param>
@@ -995,14 +905,9 @@ namespace Oxide.Game.Rust
             var arguments = new object[] { item, amount };
             Interface.CallHook("OnLoseCondition", arguments);
             amount = (float)arguments[1];
-            float condition = item.condition;
+            var condition = item.condition;
             item.condition -= amount;
-
-            if ((item.condition <= 0f) && (item.condition < condition))
-            {
-                item.OnBroken();
-            }
-
+            if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
             return true;
         }
 
@@ -1039,8 +944,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBasePlayerHurt")]
         private object IOnBasePlayerHurt(BasePlayer entity, HitInfo info)
         {
-            if (isPlayerTakingDamage) return null;
-            return Interface.CallHook("OnEntityTakeDamage", entity, info);
+            return isPlayerTakingDamage ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
         }
 
         /// <summary>
@@ -1052,19 +956,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBaseCombatEntityHurt")]
         private object IOnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
         {
-            if (entity is BasePlayer) return null;
-            return Interface.CallHook("OnEntityTakeDamage", entity, info);
-        }
-
-        /// <summary>
-        /// Called when a player throws a weapon like a Timed Explosive Charge or a F1 Grenade
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="entity"></param>
-        [HookMethod("IOnWeaponThrown")]
-        private object IOnWeaponThrown(BaseEntity.RPCMessage msg, BaseEntity entity)
-        {
-            return Interface.CallHook("OnWeaponThrown", msg.player, entity);
+            return entity is BasePlayer ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
         }
 
         /// <summary>
@@ -1079,209 +971,6 @@ namespace Oxide.Game.Rust
             if (returnvar is float) return (float)returnvar;
             if (returnvar is double) return (float)(double)returnvar;
             return chance;
-        }
-
-        /// <summary>
-        /// Called when a player launches a rocket with the rocket launcher
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        [HookMethod("IOnRocketLaunched")]
-        private object IOnRocketLaunched(BaseEntity.RPCMessage msg, BaseEntity entity)
-        {
-            return Interface.CallHook("OnRocketLaunched", msg.player, entity);
-        }
-
-        /// <summary>
-        /// Called when a player fires a weapon
-        /// </summary>
-        /// <param name="projectile"></param>
-        /// <param name="msg"></param>
-        /// <param name="component"></param>
-        /// <param name="projectiles"></param>
-        /// <returns></returns>
-        [HookMethod("IOnWeaponFired")]
-        private object IOnWeaponFired(BaseProjectile projectile, BaseEntity.RPCMessage msg, ItemModProjectile component, ProjectileShoot projectiles)
-        {
-            return Interface.CallHook("OnWeaponFired", projectile, msg.player, component, projectiles);
-        }
-
-        /// <summary>
-        /// Called when a player collects an item
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        [HookMethod("IOnItemPickup")]
-        private object IOnItemPickup(BaseEntity.RPCMessage msg, Item item)
-        {
-            return Interface.CallHook("OnItemPickup", msg.player, item);
-        }
-
-        /// <summary>
-        /// Called when a player gathers from a plant
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="entity"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        [HookMethod("IOnPlantGather")]
-        private object IOnPlantGather(BaseEntity.RPCMessage msg, PlantEntity entity, Item item)
-        {
-            return Interface.CallHook("OnPlantGather", entity, item, msg.player);
-        }
-
-        /// <summary>
-        /// Called when the player has hit something with a hammer
-        /// </summary>
-        /// <param name="hammer"></param>
-        /// <param name="info"></param>
-        [HookMethod("IOnHammerHit")]
-        private object IOnHammerHit(Hammer hammer, HitInfo info)
-        {
-            var ent = info.HitEntity as BuildingBlock;
-            return ent != null ? null : Interface.CallHook("OnHammerHit", hammer.ownerPlayer, info);
-        }
-
-        /// <summary>
-        /// Called when a player opened a door
-        /// </summary>
-        /// <param name="door"></param>
-        /// <param name="msg"></param>
-        [HookMethod("IOnDoorOpened")]
-        private object IOnDoorOpened(Door door, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnDoorOpened", door, msg.player);
-        }
-
-        /// <summary>
-        /// Called when a player closed a door
-        /// </summary>
-        /// <param name="door"></param>
-        /// <param name="msg"></param>
-        [HookMethod("IOnDoorClosed")]
-        private object IOnDoorClosed(Door door, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnDoorClosed", door, msg.player);
-        }
-
-        /// <summary>
-        /// Called when a player is authorized by a cupboard
-        /// </summary>
-        /// <param name="privilege"></param>
-        /// <param name="msg"></param>
-        [HookMethod("IOnCupboardAuthorize")]
-        private object IOnCupboardAuthorize(BuildingPrivlidge priviledge, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnCupboardAuthorize", priviledge, msg.player);
-        }
-
-        /// <summary>
-        /// Called when a player is deauthorized by a cupboard
-        /// </summary>
-        /// <param name="privilege"></param>
-        /// <param name="msg"></param>
-        [HookMethod("IOnCupboardDeauthorize")]
-        private object IOnCupboardDeauthorize(BuildingPrivlidge priviledge, BaseEntity.RPCMessage msg)
-        {
-            return Interface.CallHook("OnCupboardDeauthorize", priviledge, msg.player);
-        }
-
-        /// <summary>
-        /// Called when a player uses a door
-        /// This is used to handle the deprecated hook CanOpenDoor
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="doorlock"></param>
-        [HookMethod("CanUseDoor")]
-        private object CanUseDoor(BasePlayer player, BaseLock doorlock)
-        {
-            return Interface.CallDeprecatedHook("CanOpenDoor", player, doorlock);
-        }
-
-        /// <summary>
-        /// Called when a player gathers from a dispenser
-        /// This is used to handle the deprecated hook OnGather
-        /// </summary>
-        /// <param name="dispenser"></param>
-        /// <param name="entity"></param>
-        /// <param name="item"></param>
-        [HookMethod("OnDispenserGather")]
-        private object OnDispenserGather(ResourceDispenser dispenser, BaseEntity entity, Item item)
-        {
-            return Interface.CallDeprecatedHook("OnGather", dispenser, entity, item);
-        }
-
-        /// <summary>
-        /// Called when the player demolishes a BuildingBlock
-        /// This is used to handle the deprecated hook OnBuildingBlockDemolish
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="msg"></param>
-        [HookMethod("OnStructureDemolish")]
-        private object OnStructureDemolish(BuildingBlock block, BasePlayer player)
-        {
-            return Interface.CallDeprecatedHook("OnBuildingBlockDemolish", block, player);
-        }
-
-        /// <summary>
-        /// Called when the player repairs a BuildingBlock
-        /// This is used to handle the deprecated hook OnRepair
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="player"></param>
-        [HookMethod("OnStructureRepair")]
-        private object OnStructureRepair(BuildingBlock block, BasePlayer player)
-        {
-            return Interface.CallDeprecatedHook("OnRepair", block, player);
-        }
-
-        /// <summary>
-        /// Called when the player rotates a BuildingBlock
-        /// This is used to handle the deprecated hook OnBuildingBlockRotate
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="msg"></param>
-        [HookMethod("OnStructureRotate")]
-        private object OnStructureRotate(BuildingBlock block, BasePlayer player)
-        {
-            return Interface.CallDeprecatedHook("OnBuildingBlockRotate", block, player);
-        }
-
-        /// <summary>
-        /// Called when the player upgrades a BuildingBlock
-        /// This is used to handle the deprecated hook OnBuildingBlockUpgrade
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="msg"></param>
-        /// <param name="grade"></param>
-        [HookMethod("OnStructureUpgrade")]
-        private object OnStructureUpgrade(BuildingBlock block, BasePlayer player, BuildingGrade.Enum grade)
-        {
-            return Interface.CallDeprecatedHook("OnBuildingBlockUpgrade", block, player, grade);
-        }
-
-        /// <summary>
-        /// Called when a mining quarry is enabled
-        /// This is used to handle the deprecated hook OnMiningQuarryEnabled
-        /// </summary>
-        [HookMethod("OnQuarryEnabled")]
-        private object OnQuarryEnabled(MiningQuarry quarry)
-        {
-            return Interface.CallDeprecatedHook("OnMiningQuarryEnabled", quarry);
-        }
-
-        /// <summary>
-        /// Called when a bear trap snapped
-        /// This is used to handle the deprecated hook OnBearTrapSnapped
-        /// </summary>
-        /// <param name="trap"></param>
-        /// <param name="go"></param>
-        [HookMethod("OnTrapSnapped")]
-        private object OnTrapSnapped(BaseTrapTrigger trap, GameObject go)
-        {
-            return Interface.CallDeprecatedHook("OnBearTrapSnapped", trap, go);
         }
 
         /// <summary>

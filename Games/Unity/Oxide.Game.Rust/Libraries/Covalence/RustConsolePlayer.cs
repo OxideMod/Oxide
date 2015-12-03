@@ -12,27 +12,27 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the last-known nickname for this player
         /// </summary>
-        public string Nickname { get { return "Server Console"; } }
+        public string Nickname => "Server Console";
 
         /// <summary>
         /// Gets a unique ID for this player (unique within the current game)
         /// </summary>
-        public string UniqueID { get { return "server_console"; } }
+        public string UniqueID => "server_console";
 
         /// <summary>
         /// Gets the live player if this player is connected
         /// </summary>
-        public ILivePlayer ConnectedPlayer { get { return this; } }
+        public ILivePlayer ConnectedPlayer => this;
 
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer { get { return this; } }
+        public IPlayer BasePlayer => this;
 
         /// <summary>
         /// Gets this player's in-game character, if available
         /// </summary>
-        public IPlayerCharacter Character { get { return null; } }
+        public IPlayerCharacter Character => null;
 
         #region Permissions
 
@@ -41,11 +41,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
-        public bool HasPermission(string perm)
-        {
-            // Server console has all permissions
-            return true;
-        }
+        public bool HasPermission(string perm) => true;
 
         /// <summary>
         /// Grants the specified permission on this user
@@ -64,11 +60,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        public bool BelongsToGroup(string groupName)
-        {
-            // Server console belongs to no group
-            return false;
-        }
+        public bool BelongsToGroup(string groupName) => false;
 
         /// <summary>
         /// Adds this player to the specified usergroup
@@ -101,12 +93,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets if this player is banned
         /// </summary>
-        public bool IsBanned { get { return false; } }
+        public bool IsBanned => false;
 
         /// <summary>
         /// Gets the amount of time remaining on this player's ban
         /// </summary>
-        public TimeSpan BanTimeRemaining { get { return TimeSpan.Zero; } }
+        public TimeSpan BanTimeRemaining => TimeSpan.Zero;
 
         /// <summary>
         /// Kicks this player from the game
@@ -135,9 +127,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        public void SendChatMessage(string message)
+        public void Message(string message)
         {
-            UnityEngine.Debug.Log(message);
+            // TODO
         }
 
         /// <summary>
@@ -145,10 +137,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
-        {
-            ConsoleSystem.Run.Server.Normal(command, args);
-        }
+        public void RunCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
 
         #endregion
     }

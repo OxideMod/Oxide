@@ -6,6 +6,7 @@ using Network;
 using UnityEngine;
 
 using Oxide.Core.Libraries;
+using Oxide.Plugins;
 
 namespace Oxide.Game.Rust.Libraries
 {
@@ -17,40 +18,45 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
+        /// <returns></returns>
         public override bool IsGlobal => false;
 
         /// <summary>
-        /// Returns the UserID for the specified connection as a string
+        /// Gets private bindingflag for accessing private methods, fields, and properties
+        /// </summary>
+        [LibraryFunction("PrivateBindingFlag")]
+        public BindingFlags PrivateBindingFlag() => (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+
+        /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="str"></param>
+        [LibraryFunction("QuoteSafe")]
+        public string QuoteSafe(string str) => str.Quote();
+
+        /// <summary>
+        /// Returns the Steam ID for the specified connection as a string
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromConnection")]
-        public string UserIDFromConnection(Connection connection)
-        {
-            return connection.userid.ToString();
-        }
+        public string UserIDFromConnection(Connection connection) => connection.userid.ToString();
 
         /// <summary>
-        /// Returns the UserIDs for the specified building privilege as an array
+        /// Returns the Steam ID for the specified building privilege as an array
         /// </summary>
-        /// <param name="buildingpriv"></param>
+        /// <param name="priv"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDsFromBuildingPrivilege")]
-        public Array UserIDsFromBuildingPrivlidge(BuildingPrivlidge buildingpriv)
-        {
-            return buildingpriv.authorizedPlayers.Select(eid => eid.userid.ToString()).ToArray();
-        }
+        public Array UserIDsFromBuildingPrivlidge(BuildingPrivlidge priv) => priv.authorizedPlayers.Select(eid => eid.userid.ToString()).ToArray();
 
         /// <summary>
-        /// Returns the UserID for the specified player as a string
+        /// Returns the Steam ID for the specified player as a string
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromPlayer")]
-        public string UserIDFromPlayer(BasePlayer player)
-        {
-            return player.userID.ToString();
-        }
+        public string UserIDFromPlayer(BasePlayer player) => player.userID.ToString();
 
         /// <summary>
         /// Runs a server command
@@ -58,28 +64,25 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="command"></param>
         /// <param name="args"></param>
         [LibraryFunction("RunServerCommand")]
-        public void RunServerCommand(string command, params object[] args)
-        {
-            ConsoleSystem.Run.Server.Normal(command, args);
-        }
+        public void RunServerCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
 
         /// <summary>
-        /// Broadcasts a chat message
+        /// Broadcasts a chat message to all players
         /// </summary>
         /// <param name="name"></param>
         /// <param name="message"></param>
-        /// <param name="userid"></param>
+        /// <param name="userId"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null, string userid = "0")
+        public void BroadcastChat(string name, string message = null, string userId = "0")
         {
             if (message != null)
             {
-                ConsoleSystem.Broadcast("chat.add", userid, $"<color=orange>{name}</color>: {message}", 1.0);
+                ConsoleSystem.Broadcast("chat.add", userId, $"<color=orange>{name}</color>: {message}", 1.0);
             }
             else
             {
                 message = name;
-                ConsoleSystem.Broadcast("chat.add", userid, message, 1.0);
+                ConsoleSystem.Broadcast("chat.add", userId, message, 1.0);
             }
         }
 
@@ -89,19 +92,20 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <param name="name"></param>
         /// <param name="message"></param>
-        /// <param name="userid"></param>
+        /// <param name="userId"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(BasePlayer player, string name, string message = null, string userid = "0")
+        public void SendChatMessage(BasePlayer player, string name, string message = null, string userId = "0")
         {
-            if (player?.net == null) return;
+            if (player == null) return;
+
             if (message != null)
             {
-                player.SendConsoleCommand("chat.add", userid, $"<color=orange>{name}</color>: {message}", 1.0);
+                player.SendConsoleCommand("chat.add", userId, $"<color=orange>{name}</color>: {message}", 1.0);
             }
             else
             {
                 message = name;
-                player.SendConsoleCommand("chat.add", userid, message, 1.0);
+                player.SendConsoleCommand("chat.add", userId, message, 1.0);
             }
         }
 
@@ -119,25 +123,6 @@ namespace Oxide.Game.Rust.Libraries
             player.MovePosition(player.transform.position);
             player.ClientRPCPlayer(null, player, "ForcePositionTo", player.transform.position);
             player.TransformChanged();
-        }
-
-        /// <summary>
-        /// Gets private bindingflag for accessing private methods, fields, and properties
-        /// </summary>
-        [LibraryFunction("PrivateBindingFlag")]
-        public BindingFlags PrivateBindingFlag()
-        {
-            return (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-        }
-
-        /// <summary>
-        /// Converts a string into a quote safe string
-        /// </summary>
-        /// <param name="str"></param>
-        [LibraryFunction("QuoteSafe")]
-        public string QuoteSafe(string str)
-        {
-            return str.QuoteSafe();
         }
     }
 }

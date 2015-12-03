@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using ProtoBuf;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
-
-using ProtoBuf;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -32,39 +30,34 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, RustPlayer>();
-            foreach (var pair in playerData)
-            {
-                players.Add(pair.Key, new RustPlayer(pair.Value.SteamID, pair.Value.Nickname));
-            }
+            foreach (var pair in playerData) players.Add(pair.Key, new RustPlayer(pair.Value.SteamID, pair.Value.Nickname));
             livePlayers = new Dictionary<string, RustLivePlayer>();
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
         {
-            string uniqueID = steamid.ToString();
+            var uniqueId = steamid.ToString();
 
             // Do they exist?
             PlayerRecord record;
-            if (playerData.TryGetValue(uniqueID, out record))
+            if (playerData.TryGetValue(uniqueId, out record))
             {
                 // Update
                 record.Nickname = nickname;
-                playerData[uniqueID] = record;
+                playerData[uniqueId] = record;
 
                 // Swap out Rust player
-                players.Remove(uniqueID);
-                players.Add(uniqueID, new RustPlayer(steamid, nickname));
+                players.Remove(uniqueId);
+                players.Add(uniqueId, new RustPlayer(steamid, nickname));
             }
             else
             {
                 // Insert
-                record = new PlayerRecord();
-                record.SteamID = steamid;
-                record.Nickname = nickname;
-                playerData.Add(uniqueID, record);
+                record = new PlayerRecord {SteamID = steamid, Nickname = nickname};
+                playerData.Add(uniqueId, record);
 
                 // Create Rust player
-                players.Add(uniqueID, new RustPlayer(steamid, nickname));
+                players.Add(uniqueId, new RustPlayer(steamid, nickname));
             }
 
             // Save
@@ -77,25 +70,19 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             livePlayers[ply.userID.ToString()] = new RustLivePlayer(ply);
         }
 
-        internal void NotifyPlayerDisconnect(BasePlayer ply)
-        {
-            livePlayers.Remove(ply.userID.ToString());
-        }
+        internal void NotifyPlayerDisconnect(BasePlayer ply) => livePlayers.Remove(ply.userID.ToString());
 
         #region Offline Players
 
         /// <summary>
         /// Gets an offline player using their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="uniqueId"></param>
         /// <returns></returns>
-        public IPlayer GetPlayer(string uniqueID)
+        public IPlayer GetPlayer(string uniqueId)
         {
             RustPlayer player;
-            if (players.TryGetValue(uniqueID, out player))
-                return player;
-            else
-                return null;
+            return players.TryGetValue(uniqueId, out player) ? player : null;
         }
 
         /// <summary>
@@ -116,10 +103,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Gets all offline players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> GetAllPlayers()
-        {
-            return players.Values.Cast<IPlayer>();
-        }
+        public IEnumerable<IPlayer> GetAllPlayers() => players.Values.Cast<IPlayer>();
 
         /// <summary>
         /// Gets all offline players
@@ -162,20 +146,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public ILivePlayer GetOnlinePlayer(string uniqueID)
         {
             RustLivePlayer player;
-            if (livePlayers.TryGetValue(uniqueID, out player))
-                return player;
-            else
-                return null;
+            return livePlayers.TryGetValue(uniqueID, out player) ? player : null;
         }
 
         /// <summary>
         /// Gets all online players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ILivePlayer> GetAllOnlinePlayers()
-        {
-            return livePlayers.Values.Cast<ILivePlayer>();
-        }
+        public IEnumerable<ILivePlayer> GetAllOnlinePlayers() => livePlayers.Values.Cast<ILivePlayer>();
 
         /// <summary>
         /// Gets all online players

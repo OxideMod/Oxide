@@ -1,6 +1,8 @@
 ﻿using System.Net;
 
 using ConVar;
+using Rust;
+using Steamworks;
 
 using Oxide.Core.Libraries.Covalence;
 
@@ -11,7 +13,17 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustServer : IServer
     {
-        #region Information
+        private ServerMgr mgr;
+
+        /// <summary>
+        /// Initializes a new instance of the RustServer class
+        /// </summary>
+        public RustServer()
+        {
+            mgr = ServerMgr.Instance;
+        }
+
+        #region Server Information
 
         /// <summary>
         /// Gets the public-facing name of the server
@@ -25,11 +37,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             get
             {
-                uint ip = Steamworks.SteamGameServer.GetPublicIP();
-                if (ip == 0)
-                    return null;
-                else
-                    return new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24));
+                var ip = SteamGameServer.GetPublicIP();
+                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24));
             }
         }
 
@@ -38,38 +47,27 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public ushort Port => (ushort)Server.port;
 
+        /// <summary>
+        /// Gets the version number/build of the server
+        /// </summary>
+        public string Version => Protocol.printable;
+
         #endregion
 
-        private ServerMgr mgr;
+        #region Chat and Commands
 
         /// <summary>
-        /// Initializes a new instance of the RustServer class
-        /// </summary>
-        public RustServer()
-        {
-            mgr = ServerMgr.Instance;
-        }
-
-        #region Console and Commands
-
-        /// <summary>
-        /// Prints the specified message to the server console
+        /// Broadcasts a chat message to all player clients
         /// </summary>
         /// <param name="message"></param>
-        public void Print(string message)
-        {
-            UnityEngine.Debug.Log(message);
-        }
+        public void Broadcast(string message) => ConsoleSystem.Broadcast("chat.add", 0, message, 1.0);
 
         /// <summary>
         /// Runs the specified server command
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
-        {
-            ConsoleSystem.Run.Server.Normal(command, args);
-        }
+        public void RunCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
 
         #endregion
     }
