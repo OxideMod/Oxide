@@ -17,27 +17,27 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the last-known nickname for this player
         /// </summary>
-        public string Nickname { get; private set; }
+        public string Nickname { get; }
 
         /// <summary>
         /// Gets a unique ID for this player (unique within the current game)
         /// </summary>
-        public string UniqueID { get; private set; }
+        public string UniqueID { get; }
 
         /// <summary>
         /// Gets the live player if this player is connected
         /// </summary>
         public ILivePlayer ConnectedPlayer => HurtworldCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(UniqueID);
 
-        internal HurtworldPlayer(ulong steamID, string nickname)
+        internal HurtworldPlayer(ulong steamId, string nickname)
         {
             // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
             Nickname = nickname;
-            steamid = steamID;
-            UniqueID = steamID.ToString();
+            steamid = steamId;
+            UniqueID = steamId.ToString();
         }
 
         #region Permissions
@@ -47,56 +47,38 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
-        public bool HasPermission(string perm)
-        {
-            return libPerms.UserHasPermission(UniqueID, perm);
-        }
+        public bool HasPermission(string perm) => libPerms.UserHasPermission(UniqueID, perm);
 
         /// <summary>
         /// Grants the specified permission on this user
         /// </summary>
         /// <param name="perm"></param>
-        public void GrantPermission(string perm)
-        {
-            libPerms.GrantUserPermission(UniqueID, perm, null);
-        }
+        public void GrantPermission(string perm) => libPerms.GrantUserPermission(UniqueID, perm, null);
 
         /// <summary>
         /// Strips the specified permission from this user
         /// </summary>
         /// <param name="perm"></param>
-        public void RevokePermission(string perm)
-        {
-            libPerms.RevokeUserPermission(UniqueID, perm);
-        }
+        public void RevokePermission(string perm) => libPerms.RevokeUserPermission(UniqueID, perm);
 
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        public bool BelongsToGroup(string groupName)
-        {
-            return libPerms.UserHasGroup(UniqueID, groupName);
-        }
+        public bool BelongsToGroup(string groupName) => libPerms.UserHasGroup(UniqueID, groupName);
 
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void AddToGroup(string groupName)
-        {
-            libPerms.AddUserGroup(UniqueID, groupName);
-        }
+        public void AddToGroup(string groupName) => libPerms.AddUserGroup(UniqueID, groupName);
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void RemoveFromGroup(string groupName)
-        {
-            libPerms.RemoveUserGroup(UniqueID, groupName);
-        }
+        public void RemoveFromGroup(string groupName) => libPerms.RemoveUserGroup(UniqueID, groupName);
 
         #endregion
 
@@ -114,16 +96,15 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
 
         public bool IsBanned => false; // TODO: Implement once supported
 
-        public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // Implement once supported
+        public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement once supported
 
         #endregion
 
         #region Operator Overloads
 
-        public bool Equals(IPlayer other)
-        {
-            return UniqueID == other.UniqueID;
-        }
+        public bool Equals(IPlayer other) => UniqueID == other.UniqueID;
+
+        public override int GetHashCode() => UniqueID.GetHashCode();
 
         #endregion
     }

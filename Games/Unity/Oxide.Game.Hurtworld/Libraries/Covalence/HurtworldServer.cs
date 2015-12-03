@@ -14,7 +14,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing name of the server
         /// </summary>
-        public string Name => GameManager.Instance.ServerConfig.GameName;
+        public string Name => GameManager.Instance?.ServerConfig.GameName;
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -26,17 +26,22 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public ushort Port => (ushort)uLink.MasterServer.port;
 
+        /// <summary>
+        /// Gets the version number/build of the server
+        /// </summary>
+        public string Version => GameManager.Instance?.GetProtocolVersion().ToString();
+
         #endregion
 
-        #region Console and Commands
+        #region Chat and Commands
 
         /// <summary>
-        /// Prints the specified message to the server console
+        /// Broadcasts a chat message to all player clients
         /// </summary>
         /// <param name="message"></param>
-        public void Print(string message)
+        public void Broadcast(string message)
         {
-            UnityEngine.Debug.Log(message);
+            ChatManager.Instance?.AppendChatboxServerAll(string.Concat("<color=#b8d7a3>", message, "</color>"));
         }
 
         /// <summary>
@@ -46,7 +51,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="args"></param>
         public void RunCommand(string command, params object[] args)
         {
-            ConsoleManager.Instance.ExecuteCommand(string.Concat(command, args));
+            ConsoleManager.Instance?.ExecuteCommand(string.Join(command, (string[])args));
         }
 
         #endregion

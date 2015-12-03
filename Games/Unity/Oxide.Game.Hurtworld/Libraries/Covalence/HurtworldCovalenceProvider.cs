@@ -17,6 +17,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         internal static HurtworldCovalenceProvider Instance { get; private set; }
 
+        public HurtworldCovalenceProvider()
+        {
+            Instance = this;
+        }
+
         /// <summary>
         /// Gets the player manager
         /// </summary>
@@ -27,36 +32,22 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public HurtworldCommandSystem CommandSystem { get; private set; }
 
-        public HurtworldCovalenceProvider()
-        {
-            Instance = this;
-        }
-
         /// <summary>
         /// Creates the game-specific server object
         /// </summary>
         /// <returns></returns>
-        public IServer CreateServer()
-        {
-            return new HurtworldServer();
-        }
+        public IServer CreateServer() => new HurtworldServer();
 
         /// <summary>
         /// Creates the game-specific player manager object
         /// </summary>
         /// <returns></returns>
-        public IPlayerManager CreatePlayerManager()
-        {
-            return PlayerManager = new HurtworldPlayerManager();
-        }
+        public IPlayerManager CreatePlayerManager() => PlayerManager = new HurtworldPlayerManager();
 
         /// <summary>
         /// Creates the game-specific command system provider object
         /// </summary>
         /// <returns></returns>
-        public ICommandSystem CreateCommandSystemProvider()
-        {
-            return CommandSystem = new HurtworldCommandSystem();
-        }
+        public ICommandSystem CreateCommandSystemProvider() => CommandSystem = new HurtworldCommandSystem();
     }
 }

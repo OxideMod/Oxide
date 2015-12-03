@@ -82,7 +82,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        public void SendChatMessage(string message) => player.SendMessage(message);
+        public void Message(string message) => player.SendMessage(message);
 
         /// <summary>
         /// Runs the specified console command on this player's client

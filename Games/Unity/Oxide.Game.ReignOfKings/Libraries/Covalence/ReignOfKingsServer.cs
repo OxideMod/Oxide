@@ -38,7 +38,13 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         #endregion
 
-        #region Commands
+        #region Chat and Commands
+
+        /// <summary>
+        /// Broadcasts a chat message to all player clients
+        /// </summary>
+        /// <param name="message"></param>
+        public void Broadcast(string message) => Server.BroadcastMessage($"Server: {message}");
 
         /// <summary>
         /// Runs the specified server command
@@ -49,28 +55,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         {
             CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, command + " " + string.Join(" ", args.ToList().ConvertAll(a => (string)a).ToArray()));
         }
-
-        #endregion
-
-        #region Console/Logging
-
-        /// <summary>
-        /// Prints an info message to the server console/log
-        /// </summary>
-        /// <param name="message"></param>
-        public void Print(string message) => UnityEngine.Debug.Log(message);
-
-        /// <summary>
-        /// Prints a warning message to the server console/log
-        /// </summary>
-        /// <param name="message"></param>
-        public void PrintWarning(string message) => UnityEngine.Debug.LogWarning(message);
-
-        /// <summary>
-        /// Prints an error message to the server console/log
-        /// </summary>
-        /// <param name="message"></param>
-        public void PrintError(string message) => UnityEngine.Debug.LogError(message);
 
         #endregion
     }
