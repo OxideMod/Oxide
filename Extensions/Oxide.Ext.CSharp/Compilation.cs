@@ -104,7 +104,7 @@ namespace Oxide.Plugins
                     foreach (var name in CSharpPluginLoader.PluginReferences)
                         references[name + ".dll"] = new CompilerFile(Interface.Oxide.ExtensionDirectory, name + ".dll");
 
-                    Interface.Oxide.LogDebug("Preparing compilation");
+                    //Interface.Oxide.LogDebug("Preparing compilation");
 
                     CompilablePlugin plugin;
                     while (queuedPlugins.TryDequeue(out plugin))
@@ -121,13 +121,13 @@ namespace Oxide.Plugins
                         }
                         else if (plugins.Add(plugin))
                         {
-                            Interface.Oxide.LogDebug("Adding plugin to compilation: " + plugin.Name);
+                            //Interface.Oxide.LogDebug("Adding plugin to compilation: " + plugin.Name);
                             PreparseScript(plugin);
                             ResolveReferences(plugin);
                         }
                         else
                         {
-                            Interface.Oxide.LogDebug("Plugin is already part of compilation: " + plugin.Name);
+                            //Interface.Oxide.LogDebug("Plugin is already part of compilation: " + plugin.Name);
                         }
 
                         CacheModifiedScripts();
@@ -136,11 +136,11 @@ namespace Oxide.Plugins
                         if (queuedPlugins.Count == 0 && Current == this)
                         {
                             Current = null;
-                            Interface.Oxide.LogDebug("Probably done preparing compilation: " + plugins.Select(p => p.Name).ToSentence());
+                            //Interface.Oxide.LogDebug("Probably done preparing compilation: " + plugins.Select(p => p.Name).ToSentence());
                         }
                     }
 
-                    Interface.Oxide.LogDebug("Done preparing compilation: " + plugins.Select(p => p.Name).ToSentence());
+                    //Interface.Oxide.LogDebug("Done preparing compilation: " + plugins.Select(p => p.Name).ToSentence());
 
                     callback();
                 }
@@ -204,7 +204,7 @@ namespace Oxide.Plugins
                             RemovePlugin(plugin);
                             return;
                         }
-                        Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
+                        //Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
                         var dependency_plugin = CSharpPluginLoader.GetCompilablePlugin(plugin.Directory, dependency_name);
                         AddDependency(dependency_plugin);
                         continue;

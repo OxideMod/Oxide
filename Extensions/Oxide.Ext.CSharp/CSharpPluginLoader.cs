@@ -172,7 +172,7 @@ namespace Oxide.Plugins
         {
             if (Compilation.Current != null)
             {
-                Interface.Oxide.LogDebug("Adding plugin to outstanding compilation: " + plugin.Name);
+                //Interface.Oxide.LogDebug("Adding plugin to outstanding compilation: " + plugin.Name);
                 Compilation.Current.Add(plugin);
                 return;
             }
