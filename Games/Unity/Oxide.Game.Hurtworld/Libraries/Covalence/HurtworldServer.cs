@@ -39,20 +39,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Broadcasts a chat message to all player clients
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message)
-        {
-            ChatManager.Instance?.AppendChatboxServerAll(string.Concat("<color=#b8d7a3>", message, "</color>"));
-        }
+        public void Broadcast(string message) => ChatManager.Instance?.AppendChatboxServerAll(message);
 
         /// <summary>
         /// Runs the specified server command
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
-        {
-            ConsoleManager.Instance?.ExecuteCommand(string.Join(command, (string[])args));
-        }
+        public void RunCommand(string command, params object[] args) => ConsoleManager.Instance?.ExecuteCommand(string.Join(command, (string[])args));
 
         #endregion
     }
