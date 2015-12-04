@@ -46,8 +46,7 @@ namespace Oxide.Game.Hurtworld.Libraries
                 foreach (var callback in PluginCallbacks)
                 {
                     var callbackResult = callback.Plugin.CallHook(callback.Name, commandString);
-                    if (callbackResult != null && !(bool)callbackResult)
-                        result = (bool)callbackResult;
+                    if (callbackResult != null && !(bool)callbackResult) result = (bool)callbackResult;
                 }
                 return result;
             }
