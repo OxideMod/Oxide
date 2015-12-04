@@ -194,6 +194,7 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when the player has connected
         /// </summary>
+        /// <param name="identity"></param>
         /// <param name="player"></param>
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(PlayerIdentity identity, NetworkPlayer player)
