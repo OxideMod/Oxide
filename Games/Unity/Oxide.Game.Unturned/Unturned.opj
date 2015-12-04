@@ -82,8 +82,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnDedicatorAwake [internal]",
-            "HookName": "IOnDedicatorAwake",
+            "Name": "IDisableConsole [internal]",
+            "HookName": "IDisableConsole",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Dedicator",
             "Flagged": false,
@@ -95,7 +95,7 @@
             },
             "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
             "BaseHookName": "InitLogging [internal]",
-            "HookCategory": "Console"
+            "HookCategory": "Server"
           }
         }
       ]
