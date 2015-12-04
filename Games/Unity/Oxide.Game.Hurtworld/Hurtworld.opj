@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "qh3bCbCx0v6mnOEasdtv9ye8nw9TrinOp7QarOb0igs=",
+            "MSILHash": "KminQ/I9BvAxx3P/85V+MWhZD7n0ZHeKIV1eBaAIX1g=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,8 +45,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "qh3bCbCx0v6mnOEasdtv9ye8nw9TrinOp7QarOb0igs=",
-            "BaseHookName": null,
+            "MSILHash": "KminQ/I9BvAxx3P/85V+MWhZD7n0ZHeKIV1eBaAIX1g=",
+            "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
         },
@@ -123,7 +123,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "t98x+zoMPVapHlfwFI8hIPNTb+Cn3FKz/wt+slqgKMQ=",
+            "MSILHash": "LoyCfpLlJW/OzOUJcaL9tl7wjz27pdu6sExmjEhtExw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -173,7 +173,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "04J5h+3/F3088Lu5IVRpPYa75QvNmBmC61SkSKFLlQ0=",
+            "MSILHash": "Hrayo2J63k78RnsF6uiSWU2mrwkXNVFMc3Mm6iiHwxw=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -200,7 +200,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "YTj5QU+sLBgYTUC/O6yqnfnHawCl03ztZZ9+NDuEp9g=",
+            "MSILHash": "DiOv7JjR62cI5ZsA/BRYuv97geWoR+Q7b2/TfiIZ5MA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -305,9 +305,472 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "60EzovViUz1wSm2KCWoGgtqqA4stDMzxaJkeuI4PePY=",
+            "MSILHash": "dtYMQd9s+415DReGFOUd1zz1aBUALXYYg7NSpdYfWfg=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanUseDoor",
+            "HookName": "CanUseDoor",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoorController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetState",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDoorOpened",
+            "HookName": "OnDoorOpened",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoorController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetState",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
+            "BaseHookName": "CanUseDoor",
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnEnterVehicle",
+            "HookName": "OnEnterVehicle",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VehiclePassenger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "EnterVehicle",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "CharacterMotorSimple"
+              ]
+            },
+            "MSILHash": "TUTtfIEiY3gTiD1wMXGRlHHexnhukG+nz8v1Is2Kpdw=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnExitVehicle",
+            "HookName": "OnExitVehicle",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VehiclePassenger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ExitVehicle",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CharacterMotorSimple",
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "drHsJ7T+kVdgW4isZvmPN7QxN80PXBoi56mgUvaYZ4o=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanExitVehicle",
+            "HookName": "CanExitVehicle",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VehiclePassenger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanExit",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "Uls+Sb2sHVfsh058vKGyTa8LmLEEJ+L/RpybO+9Pecc=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnSetPassenger",
+            "HookName": "OnSetPassenger",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VehiclePassenger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetPassenger",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "UnityEngine.GameObject"
+              ]
+            },
+            "MSILHash": "ImtgwIN6bzqopKZMZ02s4EsPl6VEp/7fx/ZjWzoz9io=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnVehicleInput",
+            "HookName": "OnVehicleInput",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VehiclePassenger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SendInput",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "InputControls&"
+              ]
+            },
+            "MSILHash": "f3iTGt9YGC9CVMvoRKQnxA9WZdXWz221Ezq/FmZypKc=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 49,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDoorClosed",
+            "HookName": "OnDoorClosed",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoorController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetState",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
+            "BaseHookName": "OnDoorOpened",
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnVehicleUse",
+            "HookName": "OnVehicleUse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VehicleUsable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnBeginUse",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "nDDAOfX0obhgtvc4NJLzBZIkGwg6PpEFC2SQnFGy5BU=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseWorkbench",
+            "HookName": "CanUseWorkbench",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "HasAuthority",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "P3Mx+v3adUs95vU27ANKY5mvZxgLUs14zJrrTfI5vlw=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnCraftingComplete",
+            "HookName": "OnCraftingComplete",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CompleteCrafting",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "UgUSc09J33A8O52MONyx8JLu7T4UZ5trNgcr6oiBqCM=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "ClientCancelItem",
+            "HookName": "OnClientCancelItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ClientCancelItem",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "dZMvPeik1ffxmxILmHWhkmLgIlR0Ny4SIZc1XKCtdJo=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "ChangeRecipe",
+            "HookName": "OnChangeRecipe",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ChangeRecipe",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "uNOqDC9s2focZMXzIU2eWxGyfxZFzFruUVfwD54g14w=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "BeginCrafting",
+            "HookName": "OnBeginCrafting",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "BeginCrafting",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "BJBF6i8si1z9LTB6KAKnYpw4uXD6iS7cQxf/NLg2yY8=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBuildRecipes",
+            "HookName": "OnBuildRecipies",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "BuildRecipies",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "MbF4u12ZGL9stHbR4ZLQ7PPqihh5GeW1dl9dRnBd/z8=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1, this",
+            "HookTypeName": "Simple",
+            "Name": "OnRecipeRefund",
+            "HookName": "OnRecipeRefund",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Refund",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Assets.Scripts.Core.IStorable",
+                "RecipeDefinition"
+              ]
+            },
+            "MSILHash": "IxiATUhy1H+Aa8PENrWRY8gAxM7C1q+kwBzoxMu5h/4=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "RPCCancelItem",
+            "HookName": "OnRPCCancelItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RPCCancelItem",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "5pejCAkPlmoO6JM0FucPZZHeQOqs8Y6GYjzHclxTQaY=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "RPCStartCraftingSelected",
+            "HookName": "OnRPCStartCraftingSelected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Workbench",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RPCStartCraftingSelected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "0NksM0wmcObMQp4TMM/HKv5HMdOS8kb2BEEIhMh5Bws=",
+            "BaseHookName": null,
+            "HookCategory": null
           }
         }
       ]
