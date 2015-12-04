@@ -974,15 +974,19 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a bear trap triggers
-        /// This is used to handle the deprecated hook OnBearTrapTrigger
+        /// Used to handle the deprecated hook OnItemPickup
         /// </summary>
-        /// <param name="trap"></param>
-        /// <param name="go"></param>
-        [HookMethod("OnTrapTrigger")]
-        private object OnTrapTrigger(BearTrap trap, GameObject go)
-        {
-            return Interface.CallDeprecatedHook("OnBearTrapTrigger", trap, go);
-        }
+        /// <param name="item"></param>
+        /// <param name="player"></param>
+        [HookMethod("OnCollectiblePickup")]
+        private object OnCollectiblePickup(Item item, BasePlayer player) => Interface.CallDeprecatedHook("OnItemPickup", player, item);
+
+        /// <summary>
+        /// Used to handle the deprecated hook OnWeaponThrown
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="entity"></param>
+        [HookMethod("OnExplosiveThrown")]
+        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity) => Interface.CallDeprecatedHook("OnWeaponThrown", player, entity);
     }
 }
