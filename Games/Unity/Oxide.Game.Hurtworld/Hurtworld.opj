@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\Hurtworld\\hurtworld_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "InitOxide",
@@ -313,8 +313,8 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 39,
-            "ReturnBehavior": 1,
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -339,7 +339,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 39,
+            "InjectionIndex": 49,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -359,7 +359,7 @@
             },
             "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
             "BaseHookName": "CanUseDoor",
-            "HookCategory": null
+            "HookCategory": "Structure"
           }
         },
         {
@@ -451,7 +451,7 @@
             "HookName": "OnSetPassenger",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SetPassenger",
@@ -462,7 +462,7 @@
             },
             "MSILHash": "ImtgwIN6bzqopKZMZ02s4EsPl6VEp/7fx/ZjWzoz9io=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -477,7 +477,7 @@
             "HookName": "OnVehicleInput",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SendInput",
@@ -488,13 +488,13 @@
             },
             "MSILHash": "f3iTGt9YGC9CVMvoRKQnxA9WZdXWz221Ezq/FmZypKc=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 49,
+            "InjectionIndex": 69,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -514,7 +514,7 @@
             },
             "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
             "BaseHookName": "OnDoorOpened",
-            "HookCategory": null
+            "HookCategory": "Structure"
           }
         },
         {
@@ -529,7 +529,7 @@
             "HookName": "OnVehicleUse",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehicleUsable",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnBeginUse",
@@ -540,7 +540,7 @@
             },
             "MSILHash": "nDDAOfX0obhgtvc4NJLzBZIkGwg6PpEFC2SQnFGy5BU=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -581,7 +581,7 @@
             "HookName": "OnCraftingComplete",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "CompleteCrafting",
@@ -590,7 +590,7 @@
             },
             "MSILHash": "UgUSc09J33A8O52MONyx8JLu7T4UZ5trNgcr6oiBqCM=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -605,7 +605,7 @@
             "HookName": "OnClientCancelItem",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ClientCancelItem",
@@ -616,7 +616,7 @@
             },
             "MSILHash": "dZMvPeik1ffxmxILmHWhkmLgIlR0Ny4SIZc1XKCtdJo=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -631,7 +631,7 @@
             "HookName": "OnChangeRecipe",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "ChangeRecipe",
@@ -642,7 +642,7 @@
             },
             "MSILHash": "uNOqDC9s2focZMXzIU2eWxGyfxZFzFruUVfwD54g14w=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -657,7 +657,7 @@
             "HookName": "OnBeginCrafting",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "BeginCrafting",
@@ -666,7 +666,7 @@
             },
             "MSILHash": "BJBF6i8si1z9LTB6KAKnYpw4uXD6iS7cQxf/NLg2yY8=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -681,16 +681,16 @@
             "HookName": "OnBuildRecipies",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "BuildRecipies",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "MbF4u12ZGL9stHbR4ZLQ7PPqihh5GeW1dl9dRnBd/z8=",
+            "MSILHash": "D6muyypWwOV3QkTlkwSFYzYhbl1JSA8dF3kltJfM7VI=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -705,7 +705,7 @@
             "HookName": "OnRecipeRefund",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "Refund",
@@ -717,7 +717,7 @@
             },
             "MSILHash": "IxiATUhy1H+Aa8PENrWRY8gAxM7C1q+kwBzoxMu5h/4=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -732,7 +732,7 @@
             "HookName": "OnRPCCancelItem",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "RPCCancelItem",
@@ -744,7 +744,7 @@
             },
             "MSILHash": "5pejCAkPlmoO6JM0FucPZZHeQOqs8Y6GYjzHclxTQaY=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -759,7 +759,7 @@
             "HookName": "OnRPCStartCraftingSelected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "RPCStartCraftingSelected",
@@ -770,7 +770,7 @@
             },
             "MSILHash": "0NksM0wmcObMQp4TMM/HKv5HMdOS8kb2BEEIhMh5Bws=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_WIP"
           }
         }
       ]

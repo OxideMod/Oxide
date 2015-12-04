@@ -190,5 +190,30 @@ namespace Oxide.Game.Hurtworld
             arglist.RemoveAt(0);
             args = arglist.ToArray();
         }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(PlayerIdentity identity, NetworkPlayer player)
+        {
+            // Let covalence know
+            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+
+            // TODO: Do permission stuff
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(PlayerIdentity identity, NetworkPlayer player)
+        {
+            // Let covalence know
+            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+        }
     }
 }
