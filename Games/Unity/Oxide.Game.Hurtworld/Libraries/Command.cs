@@ -94,7 +94,6 @@ namespace Oxide.Game.Hurtworld.Libraries
             if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
 
             var full_name = name.Trim();
-
             ConsoleCommand cmd;
             if (consoleCommands.TryGetValue(full_name, out cmd))
             {
@@ -183,8 +182,7 @@ namespace Oxide.Game.Hurtworld.Libraries
             }
 
             // Remove all chat commands which were registered by the plugin
-            foreach (var cmd in chatCommands.Values.Where(c => c.Plugin == sender).ToArray())
-                chatCommands.Remove(cmd.Name);
+            foreach (var cmd in chatCommands.Values.Where(c => c.Plugin == sender).ToArray()) chatCommands.Remove(cmd.Name);
 
             // Unhook the event
             sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;

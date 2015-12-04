@@ -9,14 +9,14 @@ namespace Oxide.Plugins
     public abstract class HurtworldPlugin : CSharpPlugin
     {
         protected Command cmd;
-        protected Hurtworld hurtworld;
+        protected Hurtworld hurt;
 
         public override void SetPluginInfo(string name, string path)
         {
             base.SetPluginInfo(name, path);
 
             cmd = Interface.Oxide.GetLibrary<Command>();
-            hurtworld = Interface.Oxide.GetLibrary<Hurtworld>();
+            hurt = Interface.Oxide.GetLibrary<Hurtworld>();
         }
 
         public override void HandleAddedToManager(PluginManager manager)
