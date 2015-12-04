@@ -18,11 +18,6 @@
         /// Processes the specified message
         /// </summary>
         /// <param name="message"></param>
-        protected override void ProcessMessage(LogMessage message)
-        {
-            // Send to callback
-            if (callback != null)
-                callback(message.Message);
-        }
+        protected override void ProcessMessage(LogMessage message) => callback?.Invoke(message.Message);
     }
 }

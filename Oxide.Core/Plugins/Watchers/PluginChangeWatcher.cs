@@ -28,30 +28,18 @@
         /// Fires the OnPluginSourceChanged event
         /// </summary>
         /// <param name="name"></param>
-        protected void FirePluginSourceChanged(string name)
-        {
-            if (OnPluginSourceChanged != null)
-                OnPluginSourceChanged(name);
-        }
+        protected void FirePluginSourceChanged(string name) => OnPluginSourceChanged?.Invoke(name);
 
         /// <summary>
         /// Fires the OnPluginAdded event
         /// </summary>
         /// <param name="name"></param>
-        protected void FirePluginAdded(string name)
-        {
-            if (OnPluginAdded != null)
-                OnPluginAdded(name);
-        }
+        protected void FirePluginAdded(string name) => OnPluginAdded?.Invoke(name);
 
         /// <summary>
         /// Fires the OnPluginRemoved event
         /// </summary>
         /// <param name="name"></param>
-        protected void FirePluginRemoved(string name)
-        {
-            if (OnPluginRemoved != null)
-                OnPluginRemoved(name);
-        }
+        protected void FirePluginRemoved(string name) => OnPluginRemoved?.Invoke(name);
     }
 }

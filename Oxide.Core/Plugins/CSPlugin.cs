@@ -9,7 +9,7 @@ namespace Oxide.Core.Plugins
     /// <summary>
     /// Indicates that the specified method should be a handler for a hook
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class HookMethodAttribute : Attribute
     {
         /// <summary>
@@ -37,10 +37,7 @@ namespace Oxide.Core.Plugins
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetLibrary<T>(string name = null) where T : Library
-        {
-            return Interface.Oxide.GetLibrary<T>(name);
-        }
+        public static T GetLibrary<T>(string name = null) where T : Library => Interface.Oxide.GetLibrary<T>(name);
 
         // All hooked methods
         protected IDictionary<string, List<MethodInfo>> hooks = new Dictionary<string, List<MethodInfo>>();
@@ -64,7 +61,7 @@ namespace Oxide.Core.Plugins
                     var attr = method.GetCustomAttributes(typeof(HookMethodAttribute), true);
                     if (attr.Length < 1) continue;
                     var hookmethod = attr[0] as HookMethodAttribute;
-                    AddHookMethod(hookmethod.Name, method);
+                    AddHookMethod(hookmethod?.Name, method);
                 }
             }
         }
@@ -79,8 +76,7 @@ namespace Oxide.Core.Plugins
             base.HandleAddedToManager(manager);
 
             // Subscribe us
-            foreach (string hookname in hooks.Keys)
-                Subscribe(hookname);
+            foreach (var hookname in hooks.Keys) Subscribe(hookname);
 
             try
             {
@@ -171,8 +167,7 @@ namespace Oxide.Core.Plugins
                     {
                         var parameter = parameters[i];
                         // Copy output values for out and by reference arguments back to the calling args
-                        if (parameter.IsOut || parameter.ParameterType.IsByRef)
-                            args[i] = hook_args[i];
+                        if (parameter.IsOut || parameter.ParameterType.IsByRef) args[i] = hook_args[i];
                     }
                 }
             }
@@ -180,9 +175,6 @@ namespace Oxide.Core.Plugins
             return return_value;
         }
 
-        protected virtual object InvokeMethod(MethodInfo method, object[] args)
-        {
-            return method.Invoke(this, args);
-        }
+        protected virtual object InvokeMethod(MethodInfo method, object[] args) => method.Invoke(this, args);
     }
 }

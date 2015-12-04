@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 
 using Newtonsoft.Json;
+using ProtoBuf;
 
 using Oxide.Core.Plugins;
-using ProtoBuf;
 
 namespace Oxide.Core.Libraries
 {
@@ -14,7 +14,7 @@ namespace Oxide.Core.Libraries
         public override bool IsGlobal => false;
 
         private readonly LangData langData;
-        private readonly Dictionary<string, Dictionary<string, string>> _langFiles;
+        private readonly Dictionary<string, Dictionary<string, string>> langFiles;
         private const string DefaultLang = "en";
 
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
@@ -26,17 +26,14 @@ namespace Oxide.Core.Libraries
 
         public Lang()
         {
-            _langFiles = new Dictionary<string, Dictionary<string, string>>();
+            langFiles = new Dictionary<string, Dictionary<string, string>>();
             langData = ProtoStorage.Load<LangData>("oxide.lang") ?? new LangData();
         }
 
         /// <summary>
         /// Saves all data
         /// </summary>
-        private void SaveData()
-        {
-            ProtoStorage.Save(langData, "oxide.lang");
-        }
+        private void SaveData() => ProtoStorage.Save(langData, "oxide.lang");
 
         [LibraryFunction("RegisterMessages")]
         public void RegisterMessages(Dictionary<string, string> messages, Plugin plugin, string lang = DefaultLang)
@@ -66,21 +63,19 @@ namespace Oxide.Core.Libraries
             var lang = GetLanguage(userId);
             var file = $"{plugin.Name}.{lang}.json";
             Dictionary<string, string> langFile;
-            if (!_langFiles.TryGetValue(file, out langFile))
+            if (!langFiles.TryGetValue(file, out langFile))
             {
                 langFile = GetMessagesIntern(file);
                 if (langFile == null)
                 {
-                    if (userId != null && !lang.Equals(langData.Lang))
-                        return GetMessage(key, plugin);
+                    if (userId != null && !lang.Equals(langData.Lang)) return GetMessage(key, plugin);
                     return key;
                 }
                 AddLangFile(file, langFile, plugin);
             }
             string message;
             if (langFile.TryGetValue(key, out message)) return message ?? key;
-            if (userId != null && !lang.Equals(langData.Lang))
-                return GetMessage(key, plugin);
+            if (userId != null && !lang.Equals(langData.Lang)) return GetMessage(key, plugin);
             return key;
         }
 
@@ -90,7 +85,7 @@ namespace Oxide.Core.Libraries
             if (string.IsNullOrEmpty(lang) || plugin == null) return null;
             var file = $"{plugin.Name}.{lang}.json";
             Dictionary<string, string> langFile;
-            if (!_langFiles.TryGetValue(file, out langFile))
+            if (!langFiles.TryGetValue(file, out langFile))
             {
                 langFile = GetMessagesIntern(file);
                 if (langFile == null) return null;
@@ -121,10 +116,7 @@ namespace Oxide.Core.Libraries
         }
 
         [LibraryFunction("GetServerLanguage")]
-        public string GetServerLanguage(string userId)
-        {
-            return langData.Lang;
-        }
+        public string GetServerLanguage(string userId) => langData.Lang;
 
         [LibraryFunction("SetServerLanguage")]
         public void SetServerLanguage(string lang)
@@ -140,14 +132,13 @@ namespace Oxide.Core.Libraries
             var languages = new List<string>();
             if (plugin == null) return languages.ToArray();
             var files = Directory.GetFiles(Interface.Oxide.LangDirectory, $"{plugin.Name}.*.json");
-            foreach (var file in files)
-                languages.Add(file.Split('.')[1]);
+            foreach (var file in files) languages.Add(file.Split('.')[1]);
             return languages.ToArray();
         }
 
         private void AddLangFile(string file, Dictionary<string, string> langFile, Plugin plugin)
         {
-            _langFiles.Add(file, langFile);
+            langFiles.Add(file, langFile);
             plugin.OnRemovedFromManager -= plugin_OnRemovedFromManager;
             plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
         }
@@ -180,8 +171,7 @@ namespace Oxide.Core.Libraries
         {
             if (string.IsNullOrEmpty(file)) return null;
             var filename = Path.Combine(Interface.Oxide.LangDirectory, file);
-            if (!File.Exists(filename)) return null;
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));
+            return !File.Exists(filename) ? null : JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));
         }
 
         /// <summary>
@@ -193,8 +183,7 @@ namespace Oxide.Core.Libraries
         {
             sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;
             var langs = GetLanguages(sender);
-            foreach (var lang in langs)
-                _langFiles.Remove($"{sender.Name}.{lang}.json");
+            foreach (var lang in langs) langFiles.Remove($"{sender.Name}.{lang}.json");
         }
     }
 }

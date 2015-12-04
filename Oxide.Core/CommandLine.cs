@@ -22,8 +22,7 @@ namespace Oxide.Core
             string cmdline = string.Empty;
             string key = string.Empty;
 
-            foreach (string str in commandline)
-                cmdline += "\"" + str.Trim('/', '\\') + "\"";
+            foreach (string str in commandline) cmdline += "\"" + str.Trim('/', '\\') + "\"";
 
             foreach (string str in Split(cmdline))
             {
@@ -32,16 +31,14 @@ namespace Oxide.Core
                     var val = str;
                     if (str[0] == '-' || str[0] == '+')
                     {
-                        if (key != string.Empty && !variables.ContainsKey(key))
-                            variables.Add(key, string.Empty);
+                        if (key != string.Empty && !variables.ContainsKey(key)) variables.Add(key, string.Empty);
                         key = val.Substring(1);
                     }
                     else if (key != string.Empty)
                     {
                         if (!variables.ContainsKey(key))
                         {
-                            if (key.Contains("dir"))
-                                val = val.Replace('/', '\\');
+                            if (key.Contains("dir")) val = val.Replace('/', '\\');
                             variables.Add(key, val);
                         }
                         key = string.Empty;
@@ -49,8 +46,7 @@ namespace Oxide.Core
                 }
             }
 
-            if (key != string.Empty && !variables.ContainsKey(key))
-                variables.Add(key, string.Empty);
+            if (key != string.Empty && !variables.ContainsKey(key)) variables.Add(key, string.Empty);
         }
 
         /// <summary>
@@ -78,11 +74,7 @@ namespace Oxide.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool HasVariable(string name)
-        {
-            // Search
-            return variables.Any(v => v.Key == name);
-        }
+        public bool HasVariable(string name) => variables.Any(v => v.Key == name);
 
         /// <summary>
         /// Gets the value for the specified variable

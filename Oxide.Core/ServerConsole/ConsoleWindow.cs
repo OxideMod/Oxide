@@ -11,8 +11,8 @@ namespace Oxide.Core.ServerConsole
     {
         private const uint ATTACH_PARENT_PROCESS = 0xFFFFFFFF;
         private const int STD_OUTPUT_HANDLE = -11;
-        private TextWriter _oldOutput;
-        private Encoding _oldEncoding;
+        private TextWriter oldOutput;
+        private Encoding oldEncoding;
 
         [DllImport("kernel32.dll", CharSet = CharSet.None, ExactSpelling = false, SetLastError = true)]
         private static extern bool AllocConsole();
@@ -68,8 +68,8 @@ namespace Oxide.Core.ServerConsole
                 FreeConsole();
                 return false;
             }
-            _oldOutput = Console.Out;
-            _oldEncoding = Console.OutputEncoding;
+            oldOutput = Console.Out;
+            oldEncoding = Console.OutputEncoding;
             SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
             Console.OutputEncoding = Encoding.UTF8;
             Stream outStream;
@@ -88,11 +88,11 @@ namespace Oxide.Core.ServerConsole
 
         public void Shutdown()
         {
-            if (_oldOutput != null) Console.SetOut(_oldOutput);
-            if (_oldEncoding != null)
+            if (oldOutput != null) Console.SetOut(oldOutput);
+            if (oldEncoding != null)
             {
-                SetConsoleOutputCP((uint) _oldEncoding.CodePage);
-                Console.OutputEncoding = _oldEncoding;
+                SetConsoleOutputCP((uint) oldEncoding.CodePage);
+                Console.OutputEncoding = oldEncoding;
             }
             FreeConsole();
         }

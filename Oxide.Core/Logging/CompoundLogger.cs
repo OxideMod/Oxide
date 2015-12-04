@@ -43,11 +43,7 @@ namespace Oxide.Core.Logging
         /// Removes a sublogger from this compound logger
         /// </summary>
         /// <param name="logger"></param>
-        public void RemoveLogger(Logger logger)
-        {
-            // Unregister it
-            subloggers.Remove(logger);
-        }
+        public void RemoveLogger(Logger logger) => subloggers.Remove(logger);
 
         /// <summary>
         /// Writes a message to all subloggers of this logger

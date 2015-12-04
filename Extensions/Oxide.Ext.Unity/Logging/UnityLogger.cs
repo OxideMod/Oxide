@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 
-using Oxide.Core;
-using Oxide.Core.Logging;
-
 using UnityEngine;
 
+using Oxide.Core;
+using Oxide.Core.Logging;
 using LogType = Oxide.Core.Logging.LogType;
 
 namespace Oxide.Ext.Unity.Logging
@@ -22,7 +21,6 @@ namespace Oxide.Ext.Unity.Logging
         public UnityLogger()
             : base(true)
         {
-
         }
 
         /// <summary>

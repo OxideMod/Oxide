@@ -12,8 +12,7 @@ namespace Oxide.Core
         {
             var directory = GetFileDataPath(sub_directory.Replace("..", ""));
             if (!Directory.Exists(directory)) yield break;
-            foreach (var file in Directory.GetFiles(directory, "*.data"))
-                yield return Utility.GetFileNameWithoutExtension(file);
+            foreach (var file in Directory.GetFiles(directory, "*.data")) yield return Utility.GetFileNameWithoutExtension(file);
         }
 
         public static T Load<T>(params string[] sub_paths)
@@ -25,8 +24,7 @@ namespace Oxide.Core
                 if (File.Exists(path))
                 {
                     T data;
-                    using (var file = File.OpenRead(path))
-                        data = Serializer.Deserialize<T>(file);
+                    using (var file = File.OpenRead(path)) data = Serializer.Deserialize<T>(file);
                     return data;
                 }
             }
@@ -44,9 +42,8 @@ namespace Oxide.Core
             var directory = Path.GetDirectoryName(path);
             try
             {
-                if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-                using (var file = File.Open(path, FileMode.Create))
-                    Serializer.Serialize(file, data);
+                if (directory != null && !Directory.Exists(directory)) Directory.CreateDirectory(directory);
+                using (var file = File.Open(path, FileMode.Create)) Serializer.Serialize(file, data);
             }
             catch (Exception ex)
             {
@@ -54,19 +51,13 @@ namespace Oxide.Core
             }
         }
 
-        public static bool Exists(params string[] sub_paths)
-        {
-            return File.Exists(GetFileDataPath(GetFileName(sub_paths)));
-        }
+        public static bool Exists(params string[] sub_paths) => File.Exists(GetFileDataPath(GetFileName(sub_paths)));
 
         public static string GetFileName(params string[] sub_paths)
         {
             return string.Join(Path.DirectorySeparatorChar.ToString(), sub_paths).Replace("..", "") + ".data";
         }
 
-        public static string GetFileDataPath(string name)
-        {
-            return Path.Combine(Interface.Oxide.DataDirectory, name);
-        }
+        public static string GetFileDataPath(string name) => Path.Combine(Interface.Oxide.DataDirectory, name);
     }
 }

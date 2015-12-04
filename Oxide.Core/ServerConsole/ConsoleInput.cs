@@ -8,8 +8,8 @@ namespace Oxide.Core.ServerConsole
     {
         public string InputString = string.Empty;
         private readonly List<string> _inputHistory = new List<string>();
-        private int _inputHistoryIndex;
-        private float _nextUpdate;
+        private int inputHistoryIndex;
+        private float nextUpdate;
         internal event Action<string> OnInputText;
         internal string[] StatusTextLeft = { string.Empty, string.Empty, string.Empty, string.Empty };
         internal string[] StatusTextRight = { string.Empty, string.Empty, string.Empty, string.Empty };
@@ -32,7 +32,7 @@ namespace Oxide.Core.ServerConsole
 
         public void RedrawInputLine()
         {
-            if (_nextUpdate - 0.45f > Interface.Oxide.Now || LineWidth <= 0) return;
+            if (nextUpdate - 0.45f > Interface.Oxide.Now || LineWidth <= 0) return;
             try
             {
                 Console.CursorTop = Console.CursorTop + 1;
@@ -66,10 +66,10 @@ namespace Oxide.Core.ServerConsole
         public void Update()
         {
             if (!Valid) return;
-            if (_nextUpdate < Interface.Oxide.Now)
+            if (nextUpdate < Interface.Oxide.Now)
             {
                 RedrawInputLine();
-                _nextUpdate = Interface.Oxide.Now + 0.5f;
+                nextUpdate = Interface.Oxide.Now + 0.5f;
             }
             try
             {
@@ -80,7 +80,7 @@ namespace Oxide.Core.ServerConsole
                 return;
             }
             var consoleKeyInfo = Console.ReadKey();
-            if (consoleKeyInfo.Key != ConsoleKey.DownArrow && consoleKeyInfo.Key != ConsoleKey.UpArrow) _inputHistoryIndex = 0;
+            if (consoleKeyInfo.Key != ConsoleKey.DownArrow && consoleKeyInfo.Key != ConsoleKey.UpArrow) inputHistoryIndex = 0;
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Enter:
@@ -105,21 +105,21 @@ namespace Oxide.Core.ServerConsole
                     return;
                 case ConsoleKey.UpArrow:
                     if (_inputHistory.Count == 0) return;
-                    if (_inputHistoryIndex < 0) _inputHistoryIndex = 0;
-                    if (_inputHistoryIndex >= _inputHistory.Count - 1)
+                    if (inputHistoryIndex < 0) inputHistoryIndex = 0;
+                    if (inputHistoryIndex >= _inputHistory.Count - 1)
                     {
-                        _inputHistoryIndex = _inputHistory.Count - 1;
-                        InputString = _inputHistory[_inputHistoryIndex];
+                        inputHistoryIndex = _inputHistory.Count - 1;
+                        InputString = _inputHistory[inputHistoryIndex];
                         RedrawInputLine();
                         return;
                     }
-                    InputString = _inputHistory[_inputHistoryIndex++];
+                    InputString = _inputHistory[inputHistoryIndex++];
                     RedrawInputLine();
                     return;
                 case ConsoleKey.DownArrow:
                     if (_inputHistory.Count == 0) return;
-                    if (_inputHistoryIndex >= _inputHistory.Count - 1) _inputHistoryIndex = _inputHistory.Count - 2;
-                    InputString = _inputHistoryIndex < 0 ? string.Empty : _inputHistory[_inputHistoryIndex--];
+                    if (inputHistoryIndex >= _inputHistory.Count - 1) inputHistoryIndex = _inputHistory.Count - 2;
+                    InputString = inputHistoryIndex < 0 ? string.Empty : _inputHistory[inputHistoryIndex--];
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Tab:
@@ -159,8 +159,7 @@ namespace Oxide.Core.ServerConsole
         {
             if (str1 == null || str2 == null) return -1;
             var length = Math.Min(str1.Length, str2.Length);
-            for (var index = 0; index < length; index++)
-                if (str1[index] != str2[index]) return index;
+            for (var index = 0; index < length; index++) if (str1[index] != str2[index]) return index;
             return length;
         }
     }

@@ -27,8 +27,7 @@ namespace Oxide.Core.Logging
             syncroot = new object();
 
             // Create the thread
-            workerthread = new Thread(Worker);
-            workerthread.IsBackground = true;
+            workerthread = new Thread(Worker) { IsBackground = true };
             workerthread.Start();
         }
 
@@ -45,8 +44,7 @@ namespace Oxide.Core.Logging
         /// <param name="msg"></param>
         internal override void Write(LogMessage msg)
         {
-            lock (syncroot)
-                base.Write(msg);
+            lock (syncroot) base.Write(msg);
             waitevent.Set();
         }
 

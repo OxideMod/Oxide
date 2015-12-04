@@ -1,7 +1,6 @@
-﻿using System;
-
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Plugins;
+
 using Oxide.Ext.Unity.Logging;
 
 namespace Oxide.Ext.Unity.Plugins
@@ -27,24 +26,6 @@ namespace Oxide.Ext.Unity.Plugins
         }
 
         /// <summary>
-        /// Loads the default config for this plugin
-        /// </summary>
-        protected override void LoadDefaultConfig()
-        {
-            // No config yet, we might use it later
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Called when the plugin is initialising
-        /// </summary>
-        [HookMethod("Init")]
-        private void Init()
-        {
-
-        }
-
-        /// <summary>
         /// Called when the it's safe to initialize logging
         /// </summary>
         [HookMethod("InitLogging")]
@@ -58,5 +39,27 @@ namespace Oxide.Ext.Unity.Plugins
                 Interface.Oxide.RootLogger.DisableCache();
             });
         }
+
+        #region Console/Logging
+
+        /// <summary>
+        /// Prints an info message to the server console/log
+        /// </summary>
+        /// <param name="message"></param>
+        public void Print(string message) => UnityEngine.Debug.Log(message);
+
+        /// <summary>
+        /// Prints a warning message to the server console/log
+        /// </summary>
+        /// <param name="message"></param>
+        public void PrintWarning(string message) => UnityEngine.Debug.LogWarning(message);
+
+        /// <summary>
+        /// Prints an error message to the server console/log
+        /// </summary>
+        /// <param name="message"></param>
+        public void PrintError(string message) => UnityEngine.Debug.LogError(message);
+
+        #endregion
     }
 }

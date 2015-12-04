@@ -39,7 +39,6 @@ namespace Oxide.Core.Plugins.Watchers
             watchedPlugins = new HashSet<string>();
             changeQueue = new Dictionary<string, QueuedChange>();
             timers = Interface.Oxide.GetLibrary<Timer>();
-            
             LoadWatcher(directory, filter);
         }
 
@@ -68,19 +67,13 @@ namespace Oxide.Core.Plugins.Watchers
         /// Adds a filename-plugin mapping to this watcher
         /// </summary>
         /// <param name="name"></param>
-        public void AddMapping(string name)
-        {
-            watchedPlugins.Add(name);
-        }
+        public void AddMapping(string name) => watchedPlugins.Add(name);
 
         /// <summary>
         /// Removes the specified mapping from this watcher
         /// </summary>
         /// <param name="name"></param>
-        public void RemoveMapping(string name)
-        {
-            watchedPlugins.Remove(name);
-        }
+        public void RemoveMapping(string name) => watchedPlugins.Remove(name);
 
         /// <summary>
         /// Called when the watcher has registered a filesystem change

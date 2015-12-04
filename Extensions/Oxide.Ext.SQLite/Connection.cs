@@ -1,5 +1,6 @@
 ﻿using System.Data.SQLite;
 using System.Security.Permissions;
+
 using Oxide.Core.Plugins;
 
 namespace Oxide.Ext.SQLite

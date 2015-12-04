@@ -142,10 +142,7 @@ namespace Oxide.Core.Configuration
             get
             {
                 object val;
-                if (_keyvalues.TryGetValue(key, out val))
-                    return val;
-                else
-                    return null;
+                return _keyvalues.TryGetValue(key, out val) ? val : null;
             }
             set
             {
@@ -187,16 +184,14 @@ namespace Oxide.Core.Configuration
         public object ConvertValue(object value, Type destinationType)
         {
             if (!destinationType.IsGenericType) return Convert.ChangeType(value, destinationType);
-
             if (destinationType.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var valueType = destinationType.GetGenericArguments()[0];
                 var list = (IList)Activator.CreateInstance(destinationType);
-                foreach (var val in (IList)value)
-                    list.Add(Convert.ChangeType(val, valueType));
+                foreach (var val in (IList)value) list.Add(Convert.ChangeType(val, valueType));
                 return list;
             }
-            else if (destinationType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            if (destinationType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
                 var keyType = destinationType.GetGenericArguments()[0];
                 var valueType = destinationType.GetGenericArguments()[1];
@@ -205,8 +200,7 @@ namespace Oxide.Core.Configuration
                     dict.Add(Convert.ChangeType(key, keyType), Convert.ChangeType(((IDictionary)value)[key], valueType));
                 return dict;
             }
-            else
-                throw new InvalidCastException("Generic types other than List<> and Dictionary<,> are not supported");
+            throw new InvalidCastException("Generic types other than List<> and Dictionary<,> are not supported");
         }
 
         /// <summary>
@@ -215,10 +209,7 @@ namespace Oxide.Core.Configuration
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public T ConvertValue<T>(object value)
-        {
-            return (T)ConvertValue(value, typeof(T));
-        }
+        public T ConvertValue<T>(object value) => (T)ConvertValue(value, typeof(T));
 
         /// <summary>
         /// Gets a configuration value at the specified path
@@ -227,16 +218,13 @@ namespace Oxide.Core.Configuration
         /// <returns></returns>
         public object Get(params string[] path)
         {
-            if (path.Length < 1)
-                throw new ArgumentException("path must not be empty");
+            if (path.Length < 1) throw new ArgumentException("path must not be empty");
             object val;
-            if (!_keyvalues.TryGetValue(path[0], out val))
-                return null;
+            if (!_keyvalues.TryGetValue(path[0], out val)) return null;
             for (var i = 1; i < path.Length; i++)
             {
                 var dict = (Dictionary<string, object>)val;
-                if (!dict.TryGetValue(path[i], out val))
-                    return null;
+                if (!dict.TryGetValue(path[i], out val)) return null;
             }
             return val;
         }
@@ -247,10 +235,7 @@ namespace Oxide.Core.Configuration
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public T Get<T>(params string[] path)
-        {
-            return ConvertValue<T>(Get(path));
-        }
+        public T Get<T>(params string[] path) => ConvertValue<T>(Get(path));
 
         /// <summary>
         /// Sets a configuration value at the specified path
@@ -279,15 +264,9 @@ namespace Oxide.Core.Configuration
 
         #region IEnumerable
 
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
-        {
-            return _keyvalues.GetEnumerator();
-        }
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() => _keyvalues.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _keyvalues.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => _keyvalues.GetEnumerator();
 
         #endregion
     }

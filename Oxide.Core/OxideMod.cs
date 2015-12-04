@@ -151,7 +151,7 @@ namespace Oxide.Core
             if (debugCallback != null) RootLogger.AddLogger(new CallbackLogger(debugCallback));
 
             // Log Oxide core loading
-            LogInfo("Loading Oxide core v{0}...", Version);
+            LogInfo("Loading Oxide Core v{0}...", Version);
 
             // Create the managers
             RootPluginManager = new PluginManager(RootLogger) { ConfigPath = ConfigDirectory };
@@ -186,8 +186,7 @@ namespace Oxide.Core
             }
 
             // Load all watchers
-            foreach (var ext in extensionmanager.GetAllExtensions())
-                ext.LoadPluginWatchers(PluginDirectory);
+            foreach (var ext in extensionmanager.GetAllExtensions()) ext.LoadPluginWatchers(PluginDirectory);
 
             // Load all plugins
             LogInfo("Loading plugins...");
@@ -207,28 +206,19 @@ namespace Oxide.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public T GetLibrary<T>(string name = null) where T : Library
-        {
-            return extensionmanager.GetLibrary(name ?? typeof(T).Name) as T;
-        }
+        public T GetLibrary<T>(string name = null) where T : Library => extensionmanager.GetLibrary(name ?? typeof(T).Name) as T;
 
         /// <summary>
         /// Gets all loaded extensions
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Extension> GetAllExtensions()
-        {
-            return extensionmanager.GetAllExtensions();
-        }
+        public IEnumerable<Extension> GetAllExtensions() => extensionmanager.GetAllExtensions();
 
         /// <summary>
         /// Gets all loaded extensions
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<PluginLoader> GetPluginLoaders()
-        {
-            return extensionmanager.GetPluginLoaders();
-        }
+        public IEnumerable<PluginLoader> GetPluginLoaders() => extensionmanager.GetPluginLoaders();
 
         /// <summary>
         /// Logs a formatted info message to the root logger
@@ -236,10 +226,7 @@ namespace Oxide.Core
         /// <param name="format"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public void LogInfo(string format, params object[] args)
-        {
-            RootLogger.Write(LogType.Info, format, args);
-        }
+        public void LogInfo(string format, params object[] args) => RootLogger.Write(LogType.Info, format, args);
 
         /// <summary>
         /// Logs a formatted debug message to the root logger
@@ -247,10 +234,7 @@ namespace Oxide.Core
         /// <param name="format"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public void LogDebug(string format, params object[] args)
-        {
-            RootLogger.Write(LogType.Debug, format, args);
-        }
+        public void LogDebug(string format, params object[] args) => RootLogger.Write(LogType.Debug, format, args);
 
         /// <summary>
         /// Logs a formatted warning message to the root logger
@@ -258,10 +242,7 @@ namespace Oxide.Core
         /// <param name="format"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public void LogWarning(string format, params object[] args)
-        {
-            RootLogger.Write(LogType.Warning, format, args);
-        }
+        public void LogWarning(string format, params object[] args) => RootLogger.Write(LogType.Warning, format, args);
 
         /// <summary>
         /// Logs a formatted error message to the root logger
@@ -269,10 +250,7 @@ namespace Oxide.Core
         /// <param name="format"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public void LogError(string format, params object[] args)
-        {
-            RootLogger.Write(LogType.Error, format, args);
-        }
+        public void LogError(string format, params object[] args) => RootLogger.Write(LogType.Error, format, args);
 
         /// <summary>
         /// Logs an exception to the root logger
@@ -280,10 +258,7 @@ namespace Oxide.Core
         /// <param name="message"></param>
         /// <param name="ex"></param>
         /// <returns></returns>
-        public void LogException(string message, Exception ex)
-        {
-            RootLogger.WriteException(message, ex);
-        }
+        public void LogException(string message, Exception ex) => RootLogger.WriteException(message, ex);
 
         #region Plugin Management
 
@@ -309,7 +284,7 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
-                            LogException(string.Format("Failed to load core plugin {0}", type.Name), ex);
+                            LogException($"Failed to load core plugin {type.Name}", ex);
                         }
                     }
                 }
@@ -317,10 +292,7 @@ namespace Oxide.Core
             // Scan the plugin directory and load all reported plugins
             foreach (var loader in loaders)
             {
-                foreach (string name in loader.ScanDirectory(PluginDirectory))
-                {
-                    LoadPlugin(name);
-                }
+                foreach (string name in loader.ScanDirectory(PluginDirectory)) LoadPlugin(name);
             }
             var lastCall = Now;
             foreach (var loader in extensionmanager.GetPluginLoaders())
@@ -382,10 +354,9 @@ namespace Oxide.Core
             var loader = loaders.First();
 
             // Load it and watch for errors
-            Plugin plugin;
             try
             {
-                plugin = loader.Load(PluginDirectory, name);
+                var plugin = loader.Load(PluginDirectory, name);
                 if (plugin == null) return true; // async load
                 plugin.Loader = loader;
                 PluginLoaded(plugin);
@@ -393,7 +364,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                LogException(string.Format("Failed to load plugin {0}", name), ex);
+                LogException($"Failed to load plugin {name}", ex);
                 return false;
             }
         }
@@ -439,7 +410,7 @@ namespace Oxide.Core
 
             // Let the plugin loader know that this plugin is being unloaded
             var loader = extensionmanager.GetPluginLoaders().SingleOrDefault(l => l.LoadedPlugins.ContainsKey(name));
-            if (loader != null) loader.Unloading(plugin);
+            loader?.Unloading(plugin);
 
             // Unload it
             RootPluginManager.RemovePlugin(plugin);
@@ -484,10 +455,7 @@ namespace Oxide.Core
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="message"></param>
-        private void plugin_OnError(Plugin sender, string message)
-        {
-            LogError("{0} v{1}: {2}", sender.Name, sender.Version, message);
-        }
+        private void plugin_OnError(Plugin sender, string message) => LogError("{0} v{1}: {2}", sender.Name, sender.Version, message);
 
         #endregion
 
@@ -497,11 +465,7 @@ namespace Oxide.Core
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallHook(string hookname, params object[] args)
-        {
-            if (RootPluginManager == null) return null;
-            return RootPluginManager.CallHook(hookname, args);
-        }
+        public object CallHook(string hookname, params object[] args) => RootPluginManager?.CallHook(hookname, args);
 
         /// <summary>
         /// Calls a deprecated hook and print a warning
@@ -509,11 +473,7 @@ namespace Oxide.Core
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallDeprecatedHook(string hookname, params object[] args)
-        {
-            if (RootPluginManager == null) return null;
-            return RootPluginManager.CallDeprecatedHook(hookname, args);
-        }
+        public object CallDeprecatedHook(string hookname, params object[] args) => RootPluginManager?.CallDeprecatedHook(hookname, args);
 
         /// <summary>
         /// Queue a callback to be called in the next server frame
@@ -528,10 +488,7 @@ namespace Oxide.Core
         /// Register a callback which will be called every server frame
         /// </summary>
         /// <param name="callback"></param>
-        public void OnFrame(Action<float> callback)
-        {
-            onFrame += callback;
-        }
+        public void OnFrame(Action<float> callback) => onFrame += callback;
 
         /// <summary>
         /// Called every server frame, implemented by an engine-specific extension
@@ -568,7 +525,7 @@ namespace Oxide.Core
             // Don't update plugin watchers or call OnFrame in plugins until servers starts ticking
             if (!isInitialized) return;
 
-            if (ServerConsole != null) ServerConsole.Update();
+            ServerConsole?.Update();
 
             // Update extensions
             try
@@ -585,26 +542,17 @@ namespace Oxide.Core
         {
             IsShuttingDown = true;
             UnloadAllPlugins();
-            foreach (var extension in extensionmanager.GetAllExtensions())
-            {
-                extension.OnShutdown();
-            }
-            if (ServerConsole != null) ServerConsole.OnDisable();
+            foreach (var extension in extensionmanager.GetAllExtensions()) extension.OnShutdown();
+            ServerConsole?.OnDisable();
         }
 
         /// <summary>
         /// Called by an engine-specific extension to register the engine clock
         /// </summary>
         /// <param name="method"></param>
-        public void RegisterEngineClock(Func<float> method)
-        {
-            getTimeSinceStartup = method;
-        }
+        public void RegisterEngineClock(Func<float> method) => getTimeSinceStartup = method;
 
-        public bool CheckConsole(bool force = false)
-        {
-            return ConsoleWindow.Check(force) && !rootconfig.DisableConsole;
-        }
+        public bool CheckConsole(bool force = false) => ConsoleWindow.Check(force) && !rootconfig.DisableConsole;
 
         public bool EnableConsole(bool force = false)
         {
@@ -619,31 +567,19 @@ namespace Oxide.Core
         /// Called when a plugin watcher has reported a change in a plugin source
         /// </summary>
         /// <param name="name"></param>
-        private void watcher_OnPluginSourceChanged(string name)
-        {
-            // Reload the plugin
-            ReloadPlugin(name);
-        }
+        private void watcher_OnPluginSourceChanged(string name) => ReloadPlugin(name);
 
         /// <summary>
         /// Called when a plugin watcher has reported a change in a plugin source
         /// </summary>
         /// <param name="name"></param>
-        private void watcher_OnPluginAdded(string name)
-        {
-            // Load the plugin
-            LoadPlugin(name);
-        }
+        private void watcher_OnPluginAdded(string name) => LoadPlugin(name);
 
         /// <summary>
         /// Called when a plugin watcher has reported a change in a plugin source
         /// </summary>
         /// <param name="name"></param>
-        private void watcher_OnPluginRemoved(string name)
-        {
-            // Unload the plugin
-            UnloadPlugin(name);
-        }
+        private void watcher_OnPluginRemoved(string name) => UnloadPlugin(name);
 
         #endregion
 

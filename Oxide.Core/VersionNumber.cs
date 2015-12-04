@@ -25,10 +25,7 @@
         /// Returns a human readable string representation of this version
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return string.Format("{0}.{1}.{2}", Major, Minor, Patch);
-        }
+        public override string ToString() => $"{Major}.{Minor}.{Patch}";
 
         #region Operator Overloads
 
@@ -58,68 +55,52 @@
         {
             if (a.Major < b.Major)
                 return false;
-            else if (a.Major > b.Major)
+            if (a.Major > b.Major)
                 return true;
-            else
-            {
-                if (a.Minor < b.Minor)
-                    return false;
-                else if (a.Minor > b.Minor)
-                    return true;
-                else
-                    return a.Patch > b.Patch;
-            }
+            if (a.Minor < b.Minor)
+                return false;
+            if (a.Minor > b.Minor)
+                return true;
+            return a.Patch > b.Patch;
         }
 
         public static bool operator >=(VersionNumber a, VersionNumber b)
         {
             if (a.Major < b.Major)
                 return false;
-            else if (a.Major > b.Major)
+            if (a.Major > b.Major)
                 return true;
-            else
-            {
-                if (a.Minor < b.Minor)
-                    return false;
-                else if (a.Minor > b.Minor)
-                    return true;
-                else
-                    return a.Patch >= b.Patch;
-            }
+            if (a.Minor < b.Minor)
+                return false;
+            if (a.Minor > b.Minor)
+                return true;
+            return a.Patch >= b.Patch;
         }
 
         public static bool operator <(VersionNumber a, VersionNumber b)
         {
             if (a.Major > b.Major)
                 return false;
-            else if (a.Major < b.Major)
+            if (a.Major < b.Major)
                 return true;
-            else
-            {
-                if (a.Minor > b.Minor)
-                    return false;
-                else if (a.Minor < b.Minor)
-                    return true;
-                else
-                    return a.Patch < b.Patch;
-            }
+            if (a.Minor > b.Minor)
+                return false;
+            if (a.Minor < b.Minor)
+                return true;
+            return a.Patch < b.Patch;
         }
 
         public static bool operator <=(VersionNumber a, VersionNumber b)
         {
             if (a.Major > b.Major)
                 return false;
-            else if (a.Major < b.Major)
+            if (a.Major < b.Major)
                 return true;
-            else
-            {
-                if (a.Minor > b.Minor)
-                    return false;
-                else if (a.Minor < b.Minor)
-                    return true;
-                else
-                    return a.Patch <= b.Patch;
-            }
+            if (a.Minor > b.Minor)
+                return false;
+            if (a.Minor < b.Minor)
+                return true;
+            return a.Patch <= b.Patch;
         }
 
         #endregion

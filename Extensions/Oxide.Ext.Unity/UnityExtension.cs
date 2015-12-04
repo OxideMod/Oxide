@@ -1,8 +1,8 @@
-﻿using Oxide.Core;
+﻿using UnityEngine;
+
+using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Ext.Unity.Plugins;
-
-using UnityEngine;
 
 namespace Oxide.Ext.Unity
 {
@@ -33,7 +33,6 @@ namespace Oxide.Ext.Unity
         public UnityExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -61,7 +60,6 @@ namespace Oxide.Ext.Unity
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -69,7 +67,6 @@ namespace Oxide.Ext.Unity
         /// </summary>
         public override void OnModLoad()
         {
-
         }
     }
 }

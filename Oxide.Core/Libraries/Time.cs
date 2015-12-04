@@ -19,19 +19,13 @@ namespace Oxide.Core.Libraries
         /// </summary>
         /// <returns></returns>
         [LibraryFunction("GetUnixTimestamp")]
-        public uint GetUnixTimestamp()
-        {
-            return (uint)DateTime.UtcNow.Subtract(epoch).TotalSeconds;
-        }
+        public uint GetUnixTimestamp() => (uint)DateTime.UtcNow.Subtract(epoch).TotalSeconds;
 
         /// <summary>
         /// Returns DateTime.UtcNow
         /// </summary>
         /// <returns></returns>
         [LibraryFunction("GetCurrentTime")]
-        public DateTime GetCurrentTime()
-        {
-            return DateTime.UtcNow;
-        }
+        public DateTime GetCurrentTime() => DateTime.UtcNow;
     }
 }

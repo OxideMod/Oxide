@@ -2,7 +2,7 @@
 {
     public static class Random
     {
-        private static System.Random random;
+        private static readonly System.Random random;
 
         static Random()
         {
@@ -14,39 +14,26 @@
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
-        public static int Range(int min, int max)
-        {
-            return random.Next(min, max);
-        }
+        public static int Range(int min, int max) => random.Next(min, max);
 
         /// <summary>
         /// Returns a random integer which is bigger than or equal to 0 and smaller than max.
         /// </summary>
         /// <param name="max"></param>
-        public static int Range(int max)
-        {
-            float one = Range(0f, 1f);
-            return random.Next(max);
-        }
+        public static int Range(int max) => random.Next(max);
 
         /// <summary>
         /// Returns a random double between min and max.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
-        public static double Range(double min, double max)
-        {
-            return min + (random.NextDouble() * (max - min));
-        }
+        public static double Range(double min, double max) => min + (random.NextDouble() * (max - min));
 
         /// <summary>
         /// Returns a random float between min and max.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
-        public static float Range(float min, float max)
-        {
-            return (float)Range((double)min, (double)max);
-        }
+        public static float Range(float min, float max) => (float)Range((double)min, (double)max);
     }
 }

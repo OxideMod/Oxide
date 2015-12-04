@@ -17,22 +17,11 @@ namespace Oxide.Core.Logging
         private StreamWriter writer;
 
         /// <summary>
-        /// Initializes a new instance of the RotatingFileLogger
-        /// </summary>
-        public RotatingFileLogger()
-        {
-
-        }
-
-        /// <summary>
         /// Gets the filename for the specified date
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        private string GetLogFilename(DateTime date)
-        {
-            return Path.Combine(Directory, string.Format("oxide_{0:dd-MM-yyyy}.txt", date));
-        }
+        private string GetLogFilename(DateTime date) => Path.Combine(Directory, $"oxide_{date:dd-MM-yyyy}.txt");
 
         /// <summary>
         /// Begins a batch process operation
@@ -47,11 +36,7 @@ namespace Oxide.Core.Logging
         /// Processes the specified message
         /// </summary>
         /// <param name="message"></param>
-        protected override void ProcessMessage(LogMessage message)
-        {
-            // Write to the file
-            writer.WriteLine(message.Message);
-        }
+        protected override void ProcessMessage(LogMessage message) => writer.WriteLine(message.Message);
 
         /// <summary>
         /// Finishes a batch process operation

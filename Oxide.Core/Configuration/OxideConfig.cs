@@ -71,9 +71,7 @@ namespace Oxide.Core.Configuration
             string cmd = InstanceCommandLines[index];
             StringBuilder varnamesb = new StringBuilder(), formatsb = new StringBuilder();
             int invar = 0;
-            for (int i = 0; i < cmd.Length; i++)
-            {
-                char c = cmd[i];
+            foreach (char c in cmd) {
                 switch (c)
                 {
                     case '{':

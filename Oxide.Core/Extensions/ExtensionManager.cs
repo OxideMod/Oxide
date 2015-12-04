@@ -56,19 +56,13 @@ namespace Oxide.Core.Extensions
         /// Registers the specified plugin loader
         /// </summary>
         /// <param name="loader"></param>
-        public void RegisterPluginLoader(PluginLoader loader)
-        {
-            pluginloaders.Add(loader);
-        }
+        public void RegisterPluginLoader(PluginLoader loader) => pluginloaders.Add(loader);
 
         /// <summary>
         /// Gets all plugin loaders
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<PluginLoader> GetPluginLoaders()
-        {
-            return pluginloaders;
-        }
+        public IEnumerable<PluginLoader> GetPluginLoaders() => pluginloaders;
 
         /// <summary>
         /// Registers the specified library
@@ -87,10 +81,7 @@ namespace Oxide.Core.Extensions
         /// Gets all library names
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetLibraries()
-        {
-            return libraries.Keys;
-        }
+        public IEnumerable<string> GetLibraries() => libraries.Keys;
 
         /// <summary>
         /// Gets the library by the specified name
@@ -100,27 +91,20 @@ namespace Oxide.Core.Extensions
         public Library GetLibrary(string name)
         {
             Library lib;
-            if (!libraries.TryGetValue(name, out lib)) return null;
-            return lib;
+            return !libraries.TryGetValue(name, out lib) ? null : lib;
         }
 
         /// <summary>
         /// Registers the specified watcher
         /// </summary>
         /// <param name="watcher"></param>
-        public void RegisterPluginChangeWatcher(PluginChangeWatcher watcher)
-        {
-            changewatchers.Add(watcher);
-        }
+        public void RegisterPluginChangeWatcher(PluginChangeWatcher watcher) => changewatchers.Add(watcher);
 
         /// <summary>
         /// Gets all plugin change watchers
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<PluginChangeWatcher> GetPluginChangeWatchers()
-        {
-            return changewatchers;
-        }
+        public IEnumerable<PluginChangeWatcher> GetPluginChangeWatchers() => changewatchers;
 
         #endregion
 
@@ -130,22 +114,20 @@ namespace Oxide.Core.Extensions
         /// <param name="filename"></param>
         public void LoadExtension(string filename)
         {
-            string name = Utility.GetFileNameWithoutExtension(filename);
+            var name = Utility.GetFileNameWithoutExtension(filename);
             try
             {
                 // Load the assembly
-                Assembly assembly = Assembly.LoadFile(filename);
+                var assembly = Assembly.LoadFile(filename);
 
                 // Search for a type that derives Extension
-                Type exttype = typeof(Extension);
+                var exttype = typeof(Extension);
                 Type extensiontype = null;
                 foreach (var type in assembly.GetExportedTypes())
                 {
-                    if (exttype.IsAssignableFrom(type))
-                    {
-                        extensiontype = type;
-                        break;
-                    }
+                    if (!exttype.IsAssignableFrom(type)) continue;
+                    extensiontype = type;
+                    break;
                 }
                 if (extensiontype == null)
                 {
@@ -154,18 +136,20 @@ namespace Oxide.Core.Extensions
                 }
 
                 // Create and register the extension
-                Extension extension = Activator.CreateInstance(extensiontype, this) as Extension;
-                extension.Load();
-                extensions.Add(extension);
+                var extension = Activator.CreateInstance(extensiontype, this) as Extension;
+                if (extension != null) {
+                    extension.Load();
+                    extensions.Add(extension);
 
-                // Log extension loaded
-                Logger.Write(LogType.Info, "Loaded extension {0} v{1} by {2}", extension.Name, extension.Version, extension.Author);
+                    // Log extension loaded
+                    Logger.Write(LogType.Info, "Loaded extension {0} v{1} by {2}", extension.Name, extension.Version, extension.Author);
+                }
             }
             catch (Exception ex)
             {
                 //Logger.Write(LogType.Error, "Failed to load extension {0} ({1})", name, ex.Message);
-                Logger.WriteException(string.Format("Failed to load extension {0}", name), ex);
-                RemoteLogger.Exception(string.Format("Failed to load extension {0}", name), ex);
+                Logger.WriteException($"Failed to load extension {name}", ex);
+                RemoteLogger.Exception($"Failed to load extension {name}", ex);
             }
         }
 
@@ -187,6 +171,7 @@ namespace Oxide.Core.Extensions
                 LoadExtension(Path.Combine(directory, file));
             }
             foreach (var ext in extensions.ToArray())
+            {
                 try
                 {
                     ext.OnModLoad();
@@ -194,29 +179,24 @@ namespace Oxide.Core.Extensions
                 catch (Exception ex)
                 {
                     extensions.Remove(ext);
-                    Logger.WriteException(string.Format("Failed OnModLoad extension {0} v{1}", ext.Name, ext.Version), ex);
-                    RemoteLogger.Exception(string.Format("Failed OnModLoad extension {0} v{1}", ext.Name, ext.Version), ex);
+                    Logger.WriteException($"Failed OnModLoad extension {ext.Name} v{ext.Version}", ex);
+                    RemoteLogger.Exception($"Failed OnModLoad extension {ext.Name} v{ext.Version}", ex);
                 }
+            }
         }
 
         /// <summary>
         /// Gets all currently loaded extensions
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Extension> GetAllExtensions()
-        {
-            return extensions;
-        }
+        public IEnumerable<Extension> GetAllExtensions() => extensions;
 
         /// <summary>
         /// Returns if an extension by the given name is present
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool IsExtensionPresent(string name)
-        {
-            return extensions.Any(e => e.Name == name);
-        }
+        public bool IsExtensionPresent(string name) => extensions.Any(e => e.Name == name);
 
         /// <summary>
         /// Gets the extension by the given name

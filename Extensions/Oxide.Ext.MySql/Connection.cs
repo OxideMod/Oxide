@@ -1,5 +1,7 @@
 ﻿using System.Security.Permissions;
+
 using MySql.Data.MySqlClient;
+
 using Oxide.Core.Plugins;
 
 namespace Oxide.Ext.MySql

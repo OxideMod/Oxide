@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 
-using Oxide.Core;
-
 using UnityEngine;
+
+using Oxide.Core;
 
 namespace Oxide.Ext.Unity
 {
@@ -50,10 +50,7 @@ namespace Oxide.Ext.Unity
             }
         }
 
-        void Update()
-        {
-            oxideMod.OnFrame(Time.deltaTime);
-        }
+        void Update() => oxideMod.OnFrame(Time.deltaTime);
 
         void OnDestroy()
         {
@@ -64,8 +61,7 @@ namespace Oxide.Ext.Unity
 
         void LogMessageReceived(string message, string stack_trace, LogType type)
         {
-            if (type == LogType.Exception && stack_trace.Contains("Oxide"))
-                RemoteLogger.Exception(message, stack_trace);
+            if (type == LogType.Exception && stack_trace.Contains("Oxide")) RemoteLogger.Exception(message, stack_trace);
         }
     }
 }

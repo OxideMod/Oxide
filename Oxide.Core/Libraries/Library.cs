@@ -8,7 +8,7 @@ namespace Oxide.Core.Libraries
     /// <summary>
     /// Indicates that the specified function is a library function with a name
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class LibraryFunction : Attribute
     {
         /// <summary>
@@ -36,7 +36,7 @@ namespace Oxide.Core.Libraries
     /// <summary>
     /// Indicates that the specified function is a library property with a name
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class LibraryProperty : Attribute
     {
         /// <summary>
@@ -66,15 +66,9 @@ namespace Oxide.Core.Libraries
     /// </summary>
     public abstract class Library
     {
-        public static implicit operator bool (Library library)
-        {
-            return library != null;
-        }
+        public static implicit operator bool (Library library) => library != null;
 
-        public static bool operator !(Library library)
-        {
-            return !(bool)library;
-        }
+        public static bool operator !(Library library) => !library;
 
         // Functions stored in this library
         private IDictionary<string, MethodInfo> functions;
@@ -142,19 +136,13 @@ namespace Oxide.Core.Libraries
         /// Gets all function names in this library
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetFunctionNames()
-        {
-            return functions.Keys;
-        }
+        public IEnumerable<string> GetFunctionNames() => functions.Keys;
 
         /// <summary>
         /// Gets all property names in this library
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetPropertyNames()
-        {
-            return properties.Keys;
-        }
+        public IEnumerable<string> GetPropertyNames() => properties.Keys;
 
         /// <summary>
         /// Gets a function by the specified name
@@ -164,8 +152,7 @@ namespace Oxide.Core.Libraries
         public MethodInfo GetFunction(string name)
         {
             MethodInfo info;
-            if (functions.TryGetValue(name, out info)) return info;
-            return null;
+            return functions.TryGetValue(name, out info) ? info : null;
         }
 
         /// <summary>
@@ -176,8 +163,7 @@ namespace Oxide.Core.Libraries
         public PropertyInfo GetProperty(string name)
         {
             PropertyInfo info;
-            if (properties.TryGetValue(name, out info)) return info;
-            return null;
+            return properties.TryGetValue(name, out info) ? info : null;
         }
     }
 }

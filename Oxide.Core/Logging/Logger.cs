@@ -32,8 +32,7 @@ namespace Oxide.Core.Logging
         {
             // Initialize
             this.processmessagesimmediately = processmessagesimmediately;
-            if (!processmessagesimmediately)
-                messagequeue = new Queue<LogMessage>();
+            if (!processmessagesimmediately) messagequeue = new Queue<LogMessage>();
         }
 
         /// <summary>
@@ -45,9 +44,10 @@ namespace Oxide.Core.Logging
         /// <returns></returns>
         protected LogMessage CreateLogMessage(LogType type, string format, object[] args)
         {
-            LogMessage msg = new LogMessage { Type = type, Message = string.Format("{0} [{1}] {2}", DateTime.Now.ToShortTimeString(), type, format) };
-            if (args.Length != 0)
-                msg.Message = string.Format(msg.Message, args);
+            LogMessage msg = new LogMessage { Type = type, Message =
+                $"{DateTime.Now.ToShortTimeString()} [{type}] {format}"
+            };
+            if (args.Length != 0) msg.Message = string.Format(msg.Message, args);
             return msg;
         }
 
@@ -85,7 +85,6 @@ namespace Oxide.Core.Logging
         /// <param name="message"></param>
         protected virtual void ProcessMessage(LogMessage message)
         {
-
         }
 
         /// <summary>
@@ -98,13 +97,13 @@ namespace Oxide.Core.Logging
             var formatted = ExceptionHandler.FormatException(ex);
             if (formatted != null)
             {
-                Write(LogType.Error, string.Format("{0}{1}{2}", message, Environment.NewLine, formatted));
+                Write(LogType.Error, $"{message}{Environment.NewLine}{formatted}");
                 return;
             }
             var outer_ex = ex;
             while (ex.InnerException != null) ex = ex.InnerException;
             if (outer_ex.GetType() != ex.GetType()) Write(LogType.Debug, "ExType: {0}", outer_ex.GetType().Name);
-            Write(LogType.Error, string.Format("{0} ({1}: {2})", message, ex.GetType().Name, ex.Message));
+            Write(LogType.Error, $"{message} ({ex.GetType().Name}: {ex.Message})");
             Write(LogType.Debug, "{0}", ex.StackTrace);
         }
     }

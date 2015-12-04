@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 using Oxide.Core.Plugins;
@@ -69,10 +68,7 @@ namespace Oxide.Core.Libraries
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="manager"></param>
-            private void owner_OnRemovedFromManager(Plugin sender, PluginManager manager)
-            {
-                Destroy();
-            }
+            private void owner_OnRemovedFromManager(Plugin sender, PluginManager manager) => Destroy();
 
             /// <summary>
             /// Destroys this timer
@@ -101,7 +97,7 @@ namespace Oxide.Core.Libraries
                 {
                     Destroy();
                     var error_message = $"Failed to run a {Delay:0.00} timer";
-                    if (Owner) error_message += $" in '{Owner.Name} v{Owner.Version}'";
+                    if (Owner && Owner != null) error_message += $" in '{Owner.Name} v{Owner.Version}'";
                     Interface.Oxide.LogException(error_message, ex);
                 }
                 Owner?.TrackEnd();
@@ -142,9 +138,8 @@ namespace Oxide.Core.Libraries
             lastUpdateAt = now;
 
             if (timers.Count < 1) return;
-            
-            for (var i = timers.Count - 1; i >= 0; i--)
-                if (timers[i].Destroyed) timers.RemoveAt(i);
+
+            for (var i = timers.Count - 1; i >= 0; i--) if (timers[i].Destroyed) timers.RemoveAt(i);
 
             var count = timers.Count;
             for (var i = 0; i < count; i++)
@@ -153,22 +148,20 @@ namespace Oxide.Core.Libraries
                 if (timer != null && timer.nextrep > now) break;
                 expiredTimers.Add(timer);
             }
-            if (expiredTimers.Count > 0)
+            if (expiredTimers.Count <= 0) return;
+            timers.RemoveRange(0, expiredTimers.Count);
+            foreach (var timer in expiredTimers)
             {
-                timers.RemoveRange(0, expiredTimers.Count);
-                foreach (var timer in expiredTimers)
+                if (timer == null)
                 {
-                    if (timer == null)
-                    {
-                        Interface.Oxide.LogWarning($"A null timer instance was removed from the timer queue!");
-                        continue;
-                    }
-                    timer.Update();
-                    // Add the timer back to the queue if it needs to fire again
-                    if (!timer.Destroyed) InsertTimer(timer);
+                    Interface.Oxide.LogWarning($"A null timer instance was removed from the timer queue!");
+                    continue;
                 }
-                expiredTimers.Clear();
+                timer.Update();
+                // Add the timer back to the queue if it needs to fire again
+                if (!timer.Destroyed) InsertTimer(timer);
             }
+            expiredTimers.Clear();
         }
 
         private TimerInstance AddTimer(int repetitions, float delay, Action callback, Plugin owner = null)
@@ -201,10 +194,7 @@ namespace Oxide.Core.Libraries
         /// <param name="owner"></param>
         /// <returns></returns>
         [LibraryFunction("Once")]
-        public TimerInstance Once(float delay, Action callback, Plugin owner = null)
-        {
-            return AddTimer(1, delay, callback, owner);
-        }
+        public TimerInstance Once(float delay, Action callback, Plugin owner = null) => AddTimer(1, delay, callback, owner);
 
         /// <summary>
         /// Creates a timer that fires many times
@@ -215,10 +205,7 @@ namespace Oxide.Core.Libraries
         /// <param name="owner"></param>
         /// <returns></returns>
         [LibraryFunction("Repeat")]
-        public TimerInstance Repeat(float delay, int reps, Action callback, Plugin owner = null)
-        {
-            return AddTimer(reps, delay, callback, owner);
-        }
+        public TimerInstance Repeat(float delay, int reps, Action callback, Plugin owner = null) => AddTimer(reps, delay, callback, owner);
 
         /// <summary>
         /// Creates a timer that fires once next frame
@@ -226,9 +213,6 @@ namespace Oxide.Core.Libraries
         /// <param name="callback"></param>
         /// <returns></returns>
         [LibraryFunction("NextFrame")]
-        public TimerInstance NextFrame(Action callback)
-        {
-            return AddTimer(1, 0.0f, callback, null);
-        }
+        public TimerInstance NextFrame(Action callback) => AddTimer(1, 0.0f, callback);
     }
 }

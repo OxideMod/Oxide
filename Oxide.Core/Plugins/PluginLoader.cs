@@ -44,8 +44,7 @@ namespace Oxide.Core.Plugins
         public virtual IEnumerable<string> ScanDirectory(string directory)
         {
             if (FileExtension == null || !Directory.Exists(directory)) yield break;
-            foreach (var file in Directory.GetFiles(directory, "*" + FileExtension))
-                yield return Utility.GetFileNameWithoutExtension(file);
+            foreach (var file in Directory.GetFiles(directory, "*" + FileExtension)) yield return Utility.GetFileNameWithoutExtension(file);
         }
 
         /// <summary>
@@ -75,10 +74,7 @@ namespace Oxide.Core.Plugins
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        protected virtual Plugin GetPlugin(string filename)
-        {
-            return null;
-        }
+        protected virtual Plugin GetPlugin(string filename) => null;
 
         /// <summary>
         /// Loads a given plugin
@@ -103,8 +99,7 @@ namespace Oxide.Core.Plugins
             }
             catch (IOException)
             {
-                if (!waitingForAccess)
-                    Interface.Oxide.LogWarning("Waiting for another application to stop using script: {0}", plugin.Name);
+                if (!waitingForAccess) Interface.Oxide.LogWarning("Waiting for another application to stop using script: {0}", plugin.Name);
                 Interface.Oxide.GetLibrary<Timer>().Once(.5f, () => LoadPlugin(plugin, true));
             }
             catch (Exception ex)
@@ -132,7 +127,6 @@ namespace Oxide.Core.Plugins
         /// <param name="plugin"></param>
         public virtual void Unloading(Plugin plugin)
         {
-
         }
     }
 }

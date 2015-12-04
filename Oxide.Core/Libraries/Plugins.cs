@@ -33,10 +33,7 @@ namespace Oxide.Core.Libraries
         /// <param name="name"></param>
         /// <returns></returns>
         [LibraryFunction("Exists")]
-        public bool Exists(string name)
-        {
-            return PluginManager.GetPlugin(name) != null;
-        }
+        public bool Exists(string name) => PluginManager.GetPlugin(name) != null;
 
         /// <summary>
         /// Returns the object of a loaded plugin with the specified name
@@ -44,10 +41,7 @@ namespace Oxide.Core.Libraries
         /// <param name="name"></param>
         /// <returns></returns>
         [LibraryFunction("Find")]
-        public Plugin Find(string name)
-        {
-            return PluginManager.GetPlugin(name);
-        }
+        public Plugin Find(string name) => PluginManager.GetPlugin(name);
 
         /// <summary>
         /// Calls the specified hook
@@ -56,19 +50,13 @@ namespace Oxide.Core.Libraries
         /// <param name="args"></param>
         /// <returns></returns>
         [LibraryFunction("CallHook")]
-        public object CallHook(string hookname, params object[] args)
-        {
-            return Interface.CallHook(hookname, args);
-        }
+        public object CallHook(string hookname, params object[] args) => Interface.CallHook(hookname, args);
 
         /// <summary>
         /// Gets an array of all currently loaded plugins
         /// </summary>
         /// <returns></returns>
         [LibraryFunction("GetAll")]
-        public Plugin[] GetAll()
-        {
-            return PluginManager.GetPlugins().ToArray();
-        }
+        public Plugin[] GetAll() => PluginManager.GetPlugins().ToArray();
     }
 }

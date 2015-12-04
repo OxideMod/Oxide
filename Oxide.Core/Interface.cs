@@ -80,9 +80,7 @@ namespace Oxide.Core
         /// Gets the Oxide mod
         /// </summary>
         /// <returns></returns>
-        public static OxideMod GetMod()
-        {
-            return Oxide;
-        }
+        public static OxideMod GetMod() => Oxide;
+
     }
 }

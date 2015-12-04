@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -24,10 +23,10 @@ namespace Oxide.Core
 
         private static string[][] sentryAuth =
         {
-            new string[] { "sentry_version", "5" },
-            new string[] { "sentry_client", "MiniRaven/1.0" },
-            new string[] { "sentry_key", publicKey },
-            new string[] { "sentry_secret", secretKey }
+            new[] { "sentry_version", "5" },
+            new[] { "sentry_client", "MiniRaven/1.0" },
+            new[] { "sentry_key", publicKey },
+            new[] { "sentry_secret", secretKey }
         };
 
         private static Dictionary<string, string> BuildHeaders()
@@ -40,7 +39,7 @@ namespace Oxide.Core
         private static Dictionary<string, string> tags = new Dictionary<string, string>
         {
             { "arch", IntPtr.Size == 4 ? "x86" : "x64" },
-            { "game", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName) }
+            { "game", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName).ToLower() }
         };
 
         private class QueuedReport
@@ -120,27 +119,22 @@ namespace Oxide.Core
 
             private bool IsTypeDerivedFrom(Type type, Type base_type)
             {
-                while (type != null && type != base_type)
-                    if ((type = type.BaseType) == base_type) return true;
+                while (type != null && type != base_type) if ((type = type.BaseType) == base_type) return true;
                 return false;
             }
         }
 
-        private static Timer timers = Interface.Oxide.GetLibrary<Timer>("Timer");
-        private static WebRequests webrequests = Interface.Oxide.GetLibrary<WebRequests>("WebRequests");
+        private static Timer timers = Interface.Oxide.GetLibrary<Timer>();
+        private static WebRequests webrequests = Interface.Oxide.GetLibrary<WebRequests>();
         private static List<QueuedReport> queuedReports = new List<QueuedReport>();
         private static bool submittingReports;
 
-        public static void SetTag(string name, string value)
-        {
-            tags[name] = value;
-        }
+        public static void SetTag(string name, string value) => tags[name] = value;
 
         public static string GetTag(string name)
         {
             string value;
-            if (tags.TryGetValue(name, out value)) return value;
-            return null;
+            return tags.TryGetValue(name, out value) ? value : "unknown";
         }
 
         public static void Debug(string message)
@@ -200,7 +194,7 @@ namespace Oxide.Core
             if (queuedReports.Count < 1) return;
             var queued_report = queuedReports[0];
             submittingReports = true;
-            Action<int, string> on_request_complete = (code, response) =>
+            webrequests.EnqueuePost(url, queued_report.Body, (code, response) =>
             {
                 if (code == 200)
                 {
@@ -212,15 +206,14 @@ namespace Oxide.Core
                 {
                     timers.Once(5f, SubmitNextReport);
                 }
-            };
-            webrequests.EnqueuePost(url, queued_report.Body, on_request_complete, null, queued_report.Headers);
+            }, null, queued_report.Headers);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static string GetCurrentMethod()
         {
             var calling_method = (new StackTrace()).GetFrame(2).GetMethod();
-            return calling_method.DeclaringType.FullName + "." + calling_method.Name;
+            return calling_method.DeclaringType?.FullName + "." + calling_method.Name;
         }
     }
 }

@@ -20,10 +20,7 @@ namespace Oxide.Core.Libraries
         /// <param name="patch"></param>
         /// <returns></returns>
         [LibraryFunction("V")]
-        public VersionNumber MakeVersion(ushort major, ushort minor, ushort patch)
-        {
-            return new VersionNumber(major, minor, patch);
-        }
+        public VersionNumber MakeVersion(ushort major, ushort minor, ushort patch) => new VersionNumber(major, minor, patch);
 
         /// <summary>
         /// Creates a new instance of the specified type
@@ -32,12 +29,6 @@ namespace Oxide.Core.Libraries
         /// <param name="args"></param>
         /// <returns></returns>
         [LibraryFunction("new")]
-        public object New(Type type, object[] args)
-        {
-            if (args == null)
-                return Activator.CreateInstance(type);
-            else
-                return Activator.CreateInstance(type, args);
-        }
+        public object New(Type type, object[] args) => args == null ? Activator.CreateInstance(type) : Activator.CreateInstance(type, args);
     }
 }
