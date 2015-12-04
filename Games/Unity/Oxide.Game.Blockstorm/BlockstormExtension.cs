@@ -13,8 +13,6 @@ namespace Oxide.Game.Blockstorm
     /// </summary>
     public class BlockstormExtension : Extension
     {
-        public static DedicatedServerConfiguration dedicatedServerConfiguration { get; } = new DedicatedServerConfiguration();
-
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -53,7 +51,6 @@ namespace Oxide.Game.Blockstorm
         public BlockstormExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -74,8 +71,9 @@ namespace Oxide.Game.Blockstorm
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
+
+        public static DedicatedServerConfiguration DedicatedServerConfiguration { get; } = new DedicatedServerConfiguration();
 
         /// <summary>
         /// Called when all other extensions have been loaded
@@ -87,22 +85,16 @@ namespace Oxide.Game.Blockstorm
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            var commandLineParser = new CommandLineParser();
-            var serverConfig = "serverConfig";
-            if (commandLineParser.method_1("config"))
-                serverConfig = commandLineParser.method_2("config");
-            dedicatedServerConfiguration.method_0(serverConfig, AssetsCollection.instance);
-
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 var players = FpsMultiplayerGame.instance.playersList.method_5().Count;
-                var hostname = dedicatedServerConfiguration.string_10;
+                var hostname = DedicatedServerConfiguration.string_10;
                 return string.Concat(players, " | ", hostname);
             };
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
-                var hostname = dedicatedServerConfiguration.string_10;
+                var hostname = DedicatedServerConfiguration.string_10;
                 return string.Concat(" ", hostname);
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>
@@ -116,7 +108,7 @@ namespace Oxide.Game.Blockstorm
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = FpsMultiplayerGame.instance.playersList.method_5().Count;
-                var playerLimit = dedicatedServerConfiguration.int_1.ToString();
+                var playerLimit = DedicatedServerConfiguration.int_1.ToString();
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>

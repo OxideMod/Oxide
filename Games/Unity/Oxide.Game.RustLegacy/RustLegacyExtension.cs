@@ -162,7 +162,6 @@ namespace Oxide.Game.RustLegacy
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>

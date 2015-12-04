@@ -22,12 +22,11 @@ namespace Oxide.Game.RustLegacy
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
-        // The permission lib
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>("Permission");
+        // The permission library
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" }; // TODO: Migrate to "player" to "default"
 
-        private static readonly string[] DefaultGroups = { "player", "admin" };
-
-        // The command lib
+        // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // Track when the server has been initialized
@@ -101,7 +100,7 @@ namespace Oxide.Game.RustLegacy
 
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust legacy");
-            RemoteLogger.SetTag("protocol", Connection.protocol.ToString());
+            RemoteLogger.SetTag("version", Connection.protocol.ToString());
         }
 
         /// <summary>
@@ -561,7 +560,7 @@ namespace Oxide.Game.RustLegacy
             // Sanity checks
             if (arg == null) return null;
 
-            var cmdlib = Interface.Oxide.GetLibrary<Command>("Command");
+            var cmdlib = Interface.Oxide.GetLibrary<Command>();
             string cmd = $"{arg.Class}.{arg.Function}";
 
             // Is it chat.say?

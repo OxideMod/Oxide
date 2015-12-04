@@ -2,7 +2,6 @@
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
-
 using Oxide.Game.Hurtworld.Libraries;
 
 namespace Oxide.Plugins

@@ -35,7 +35,6 @@ namespace Oxide.Game.FromTheDepths
 
         public static string[] Filter =
         {
-
         };
 
         /// <summary>
@@ -45,7 +44,6 @@ namespace Oxide.Game.FromTheDepths
         public FromTheDepthsExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -66,7 +64,6 @@ namespace Oxide.Game.FromTheDepths
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -84,7 +81,7 @@ namespace Oxide.Game.FromTheDepths
             StaticOptionsManager.soundVolume = 0f;
 
             // Set server options
-            StaticOptionsManager.gameName = "The Wulf Den"; // TODO: Switch to cmd argument
+            StaticOptionsManager.gameName = "My Oxide Server"; // TODO: Switch to cmd argument
             StaticOptionsManager.gameComments = "Powered by Oxide"; // TODO: Switch to cmd argument
             StaticOptionsManager.gamePassword = "oxide"; // TODO: Switch to cmd argument
             StaticOptionsManager.playerLimit = 10; // TODO: Switch to cmd argument
@@ -127,13 +124,11 @@ namespace Oxide.Game.FromTheDepths
                 var playerLimit = MultiplayerManager.Instance.GameDetails.PlayerLimit;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
-            /*Interface.Oxide.ServerConsole.Status2Right = () =>
+            Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
-                var inbound = Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
-                var outbound = Number.FormatMemoryShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
-                return string.Concat(inbound, "/s in, ", outbound, "/s out");
-            };*/
+                // TODO: Network in/out
+                return string.Empty;
+            };
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
@@ -153,7 +148,7 @@ namespace Oxide.Game.FromTheDepths
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO
+            // TODO: Handle console input
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

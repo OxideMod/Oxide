@@ -10,7 +10,7 @@ namespace Oxide.Plugins
         {
             base.SetPluginInfo(name, path);
 
-            forest = Interface.Oxide.GetLibrary<Game.TheForest.Libraries.TheForest>("Forest");
+            forest = Interface.Oxide.GetLibrary<Game.TheForest.Libraries.TheForest>();
         }
     }
 }

@@ -82,7 +82,6 @@ namespace Oxide.Game.SevenDays
         public SevenDaysExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -103,7 +102,6 @@ namespace Oxide.Game.SevenDays
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -140,8 +138,6 @@ namespace Oxide.Game.SevenDays
             {
                 var players = GameManager.Instance?.World?.Players?.Count;
                 var playerLimit = GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount);
-                //var sleepersCount = ;
-                //var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
                 var entitiesCount = GameManager.Instance?.World?.Entities?.Count;
                 var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
                 return string.Concat(" ", players, "/", playerLimit, " players, ", entities);

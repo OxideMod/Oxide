@@ -25,7 +25,7 @@ namespace Oxide.Game.Terraria
         public TerrariaCore()
         {
             // Set attributes
-            Name = "terrariascore";
+            Name = "terrariacore";
             Title = "Terraria Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);

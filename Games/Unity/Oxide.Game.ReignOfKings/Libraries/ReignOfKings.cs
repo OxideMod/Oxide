@@ -11,7 +11,7 @@ using Oxide.Plugins;
 namespace Oxide.Game.ReignOfKings.Libraries
 {
     /// <summary>
-    /// A library containing utility shortcut functions
+    /// A library containing utility shortcut functions for Reign of Kings
     /// </summary>
     public class ReignOfKings : Library
     {

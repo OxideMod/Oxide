@@ -33,7 +33,6 @@ namespace Oxide.Game.FortressCraft
 
         public static string[] Filter =
         {
-
         };
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace Oxide.Game.FortressCraft
         public FortressCraftExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -64,7 +62,6 @@ namespace Oxide.Game.FortressCraft
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -82,7 +79,7 @@ namespace Oxide.Game.FortressCraft
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO
+            // TODO: Handle console input
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

@@ -41,7 +41,7 @@ namespace Oxide.Game.TheForest
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
+            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
         }
 

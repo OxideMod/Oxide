@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-
-using SDG.Unturned;
+﻿using SDG.Unturned;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -34,7 +30,7 @@ namespace Oxide.Game.Unturned
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
+            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
         }
 
@@ -46,7 +42,7 @@ namespace Oxide.Game.Unturned
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "unturned");
-            RemoteLogger.SetTag("protocol", Provider.APP_VERSION);
+            RemoteLogger.SetTag("version", Provider.APP_VERSION);
         }
 
         /// <summary>
@@ -69,12 +65,6 @@ namespace Oxide.Game.Unturned
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
-        /// Called when the CommandWindow is instantiated
-        /// </summary>
-        [HookMethod("IOnDedicatorAwake")]
-        private bool IOnDedicatorAwake() => false;
-
-        /// <summary>
         /// Called when a plugin is loaded
         /// </summary>
         /// <param name="plugin"></param>
@@ -93,5 +83,11 @@ namespace Oxide.Game.Unturned
             loggingInitialized = true;
             CallHook("InitLogging", null);
         }
+
+        /// <summary>
+        /// Disables the original console
+        /// </summary>
+        [HookMethod("IDisableConsole")]
+        private bool IDisableConsole() => false;
     }
 }

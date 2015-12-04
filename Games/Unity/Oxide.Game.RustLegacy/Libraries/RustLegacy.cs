@@ -2,6 +2,7 @@
 using System.Reflection;
 
 using Oxide.Core.Libraries;
+using Oxide.Plugins;
 
 namespace Oxide.Game.RustLegacy.Libraries
 {
@@ -13,18 +14,29 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
+        /// <returns></returns>
         public override bool IsGlobal => false;
+
+        /// <summary>
+        /// Gets private bindingflag for accessing private methods, fields, and properties
+        /// </summary>
+        [LibraryFunction("PrivateBindingFlag")]
+        public BindingFlags PrivateBindingFlag() => (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+
+        /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="str"></param>
+        [LibraryFunction("QuoteSafe")]
+        public string QuoteSafe(string str) => str.Quote();
 
         /// <summary>
         /// Returns the UserID for the specified player as a string
         /// </summary>
-        /// <param name="netuser"></param>
+        /// <param name="netUser"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromPlayer")]
-        public string UserIDFromPlayer(NetUser netuser)
-        {
-            return netuser.userID.ToString();
-        }
+        public string UserIDFromPlayer(NetUser netUser) => netUser.userID.ToString();
 
         /// <summary>
         /// Print a message to every players chat log
@@ -32,13 +44,8 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null)
+        public void BroadcastChat(string name = "Server", string message = null)
         {
-            if (message == null)
-            {
-                message = name;
-                name = "Server";
-            }
             ConsoleNetworker.Broadcast($"chat.add {QuoteSafe(name)} {QuoteSafe(message)}");
         }
 
@@ -49,13 +56,8 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(NetUser netUser, string name, string message = null)
+        public void SendChatMessage(NetUser netUser, string name = "Server", string message = null)
         {
-            if (message == null)
-            {
-                message = name;
-                name = "Server";
-            }
             ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {QuoteSafe(name)} {QuoteSafe(message)}");
         }
 
@@ -77,20 +79,14 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="format"></param>
         /// <param name="args"></param>
         [LibraryFunction("BroadcastConsole")]
-        public void BroadcastConsole(string format, params object[] args)
-        {
-            ConsoleNetworker.Broadcast($"echo {QuoteSafe(string.Format(format, args))}");
-        }
+        public void BroadcastConsole(string format, params object[] args) => ConsoleNetworker.Broadcast($"echo {QuoteSafe(string.Format(format, args))}");
 
         /// <summary>
         /// Runs a console command on the server
         /// </summary>
         /// <param name="cmd"></param>
         [LibraryFunction("RunServerCommand")]
-        public void RunServerCommand(string cmd)
-        {
-            ConsoleSystem.Run(cmd);
-        }
+        public void RunServerCommand(string cmd) => ConsoleSystem.Run(cmd);
 
         /// <summary>
         /// Runs a console command for a specific player
@@ -98,26 +94,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="netUser"></param>
         /// <param name="cmd"></param>
         [LibraryFunction("RunClientCommand")]
-        public void RunClientCommand(NetUser netUser, string cmd)
-        {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, cmd);
-        }
-
-        /// <summary>
-        /// Gets private bindingflag for accessing private methods, fields, and properties
-        /// </summary>
-        [LibraryFunction("PrivateBindingFlag")]
-        public BindingFlags PrivateBindingFlag()
-        {
-            return (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-        }
-
-        /// <summary>
-        /// Converts a string into a quote safe string
-        /// </summary>
-        /// <param name="str"></param>
-        [LibraryFunction("QuoteSafe")]
-        public string QuoteSafe(string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
+        public void RunClientCommand(NetUser netUser, string cmd) => ConsoleNetworker.SendClientCommand(netUser.networkPlayer, cmd);
 
         /// <summary>
         /// Finds a player by name, steam id or ip
@@ -143,13 +120,10 @@ namespace Oxide.Game.RustLegacy.Libraries
         }
 
         /// <summary>
-        /// Returns an array with all online player's their NetUser
+        /// Returns an array with all online players' NetUser
         /// </summary>
         [LibraryFunction("GetAllNetUsers")]
-        public NetUser[] GetAllNetUsers()
-        {
-            return Enumerable.ToArray(PlayerClient.All.Select(playerClient => playerClient.netUser));
-        }
+        public NetUser[] GetAllNetUsers() => Enumerable.ToArray(PlayerClient.All.Select(playerClient => playerClient.netUser));
 
         /// <summary>
         /// Shows a notice to a player
@@ -170,26 +144,31 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="netUser"></param>
         /// <param name="message"></param>
         [LibraryFunction("InventoryNotice")]
-        public void InventoryNotice(NetUser netUser, string message)
-        {
-            Rust.Notice.Inventory(netUser.networkPlayer, message);
-        }
+        public void InventoryNotice(NetUser netUser, string message) => Rust.Notice.Inventory(netUser.networkPlayer, message);
 
         /// <summary>
         /// Returns an Inventory.Slot.Preference
         /// </summary>
-        /// <param name="startSlotKind"></param>
+        /// <param name="kind"></param>
         /// <param name="stack"></param>
         /// <param name="flags"></param>
         [LibraryFunction("InventorySlotPreference")]
-        public Inventory.Slot.Preference InventorySlotPreference(Inventory.Slot.Kind startSlotKind, bool stack, Inventory.Slot.KindFlags flags)
+        public Inventory.Slot.Preference InventorySlotPreference(Inventory.Slot.Kind kind, bool stack, Inventory.Slot.KindFlags flags)
         {
-            return Inventory.Slot.Preference.Define(startSlotKind, stack, flags);
+            return Inventory.Slot.Preference.Define(kind, stack, flags);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="netUser"></param>
         [LibraryFunction("GetCharacter")]
         public Character GetCharacter(NetUser netUser) => RustLegacyCore.GetCharacter(netUser);
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="netUser"></param>
         [LibraryFunction("GetInventory")]
         public PlayerInventory GetInventory(NetUser netUser) => RustLegacyCore.GetInventory(netUser);
     }

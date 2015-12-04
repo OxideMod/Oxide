@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Reflection;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Plugins;
+
 using Oxide.Game.RustLegacy;
 using Oxide.Game.RustLegacy.Libraries;
-
-using UnityEngine;
 
 namespace Oxide.Plugins
 {
@@ -20,7 +21,7 @@ namespace Oxide.Plugins
             base.SetPluginInfo(name, path);
 
             cmd = Interface.Oxide.GetLibrary<Command>();
-            rust = Interface.Oxide.GetLibrary<RustLegacy>("Rust");
+            rust = Interface.Oxide.GetLibrary<RustLegacy>();
         }
 
         public override void HandleAddedToManager(PluginManager manager)
@@ -33,22 +34,22 @@ namespace Oxide.Plugins
                     var plugin_field = new PluginFieldInfo(this, field);
                     if (plugin_field.GenericArguments.Length != 2 || plugin_field.GenericArguments[0] != typeof(NetUser))
                     {
-                        Puts("[{0}] The {1} field is not a Hash with a NetUser key! (online players will not be tracked)", Name, field.Name);
+                        Puts("The {0} field is not a Hash with a NetUser key! (online players will not be tracked)", field.Name);
                         continue;
                     }
                     if (!plugin_field.LookupMethod("Add", plugin_field.GenericArguments))
                     {
-                        Puts("[{0}] The {1} field does not support adding NetUser keys! (online players will not be tracked)", Name, field.Name);
+                        Puts("The {0} field does not support adding NetUser keys! (online players will not be tracked)", field.Name);
                         continue;
                     }
                     if (!plugin_field.LookupMethod("Remove", typeof(NetUser)))
                     {
-                        Puts("[{0}] The {1} field does not support removing NetUser keys! (online players will not be tracked)", Name, field.Name);
+                        Puts("The {0} field does not support removing NetUser keys! (online players will not be tracked)", field.Name);
                         continue;
                     }
                     if (plugin_field.GenericArguments[1].GetField("Player") == null)
                     {
-                        Puts("[{0}] The {1} class does not have a public Player field! (online players will not be tracked)", Name, plugin_field.GenericArguments[1].Name);
+                        Puts("The {0} class does not have a public Player field! (online players will not be tracked)", plugin_field.GenericArguments[1].Name);
                         continue;
                     }
                     onlinePlayerFields.Add(plugin_field);
@@ -61,10 +62,7 @@ namespace Oxide.Plugins
                 if (attributes.Length > 0)
                 {
                     var attribute = attributes[0] as ConsoleCommandAttribute;
-                    if (attribute != null)
-                    {
-                        cmd.AddConsoleCommand(attribute.Command, this, method.Name);
-                    }
+                    if (attribute != null)  cmd.AddConsoleCommand(attribute.Command, this, method.Name);
                     continue;
                 }
 
@@ -72,27 +70,17 @@ namespace Oxide.Plugins
                 if (attributes.Length > 0)
                 {
                     var attribute = attributes[0] as ChatCommandAttribute;
-                    if (attribute != null)
-                    {
-                        cmd.AddChatCommand(attribute.Command, this, method.Name);
-                    }
+                    if (attribute != null) cmd.AddChatCommand(attribute.Command, this, method.Name);
                 }
             }
 
-            if (onlinePlayerFields.Count > 0)
-            {
-                foreach (var playerClient in PlayerClient.All)
-                    AddOnlinePlayer(playerClient.netUser);
-            }
+            if (onlinePlayerFields.Count > 0) foreach (var playerClient in PlayerClient.All) AddOnlinePlayer(playerClient.netUser);
 
             base.HandleAddedToManager(manager);
         }
 
         [HookMethod("OnPlayerConnected")]
-        private void base_OnPlayerInit(NetUser player)
-        {
-            AddOnlinePlayer(player);
-        }
+        private void base_OnPlayerInit(NetUser player) => AddOnlinePlayer(player);
 
         [HookMethod("OnPlayerDisconnected")]
         private void base_OnPlayerDisconnected(uLink.NetworkPlayer player)
@@ -102,8 +90,7 @@ namespace Oxide.Plugins
             {
                 NextTick(() =>
                 {
-                    foreach (var plugin_field in onlinePlayerFields)
-                        plugin_field.Call("Remove", player);
+                    foreach (var plugin_field in onlinePlayerFields) plugin_field.Call("Remove", player);
                 });
             }
         }
@@ -137,8 +124,7 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void PrintToConsole(string format, params object[] args)
         {
-            if (PlayerClient.All.Count < 1) return;
-            ConsoleNetworker.Broadcast("echo " + string.Format(format, args));
+            if (PlayerClient.All.Count >= 1) ConsoleNetworker.Broadcast("echo " + string.Format(format, args));
         }
 
         /// <summary>
@@ -163,71 +149,62 @@ namespace Oxide.Plugins
             ConsoleNetworker.Broadcast("chat.add \"Server\"" + string.Format(format, args).QuoteSafe());
         }
 
-        // <summary>
-        // Send a reply message in response to a console command
-        // </summary>
-        // <param name="arg"></param>
-        // <param name="format"></param>
-        // <param name="args"></param>
+        /// <summary>
+        /// Send a reply message in response to a console command
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         protected void SendReply(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
-
             if (arg.argUser != null)
             {
                 PrintToConsole(arg.argUser, format, args);
                 return;
             }
-
             Puts(message);
         }
 
-        // <summary>
-        // Send a reply message in response to a chat command
-        // </summary>
-        // <param name="player"></param>
-        // <param name="format"></param>
-        // <param name="args"></param>
-        protected void SendReply(NetUser netUser, string format, params object[] args)
-        {
-            PrintToChat(netUser, format, args);
-        }
+        /// <summary>
+        /// Send a reply message in response to a chat command
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        protected void SendReply(NetUser netUser, string format, params object[] args) => PrintToChat(netUser, format, args);
 
-        // <summary>
-        // Send a warning message in response to a console command
-        // </summary>
-        // <param name="arg"></param>
-        // <param name="format"></param>
-        // <param name="args"></param>
+        /// <summary>
+        /// Send a warning message in response to a console command
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         protected void SendWarning(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
-
             if (arg.argUser != null)
             {
                 rust.SendConsoleMessage(arg.argUser, format, args);
                 return;
             }
-
             Debug.LogWarning(message);
         }
 
-        // <summary>
-        // Send an error message in response to a console command
-        // </summary>
-        // <param name="arg"></param>
-        // <param name="format"></param>
-        // <param name="args"></param>
+        /// <summary>
+        /// Send an error message in response to a console command
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         protected void SendError(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = string.Format(format, args);
-
             if (arg.argUser != null)
             {
                 rust.SendConsoleMessage(arg.argUser, format, args);
                 return;
             }
-
             Debug.LogError(message);
         }
     }

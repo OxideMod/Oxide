@@ -6,7 +6,7 @@ using Oxide.Plugins;
 namespace Oxide.Game.InterstellarRift.Libraries
 {
     /// <summary>
-    /// A library containing utility shortcut functions
+    /// A library containing utility shortcut functions for Interstellar Rift
     /// </summary>
     public class InterstellarRift : Library
     {

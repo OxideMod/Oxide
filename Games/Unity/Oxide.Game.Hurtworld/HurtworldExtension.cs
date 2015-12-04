@@ -52,7 +52,6 @@ namespace Oxide.Game.Hurtworld
         public HurtworldExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -74,7 +73,6 @@ namespace Oxide.Game.Hurtworld
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -90,7 +88,7 @@ namespace Oxide.Game.Hurtworld
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 if (GameManager.Instance == null) return string.Empty;
-                var players = GameManager.Instance.GetIdentifierMap().Count(x => x.Value.IsConnected);
+                var players = GameManager.Instance.GetPlayerCount();
                 var hostname = GameManager.Instance.ServerConfig.GameName;
                 return string.Concat(players, " | ", hostname);
             };
@@ -112,7 +110,7 @@ namespace Oxide.Game.Hurtworld
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 if (GameManager.Instance == null) return string.Empty;
-                var players = GameManager.Instance.GetIdentifierMap().Count(x => x.Value.IsConnected);
+                var players = GameManager.Instance.GetPlayerCount();
                 var playerLimit = GameManager.Instance.ServerConfig.MaxPlayers;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
@@ -140,7 +138,7 @@ namespace Oxide.Game.Hurtworld
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = GameManager.PROTOCOL_VERSION.ToString();
+                var gameVersion = GameManager.Instance?.GetProtocolVersion().ToString();
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };

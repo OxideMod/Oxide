@@ -1,15 +1,22 @@
-﻿namespace Oxide.Plugins
+﻿using Oxide.Core;
+
+using Oxide.Game.SevenDays.Libraries;
+
+namespace Oxide.Plugins
 {
     public abstract class SevenDaysPlugin : CSharpPlugin
     {
-        protected void PrintToChat(string message)
+        protected SevenDays sdtd;
+
+        public override void SetPluginInfo(string name, string path)
         {
-            PrintToChat("", message);
+            base.SetPluginInfo(name, path);
+
+            sdtd = Interface.Oxide.GetLibrary<SevenDays>();
         }
 
-        protected void PrintToChat(string name, string message)
-        {
-            GameManager.Instance.GameMessageServer(null, message, name);
-        }
+        protected void PrintToChat(string message) => PrintToChat("", message);
+
+        protected void PrintToChat(string name, string message) => GameManager.Instance.GameMessageServer(null, message, name);
     }
 }

@@ -11,7 +11,6 @@ using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
 using RoKPermissions = CodeHatch.Permissions;
 using UnityEngine;
-using Network = uLink.Network;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -57,12 +56,8 @@ namespace Oxide.Game.ReignOfKings
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
+            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
-
-            // Cheat a reference for UnityEngine and uLink in the default plugin reference list
-            var zero = Vector3.zero;
-            var isServer = Network.isServer;
         }
 
         /// <summary>

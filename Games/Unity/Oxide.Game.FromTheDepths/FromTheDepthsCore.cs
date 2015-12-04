@@ -1,6 +1,7 @@
 ﻿using BrilliantSkies.FromTheDepths.Multiplayer;
 
 using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.FromTheDepths
@@ -10,8 +11,9 @@ namespace Oxide.Game.FromTheDepths
     /// </summary>
     public class FromTheDepthsCore : CSPlugin
     {
-        // The pluginmanager
-        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
+        // The permission library
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
         // Track when the server has been initialized
         private bool serverInitialized;
@@ -28,7 +30,7 @@ namespace Oxide.Game.FromTheDepths
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
+            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
         }
 
@@ -40,7 +42,7 @@ namespace Oxide.Game.FromTheDepths
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "from the depths");
-            RemoteLogger.SetTag("protocol", StaticOptionsManager.version);
+            RemoteLogger.SetTag("version", StaticOptionsManager.version);
         }
 
         /// <summary>

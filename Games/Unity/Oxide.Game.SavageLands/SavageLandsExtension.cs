@@ -33,7 +33,6 @@ namespace Oxide.Game.SavageLands
 
         public static string[] Filter =
         {
-
         };
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace Oxide.Game.SavageLands
         public SavageLandsExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -55,7 +53,7 @@ namespace Oxide.Game.SavageLands
             Manager.RegisterPluginLoader(new SavageLandsPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("savage", new Libraries.SavageLands());
+            Manager.RegisterLibrary("Savage", new Libraries.SavageLands());
         }
 
         /// <summary>
@@ -64,7 +62,6 @@ namespace Oxide.Game.SavageLands
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -80,7 +77,7 @@ namespace Oxide.Game.SavageLands
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO
+            // TODO: Handle console input
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

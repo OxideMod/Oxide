@@ -6,7 +6,7 @@ using Oxide.Plugins;
 namespace Oxide.Game.Terraria.Libraries
 {
     /// <summary>
-    /// A library containing utility shortcut functions
+    /// A library containing utility shortcut functions for Terraria
     /// </summary>
     public class Terraria : Library
     {

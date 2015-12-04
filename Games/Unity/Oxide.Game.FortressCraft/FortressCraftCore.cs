@@ -1,4 +1,5 @@
 ﻿using Oxide.Core;
+using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.FortressCraft
@@ -8,6 +9,10 @@ namespace Oxide.Game.FortressCraft
     /// </summary>
     public class FortressCraftCore : CSPlugin
     {
+        // The permission library
+        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
@@ -23,7 +28,7 @@ namespace Oxide.Game.FortressCraft
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
+            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
         }
 
@@ -35,7 +40,7 @@ namespace Oxide.Game.FortressCraft
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "fortresscraft");
-            //RemoteLogger.SetTag("protocol", cl000c.cCompatibilityVersion.ToLower());
+            //RemoteLogger.SetTag("version", );
         }
 
         /// <summary>
@@ -48,7 +53,7 @@ namespace Oxide.Game.FortressCraft
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
+            //RemoteLogger.SetTag("hostname", );
         }
 
         /// <summary>

@@ -3,25 +3,30 @@ using System.Linq;
 
 namespace Oxide.Plugins
 {
-    [Info("Hooks Test", "Oxide Team", 0.1)]
-    public class HooksTest : UnturnedPlugin
+    [Info("Hooks", "Oxide Team", 0.1)]
+    [Description("Tests all of the available Oxide hooks.")]
+
+    public class Hooks : UnturnedPlugin
     {
-        int hookCount = 0;
+        #region Hook Verification
+
+        int hookCount;
         int hooksVerified;
         Dictionary<string, bool> hooksRemaining = new Dictionary<string, bool>();
 
-        public void HookCalled(string name)
+        public void HookCalled(string hook)
         {
-            if (!hooksRemaining.ContainsKey(name)) return;
+            if (!hooksRemaining.ContainsKey(hook)) return;
             hookCount--;
             hooksVerified++;
-            PrintWarning("{0} is working. {1} hooks verified!", name, hooksVerified);
-            hooksRemaining.Remove(name);
-            if (hookCount == 0)
-                PrintWarning("All hooks verified!");
-            else
-                PrintWarning("{0} hooks remaining: " + string.Join(", ", hooksRemaining.Keys.ToArray()), hookCount);
+            PrintWarning($"{hook} is working");
+            hooksRemaining.Remove(hook);
+            PrintWarning(hookCount == 0 ? "All hooks verified!" : $"{hooksVerified} hooks verified, {hookCount} hooks remaining");
         }
+
+        #endregion
+
+        #region Plugin Hooks
 
         private void Init()
         {
@@ -31,39 +36,24 @@ namespace Oxide.Plugins
             HookCalled("Init");
         }
 
-        public void Loaded()
-        {
-            HookCalled("Loaded");
-        }
+        protected override void LoadDefaultConfig() => HookCalled("LoadDefaultConfig");
 
-        protected override void LoadDefaultConfig()
-        {
-            HookCalled("LoadDefaultConfig");
-        }
+        private void Loaded() => HookCalled("Loaded");
 
-        private void Unloaded()
-        {
-            HookCalled("Unloaded");
-        }
+        private void Unloaded() => HookCalled("Unloaded");
 
-        private void OnFrame()
-        {
-            HookCalled("OnFrame");
-        }
+        private void OnFrame() => HookCalled("OnFrame");
 
-        private void OnServerInitialized()
-        {
-            HookCalled("OnServerInitialized");
-        }
+        #endregion
 
-        private void OnServerSave()
-        {
-            HookCalled("OnServerSave");
-        }
+        #region Server Hooks
 
-        private void OnServerShutdown()
-        {
-            HookCalled("OnServerShutdown");
-        }
+        private void OnServerInitialized() => HookCalled("OnServerInitialized");
+
+        private void OnServerSave() => HookCalled("OnServerSave");
+
+        private void OnServerShutdown() => HookCalled("OnServerShutdown");
+
+        #endregion
     }
 }

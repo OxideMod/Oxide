@@ -11,7 +11,7 @@ using Oxide.Plugins;
 namespace Oxide.Game.TheForest.Libraries
 {
     /// <summary>
-    /// A library containing utility shortcut functions
+    /// A library containing utility shortcut functions for The Forest
     /// </summary>
     public class TheForest : Library
     {

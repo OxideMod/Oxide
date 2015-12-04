@@ -45,7 +45,6 @@ namespace Oxide.Game.Unturned
         public UnturnedExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -66,7 +65,6 @@ namespace Oxide.Game.Unturned
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>

@@ -18,11 +18,11 @@ namespace Oxide.Game.Hurtworld
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
-        // The permission lib
+        // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
-        // The command lib
+        // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // Track when the server has been initialized
@@ -40,7 +40,7 @@ namespace Oxide.Game.Hurtworld
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>("Plugins");
+            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
         }
 
@@ -52,7 +52,7 @@ namespace Oxide.Game.Hurtworld
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "hurtworld");
-            RemoteLogger.SetTag("protocol", GameManager.PROTOCOL_VERSION.ToString());
+            RemoteLogger.SetTag("version", GameManager.Instance.GetProtocolVersion().ToString());
         }
 
         /// <summary>
@@ -74,7 +74,6 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-
         /// <summary>
         /// Called when a plugin is loaded
         /// </summary>
@@ -87,17 +86,21 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
+        /// Starts the logging
+        /// </summary>
+        private void InitializeLogging()
+        {
+            loggingInitialized = true;
+            CallHook("InitLogging", null);
+        }
+
+        /// <summary>
         /// Called when a console command was run
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
         [HookMethod("OnRunCommand")]
-        private object OnRunCommand(string arg)
-        {
-            // Sanity checks
-            if (arg == null || arg.Trim().Length == 0) return null;
-            return cmdlib.HandleConsoleCommand(arg);
-        }
+        private object OnRunCommand(string arg) => arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
 
         /// <summary>
         /// Called when the player sends a message
@@ -109,28 +112,28 @@ namespace Oxide.Game.Hurtworld
         private object OnPlayerChat(PlayerIdentity identity, NetworkMessageInfo info, string message)
         {
             if (message.Trim().Length <= 1) return true;
+
             var str = message.Substring(0, 1);
+
             // Is it a chat command?
-            if (str.Equals("/") || str.Equals("!"))
+            if (!str.Equals("/") && !str.Equals("!")) return null;
+
+            // Get the arg string
+            var argstr = message.Substring(1);
+
+            // Parse it
+            string chatcmd;
+            string[] args;
+            ParseChatCommand(argstr, out chatcmd, out args);
+            if (chatcmd == null) return null;
+
+            // Handle it
+            if (!cmdlib.HandleChatCommand(identity, info, chatcmd, args))
             {
-                // Get the arg string
-                var argstr = message.Substring(1);
-
-                // Parse it
-                string chatcmd;
-                string[] args;
-                ParseChatCommand(argstr, out chatcmd, out args);
-                if (chatcmd == null) return null;
-
-                // Handle it
-                if (!cmdlib.HandleChatCommand(identity, info, chatcmd, args))
-                {
-                    ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Unknown command: {chatcmd}</color>", info.sender);
-                    return true;
-                }
+                ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Unknown command: {chatcmd}</color>", info.sender);
                 return true;
             }
-            return null;
+            return true;
         }
 
         /// <summary>
@@ -144,6 +147,7 @@ namespace Oxide.Game.Hurtworld
             var arglist = new List<string>();
             var sb = new StringBuilder();
             var inlongarg = false;
+
             foreach (var c in argstr)
             {
                 if (c == '"')
@@ -185,15 +189,6 @@ namespace Oxide.Game.Hurtworld
             cmd = arglist[0];
             arglist.RemoveAt(0);
             args = arglist.ToArray();
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
     }
 }

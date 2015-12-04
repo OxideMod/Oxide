@@ -33,7 +33,6 @@ namespace Oxide.Game.BeastsOfPrey
 
         public static string[] Filter =
         {
-
         };
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace Oxide.Game.BeastsOfPrey
         public BeastsOfPreyExtension(ExtensionManager manager)
             : base(manager)
         {
-
         }
 
         /// <summary>
@@ -64,7 +62,6 @@ namespace Oxide.Game.BeastsOfPrey
         /// <param name="plugindir"></param>
         public override void LoadPluginWatchers(string plugindir)
         {
-
         }
 
         /// <summary>
@@ -77,12 +74,55 @@ namespace Oxide.Game.BeastsOfPrey
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            // TODO: Add status information
+            Interface.Oxide.ServerConsole.Title = () =>
+            {
+                var players = ServerMonitor.instance?.playerList.childCount;
+                var hostname = ServerMonitor.instance?.serverName;
+                return string.Concat(players, " | ", hostname);
+            };
+
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var hostname = ServerMonitor.instance?.serverName;
+                return string.Concat(" ", hostname);
+            };
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = ServerMonitor.instance?.playerList.childCount;
+                const int playerLimit = 20; // SmartFoxServer license limitation
+                return string.Concat(" ", players, "/", playerLimit, " players");
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                // TODO: Network in/out
+                return string.Empty;
+            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(Server_Network_Manager.instance.timeServer)).ToString("h:mm tt").ToLower();
+                return string.Concat(" ", time);
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                var gameVersion = Server_Network_Manager.instance.sfsVersion;
+                var oxideVersion = OxideMod.Version.ToString();
+                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
+            };
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO
+            // TODO: Handle console input
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

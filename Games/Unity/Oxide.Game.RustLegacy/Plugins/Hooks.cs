@@ -4,8 +4,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using UnityEngine;
-
 namespace Oxide.Plugins
 {
     [Info("Hooks Test", "Oxide Team", 0.1)]
@@ -34,6 +32,7 @@ namespace Oxide.Plugins
             hooksRemaining = hooks.Keys.ToDictionary(k => k, k => true);
             PrintWarning("{0} hook to test!", hookCount);
             HookCalled("Init");
+            // TODO: LoadDefaultConfig();
         }
 
         public void Loaded()
@@ -44,11 +43,14 @@ namespace Oxide.Plugins
         protected override void LoadDefaultConfig()
         {
             HookCalled("LoadDefaultConfig");
+            // TODO: CreateDefaultConfig();
+            //LoadConfig();
         }
 
         private void Unloaded()
         {
             HookCalled("Unloaded");
+            // TODO: Unload plugin and store state in config
         }
 
         private void OnFrame()
@@ -56,31 +58,10 @@ namespace Oxide.Plugins
             HookCalled("OnFrame");
         }
 
-        private void ModifyTags(string oldtags)
+        private void ModifyTags()
         {
             HookCalled("ModifyTags");
-        }
-
-        private void BuildServerTags(IList<string> tags)
-        {
-            HookCalled("BuildServerTags");
-        }
-
-        int ResourceCounter = 1;
-        private void OnResourceNodeLoaded(ResourceTarget resource)
-        {
-            HookCalled("OnResourceNodeLoaded");
-            // Print resource
-            if (ResourceCounter <= 10)
-            {
-                Puts(resource.name + " loaded at " + resource.transform.position.ToString());
-                ResourceCounter++;
-            }
-        }
-
-        private void OnDatablocksInitialized()
-        {
-            HookCalled("OnDatablocksInitialized");
+            // TODO: Print new tags
         }
 
         private void OnServerInitialized()
@@ -101,11 +82,8 @@ namespace Oxide.Plugins
         private void OnRunCommand(ConsoleSystem.Arg arg)
         {
             HookCalled("OnRunCommand");
-            var name = arg.argUser?.displayName;
-            if (name == null) name = "server console";
-            var cmd = arg.Class + "." + arg.Function;
-            var args = arg.ArgsStr;
-            Puts("The command '" + cmd + "' was used by " + name + " with the following arguments: " + args);
+            // TODO: Run test command
+            // TODO: Print command messages
         }
 
         private void OnUserApprove(ClientConnection connection, uLink.NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
@@ -113,95 +91,53 @@ namespace Oxide.Plugins
             HookCalled("OnUserApprove");
         }
 
-        private void CanClientLogin(ClientConnection connection)
-        {
-            HookCalled("CanClientLogin");
-        }
-
         private void OnPlayerConnected(NetUser netuser)
         {
             HookCalled("OnPlayerConnected");
-            // Print player connected in in-game chat
-            PrintToChat($"The player {netuser.displayName} has connected");
+            // TODO: Print player connected
         }
 
         private void OnPlayerDisconnected(uLink.NetworkPlayer player)
         {
             HookCalled("OnPlayerDisconnected");
-            // Print player disconnected in in-game chat
-            var netUser = player.GetLocalData<NetUser>();
-            PrintToChat($"The player {netUser.displayName} has disconnected");
+            // TODO: Print player disconnected
         }
 
-        private void OnPlayerSpawn(PlayerClient client, bool useCamp, RustProto.Avatar avatar)
+        private void OnPlayerSpawn(PlayerClient client, bool useCamp, RustProto.Avatar avater)
         {
             HookCalled("OnPlayerSpawn");
-            // Print spawn location in console
-            Puts("Player " + client.netUser.displayName + " spawned at " + client.lastKnownPosition + ".");
-            Puts("Player did " + (useCamp ? "" : "not ") + "select a sleepingbag to spawn at.");
-
-            // Doing stuff with the player needs to wait until the next frame
-            NextTick(() =>
-            {
-                // Print start metabolism values in console
-                var player = client.controllable;
-                var character = player.character;
-                var metabolism = character.GetComponent<Metabolism>();
-
-                Puts(client.netUser.displayName + " currently has the following Metabolism values:");
-                Puts("  Health: " + character.health.ToString());
-                Puts("  Calories: " + metabolism.GetCalorieLevel().ToString());
-                Puts("  Radiation: " + metabolism.GetRadLevel().ToString());
-
-                // Give admin items for testing
-                if (client.netUser.CanAdmin())
-                {
-                    var inventory = player.GetComponent<Inventory>();
-                    var pref = Inventory.Slot.Preference.Define(Inventory.Slot.Kind.Belt, false, Inventory.Slot.KindFlags.Belt);
-                    var item = DatablockDictionary.GetByName("Uber Hatchet");
-                    inventory.AddItemAmount(item, 1, pref);
-                }
-            });
+            // TODO: Print spawn location
+            // TODO: Print start metabolism values
+            // TODO: Give admin items for testing
         }
 
         private void OnItemCraft(CraftingInventory inventory, BlueprintDataBlock blueprint, int amount, ulong startTime)
         {
             HookCalled("OnItemCraft");
-            // Print item crafting
-            var netUser = inventory.GetComponent<Character>().netUser;
-            Puts(netUser.displayName + " started crafting " + blueprint.resultItem.name + " x " + amount.ToString());
+            // TODO: Print item crafting
         }
 
-        private void OnItemDeployed(DeployableObject component, NetUser netUser)
+        private void OnItemDeployed(DeployableObject component, NetUser user)
         {
             HookCalled("OnItemDeployed");
-            // Print item deployed
-            Puts(netUser.displayName + " deployed a " + component.name);
+            // TODO: Print item deployed
         }
 
         private void OnItemAdded(Inventory inventory, int slot, IInventoryItem item)
         {
             HookCalled("OnItemAdded");
-            // Print item added
-            var netUser = inventory.GetComponent<Character>()?.netUser;
-            if (netUser == null) return;
-            Puts(item.datablock.name + " was added to inventory slot " + slot.ToString() + " owned by " + netUser.displayName);
+            // TODO: Print item added
         }
 
         private void OnItemRemoved(Inventory inventory, int slot, IInventoryItem item)
         {
             HookCalled("OnItemRemoved");
-            // Print item removed
-            var netUser = inventory.GetComponent<Character>()?.netUser;
-            if (netUser == null) return;
-            Puts(item.datablock.name + " was removed from inventory slot " + slot.ToString() + " owned by " + netUser.displayName);
+            // TODO: Print item removed
         }
 
-        private void OnDoorToggle(BasicDoor door, ulong timestamp, Controllable controllable)
+        private void OnDoorToggle(BasicDoor door, ulong timestamp, Controllable Controllable)
         {
             HookCalled("OnDoorToggle");
-            // Print door used
-            Puts(controllable.netUser.displayName + " used the door " + door.GetInstanceID() + " owned by the player with SteamID " + door.GetComponent<DeployableObject>().ownerID);
         }
 
         private void ModifyDamage(TakeDamage takedamage, DamageEvent damage)
@@ -212,78 +148,26 @@ namespace Oxide.Plugins
         private void OnHurt(TakeDamage takedamage, DamageEvent damage)
         {
             HookCalled("OnHurt");
-            // Print damage taken
-            var netUser = damage.victim.client.netUser;
-            if (netUser == null) return;
-            Puts("Player " + netUser.displayName + " took " + damage.amount + " damage!");
         }
 
         private void OnKilled(TakeDamage takedamage, DamageEvent damage)
         {
             HookCalled("OnKilled");
-            // Print death message
-            var netUser = damage.victim.client.netUser;
-            if (netUser == null) return;
-            Puts("Player " + netUser.displayName + " has died!");
         }
 
-        private void OnStructureBuilt(StructureComponent component, NetUser netUser)
+        private void OnStructureBuilt(StructureComponent component, NetUser user)
         {
             HookCalled("OnStructureBuilt");
-            // Print structure built
-            Puts(netUser.displayName + " build a " + component.name);
         }
 
-        private void OnPlayerChat(NetUser netUser, string message)
+        private void OnPlayerChat(NetUser user, string msg)
         {
             HookCalled("OnPlayerChat");
-            // Print chat
-            Puts(netUser.displayName + " : " + message);
         }
 
-        private void OnPlayerVoice(NetUser netUser, List<uLink.NetworkPlayer> listeners)
+        private void OnPlayerVoice(NetUser user, List<uLink.NetworkPlayer> listeners)
         {
             HookCalled("OnPlayerVoice");
-            // Print player using voice chat.
-            Puts(netUser.displayName + " is currently using voice chat.");
-        }
-
-        private void OnAirDrop(Vector3 dropLocation)
-        {
-            HookCalled("OnAirDrop");
-            // Print airdrop location
-            Puts("An airdrop is being called at location " + dropLocation.ToString());
-        }
-
-        bool OnStructureDecayCalled = false;
-        private void OnStructureDecay(StructureMaster master)
-        {
-            HookCalled("OnStructureDecay");
-            // Print structure info
-            if (!OnStructureDecayCalled)
-            {
-                Puts("Structure at " + master.transform.position.ToString() + " owned by player with SteamID " + master.ownerID + " took decay damage.");
-                OnStructureDecayCalled = true;
-            }
-        }
-
-        private void OnResearchItem(ResearchToolItem<ResearchToolDataBlock> tool, IInventoryItem item)
-        {
-            HookCalled("OnResearchItem");
-            // TODO: Complete parameters
-            //var netUser = item.inventory.GetComponent<Character>()?.netUser;
-            var netUser = item.inventory.GetComponent<Character>()?.netUser;
-            if (netUser == null) return;
-            Puts(netUser.displayName + " used " + tool.datablock.name + " on the item " + item.datablock.name);
-        }
-
-        private void OnBlueprintUse(BlueprintDataBlock bp, IBlueprintItem item)
-        {
-            HookCalled("OnBlueprintUse");
-            // TODO: Complete parameters
-            var netUser = item.inventory.GetComponent<Character>()?.netUser;
-            if (netUser == null) return;
-            Puts(netUser.displayName + " used the blueprint " + item.datablock.name + " to learn how to craft " + bp.resultItem.name);
         }
     }
 }
