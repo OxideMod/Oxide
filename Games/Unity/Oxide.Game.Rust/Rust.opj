@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\Rust\\RustDedicated_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "InitOxide",

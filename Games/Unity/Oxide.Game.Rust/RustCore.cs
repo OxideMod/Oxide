@@ -748,7 +748,7 @@ namespace Oxide.Game.Rust
                 {
                     var rustCovalence = Libraries.Covalence.RustCovalenceProvider.Instance;
                     var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
-                    if (rustCovalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0, ""))) return true;
+                    if (rustCovalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
                 }
 
                 // Get the args
