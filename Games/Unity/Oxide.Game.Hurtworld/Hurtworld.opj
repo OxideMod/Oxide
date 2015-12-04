@@ -173,7 +173,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "Hrayo2J63k78RnsF6uiSWU2mrwkXNVFMc3Mm6iiHwxw=",
+            "MSILHash": "IRKusdhDMBzUjCSu2wEQndAdIlP9PyNWDz3YfES9ieU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -688,7 +688,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "D6muyypWwOV3QkTlkwSFYzYhbl1JSA8dF3kltJfM7VI=",
+            "MSILHash": "lFdMw2RY62Cq82Aq7x/QyZu39IAjQk8a7XMWE1Bzkd4=",
             "BaseHookName": null,
             "HookCategory": "_WIP"
           }
