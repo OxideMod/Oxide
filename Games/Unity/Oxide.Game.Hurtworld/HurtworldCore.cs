@@ -69,12 +69,6 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
-        /// <summary>
         /// Called when a plugin is loaded
         /// </summary>
         /// <param name="plugin"></param>
