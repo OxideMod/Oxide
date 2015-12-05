@@ -59,6 +59,11 @@ namespace Oxide.Ext.Unity
             oxideMod.NextTick(Create);
         }
 
+        void OnApplicationQuit()
+        {
+            if (!oxideMod.IsShuttingDown) Interface.Oxide.OnShutdown();
+        }
+
         void LogMessageReceived(string message, string stack_trace, LogType type)
         {
             if (type == LogType.Exception && stack_trace.Contains("Oxide")) RemoteLogger.Exception(message, stack_trace);
