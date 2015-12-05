@@ -10,7 +10,7 @@ namespace Oxide.Plugins
 {
     public class CSharpPluginLoader : PluginLoader
     {
-        public static string[] DefaultReferences = { "mscorlib", "System", "System.Core", "System.Data", "Oxide.Core", "Oxide.Ext.CSharp" };
+        public static string[] DefaultReferences = { "mscorlib", "System", "System.Core", "System.Data", "Newtonsoft.Json", "Oxide.Core", "Oxide.Ext.CSharp" };
         public static HashSet<string> PluginReferences = new HashSet<string>(DefaultReferences);
         public static CSharpPluginLoader Instance;
         private static Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
