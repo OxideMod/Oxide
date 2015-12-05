@@ -205,8 +205,8 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
-                var inbound = Number.FormatNumberShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
-                var outbound = Number.FormatNumberShort(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
+                var inbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
+                var outbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
                 return string.Concat(inbound, "/s in, ", outbound, "/s out");
             };
 
