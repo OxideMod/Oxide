@@ -35,12 +35,24 @@ namespace Oxide.Game.Hurtworld
         public static string[] Filter =
         {
             ".",
-            "adding player to group",
-            "Built mappings for entity",
+            "Applying hit on",
+            "Authorizing player for region",
+            "Automove Source item not found",
+            "Begin auth session result k_EBeginAuthSessionResultOK",
             "Building proper config for",
+            "Built mappings for entity",
+            "Deauthorizing player for region",
+            "Got validate auth ticket repsonse k_EAuthSessionResponseOK",
+            "Hit claim against invalid view",
             "Image Effects are not supported on this platform.",
             "Loading structure with owner",
+            "Object out of bounds, destroying",
+            "Player denied permission to",
+            "Player not using",
+            "Player requesting spawn.",
             "Riped",
+            "Sending structures to client",
+            "Source was empty",
             "Syncing tree deltas",
             "The image effect DefaultCamera"
         };

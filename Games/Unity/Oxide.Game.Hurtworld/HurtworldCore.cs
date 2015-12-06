@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-using uLink;
+using UnityEngine;
+using NetworkMessageInfo = uLink.NetworkMessageInfo;
+using NetworkPlayer = uLink.NetworkPlayer;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -127,6 +129,7 @@ namespace Oxide.Game.Hurtworld
                 ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Unknown command: {chatcmd}</color>", info.sender);
                 return true;
             }
+
             return true;
         }
 
@@ -210,5 +213,11 @@ namespace Oxide.Game.Hurtworld
             // Let covalence know
             Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
         }
+
+        /// <summary>
+        /// Sends game logging to the Unity log
+        /// </summary>
+        [HookMethod("IOnServerLog")]
+        private void IOnServerLog(string text) => Debug.Log(text);
     }
 }

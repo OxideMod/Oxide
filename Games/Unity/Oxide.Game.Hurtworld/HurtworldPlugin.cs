@@ -16,7 +16,7 @@ namespace Oxide.Plugins
             base.SetPluginInfo(name, path);
 
             cmd = Interface.Oxide.GetLibrary<Command>();
-            hurt = Interface.Oxide.GetLibrary<Hurtworld>();
+            hurt = Interface.Oxide.GetLibrary<Hurtworld>("Hurtworld");
         }
 
         public override void HandleAddedToManager(PluginManager manager)

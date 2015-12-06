@@ -37,16 +37,16 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null)
+        public void BroadcastChat(string name = "Server", string message = null)
         {
             if (message != null)
             {
-                ChatManager.Instance?.AppendChatboxServerAll(string.Concat("<color=#6495be>", name, "</color>", message));
+                ChatManager.Instance?.AppendChatboxServerAll(string.Concat(new[] { "<color=#6495be>", name, "</color>  ", message }));
             }
             else
             {
                 message = name;
-                ChatManager.Instance?.AppendChatboxServerAll(string.Concat("<color=#b8d7a3>", message, "</color>"));
+                ChatManager.Instance?.AppendChatboxServerAll(string.Concat(new[] { "<color=#b8d7a3>", message, "</color>" }));
             }
         }
 
@@ -57,16 +57,16 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(NetworkPlayer player, string name, string message = null)
+        public void SendChatMessage(NetworkPlayer player, string name = "Server", string message = null)
         {
             if (message != null)
             {
-                ChatManager.Instance?.AppendChatboxServerSingle(string.Concat("<color=#6495be>", name, "</color>", message), player);
+                ChatManager.Instance?.AppendChatboxServerSingle(string.Concat(new[] { "<color=#6495be>", name, "</color>  ", message }), player);
             }
             else
             {
                 message = name;
-                ChatManager.Instance?.AppendChatboxServerSingle(string.Concat("<color=#b8d7a3>", message, "</color>"), player);
+                ChatManager.Instance?.AppendChatboxServerSingle(string.Concat(new[] { "<color=#b8d7a3>", message, "</color>" }), player);
             }
         }
     }

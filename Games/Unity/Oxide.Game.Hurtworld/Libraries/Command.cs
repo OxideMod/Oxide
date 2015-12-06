@@ -143,8 +143,9 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <summary>
         /// Handles the specified chat command
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="name"></param>
+        /// <param name="identity"></param>
+        /// <param name="info"></param>
+        /// <param name="command"></param>
         /// <param name="args"></param>
         internal bool HandleChatCommand(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
         {
