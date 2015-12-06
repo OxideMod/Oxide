@@ -62,7 +62,6 @@ namespace Oxide.Game.BeastsOfPrey
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-
         /// <summary>
         /// Called when a plugin is loaded
         /// </summary>

@@ -802,9 +802,9 @@ namespace Oxide.Game.Rust
             var arglist = new List<string>();
             var sb = new StringBuilder();
             var inlongarg = false;
-            for (var i = 0; i < argstr.Length; i++)
+
+            foreach (var c in argstr)
             {
-                var c = argstr[i];
                 if (c == '"')
                 {
                     if (inlongarg)

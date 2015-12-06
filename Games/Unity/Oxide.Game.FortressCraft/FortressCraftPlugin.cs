@@ -12,7 +12,7 @@ namespace Oxide.Plugins
         {
             base.SetPluginInfo(name, path);
 
-            fortress = Interface.Oxide.GetLibrary<FortressCraft>();
+            fortress = Interface.Oxide.GetLibrary<FortressCraft>("Fortress");
         }
     }
 }

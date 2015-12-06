@@ -21,7 +21,7 @@ namespace Oxide.Plugins
             base.SetPluginInfo(name, path);
 
             cmd = Interface.Oxide.GetLibrary<Command>();
-            rok = Interface.Oxide.GetLibrary<ReignOfKings>();
+            rok = Interface.Oxide.GetLibrary<ReignOfKings>("RoK");
         }
 
         public override void HandleAddedToManager(PluginManager manager)

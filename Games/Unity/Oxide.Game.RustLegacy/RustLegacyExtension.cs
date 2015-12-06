@@ -177,6 +177,7 @@ namespace Oxide.Game.RustLegacy
                 LibRust.Shutdown();
             }
             if (!Interface.Oxide.EnableConsole(true)) return;
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             ConsoleSystem.RegisterLogCallback(HandleLog, true);*/
         }

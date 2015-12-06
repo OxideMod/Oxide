@@ -12,7 +12,7 @@ namespace Oxide.Plugins
         {
             base.SetPluginInfo(name, path);
 
-            bop = Interface.Oxide.GetLibrary<BeastsOfPrey>();
+            bop = Interface.Oxide.GetLibrary<BeastsOfPrey>("BoP");
         }
     }
 }

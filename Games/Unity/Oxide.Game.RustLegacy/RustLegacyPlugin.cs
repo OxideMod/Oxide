@@ -21,7 +21,7 @@ namespace Oxide.Plugins
             base.SetPluginInfo(name, path);
 
             cmd = Interface.Oxide.GetLibrary<Command>();
-            rust = Interface.Oxide.GetLibrary<RustLegacy>();
+            rust = Interface.Oxide.GetLibrary<RustLegacy>("Rust");
         }
 
         public override void HandleAddedToManager(PluginManager manager)

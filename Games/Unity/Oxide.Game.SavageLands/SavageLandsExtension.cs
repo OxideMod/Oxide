@@ -70,8 +70,10 @@ namespace Oxide.Game.SavageLands
         public override void OnModLoad()
         {
             if (!Interface.Oxide.EnableConsole()) return;
+
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+
             // TODO: Add status information
         }
 
@@ -83,6 +85,7 @@ namespace Oxide.Game.SavageLands
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
+
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;

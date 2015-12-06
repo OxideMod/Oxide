@@ -12,7 +12,7 @@ namespace Oxide.Plugins
         {
             base.SetPluginInfo(name, path);
 
-            sdtd = Interface.Oxide.GetLibrary<SevenDays>();
+            sdtd = Interface.Oxide.GetLibrary<SevenDays>("SDTD");
         }
 
         protected void PrintToChat(string message) => PrintToChat("", message);

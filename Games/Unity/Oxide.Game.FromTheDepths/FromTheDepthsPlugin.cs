@@ -12,7 +12,7 @@ namespace Oxide.Plugins
         {
             base.SetPluginInfo(name, path);
 
-            ftd = Interface.Oxide.GetLibrary<FromTheDepths>();
+            ftd = Interface.Oxide.GetLibrary<FromTheDepths>("FTD");
         }
     }
 }
