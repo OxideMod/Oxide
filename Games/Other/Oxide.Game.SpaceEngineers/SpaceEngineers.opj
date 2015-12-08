@@ -1,0 +1,126 @@
+{
+  "Name": "SpaceEngineers",
+  "TargetDirectory": "D:\\Servers\\Game\\SpaceEngineers\\DedicatedServer64",
+  "Manifests": [
+    {
+      "AssemblyName": "Sandbox.Game.dll",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.MyInitializer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InvokeBeforeRun",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt32",
+                "System.String",
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "Q3onCvlpDGjb53aTOxcGb+nuRbhlJvm81zXasuFItFI=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.MyInitializer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InvokeBeforeRun",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt32",
+                "System.String",
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "Q3onCvlpDGjb53aTOxcGb+nuRbhlJvm81zXasuFItFI=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        }
+      ]
+    },
+    {
+      "AssemblyName": "VRage.Dedicated.dll",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "VRage.Dedicated.dll",
+            "TypeName": "VRage.Dedicated.DedicatedServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "RunMain",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.Boolean",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "Q+hsFsrT9uuulKvcyrwfFQcEEoTEqGhqhtq3o1DpRKk=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 25,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IDisableConsole [internal]",
+            "HookName": "IDisableConsole",
+            "AssemblyName": "VRage.Dedicated.dll",
+            "TypeName": "VRage.Dedicated.DedicatedServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "RunMain",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.Boolean",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "Q+hsFsrT9uuulKvcyrwfFQcEEoTEqGhqhtq3o1DpRKk=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
+          }
+        }
+      ]
+    }
+  ]
+}

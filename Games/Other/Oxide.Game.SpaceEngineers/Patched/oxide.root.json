@@ -1,0 +1,15 @@
+{
+    "ExtensionDirectory": "DedicatedServer64",
+
+    "PluginDirectory": "plugins",
+    "ConfigDirectory": "config",
+    "DataDirectory": "data",
+    "LangDirectory": "lang",
+    "LogDirectory": "logs",
+
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "oxide"
+    ]
+}
