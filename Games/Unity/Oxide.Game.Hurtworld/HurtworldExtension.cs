@@ -42,6 +42,7 @@ namespace Oxide.Game.Hurtworld
             "Building proper config for",
             "Built mappings for entity",
             "Deauthorizing player for region",
+            "Finished writing containers for save, waiting on save thread",
             "Got validate auth ticket repsonse k_EAuthSessionResponseOK",
             "Hit claim against invalid view",
             "Image Effects are not supported on this platform.",
@@ -54,7 +55,8 @@ namespace Oxide.Game.Hurtworld
             "Sending structures to client",
             "Source was empty",
             "Syncing tree deltas",
-            "The image effect DefaultCamera"
+            "The image effect DefaultCamera",
+            "Writing to disk completed from background thread"
         };
 
         /// <summary>

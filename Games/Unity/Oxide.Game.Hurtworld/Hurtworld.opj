@@ -755,7 +755,7 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnServerLog",
+            "Name": "IOnServerLog [internal]",
             "HookName": "IOnServerLog",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleManager",

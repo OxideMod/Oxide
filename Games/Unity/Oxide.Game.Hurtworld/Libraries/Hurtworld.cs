@@ -39,15 +39,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name = "Server", string message = null)
         {
-            if (message != null)
-            {
-                ChatManager.Instance?.AppendChatboxServerAll(string.Concat(new[] { "<color=#6495be>", name, "</color>  ", message }));
-            }
-            else
-            {
-                message = name;
-                ChatManager.Instance?.AppendChatboxServerAll(string.Concat(new[] { "<color=#b8d7a3>", message, "</color>" }));
-            }
+            ChatManager.Instance?.AppendChatboxServerAll((message != null ? $"{name} {message}" : name));
         }
 
         /// <summary>
@@ -59,15 +51,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(NetworkPlayer player, string name = "Server", string message = null)
         {
-            if (message != null)
-            {
-                ChatManager.Instance?.AppendChatboxServerSingle(string.Concat(new[] { "<color=#6495be>", name, "</color>  ", message }), player);
-            }
-            else
-            {
-                message = name;
-                ChatManager.Instance?.AppendChatboxServerSingle(string.Concat(new[] { "<color=#b8d7a3>", message, "</color>" }), player);
-            }
+            ChatManager.Instance?.AppendChatboxServerSingle((message != null ? $"{name} {message}" : name), player);
         }
     }
 }
