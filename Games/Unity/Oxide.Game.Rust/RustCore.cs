@@ -681,6 +681,15 @@ namespace Oxide.Game.Rust
             // We're going to call out and build a list of all tags to use
             var taglist = new List<string>(oldtags.Split(','));
             Interface.CallHook("BuildServerTags", taglist);
+            // Let's put the modded and oxide tags back if the mod developer removed them
+            if (!taglist.Contains("modded"))
+            {
+                taglist.Add("modded");
+            }
+            if (!taglist.Contains("oxide"))
+            {
+                taglist.Add("oxide");
+            }
             return string.Join(",", taglist.ToArray());
         }
 
