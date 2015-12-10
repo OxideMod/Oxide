@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
+using Steamworks;
 using UnityEngine;
-using NetworkMessageInfo = uLink.NetworkMessageInfo;
-using NetworkPlayer = uLink.NetworkPlayer;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -37,14 +36,24 @@ namespace Oxide.Game.Hurtworld
         public HurtworldCore()
         {
             // Set attributes
-            Name = "hurtworldcore";
-            Title = "Hurtworld Core";
+            Title = "Hurtworld";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
         }
+
+        /// <summary>
+        /// Starts the logging
+        /// </summary>
+        private void InitializeLogging()
+        {
+            loggingInitialized = true;
+            CallHook("InitLogging", null);
+        }
+
+        #region Plugin Hooks
 
         /// <summary>
         /// Called when the plugin is initializing
@@ -55,19 +64,45 @@ namespace Oxide.Game.Hurtworld
             // Configure remote logging
             RemoteLogger.SetTag("game", "hurtworld");
             RemoteLogger.SetTag("version", GameManager.Instance.GetProtocolVersion().ToString());
-        }
 
-        /// <summary>
-        /// Called when the server is first initialized
-        /// </summary>
-        [HookMethod("OnServerInitialized")]
-        private void OnServerInitialized()
-        {
-            if (serverInitialized) return;
-            serverInitialized = true;
+            // Add general commands
+            //cmdlib.AddConsoleCommand("oxide.plugins", this, "CmdPlugins");
+            //cmdlib.AddConsoleCommand("plugins", this, "CmdPlugins");
+            //cmdlib.AddConsoleCommand("oxide.load", this, "CmdLoad");
+            //cmdlib.AddConsoleCommand("load", this, "CmdLoad");
+            //cmdlib.AddConsoleCommand("oxide.unload", this, "CmdUnload");
+            //cmdlib.AddConsoleCommand("unload", this, "CmdUnload");
+            //cmdlib.AddConsoleCommand("oxide.reload", this, "CmdReload");
+            //cmdlib.AddConsoleCommand("reload", this, "CmdReload");
+            //cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
+            //cmdlib.AddConsoleCommand("version", this, "CmdVersion");
 
-            // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
+            // Add permission commands
+            //cmdlib.AddConsoleCommand("oxide.group", this, "CmdGroup");
+            //cmdlib.AddConsoleCommand("group", this, "CmdGroup");
+            //cmdlib.AddConsoleCommand("oxide.usergroup", this, "CmdUserGroup");
+            //cmdlib.AddConsoleCommand("usergroup", this, "CmdUserGroup");
+            //cmdlib.AddConsoleCommand("oxide.grant", this, "CmdGrant");
+            //cmdlib.AddConsoleCommand("grant", this, "CmdGrant");
+            //cmdlib.AddConsoleCommand("oxide.revoke", this, "CmdRevoke");
+            //cmdlib.AddConsoleCommand("revoke", this, "CmdRevoke");
+            //cmdlib.AddConsoleCommand("oxide.show", this, "CmdShow");
+            //cmdlib.AddConsoleCommand("show", this, "CmdShow");
+
+            if (permission.IsLoaded)
+            {
+                var rank = 0;
+                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+                {
+                    var defaultGroup = DefaultGroups[i];
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
+                permission.CleanUp(s =>
+                {
+                    ulong temp;
+                    return ulong.TryParse(s, out temp);
+                });
+            }
         }
 
         /// <summary>
@@ -81,22 +116,74 @@ namespace Oxide.Game.Hurtworld
             if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
+        #endregion
+
+        #region Server Hooks
+
         /// <summary>
-        /// Starts the logging
+        /// Called when the server is first initialized
         /// </summary>
-        private void InitializeLogging()
+        [HookMethod("OnServerInitialized")]
+        private void OnServerInitialized()
         {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
+            if (serverInitialized) return;
+            serverInitialized = true;
+
+            // Add 'modded' and 'oxide' tags
+            SteamGameServer.SetGameTags("modded,oxide");
+
+            // Configure the hostname after it has been set
+            RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
         }
 
         /// <summary>
-        /// Called when a console command was run
+        /// Sends game logging to the Unity log
         /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        [HookMethod("OnRunCommand")]
-        private object OnRunCommand(string arg) => arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
+        [HookMethod("IOnServerLog")]
+        private void IOnServerLog(string text) => Debug.Log(text);
+
+        #endregion
+
+        #region Player Hooks
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="info"></param>
+        [HookMethod("IOnPlayerConnected")]
+        private void IOnPlayerConnected(string name, uLink.NetworkMessageInfo info)
+        {
+            var identity = GameManager.Instance.GetIdentity(info.sender);
+            identity.Name = name;
+
+            // Let covalence know
+            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(info.sender);
+
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var userId = identity.SteamId.ToString();
+                permission.UpdateNickname(userId, identity.Name);
+
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+            }
+
+            Interface.Oxide.CallHook("OnPlayerConnected", identity, info.sender);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(PlayerIdentity identity, uLink.NetworkPlayer player)
+        {
+            // Let covalence know
+            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+        }
 
         /// <summary>
         /// Called when the player sends a message
@@ -105,7 +192,7 @@ namespace Oxide.Game.Hurtworld
         /// <param name="info"></param>
         /// <param name="message"></param>
         [HookMethod("OnPlayerChat")]
-        private object OnPlayerChat(PlayerIdentity identity, NetworkMessageInfo info, string message)
+        private object OnPlayerChat(PlayerIdentity identity, uLink.NetworkMessageInfo info, string message)
         {
             if (message.Trim().Length <= 1) return true;
 
@@ -132,6 +219,29 @@ namespace Oxide.Game.Hurtworld
 
             return true;
         }
+
+        /// <summary>
+        /// Called when the player has respawned
+        /// </summary>
+        /// <param name="manager"></param>
+        [HookMethod("IOnPlayerRespawn")]
+        private void IOnPlayerRespawn(PlayerStatManager manager)
+        {
+            var identity = GameManager.Instance.GetIdentity(manager.networkView.owner);
+            Interface.CallHook("OnPlayerRespawn", identity, manager.networkView.owner);
+        }
+
+        #endregion
+
+        #region Command Handling
+
+        /// <summary>
+        /// Called when a console command was run
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        [HookMethod("OnRunCommand")]
+        private object OnRunCommand(string arg) => arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
 
         /// <summary>
         /// Parses the specified chat command
@@ -188,36 +298,6 @@ namespace Oxide.Game.Hurtworld
             args = arglist.ToArray();
         }
 
-        /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(PlayerIdentity identity, NetworkPlayer player)
-        {
-            // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
-
-            // TODO: Do permission stuff
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(PlayerIdentity identity, NetworkPlayer player)
-        {
-            // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
-        }
-
-        /// <summary>
-        /// Sends game logging to the Unity log
-        /// </summary>
-        [HookMethod("IOnServerLog")]
-        private void IOnServerLog(string text) => Debug.Log(text);
+        #endregion
     }
 }

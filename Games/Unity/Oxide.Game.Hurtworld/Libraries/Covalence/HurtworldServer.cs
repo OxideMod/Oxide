@@ -46,7 +46,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args) => ConsoleManager.Instance?.ExecuteCommand(string.Join(command, (string[])args));
+        public void RunCommand(string command, params object[] args) => ConsoleManager.Instance?.ExecuteCommand(string.Concat(command, (string[])args));
 
         #endregion
     }

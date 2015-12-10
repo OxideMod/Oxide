@@ -23,6 +23,19 @@
         /// <param name="reason"></param>
         void Kick(string reason);
 
+        /// <summary>
+        /// Causes this player's character to die
+        /// </summary>
+        void Kill();
+
+        /// <summary>
+        /// Teleports this player's character to the specified position
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        void Teleport(float x, float y, float z);
+
         #endregion
 
         #region Chat and Commands

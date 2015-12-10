@@ -53,32 +53,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 68,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l1, a0",
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "uLink_OnPlayerConnected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayer"
-              ]
-            },
-            "MSILHash": "uk99uZkzRSgf6FkYJ6zBU2QAk8uZyT4voSxp7bBY+jk=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 29,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
@@ -771,6 +745,57 @@
             "MSILHash": "461bV27ln8SO0Mc/l3OHZrcMGanJnga8l7HcsWaaR5E=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerConnected [internal]",
+            "HookName": "IOnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RPCClientReady",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "mfVUdAPGxchfXb21vEuTjBePMZUgBGoRUIywFqEXm/U=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerRespawn [internal]",
+            "HookName": "IOnPlayerRespawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerStatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Respawn",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "j7WTTYXEZ6jTrsiUqJuyemgQreQ/aSlnS2q7EQrbSzI=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]

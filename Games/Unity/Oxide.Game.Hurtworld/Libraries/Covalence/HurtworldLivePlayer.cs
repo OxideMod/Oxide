@@ -55,7 +55,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="reason"></param>
         public void Kick(string reason)
         {
-            Interface.Oxide.LogWarning(steamid.ToString() + ", " + reason);
+            Interface.Oxide.LogWarning(steamid + ", " + reason);
             GameManager.Instance?.KickPlayer(steamid.ToString(), reason);
         }
 
@@ -102,7 +102,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="args"></param>
         public void RunCommand(string command, params object[] args)
         {
-            // TODO
+            // TODO: Not available yet
         }
 
         #endregion
