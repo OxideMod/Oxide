@@ -435,7 +435,7 @@ namespace Oxide.Game.Rust
             }
 
             foreach (var name in arg.Args)
-                if (string.IsNullOrEmpty(name)) Interface.Oxide.UnloadPlugin(name);
+                if (!string.IsNullOrEmpty(name)) Interface.Oxide.UnloadPlugin(name);
         }
 
         /// <summary>
@@ -460,7 +460,7 @@ namespace Oxide.Game.Rust
 
             foreach (var name in arg.Args)
             {
-                if (string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
+                if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
             }
         }
 
