@@ -47,13 +47,17 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Grants the specified permission on this user
         /// </summary>
         /// <param name="perm"></param>
-        public void GrantPermission(string perm) { }
+        public void GrantPermission(string perm)
+        {
+        }
 
         /// <summary>
         /// Strips the specified permission from this user
         /// </summary>
         /// <param name="perm"></param>
-        public void RevokePermission(string perm) { }
+        public void RevokePermission(string perm)
+        {
+        }
 
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
@@ -66,13 +70,17 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Adds this player to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void AddToGroup(string groupName) { }
+        public void AddToGroup(string groupName)
+        {
+        }
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void RemoveFromGroup(string groupName) { }
+        public void RemoveFromGroup(string groupName)
+        {
+        }
 
         #endregion
 
@@ -83,12 +91,16 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
-        public void Ban(string reason, TimeSpan duration) { }
+        public void Ban(string reason, TimeSpan duration)
+        {
+        }
 
         /// <summary>
         /// Unbans this player
         /// </summary>
-        public void Unban() { }
+        public void Unban()
+        {
+        }
 
         /// <summary>
         /// Gets if this player is banned
@@ -104,12 +116,16 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Kicks this player from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) { }
+        public void Kick(string reason)
+        {
+        }
 
         /// <summary>
         /// Causes this player's character to die
         /// </summary>
-        public void Kill() { }
+        public void Kill()
+        {
+        }
 
         /// <summary>
         /// Teleports this player's character to the specified position
@@ -117,7 +133,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) { }
+        public void Teleport(float x, float y, float z)
+        {
+        }
 
         #endregion
 

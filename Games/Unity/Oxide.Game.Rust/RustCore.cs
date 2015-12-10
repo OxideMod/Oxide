@@ -26,7 +26,7 @@ namespace Oxide.Game.Rust
 
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" }; // TODO: Migrate to "player" to "default"
+        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" }; // TODO: Migrate "player" to "default"
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -36,8 +36,6 @@ namespace Oxide.Game.Rust
 
         // Cache the serverInput field info
         private readonly FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
-
-        //
         private readonly Dictionary<BasePlayer, InputState> playerInputState = new Dictionary<BasePlayer, InputState>();
 
         // Track if a BasePlayer.OnAttacked call is in progress
@@ -49,16 +47,29 @@ namespace Oxide.Game.Rust
         public RustCore()
         {
             // Set attributes
-            Name = "rustcore";
-            Title = "Rust Core";
+            Title = "Rust";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
             // Cheat references in the default plugin reference list
+            // TODO: Create DefaultReferences for Rust
             var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
             var fpSystem = Math.unixTimestamp; // Facepunch.System
             var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
         }
+
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <returns></returns>
+        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
+        {
+            if (permission.IsLoaded) return true;
+            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
+            return false;
+        }
+
+        #region Plugin Hooks
 
         /// <summary>
         /// Called when the plugin is initialising
@@ -66,29 +77,33 @@ namespace Oxide.Game.Rust
         [HookMethod("Init")]
         private void Init()
         {
+            // Configure remote logging
+            RemoteLogger.SetTag("game", "rust");
+            RemoteLogger.SetTag("version", Protocol.printable);
+
             // Add general commands
-            cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
-            cmdlib.AddConsoleCommand("global.plugins", this, "cmdPlugins");
-            cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
-            cmdlib.AddConsoleCommand("global.load", this, "cmdLoad");
-            cmdlib.AddConsoleCommand("oxide.unload", this, "cmdUnload");
-            cmdlib.AddConsoleCommand("global.unload", this, "cmdUnload");
-            cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
-            cmdlib.AddConsoleCommand("global.reload", this, "cmdReload");
-            cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
-            //cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
+            cmdlib.AddConsoleCommand("oxide.plugins", this, "CmdPlugins");
+            cmdlib.AddConsoleCommand("global.plugins", this, "CmdPlugins");
+            cmdlib.AddConsoleCommand("oxide.load", this, "CmdLoad");
+            cmdlib.AddConsoleCommand("global.load", this, "CmdLoad");
+            cmdlib.AddConsoleCommand("oxide.unload", this, "CmdUnload");
+            cmdlib.AddConsoleCommand("global.unload", this, "CmdUnload");
+            cmdlib.AddConsoleCommand("oxide.reload", this, "CmdReload");
+            cmdlib.AddConsoleCommand("global.reload", this, "CmdReload");
+            cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
+            //cmdlib.AddConsoleCommand("global.version", this, "CmdVersion");
 
             // Add permission commands
-            cmdlib.AddConsoleCommand("oxide.group", this, "cmdGroup");
-            cmdlib.AddConsoleCommand("global.group", this, "cmdGroup");
-            cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
-            cmdlib.AddConsoleCommand("global.usergroup", this, "cmdUserGroup");
-            cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
-            cmdlib.AddConsoleCommand("global.grant", this, "cmdGrant");
-            cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
-            cmdlib.AddConsoleCommand("global.revoke", this, "cmdRevoke");
-            cmdlib.AddConsoleCommand("oxide.show", this, "cmdShow");
-            cmdlib.AddConsoleCommand("global.show", this, "cmdShow");
+            cmdlib.AddConsoleCommand("oxide.group", this, "CmdGroup");
+            cmdlib.AddConsoleCommand("global.group", this, "CmdGroup");
+            cmdlib.AddConsoleCommand("oxide.usergroup", this, "CmdUserGroup");
+            cmdlib.AddConsoleCommand("global.usergroup", this, "CmdUserGroup");
+            cmdlib.AddConsoleCommand("oxide.grant", this, "CmdGrant");
+            cmdlib.AddConsoleCommand("global.grant", this, "CmdGrant");
+            cmdlib.AddConsoleCommand("oxide.revoke", this, "CmdRevoke");
+            cmdlib.AddConsoleCommand("global.revoke", this, "CmdRevoke");
+            cmdlib.AddConsoleCommand("oxide.show", this, "CmdShow");
+            cmdlib.AddConsoleCommand("global.show", this, "CmdShow");
 
             if (permission.IsLoaded)
             {
@@ -104,33 +119,21 @@ namespace Oxide.Game.Rust
                     return ulong.TryParse(s, out temp);
                 });
             }
-
-            // Configure remote logging
-            RemoteLogger.SetTag("game", "rust");
-            RemoteLogger.SetTag("version", Protocol.printable);
         }
 
         /// <summary>
-        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// Called when another plugin has been loaded
         /// </summary>
-        /// <returns></returns>
-        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
         {
-            if (permission.IsLoaded) return true;
-            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
-            return false;
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
-        /// <summary>
-        /// Check if player is admin
-        /// </summary>
-        /// <returns></returns>
-        private static bool IsAdmin(ConsoleSystem.Arg arg)
-        {
-            if (arg.Player() == null || arg.Player().IsAdmin()) return true;
-            arg.ReplyWith("You are not an admin.");
-            return false;
-        }
+        #endregion
+
+        #region Server Hooks
 
         /// <summary>
         /// Called when the server is first initialized
@@ -144,6 +147,12 @@ namespace Oxide.Game.Rust
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
         }
+
+        /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when ServerConsole is enabled
@@ -163,29 +172,189 @@ namespace Oxide.Game.Rust
         /// Called when ServerConsole is disabled
         /// </summary>
         [HookMethod("IOnDisableServerConsole")]
-        private object IOnDisableServerConsole() => !Interface.Oxide.CheckConsole(true) ? (object) null : false;
+        private object IOnDisableServerConsole() => !Interface.Oxide.CheckConsole(true) ? (object)null : false;
+
+        #endregion
+
+        #region Player Hooks
 
         /// <summary>
-        /// Called when the server is shutting down
+        /// Called when a user is attempting to connect
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
-        /// <summary>
-        /// Called when another plugin has been loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        [HookMethod("IOnUserApprove")]
+        private object IOnUserApprove(Connection connection)
         {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+            // Call out and see if we should reject
+            var canlogin = Interface.CallHook("CanClientLogin", connection);
+            if (canlogin != null)
+            {
+                // If it's a bool and it's true, let them in
+                if (canlogin is bool && (bool)canlogin) return null;
+
+                // If it's a string, reject them with a message
+                if (canlogin is string)
+                {
+                    ConnectionAuth.Reject(connection, (string)canlogin);
+                    return true;
+                }
+
+                // We don't know what type it is, reject them with it anyway
+                ConnectionAuth.Reject(connection, canlogin.ToString());
+                return true;
+            }
+            return Interface.CallHook("OnUserApprove", connection);
         }
+
+        /// <summary>
+        /// Called when the player has been initialized
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerInit")]
+        private void OnPlayerInit(BasePlayer player)
+        {
+            // Let covalence know
+            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+
+            // Do permission stuff
+            var authLevel = player.net.connection.authLevel;
+            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
+            {
+                var userId = player.userID.ToString();
+                permission.UpdateNickname(userId, player.displayName);
+
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[authLevel]);
+            }
+
+            // Cache serverInput for player so that reflection only needs to be used once
+            playerInputState[player] = (InputState)serverInputField.GetValue(player);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(BasePlayer player)
+        {
+            // Let covalence know
+            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+
+            playerInputState.Remove(player);
+        }
+
+        /// <summary>
+        /// Called when a player tick is received from a client
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        [HookMethod("OnPlayerTick")]
+        private object OnPlayerTick(BasePlayer player, PlayerTick msg)
+        {
+            InputState input;
+            return playerInputState.TryGetValue(player, out input) ? Interface.CallHook("OnPlayerInput", player, input) : null;
+        }
+
+        /// <summary>
+        /// Called when a BasePlayer is attacked
+        /// This is used to call OnEntityTakeDamage for a BasePlayer when attacked
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="info"></param>
+        [HookMethod("IOnBasePlayerAttacked")]
+        private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
+        {
+            if (isPlayerTakingDamage) return null;
+            if (Interface.CallHook("OnEntityTakeDamage", player, info) != null) return true;
+
+            isPlayerTakingDamage = true;
+            try
+            {
+                player.OnAttacked(info);
+            }
+            finally
+            {
+                isPlayerTakingDamage = false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Called when a BasePlayer is hurt
+        /// This is used to call OnEntityTakeDamage when a player was hurt without being attacked
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        [HookMethod("IOnBasePlayerHurt")]
+        private object IOnBasePlayerHurt(BasePlayer entity, HitInfo info)
+        {
+            return isPlayerTakingDamage ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
+        }
+
+        /// <summary>
+        /// Called when a player finishes researching an item, before the result is available (success/failure)
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="chance"></param>
+        [HookMethod("IOnItemResearchEnd")]
+        private float IOnItemResearchEnd(ResearchTable table, float chance)
+        {
+            var returnvar = Interface.CallHook("OnItemResearchEnd", table, chance);
+            if (returnvar is float) return (float)returnvar;
+            if (returnvar is double) return (float)(double)returnvar;
+            return chance;
+        }
+
+        #endregion
+
+        #region Entity Hooks
+
+        /// <summary>
+        /// Called when a BaseCombatEntity takes damage
+        /// This is used to call OnEntityTakeDamage for anything other than a BasePlayer
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="info"></param>
+        [HookMethod("IOnBaseCombatEntityHurt")]
+        private object IOnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
+        {
+            return entity is BasePlayer ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
+        }
+
+        #endregion
+
+        #region Item Hooks
+
+        /// <summary>
+        /// Called when an item loses durability
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="amount"></param>
+        [HookMethod("IOnLoseCondition")]
+        private object IOnLoseCondition(Item item, float amount)
+        {
+            var arguments = new object[] { item, amount };
+            Interface.CallHook("OnLoseCondition", arguments);
+            amount = (float)arguments[1];
+            var condition = item.condition;
+            item.condition -= amount;
+            if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
+            return true;
+        }
+
+        #endregion
+
+        #region Console Commands
 
         /// <summary>
         /// Called when the "oxide.plugins" command has been executed
         /// </summary>
-        [HookMethod("cmdPlugins")]
-        private void cmdPlugins(ConsoleSystem.Arg arg)
+        [HookMethod("CmdPlugins")]
+        private void CmdPlugins(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
 
@@ -221,11 +390,10 @@ namespace Oxide.Game.Rust
         /// Called when the "oxide.load" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdLoad")]
-        private void cmdLoad(ConsoleSystem.Arg arg)
+        [HookMethod("CmdLoad")]
+        private void CmdLoad(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
-            // Check arg 1 exists
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: load *|<pluginname>+");
@@ -241,7 +409,6 @@ namespace Oxide.Game.Rust
             foreach (var name in arg.Args)
             {
                 if (string.IsNullOrEmpty(name)) continue;
-                // Load
                 Interface.Oxide.LoadPlugin(name);
                 pluginmanager.GetPlugin(name);
             }
@@ -251,11 +418,10 @@ namespace Oxide.Game.Rust
         /// Called when the "oxide.unload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdUnload")]
-        private void cmdUnload(ConsoleSystem.Arg arg)
+        [HookMethod("CmdUnload")]
+        private void CmdUnload(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
-            // Check arg 1 exists
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: unload *|<pluginname>+");
@@ -269,23 +435,17 @@ namespace Oxide.Game.Rust
             }
 
             foreach (var name in arg.Args)
-            {
-                if (string.IsNullOrEmpty(name)) continue;
-
-                // Unload
-                Interface.Oxide.UnloadPlugin(name);
-            }
+                if (string.IsNullOrEmpty(name)) Interface.Oxide.UnloadPlugin(name);
         }
 
         /// <summary>
         /// Called when the "oxide.reload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdReload")]
-        private void cmdReload(ConsoleSystem.Arg arg)
+        [HookMethod("CmdReload")]
+        private void CmdReload(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
-            // Check arg 1 exists
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: reload *|<pluginname>+");
@@ -300,10 +460,7 @@ namespace Oxide.Game.Rust
 
             foreach (var name in arg.Args)
             {
-                if (string.IsNullOrEmpty(name)) continue;
-
-                // Reload
-                Interface.Oxide.ReloadPlugin(name);
+                if (string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
             }
         }
 
@@ -311,33 +468,25 @@ namespace Oxide.Game.Rust
         /// Called when the "version" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdVersion")]
-        private void cmdVersion(ConsoleSystem.Arg arg)
+        [HookMethod("CmdVersion")]
+        private void CmdVersion(ConsoleSystem.Arg arg)
         {
-            // Get the Rust network protocol version at runtime
-            var protocol = Protocol.printable;
-
-            // Get the Oxide Core version
             var oxide = OxideMod.Version.ToString();
+            var rust = Protocol.printable;
 
-            // Show the versions
-            if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
-            {
-                arg.ReplyWith("Oxide version: " + oxide + ", Rust Protocol: " + protocol);
-            }
+            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(rust))
+                arg.ReplyWith($"Oxide version: {oxide}, Rust Protocol: {rust}");
         }
 
         /// <summary>
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdGroup")]
-        private void cmdGroup(ConsoleSystem.Arg arg)
+        [HookMethod("CmdGroup")]
+        private void CmdGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (!IsAdmin(arg)) return;
-            // Check 2 args exists
             if (!arg.HasArgs(2))
             {
                 var reply = "Syntax: group <add|set> <name> [title] [rank]\n";
@@ -405,13 +554,11 @@ namespace Oxide.Game.Rust
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdUserGroup")]
-        private void cmdUserGroup(ConsoleSystem.Arg arg)
+        [HookMethod("CmdUserGroup")]
+        private void CmdUserGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (!IsAdmin(arg)) return;
-            // Check 3 args exists
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: usergroup <add|remove> <username> <groupname>");
@@ -459,13 +606,11 @@ namespace Oxide.Game.Rust
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdGrant")]
-        private void cmdGrant(ConsoleSystem.Arg arg)
+        [HookMethod("CmdGrant")]
+        private void CmdGrant(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (!IsAdmin(arg)) return;
-            // Check 3 args exists
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: grant <group|user> <name|id> <permission>");
@@ -517,13 +662,11 @@ namespace Oxide.Game.Rust
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdRevoke")]
-        private void cmdRevoke(ConsoleSystem.Arg arg)
+        [HookMethod("CmdRevoke")]
+        private void CmdRevoke(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (!IsAdmin(arg)) return;
-            // Check 3 args exists
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: revoke <group|user> <name|id> <permission>");
@@ -575,13 +718,11 @@ namespace Oxide.Game.Rust
         /// Called when the "show" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdShow")]
-        private void cmdShow(ConsoleSystem.Arg arg)
+        [HookMethod("CmdShow")]
+        private void CmdShow(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs())
             {
                 var reply = "Syntax: show <group|user> <name>\n";
@@ -649,88 +790,9 @@ namespace Oxide.Game.Rust
             }
         }
 
-        private static BasePlayer FindPlayer(string nameOrIdOrIp)
-        {
-            foreach (var activePlayer in BasePlayer.activePlayerList)
-            {
-                if (activePlayer.userID.ToString() == nameOrIdOrIp)
-                    return activePlayer;
-                if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
-                    return activePlayer;
-                if (activePlayer.net?.connection != null && activePlayer.net.connection.ipaddress == nameOrIdOrIp)
-                    return activePlayer;
-            }
-            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
-            {
-                if (sleepingPlayer.userID.ToString() == nameOrIdOrIp)
-                    return sleepingPlayer;
-                if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
-                    return sleepingPlayer;
-            }
-            return null;
-        }
+        #endregion
 
-        /// <summary>
-        /// Called when the server wants to know what tags to use
-        /// </summary>
-        /// <param name="oldtags"></param>
-        /// <returns></returns>
-        [HookMethod("IModifyTags")]
-        private string IModifyTags(string oldtags)
-        {
-            // We're going to call out and build a list of all tags to use
-            var taglist = new List<string>(oldtags.Split(','));
-            Interface.CallHook("BuildServerTags", taglist);
-            return string.Join(",", taglist.ToArray());
-        }
-
-        /// <summary>
-        /// Called when it's time to build the tags list
-        /// </summary>
-        /// <param name="taglist"></param>
-        [HookMethod("BuildServerTags")]
-        private void BuildServerTags(IList<string> taglist)
-        {
-            // Add modded and oxide
-            taglist.Add("modded");
-            taglist.Add("oxide");
-        }
-
-        /// <summary>
-        /// Called when a user is attempting to connect
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <returns></returns>
-        [HookMethod("IOnUserApprove")]
-        private object IOnUserApprove(Connection connection)
-        {
-            // Reject invalid connections
-            if (connection.userid == 0 || string.IsNullOrEmpty(connection.username))
-            {
-                ConnectionAuth.Reject(connection, "Your Steam ID or username is invalid");
-                return true;
-            }
-
-            // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection);
-            if (canlogin != null)
-            {
-                // If it's a bool and it's true, let them in
-                if (canlogin is bool && (bool)canlogin) return null;
-
-                // If it's a string, reject them with a message
-                if (canlogin is string)
-                {
-                    ConnectionAuth.Reject(connection, (string)canlogin);
-                    return true;
-                }
-
-                // We don't know what type it is, reject them with it anyway
-                ConnectionAuth.Reject(connection, canlogin.ToString());
-                return true;
-            }
-            return Interface.CallHook("OnUserApprove", connection);
-        }
+        #region Command Handling
 
         /// <summary>
         /// Called when a console command was run
@@ -741,50 +803,42 @@ namespace Oxide.Game.Rust
         private object OnRunCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
+            if (arg.cmd.namefull != "chat.say") return null;
 
-            if (arg.cmd.namefull == "chat.say")
+            if (arg.connection != null)
             {
-                if (arg.connection != null)
-                {
-                    var rustCovalence = Libraries.Covalence.RustCovalenceProvider.Instance;
-                    var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
-                    if (rustCovalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
-                }
+                var rustCovalence = Libraries.Covalence.RustCovalenceProvider.Instance;
+                var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+                if (rustCovalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
+            }
 
-                // Get the args
-                var str = arg.GetString(0, "text");
-                if (str.Length == 0) return null;
+            // Get the args
+            var str = arg.GetString(0, "text");
+            if (str.Length == 0) return null;
 
-                // Is it a chat command?
-                if (str[0] == '/' || str[0] == '!')
-                {
-                    // Get the message
-                    var message = str.Substring(1);
+            // Is it a chat command?
+            if (str[0] == '/' || str[0] == '!')
+            {
+                // Get the message
+                var message = str.Substring(1);
 
-                    // Parse it
-                    string cmd;
-                    string[] args;
-                    ParseChatCommand(message, out cmd, out args);
-                    if (cmd == null) return null;
+                // Parse it
+                string cmd;
+                string[] args;
+                ParseChatCommand(message, out cmd, out args);
+                if (cmd == null) return null;
 
-                    // Handle it
-                    var player = arg.connection.player as BasePlayer;
-                    if (player == null)
-                    {
-                        Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
-                    }
-                    else
-                    {
-                        if (!cmdlib.HandleChatCommand(player, cmd, args))
-                        {
-                            player.SendConsoleCommand("chat.add", 0, $"Unknown command '{cmd}'!");
-                        }
-                    }
+                // Handle it
+                var player = arg.connection.player as BasePlayer;
+                if (player == null)
+                    Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
+                else
+                    if (!cmdlib.HandleChatCommand(player, cmd, args))
+                        player.SendConsoleCommand("chat.add", 0, $"Unknown command '{cmd}'!");
 
-                    // Handled
-                    arg.ReplyWith(string.Empty);
-                    return true;
-                }
+                // Handled
+                arg.ReplyWith(string.Empty);
+                return true;
             }
 
             // Default behavior
@@ -846,132 +900,41 @@ namespace Oxide.Game.Rust
             args = arglist.ToArray();
         }
 
-        /// <summary>
-        /// Called when the player has been initialized
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerInit")]
-        private void OnPlayerInit(BasePlayer player)
-        {
-            // Let covalence know
-            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
-
-            // Do permission stuff
-            var authLevel = player.net.connection.authLevel;
-            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
-            {
-                var userId = player.userID.ToString();
-                permission.UpdateNickname(userId, player.displayName);
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[authLevel]);
-            }
-
-            // Cache serverInput for player so that reflection only needs to be used once
-            playerInputState[player] = (InputState)serverInputField.GetValue(player);
-        }
+        #endregion
 
         /// <summary>
-        /// Called when the player has disconnected
+        /// Check if player is admin
         /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(BasePlayer player)
-        {
-            // Let covalence know
-            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
-            playerInputState.Remove(player);
-        }
-
-        /// <summary>
-        /// Called when a player tick is received from a client
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="msg"></param>
         /// <returns></returns>
-        [HookMethod("OnPlayerTick")]
-        private object OnPlayerTick(BasePlayer player, PlayerTick msg)
+        private static bool IsAdmin(ConsoleSystem.Arg arg)
         {
-            InputState input;
-            return playerInputState.TryGetValue(player, out input) ? Interface.CallHook("OnPlayerInput", player, input) : null;
+            if (arg.Player() == null || arg.Player().IsAdmin()) return true;
+            arg.ReplyWith("You are not an admin.");
+            return false;
         }
 
-        /// <summary>
-        /// Called when an item loses durability
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="amount"></param>
-        [HookMethod("IOnLoseCondition")]
-        private object IOnLoseCondition(Item item, float amount)
+        private static BasePlayer FindPlayer(string nameOrIdOrIp)
         {
-            var arguments = new object[] { item, amount };
-            Interface.CallHook("OnLoseCondition", arguments);
-            amount = (float)arguments[1];
-            var condition = item.condition;
-            item.condition -= amount;
-            if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
-            return true;
-        }
-
-        /// <summary>
-        /// Called when a BasePlayer is attacked
-        /// This is used to call OnEntityTakeDamage for a BasePlayer when attacked
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="info"></param>
-        [HookMethod("IOnBasePlayerAttacked")]
-        private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
-        {
-            if (isPlayerTakingDamage) return null;
-            if (Interface.CallHook("OnEntityTakeDamage", player, info) != null) return true;
-            isPlayerTakingDamage = true;
-            try
+            foreach (var activePlayer in BasePlayer.activePlayerList)
             {
-                player.OnAttacked(info);
+                if (activePlayer.userID.ToString() == nameOrIdOrIp)
+                    return activePlayer;
+                if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
+                    return activePlayer;
+                if (activePlayer.net?.connection != null && activePlayer.net.connection.ipaddress == nameOrIdOrIp)
+                    return activePlayer;
             }
-            finally
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
             {
-                isPlayerTakingDamage = false;
+                if (sleepingPlayer.userID.ToString() == nameOrIdOrIp)
+                    return sleepingPlayer;
+                if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
+                    return sleepingPlayer;
             }
-            return true;
+            return null;
         }
 
-        /// <summary>
-        /// Called when a BasePlayer is hurt
-        /// This is used to call OnEntityTakeDamage when a player was hurt without being attacked
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="info"></param>
-        /// <returns></returns>
-        [HookMethod("IOnBasePlayerHurt")]
-        private object IOnBasePlayerHurt(BasePlayer entity, HitInfo info)
-        {
-            return isPlayerTakingDamage ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
-        }
-
-        /// <summary>
-        /// Called when a BaseCombatEntity takes damage
-        /// This is used to call OnEntityTakeDamage for anything other than a BasePlayer
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="info"></param>
-        [HookMethod("IOnBaseCombatEntityHurt")]
-        private object IOnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
-        {
-            return entity is BasePlayer ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
-        }
-
-        /// <summary>
-        /// Called when a player finishes researching an item, before the result is available (success/failure)
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="chance"></param>
-        [HookMethod("IOnItemResearchEnd")]
-        private float IOnItemResearchEnd(ResearchTable table, float chance)
-        {
-            var returnvar = Interface.CallHook("OnItemResearchEnd", table, chance);
-            if (returnvar is float) return (float)returnvar;
-            if (returnvar is double) return (float)(double)returnvar;
-            return chance;
-        }
+        #region Deprecated Hooks
 
         /// <summary>
         /// Used to handle the deprecated hook OnItemPickup
@@ -1003,5 +966,7 @@ namespace Oxide.Game.Rust
         /// <param name="entity"></param>
         [HookMethod("OnTurretSetTarget")]
         private object OnTurretSetTarget(AutoTurret turret, BaseCombatEntity entity) => Interface.CallDeprecatedHook("OnTurrentSetTarget", turret, entity);
+
+        #endregion
     }
 }

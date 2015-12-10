@@ -59,14 +59,6 @@ namespace Oxide.Plugins
 
         private void OnTerrainInitialized() => HookCalled("OnTerrainInitialized");
 
-        private bool tagsListed;
-        private void BuildServerTags(List<string> tags)
-        {
-            HookCalled("BuildServerTags");
-            if (!tagsListed) Puts(string.Join(", ", tags.ToArray()));
-            tagsListed = true;
-        }
-
         private void OnRunCommand(ConsoleSystem.Arg arg)
         {
             HookCalled("OnRunCommand");
