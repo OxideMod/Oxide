@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using NLua;
 
-using Oxide.Core;
 using Oxide.Core.Configuration;
+using Oxide.Ext.Lua;
 
-using Utility = Oxide.Ext.Lua.Utility;
-
-struct TestStruct { }
+struct TestStruct {}
 
 namespace Oxide.Tests
 {
@@ -20,23 +19,23 @@ namespace Oxide.Tests
         [TestMethod]
         public void TestLuaTableConfig()
         {
-            var lua = new Lua();
+            Lua lua = new Lua();
 
             const string inputfile = "{ \"x\": 10, \"y\": \"hello\", \"z\": [ 10, \"yo\" ], \"w\": { \"a\": 20, \"b\": [ 500, 600 ] } }";
-            var filename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
+            string filename = Path.GetTempFileName();
             File.WriteAllText(filename, inputfile);
 
             var cfg = ConfigFile.Load<DynamicConfigFile>(filename);
 
             TestConfigFile(cfg); // This should always pass so long as the CoreTests pass
 
-            var tbl = Utility.TableFromConfig(cfg, lua);
+            LuaTable tbl = Utility.TableFromConfig(cfg, lua);
 
             Assert.AreEqual(10.0, tbl["x"], "Failed tbl.x");
             Assert.AreEqual("hello", tbl["y"], "Failed tbl.y");
 
             Assert.IsInstanceOfType(tbl["z"], typeof(LuaTable), "Failed tbl.z");
-            var ztbl = tbl["z"] as LuaTable;
+            LuaTable ztbl = tbl["z"] as LuaTable;
             if (ztbl != null)
             {
                 Assert.IsNull(ztbl[0], "Failed tbl.z[0]");
@@ -46,13 +45,13 @@ namespace Oxide.Tests
             }
 
             Assert.IsInstanceOfType(tbl["w"], typeof(LuaTable), "Failed tbl.w");
-            var wtbl = tbl["w"] as LuaTable;
+            LuaTable wtbl = tbl["w"] as LuaTable;
             if (wtbl != null)
             {
                 Assert.AreEqual(20.0, wtbl["a"], "Failed tbl.w.a");
 
                 Assert.IsInstanceOfType(wtbl["b"], typeof(LuaTable), "Failed tbl.w.b");
-                var wbtbl = wtbl["b"] as LuaTable;
+                LuaTable wbtbl = wtbl["b"] as LuaTable;
                 if (wbtbl != null)
                 {
                     Assert.IsNull(wbtbl[0], "Failed tbl.w.b[0]");
@@ -62,9 +61,7 @@ namespace Oxide.Tests
                 }
             }
 
-            var tempFilename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
-            File.WriteAllText(tempFilename, "{}");
-            cfg = ConfigFile.Load<DynamicConfigFile>(tempFilename);
+            cfg = new DynamicConfigFile(Path.GetTempFileName());
             Utility.SetConfigFromTable(cfg, tbl);
 
             TestConfigFile(cfg);
@@ -77,41 +74,52 @@ namespace Oxide.Tests
 
             var list = cfg["z"] as List<object>;
             Assert.IsNotNull(list, "Failed cfg.z");
-            Assert.AreEqual(2, list.Count, "Failed cfg.z.Count");
-            if (list.Count == 2)
+            if (list != null)
             {
-                Assert.AreEqual(10, list[0], "Failed cfg.z[0]");
-                Assert.AreEqual("yo", list[1], "Failed cfg.z[1]");
+                Assert.AreEqual(2, list.Count, "Failed cfg.z.Count");
+                if (list.Count == 2)
+                {
+                    Assert.AreEqual(10, list[0], "Failed cfg.z[0]");
+                    Assert.AreEqual("yo", list[1], "Failed cfg.z[1]");
+                }
             }
 
             var dict = cfg["w"] as Dictionary<string, object>;
             Assert.IsNotNull(dict, "Failed cfg.w");
-            Assert.AreEqual(2, dict.Count, "Failed cfg.w.Count");
-            if (dict.Count != 2) return;
-            object tmp;
-            Assert.AreEqual(true, dict.TryGetValue("a", out tmp), "Failed cfg.w.a");
-            Assert.AreEqual(20, tmp, "Failed cfg.w.a");
-            Assert.AreEqual(true, dict.TryGetValue("b", out tmp), "Failed cfg.w.b");
+            if (dict != null)
+            {
+                Assert.AreEqual(2, dict.Count, "Failed cfg.w.Count");
+                if (dict.Count == 2)
+                {
+                    object tmp;
+                    Assert.AreEqual(true, dict.TryGetValue("a", out tmp), "Failed cfg.w.a");
+                    Assert.AreEqual(20, tmp, "Failed cfg.w.a");
+                    Assert.AreEqual(true, dict.TryGetValue("b", out tmp), "Failed cfg.w.b");
 
-            list = tmp as List<object>;
-            Assert.IsNotNull(list, "Failed cfg.w.b");
-            Assert.AreEqual(2, list.Count, "Failed cfg.w.b.Count");
-            if (list.Count != 2) return;
-            Assert.AreEqual(500, list[0], "Failed cfg.w.b[0]");
-            Assert.AreEqual(600, list[1], "Failed cfg.w.b[1]");
+                    list = tmp as List<object>;
+                    Assert.IsNotNull(list, "Failed cfg.w.b");
+                    if (list != null)
+                    {
+                        Assert.AreEqual(2, list.Count, "Failed cfg.w.b.Count");
+                        if (list.Count == 2)
+                        {
+                            Assert.AreEqual(500, list[0], "Failed cfg.w.b[0]");
+                            Assert.AreEqual(600, list[1], "Failed cfg.w.b[1]");
+                        }
+                    }
+                }
+            }
         }
 
         [TestMethod]
         public void TestEmptyTableInConfig()
         {
-            var lua = new Lua();
+            Lua lua = new Lua();
 
             lua.LoadString("TeleportData = { AdminTP = {}, Test = 3, ABC=4 }", "test").Call();
 
-            var tdata = lua["TeleportData"] as LuaTable;
-            var tempFilename = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
-            File.WriteAllText(tempFilename, "{}");
-            var cfgfile = ConfigFile.Load<DynamicConfigFile>(tempFilename);
+            LuaTable tdata = lua["TeleportData"] as LuaTable;
+            DynamicConfigFile cfgfile = new DynamicConfigFile(Path.GetTempFileName());
             Utility.SetConfigFromTable(cfgfile, tdata);
 
             Assert.AreEqual(3, cfgfile["Test"], "Failed TeleportData.Test");
@@ -119,8 +127,10 @@ namespace Oxide.Tests
 
             //Assert.IsInstanceOfType(cfgfile["AdminTP"], typeof(List<string, object>), "Failed TeleportData.AdminTP");
 
-            var tmp = Path.Combine(Interface.Oxide.ConfigDirectory, Path.GetRandomFileName());
-            cfgfile.Save(tmp);
+            string tmp = Path.GetTempFileName();
+            cfgfile.Save();
+
+            string text = File.ReadAllText(tmp);
             File.Delete(tmp);
         }
 

@@ -64,7 +64,6 @@
     <Compile Include="CommandLine.cs" />
     <Compile Include="Configuration\ConfigFile.cs" />
     <Compile Include="Configuration\DynamicConfigFile.cs" />
-    <Compile Include="Configuration\ObjectExtensions.cs" />
     <Compile Include="Configuration\OxideConfig.cs" />
     <Compile Include="DataFileSystem.cs" />
     <Compile Include="ExceptionHandler.cs" />
