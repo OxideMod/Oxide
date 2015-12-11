@@ -47,7 +47,8 @@ namespace Oxide.Game.Rust
         public RustCore()
         {
             // Set attributes
-            Title = "Rust";
+            Name = "rustcore";
+            Title = "Rust Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 

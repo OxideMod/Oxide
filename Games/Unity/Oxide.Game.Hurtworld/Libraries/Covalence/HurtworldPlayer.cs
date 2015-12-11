@@ -84,17 +84,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
 
         #region Administration
 
-        public void Ban(string reason, TimeSpan duration)
-        {
-            // TODO: Implement once supported
-        }
+        public void Ban(string reason, TimeSpan duration) => ConsoleManager.Instance?.ExecuteCommand(string.Concat("ban", steamid.ToString()));
 
-        public void Unban()
-        {
-            // TODO: Implement once supported
-        }
+        public void Unban() => ConsoleManager.Instance?.ExecuteCommand(string.Concat("unban", steamid.ToString()));
 
-        public bool IsBanned => false; // TODO: Implement once supported
+        public bool IsBanned => BanManager.Instance.IsBanned(steamid);
 
         public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement once supported
 
