@@ -710,10 +710,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 18,
+            "InjectionIndex": 36,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
             "Name": "IOnBaseCombatEntityHurt [internal]",
             "HookName": "IOnBaseCombatEntityHurt",
