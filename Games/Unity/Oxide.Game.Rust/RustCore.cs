@@ -82,7 +82,7 @@ namespace Oxide.Game.Rust
             RemoteLogger.SetTag("game", "rust");
             RemoteLogger.SetTag("version", Protocol.printable);
 
-            // Add general commands
+            // Add general console commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "CmdPlugins");
             cmdlib.AddConsoleCommand("global.plugins", this, "CmdPlugins");
             cmdlib.AddConsoleCommand("oxide.load", this, "CmdLoad");
@@ -94,7 +94,7 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
             //cmdlib.AddConsoleCommand("global.version", this, "CmdVersion");
 
-            // Add permission commands
+            // Add permission console commands
             cmdlib.AddConsoleCommand("oxide.group", this, "CmdGroup");
             cmdlib.AddConsoleCommand("global.group", this, "CmdGroup");
             cmdlib.AddConsoleCommand("oxide.usergroup", this, "CmdUserGroup");
@@ -352,7 +352,7 @@ namespace Oxide.Game.Rust
         #region Console Commands
 
         /// <summary>
-        /// Called when the "oxide.plugins" command has been executed
+        /// Called when the "plugins" command has been executed
         /// </summary>
         [HookMethod("CmdPlugins")]
         private void CmdPlugins(ConsoleSystem.Arg arg)
@@ -388,7 +388,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when the "oxide.load" command has been executed
+        /// Called when the "load" command has been executed
         /// </summary>
         /// <param name="arg"></param>
         [HookMethod("CmdLoad")]
@@ -416,7 +416,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when the "oxide.unload" command has been executed
+        /// Called when the "unload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
         [HookMethod("CmdUnload")]
@@ -440,7 +440,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when the "oxide.reload" command has been executed
+        /// Called when the "reload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
         [HookMethod("CmdReload")]

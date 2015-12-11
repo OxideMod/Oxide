@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
@@ -68,7 +69,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                 }
 
                 // Register it
-                string[] splitName = command_name.Split('.');
+                var splitName = command_name.Split('.');
                 rustCommands?.Add(command_name, new ConsoleSystem.Command
                 {
                     name = splitName.Length >= 2 ? splitName[1] : splitName[0],
@@ -95,8 +96,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         private static string[] ExtractArgs(ConsoleSystem.Arg arg)
         {
             if (arg == null) return new string[0];
-            List<string> argsList = new List<string>();
-            int i = 0;
+            var argsList = new List<string>();
+            var i = 0;
             while (arg.HasArgs(++i)) argsList.Add(arg.GetString(i - 1));
             return argsList.ToArray();
         }
@@ -113,14 +114,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
             // Is it a console command?
             if (type == CommandType.Console)
-            {
-                // Unregister it
-                rustCommands.Remove(cmd);
-            }
+                rustCommands?.Remove(cmd);
             else if (type == CommandType.Chat)
-            {
                 registeredChatCommands.Remove(cmd);
-            }
         }
 
         /// <summary>

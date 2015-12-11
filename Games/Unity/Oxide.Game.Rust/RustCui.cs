@@ -5,7 +5,6 @@ using System.ComponentModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,20 +22,11 @@ namespace Oxide.Game.Rust.Cui
                 }).Replace("\\n", "\n");
         }
 
-        public static List<CuiElement> FromJson(string json)
-        {
-            return JsonConvert.DeserializeObject<List<CuiElement>>(json);
-        }
+        public static List<CuiElement> FromJson(string json) => JsonConvert.DeserializeObject<List<CuiElement>>(json);
 
-        public static string GetGuid()
-        {
-            return Guid.NewGuid().ToString().Replace("-", string.Empty);
-        }
+        public static string GetGuid() => Guid.NewGuid().ToString().Replace("-", string.Empty);
 
-        public static bool AddUi(BasePlayer player, List<CuiElement> elements)
-        {
-            return AddUi(player, ToJson(elements));
-        }
+        public static bool AddUi(BasePlayer player, List<CuiElement> elements) => AddUi(player, ToJson(elements));
 
         public static bool AddUi(BasePlayer player, string json)
         {
@@ -57,10 +47,7 @@ namespace Oxide.Game.Rust.Cui
             elem.Color = $"{color.r} {color.g} {color.b} {color.a}";
         }
 
-        public static Color GetColor(this ICuiColor elem)
-        {
-            return ColorEx.Parse(elem.Color);
-        }
+        public static Color GetColor(this ICuiColor elem) => ColorEx.Parse(elem.Color);
     }
 
     public class CuiElementContainer : List<CuiElement>
@@ -120,21 +107,14 @@ namespace Oxide.Game.Rust.Cui
             if (panel.Image != null) element.Components.Add(panel.Image);
             if (panel.RawImage != null) element.Components.Add(panel.RawImage);
             element.Components.Add(panel.RectTransform);
-            if (panel.CursorEnabled)
-                element.Components.Add(new CuiNeedsCursorComponent());
+            if (panel.CursorEnabled) element.Components.Add(new CuiNeedsCursorComponent());
             Add(element);
             return name;
         }
 
-        public string ToJson()
-        {
-            return ToString();
-        }
+        public string ToJson() => ToString();
 
-        public override string ToString()
-        {
-            return CuiHelper.ToJson(this);
-        }
+        public override string ToString() => CuiHelper.ToJson(this);
     }
 
     public class CuiButton
@@ -391,10 +371,7 @@ namespace Oxide.Game.Rust.Cui
             return target;
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType == typeof (ICuiComponent);
-        }
+        public override bool CanConvert(Type objectType) => objectType == typeof (ICuiComponent);
 
         public override bool CanWrite => false;
     }
