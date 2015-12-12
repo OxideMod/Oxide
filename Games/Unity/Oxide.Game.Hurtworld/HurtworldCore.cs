@@ -32,7 +32,7 @@ namespace Oxide.Game.Hurtworld
         private bool serverInitialized;
         private bool loggingInitialized;
 
-        // Track oxide.load chat commands
+        // Track 'load' chat commands
         private readonly Dictionary<string, uLink.NetworkPlayer> loadingPlugins = new Dictionary<string, uLink.NetworkPlayer>();
 
         /// <summary>
@@ -82,9 +82,9 @@ namespace Oxide.Game.Hurtworld
             RemoteLogger.SetTag("game", "hurtworld");
             RemoteLogger.SetTag("version", GameManager.Instance.GetProtocolVersion().ToString());
 
-            // Add general commands
-            cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
-            cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
+            // Add general chat commands
+            //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
+            //cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
             cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
             cmdlib.AddChatCommand("load", this, "CmdLoad");
             cmdlib.AddChatCommand("oxide.unload", this, "CmdUnload");
@@ -94,7 +94,7 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddChatCommand("oxide.version", this, "CmdVersion");
             cmdlib.AddChatCommand("version", this, "CmdVersion");
 
-            // Add permission commands
+            // Add permission chat commands
             cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
             cmdlib.AddChatCommand("group", this, "CmdGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
@@ -241,23 +241,12 @@ namespace Oxide.Game.Hurtworld
             return true;
         }
 
-        /// <summary>
-        /// Called when the player has respawned
-        /// </summary>
-        /// <param name="manager"></param>
-        [HookMethod("IOnPlayerRespawn")]
-        private void IOnPlayerRespawn(PlayerStatManager manager)
-        {
-            var identity = GameManager.Instance.GetIdentity(manager.networkView.owner);
-            Interface.CallHook("OnPlayerRespawn", identity, manager.networkView.owner);
-        }
-
         #endregion
 
         #region Console/Chat Commands
 
         /// <summary>
-        /// Called when the "oxide.plugins" command has been executed
+        /// Called when the "plugins" command has been executed
         /// </summary>
         /// <param name="identity"></param>
         /// <param name="info"></param>
@@ -296,7 +285,7 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when the "oxide.load" command has been executed
+        /// Called when the "load" command has been executed
         /// </summary>
         /// <param name="identity"></param>
         /// <param name="info"></param>
@@ -327,7 +316,7 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when the "oxide.reload" command has been executed
+        /// Called when the "reload" command has been executed
         /// </summary>
         /// <param name="identity"></param>
         /// <param name="info"></param>
@@ -367,7 +356,7 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when the "oxide.unload" command has been executed
+        /// Called when the "unload" command has been executed
         /// </summary>
         /// <param name="identity"></param>
         /// <param name="info"></param>

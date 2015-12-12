@@ -156,32 +156,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 7,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerInitialized",
-            "HookName": "OnServerInitialized",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "LoadServer",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String"
-              ]
-            },
-            "MSILHash": "AZsPtqgrez7FbrIb+tEbcQI9274eVIvvHLjXYoBZpuM=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
@@ -779,11 +753,11 @@
           "Hook": {
             "InjectionIndex": 3,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 1,
-            "ArgumentString": "",
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.AttachedIdentity, this.networkView.owner",
             "HookTypeName": "Simple",
-            "Name": "IOnPlayerRespawn [internal]",
-            "HookName": "IOnPlayerRespawn",
+            "Name": "OnPlayerRespawn",
+            "HookName": "OnPlayerRespawn",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerStatManager",
             "Flagged": false,
@@ -796,6 +770,30 @@
             "MSILHash": "DtQhRxr7WwZeJdL/Hi+jt6D7vfvdVIX+rjngvn6LYbY=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 49,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SteamworksManagerClient",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InvalidateServerConfig",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "elAV6psmtHPPHfLZhISO6S8uOo6VDFZt2BG1SP+hokE=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
