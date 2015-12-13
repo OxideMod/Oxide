@@ -33,6 +33,17 @@ namespace Oxide.Game.SevenDays
         }
 
         /// <summary>
+        /// Starts the logging
+        /// </summary>
+        private void InitializeLogging()
+        {
+            loggingInitialized = true;
+            CallHook("InitLogging", null);
+        }
+
+        #region Plugins Hooks
+
+        /// <summary>
         /// Called when the plugin is initializing
         /// </summary>
         [HookMethod("Init")]
@@ -42,24 +53,6 @@ namespace Oxide.Game.SevenDays
             RemoteLogger.SetTag("game", "7 days to die");
             RemoteLogger.SetTag("version", GamePrefs.GetString(EnumGamePrefs.GameVersion));
         }
-
-        /// <summary>
-        /// Called when the server is first initialized
-        /// </summary>
-        [HookMethod("OnServerInitialized")]
-        private void OnServerInitialized()
-        {
-            if (serverInitialized) return;
-            serverInitialized = true;
-            // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
-        }
-
-        /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when a plugin is loaded
@@ -72,13 +65,29 @@ namespace Oxide.Game.SevenDays
             if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
+        #endregion
+
+        #region Server Hooks
+
         /// <summary>
-        /// Starts the logging
+        /// Called when the server is first initialized
         /// </summary>
-        private void InitializeLogging()
+        [HookMethod("OnServerInitialized")]
+        private void OnServerInitialized()
         {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
+            if (serverInitialized) return;
+            serverInitialized = true;
+
+            // Configure the hostname after it has been set
+            RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
         }
+
+        /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
+        #endregion
     }
 }

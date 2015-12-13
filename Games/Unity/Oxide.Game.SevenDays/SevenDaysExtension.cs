@@ -152,7 +152,9 @@ namespace Oxide.Game.SevenDays
             {
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return string.Empty;
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(GameManager.Instance.World.GetWorldTime())).ToString("h:mm tt").ToLower();
-                return string.Concat(" ", time);
+                var world = GamePrefs.GetString(EnumGamePrefs.GameWorld);
+                var seed = GamePrefs.GetString(EnumGamePrefs.GameName);
+                return string.Concat(" ", time, ", ", world, " [", seed, "]");
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
@@ -164,8 +166,7 @@ namespace Oxide.Game.SevenDays
 
             Interface.Oxide.ServerConsole.Completion = input =>
             {
-                if (string.IsNullOrEmpty(input)) return null;
-                return SingletonMonoBehaviour<SdtdConsole>.Instance.commands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
+                return string.IsNullOrEmpty(input) ? null : SdtdConsole.Instance.commands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
             };
         }
 
