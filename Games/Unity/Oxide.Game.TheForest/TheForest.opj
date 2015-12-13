@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\TheForest\\TheForest_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp-firstpass",
+      "AssemblyName": "Assembly-CSharp-firstpass.dll",
       "Hooks": [
         {
           "Type": "InitOxide",
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "Simple",
@@ -210,7 +210,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 20,
+            "InjectionIndex": 29,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -226,7 +226,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ep1Omk53MHW0ox38M8vgqGvlWP1LQrHBBFfqpEto5zk=",
+            "MSILHash": "IGLGPVWyplPquL4NIHlHzoYhLqwUtUNTRZLrqVad6dY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -354,7 +354,7 @@
             },
             "MSILHash": "GO1e4wInJKaoEf37Yb7Mv7eb1wG6ByxXPEXxXVnvapY=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -380,7 +380,7 @@
             },
             "MSILHash": "Yw6fSe52d3Hx6yh1586gpFSHaKgVmmX7h2PRhbzXHV4=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -406,7 +406,7 @@
             },
             "MSILHash": "QOpSvJeWmv0157Fqg7QA5+xY2lvCiDUVKjvlYEg2lJI=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -432,7 +432,7 @@
             },
             "MSILHash": "/dAzGt8UMRyUxFiA2FIme+I6fVduAmBePEnwFQMJboU=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -458,7 +458,7 @@
             },
             "MSILHash": "T+bL6U4IfPfNXrDilUMtc/3rdwJ2WVnCq/G8F4K81vw=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -484,7 +484,7 @@
             },
             "MSILHash": "xtfdE0pvpqqxDgts3lv0ptTJInK029HjmwJOcQNzNB0=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -510,7 +510,7 @@
             },
             "MSILHash": "msmvI9GkBFKZd+q7MfQhs8nMTEzIKpMbuVV9IAzM4sQ=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -536,7 +536,7 @@
             },
             "MSILHash": "YaoFxg9IESIS4ekVyul1k6Kcmc9LP5R9RHQZkXCa04M=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -562,7 +562,7 @@
             },
             "MSILHash": "mn9DAAOjH0Pvi0gSouujJqRFarLpNrqfHwh77SKsAYM=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -588,7 +588,7 @@
             },
             "MSILHash": "D4Cq1n2DBhZczrojwtMg4V0dpMM6GqhWOQQDSKN9riY=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -614,7 +614,7 @@
             },
             "MSILHash": "YXN2WY2ndhh+uM2gAgX5TJ37jVee6j4LVZzu7Yt88pI=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -640,7 +640,7 @@
             },
             "MSILHash": "nanswpSG1yz1UlI3+38Y13W4fqV+SBHTjitVu7+Lkx0=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -666,7 +666,7 @@
             },
             "MSILHash": "BoRnKzDZTHykJsaCP7AG+YNNxoSE69IacsVDya9Yu44=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -692,7 +692,7 @@
             },
             "MSILHash": "uiH2t3vrl9i9H6Rn3PydQd0eXWjX3JIm6bXKiTRSoj0=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -718,7 +718,7 @@
             },
             "MSILHash": "7rUmF+2n7QOVwwROJNBUvGxFm3zx6o7hRaXZaZ9BJRE=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -744,7 +744,7 @@
             },
             "MSILHash": "MJUh7rfAKJGZeJweVKXDn2a6/CZ3wnpAUIegiQNbvfg=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -770,7 +770,7 @@
             },
             "MSILHash": "Rdp/1gb/knuHo6zm/1gKcn4W4W7vz7cUQO8Ga1Iy9eo=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -796,7 +796,7 @@
             },
             "MSILHash": "Uei9XnuE5fOzeOBTcv9TWAWAamOobR7NQKqKijPTSZM=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -848,7 +848,7 @@
             },
             "MSILHash": "KNZFpGUYrgJAoZ8mdf8vPdeCRKRf7mrPS7byrgit9Kw=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -874,7 +874,7 @@
             },
             "MSILHash": "zfC5zWVl0O7GFmeKoT0V5UQ12DctDu8+VGjuxKclqFU=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -900,7 +900,7 @@
             },
             "MSILHash": "I5nEGGax22uFbZwDrK/McbaogMNALjiYMThY9jq7TXk=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -926,7 +926,7 @@
             },
             "MSILHash": "mtsyXflbA/q8xoV5xf94J48pd10aTUaScBpCBan2Tmo=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -952,7 +952,7 @@
             },
             "MSILHash": "XlCdFQwL6HV+O8YWgP70rHPNuhGd+eIY9LlT08gFNC0=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -978,7 +978,7 @@
             },
             "MSILHash": "tsCRUhoAJNTHHHlmdy5cDYeKPtb0fet6mAMeZFV2Ewg=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1004,7 +1004,7 @@
             },
             "MSILHash": "qLaJN89c7zYAs+cvGTf2F2yvTH2s/TYWxhKJqH5HQHk=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1030,7 +1030,7 @@
             },
             "MSILHash": "dHpqdIv3NuuWw4Ez89fjKGWm6cSxHDAUm1TIJXY7eHE=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1056,7 +1056,7 @@
             },
             "MSILHash": "I6sQGA1hKGO9/p6Gq0l3CtSM0LbLQ6IMJznleeiO524=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1082,7 +1082,7 @@
             },
             "MSILHash": "eT8KzO86xfbGAZ4/yD/uRDWBHf/zMxFE2U55Wfp9rfI=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1108,7 +1108,7 @@
             },
             "MSILHash": "BYrKa78G2qvpQE0lO2IJeo6j/3qeGtEjtiUSIoCQ3m8=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1132,9 +1132,9 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "5LbraVg/nZytj9+8MAX/Kr8H7/vW4QL6Eqb6GVSDPO4=",
+            "MSILHash": "AFWa65dpH1Xv5WN6naxEpa0oGHLOFFOi0XAgAx2AvNc=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1160,7 +1160,7 @@
             },
             "MSILHash": "orTYHHhjh70cLltCC5vemzwm8Gp4ELXQ4iZMWjE4V3Q=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1186,7 +1186,7 @@
             },
             "MSILHash": "EXXCsKzAbH+0EY0a7ySejrP1bOPXRJ/JVIcijMyDCP4=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1212,7 +1212,7 @@
             },
             "MSILHash": "saHoQtaxGsU47/I5SaBgcsAwCTLaZoWNNLy35MaLHwQ=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1238,7 +1238,7 @@
             },
             "MSILHash": "lSKkBKy/RCrfDHS1ROTHIQohdE+bk0dfN4XqSSRJDiw=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1264,7 +1264,7 @@
             },
             "MSILHash": "E4td5LUq8QOA6STb42q3P7mljpiZuqpXN3R+0Hm6VHQ=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1290,7 +1290,7 @@
             },
             "MSILHash": "T8MMaaPNdGTv8AeWX+JTH1GhC+lIGv9yQrZE1LqkJZk=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1316,7 +1316,7 @@
             },
             "MSILHash": "KUz5yggLj+Gw0ryGBsqzh4lPLEcob+DSMeCCYLbsg90=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1342,7 +1342,7 @@
             },
             "MSILHash": "ggD4yjIldhdYTFxhuKSjN0jo/+Vcq9kskQGVayC+6Jo=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1368,7 +1368,7 @@
             },
             "MSILHash": "ZPk+9/Eh/7kW1pobjV223+xkzPw5Oa3PyboB3yUS+UY=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1394,7 +1394,7 @@
             },
             "MSILHash": "52U3VCcgSWX1gJ19v6G24Bc5XYnTKJuC4/u1J9u/kT0=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1420,7 +1420,7 @@
             },
             "MSILHash": "n5faeUst8FJNR2C5GRmPdO6IPocNqxZO3NJ9tXAcN3E=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1446,7 +1446,7 @@
             },
             "MSILHash": "WH1zUHs6fW9+pv9zbvuTArYLfZ0JWtiSFwSw3L16o24=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1472,7 +1472,7 @@
             },
             "MSILHash": "QX5aWxNZQFQVmcuBaIejiTMgX12JP96kUK852c/kn3w=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1498,7 +1498,7 @@
             },
             "MSILHash": "pO4pfSR/9YruUYwFIFfYJUfNwG6TMM3EKMLg8gqC1MA=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1598,7 +1598,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2/59zWgea+1I/m5iHKfzBAKUSX22Jh/sfXKgAp8GvbM=",
+            "MSILHash": "ASM9G2jYwXVBaovEF4e/iAuR9RML52XHk8A7cQYA1gE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1624,7 +1624,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "43t1/Kc82SzvPAt3hs/85ZHzdgzfeUrb7dpndjgoWT4=",
+            "MSILHash": "VjrTj5kINwdkqGBa42a562AS+D4SsQfiUyz8yhLPq2k=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1632,7 +1632,7 @@
       ]
     },
     {
-      "AssemblyName": "Assembly-UnityScript",
+      "AssemblyName": "Assembly-UnityScript.dll",
       "Hooks": [
         {
           "Type": "Simple",
@@ -1707,7 +1707,7 @@
             },
             "MSILHash": "zAlNK8o5m6q0Q+eJGB1GGOf0v4ibWSxTnRfwrC7m+lI=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1733,7 +1733,7 @@
             },
             "MSILHash": "qNHemDeK+/cIk/9vmgsqiindoS2geZScL86l7bVXF8Y=",
             "BaseHookName": null,
-            "HookCategory": "_WORKING"
+            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1757,7 +1757,7 @@
             },
             "MSILHash": "lISBkNycvvoBYdlrNqsV2ZG+zmcKl3e5wv8tTHzC19Y=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1781,7 +1781,7 @@
             },
             "MSILHash": "uCJ4P8BPhlLk8jrjeUq/mNd87hR2D6IJSeNGVx+7EI0=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1805,7 +1805,7 @@
             },
             "MSILHash": "74rL6CAYOcQZE/Hd9YbJWGvDhY9a3RcvJssbNf9jwPs=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         },
         {
@@ -1829,7 +1829,7 @@
             },
             "MSILHash": "5+zGDtMVYUT3jjKqXVBWC0T+xFlpneH5plzim9x9rNE=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "_UNTESTED"
           }
         }
       ]

@@ -46,6 +46,17 @@ namespace Oxide.Game.TheForest
         }
 
         /// <summary>
+        /// Starts the logging
+        /// </summary>
+        private void InitializeLogging()
+        {
+            loggingInitialized = true;
+            CallHook("InitLogging", null);
+        }
+
+        #region Plugin Hooks
+
+        /// <summary>
         /// Called when the plugin is initializing
         /// </summary>
         [HookMethod("Init")]
@@ -53,8 +64,39 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("version", "0.28d"); // TODO: Grab version progmatically
+            RemoteLogger.SetTag("version", "0.29c"); // TODO: Grab version progmatically
+
+            // Setup the default permission groups
+            if (permission.IsLoaded)
+            {
+                var rank = 0;
+                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+                {
+                    var defaultGroup = DefaultGroups[i];
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
+                permission.CleanUp(s =>
+                {
+                    ulong temp;
+                    return ulong.TryParse(s, out temp);
+                });
+            }
         }
+
+        /// <summary>
+        /// Called when a plugin is loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
+        }
+
+        #endregion
+
+        #region Server Hooks
 
         /// <summary>
         /// Called when the server is first initialized
@@ -75,40 +117,9 @@ namespace Oxide.Game.TheForest
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
-        }
+        #endregion
 
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
-        }
-
-        /// <summary>
-        /// Called when the player sends a message
-        /// </summary>
-        /// <param name="e"></param>
-        [HookMethod("OnPlayerChat")]
-        private void OnPlayerChat(ChatEvent e)
-        {
-            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == e.Sender);
-            if (player == null) return;
-            var steamId = player.source.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
-
-            Interface.Oxide.LogInfo($"{name}: {e.Message}");
-        }
+        #region Player Hooks
 
         /// <summary>
         /// Called when the player has connected
@@ -120,6 +131,15 @@ namespace Oxide.Game.TheForest
             if (connection == null) return;
             var steamId = connection.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                permission.UpdateNickname(steamId.ToString(), name);
+
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(steamId.ToString())) permission.AddUserGroup(steamId.ToString(), DefaultGroups[0]);
+            }
 
             Interface.Oxide.LogInfo($"{steamId}/{name} joined");
         }
@@ -137,6 +157,23 @@ namespace Oxide.Game.TheForest
 
             Interface.Oxide.LogInfo($"{steamId}/{name} quit");
         }
+
+        /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="e"></param>
+        [HookMethod("OnPlayerChat")]
+        private void OnPlayerChat(ChatEvent e)
+        {
+            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == e.Sender);
+            if (player == null) return;
+            var steamId = player.source.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+            Interface.Oxide.LogInfo($"{name}: {e.Message}");
+        }
+
+        #endregion
 
         /// <summary>
         /// Disables the audio output
@@ -302,7 +339,6 @@ namespace Oxide.Game.TheForest
                 behaviour.enabled = false;
                 behaviour.gameObject.SetActive(false);
             }
-
             return false;
         }
 
@@ -316,7 +352,6 @@ namespace Oxide.Game.TheForest
             //var dir = Utility.GetDirectoryName(Interface.Oxide.RootDirectory + "\\saves\\");
             var dir = Interface.Oxide.RootDirectory + "\\saves\\" + TitleScreen.StartGameSetup.Slot + "\\";
             if (/*dir != null && */!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-
             return dir;
         }
     }
