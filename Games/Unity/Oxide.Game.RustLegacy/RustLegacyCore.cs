@@ -762,19 +762,5 @@ namespace Oxide.Game.RustLegacy
         public static Character GetCharacter(NetUser netUser) => playerData[netUser].character;
 
         public static PlayerInventory GetInventory(NetUser netUser) => playerData[netUser].inventory;
-
-        /// <summary>
-        /// Called when a player gathers from a tree
-        /// </summary>
-        /// <param name="inventory"></param>
-        /// <param name="resource"></param>
-        /// <param name="amount"></param>
-        [HookMethod("IOnTreeGather")]
-        private object IOnTreeGather(Inventory inventory, ResourceTarget resource, int amount)
-        {
-            var value = Interface.CallHook("OnGather", inventory, resource, null, amount);
-            if (value is int) return value;
-            return null;
-        }
     }
 }
