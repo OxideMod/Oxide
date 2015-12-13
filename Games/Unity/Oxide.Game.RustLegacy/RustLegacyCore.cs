@@ -60,11 +60,28 @@ namespace Oxide.Game.RustLegacy
         }
 
         /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <returns></returns>
+        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
+        {
+            if (permission.IsLoaded) return true;
+            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
+            return false;
+        }
+
+        #region Plugin Hooks
+
+        /// <summary>
         /// Called when the plugin is initialising
         /// </summary>
         [HookMethod("Init")]
         private void Init()
         {
+            // Configure remote logging
+            RemoteLogger.SetTag("game", "rust legacy");
+            RemoteLogger.SetTag("version", Connection.protocol.ToString());
+
             // Add general commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
             cmdlib.AddConsoleCommand("global.plugins", this, "cmdPlugins");
@@ -96,23 +113,27 @@ namespace Oxide.Game.RustLegacy
                     var defaultGroup = DefaultGroups[i];
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
+                permission.CleanUp(s =>
+                {
+                    ulong temp;
+                    return ulong.TryParse(s, out temp);
+                });
             }
-
-            // Configure remote logging
-            RemoteLogger.SetTag("game", "rust legacy");
-            RemoteLogger.SetTag("version", Connection.protocol.ToString());
         }
 
         /// <summary>
-        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// Called when another plugin has been loaded
         /// </summary>
-        /// <returns></returns>
-        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
         {
-            if (permission.IsLoaded) return true;
-            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
-            return false;
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
+
+        #endregion
+
+        #region Server Hooks
 
         /// <summary>
         /// Called when the server is first initialized
@@ -134,17 +155,30 @@ namespace Oxide.Game.RustLegacy
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
-        /// Called when another plugin has been loaded
+        /// Called when an AI moves
+        /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
         /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
+        /// <param name="ai"></param>
+        /// <param name="movement"></param>
+        [HookMethod("IOnAIMovement")]
+        private void IOnAIMovement(BasicWildLifeAI ai, BaseAIMovement movement)
         {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+            var nmMovement = movement as NavMeshMovement;
+            if (!nmMovement) return;
+
+            if (nmMovement._agent.pathStatus == NavMeshPathStatus.PathInvalid && ai.GetComponent<TakeDamage>().alive)
+            {
+                TakeDamage.KillSelf(ai.GetComponent<IDBase>());
+                Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
+            }
         }
 
+        #endregion
+
+        #region Console Commands
+
         /// <summary>
-        /// Called when the "oxide.plugins" command has been executed
+        /// Called when the "plugins" command has been executed
         /// </summary>
         [HookMethod("cmdPlugins")]
         private void cmdPlugins(ConsoleSystem.Arg arg)
@@ -178,14 +212,13 @@ namespace Oxide.Game.RustLegacy
         }
 
         /// <summary>
-        /// Called when the "oxide.load" command has been executed
+        /// Called when the "load" command has been executed
         /// </summary>
         /// <param name="arg"></param>
         [HookMethod("cmdLoad")]
         private void cmdLoad(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
-            // Check arg 1 exists
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: load *|<pluginname>+");
@@ -201,21 +234,19 @@ namespace Oxide.Game.RustLegacy
             foreach (var name in arg.Args)
             {
                 if (string.IsNullOrEmpty(name)) continue;
-                // Load
                 Interface.Oxide.LoadPlugin(name);
                 pluginmanager.GetPlugin(name);
             }
         }
 
         /// <summary>
-        /// Called when the "oxide.unload" command has been executed
+        /// Called when the "unload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
         [HookMethod("cmdUnload")]
         private void cmdUnload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
-            // Check arg 1 exists
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: unload *|<pluginname>+");
@@ -229,23 +260,17 @@ namespace Oxide.Game.RustLegacy
             }
 
             foreach (var name in arg.Args)
-            {
-                if (string.IsNullOrEmpty(name)) continue;
-
-                // Unload
-                Interface.Oxide.UnloadPlugin(name);
-            }
+                if (!string.IsNullOrEmpty(name)) Interface.Oxide.UnloadPlugin(name);
         }
 
         /// <summary>
-        /// Called when the "oxide.reload" command has been executed
+        /// Called when the "reload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
         [HookMethod("cmdReload")]
         private void cmdReload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
-            // Check arg 1 exists
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Syntax: reload *|<pluginname>+");
@@ -259,12 +284,7 @@ namespace Oxide.Game.RustLegacy
             }
 
             foreach (var name in arg.Args)
-            {
-                if (string.IsNullOrEmpty(name)) continue;
-
-                // Reload
-                Interface.Oxide.ReloadPlugin(name);
-            }
+                if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
         }
 
         /// <summary>
@@ -274,17 +294,11 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("cmdVersion")]
         private void cmdVersion(ConsoleSystem.Arg arg)
         {
-            // Get the Rust network protocol version
-            var protocol = Connection.protocol.ToString();
-
-            // Get the Oxide Core version
             var oxide = OxideMod.Version.ToString();
+            var rust = Connection.protocol.ToString();
 
-            // Show the versions
-            if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
-            {
-                arg.ReplyWith($"Oxide version: {oxide}, Rust Protocol: {protocol}");
-            }
+            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(rust))
+                arg.ReplyWith($"Oxide version: {oxide}, Rust Protocol: {rust}");
         }
 
         /// <summary>
@@ -295,9 +309,7 @@ namespace Oxide.Game.RustLegacy
         private void cmdGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
-            // Check 2 args exists
             if (!arg.HasArgs(2))
             {
                 arg.ReplyWith("Syntax: group <add|remove|set> <name> [title] [rank]");
@@ -350,9 +362,7 @@ namespace Oxide.Game.RustLegacy
         private void cmdUserGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
-            // Check 3 args exists
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: usergroup <add|remove> <username> <groupname>");
@@ -409,9 +419,7 @@ namespace Oxide.Game.RustLegacy
         private void cmdGrant(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
-            // Check 3 args exists
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: grant <group|user> <name|id> <permission>");
@@ -460,9 +468,7 @@ namespace Oxide.Game.RustLegacy
         private void cmdRevoke(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
-            // Check 3 args exists
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Syntax: revoke <group|user> <name|id> <permission>");
@@ -503,50 +509,9 @@ namespace Oxide.Game.RustLegacy
             }
         }
 
-        public NetUser FindPlayer(string strNameOrIdorIp)
-        {
-            NetUser netUser;
-            if ((netUser = PlayerClient.All.Find(p => p.netUser.userID.ToString() == strNameOrIdorIp)?.netUser) != null)
-                return netUser;
+        #endregion
 
-            if ((netUser = PlayerClient.All.Find(p => p.netUser.displayName.ToLower().Contains(strNameOrIdorIp.ToLower()))?.netUser) != null)
-                return netUser;
-
-            if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == strNameOrIdorIp)?.netUser) != null)
-                return netUser;
-
-            return null;
-        }
-
-        public static Character GetCharacter(NetUser netUser) => playerData[netUser].character ?? null;
-
-        public static PlayerInventory GetInventory(NetUser netUser) => playerData[netUser].inventory ?? null;
-
-        /// <summary>
-        /// Called when the server wants to know what tags to use
-        /// </summary>
-        /// <param name="oldtags"></param>
-        /// <returns></returns>
-        [HookMethod("IModifyTags")]
-        private string IModifyTags(string oldtags)
-        {
-            // We're going to call out and build a list of all tags to use
-            var taglist = new List<string>(oldtags.Split(','));
-            Interface.CallHook("BuildServerTags", taglist);
-            return string.Join(",", taglist.ToArray());
-        }
-
-        /// <summary>
-        /// Called when it's time to build the tags list
-        /// </summary>
-        /// <param name="taglist"></param>
-        [HookMethod("BuildServerTags")]
-        private void BuildServerTags(IList<string> taglist)
-        {
-            // Add modded and oxide
-            taglist.Add("modded");
-            taglist.Add("oxide");
-        }
+        #region Command Handling
 
         /// <summary>
         /// Called when a console command was run
@@ -560,7 +525,6 @@ namespace Oxide.Game.RustLegacy
             // Sanity checks
             if (arg == null) return null;
 
-            var cmdlib = Interface.Oxide.GetLibrary<Command>();
             string cmd = $"{arg.Class}.{arg.Function}";
 
             // Is it chat.say?
@@ -655,6 +619,10 @@ namespace Oxide.Game.RustLegacy
             args = arglist.ToArray();
         }
 
+        #endregion
+
+        #region Player Hooks
+
         /// <summary>
         /// Called when a user is attempting to connect
         /// </summary>
@@ -687,25 +655,15 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(NetUser player)
         {
-            if (!permission.IsLoaded) return;
-            var userId = player.userID.ToString();
-            permission.UpdateNickname(userId, player.displayName);
-            if (permission.UserHasAnyGroup(userId)) return;
-            permission.AddUserGroup(userId, DefaultGroups[0]);
-        }
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var userId = player.userID.ToString();
+                permission.UpdateNickname(userId, player.displayName);
 
-        /// <summary>
-        /// Called when the player has spawned
-        /// </summary>
-        /// <param name="client"></param>
-        [HookMethod("OnPlayerSpawned")]
-        private void OnPlayerSpawned(PlayerClient client)
-        {
-            var netUser = client.netUser;
-            if (!playerData.ContainsKey(netUser))
-                playerData.Add(netUser, new PlayerData());
-            playerData[netUser].character = client.controllable.GetComponent<Character>();
-            playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+            }
         }
 
         /// <summary>
@@ -721,69 +679,56 @@ namespace Oxide.Game.RustLegacy
             {
                 Interface.Oxide.NextTick(() =>
                 {
-                    if (playerData.ContainsKey(netUser))
-                        playerData.Remove(netUser);
+                    if (playerData.ContainsKey(netUser)) playerData.Remove(netUser);
                 });
             }
         }
 
         /// <summary>
-        /// Called when a user is speaking
+        /// Called when the player has spawned
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="total"></param>
-        [HookMethod("IOnPlayerVoice")]
-        private object IOnPlayerVoice(PlayerClient client, int total)
+        [HookMethod("OnPlayerSpawned")]
+        private void OnPlayerSpawned(PlayerClient client)
         {
-            var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
-            var num = Interface.CallHook("OnPlayerVoice", client.netUser, players);
-            playerList.SetValue(null, players);
-            return (num != null) ? (int) num : num;
+            var netUser = client.netUser;
+            if (!playerData.ContainsKey(netUser)) playerData.Add(netUser, new PlayerData());
+            playerData[netUser].character = client.controllable.GetComponent<Character>();
+            playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
         }
 
         /// <summary>
-        /// Called when an AI moves
-        /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
+        /// Called when the player is speaking
         /// </summary>
-        /// <param name="ai"></param>
-        /// <param name="movement"></param>
-        [HookMethod("IOnAIMovement")]
-        private void IOnAIMovement(BasicWildLifeAI ai, BaseAIMovement movement)
+        /// <param name="netUser"></param>
+        [HookMethod("IOnPlayerVoice")]
+        private object IOnPlayerVoice(NetUser netUser)
         {
-            var nmMovement = movement as NavMeshMovement;
-            if (!nmMovement) return;
-
-            var alive = ai.GetComponent<TakeDamage>().alive;
-
-            if (nmMovement._agent.pathStatus == NavMeshPathStatus.PathInvalid && alive)
-            {
-                TakeDamage.KillSelf(ai.GetComponent<IDBase>());
-                Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
-            }
+            var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
+            playerList.SetValue(null, players);
+            return (int?)Interface.CallHook("OnPlayerVoice", netUser, players);
         }
+
+        #endregion
+
+        #region Anti-Cheat Hooks
 
         /// <summary>
         /// Called when the GetClientMove packed is received for a player
         /// Checking the player position in the packet to prevent harmful packets crashing the server
         /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="origin"></param>
-        /// <param name="encoded"></param>
-        /// <param name="stateFlags"></param>
-        /// <param name="info"></param>
+        /// <param name="netUser"></param>
+        /// <param name="pos"></param>
         [HookMethod("IOnGetClientMove")]
-        private object IOnGetClientMove(HumanController controller, Vector3 origin, int encoded, ushort stateFlags, uLink.NetworkMessageInfo info)
+        private object IOnGetClientMove(NetUser netUser, Vector3 pos)
         {
-            if (float.IsNaN(origin.x) || float.IsInfinity(origin.x) ||
-                float.IsNaN(origin.y) || float.IsInfinity(origin.y) ||
-                float.IsNaN(origin.z) || float.IsInfinity(origin.z))
+            if (float.IsNaN(pos.x) || float.IsInfinity(pos.x) || float.IsNaN(pos.y) || float.IsInfinity(pos.y) || float.IsNaN(pos.z) || float.IsInfinity(pos.z))
             {
-                Interface.Oxide.LogInfo($"Banned {controller.netUser.displayName} [{controller.netUser.userID}] for sending bad packets (possible teleport hack)");
-                BanList.Add(controller.netUser.userID, controller.netUser.displayName, "Sending bad packets (possible teleport hack)");
-                controller.netUser.Kick(NetError.ConnectionBanned, true);
+                Interface.Oxide.LogInfo($"Banned {netUser.displayName} [{netUser.userID}] for sending bad packets (possible teleport hack)");
+                BanList.Add(netUser.userID, netUser.displayName, "Sending bad packets (possible teleport hack)");
+                netUser.Kick(NetError.ConnectionBanned, true);
                 return false;
             }
-
             return null;
         }
 
@@ -791,15 +736,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when receiving an RPC message from a client attempting to run RecieveNetwork on the server
         /// This shouldn't run from the server ever and is only used by metabolism hacks
         /// </summary>
-        /// <param name="metabolism"></param>
-        /// <param name="calories"></param>
-        /// <param name="water"></param>
-        /// <param name="radiation"></param>
-        /// <param name="antiradiation"></param>
-        /// <param name="temperature"></param>
-        /// <param name="poison"></param>
         [HookMethod("IOnRecieveNetwork")]
-        private object IOnRecieveNetwork(Metabolism metabolism, float calories, float water, float radiation, float antiradiation, float temperature, float poison)
+        private object IOnRecieveNetwork()
         {
             var now = Interface.Oxide.Now;
             if (now - lastWarningAt > 300f)
@@ -810,18 +748,32 @@ namespace Oxide.Game.RustLegacy
             return false;
         }
 
+        #endregion
+
+        public NetUser FindPlayer(string strNameOrIdorIp)
+        {
+            NetUser netUser;
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.userID.ToString() == strNameOrIdorIp)?.netUser) != null) return netUser;
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.displayName.ToLower().Contains(strNameOrIdorIp.ToLower()))?.netUser) != null) return netUser;
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == strNameOrIdorIp)?.netUser) != null) return netUser;
+            return null;
+        }
+
+        public static Character GetCharacter(NetUser netUser) => playerData[netUser].character;
+
+        public static PlayerInventory GetInventory(NetUser netUser) => playerData[netUser].inventory;
+
         /// <summary>
         /// Called when a player gathers from a tree
         /// </summary>
-        /// <param name="weapon"></param>
+        /// <param name="inventory"></param>
         /// <param name="resource"></param>
         /// <param name="amount"></param>
         [HookMethod("IOnTreeGather")]
-        private object IOnTreeGather(IMeleeWeaponItem weapon, ResourceTarget resource, int amount)
+        private object IOnTreeGather(Inventory inventory, ResourceTarget resource, int amount)
         {
-            var value = Interface.CallHook("OnGather", weapon.inventory, resource, null, amount);
-            if (value is int)
-                return value;
+            var value = Interface.CallHook("OnGather", inventory, resource, null, amount);
+            if (value is int) return value;
             return null;
         }
     }

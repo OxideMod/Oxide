@@ -58,12 +58,6 @@ namespace Oxide.Plugins
             HookCalled("OnFrame");
         }
 
-        private void ModifyTags()
-        {
-            HookCalled("ModifyTags");
-            // TODO: Print new tags
-        }
-
         private void OnServerInitialized()
         {
             HookCalled("OnServerInitialized");

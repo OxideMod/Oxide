@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\RustLegacy\\rust_server_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "InitOxide",
@@ -316,30 +316,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 23,
-            "ReturnBehavior": 3,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0 => l0",
-            "HookTypeName": "Simple",
-            "Name": "IModifyTags [internal]",
-            "HookName": "IModifyTags",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Rust.Steam.Server",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "GetTags",
-              "ReturnType": "System.String",
-              "Parameters": []
-            },
-            "MSILHash": "eRdK7MTGBpUJ7RwefOdl4tKMLdvBm68Q+3nVglAwDTQ=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
@@ -441,7 +417,7 @@
             },
             "MSILHash": "qaybCO95JK6Y3Al3132vRx2DrMntbutPnJBlp/O8mpw=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -554,7 +530,7 @@
             "InjectionIndex": 99,
             "ReturnBehavior": 3,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0,  l5 => l5",
+            "ArgumentString": "l0.netUser,  l5 => l5",
             "HookTypeName": "Simple",
             "Name": "IOnPlayerVoice [internal]",
             "HookName": "IOnPlayerVoice",
@@ -606,8 +582,8 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.netUser, a0",
             "HookTypeName": "Simple",
             "Name": "IOnGetClientMove [internal]",
             "HookName": "IOnGetClientMove",
@@ -627,7 +603,7 @@
             },
             "MSILHash": "DToIg6WBON5urrKVC0qFBtbjkUb6bietRyrycSbRimI=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Anti-Cheat"
           }
         },
         {
@@ -662,7 +638,7 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 3,
+            "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "IOnRecieveNetwork [internal]",
@@ -685,7 +661,7 @@
             },
             "MSILHash": "qDCF8ydMGtRraEzpDbOFELKJx5VWgw771Nr2MCQXZc8=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Anti-Cheat"
           }
         },
         {
@@ -738,7 +714,7 @@
             },
             "MSILHash": "kcoSMRom7l5d9neZXbtMSZIbnJ2GtMtywiQPi/qO6LQ=",
             "BaseHookName": null,
-            "HookCategory": "Item"
+            "HookCategory": "Entity"
           }
         },
         {
@@ -827,7 +803,7 @@
             "InjectionIndex": 187,
             "ReturnBehavior": 3,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l5, l11, l14 => l14",
+            "ArgumentString": "l5.inventory, l11, l14 => l14",
             "HookTypeName": "Simple",
             "Name": "IOnTreeGather",
             "HookName": "IOnTreeGather",
@@ -847,6 +823,35 @@
             "MSILHash": "AxlmHSGtBJvZt/SjX1xP93PbcW/BKNbXSnwqz0qpgIk=",
             "BaseHookName": null,
             "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": "rust,oxide,modded"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "ModifyTags",
+            "HookName": "ModifyTags",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Rust.Steam.Server",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetTags",
+              "ReturnType": "System.String",
+              "Parameters": []
+            },
+            "MSILHash": "eRdK7MTGBpUJ7RwefOdl4tKMLdvBm68Q+3nVglAwDTQ=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
