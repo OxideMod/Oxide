@@ -760,7 +760,7 @@
             "HookName": "OnPlayerRespawn",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerStatManager",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Respawn",
