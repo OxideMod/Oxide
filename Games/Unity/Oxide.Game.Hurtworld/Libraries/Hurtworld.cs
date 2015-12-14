@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
 
-using uLink;
-
 using Oxide.Core.Libraries;
 using Oxide.Plugins;
 
@@ -37,9 +35,9 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name = "Server", string message = null)
+        public void BroadcastChat(string name, string message = null)
         {
-            ChatManager.Instance?.AppendChatboxServerAll((message != null ? $"{name} {message}" : name));
+            ChatManager.Instance.AppendChatboxServerAll(message != null ? $"{name} {message}" : name);
         }
 
         /// <summary>
@@ -49,9 +47,9 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(NetworkPlayer player, string name = "Server", string message = null)
+        public void SendChatMessage(uLink.NetworkPlayer player, string name, string message = null)
         {
-            ChatManager.Instance?.AppendChatboxServerSingle((message != null ? $"{name} {message}" : name), player);
+            ChatManager.Instance.AppendChatboxServerSingle(message != null ? $"{name} {message}" : name, player);
         }
     }
 }

@@ -760,7 +760,7 @@
             "HookName": "OnPlayerRespawn",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerStatManager",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "Respawn",
@@ -794,6 +794,32 @@
             "MSILHash": "Vt5m/ULVCPD/SvuLLQ1am1IQBTZhjZUt7q7s//xwOnQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 8,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.sender",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSuicide",
+            "HookName": "OnPlayerSuicide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "KillPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "25UK3xYsu/Pw+bHMSRXnwoBxtn93KH1Z98IpMOiykBc=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]
