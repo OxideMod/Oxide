@@ -165,15 +165,15 @@ namespace Oxide.Game.Hurtworld
         /// Called when the player has connected
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="info"></param>
+        /// <param name="player"></param>
         [HookMethod("IOnPlayerConnected")]
-        private void IOnPlayerConnected(string name, uLink.NetworkMessageInfo info)
+        private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
         {
-            var identity = GameManager.Instance.GetIdentity(info.sender);
+            var identity = GameManager.Instance.GetIdentity(player);
             identity.Name = name;
 
             // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(info.sender);
+            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
 
             // Do permission stuff
             if (permission.IsLoaded)
@@ -185,7 +185,7 @@ namespace Oxide.Game.Hurtworld
                 if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
             }
 
-            Interface.Oxide.CallHook("OnPlayerConnected", identity, info.sender);
+            Interface.Oxide.CallHook("OnPlayerConnected", identity, player);
         }
 
         /// <summary>
@@ -233,6 +233,17 @@ namespace Oxide.Game.Hurtworld
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Called when the player attempts to suicide
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("IOnPlayerSuicide")]
+        private void IOnPlayerSuicide(uLink.NetworkPlayer player)
+        {
+            var identity = GameManager.Instance.GetIdentity(player);
+            Interface.Oxide.CallHook("OnPlayerSuicide", identity, player);
         }
 
         #endregion
