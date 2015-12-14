@@ -701,32 +701,6 @@
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnServerLog [internal]",
-            "HookName": "IOnServerLog",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ConsoleManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "AppendLine",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String"
-              ]
-            },
-            "MSILHash": "461bV27ln8SO0Mc/l3OHZrcMGanJnga8l7HcsWaaR5E=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
             "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "IOnPlayerConnected [internal]",
@@ -820,6 +794,42 @@
             "MSILHash": "25UK3xYsu/Pw+bHMSRXnwoBxtn93KH1Z98IpMOiykBc=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_1",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "UnityEngine|UnityEngine.Debug|Log"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DebugLog",
+            "HookName": "DebugLog",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConsoleManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "AppendLine",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "461bV27ln8SO0Mc/l3OHZrcMGanJnga8l7HcsWaaR5E=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]

@@ -157,12 +157,6 @@ namespace Oxide.Game.Hurtworld
             RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
         }
 
-        /// <summary>
-        /// Sends game logging to the Unity log
-        /// </summary>
-        [HookMethod("IOnServerLog")]
-        private void IOnServerLog(string text) => Debug.Log(text);
-
         #endregion
 
         #region Player Hooks
