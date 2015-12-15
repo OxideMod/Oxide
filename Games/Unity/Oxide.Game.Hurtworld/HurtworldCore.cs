@@ -240,15 +240,15 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("IOnPlayerSuicide")]
-        private void IOnPlayerSuicide(uLink.NetworkPlayer player)
+        private object IOnPlayerSuicide(uLink.NetworkPlayer player)
         {
             var identity = GameManager.Instance.GetIdentity(player);
-            Interface.Oxide.CallHook("OnPlayerSuicide", identity, player);
+            return Interface.Oxide.CallHook("OnPlayerSuicide", identity, player);
         }
 
         #endregion
 
-        #region Console/Chat Commands
+        #region Chat/Console Commands
 
         /// <summary>
         /// Called when the "plugins" command has been executed

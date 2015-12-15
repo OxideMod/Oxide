@@ -43,6 +43,7 @@ namespace Oxide.Game.Hurtworld
             "Built mappings for entity",
             "Client trying to move item in unknown storage:",
             "Deauthorizing player for region",
+            "Degenerate triangles might have been generated.",
             "Failed to find hitbox in mappings",
             "Finished writing containers for save, waiting on save thread",
             "Fire went out due to wind",
@@ -61,6 +62,7 @@ namespace Oxide.Game.Hurtworld
             "Syncing tree deltas",
             "System.TypeInitializationException: An exception was thrown by the type initializer for Mono.CSharp.CSharpCodeCompiler",
             "The image effect DefaultCamera",
+            "Usually this is not a problem,",
             "Writing to disk completed from background thread"
         };
 
