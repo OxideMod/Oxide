@@ -53,7 +53,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 14,
+            "InjectionIndex": 23,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0, a0",
@@ -828,6 +828,112 @@
               ]
             },
             "MSILHash": "461bV27ln8SO0Mc/l3OHZrcMGanJnga8l7HcsWaaR5E=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnConnectionNotice",
+            "HookName": "OnConnectionNotice",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ChatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "AppendConnectionNotice",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "lFyTVdBDiiz8nHX3NILFZ12ORmF+XTmGCHAEyrOlf7A=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDeathNotice",
+            "HookName": "OnDeathNotice",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ChatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "AppendDeathNotice",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "EntityEffectSourceData"
+              ]
+            },
+            "MSILHash": "O28lh4MUhbvTXqKw3gvzndxIFzTxtVBQffUP6AtGu2w=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnDisconnectionNotice",
+            "HookName": "OnDisconnectionNotice",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ChatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "AppendDisconnectionNotice",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "klwBW/xfNtjYLGdJF7TBu50coCCAIuuHwO7Fqc3jEr8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnNameChangeNotice",
+            "HookName": "OnNameChangeNotice",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ChatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "AppendNameChangeNotice",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String"
+              ]
+            },
+            "MSILHash": "cQ7xCaKjTRPnH2uu0NKes8LtQbfCPM+I58a+HV4h9h4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
