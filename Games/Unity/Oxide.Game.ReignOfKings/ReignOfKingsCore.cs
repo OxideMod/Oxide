@@ -9,8 +9,6 @@ using CodeHatch.Common;
 using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
-using RoKPermissions = CodeHatch.Permissions;
-using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -31,7 +29,7 @@ namespace Oxide.Game.ReignOfKings
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
 
         // The RoK permission library
-        private RoKPermissions.Permission RoKPerms;
+        private CodeHatch.Permissions.Permission rokPerms;
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -40,8 +38,8 @@ namespace Oxide.Game.ReignOfKings
         private bool serverInitialized;
         private bool loggingInitialized;
 
-        // Track oxide.load chat commands
-        private Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
+        // Track 'load' chat commands
+        private readonly Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
 
         private static readonly FieldInfo FoldersField = typeof (FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -61,106 +59,6 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called when the plugin is initialising
-        /// </summary>
-        [HookMethod("Init")]
-        private void Init()
-        {
-            // Add general commands
-            cmdlib.AddChatCommand("oxide.plugins", this, "cmdPlugins");
-            cmdlib.AddChatCommand("plugins", this, "cmdPlugins");
-            cmdlib.AddChatCommand("oxide.load", this, "cmdLoad");
-            cmdlib.AddChatCommand("load", this, "cmdLoad");
-            cmdlib.AddChatCommand("oxide.unload", this, "cmdUnload");
-            cmdlib.AddChatCommand("unload", this, "cmdUnload");
-            cmdlib.AddChatCommand("oxide.reload", this, "cmdReload");
-            cmdlib.AddChatCommand("reload", this, "cmdReload");
-            cmdlib.AddChatCommand("oxide.version", this, "cmdVersion");
-            cmdlib.AddChatCommand("version", this, "cmdVersion");
-
-            // Add permission commands
-            cmdlib.AddChatCommand("oxide.group", this, "cmdGroup");
-            cmdlib.AddChatCommand("group", this, "cmdGroup");
-            cmdlib.AddChatCommand("oxide.usergroup", this, "cmdUserGroup");
-            cmdlib.AddChatCommand("usergroup", this, "cmdUserGroup");
-            cmdlib.AddChatCommand("oxide.grant", this, "cmdGrant");
-            cmdlib.AddChatCommand("grant", this, "cmdGrant");
-            cmdlib.AddChatCommand("oxide.revoke", this, "cmdRevoke");
-            cmdlib.AddChatCommand("revoke", this, "cmdRevoke");
-
-            // Configure remote logging
-            RemoteLogger.SetTag("game", "reign of kings");
-            RemoteLogger.SetTag("version", GameInfo.VersionName.ToLower());
-        }
-
-        /// <summary>
-        /// Called when the server is first initialized
-        /// </summary>
-        [HookMethod("OnServerInitialized")]
-        private void OnServerInitialized()
-        {
-            if (serverInitialized) return;
-            serverInitialized = true;
-            RoKPerms = Server.Permissions;
-
-            // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", DedicatedServerBypass.Settings.ServerName);
-
-            // Load default permission groups
-            if (permission.IsLoaded)
-            {
-                var rank = 0;
-                var RoKGroups = RoKPerms.GetGroups();
-                for (var i = RoKGroups.Count - 1; i >= 0; i--)
-                {
-                    var defaultGroup = RoKGroups[i].Name;
-                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
-            }
-        }
-        /// <summary>
-        /// Checks if the permission system has loaded, shows an error if it failed to load
-        /// </summary>
-        /// <returns></returns>
-        private bool PermissionsLoaded(Player player)
-        {
-            if (permission.IsLoaded || player.IsServer) return true;
-            SendPlayerMessage(player, "Unable to load permission files! Permissions will not work until the error has been resolved.\n => " + permission.LastException.Message);
-            return false;
-        }
-
-        /// <summary>
-        /// Sends a message to a specific player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="format"></param>
-        /// <param name="args"></param>
-        private static void SendPlayerMessage(Player player, string format, params object[] args)
-        {
-            if (player.IsServer) player.SendMessage("[950415]Oxide[FFFFFF]: " + format, args);
-        }
-
-        /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore")  InitializeLogging();
-            if (!loadingPlugins.ContainsKey(plugin.Name)) return;
-            SendPlayerMessage(loadingPlugins[plugin.Name], "Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
-            loadingPlugins.Remove(plugin.Name);
-        }
-
-        /// <summary>
         /// Starts the logging
         /// </summary>
         private void InitializeLogging()
@@ -170,431 +68,103 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called when the "oxide.plugins" command has been executed
+        /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdPlugins")]
-        private void cmdPlugins(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-            if (!HasPermission(player, "admin")) return;
-
-            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
-            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
-            var unloaded_plugin_errors = new Dictionary<string, string>();
-            foreach (var loader in Interface.Oxide.GetPluginLoaders())
-            {
-                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
-                {
-                    string msg;
-                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
-                }
-            }
-
-            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
-            if (total_plugin_count < 1)
-            {
-                SendPlayerMessage(player, "No plugins are currently available");
-                return;
-            }
-
-            var output = $"Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
-            var number = 1;
-            foreach (var plugin in loaded_plugins) output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
-            foreach (var plugin_name in unloaded_plugin_errors.Keys) output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
-            SendPlayerMessage(player, output);
-        }
-
-        /// <summary>
-        /// Called when the "oxide.load" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdLoad")]
-        private void cmdLoad(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-            if (!HasPermission(player, "admin")) return;
-
-            // Check arg 1 exists
-            if (args.Length < 1)
-            {
-                SendPlayerMessage(player, "Syntax: load *|<pluginname>+");
-                return;
-            }
-
-            if (args[0].Equals("*"))
-            {
-                Interface.Oxide.LoadAllPlugins();
-                return;
-            }
-
-            foreach (var name in args)
-            {
-                if (string.IsNullOrEmpty(name) || !Interface.Oxide.LoadPlugin(name)) continue;
-                if (!loadingPlugins.ContainsKey(name)) loadingPlugins.Add(name, player);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "oxide.unload" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdUnload")]
-        private void cmdUnload(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-            if (!HasPermission(player, "admin")) return;
-
-            // Check arg 1 exists
-            if (args.Length < 1)
-            {
-                SendPlayerMessage(player, "Syntax: unload *|<pluginname>+");
-                return;
-            }
-
-            if (args[0].Equals("*"))
-            {
-                Interface.Oxide.UnloadAllPlugins();
-                return;
-            }
-
-            foreach (var name in args)
-            {
-                if (string.IsNullOrEmpty(name)) continue;
-
-                // Unload
-                var plugin = pluginmanager.GetPlugin(name);
-                if (plugin == null)
-                {
-                    SendPlayerMessage(player, "Plugin '{0}' not loaded.", name);
-                    continue;
-                }
-                Interface.Oxide.UnloadPlugin(name);
-                SendPlayerMessage(player, "Unloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "oxide.reload" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdReload")]
-        private void cmdReload(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-            if (!HasPermission(player, "admin")) return;
-
-            // Check arg 1 exists
-            if (args.Length < 1)
-            {
-                SendPlayerMessage(player, "Syntax: reload *|<pluginname>+");
-                return;
-            }
-
-            if (args[0].Equals("*"))
-            {
-                Interface.Oxide.ReloadAllPlugins();
-                return;
-            }
-
-            foreach (var name in args)
-            {
-                if (string.IsNullOrEmpty(name)) continue;
-
-                // Reload
-                var plugin = pluginmanager.GetPlugin(name);
-                if (plugin == null)
-                {
-                    SendPlayerMessage(player, "Plugin '{0}' not loaded.", name);
-                    continue;
-                }
-                Interface.Oxide.ReloadPlugin(name);
-                SendPlayerMessage(player, "Reloaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "version" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdVersion")]
-        private void cmdVersion(Player player, string command, string[] args)
-        {
-            // Get the Rust network protocol version at runtime
-            var protocol = GameInfo.VersionName;
-
-            // Get the Oxide Core version
-            var oxide = OxideMod.Version.ToString();
-
-            // Show the versions
-            if (!string.IsNullOrEmpty(protocol) && !string.IsNullOrEmpty(oxide))
-                SendPlayerMessage(player, "Oxide version: " + oxide + ", Reign of Kings version: " + protocol);
-        }
-
-        /// <summary>
-        /// Called when the "group" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdGroup")]
-        private void cmdGroup(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-            if (!HasPermission(player, "admin")) return;
-
-            // Check 2 args exists
-            if (args.Length < 2)
-            {
-                SendPlayerMessage(player, "Syntax: group <add|remove|set> <name> [title] [rank]");
-                return;
-            }
-
-            var mode = args[0];
-            var name = args[1];
-            var title = args.Length > 2 ? args[2] : string.Empty;
-            int rank;
-            if (args.Length < 4 || !int.TryParse(args[3], out rank))
-                rank = 0;
-
-            if (mode.Equals("add"))
-            {
-                if (permission.GroupExists(name))
-                {
-                    SendPlayerMessage(player, "Group '" + name + "' already exist");
-                    return;
-                }
-                permission.CreateGroup(name, title, rank);
-                SendPlayerMessage(player, "Group '" + name + "' created");
-            }
-            else if (mode.Equals("remove"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    SendPlayerMessage(player, "Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.RemoveGroup(name);
-                SendPlayerMessage(player, "Group '" + name + "' deleted");
-            }
-            else if (mode.Equals("set"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    SendPlayerMessage(player, "Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.SetGroupTitle(name, title);
-                permission.SetGroupRank(name, rank);
-                SendPlayerMessage(player, "Group '" + name + "' changed");
-            }
-        }
-
-        /// <summary>
-        /// Called when the "group" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdUserGroup")]
-        private void cmdUserGroup(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-            if (!HasPermission(player, "admin")) return;
-
-            // Check 3 args exists
-            if (args.Length < 3)
-            {
-                SendPlayerMessage(player, "Syntax: usergroup <add|remove> <username> <groupname>");
-                return;
-            }
-
-            var mode = args[0];
-            var name = args[1];
-            var group = args[2];
-
-            var target = FindPlayer(name);
-            if (target == null && !permission.UserExists(name))
-            {
-                SendPlayerMessage(player, "User '" + name + "' not found");
-                return;
-            }
-            var userId = name;
-            if (target != null)
-            {
-                userId = target.Id.ToString();
-                name = target.Name;
-                permission.UpdateNickname(userId, name);
-            }
-
-            if (!permission.GroupExists(group))
-            {
-                SendPlayerMessage(player, "Group '" + group + "' doesn't exist");
-                return;
-            }
-
-            if (mode.Equals("add"))
-            {
-                permission.AddUserGroup(userId, group);
-                SendPlayerMessage(player, "User '" + name + "' assigned group: " + group);
-            }
-            else if (mode.Equals("remove"))
-            {
-                permission.RemoveUserGroup(userId, group);
-                SendPlayerMessage(player, "User '" + name + "' removed from group: " + group);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "grant" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdGrant")]
-        private void cmdGrant(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-            if (!HasPermission(player, "admin")) return;
-
-            // Check 3 args exists
-            if (args.Length < 3)
-            {
-                SendPlayerMessage(player, "Syntax: grant <group|user> <name|id> <permission>");
-                return;
-            }
-
-            var mode = args[0];
-            var name = args[1];
-            var perm = args[2];
-
-            if (mode.Equals("group"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    SendPlayerMessage(player, "Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.GrantGroupPermission(name, perm, null);
-                SendPlayerMessage(player, "Group '" + name + "' granted permission: " + perm);
-            }
-            else if (mode.Equals("user"))
-            {
-                var target = FindPlayer(name);
-                if (target == null && !permission.UserExists(name))
-                {
-                    SendPlayerMessage(player, "User '" + name + "' not found");
-                    return;
-                }
-                var userId = name;
-                if (target != null)
-                {
-                    userId = target.Id.ToString();
-                    name = target.Name;
-                    permission.UpdateNickname(userId, name);
-                }
-                permission.GrantUserPermission(userId, perm, null);
-                SendPlayerMessage(player, "User '" + name + "' granted permission: " + perm);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "grant" command has been executed
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("cmdRevoke")]
-        private void cmdRevoke(Player player, string command, string[] args)
-        {
-            if (!PermissionsLoaded(player)) return;
-
-            if (!HasPermission(player, "admin")) return;
-
-            // Check 3 args exists
-            if (args.Length < 3)
-            {
-                SendPlayerMessage(player, "Syntax: revoke <group|user> <name|id> <permission>");
-                return;
-            }
-
-            var mode = args[0];
-            var name = args[1];
-            var perm = args[2];
-
-            if (mode.Equals("group"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    SendPlayerMessage(player, "Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.RevokeGroupPermission(name, perm);
-                SendPlayerMessage(player, "Group '" + name + "' revoked permission: " + perm);
-            }
-            else if (mode.Equals("user"))
-            {
-                var target = FindPlayer(name);
-                if (target == null && !permission.UserExists(name))
-                {
-                    SendPlayerMessage(player, "User '" + name + "' not found");
-                    return;
-                }
-                var userId = name;
-                if (target != null)
-                {
-                    userId = target.Id.ToString();
-                    name = target.Name;
-                    permission.UpdateNickname(userId, name);
-                }
-                permission.RevokeUserPermission(userId, perm);
-                SendPlayerMessage(player, "User '" + name + "' revoked permission: " + perm);
-            }
-        }
-
-        /// <summary>
-        /// Looks for a player
-        /// </summary>
-        /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        private Player FindPlayer(string nameOrIdOrIp)
+        private bool PermissionsLoaded(Player player)
         {
-            var player = Server.GetPlayerByName(nameOrIdOrIp);
-            if (player == null)
-            {
-                ulong id;
-                if (ulong.TryParse(nameOrIdOrIp, out id)) player = Server.GetPlayerById(id);
-            }
-            if (player == null)
-            {
-                foreach (var target in Server.ClientPlayers)
-                    if (target.Connection.IpAddress == nameOrIdOrIp) player = target;
-            }
-            return player;
-        }
-
-        /// <summary>
-        /// Checks if a player has the required permission
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="perm"></param>
-        /// <returns></returns>
-        private bool HasPermission(Player player, string perm)
-        {
-            if (serverInitialized && RoKPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm) || player.IsServer) return true;
-            SendPlayerMessage(player, "You don't have permission to use this command.");
+            if (permission.IsLoaded || player.IsServer) return true;
+            ReplyWith(player, "Unable to load permission files! Permissions will not work until the error has been resolved.\n => " + permission.LastException.Message);
             return false;
         }
+
+        #region Plugin Hooks
+
+        /// <summary>
+        /// Called when the plugin is initialising
+        /// </summary>
+        [HookMethod("Init")]
+        private void Init()
+        {
+            // Configure remote logging
+            RemoteLogger.SetTag("game", "reign of kings");
+            RemoteLogger.SetTag("version", GameInfo.VersionName.ToLower());
+
+            // Add general commands
+            cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
+            cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
+            cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
+            cmdlib.AddChatCommand("load", this, "CmdLoad");
+            cmdlib.AddChatCommand("oxide.unload", this, "CmdUnload");
+            cmdlib.AddChatCommand("unload", this, "CmdUnload");
+            cmdlib.AddChatCommand("oxide.reload", this, "CmdReload");
+            cmdlib.AddChatCommand("reload", this, "CmdReload");
+            cmdlib.AddChatCommand("oxide.version", this, "CmdVersion");
+            cmdlib.AddChatCommand("version", this, "CmdVersion");
+
+            // Add permission commands
+            cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
+            cmdlib.AddChatCommand("group", this, "CmdGroup");
+            cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
+            cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");
+            cmdlib.AddChatCommand("oxide.grant", this, "CmdGrant");
+            cmdlib.AddChatCommand("grant", this, "CmdGrant");
+            cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
+            cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
+            cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
+            cmdlib.AddChatCommand("show", this, "CmdShow");
+        }
+
+        /// <summary>
+        /// Called when a plugin is loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
+
+            if (!loadingPlugins.ContainsKey(plugin.Name)) return;
+            ReplyWith(loadingPlugins[plugin.Name], $"Loaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+            loadingPlugins.Remove(plugin.Name);
+        }
+
+        #endregion
+
+        #region Server Hooks
+
+        /// <summary>
+        /// Called when the server is first initialized
+        /// </summary>
+        [HookMethod("OnServerInitialized")]
+        private void OnServerInitialized()
+        {
+            if (serverInitialized) return;
+            serverInitialized = true;
+
+            // Configure the hostname after it has been set
+            RemoteLogger.SetTag("hostname", DedicatedServerBypass.Settings.ServerName);
+
+            // Load default permission groups
+            rokPerms = Server.Permissions;
+            if (permission.IsLoaded)
+            {
+                var rank = 0;
+                var rokGroups = rokPerms.GetGroups();
+                for (var i = rokGroups.Count - 1; i >= 0; i--)
+                {
+                    var defaultGroup = rokGroups[i].Name;
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies
@@ -621,20 +191,464 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called when a player connects to the server
+        /// Called when the hash is recalculated
+        /// </summary>
+        /// <param name="fileHasher"></param>
+        [HookMethod("IOnRecalculateHash")]
+        private void IOnRecalculateHash(FileHasher fileHasher)
+        {
+            if (fileHasher.FileLocationFromDataPath.Equals("/Managed/Assembly-CSharp.dll"))
+                fileHasher.FileLocationFromDataPath = "/Managed/Assembly-CSharp_Original.dll";
+        }
+
+        /// <summary>
+        /// Called when the files are counted
+        /// </summary>
+        /// <param name="fileCounter"></param>
+        [HookMethod("IOnCountFolder")]
+        private void IOnCountFolder(FileCounter fileCounter)
+        {
+            if (fileCounter.FolderLocationFromDataPath.Equals("/Managed/") && fileCounter.Folders.Length != 39)
+            {
+                var folders = (string[])FoldersField.GetValue(fileCounter);
+                Array.Resize(ref folders, 39);
+                FoldersField.SetValue(fileCounter, folders);
+            }
+            else if (fileCounter.FolderLocationFromDataPath.Equals("/../") && fileCounter.Folders.Length != 2)
+            {
+                var folders = (string[])FoldersField.GetValue(fileCounter);
+                Array.Resize(ref folders, 2);
+                FoldersField.SetValue(fileCounter, folders);
+            }
+        }
+
+        #endregion
+
+        #region Player Hooks
+
+        /// <summary>
+        /// Called when the player has connected
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        [HookMethod("IOnPlayerConnected")]
-        private object IOnPlayerConnected(Player player) => player.Id == 9999999999 ? null : Interface.CallHook("OnPlayerConnected", player);
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(Player player)
+        {
+            // Let covalence know
+            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+        }
 
         /// <summary>
-        /// Called when a chat message was sent
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(Player player)
+        {
+            // Let covalence know
+            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+        }
+
+        /// <summary>
+        /// Called when the player has been initialized and spawned into the game
         /// </summary>
         /// <param name="e"></param>
-        /// <returns></returns>
-        [HookMethod("IOnPlayerChat")]
-        private object IOnPlayerChat(PlayerEvent e) => e.SenderId == 9999999999 ? null : Interface.CallHook("OnPlayerChat", e);
+        [HookMethod("OnPlayerSpawn")]
+        private void OnPlayerSpawn(PlayerFirstSpawnEvent e)
+        {
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var userId = e.Player.Id.ToString();
+                permission.UpdateNickname(userId, e.Player.Name);
+
+                // Add player to default group
+                if (permission.GroupExists("default")) permission.AddUserGroup(userId, "default");
+                else if (permission.GroupExists("guest")) permission.AddUserGroup(userId, "guest");
+            }
+        }
+
+        #endregion
+
+        #region Chat/Console Commands
+
+        /// <summary>
+        /// Called when the "plugins" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdPlugins")]
+        private void CmdPlugins(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+
+            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
+            var unloaded_plugin_errors = new Dictionary<string, string>();
+            foreach (var loader in Interface.Oxide.GetPluginLoaders())
+            {
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
+                {
+                    string msg;
+                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                }
+            }
+
+            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
+            if (total_plugin_count < 1)
+            {
+                ReplyWith(player, "No plugins are currently available");
+                return;
+            }
+
+            var output = $"Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
+            var number = 1;
+            foreach (var plugin in loaded_plugins) output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
+            foreach (var plugin_name in unloaded_plugin_errors.Keys) output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            ReplyWith(player, output);
+        }
+
+        /// <summary>
+        /// Called when the "load" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdLoad")]
+        private void CmdLoad(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 1)
+            {
+                ReplyWith(player, "Syntax: load *|<pluginname>+");
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.LoadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name) || !Interface.Oxide.LoadPlugin(name)) continue;
+                if (!loadingPlugins.ContainsKey(name)) loadingPlugins.Add(name, player);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "reload" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdReload")]
+        private void CmdReload(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 1)
+            {
+                ReplyWith(player, "Syntax: reload *|<pluginname>+");
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.ReloadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+
+                // Reload
+                var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    ReplyWith(player, $"Plugin '{name}' not loaded.");
+                    continue;
+                }
+                Interface.Oxide.ReloadPlugin(name);
+                ReplyWith(player, $"Reloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+            }
+        }
+
+        /// <summary>
+        /// Called when the "unload" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdUnload")]
+        private void CmdUnload(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 1)
+            {
+                ReplyWith(player, "Syntax: unload *|<pluginname>+");
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.UnloadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+
+                // Unload
+                var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    ReplyWith(player, $"Plugin '{name}' not loaded.");
+                    continue;
+                }
+                Interface.Oxide.UnloadPlugin(name);
+                ReplyWith(player, $"Unloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+            }
+        }
+
+        /// <summary>
+        /// Called when the "version" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdVersion")]
+        private void CmdVersion(Player player, string command, string[] args)
+        {
+            var oxide = OxideMod.Version.ToString();
+            var game = GameInfo.VersionName;
+
+            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game))
+                ReplyWith(player, $"Oxide version: {oxide}, Reign of Kings version: {game}");
+        }
+
+        /// <summary>
+        /// Called when the "group" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdGroup")]
+        private void CmdGroup(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 2)
+            {
+                ReplyWith(player, "Syntax: group <add|remove|set> <name> [title] [rank]");
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var title = args.Length > 2 ? args[2] : string.Empty;
+            int rank;
+            if (args.Length < 4 || !int.TryParse(args[3], out rank))
+                rank = 0;
+
+            if (mode.Equals("add"))
+            {
+                if (permission.GroupExists(name))
+                {
+                    ReplyWith(player, "Group '" + name + "' already exist");
+                    return;
+                }
+                permission.CreateGroup(name, title, rank);
+                ReplyWith(player, "Group '" + name + "' created");
+            }
+            else if (mode.Equals("remove"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    ReplyWith(player, "Group '" + name + "' doesn't exist");
+                    return;
+                }
+                permission.RemoveGroup(name);
+                ReplyWith(player, "Group '" + name + "' deleted");
+            }
+            else if (mode.Equals("set"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    ReplyWith(player, "Group '" + name + "' doesn't exist");
+                    return;
+                }
+                permission.SetGroupTitle(name, title);
+                permission.SetGroupRank(name, rank);
+                ReplyWith(player, "Group '" + name + "' changed");
+            }
+        }
+
+        /// <summary>
+        /// Called when the "group" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdUserGroup")]
+        private void CmdUserGroup(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 3)
+            {
+                ReplyWith(player, "Syntax: usergroup <add|remove> <username> <groupname>");
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var group = args[2];
+
+            var target = FindPlayer(name);
+            if (target == null && !permission.UserExists(name))
+            {
+                ReplyWith(player, "User '" + name + "' not found");
+                return;
+            }
+            var userId = name;
+            if (target != null)
+            {
+                userId = target.Id.ToString();
+                name = target.Name;
+                permission.UpdateNickname(userId, name);
+            }
+
+            if (!permission.GroupExists(group))
+            {
+                ReplyWith(player, "Group '" + group + "' doesn't exist");
+                return;
+            }
+
+            if (mode.Equals("add"))
+            {
+                permission.AddUserGroup(userId, group);
+                ReplyWith(player, "User '" + name + "' assigned group: " + group);
+            }
+            else if (mode.Equals("remove"))
+            {
+                permission.RemoveUserGroup(userId, group);
+                ReplyWith(player, "User '" + name + "' removed from group: " + group);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "grant" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdGrant")]
+        private void CmdGrant(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 3)
+            {
+                ReplyWith(player, "Syntax: grant <group|user> <name|id> <permission>");
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
+
+            if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    ReplyWith(player, "Group '" + name + "' doesn't exist");
+                    return;
+                }
+                permission.GrantGroupPermission(name, perm, null);
+                ReplyWith(player, "Group '" + name + "' granted permission: " + perm);
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserExists(name))
+                {
+                    ReplyWith(player, "User '" + name + "' not found");
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.Id.ToString();
+                    name = target.Name;
+                    permission.UpdateNickname(userId, name);
+                }
+                permission.GrantUserPermission(userId, perm, null);
+                ReplyWith(player, "User '" + name + "' granted permission: " + perm);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "grant" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdRevoke")]
+        private void CmdRevoke(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 3)
+            {
+                ReplyWith(player, "Syntax: revoke <group|user> <name|id> <permission>");
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
+
+            if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    ReplyWith(player, "Group '" + name + "' doesn't exist");
+                    return;
+                }
+                permission.RevokeGroupPermission(name, perm);
+                ReplyWith(player, "Group '" + name + "' revoked permission: " + perm);
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserExists(name))
+                {
+                    ReplyWith(player, "User '" + name + "' not found");
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.Id.ToString();
+                    name = target.Name;
+                    permission.UpdateNickname(userId, name);
+                }
+                permission.RevokeUserPermission(userId, perm);
+                ReplyWith(player, "User '" + name + "' revoked permission: " + perm);
+            }
+        }
+
+        #endregion
+
+        #region Command Handling
 
         /// <summary>
         /// Called when a chat command was run
@@ -722,66 +736,50 @@ namespace Oxide.Game.ReignOfKings
             args = arglist.ToArray();
         }
 
-        /// <summary>
-        /// Called when the player has been initialized and spawned into the game
-        /// </summary>
-        /// <param name="e"></param>
-        [HookMethod("OnPlayerSpawn")]
-        void OnPlayerSpawn(PlayerFirstSpawnEvent e)
-        {
-            if (!permission.IsLoaded) return;
-            var userId = e.Player.Id.ToString();
-            permission.UpdateNickname(userId, e.Player.Name);
+        #endregion
 
-            // Add player to default group
-            if (permission.GroupExists("default"))
-                permission.AddUserGroup(userId, "default");
-            else if (permission.GroupExists("guest"))
-                permission.AddUserGroup(userId, "guest");
+        /// <summary>
+        /// Replies to the player with a specific message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        private static void ReplyWith(Player player, string message)
+        {
+            if (player.IsServer) player.SendMessage($"[950415]Server[FFFFFF]: {message}");
         }
 
         /// <summary>
-        /// Called when the hash is recalculated
+        /// Lookup the player using name, Steam ID, or IP address
         /// </summary>
-        /// <param name="fileHasher"></param>
-        [HookMethod("IOnRecalculateHash")]
-        void IOnRecalculateHash(FileHasher fileHasher)
+        /// <param name="nameOrIdOrIp"></param>
+        /// <returns></returns>
+        private Player FindPlayer(string nameOrIdOrIp)
         {
-            if (fileHasher.FileLocationFromDataPath.Equals("/Managed/Assembly-CSharp.dll"))
-                fileHasher.FileLocationFromDataPath = "/Managed/Assembly-CSharp_Original.dll";
-        }
-
-        /// <summary>
-        /// Called when the files are counted
-        /// </summary>
-        /// <param name="fileCounter"></param>
-        [HookMethod("IOnCountFolder")]
-        void IOnCountFolder(FileCounter fileCounter)
-        {
-            if (fileCounter.FolderLocationFromDataPath.Equals("/Managed/") && fileCounter.Folders.Length != 39)
+            var player = Server.GetPlayerByName(nameOrIdOrIp);
+            if (player == null)
             {
-                var folders = (string[]) FoldersField.GetValue(fileCounter);
-                Array.Resize(ref folders, 39);
-                FoldersField.SetValue(fileCounter, folders);
+                ulong id;
+                if (ulong.TryParse(nameOrIdOrIp, out id)) player = Server.GetPlayerById(id);
             }
-            else if (fileCounter.FolderLocationFromDataPath.Equals("/../") && fileCounter.Folders.Length != 2)
+            if (player == null)
             {
-                var folders = (string[])FoldersField.GetValue(fileCounter);
-                Array.Resize(ref folders, 2);
-                FoldersField.SetValue(fileCounter, folders);
+                foreach (var target in Server.ClientPlayers)
+                    if (target.Connection.IpAddress == nameOrIdOrIp) player = target;
             }
+            return player;
         }
 
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(Player player)
+        /// <summary>
+        /// Checks if the player has the required permission
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="perm"></param>
+        /// <returns></returns>
+        private bool HasPermission(Player player, string perm)
         {
-            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
-        }
-
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(Player player)
-        {
-            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+            if (serverInitialized && rokPerms.HasPermission(player.Name, perm) || permission.UserHasGroup(player.Id.ToString(), perm) || player.IsServer) return true;
+            ReplyWith(player, "You don't have permission to use this command.");
+            return false;
         }
     }
 }

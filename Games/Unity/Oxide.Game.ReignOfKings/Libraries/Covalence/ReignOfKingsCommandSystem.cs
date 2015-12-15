@@ -46,9 +46,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="cmd"></param>
         /// <param name="type"></param>
-        public void UnregisterCommand(string cmd, CommandType type)
-        {
-            CommandManager.RegisteredCommands.Remove(cmd);
-        }
+        public void UnregisterCommand(string cmd, CommandType type) => CommandManager.RegisteredCommands.Remove(cmd);
     }
 }

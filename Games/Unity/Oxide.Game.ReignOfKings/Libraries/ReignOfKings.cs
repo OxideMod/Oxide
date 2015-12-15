@@ -64,10 +64,7 @@ namespace Oxide.Game.ReignOfKings.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name = "Server", string message = null)
-        {
-            Server.BroadcastMessage(message != null ? $"{name}: {message}" : name);
-        }
+        public void BroadcastChat(string name, string message = null) => Server.BroadcastMessage(message != null ? $"{name}: {message}" : name);
 
         /// <summary>
         /// Sends a chat message to the player
@@ -76,10 +73,6 @@ namespace Oxide.Game.ReignOfKings.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(Player player, string name = "Server", string message = null)
-        {
-            player.SendMessage(message != null ? $"{name}: {message}" : name);
-        }
-
+        public void SendChatMessage(Player player, string name, string message = null) => player.SendMessage(message != null ? $"{name}: {message}" : name);
     }
 }

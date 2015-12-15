@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\ReignOfKings\\ROK_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "InitOxide",
@@ -177,13 +177,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 174,
+            "InjectionIndex": 217,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l5",
             "HookTypeName": "Simple",
-            "Name": "IOnPlayerConnected [internal]",
-            "HookName": "IOnPlayerConnected",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Networking.CoreServer",
             "Flagged": false,
@@ -203,13 +203,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 407,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnPlayerChat [internal]",
-            "HookName": "IOnPlayerChat",
+            "Name": "OnPlayerChat",
+            "HookName": "OnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Networking.Events.Listeners.PlayerListener",
             "Flagged": false,
