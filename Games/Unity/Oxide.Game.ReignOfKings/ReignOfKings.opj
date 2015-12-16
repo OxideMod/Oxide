@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ICZFa7o8ZNw4YejUYv9+/fudCLiSzROeteFuTeZTkZU=",
+            "MSILHash": "+bJadjtyCygNjye8lYTNv4d9oWFjIOXpyZLKicSgHGc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -117,7 +117,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "gws+PM1s4Azb7scIyLSopnoO31sRrGShuekqPChi/XU=",
+            "MSILHash": "PMAoU0ne8DrX2yo5DVzrRQF8lud1Ti18lqcEBaVsEvs=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -195,7 +195,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "vP2nEhbQh87iQs5pShdJ2bpYpQ6UbBCgFUHIRbvFtIc=",
+            "MSILHash": "3kzI2M5WmUZnWRc7EXFSQ3iURbavWDvCC3C0qzkledA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
