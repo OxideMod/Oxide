@@ -147,7 +147,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="message"></param>
         public void Message(string message)
         {
-            // TODO
+            // TODO: Send message to client
         }
 
         /// <summary>

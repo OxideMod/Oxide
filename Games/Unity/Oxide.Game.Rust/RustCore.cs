@@ -951,21 +951,6 @@ namespace Oxide.Game.Rust
         [HookMethod("OnExplosiveThrown")]
         private object OnExplosiveThrown(BasePlayer player, BaseEntity entity) => Interface.CallDeprecatedHook("OnWeaponThrown", player, entity);
 
-        /// <summary>
-        /// Used to handle the deprecated hook OnTurrentHasTarget
-        /// </summary>
-        /// <param name="turret"></param>
-        [HookMethod("OnTurretHasTarget")]
-        private object OnTurretHasTarget(AutoTurret turret) => Interface.CallDeprecatedHook("OnTurrentHasTarget", turret);
-
-        /// <summary>
-        /// Used to handle the deprecated hook OnTurrentSetTarget
-        /// </summary>
-        /// <param name="turret"></param>
-        /// <param name="entity"></param>
-        [HookMethod("OnTurretSetTarget")]
-        private object OnTurretSetTarget(AutoTurret turret, BaseCombatEntity entity) => Interface.CallDeprecatedHook("OnTurrentSetTarget", turret, entity);
-
         #endregion
     }
 }
