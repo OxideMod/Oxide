@@ -189,20 +189,13 @@ namespace Oxide.Game.Rust
         {
             // Call out and see if we should reject
             var canlogin = Interface.CallHook("CanClientLogin", connection);
-            // If it's not null and not a bool or it's false
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
-                // If it's a string, reject them with a message
-                if (canlogin is string)
-                {
-                    ConnectionAuth.Reject(connection, (string)canlogin);
-                    return true;
-                }
-
-                // We don't know what type it is, reject them with it anyway
+                // Reject the user with the message
                 ConnectionAuth.Reject(connection, canlogin.ToString());
                 return true;
             }
+
             return Interface.CallHook("OnUserApprove", connection);
         }
 
