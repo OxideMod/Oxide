@@ -123,6 +123,35 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 123,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": ",oxide,modded"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "ModifyTags [patch]",
+            "HookName": "ModifyTags",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "openGameServer",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "Avb6ypQa8KeqcH1bRa5hCXuRcHz2TVniYs8pglptQJw=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
         }
       ]
     }
