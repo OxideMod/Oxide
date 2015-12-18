@@ -223,15 +223,15 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         /// <param name="session"></param>
         /// <param name="message"></param>
-        [HookMethod("OnPlayerChat")]
-        private object OnPlayerChat(PlayerSession session, string message)
+        [HookMethod("IOnPlayerChat")]
+        private object IOnPlayerChat(PlayerSession session, string message)
         {
             if (message.Trim().Length <= 1) return true;
             
             var str = message.Substring(0, 1);
 
             // Is it a chat command?
-            if (!str.Equals("/") && !str.Equals("!")) return null;
+            if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", session, message);
 
             // Get the arg string
             var argstr = message.Substring(1);
