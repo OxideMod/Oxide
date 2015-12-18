@@ -143,15 +143,14 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <summary>
         /// Handles the specified chat command
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        internal bool HandleChatCommand(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        internal bool HandleChatCommand(PlayerSession session, string command, string[] args)
         {
             ChatCommand cmd;
             if (!chatCommands.TryGetValue(command.ToLowerInvariant(), out cmd)) return false;
-            cmd.Plugin.CallHook(cmd.CallbackName, identity, info, command, args);
+            cmd.Plugin.CallHook(cmd.CallbackName, session, command, args);
 
             return true;
         }

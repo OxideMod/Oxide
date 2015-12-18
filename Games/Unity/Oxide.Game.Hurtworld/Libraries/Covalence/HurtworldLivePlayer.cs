@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using NetworkPlayer = uLink.NetworkPlayer;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
@@ -35,14 +34,13 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public object Object { get; private set; }
 
-        private NetworkPlayer player;
+        private PlayerSession session;
 
-        internal HurtworldLivePlayer(NetworkPlayer player)
+        internal HurtworldLivePlayer(PlayerSession session)
         {
-            this.player = player;
-            var cSteamId = GameManager.Instance?.GetIdentity(player).SteamId;
-            if (cSteamId != null) steamid = (ulong)cSteamId;
-            Object = player;
+            this.session = session;
+            steamid = (ulong)session.SteamId;
+            Object = session;
         }
 
         #endregion
@@ -56,7 +54,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public void Kick(string reason)
         {
             Interface.Oxide.LogWarning(steamid + ", " + reason);
-            GameManager.Instance?.KickPlayer(steamid.ToString(), reason);
+            GameManager.Instance.KickPlayer(steamid.ToString(), reason);
         }
 
         /// <summary>
@@ -64,8 +62,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public void Kill()
         {
-            var playerEntity = GameManager.GetPlayerEntity(player);
-            var component = playerEntity.GetComponent<EntityStats>();
+            var component = session.WorldPlayerEntity.GetComponent<EntityStats>();
             var entityEffectSourceDatum = new EntityEffectSourceData { SourceDescriptionKey = "EntityStats/Sources/Suicide" };
             component.HandleEvent(new EntityEventData { EventType = EEntityEventType.Die }, entityEffectSourceDatum);
         }
@@ -76,11 +73,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z)
-        {
-            var playerEntity = GameManager.GetPlayerEntity(player);
-            playerEntity.transform.position = new Vector3(x, y, z);
-        }
+        public void Teleport(float x, float y, float z) => session.WorldPlayerEntity.transform.position = new Vector3(x, y, z);
 
         #endregion
 
@@ -90,10 +83,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
-        {
-            ChatManager.Instance?.AppendChatboxServerSingle(string.Concat("<color=#b8d7a3>", message, "</color>  "), player);
-        }
+        public void Message(string message) => ChatManager.Instance.AppendChatboxServerSingle(message, session.Player);
 
         /// <summary>
         /// Runs the specified console command on this player's client
@@ -117,8 +107,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="z"></param>
         public void GetPosition(out float x, out float y, out float z)
         {
-            var playerEntity = GameManager.GetPlayerEntity(player);
-            var pos = playerEntity.transform.position;
+            var pos = session.WorldPlayerEntity.transform.position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -130,8 +119,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition GetPosition()
         {
-            var playerEntity = GameManager.GetPlayerEntity(player);
-            var pos = playerEntity.transform.position;
+            var pos = session.WorldPlayerEntity.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using uLink;
+using ProtoBuf;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
@@ -14,6 +14,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// </summary>
     class HurtworldPlayerManager : IPlayerManager
     {
+        [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord
         {
             public string Nickname;
@@ -27,7 +28,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         internal HurtworldPlayerManager()
         {
             // Load player data
-            playerData = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, HurtworldPlayer>();
             foreach (var pair in playerData) players.Add(pair.Key, new HurtworldPlayer(pair.Value.SteamId, pair.Value.Nickname));
             livePlayers = new Dictionary<string, HurtworldLivePlayer>();
@@ -60,17 +62,16 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             }
 
             // Save
-            Interface.Oxide.DataFileSystem.WriteObject("oxide.covalence.playerdata", playerData);
+            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
         }
 
-        internal void NotifyPlayerConnect(NetworkPlayer ply)
+        internal void NotifyPlayerConnect(PlayerSession session)
         {
-            var identity = GameManager.Instance.GetIdentity(ply);
-            NotifyPlayerJoin((ulong)identity.SteamId, identity.Name);
-            livePlayers[identity.SteamId.ToString()] = new HurtworldLivePlayer(ply);
+            NotifyPlayerJoin((ulong)session.SteamId, session.Name);
+            livePlayers[session.SteamId.ToString()] = new HurtworldLivePlayer(session);
         }
 
-        internal void NotifyPlayerDisconnect(NetworkPlayer ply) => livePlayers.Remove(ply.id.ToString());
+        internal void NotifyPlayerDisconnect(PlayerSession session) => livePlayers.Remove(session.SteamId.ToString());
 
         #region Offline Players
 

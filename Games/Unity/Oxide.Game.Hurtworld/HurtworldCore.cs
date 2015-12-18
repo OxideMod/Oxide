@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 using Steamworks;
-using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -33,7 +32,7 @@ namespace Oxide.Game.Hurtworld
         private bool loggingInitialized;
 
         // Track 'load' chat commands
-        private readonly Dictionary<string, uLink.NetworkPlayer> loadingPlugins = new Dictionary<string, uLink.NetworkPlayer>();
+        private readonly Dictionary<string, PlayerSession> loadingPlugins = new Dictionary<string, PlayerSession>();
 
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
@@ -63,10 +62,10 @@ namespace Oxide.Game.Hurtworld
         /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
         /// <returns></returns>
-        private bool PermissionsLoaded(uLink.NetworkPlayer player)
+        private bool PermissionsLoaded(PlayerSession session)
         {
             if (permission.IsLoaded) return true;
-            ReplyWith(player, "Unable to load permission files! Permissions will not work until the error has been resolved.\n => " + permission.LastException.Message);
+            ReplyWith(session, "Unable to load permission files! Permissions will not work until the error has been resolved.\n => " + permission.LastException.Message);
             return false;
         }
 
@@ -150,8 +149,8 @@ namespace Oxide.Game.Hurtworld
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Add 'modded' and 'oxide' tags
-            SteamGameServer.SetGameTags("modded,oxide");
+            // Add 'oxide' and 'modded' tags
+            SteamGameServer.SetGameTags("oxide,modded");
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
@@ -162,6 +161,26 @@ namespace Oxide.Game.Hurtworld
         #region Player Hooks
 
         /// <summary>
+        /// Called when a user is attempting to connect
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        [HookMethod("IOnUserApprove")]
+        private object IOnUserApprove(PlayerSession session)
+        {
+            // Call out and see if we should reject
+            var canlogin = Interface.CallHook("CanClientLogin", session);
+            if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
+            {
+                // Reject the user with the message
+                GameManager.Instance.DisconnectPlayerSync(session.Player, canlogin.ToString());
+                return true;
+            }
+
+            return Interface.CallHook("OnUserApprove", session);
+        }
+
+        /// <summary>
         /// Called when the player has connected
         /// </summary>
         /// <param name="name"></param>
@@ -169,48 +188,46 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnPlayerConnected")]
         private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
         {
-            var identity = GameManager.Instance.GetIdentity(player);
-            identity.Name = name;
+            var session = GameManager.Instance.GetSession(player);
+            session.Name = name;
 
             // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(session);
 
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                var userId = identity.SteamId.ToString();
-                permission.UpdateNickname(userId, identity.Name);
+                var userId = session.SteamId.ToString();
+                permission.UpdateNickname(userId, session.Name);
 
                 // Add player to default group
                 if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
             }
 
-            Interface.Oxide.CallHook("OnPlayerConnected", identity, player);
+            Interface.Oxide.CallHook("OnPlayerConnected", session);
         }
 
         /// <summary>
         /// Called when the player has disconnected
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="player"></param>
+        /// <param name="session"></param>
         [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(PlayerIdentity identity, uLink.NetworkPlayer player)
+        private void OnPlayerDisconnected(PlayerSession session)
         {
             // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(session);
         }
 
         /// <summary>
         /// Called when the player sends a message
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="message"></param>
         [HookMethod("OnPlayerChat")]
-        private object OnPlayerChat(PlayerIdentity identity, uLink.NetworkMessageInfo info, string message)
+        private object OnPlayerChat(PlayerSession session, string message)
         {
             if (message.Trim().Length <= 1) return true;
-
+            
             var str = message.Substring(0, 1);
 
             // Is it a chat command?
@@ -226,9 +243,9 @@ namespace Oxide.Game.Hurtworld
             if (chatcmd == null) return null;
 
             // Handle it
-            if (!cmdlib.HandleChatCommand(identity, info, chatcmd, args))
+            if (!cmdlib.HandleChatCommand(session, chatcmd, args))
             {
-                ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Unknown command: {chatcmd}</color>", info.sender);
+                ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Unknown command: {chatcmd}</color>", session.Player);
                 return true;
             }
 
@@ -242,8 +259,8 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnPlayerSuicide")]
         private object IOnPlayerSuicide(uLink.NetworkPlayer player)
         {
-            var identity = GameManager.Instance.GetIdentity(player);
-            return Interface.Oxide.CallHook("OnPlayerSuicide", identity, player);
+            var session = GameManager.Instance.GetSession(player);
+            return Interface.Oxide.CallHook("OnPlayerSuicide", session);
         }
 
         #endregion
@@ -253,15 +270,14 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when the "plugins" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdPlugins")]
-        private void CmdPlugins(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdPlugins(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
 
             var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
@@ -278,7 +294,7 @@ namespace Oxide.Game.Hurtworld
             var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
             if (total_plugin_count < 1)
             {
-                ReplyWith(info.sender, "No plugins are currently available");
+                ReplyWith(session, "No plugins are currently available");
                 return;
             }
 
@@ -286,24 +302,23 @@ namespace Oxide.Game.Hurtworld
             var number = 1;
             foreach (var plugin in loaded_plugins) output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
             foreach (var plugin_name in unloaded_plugin_errors.Keys) output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
-            ReplyWith(info.sender, output);
+            ReplyWith(session, output);
         }
 
         /// <summary>
         /// Called when the "load" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdLoad")]
-        private void CmdLoad(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdLoad(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(info.sender, "Syntax: load *|<pluginname>+");
+                ReplyWith(session, "Syntax: load *|<pluginname>+");
                 return;
             }
 
@@ -316,25 +331,24 @@ namespace Oxide.Game.Hurtworld
             foreach (var name in args)
             {
                 if (string.IsNullOrEmpty(name) || !Interface.Oxide.LoadPlugin(name)) continue;
-                if (!loadingPlugins.ContainsKey(name)) loadingPlugins.Add(name, info.sender);
+                if (!loadingPlugins.ContainsKey(name)) loadingPlugins.Add(name, session);
             }
         }
 
         /// <summary>
         /// Called when the "reload" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdReload")]
-        private void CmdReload(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdReload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(info.sender, "Syntax: reload *|<pluginname>+");
+                ReplyWith(session, "Syntax: reload *|<pluginname>+");
                 return;
             }
 
@@ -352,29 +366,28 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    ReplyWith(info.sender, $"Plugin '{name}' not loaded.");
+                    ReplyWith(session, $"Plugin '{name}' not loaded.");
                     continue;
                 }
                 Interface.Oxide.ReloadPlugin(name);
-                ReplyWith(info.sender, $"Reloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+                ReplyWith(session, $"Reloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
             }
         }
 
         /// <summary>
         /// Called when the "unload" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdUnload")]
-        private void CmdUnload(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdUnload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(info.sender, "Syntax: unload *|<pluginname>+");
+                ReplyWith(session, "Syntax: unload *|<pluginname>+");
                 return;
             }
 
@@ -392,46 +405,44 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    ReplyWith(info.sender, $"Plugin '{name}' not loaded.");
+                    ReplyWith(session, $"Plugin '{name}' not loaded.");
                     continue;
                 }
                 Interface.Oxide.UnloadPlugin(name);
-                ReplyWith(info.sender, $"Unloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+                ReplyWith(session, $"Unloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
             }
         }
 
         /// <summary>
         /// Called when the "version" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdVersion")]
-        private void CmdVersion(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdVersion(PlayerSession session, string command, string[] args)
         {
             var oxide = OxideMod.Version.ToString();
             var game = GameManager.Instance?.GetProtocolVersion().ToString();
 
             if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game))
-                ReplyWith(info.sender, $"Oxide version: {oxide}, Hurtworld version: {game}");
+                ReplyWith(session, $"Oxide version: {oxide}, Hurtworld version: {game}");
         }
 
         /// <summary>
         /// Called when the "group" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdGroup")]
-        private void CmdGroup(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
             if (args.Length < 2)
             {
-                ReplyWith(info.sender, "Syntax: group <add|remove|set> <name> [title] [rank]");
+                ReplyWith(session, "Syntax: group <add|remove|set> <name> [title] [rank]");
                 return;
             }
 
@@ -446,50 +457,49 @@ namespace Oxide.Game.Hurtworld
             {
                 if (permission.GroupExists(name))
                 {
-                    ReplyWith(info.sender, "Group '" + name + "' already exist");
+                    ReplyWith(session, "Group '" + name + "' already exist");
                     return;
                 }
                 permission.CreateGroup(name, title, rank);
-                ReplyWith(info.sender, "Group '" + name + "' created");
+                ReplyWith(session, "Group '" + name + "' created");
             }
             else if (mode.Equals("remove"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(info.sender, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "Group '" + name + "' doesn't exist");
                     return;
                 }
                 permission.RemoveGroup(name);
-                ReplyWith(info.sender, "Group '" + name + "' deleted");
+                ReplyWith(session, "Group '" + name + "' deleted");
             }
             else if (mode.Equals("set"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(info.sender, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "Group '" + name + "' doesn't exist");
                     return;
                 }
                 permission.SetGroupTitle(name, title);
                 permission.SetGroupRank(name, rank);
-                ReplyWith(info.sender, "Group '" + name + "' changed");
+                ReplyWith(session, "Group '" + name + "' changed");
             }
         }
 
         /// <summary>
         /// Called when the "group" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdUserGroup")]
-        private void CmdUserGroup(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdUserGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(info.sender, "Syntax: usergroup <add|remove> <username> <groupname>");
+                ReplyWith(session, "Syntax: usergroup <add|remove> <username> <groupname>");
                 return;
             }
 
@@ -497,10 +507,10 @@ namespace Oxide.Game.Hurtworld
             var name = args[1];
             var group = args[2];
 
-            var target = FindIdentity(name);
+            var target = FindSession(name);
             if (target == null && !permission.UserExists(name))
             {
-                ReplyWith(info.sender, "User '" + name + "' not found");
+                ReplyWith(session, "User '" + name + "' not found");
                 return;
             }
             var userId = name;
@@ -513,37 +523,36 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.GroupExists(group))
             {
-                ReplyWith(info.sender, "Group '" + group + "' doesn't exist");
+                ReplyWith(session, "Group '" + group + "' doesn't exist");
                 return;
             }
 
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                ReplyWith(info.sender, "User '" + name + "' assigned group: " + group);
+                ReplyWith(session, "User '" + name + "' assigned group: " + group);
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                ReplyWith(info.sender, "User '" + name + "' removed from group: " + group);
+                ReplyWith(session, "User '" + name + "' removed from group: " + group);
             }
         }
 
         /// <summary>
         /// Called when the "grant" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdGrant")]
-        private void CmdGrant(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdGrant(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(info.sender, "Syntax: grant <group|user> <name|id> <permission>");
+                ReplyWith(session, "Syntax: grant <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -555,18 +564,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(info.sender, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "Group '" + name + "' doesn't exist");
                     return;
                 }
                 permission.GrantGroupPermission(name, perm, null);
-                ReplyWith(info.sender, "Group '" + name + "' granted permission: " + perm);
+                ReplyWith(session, "Group '" + name + "' granted permission: " + perm);
             }
             else if (mode.Equals("user"))
             {
-                var target = FindIdentity(name);
+                var target = FindSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
-                    ReplyWith(info.sender, "User '" + name + "' not found");
+                    ReplyWith(session, "User '" + name + "' not found");
                     return;
                 }
                 var userId = name;
@@ -577,25 +586,24 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                ReplyWith(info.sender, "User '" + name + "' granted permission: " + perm);
+                ReplyWith(session, "User '" + name + "' granted permission: " + perm);
             }
         }
 
         /// <summary>
         /// Called when the "grant" command has been executed
         /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="info"></param>
+        /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         [HookMethod("CmdRevoke")]
-        private void CmdRevoke(PlayerIdentity identity, uLink.NetworkMessageInfo info, string command, string[] args)
+        private void CmdRevoke(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(info.sender)) return;
-            if (!identity.IsAdmin) return;
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(info.sender, "Syntax: revoke <group|user> <name|id> <permission>");
+                ReplyWith(session, "Syntax: revoke <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -607,18 +615,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(info.sender, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "Group '" + name + "' doesn't exist");
                     return;
                 }
                 permission.RevokeGroupPermission(name, perm);
-                ReplyWith(info.sender, "Group '" + name + "' revoked permission: " + perm);
+                ReplyWith(session, "Group '" + name + "' revoked permission: " + perm);
             }
             else if (mode.Equals("user"))
             {
-                var target = FindIdentity(name);
+                var target = FindSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
-                    ReplyWith(info.sender, "User '" + name + "' not found");
+                    ReplyWith(session, "User '" + name + "' not found");
                     return;
                 }
                 var userId = name;
@@ -629,7 +637,7 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                ReplyWith(info.sender, "User '" + name + "' revoked permission: " + perm);
+                ReplyWith(session, "User '" + name + "' revoked permission: " + perm);
             }
         }
 
@@ -705,29 +713,29 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="session"></param>
         /// <param name="message"></param>
-        private static void ReplyWith(uLink.NetworkPlayer player, string message) => ChatManager.Instance?.AppendChatboxServerSingle(message, player);
+        private void ReplyWith(PlayerSession session, string message) => ChatManager.Instance.AppendChatboxServerSingle(message, session.Player);
 
         /// <summary>
-        /// Lookup the player identity using name, Steam ID, or IP address
+        /// Lookup the player session using name, Steam ID, or IP address
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        private PlayerIdentity FindIdentity(string nameOrIdOrIp)
+        private PlayerSession FindSession(string nameOrIdOrIp)
         {
-            var identityMap = GameManager.Instance.GetIdentityMap();
-            PlayerIdentity identity = null;
-            foreach (var i in identityMap)
+            var sessions = GameManager.Instance.GetSessions();
+            PlayerSession session = null;
+            foreach (var i in sessions)
             {
                 if (nameOrIdOrIp.Equals(i.Value.Name, StringComparison.OrdinalIgnoreCase) ||
                     nameOrIdOrIp.Equals(i.Value.SteamId.ToString()) || nameOrIdOrIp.Equals(i.Key.ipAddress))
                 {
-                    identity = i.Value;
+                    session = i.Value;
                     break;
                 }
             }
-            return identity;
+            return session;
         }
     }
 }

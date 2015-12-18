@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "KminQ/I9BvAxx3P/85V+MWhZD7n0ZHeKIV1eBaAIX1g=",
+            "MSILHash": "IM0DgPmxFp/1tLwe5HvZhyZ85dJtnOxBXGHtnDlBc9U=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "KminQ/I9BvAxx3P/85V+MWhZD7n0ZHeKIV1eBaAIX1g=",
+            "MSILHash": "IM0DgPmxFp/1tLwe5HvZhyZ85dJtnOxBXGHtnDlBc9U=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -53,10 +53,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 23,
+            "InjectionIndex": 10,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0, a0",
+            "ArgumentString": "l0",
             "HookTypeName": "Simple",
             "Name": "OnPlayerDisconnected",
             "HookName": "OnPlayerDisconnected",
@@ -71,7 +71,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "GOtLkQQyqXOJFQlIVvWvuSxqw/ACfhyj7k/tBu2A8PU=",
+            "MSILHash": "VVOfEPO0GRzf7ajimkIgJPrVkFvlmwJjEnCzDpfxlE0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -121,7 +121,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "qCppJv3O2uJPKpGZxC6weRMd9IkbhSZTtIB3Yd8QWOk=",
+            "MSILHash": "iW80nQJ8jg/+vmusY33hWRBwPs804VtMSUsGmdKf3pc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -132,7 +132,7 @@
             "InjectionIndex": 8,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0, a1, a0",
+            "ArgumentString": "l0.ConnectedSession, a0",
             "HookTypeName": "Simple",
             "Name": "OnPlayerChat",
             "HookName": "OnPlayerChat",
@@ -227,7 +227,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "VPR/FvBvEVJnHRTvp3TLbFWVLRgBYpz/RBBHszgYM2E=",
+            "MSILHash": "isE3nUZvDfyyLI/oSynogNK26ddkSR83IP+FoI9euPo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -236,7 +236,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -255,7 +255,7 @@
             },
             "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -287,16 +287,16 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 18,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.networkView.owner, a0, this",
             "HookTypeName": "Simple",
             "Name": "OnEnterVehicle",
             "HookName": "OnEnterVehicle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "EnterVehicle",
@@ -307,22 +307,22 @@
             },
             "MSILHash": "TUTtfIEiY3gTiD1wMXGRlHHexnhukG+nz8v1Is2Kpdw=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Vehicle"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 5,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.networkView.owner, a0, this",
             "HookTypeName": "Simple",
             "Name": "OnExitVehicle",
             "HookName": "OnExitVehicle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ExitVehicle",
@@ -334,7 +334,7 @@
             },
             "MSILHash": "drHsJ7T+kVdgW4isZvmPN7QxN80PXBoi56mgUvaYZ4o=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Vehicle"
           }
         },
         {
@@ -342,14 +342,14 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this",
             "HookTypeName": "Simple",
             "Name": "CanExitVehicle",
             "HookName": "CanExitVehicle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CanExit",
@@ -358,16 +358,16 @@
             },
             "MSILHash": "Uls+Sb2sHVfsh058vKGyTa8LmLEEJ+L/RpybO+9Pecc=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Vehicle"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 5,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
             "Name": "OnSetPassenger",
             "HookName": "OnSetPassenger",
@@ -384,16 +384,16 @@
             },
             "MSILHash": "ImtgwIN6bzqopKZMZ02s4EsPl6VEp/7fx/ZjWzoz9io=",
             "BaseHookName": null,
-            "HookCategory": "_WIP"
+            "HookCategory": "Vehicle"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
             "Name": "OnVehicleInput",
             "HookName": "OnVehicleInput",
@@ -442,13 +442,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
+            "InjectionIndex": 3,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0.networkView.owner, l0, this",
             "HookTypeName": "Simple",
-            "Name": "OnVehicleUse",
-            "HookName": "OnVehicleUse",
+            "Name": "CanUseVehicle",
+            "HookName": "CanUseVehicle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehicleUsable",
             "Flagged": true,
@@ -462,13 +462,13 @@
             },
             "MSILHash": "nDDAOfX0obhgtvc4NJLzBZIkGwg6PpEFC2SQnFGy5BU=",
             "BaseHookName": null,
-            "HookCategory": "_WIP"
+            "HookCategory": "Vehicle"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 26,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
@@ -477,7 +477,7 @@
             "HookName": "CanUseWorkbench",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "HasAuthority",
@@ -488,7 +488,7 @@
             },
             "MSILHash": "FYc4QCT3y++euKFZvpRWEx5s8aXv9anmCsrTmoc+EaI=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "_WIP"
           }
         },
         {
@@ -749,7 +749,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 49,
+            "InjectionIndex": 81,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -765,7 +765,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Vt5m/ULVCPD/SvuLLQ1am1IQBTZhjZUt7q7s//xwOnQ=",
+            "MSILHash": "AYfUek/R48tOYAMozlAC1XU34RxWSnLv198ys9Ms0Cc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -814,7 +814,7 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "DebugLog",
+            "Name": "DebugLog [patch]",
             "HookName": "DebugLog",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleManager",
@@ -936,6 +936,59 @@
             "MSILHash": "cQ7xCaKjTRPnH2uu0NKes8LtQbfCPM+I58a+HV4h9h4=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 105,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l2",
+            "HookTypeName": "Simple",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerConnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "caCWZIiTPqD0ry9yDet4a4d+MAK8Gcxaa8xpUWDzVwA=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 9,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.AttachedIdentity.ConnectedSession",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDeath",
+            "HookName": "OnPlayerDeath",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerStatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "StatsOnEventPublished",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityEventData",
+                "EntityEffectSourceData"
+              ]
+            },
+            "MSILHash": "UKumwO+Yuh6wZ4yd49J3gux+pZYx2o70/ekkqpV8R4Y=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]

@@ -43,13 +43,13 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <summary>
         /// Sends a chat message to the player
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="session"></param>
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(uLink.NetworkPlayer player, string name, string message = null)
+        public void SendChatMessage(PlayerSession session, string name, string message = null)
         {
-            ChatManager.Instance.AppendChatboxServerSingle(message != null ? $"{name} {message}" : name, player);
+            ChatManager.Instance.AppendChatboxServerSingle(message != null ? $"{name} {message}" : name, session.Player);
         }
     }
 }
