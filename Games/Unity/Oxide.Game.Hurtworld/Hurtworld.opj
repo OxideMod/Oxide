@@ -134,8 +134,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l0.ConnectedSession, a0",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerChat",
-            "HookName": "OnPlayerChat",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ChatManager",
             "Flagged": false,
@@ -888,7 +888,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 3,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -906,7 +906,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "klwBW/xfNtjYLGdJF7TBu50coCCAIuuHwO7Fqc3jEr8=",
+            "MSILHash": "W37pwJicbYKeK5IXHFpSKn9xtw93Fmuuv3tQ2AwZOOo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
