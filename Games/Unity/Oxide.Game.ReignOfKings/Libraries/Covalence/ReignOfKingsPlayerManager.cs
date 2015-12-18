@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using CodeHatch.Engine.Networking;
+using ProtoBuf;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
@@ -14,6 +15,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// </summary>
     class ReignOfKingsPlayerManager : IPlayerManager
     {
+        [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord
         {
             public string Nickname;
@@ -27,7 +29,8 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         internal ReignOfKingsPlayerManager()
         {
             // Load player data
-            playerData = Interface.Oxide.DataFileSystem.ReadObject<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, ReignOfKingsPlayer>();
             foreach (var pair in playerData) players.Add(pair.Key, new ReignOfKingsPlayer(pair.Value.SteamID, pair.Value.Nickname));
             livePlayers = new Dictionary<string, ReignOfKingsLivePlayer>();
@@ -60,7 +63,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             }
 
             // Save
-            Interface.Oxide.DataFileSystem.WriteObject("oxide.covalence.playerdata", playerData);
+            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
         }
 
         internal void NotifyPlayerConnect(Player ply)
