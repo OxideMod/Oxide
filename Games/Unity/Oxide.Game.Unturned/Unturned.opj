@@ -6,9 +6,32 @@
       "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 6,
+            "RemoveCount": 2,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Dedicator",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 3,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -19,12 +42,12 @@
             "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "disconnect",
+              "Exposure": 0,
+              "Name": "OnApplicationQuit",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "FEQq4C/L18Y4LFxbzfynK2BvTk7orsYwanPwJgQ5q90=",
+            "MSILHash": "JI7ak8bTz1UuhBULPJ1q4/WqLKg6RLbAoqXWcnqtcuo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -32,12 +55,12 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 4,
+            "InjectionIndex": 0,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Dedicator",
+            "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
             "Signature": {
               "Exposure": 0,
@@ -45,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
+            "MSILHash": "iWey4Qg0a6GE9eyjBSlL2JZznXfUyA87QNgOZ0CLs1w=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -53,7 +76,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 5,
+            "InjectionIndex": 1,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -61,7 +84,7 @@
             "Name": "InitLogging [internal]",
             "HookName": "InitLogging",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Dedicator",
+            "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
             "Signature": {
               "Exposure": 0,
@@ -69,7 +92,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
+            "MSILHash": "iWey4Qg0a6GE9eyjBSlL2JZznXfUyA87QNgOZ0CLs1w=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -77,24 +100,27 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 9,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "InjectionIndex": 28,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l0, l1",
             "HookTypeName": "Simple",
-            "Name": "IDisableConsole [internal]",
-            "HookName": "IDisableConsole",
+            "Name": "OnRunCommand",
+            "HookName": "OnRunCommand",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Dedicator",
+            "TypeName": "SDG.Unturned.Commander",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
-              "ReturnType": "System.Void",
-              "Parameters": []
+              "Exposure": 2,
+              "Name": "execute",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "Steamworks.CSteamID",
+                "System.String"
+              ]
             },
-            "MSILHash": "iqgv07Bdcre1A9lJ7Xm1f9TqfexHmiwY5E/nGuPrzkc=",
-            "BaseHookName": "InitLogging [internal]",
+            "MSILHash": "LMm2e6EpdFbcpsdU7k1wCIn6Wlv2CtpkJHQKk/syGM4=",
+            "BaseHookName": null,
             "HookCategory": "Server"
           }
         }
