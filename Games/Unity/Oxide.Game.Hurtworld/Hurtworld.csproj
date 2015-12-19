@@ -91,7 +91,7 @@
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\KeraLua.dll" />
-      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.so; $(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\Linux\*.dll" />
+      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\Linux\**\*.*" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.so" />
       <LinuxGameFiles Include="$(ProjectDir)\Files\Linux\**\*.*; $(ProjectDir)\Files\*.*" />
       <LinuxNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Linux\*.*" />
