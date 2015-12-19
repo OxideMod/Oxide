@@ -749,7 +749,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 81,
+            "InjectionIndex": 85,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -765,7 +765,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "AYfUek/R48tOYAMozlAC1XU34RxWSnLv198ys9Ms0Cc=",
+            "MSILHash": "mAkSOX+odAXHIH7XvEAJaeG4w5BEcm+t/T46CPnb0tQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
