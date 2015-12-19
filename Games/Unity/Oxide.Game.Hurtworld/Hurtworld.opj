@@ -728,7 +728,7 @@
             "InjectionIndex": 3,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this.AttachedIdentity, this.networkView.owner",
+            "ArgumentString": "this.AttachedIdentity.ConnectedSession",
             "HookTypeName": "Simple",
             "Name": "OnPlayerRespawn",
             "HookName": "OnPlayerRespawn",
