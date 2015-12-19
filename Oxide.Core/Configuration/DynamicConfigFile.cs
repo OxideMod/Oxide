@@ -106,8 +106,8 @@ namespace Oxide.Core.Configuration
             filename = SanitiseName(filename);
             var path = Path.GetFullPath(filename);
             if (!path.StartsWith(_chroot, StringComparison.Ordinal))
-                throw new Exception("Only access to oxide directory!");
-            return filename;
+                throw new Exception($"Only access to oxide directory!\nPath: {path}");
+            return path;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Oxide.Core.Configuration
             name = name.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
             name = Regex.Replace(name, "[" + Regex.Escape(new string(Path.GetInvalidPathChars())) + "]", "_");
             name = Regex.Replace(name, @"\.+", ".");
-            return name.TrimStart('.', Path.DirectorySeparatorChar);
+            return name.TrimStart('.');
         }
 
         /// <summary>
