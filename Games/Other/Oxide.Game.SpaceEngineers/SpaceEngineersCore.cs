@@ -32,6 +32,17 @@ namespace Oxide.Game.SpaceEngineers
         }
 
         /// <summary>
+        /// Starts the logging
+        /// </summary>
+        private void InitializeLogging()
+        {
+            loggingInitialized = true;
+            CallHook("InitLogging", null);
+        }
+
+        #region Plugin Hooks
+
+        /// <summary>
         /// Called when the plugin is initializing
         /// </summary>
         [HookMethod("Init")]
@@ -41,25 +52,6 @@ namespace Oxide.Game.SpaceEngineers
             RemoteLogger.SetTag("game", "space engineers");
             RemoteLogger.SetTag("version", MyFinalBuildConstants.APP_VERSION.ToString());
         }
-
-        /// <summary>
-        /// Called when the server is first initialized
-        /// </summary>
-        [HookMethod("OnServerInitialized")]
-        private void OnServerInitialized()
-        {
-            if (serverInitialized) return;
-            serverInitialized = true;
-
-            // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", );
-        }
-
-        /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when a plugin is loaded
@@ -72,19 +64,29 @@ namespace Oxide.Game.SpaceEngineers
             if (!loggingInitialized) InitializeLogging();
         }
 
+        #endregion
+
+        #region Server Hooks
+
         /// <summary>
-        /// Starts the logging
+        /// Called when the server is first initialized
         /// </summary>
-        private void InitializeLogging()
+        [HookMethod("OnServerInitialized")]
+        private void OnServerInitialized()
         {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
+            if (serverInitialized) return;
+            serverInitialized = true;
+
+            // Configure the hostname after it has been set
+            //RemoteLogger.SetTag("hostname", ); // TODO
         }
 
         /// <summary>
-        /// Disables the original console
+        /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IDisableConsole")]
-        private bool IDisableConsole() => false;
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
+        #endregion
     }
 }

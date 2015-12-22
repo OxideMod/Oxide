@@ -6,32 +6,6 @@
       "AssemblyName": "Sandbox.Game.dll",
       "Hooks": [
         {
-          "Type": "InitOxide",
-          "Hook": {
-            "InjectionIndex": 0,
-            "HookTypeName": "Initialize Oxide",
-            "Name": "InitOxide [internal]",
-            "HookName": "InitOxide",
-            "AssemblyName": "Sandbox.Game.dll",
-            "TypeName": "Sandbox.MyInitializer",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "InvokeBeforeRun",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.UInt32",
-                "System.String",
-                "System.String",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "Q3onCvlpDGjb53aTOxcGb+nuRbhlJvm81zXasuFItFI=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
@@ -92,15 +66,25 @@
           }
         },
         {
-          "Type": "Simple",
+          "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 25,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IDisableConsole [internal]",
-            "HookName": "IDisableConsole",
+            "InjectionIndex": 1,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "starg_s",
+                "OpType": "Parameter",
+                "Operand": 3
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
             "AssemblyName": "VRage.Dedicated.dll",
             "TypeName": "VRage.Dedicated.DedicatedServer",
             "Flagged": false,
