@@ -1132,7 +1132,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "AFWa65dpH1Xv5WN6naxEpa0oGHLOFFOi0XAgAx2AvNc=",
+            "MSILHash": "ShXzTL9xUEfCpzoVbtvnLOm8c18C7j1XnvJP+Tc+0X8=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1470,7 +1470,7 @@
                 "PlayerHitEnemy"
               ]
             },
-            "MSILHash": "QX5aWxNZQFQVmcuBaIejiTMgX12JP96kUK852c/kn3w=",
+            "MSILHash": "TTvlgl5qvfO4PLZEBGt55YnYkpiFBdZSiOQcN2czn6Y=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1624,7 +1624,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "VjrTj5kINwdkqGBa42a562AS+D4SsQfiUyz8yhLPq2k=",
+            "MSILHash": "h8fh9JoimtU25xajNcE9Ypheuou6Moh8JxMmZJ77y1M=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
