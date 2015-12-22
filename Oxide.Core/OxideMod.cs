@@ -563,6 +563,7 @@ namespace Oxide.Core
         }
 
         #region Plugin Change Watchers
+
         /// <summary>
         /// Called when a plugin watcher has reported a change in a plugin source
         /// </summary>

@@ -639,12 +639,14 @@ namespace Oxide.Game.RustLegacy
                 return false;
             }
 
-            var result = Interface.CallHook("CanClientLogin", connection, approval);
-            if (result is uLink.NetworkConnectionError)
+            // Call out and see if we should reject
+            var canlogin = Interface.CallHook("CanClientLogin", connection);
+            if (canlogin is uLink.NetworkConnectionError)
             {
-                approval.Deny((uLink.NetworkConnectionError)result);
-                return false;
+                approval.Deny((uLink.NetworkConnectionError)canlogin);
+                return true;
             }
+
             return Interface.CallHook("OnUserApprove", connection, approval, acceptor);
         }
 

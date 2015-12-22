@@ -33,6 +33,17 @@ namespace Oxide.Game.BeastsOfPrey
         }
 
         /// <summary>
+        /// Starts the logging
+        /// </summary>
+        private void InitializeLogging()
+        {
+            loggingInitialized = true;
+            CallHook("InitLogging", null);
+        }
+
+        #region Plugin Hooks
+
+        /// <summary>
         /// Called when the plugin is initializing
         /// </summary>
         [HookMethod("Init")]
@@ -42,6 +53,21 @@ namespace Oxide.Game.BeastsOfPrey
             RemoteLogger.SetTag("game", "fortresscraft");
             RemoteLogger.SetTag("version", Server_Network_Manager.instance.sfsVersion.ToString());
         }
+
+        /// <summary>
+        /// Called when a plugin is loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
+        }
+
+        #endregion
+
+        #region Server Hooks
 
         /// <summary>
         /// Called when the server is first initialized
@@ -62,24 +88,6 @@ namespace Oxide.Game.BeastsOfPrey
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
-        }
+        #endregion
     }
 }
