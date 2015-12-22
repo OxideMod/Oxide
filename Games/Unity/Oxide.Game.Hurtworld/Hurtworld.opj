@@ -970,7 +970,7 @@
             "InjectionIndex": 9,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this.AttachedIdentity.ConnectedSession",
+            "ArgumentString": "this.AttachedIdentity.ConnectedSession, a1",
             "HookTypeName": "Simple",
             "Name": "OnPlayerDeath",
             "HookName": "OnPlayerDeath",

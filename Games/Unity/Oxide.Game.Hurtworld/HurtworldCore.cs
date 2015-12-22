@@ -173,7 +173,7 @@ namespace Oxide.Game.Hurtworld
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
-                GameManager.Instance.DisconnectPlayerSync(session.Player, canlogin.ToString());
+                GameManager.Instance.KickPlayer(session.SteamId.ToString(), canlogin.ToString());
                 return true;
             }
 
@@ -227,7 +227,6 @@ namespace Oxide.Game.Hurtworld
         private object IOnPlayerChat(PlayerSession session, string message)
         {
             if (message.Trim().Length <= 1) return true;
-            
             var str = message.Substring(0, 1);
 
             // Is it a chat command?
