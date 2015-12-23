@@ -83,7 +83,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => ChatManager.Instance.AppendChatboxServerSingle(message, session.Player);
+        public void Message(string message) => ChatManager.Instance?.RPC("RelayChat", session.Player, message);
 
         /// <summary>
         /// Runs the specified console command on this player's client

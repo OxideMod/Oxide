@@ -244,7 +244,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, chatcmd, args))
             {
-                ChatManager.Instance.AppendChatboxServerSingle($"<color=#b8d7a3>Unknown command: {chatcmd}</color>", session.Player);
+                ChatManager.Instance.RPC("RelayChat", session.Player, $"<color=#b8d7a3>Unknown command: {chatcmd}</color>");
                 return true;
             }
 
@@ -714,7 +714,7 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         /// <param name="session"></param>
         /// <param name="message"></param>
-        private void ReplyWith(PlayerSession session, string message) => ChatManager.Instance.AppendChatboxServerSingle(message, session.Player);
+        private void ReplyWith(PlayerSession session, string message) => ChatManager.Instance?.RPC("RelayChat", session.Player, message);
 
         /// <summary>
         /// Lookup the player session using name, Steam ID, or IP address

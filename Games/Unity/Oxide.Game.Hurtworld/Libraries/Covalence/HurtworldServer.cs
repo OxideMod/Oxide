@@ -39,7 +39,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Broadcasts a chat message to all player clients
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => ChatManager.Instance?.AppendChatboxServerAll(message);
+        public void Broadcast(string message) => ChatManager.Instance?.RPC("RelayChat", uLink.RPCMode.Others, message);
 
         /// <summary>
         /// Runs the specified server command
