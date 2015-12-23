@@ -232,7 +232,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 71,
+            "InjectionIndex": 74,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -251,7 +251,7 @@
                 "UnityEngine.Quaternion"
               ]
             },
-            "MSILHash": "/Am3AXdUP3S+fTSKiLpKcsyr3twYaR2G6j+QAMzI2gA=",
+            "MSILHash": "vn8hCjT1ot+lHL5hdixQS6nxcdbdv0aL4GF/ce5Lpwk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2229,7 +2229,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "QVtVJ6+QgRed49KH644IcMQAK18W8GpiMhYo4ey6bdU=",
+            "MSILHash": "lyde8sGBoKoyEDIjT6eJVMshjC4AsIoe+83/CZ1Hovs=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
