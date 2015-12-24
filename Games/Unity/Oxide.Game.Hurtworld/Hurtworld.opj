@@ -765,7 +765,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Z0JqtofR9fUc6FFpCcd/4gUIxg7fRw0NS9NCGHM9D3A=",
+            "MSILHash": "kysbaaDqo/o3O1CrDCTnDL0Y9pKSZopwpEKmWtRHpZ8=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -959,7 +959,7 @@
                 "EntityEffectSourceData"
               ]
             },
-            "MSILHash": "zWlz3LI/Tm7yK4sH1Vgn49TC1g2Z7ZwaFTKge920Tf4=",
+            "MSILHash": "3bQsaR6iEfV993mN/anycECYNsn4xF9IRY1zI4S4Zdw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

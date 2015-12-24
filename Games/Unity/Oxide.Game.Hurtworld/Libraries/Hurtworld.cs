@@ -37,7 +37,8 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name, string message = null)
         {
-            ChatManager.Instance?.RPC("RelayChat", uLink.RPCMode.Others, message != null ? $"{name} {message}" : name);
+            GameManager.Instance.SendLog(string.Concat("[Broadcast] ", message));
+            ChatManager.Instance.RPC("RelayChat", uLink.RPCMode.Others, message != null ? $"{name} {message}" : name);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(PlayerSession session, string name, string message = null)
         {
-            ChatManager.Instance?.RPC("RelayChat", session.Player, message != null ? $"{name} {message}" : name);
+            ChatManager.Instance.RPC("RelayChat", session.Player, message != null ? $"{name} {message}" : name);
         }
     }
 }

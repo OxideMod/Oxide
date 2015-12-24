@@ -51,11 +51,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Kicks this player from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason)
-        {
-            Interface.Oxide.LogWarning(steamid + ", " + reason);
-            GameManager.Instance.KickPlayer(steamid.ToString(), reason);
-        }
+        public void Kick(string reason) => GameManager.Instance.KickPlayer(steamid.ToString(), reason);
 
         /// <summary>
         /// Causes this player's character to die
