@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "l7kUyqajvR7Tkcgb5u5wCzcoiZW+3XsLMqpyLVkPzoI=",
+            "MSILHash": "i4rj+uMArCj76iUKw1T2/iJcbLmSrHLQuZ4DV/FzcKE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "l7kUyqajvR7Tkcgb5u5wCzcoiZW+3XsLMqpyLVkPzoI=",
+            "MSILHash": "i4rj+uMArCj76iUKw1T2/iJcbLmSrHLQuZ4DV/FzcKE=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -228,7 +228,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "PptagnVSMly7BSAcMYOCqyIA2i0wTJtKcthW4Jup0Xs=",
+            "MSILHash": "XhINClogi3LZGWIWIjvATRRuAFRn0MyXmWe95yXMbQU=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
