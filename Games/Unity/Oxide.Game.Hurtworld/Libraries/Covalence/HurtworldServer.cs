@@ -14,7 +14,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing name of the server
         /// </summary>
-        public string Name => GameManager.Instance?.ServerConfig.GameName;
+        public string Name => GameManager.Instance.ServerConfig.GameName;
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -29,7 +29,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the version number/build of the server
         /// </summary>
-        public string Version => GameManager.Instance?.GetProtocolVersion().ToString();
+        public string Version => GameManager.Instance.GetProtocolVersion().ToString();
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            GameManager.Instance.SendLog(string.Concat("[Broadcast]", message));
+            GameManager.Instance.SendLog(string.Concat("[Broadcast] ", message));
             ChatManager.Instance.RPC("RelayChat", uLink.RPCMode.Others, message);
         }
 
