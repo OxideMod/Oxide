@@ -876,8 +876,17 @@ namespace Oxide.Game.Hurtworld
         /// Replies to the player with a specific message
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="message"></param>
-        private void ReplyWith(PlayerSession session, string message) => ChatManager.Instance?.RPC("RelayChat", session.Player, message);
+        /// <param name="key"></param>
+        /// <param name="args"></param>
+        private void ReplyWith(PlayerSession session, string key, params object[] args)
+        {
+            if (session == null)
+            {
+                Interface.Oxide.LogInfo(string.Format(lang.GetMessage(key, this), args));
+                return;
+            }
+            ChatManager.Instance.RPC("RelayChat", session.Player, string.Format(lang.GetMessage(key, this, session.SteamId.ToString()), args));
+        }
 
         /// <summary>
         /// Lookup the player session using name, Steam ID, or IP address
