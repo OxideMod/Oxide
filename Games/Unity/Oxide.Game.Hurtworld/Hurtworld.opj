@@ -963,6 +963,31 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 40,
+            "RemoveCount": 5,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "DupeCommandFix [patch]",
+            "HookName": "DupeCommandFix",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConsoleManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ExecuteCommandRaw",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "L3TwL/A+bfdht36hBUNrYeddhsV5V0pSz5zU3YST3WM=",
+            "BaseHookName": "OnRunCommand",
+            "HookCategory": "Server"
+          }
         }
       ]
     }

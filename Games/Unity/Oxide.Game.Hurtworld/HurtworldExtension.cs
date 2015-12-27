@@ -172,7 +172,10 @@ namespace Oxide.Game.Hurtworld
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        private static void ServerConsoleOnInput(string input) => ConsoleManager.Instance.ExecuteCommand(input);
+        private static void ServerConsoleOnInput(string input)
+        {
+            if (!string.IsNullOrEmpty(input)) ConsoleManager.Instance.ExecuteCommand(input);
+        }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
