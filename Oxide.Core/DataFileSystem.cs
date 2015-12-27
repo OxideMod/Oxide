@@ -51,10 +51,7 @@ namespace Oxide.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public bool ExistsDatafile(string name)
-        {
-            return GetFile(name).Exists();
-        }
+        public bool ExistsDatafile(string name) => GetFile(name).Exists();
 
         /// <summary>
         /// Gets a datafile
@@ -84,24 +81,16 @@ namespace Oxide.Core
         /// Saves the specified datafile
         /// </summary>
         /// <param name="name"></param>
-        public void SaveDatafile(string name)
-        {
-            // Save it
-            GetFile(name).Save();
-        }
+        public void SaveDatafile(string name) => GetFile(name).Save();
 
         public T ReadObject<T>(string name)
         {
-            if (ExistsDatafile(name))
-                return GetFile(name).ReadObject<T>();
+            if (ExistsDatafile(name)) return GetFile(name).ReadObject<T>();
             var instance = Activator.CreateInstance<T>();
             WriteObject(name, instance);
             return instance;
         }
 
-        public void WriteObject<T>(string name, T Object, bool sync = false)
-        {
-            GetFile(name).WriteObject(Object, sync);
-        }
+        public void WriteObject<T>(string name, T Object, bool sync = false) => GetFile(name).WriteObject(Object, sync);
     }
 }

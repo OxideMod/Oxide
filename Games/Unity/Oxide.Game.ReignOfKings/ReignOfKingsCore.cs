@@ -74,7 +74,7 @@ namespace Oxide.Game.ReignOfKings
         private bool PermissionsLoaded(Player player)
         {
             if (permission.IsLoaded || player.IsServer) return true;
-            ReplyWith(player, "Unable to load permission files! Permissions will not work until the error has been resolved.\n => " + permission.LastException.Message);
+            ReplyWith(player, "Unable to load permission files! Permissions will not work until resolved.\n => " + permission.LastException.Message);
             return false;
         }
 
@@ -111,8 +111,8 @@ namespace Oxide.Game.ReignOfKings
             cmdlib.AddChatCommand("grant", this, "CmdGrant");
             cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
-            cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
-            cmdlib.AddChatCommand("show", this, "CmdShow");
+            //cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
+            //cmdlib.AddChatCommand("show", this, "CmdShow");
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace Oxide.Game.ReignOfKings
             if (!HasPermission(player, "admin")) return;
             if (args.Length < 1)
             {
-                ReplyWith(player, "Syntax: load *|<pluginname>+");
+                ReplyWith(player, "Usage: load *|<pluginname>+");
                 return;
             }
 
@@ -353,7 +353,7 @@ namespace Oxide.Game.ReignOfKings
             if (!HasPermission(player, "admin")) return;
             if (args.Length < 1)
             {
-                ReplyWith(player, "Syntax: reload *|<pluginname>+");
+                ReplyWith(player, "Usage: reload *|<pluginname>+");
                 return;
             }
 
@@ -392,7 +392,7 @@ namespace Oxide.Game.ReignOfKings
             if (!HasPermission(player, "admin")) return;
             if (args.Length < 1)
             {
-                ReplyWith(player, "Syntax: unload *|<pluginname>+");
+                ReplyWith(player, "Usage: unload *|<pluginname>+");
                 return;
             }
 
@@ -447,7 +447,7 @@ namespace Oxide.Game.ReignOfKings
             if (!HasPermission(player, "admin")) return;
             if (args.Length < 2)
             {
-                ReplyWith(player, "Syntax: group <add|remove|set> <name> [title] [rank]");
+                ReplyWith(player, "Usage: group <add|remove|set> <name> [title] [rank]");
                 return;
             }
 
@@ -504,7 +504,7 @@ namespace Oxide.Game.ReignOfKings
             if (!HasPermission(player, "admin")) return;
             if (args.Length < 3)
             {
-                ReplyWith(player, "Syntax: usergroup <add|remove> <username> <groupname>");
+                ReplyWith(player, "Usage: usergroup <add|remove> <username> <groupname>");
                 return;
             }
 
@@ -557,7 +557,7 @@ namespace Oxide.Game.ReignOfKings
             if (!HasPermission(player, "admin")) return;
             if (args.Length < 3)
             {
-                ReplyWith(player, "Syntax: grant <group|user> <name|id> <permission>");
+                ReplyWith(player, "Usage: grant <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -608,7 +608,7 @@ namespace Oxide.Game.ReignOfKings
             if (!HasPermission(player, "admin")) return;
             if (args.Length < 3)
             {
-                ReplyWith(player, "Syntax: revoke <group|user> <name|id> <permission>");
+                ReplyWith(player, "Usage: revoke <group|user> <name|id> <permission>");
                 return;
             }
 

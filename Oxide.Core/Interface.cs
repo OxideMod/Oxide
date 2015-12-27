@@ -23,11 +23,9 @@ namespace Oxide.Core
         public static void Initialize()
         {
             // Create if not already created
-            if (Oxide == null)
-            {
-                Oxide = new OxideMod(DebugCallback);
-                Oxide.Load();
-            }
+            if (Oxide != null) return;
+            Oxide = new OxideMod(DebugCallback);
+            Oxide.Load();
         }
 
         /// <summary>
@@ -36,10 +34,7 @@ namespace Oxide.Core
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static object CallDeprecatedHook(string hookname, params object[] args)
-        {
-            return Oxide.CallDeprecatedHook(hookname, args);
-        }
+        public static object CallDeprecatedHook(string hookname, params object[] args) => Oxide.CallDeprecatedHook(hookname, args);
 
         /// <summary>
         /// Calls the specified hook
@@ -47,11 +42,7 @@ namespace Oxide.Core
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static object CallHook(string hookname, params object[] args)
-        {
-            // Call into Oxide core
-            return Oxide?.CallHook(hookname, args);
-        }
+        public static object CallHook(string hookname, params object[] args) => Oxide?.CallHook(hookname, args);
 
         /// <summary>
         /// Calls the specified hook
@@ -59,10 +50,7 @@ namespace Oxide.Core
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static object Call(string hookname, params object[] args)
-        {
-            return CallHook(hookname, args);
-        }
+        public static object Call(string hookname, params object[] args) => CallHook(hookname, args);
 
         /// <summary>
         /// Calls the specified hook and converts the return value to the specified type
@@ -71,16 +59,12 @@ namespace Oxide.Core
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static T Call<T>(string hookname, params object[] args)
-        {
-            return (T)Convert.ChangeType(CallHook(hookname, args), typeof(T));
-        }
+        public static T Call<T>(string hookname, params object[] args) => (T)Convert.ChangeType(CallHook(hookname, args), typeof(T));
 
         /// <summary>
         /// Gets the Oxide mod
         /// </summary>
         /// <returns></returns>
         public static OxideMod GetMod() => Oxide;
-
     }
 }

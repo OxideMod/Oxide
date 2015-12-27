@@ -66,7 +66,7 @@ namespace Oxide.Game.RustLegacy
         private bool PermissionsLoaded(ConsoleSystem.Arg arg)
         {
             if (permission.IsLoaded) return true;
-            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
+            arg.ReplyWith("Unable to load permission files! Permissions will not work until resolved.\r\n => " + permission.LastException.Message);
             return false;
         }
 
@@ -221,7 +221,7 @@ namespace Oxide.Game.RustLegacy
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: load *|<pluginname>+");
+                arg.ReplyWith("Usage: load *|<pluginname>+");
                 return;
             }
 
@@ -249,7 +249,7 @@ namespace Oxide.Game.RustLegacy
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: unload *|<pluginname>+");
+                arg.ReplyWith("Usage: unload *|<pluginname>+");
                 return;
             }
 
@@ -273,7 +273,7 @@ namespace Oxide.Game.RustLegacy
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: reload *|<pluginname>+");
+                arg.ReplyWith("Usage: reload *|<pluginname>+");
                 return;
             }
 
@@ -312,7 +312,7 @@ namespace Oxide.Game.RustLegacy
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             if (!arg.HasArgs(2))
             {
-                arg.ReplyWith("Syntax: group <add|remove|set> <name> [title] [rank]");
+                arg.ReplyWith("Usage: group <add|remove|set> <name> [title] [rank]");
                 return;
             }
 
@@ -365,7 +365,7 @@ namespace Oxide.Game.RustLegacy
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: usergroup <add|remove> <username> <groupname>");
+                arg.ReplyWith("Usage: usergroup <add|remove> <username> <groupname>");
                 return;
             }
 
@@ -422,7 +422,7 @@ namespace Oxide.Game.RustLegacy
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: grant <group|user> <name|id> <permission>");
+                arg.ReplyWith("Usage: grant <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -471,7 +471,7 @@ namespace Oxide.Game.RustLegacy
             if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: revoke <group|user> <name|id> <permission>");
+                arg.ReplyWith("Usage: revoke <group|user> <name|id> <permission>");
                 return;
             }
 

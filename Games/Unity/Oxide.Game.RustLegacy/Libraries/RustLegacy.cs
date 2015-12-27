@@ -58,7 +58,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(NetUser netUser, string name = "Server", string message = null)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {QuoteSafe(name)} {QuoteSafe(message)}");
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {name} {message}");
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         [LibraryFunction("SendConsoleMessage")]
         public void SendConsoleMessage(NetUser netUser, string format, params object[] args)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"echo {QuoteSafe(string.Format(format, args))}");
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"echo {string.Format(format, args)}");
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="format"></param>
         /// <param name="args"></param>
         [LibraryFunction("BroadcastConsole")]
-        public void BroadcastConsole(string format, params object[] args) => ConsoleNetworker.Broadcast($"echo {QuoteSafe(string.Format(format, args))}");
+        public void BroadcastConsole(string format, params object[] args) => ConsoleNetworker.Broadcast($"echo {string.Format(format, args)}");
 
         /// <summary>
         /// Runs a console command on the server
@@ -105,17 +105,11 @@ namespace Oxide.Game.RustLegacy.Libraries
         {
             NetUser netUser;
             if ((netUser = PlayerClient.All.Find(p => p.netUser.userID.ToString() == strNameOrIdorIp)?.netUser) != null)
-            {
                 return netUser;
-            }
             if ((netUser = PlayerClient.All.Find(p => p.netUser.displayName.ToLower().Contains(strNameOrIdorIp.ToLower()))?.netUser) != null)
-            {
                 return netUser;
-            }
             if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == strNameOrIdorIp)?.netUser) != null)
-            {
                 return netUser;
-            }
             return null;
         }
 

@@ -5,7 +5,6 @@ using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
-
 using Oxide.Game.RustLegacy;
 using Oxide.Game.RustLegacy.Libraries;
 

@@ -15,9 +15,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         private readonly ulong steamid;
 
         /// <summary>
-        /// Gets the last-known nickname for this player
+        /// Gets/sets the nickname for this player
         /// </summary>
-        public string Nickname { get; }
+        public string Nickname { get; set; }
 
         /// <summary>
         /// Gets a unique ID for this player (unique within the current game)

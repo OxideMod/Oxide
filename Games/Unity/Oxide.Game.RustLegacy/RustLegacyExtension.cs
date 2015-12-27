@@ -182,7 +182,10 @@ namespace Oxide.Game.RustLegacy
             ConsoleSystem.RegisterLogCallback(HandleLog, true);*/
         }
 
-        private void ServerConsoleOnInput(string input) => ConsoleSystem.Run(input, true);
+        private void ServerConsoleOnInput(string input)
+        {
+            if (!string.IsNullOrEmpty(input)) ConsoleSystem.Run(input, true);
+        }
 
         private void HandleLog(string message, string stackTrace, LogType type)
         {

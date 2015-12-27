@@ -74,10 +74,7 @@ namespace Oxide.Core
             }
         }
 
-        public static void PrintCallStack()
-        {
-            Interface.Oxide.LogDebug("CallStack:{0}{1}", Environment.NewLine, new StackTrace(1, true));
-        }
+        public static void PrintCallStack() => Interface.Oxide.LogDebug("CallStack:{0}{1}", Environment.NewLine, new StackTrace(1, true));
 
         public static string FormatBytes(double bytes)
         {

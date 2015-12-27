@@ -66,7 +66,7 @@ namespace Oxide.Game.Rust
         private bool PermissionsLoaded(ConsoleSystem.Arg arg)
         {
             if (permission.IsLoaded) return true;
-            arg.ReplyWith("Unable to load permission files! Permissions will not work until the error has been resolved.\r\n => " + permission.LastException.Message);
+            arg.ReplyWith("Unable to load permission files! Permissions will not work until resolved.\r\n => " + permission.LastException.Message);
             return false;
         }
 
@@ -388,7 +388,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: load *|<pluginname>+");
+                arg.ReplyWith("Usage: load *|<pluginname>+");
                 return;
             }
 
@@ -416,7 +416,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: unload *|<pluginname>+");
+                arg.ReplyWith("Usage: unload *|<pluginname>+");
                 return;
             }
 
@@ -440,7 +440,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                arg.ReplyWith("Syntax: reload *|<pluginname>+");
+                arg.ReplyWith("Usage: reload *|<pluginname>+");
                 return;
             }
 
@@ -481,9 +481,9 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(2))
             {
-                var reply = "Syntax: group <add|set> <name> [title] [rank]\n";
-                reply += "Syntax: group <remove> <name>\n";
-                reply += "Syntax: group <parent> <name> <parentName>";
+                var reply = "Usage: group <add|set> <name> [title] [rank]\n";
+                reply += "Usage: group <remove> <name>\n";
+                reply += "Usage: group <parent> <name> <parentName>";
                 arg.ReplyWith(reply);
                 return;
             }
@@ -553,7 +553,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: usergroup <add|remove> <username> <groupname>");
+                arg.ReplyWith("Usage: usergroup <add|remove> <username> <groupname>");
                 return;
             }
 
@@ -605,7 +605,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: grant <group|user> <name|id> <permission>");
+                arg.ReplyWith("Usage: grant <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -661,7 +661,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(3))
             {
-                arg.ReplyWith("Syntax: revoke <group|user> <name|id> <permission>");
+                arg.ReplyWith("Usage: revoke <group|user> <name|id> <permission>");
                 return;
             }
 
@@ -717,8 +717,8 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                var reply = "Syntax: show <group|user> <name>\n";
-                reply += "Syntax: show <groups|perms>";
+                var reply = "Usage: show <group|user> <name>\n";
+                reply += "Usage: show <groups|perms>";
                 arg.ReplyWith(reply);
                 return;
             }

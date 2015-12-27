@@ -129,7 +129,10 @@ namespace Oxide.Game.Unturned
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        private static void ServerConsoleOnInput(string input) => Commander.execute(CSteamID.Nil, input);
+        private static void ServerConsoleOnInput(string input)
+        {
+            if (!string.IsNullOrEmpty(input)) Commander.execute(CSteamID.Nil, input);
+        }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {

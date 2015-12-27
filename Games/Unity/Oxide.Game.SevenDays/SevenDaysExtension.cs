@@ -184,7 +184,7 @@ namespace Oxide.Game.SevenDays
 
         private static void ServerConsoleOnInput(string input)
         {
-            var result = SingletonMonoBehaviour<SdtdConsole>.Instance.ExecuteSync(input, null);
+            var result = SdtdConsole.Instance.ExecuteSync(input, null);
             if (result != null) Interface.Oxide.ServerConsole.AddMessage(string.Join("\n", result.ToArray()));
         }
 

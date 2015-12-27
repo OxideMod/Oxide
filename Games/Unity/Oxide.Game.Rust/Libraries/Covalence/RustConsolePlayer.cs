@@ -10,7 +10,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     public class RustConsolePlayer : IPlayer, ILivePlayer
     {
         /// <summary>
-        /// Gets the last-known nickname for this player
+        /// Gets the nickname for this player
         /// </summary>
         public string Nickname => "Server Console";
 
