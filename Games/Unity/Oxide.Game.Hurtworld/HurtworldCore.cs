@@ -17,6 +17,8 @@ namespace Oxide.Game.Hurtworld
     /// </summary>
     public class HurtworldCore : CSPlugin
     {
+        #region Setup
+
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
@@ -27,6 +29,43 @@ namespace Oxide.Game.Hurtworld
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
+        #region Localization
+
+        // The language library
+        private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        private readonly Dictionary<string, string> messages = new Dictionary<string, string>
+        {
+            {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
+            {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
+            {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
+            {"CommandUsageReload", "Usage: reload *|<pluginname>+"},
+            {"CommandUsageRevoke", "Usage: revoke <group|user> <name|id> <permission>"},
+            {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"},
+            {"CommandUsageUnload", "Usage: unload *|<pluginname>+"},
+            {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
+            {"GroupChanged", "Group '{0}' changed"},
+            {"GroupCreated", "Group '{0}' created"},
+            {"GroupDeleted", "Group '{0}' deleted"},
+            {"GroupNotFound", "Group '{0}' doesn't exist" },
+            {"GroupPermissionGranted", "Group '{0}' granted permission: {1}"},
+            {"GroupPermissionRevoked", "Group '{0}' revoked permission: {1}"},
+            {"NoPluginsFound", "No plugins are currently available"},
+            {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
+            {"OxideVersion", "Oxide version: {0}, Hurtworld version: {1}"},
+            {"PluginNotLoaded", "Plugin '{0}' not loaded."},
+            {"PluginReloaded", "Reloaded plugin {0} v{1} by {2}"},
+            {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
+            {"UnknownChatCommand", "<color=#b8d7a3>Unknown command:</color> {0}"},
+            {"UserAddedToGroup", "User '{0}' added to group: {1}"},
+            {"UserNotFound", "User '{0}' not found"},
+            {"UserPermissionGranted", "User '{0}' granted permission: {1}"},
+            {"UserPermissionRevoked", "User '{0}' revoked permission: {1}"},
+            {"UserRemovedFromGroup", "User '{0}' removed from group: {1}"},
+            {"YouAreNotAdmin", "You are not an admin"}
+        };
+
+        #endregion
+
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
@@ -34,13 +73,17 @@ namespace Oxide.Game.Hurtworld
         // Track 'load' chat commands
         private readonly Dictionary<string, PlayerSession> loadingPlugins = new Dictionary<string, PlayerSession>();
 
+        #endregion
+
+        #region Initialization
+
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
         /// </summary>
         public HurtworldCore()
         {
             // Set attributes
-            Name = "hurtworldcore";
+            Name = "HurtworldCore";
             Title = "Hurtworld Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
@@ -65,9 +108,11 @@ namespace Oxide.Game.Hurtworld
         private bool PermissionsLoaded(PlayerSession session)
         {
             if (permission.IsLoaded) return true;
-            ReplyWith(session, "Unable to load permission files! Permissions will not work until the error has been resolved.\n => " + permission.LastException.Message);
+            ReplyWith(session, "PermissionsNotLoaded", permission.LastException.Message);
             return false;
         }
+
+        #endregion
 
         #region Plugin Hooks
 
@@ -80,6 +125,9 @@ namespace Oxide.Game.Hurtworld
             // Configure remote logging
             RemoteLogger.SetTag("game", "hurtworld");
             RemoteLogger.SetTag("version", GameManager.Instance.GetProtocolVersion().ToString());
+
+            // Register messages for localization
+            lang.RegisterMessages(messages, this);
 
             // Add general chat commands
             //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
@@ -188,6 +236,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnPlayerConnected")]
         private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
         {
+            // Set the session name for Hurtworld
             var session = GameManager.Instance.GetSession(player);
             session.Name = name;
 
@@ -244,7 +293,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, chatcmd, args))
             {
-                ChatManager.Instance.RPC("RelayChat", session.Player, $"<color=#b8d7a3>Unknown command: {chatcmd}</color>");
+                ReplyWith(session, "UnknownChatCommand", chatcmd);
                 return true;
             }
 
@@ -265,6 +314,8 @@ namespace Oxide.Game.Hurtworld
         #endregion
 
         #region Chat/Console Commands
+
+        #region Plugins Command
 
         /// <summary>
         /// Called when the "plugins" command has been executed
@@ -293,7 +344,7 @@ namespace Oxide.Game.Hurtworld
             var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
             if (total_plugin_count < 1)
             {
-                ReplyWith(session, "No plugins are currently available");
+                ReplyWith(session, lang.GetMessage("NoPluginsFound", this, session.SteamId.ToString()));
                 return;
             }
 
@@ -303,6 +354,10 @@ namespace Oxide.Game.Hurtworld
             foreach (var plugin_name in unloaded_plugin_errors.Keys) output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
             ReplyWith(session, output);
         }
+
+        #endregion
+
+        #region Load Command
 
         /// <summary>
         /// Called when the "load" command has been executed
@@ -317,7 +372,7 @@ namespace Oxide.Game.Hurtworld
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(session, "Syntax: load *|<pluginname>+");
+                ReplyWith(session, "CommandUsageLoad");
                 return;
             }
 
@@ -334,6 +389,10 @@ namespace Oxide.Game.Hurtworld
             }
         }
 
+        #endregion
+
+        #region Reload Command
+
         /// <summary>
         /// Called when the "reload" command has been executed
         /// </summary>
@@ -347,7 +406,7 @@ namespace Oxide.Game.Hurtworld
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(session, "Syntax: reload *|<pluginname>+");
+                ReplyWith(session, "CommandUsageReload");
                 return;
             }
 
@@ -365,13 +424,17 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    ReplyWith(session, $"Plugin '{name}' not loaded.");
+                    ReplyWith(session, "PluginNotLoaded", name);
                     continue;
                 }
                 Interface.Oxide.ReloadPlugin(name);
-                ReplyWith(session, $"Reloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+                ReplyWith(session, "PluginReloaded", plugin.Title, plugin.Version, plugin.Author);
             }
         }
+
+        #endregion
+
+        #region Unload Command
 
         /// <summary>
         /// Called when the "unload" command has been executed
@@ -386,7 +449,7 @@ namespace Oxide.Game.Hurtworld
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(session, "Syntax: unload *|<pluginname>+");
+                ReplyWith(session, "CommandUsageUnload");
                 return;
             }
 
@@ -404,13 +467,17 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    ReplyWith(session, $"Plugin '{name}' not loaded.");
+                    ReplyWith(session, "PluginNotLoaded", name);
                     continue;
                 }
                 Interface.Oxide.UnloadPlugin(name);
-                ReplyWith(session, $"Unloaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+                ReplyWith(session, "PluginUnloaded", plugin.Title, plugin.Version, plugin.Author);
             }
         }
+
+        #endregion
+
+        #region Version Command
 
         /// <summary>
         /// Called when the "version" command has been executed
@@ -422,11 +489,13 @@ namespace Oxide.Game.Hurtworld
         private void CmdVersion(PlayerSession session, string command, string[] args)
         {
             var oxide = OxideMod.Version.ToString();
-            var game = GameManager.Instance?.GetProtocolVersion().ToString();
-
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game))
-                ReplyWith(session, $"Oxide version: {oxide}, Hurtworld version: {game}");
+            var game = GameManager.Instance.GetProtocolVersion().ToString();
+            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game)) ReplyWith(session, "OxideVersion", oxide, game);
         }
+
+        #endregion
+
+        #region Group Command
 
         /// <summary>
         /// Called when the "group" command has been executed
@@ -441,7 +510,7 @@ namespace Oxide.Game.Hurtworld
             if (!session.IsAdmin) return;
             if (args.Length < 2)
             {
-                ReplyWith(session, "Syntax: group <add|remove|set> <name> [title] [rank]");
+                ReplyWith(session, "CommandUsageGroup");
                 return;
             }
 
@@ -456,34 +525,38 @@ namespace Oxide.Game.Hurtworld
             {
                 if (permission.GroupExists(name))
                 {
-                    ReplyWith(session, "Group '" + name + "' already exist");
+                    ReplyWith(session, "GroupNotFound", name);
                     return;
                 }
                 permission.CreateGroup(name, title, rank);
-                ReplyWith(session, "Group '" + name + "' created");
+                ReplyWith(session, "GroupCreated", name);
             }
             else if (mode.Equals("remove"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "GroupNotFound", name);
                     return;
                 }
                 permission.RemoveGroup(name);
-                ReplyWith(session, "Group '" + name + "' deleted");
+                ReplyWith(session, "GroupDeleted", name);
             }
             else if (mode.Equals("set"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "GroupNotFound", name);
                     return;
                 }
                 permission.SetGroupTitle(name, title);
                 permission.SetGroupRank(name, rank);
-                ReplyWith(session, "Group '" + name + "' changed");
+                ReplyWith(session, "GroupChanged", name);
             }
         }
+
+        #endregion
+
+        #region User Group Command
 
         /// <summary>
         /// Called when the "group" command has been executed
@@ -498,7 +571,7 @@ namespace Oxide.Game.Hurtworld
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(session, "Syntax: usergroup <add|remove> <username> <groupname>");
+                ReplyWith(session, "CommandUsageUserGroup");
                 return;
             }
 
@@ -509,7 +582,7 @@ namespace Oxide.Game.Hurtworld
             var target = FindSession(name);
             if (target == null && !permission.UserExists(name))
             {
-                ReplyWith(session, "User '" + name + "' not found");
+                ReplyWith(session, "UserNotFound", name);
                 return;
             }
             var userId = name;
@@ -522,21 +595,25 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.GroupExists(group))
             {
-                ReplyWith(session, "Group '" + group + "' doesn't exist");
+                ReplyWith(session, "GroupNotFound", name);
                 return;
             }
 
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                ReplyWith(session, "User '" + name + "' assigned group: " + group);
+                ReplyWith(session, "UserAddedtoGroup", name, group);
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                ReplyWith(session, "User '" + name + "' removed from group: " + group);
+                ReplyWith(session, "UserRemovedFromGroup", name, group);
             }
         }
+
+        #endregion
+
+        #region Grant Command
 
         /// <summary>
         /// Called when the "grant" command has been executed
@@ -551,7 +628,7 @@ namespace Oxide.Game.Hurtworld
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(session, "Syntax: grant <group|user> <name|id> <permission>");
+                ReplyWith(session, "CommandUsageGrant");
                 return;
             }
 
@@ -563,18 +640,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "GroupNotFound", name);
                     return;
                 }
                 permission.GrantGroupPermission(name, perm, null);
-                ReplyWith(session, "Group '" + name + "' granted permission: " + perm);
+                ReplyWith(session, "GroupPermissionGranted", name, perm);
             }
             else if (mode.Equals("user"))
             {
                 var target = FindSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
-                    ReplyWith(session, "User '" + name + "' not found");
+                    ReplyWith(session, "UserNotFound", name);
                     return;
                 }
                 var userId = name;
@@ -585,12 +662,16 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                ReplyWith(session, "User '" + name + "' granted permission: " + perm);
+                ReplyWith(session, "UserPermissionGranted", name, perm);
             }
         }
 
+        #endregion
+
+        #region Revoke Command
+
         /// <summary>
-        /// Called when the "grant" command has been executed
+        /// Called when the "revoke" command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -602,7 +683,7 @@ namespace Oxide.Game.Hurtworld
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(session, "Syntax: revoke <group|user> <name|id> <permission>");
+                ReplyWith(session, "CommandUsageRevoke");
                 return;
             }
 
@@ -614,18 +695,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "Group '" + name + "' doesn't exist");
+                    ReplyWith(session, "GroupNotFound", name);
                     return;
                 }
                 permission.RevokeGroupPermission(name, perm);
-                ReplyWith(session, "Group '" + name + "' revoked permission: " + perm);
+                ReplyWith(session, "GroupPermissionRevoked", name, perm);
             }
             else if (mode.Equals("user"))
             {
                 var target = FindSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
-                    ReplyWith(session, "User '" + name + "' not found");
+                    ReplyWith(session, "UserNotFound", name);
                     return;
                 }
                 var userId = name;
@@ -636,9 +717,91 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                ReplyWith(session, "User '" + name + "' revoked permission: " + perm);
+                ReplyWith(session, "UserPermissionRevoked", name, perm);
             }
         }
+
+        #endregion
+
+        #region Show Command
+
+        /// <summary>
+        /// Called when the "show" command has been executed
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdShow")]
+        private void CmdShow(PlayerSession session, string command, string[] args)
+        {
+            if (!PermissionsLoaded(session)) return;
+            if (!session.IsAdmin) return;
+            if (args.Length < 1)
+            {
+                ReplyWith(session, "CommandUsageShow");
+                return;
+            }
+
+            var mode = args[0];
+            var name = args.Length > 1 ? args[1] : string.Empty;
+
+            if (mode.Equals("perms"))
+            {
+                var result = "Permissions:\n";
+                result += string.Join(", ", permission.GetPermissions());
+                ReplyWith(session, result);
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindSession(name);
+                if (target == null && !permission.UserExists(name))
+                {
+                    ReplyWith(session, "UserNotFound");
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.SteamId.ToString();
+                    name = target.Name;
+                    permission.UpdateNickname(userId, name);
+                    name += $" ({userId})";
+                }
+                var result = $"User '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetUserPermissions(userId));
+                result += $"\nUser '{name}' groups:\n";
+                result += string.Join(", ", permission.GetUserGroups(userId));
+                ReplyWith(session, result);
+            }
+            else if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    ReplyWith(session, "GroupNotFound", name);
+                    return;
+                }
+                var result = $"Group '{name}' users:\n";
+                result += string.Join(", ", permission.GetUsersInGroup(name));
+                result += $"\nGroup '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetGroupPermissions(name));
+                var parent = permission.GetGroupParent(name);
+                while (permission.GroupExists(parent))
+                {
+                    result = $"\nParent group '{parent}' permissions:\n";
+                    result += string.Join(", ", permission.GetGroupPermissions(parent));
+                    parent = permission.GetGroupParent(parent);
+                }
+                ReplyWith(session, result);
+            }
+            else if (mode.Equals("groups"))
+            {
+                var result = "Groups:\n";
+                result += string.Join(", ", permission.GetGroups());
+                ReplyWith(session, result);
+            }
+        }
+
+        #endregion
 
         #endregion
 
