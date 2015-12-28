@@ -44,10 +44,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name = "Server", string message = null)
-        {
-            ConsoleNetworker.Broadcast($"chat.add {QuoteSafe(name)} {QuoteSafe(message)}");
-        }
+        public void BroadcastChat(string name = "Server", string message = null) => ConsoleNetworker.Broadcast($"chat.add {name} {message}");
 
         /// <summary>
         /// Sends a chat message to the user
@@ -153,14 +150,14 @@ namespace Oxide.Game.RustLegacy.Libraries
         }
 
         /// <summary>
-        ///
+        /// Returns the character of a player
         /// </summary>
         /// <param name="netUser"></param>
         [LibraryFunction("GetCharacter")]
         public Character GetCharacter(NetUser netUser) => RustLegacyCore.GetCharacter(netUser);
 
         /// <summary>
-        ///
+        /// Returns the inventory of a player
         /// </summary>
         /// <param name="netUser"></param>
         [LibraryFunction("GetInventory")]
