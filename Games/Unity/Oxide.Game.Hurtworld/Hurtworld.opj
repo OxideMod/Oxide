@@ -814,8 +814,8 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "DebugLog [patch]",
-            "HookName": "DebugLog",
+            "Name": "AddDebugLog [patch]",
+            "HookName": "AddDebugLog",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleManager",
             "Flagged": false,
@@ -971,8 +971,8 @@
             "RemoveCount": 5,
             "Instructions": [],
             "HookTypeName": "Modify",
-            "Name": "DupeCommandFix [patch]",
-            "HookName": "DupeCommandFix",
+            "Name": "FixDupeCommand [patch]",
+            "HookName": "FixDupeCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleManager",
             "Flagged": false,
@@ -987,6 +987,94 @@
             "MSILHash": "L3TwL/A+bfdht36hBUNrYeddhsV5V0pSz5zU3YST3WM=",
             "BaseHookName": "OnRunCommand",
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 65,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a4.ConnectedSession",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerInit",
+            "HookName": "OnPlayerInit",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SyncPlayerEntity",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.BitStream",
+                "UnityEngine.GameObject",
+                "UnityEngine.Vector3",
+                "UnityEngine.Quaternion",
+                "PlayerIdentity",
+                "System.Int32",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "L0fwpzD+a1/noCQjDoZ3SAMLo1LY8ufX0Rt1+w/NQRo=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 95,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1",
+            "HookTypeName": "Simple",
+            "Name": "OnEntitySpawned",
+            "HookName": "OnEntitySpawned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "NetInstantiate",
+              "ReturnType": "UnityEngine.GameObject",
+              "Parameters": [
+                "uLink.NetworkPlayer",
+                "System.String",
+                "UnityEngine.Vector3",
+                "UnityEngine.Quaternion",
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "6grNMOBmTh/xOa/a5ypl/FV0N5hI7Me4qyOYNmiFfKQ=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 24,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0.ConnectedSession",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpawn",
+            "HookName": "OnPlayerSpawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConstructionManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StructureBuildCompleted",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "SjDEQIQ5YtjsKwjMcMt95iTnFfvuF5yL6v5CIn2xvKk=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]
