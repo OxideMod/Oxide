@@ -5,7 +5,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// <summary>
     /// Provides Covalence functionality for the game "Reign of Kings"
     /// </summary>
-    class ReignOfKingsCovalenceProvider : ICovalenceProvider
+    public class ReignOfKingsCovalenceProvider : ICovalenceProvider
     {
         /// <summary>
         /// Gets the name of the game for which this provider provides

@@ -7,7 +7,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// <summary>
     /// Represents a binding to a generic command system
     /// </summary>
-    class ReignOfKingsCommandSystem : ICommandSystem
+    public class ReignOfKingsCommandSystem : ICommandSystem
     {
         /// <summary>
         /// Registers the specified command
@@ -21,16 +21,13 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             if (type == CommandType.Console) return;
 
             // Convert to lowercase
-            var command_name = cmd.ToLowerInvariant();
+            var commandName = cmd.ToLowerInvariant();
 
             // Check if it already exists
-            if (CommandManager.RegisteredCommands.ContainsKey(command_name))
-            {
-                throw new CommandAlreadyExistsException(command_name);
-            }
+            if (CommandManager.RegisteredCommands.ContainsKey(commandName)) throw new CommandAlreadyExistsException(commandName);
 
             // Register it
-            var commandAttribute = new CommandAttribute("/" + command_name, string.Empty)
+            var commandAttribute = new CommandAttribute($"/{commandName}", string.Empty)
             {
                 Method = info =>
                 {
@@ -38,7 +35,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
                     callback(info.Label, CommandType.Chat, player, info.Args);
                 }
             };
-            CommandManager.RegisteredCommands[command_name] = commandAttribute;
+            CommandManager.RegisteredCommands[commandName] = commandAttribute;
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
@@ -8,7 +7,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// <summary>
     /// Represents a connected player
     /// </summary>
-    class HurtworldLivePlayer : ILivePlayer, IPlayerCharacter
+    public class HurtworldLivePlayer : ILivePlayer, IPlayerCharacter
     {
         #region Information
 

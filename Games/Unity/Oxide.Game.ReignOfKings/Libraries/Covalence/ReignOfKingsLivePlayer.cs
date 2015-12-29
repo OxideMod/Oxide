@@ -13,7 +13,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// <summary>
     /// Represents a connected player
     /// </summary>
-    class ReignOfKingsLivePlayer : ILivePlayer, IPlayerCharacter
+    public class ReignOfKingsLivePlayer : ILivePlayer, IPlayerCharacter
     {
         #region Information
 

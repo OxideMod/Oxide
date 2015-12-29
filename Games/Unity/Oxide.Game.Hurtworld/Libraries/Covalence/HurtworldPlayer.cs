@@ -9,7 +9,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    class HurtworldPlayer : IPlayer, IEquatable<IPlayer>
+    public class HurtworldPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly ulong steamid;

@@ -172,9 +172,7 @@ namespace Oxide.Core.Libraries
 
             var prefix = owner.Name.ToLower() + ".";
             if (!name.StartsWith(prefix))
-            {
-                Interface.Oxide.LogWarning("Permission '{0}' (by plugin {1}) is not prefixed with plugin name, should be '{2}{0}'", name, owner.Title, prefix);
-            }
+                Interface.Oxide.LogWarning("Missing plugin name prefix '{0} for permission '{1}' (by plugin '{2}')", prefix, name, owner.Title);
         }
 
         /// <summary>

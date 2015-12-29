@@ -12,7 +12,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// <summary>
     /// Represents a generic player manager
     /// </summary>
-    class HurtworldPlayerManager : IPlayerManager
+    public class HurtworldPlayerManager : IPlayerManager
     {
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord

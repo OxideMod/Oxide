@@ -12,7 +12,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// <summary>
     /// Represents the server hosting the game instance
     /// </summary>
-    class ReignOfKingsServer : IServer
+    public class ReignOfKingsServer : IServer
     {
         #region Information
 

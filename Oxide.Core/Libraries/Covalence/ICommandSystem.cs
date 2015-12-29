@@ -25,6 +25,7 @@
         /// </summary>
         /// <param name="cmd"></param>
         /// <param name="type"></param>
+        /// <param name="callback"></param>
         void RegisterCommand(string cmd, CommandType type, CommandCallback callback);
 
         /// <summary>

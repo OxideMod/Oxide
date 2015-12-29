@@ -5,7 +5,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// <summary>
     /// Provides Covalence functionality for the game "Hurtworld"
     /// </summary>
-    class HurtworldCovalenceProvider : ICovalenceProvider
+    public class HurtworldCovalenceProvider : ICovalenceProvider
     {
         /// <summary>
         /// Gets the name of the game for which this provider provides

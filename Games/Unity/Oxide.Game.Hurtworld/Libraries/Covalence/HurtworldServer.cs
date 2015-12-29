@@ -7,7 +7,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// <summary>
     /// Represents the server hosting the game instance
     /// </summary>
-    class HurtworldServer : IServer
+    public class HurtworldServer : IServer
     {
         #region Information
 

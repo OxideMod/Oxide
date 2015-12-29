@@ -1,11 +1,13 @@
-﻿using Oxide.Core.Libraries.Covalence;
+﻿using System.Collections.Generic;
+
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
     /// <summary>
     /// Represents a binding to a generic command system
     /// </summary>
-    class HurtworldCommandSystem : ICommandSystem
+    public class HurtworldCommandSystem : ICommandSystem
     {
         /// <summary>
         /// Registers the specified command

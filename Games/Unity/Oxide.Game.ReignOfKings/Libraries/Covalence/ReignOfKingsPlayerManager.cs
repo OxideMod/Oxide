@@ -13,7 +13,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// <summary>
     /// Represents a generic player manager
     /// </summary>
-    class ReignOfKingsPlayerManager : IPlayerManager
+    public class ReignOfKingsPlayerManager : IPlayerManager
     {
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord
