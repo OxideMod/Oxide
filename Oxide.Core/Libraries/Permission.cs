@@ -172,7 +172,7 @@ namespace Oxide.Core.Libraries
 
             var prefix = owner.Name.ToLower() + ".";
             if (!name.StartsWith(prefix))
-                Interface.Oxide.LogWarning("Missing plugin name prefix '{0} for permission '{1}' (by plugin '{2}')", prefix, name, owner.Title);
+                Interface.Oxide.LogWarning("Missing plugin name prefix '{0}' for permission '{1}' (by plugin '{2}')", prefix, name, owner.Title);
         }
 
         /// <summary>

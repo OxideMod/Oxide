@@ -130,7 +130,7 @@ namespace Oxide.Plugins
     /// <summary>
     /// Base class which all dynamic CSharp plugins must inherit
     /// </summary>
-    public abstract partial class CSharpPlugin : CSPlugin
+    public abstract class CSharpPlugin : CSPlugin
     {
         /// <summary>
         /// Wrapper for dynamically managed plugin fields
@@ -323,7 +323,7 @@ namespace Oxide.Plugins
                 }
                 catch (InvalidProgramException ex)
                 {
-                    Interface.Oxide.LogError("Hook dispatch failure detected, falling back to reflection based dispatch. " + ex.ToString());
+                    Interface.Oxide.LogError("Hook dispatch failure detected, falling back to reflection based dispatch. " + ex);
                     var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(Interface.Oxide.PluginDirectory, Name);
                     if (compilable_plugin != null && compilable_plugin.CompiledAssembly != null)
                     {
@@ -391,7 +391,13 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Queue a callback to be called in the next server tick
+        /// Queue a callback to be called in the next server frame
+        /// </summary>
+        /// <param name="callback"></param>
+        protected void NextFrame(Action callback) => Interface.Oxide.NextTick(callback);
+
+        /// <summary>
+        /// Queue a callback to be called in the next server frame
         /// </summary>
         /// <param name="callback"></param>
         protected void NextTick(Action callback) => Interface.Oxide.NextTick(callback);
