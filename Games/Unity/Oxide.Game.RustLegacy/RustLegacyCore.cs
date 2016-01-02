@@ -36,7 +36,7 @@ namespace Oxide.Game.RustLegacy
         private readonly FieldInfo playerList = typeof(VoiceCom).GetField("playerList", BindingFlags.Static | BindingFlags.NonPublic);
 
         // Cache some player information
-        private static Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
+        private static readonly Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
 
         public class PlayerData
         {
@@ -103,6 +103,8 @@ namespace Oxide.Game.RustLegacy
             cmdlib.AddConsoleCommand("global.grant", this, "cmdGrant");
             cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
             cmdlib.AddConsoleCommand("global.revoke", this, "cmdRevoke");
+            cmdlib.AddConsoleCommand("oxide.show", this, "cmdShow");
+            cmdlib.AddConsoleCommand("global.show", this, "cmdShow");
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -134,6 +136,17 @@ namespace Oxide.Game.RustLegacy
         #endregion
 
         #region Server Hooks
+
+        /// <summary>
+        /// Check if player is admin
+        /// </summary>
+        /// <returns></returns>
+        private static bool IsAdmin(ConsoleSystem.Arg arg)
+        {
+            if (arg.argUser == null || arg.argUser.CanAdmin()) return true;
+            arg.ReplyWith("You are not an admin.");
+            return false;
+        }
 
         /// <summary>
         /// Called when the server is first initialized
@@ -183,7 +196,7 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("cmdPlugins")]
         private void cmdPlugins(ConsoleSystem.Arg arg)
         {
-            if (arg.argUser != null && !arg.argUser.admin) return;
+            if (!IsAdmin(arg)) return;
 
             var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
@@ -219,6 +232,8 @@ namespace Oxide.Game.RustLegacy
         private void cmdLoad(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
+            if (!IsAdmin(arg)) return;
+
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Usage: load *|<pluginname>+");
@@ -247,6 +262,8 @@ namespace Oxide.Game.RustLegacy
         private void cmdUnload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
+            if (!IsAdmin(arg)) return;
+
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Usage: unload *|<pluginname>+");
@@ -271,6 +288,8 @@ namespace Oxide.Game.RustLegacy
         private void cmdReload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
+            if (!IsAdmin(arg)) return;
+
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Usage: reload *|<pluginname>+");
@@ -309,10 +328,14 @@ namespace Oxide.Game.RustLegacy
         private void cmdGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
+            if (!IsAdmin(arg)) return;
+
             if (!arg.HasArgs(2))
             {
-                arg.ReplyWith("Usage: group <add|remove|set> <name> [title] [rank]");
+                var reply = "Syntax: group <add|set> <name> [title] [rank]";
+                reply += "Syntax: group <remove> <name>\n";
+                reply += "Syntax: group <parent> <name> <parentName>";
+                arg.ReplyWith(reply);
                 return;
             }
 
@@ -362,7 +385,8 @@ namespace Oxide.Game.RustLegacy
         private void cmdUserGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
+            if (!IsAdmin(arg)) return;
+
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Usage: usergroup <add|remove> <username> <groupname>");
@@ -419,7 +443,8 @@ namespace Oxide.Game.RustLegacy
         private void cmdGrant(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
+            if (!IsAdmin(arg)) return;
+
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Usage: grant <group|user> <name|id> <permission>");
@@ -468,7 +493,8 @@ namespace Oxide.Game.RustLegacy
         private void cmdRevoke(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (arg.argUser != null && !arg.argUser.CanAdmin()) return;
+            if (!IsAdmin(arg)) return;
+
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Usage: revoke <group|user> <name|id> <permission>");
@@ -510,6 +536,83 @@ namespace Oxide.Game.RustLegacy
         }
 
         #endregion
+
+        /// <summary>
+        /// Called when the "show" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("cmdShow")]
+        private void cmdShow(ConsoleSystem.Arg arg)
+        {
+            if (!PermissionsLoaded(arg)) return;
+            if (!IsAdmin(arg)) return;
+
+            if (!arg.HasArgs())
+            {
+                var reply = "Syntax: show <group|user> <name>\n";
+                reply += "Syntax: show <groups|perms>";
+                arg.ReplyWith(reply);
+                return;
+            }
+
+            var mode = arg.GetString(0);
+            var name = arg.GetString(1);
+
+            if (mode.Equals("perms"))
+            {
+                var result = "Permissions:\n";
+                result += string.Join(", ", permission.GetPermissions());
+                arg.ReplyWith(result);
+            }
+            else if (mode.Equals("user"))
+            {
+                var player = FindPlayer(name);
+                if (player == null && !permission.UserExists(name))
+                {
+                    arg.ReplyWith("User '" + name + "' not found");
+                    return;
+                }
+                var userId = name;
+                if (player != null)
+                {
+                    userId = player.userID.ToString();
+                    name = player.displayName;
+                    permission.UpdateNickname(userId, name);
+                    name += $"({userId})";
+                }
+                var result = "User '" + name + "' permissions:\n";
+                result += string.Join(", ", permission.GetUserPermissions(userId));
+                result += "\nUser '" + name + "' groups:\n";
+                result += string.Join(", ", permission.GetUserGroups(userId));
+                arg.ReplyWith(result);
+            }
+            else if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    arg.ReplyWith("Group '" + name + "' doesn't exist");
+                    return;
+                }
+                var result = "Group '" + name + "' users:\n";
+                result += string.Join(", ", permission.GetUsersInGroup(name));
+                result += "\nGroup '" + name + "' permissions:\n";
+                result += string.Join(", ", permission.GetGroupPermissions(name));
+                var parent = permission.GetGroupParent(name);
+                while (permission.GroupExists(parent))
+                {
+                    result = "\nParent group '" + parent + "' permissions:\n";
+                    result += string.Join(", ", permission.GetGroupPermissions(parent));
+                    parent = permission.GetGroupParent(name);
+                }
+                arg.ReplyWith(result);
+            }
+            else if (mode.Equals("groups"))
+            {
+                var result = "Groups:\n";
+                result += string.Join(", ", permission.GetGroups());
+                arg.ReplyWith(result);
+            }
+        }
 
         #region Command Handling
 

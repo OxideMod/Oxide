@@ -47,7 +47,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Libraries\Command.cs" />
     <Compile Include="Libraries\RustLegacy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -44,7 +44,10 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name = "Server", string message = null) => ConsoleNetworker.Broadcast($"chat.add {name} {message}");
+        public void BroadcastChat(string name, string message = null)
+        {
+            ConsoleNetworker.Broadcast(message != null ? $"chat.add {name.Quote()} {message.Quote()}" : $"chat.add \"Server\" {name.Quote()}");
+        }
 
         /// <summary>
         /// Sends a chat message to the user
@@ -53,9 +56,10 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(NetUser netUser, string name = "Server", string message = null)
+        public void SendChatMessage(NetUser netUser, string name, string message = null)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add {name} {message}");
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer,
+                message != null ? $"chat.add {name.Quote()} {message.Quote()}" : $"chat.add \"Server\" {name.Quote()}");
         }
 
         /// <summary>

@@ -766,7 +766,7 @@
             },
             "MSILHash": "4RmI0n6m7vZy7x0iOWeLFMWQ4TNmf5zSxvGCiX0zL5I=",
             "BaseHookName": "OnKilled",
-            "HookCategory": "Player"
+            "HookCategory": "Entity"
           }
         },
         {
@@ -838,7 +838,7 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "ModifyTags",
+            "Name": "ModifyTags [patch]",
             "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Rust.Steam.Server",
