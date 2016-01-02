@@ -39,7 +39,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         {
             this.session = session;
             steamid = (ulong)session.SteamId;
-            Object = session;
+            Object = session.WorldPlayerEntity;
         }
 
         #endregion
