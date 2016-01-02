@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Rust.Defines;
 using uLink;
 using UnityEngine;
 
@@ -80,7 +79,7 @@ namespace Oxide.Game.RustLegacy
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust legacy");
-            RemoteLogger.SetTag("version", Connection.protocol.ToString());
+            RemoteLogger.SetTag("version", Rust.Defines.Connection.protocol.ToString());
 
             // Add general commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
@@ -233,7 +232,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Usage: load *|<pluginname>+");
@@ -263,7 +261,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Usage: unload *|<pluginname>+");
@@ -289,7 +286,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs())
             {
                 arg.ReplyWith("Usage: reload *|<pluginname>+");
@@ -314,7 +310,7 @@ namespace Oxide.Game.RustLegacy
         private void cmdVersion(ConsoleSystem.Arg arg)
         {
             var oxide = OxideMod.Version.ToString();
-            var rust = Connection.protocol.ToString();
+            var rust = Rust.Defines.Connection.protocol.ToString();
 
             if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(rust))
                 arg.ReplyWith($"Oxide version: {oxide}, Rust Protocol: {rust}");
@@ -329,7 +325,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs(2))
             {
                 var reply = "Syntax: group <add|set> <name> [title] [rank]";
@@ -386,7 +381,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Usage: usergroup <add|remove> <username> <groupname>");
@@ -444,7 +438,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Usage: grant <group|user> <name|id> <permission>");
@@ -494,7 +487,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs(3))
             {
                 arg.ReplyWith("Usage: revoke <group|user> <name|id> <permission>");
@@ -546,7 +538,6 @@ namespace Oxide.Game.RustLegacy
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
-
             if (!arg.HasArgs())
             {
                 var reply = "Syntax: show <group|user> <name>\n";
