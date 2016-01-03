@@ -900,7 +900,7 @@ namespace Oxide.Game.Rust
         /// <returns></returns>
         private static bool IsAdmin(ConsoleSystem.Arg arg)
         {
-            if (arg.Player() == null || arg.Player().IsAdmin()) return true;
+            if (arg.connection == null || arg.connection.authLevel >= 2) return true;
             arg.ReplyWith("You are not an admin.");
             return false;
         }
