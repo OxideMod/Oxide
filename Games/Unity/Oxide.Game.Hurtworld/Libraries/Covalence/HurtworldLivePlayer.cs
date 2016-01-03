@@ -21,7 +21,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets this player's in-game character, if available
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
+        public IPlayerCharacter Character { get; }
 
         /// <summary>
         /// Gets the owner of this character
@@ -31,14 +31,15 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs this character, if available
         /// </summary>
-        public object Object { get; private set; }
+        public object Object { get; }
 
-        private PlayerSession session;
+        private readonly PlayerSession session;
 
         internal HurtworldLivePlayer(PlayerSession session)
         {
             this.session = session;
             steamid = (ulong)session.SteamId;
+            Character = this;
             Object = session.WorldPlayerEntity;
         }
 

@@ -27,7 +27,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets this player's in-game character, if available
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
+        public IPlayerCharacter Character { get; }
 
         /// <summary>
         /// Gets the owner of this character
@@ -37,14 +37,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs this character, if available
         /// </summary>
-        public object Object { get; private set; }
+        public object Object { get; }
 
-        private Player player;
+        private readonly Player player;
 
         internal ReignOfKingsLivePlayer(Player player)
         {
             this.player = player;
             steamid = player.Id;
+            Character = this;
             Object = player;
         }
 

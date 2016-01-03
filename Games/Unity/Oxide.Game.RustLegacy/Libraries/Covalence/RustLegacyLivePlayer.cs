@@ -22,7 +22,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets this player's in-game character, if available
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
+        public IPlayerCharacter Character { get; }
 
         /// <summary>
         /// Gets the owner of this character
@@ -32,14 +32,15 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs this character, if available
         /// </summary>
-        public object Object { get; private set; }
+        public object Object { get; }
 
-        private NetUser netUser;
+        private readonly NetUser netUser;
 
         internal RustLegacyLivePlayer(NetUser netUser)
         {
             this.netUser = netUser;
             steamid = netUser.userID;
+            Character = this;
             Object = netUser.playerClient;
         }
 
