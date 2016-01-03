@@ -27,7 +27,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets this player's in-game character, if available
         /// </summary>
-        public IPlayerCharacter Character { get; }
+        public IPlayerCharacter Character { get; private set; }
 
         /// <summary>
         /// Gets the owner of this character
@@ -37,7 +37,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs this character, if available
         /// </summary>
-        public object Object { get; }
+        public object Object { get; private set; }
 
         private readonly Player player;
 
@@ -46,7 +46,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             this.player = player;
             steamid = player.Id;
             Character = this;
-            Object = player;
+            Object = player.CurrentCharacter;
         }
 
         #endregion
