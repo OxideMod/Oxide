@@ -602,7 +602,7 @@ namespace Oxide.Game.Hurtworld
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                ReplyWith(session, "UserAddedtoGroup", name, group);
+                ReplyWith(session, "UserAddedToGroup", name, group);
             }
             else if (mode.Equals("remove"))
             {
