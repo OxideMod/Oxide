@@ -1,4 +1,3 @@
-# Source language
 language: csharp
 
 # Update Mono to latest snapshot
@@ -19,15 +18,11 @@ solution: Oxide.sln
 after_success: "[[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
 
 notifications:
-  # Disable build status email notifications, until the issue with forks is fixed
   email: false
-  # Slack (oxidemod.slack.com)
   slack:
     rooms:
       secure: "bmk8bmBzIOjuCR4qs5zx+SypIqLFR0QqXmd04mUohaLpAp1lJ5JQiOgKAcQPz0sqdUlu2ZAWjDT2brx0/DPssBJnQOTdKcWhYdp6n70oqXA/tvSj0FLSrZyFJjldI5okqkqGXkOdaees5mqWxEYVJEP/BjgVsDd+JvTuV5jGXlc="
 
-# Environmental system variables
 env:
   global:
-    # Super secure, encrypted variables! Ssssh!
-    - secure: "Xl3Pwx7OtKTo8JdQI5aReKoSdVOLGpvIF/JWhxQMnUWzfB0olO71HF/KHh1mUDWPI6cOaQrQJ+4d/dtMLMUTJgTnYK1lOsF4d+Y5UsNRb1/Cq1sgvs/xEzcT9zhinLeuGUmjsJK2vTqat6QcvZbErlwBoGZSOMkX4BYsR8QFbpU="
+    - secure: "rhZ/ZlRhJWfRWquzilEGrgSvG5aV8FaPAPXsiMQQCwP+bjNiOH6siYsm7L0Lqv6no1YQSsCpO2b/DO60DMMJRUpdxBgfdHkT9ioxHJiA4i4ObXEpQOu3qKvRvTKD+pLnYGCghXI6MjtTPZnHDuwaErzg1tOc52t7Z4C+renLfY0="
