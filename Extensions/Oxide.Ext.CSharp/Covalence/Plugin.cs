@@ -46,11 +46,5 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.LogError("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
         }
-
-        /// <summary>
-        /// Queue a callback to be called in the next server frame
-        /// </summary>
-        /// <param name="callback"></param>
-        protected void NextFrame(Action callback) => Interface.Oxide.NextTick(callback);
     }
 }
