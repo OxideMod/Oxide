@@ -11,6 +11,8 @@
         {
             X = x; Y = y; Z = z;
         }
+
+        public override string ToString() => $"({X}, {Y}, {Z})";
     }
 
     /// <summary>
