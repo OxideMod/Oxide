@@ -90,8 +90,7 @@
     </PropertyGroup>
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
-      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\KeraLua.dll" />
-      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\Linux\**\*.*" />
+      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.so" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.so" />
       <LinuxGameFiles Include="$(ProjectDir)\Files\Linux\**\*.*; $(ProjectDir)\Files\*.*" />
       <LinuxNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Linux\*.*" />
@@ -100,6 +99,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\$(OutputPath)\*.dll" />
@@ -108,8 +108,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
       <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\uLink*.dll; $(TargetDir)\UnityEngine*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\Linux\**" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
       <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
       <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
