@@ -44,6 +44,7 @@ namespace Oxide.Core.Libraries
             var existingMessages = GetMessagesIntern(file);
             if (existingMessages == null)
             {
+                langFiles.Remove(file);
                 AddLangFile(file, messages, plugin);
                 changed = true;
             }
@@ -109,14 +110,14 @@ namespace Oxide.Core.Libraries
             string currentLang;
             if (langData.UserData.TryGetValue(userId, out currentLang) && lang.Equals(currentLang)) return;
             if (lang.Equals(langData.Lang))
-                langData.UserData.Remove(lang);
+                langData.UserData.Remove(userId);
             else
                 langData.UserData[userId] = lang;
             SaveData();
         }
 
         [LibraryFunction("GetServerLanguage")]
-        public string GetServerLanguage(string userId) => langData.Lang;
+        public string GetServerLanguage() => langData.Lang;
 
         [LibraryFunction("SetServerLanguage")]
         public void SetServerLanguage(string lang)
