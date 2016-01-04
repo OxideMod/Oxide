@@ -80,16 +80,9 @@ namespace Oxide.Plugins
 
         internal void Compile(CompilablePlugin[] plugins, Action<Compilation> callback)
         {
-            if (!CheckCompiler())
-            {
-                OnCompilerFailed("Compiler couldn't be started.");
-                return;
-            }
-
             var id = lastId++;
             var compilation = new Compilation(id, callback, plugins);
             compilations[id] = compilation;
-
             compilation.Prepare(() => EnqueueCompilation(compilation));
         }
 
