@@ -92,6 +92,9 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("oxide.reload", this, "CmdReload");
             cmdlib.AddConsoleCommand("global.reload", this, "CmdReload");
             cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
+            cmdlib.AddConsoleCommand("oxide.lang", this, "CmdLang");
+            cmdlib.AddConsoleCommand("global.lang", this, "CmdLang");
+            cmdlib.AddChatCommand("lang", this, CmdChatLang);
             //cmdlib.AddConsoleCommand("global.version", this, "CmdVersion");
 
             // Add permission console commands
@@ -471,6 +474,35 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when the "lang" command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("CmdLang")]
+        private void CmdLang(ConsoleSystem.Arg arg)
+        {
+            if (!IsAdmin(arg)) return;
+            var lang = Interface.Oxide.GetLibrary<Lang>();
+            if (arg.HasArgs())
+                lang.SetServerLanguage(arg.GetString(0));
+            arg.ReplyWith("Server language: " + lang.GetServerLanguage());
+        }
+
+        /// <summary>
+        /// Called when the "lang" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdChatLang")]
+        private void CmdChatLang(BasePlayer player, string command, string[] args)
+        {
+            var lang = Interface.Oxide.GetLibrary<Lang>();
+            if (args != null && args.Length > 0)
+                lang.SetLanguage(args[0], player.UserIDString);
+            player.ChatMessage("Language: " + lang.GetLanguage(player.UserIDString));
+        }
+
+        /// <summary>
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
@@ -799,6 +831,7 @@ namespace Oxide.Game.Rust
 
             if (arg.connection != null)
             {
+                if (arg.Player() == null) return true;
                 var rustCovalence = Libraries.Covalence.RustCovalenceProvider.Instance;
                 var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
                 if (rustCovalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
