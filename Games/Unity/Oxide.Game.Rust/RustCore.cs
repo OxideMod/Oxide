@@ -92,10 +92,12 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("oxide.reload", this, "CmdReload");
             cmdlib.AddConsoleCommand("global.reload", this, "CmdReload");
             cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
+            //cmdlib.AddConsoleCommand("global.version", this, "CmdVersion");
             cmdlib.AddConsoleCommand("oxide.lang", this, "CmdLang");
             cmdlib.AddConsoleCommand("global.lang", this, "CmdLang");
+
+            // Add general chat commands
             cmdlib.AddChatCommand("lang", this, CmdChatLang);
-            //cmdlib.AddConsoleCommand("global.version", this, "CmdVersion");
 
             // Add permission console commands
             cmdlib.AddConsoleCommand("oxide.group", this, "CmdGroup");
@@ -481,9 +483,8 @@ namespace Oxide.Game.Rust
         private void CmdLang(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
-            var lang = Interface.Oxide.GetLibrary<Lang>();
-            if (arg.HasArgs())
-                lang.SetServerLanguage(arg.GetString(0));
+
+            if (arg.HasArgs()) lang.SetServerLanguage(arg.GetString(0));
             arg.ReplyWith("Server language: " + lang.GetServerLanguage());
         }
 
@@ -496,9 +497,7 @@ namespace Oxide.Game.Rust
         [HookMethod("CmdChatLang")]
         private void CmdChatLang(BasePlayer player, string command, string[] args)
         {
-            var lang = Interface.Oxide.GetLibrary<Lang>();
-            if (args != null && args.Length > 0)
-                lang.SetLanguage(args[0], player.UserIDString);
+            if (args != null && args.Length > 0) lang.SetLanguage(args[0], player.UserIDString);
             player.ChatMessage("Language: " + lang.GetLanguage(player.UserIDString));
         }
 

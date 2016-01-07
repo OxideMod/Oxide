@@ -474,10 +474,10 @@
             "InjectionIndex": 28,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0",
+            "ArgumentString": "this.entitySource, a0",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerLoot [entity]",
-            "HookName": "OnPlayerLoot",
+            "Name": "OnLootEntity",
+            "HookName": "OnLootEntity",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
             "Flagged": false,
@@ -501,10 +501,10 @@
             "InjectionIndex": 32,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
-            "ArgumentString": null,
+            "ArgumentString": "this.entitySource, a0",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerLoot [item]",
-            "HookName": "OnPlayerLoot",
+            "Name": "OnLootItem",
+            "HookName": "OnLootItem",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
             "Flagged": false,
@@ -526,11 +526,11 @@
           "Hook": {
             "InjectionIndex": 37,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.entitySource, a0",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerLoot [player]",
-            "HookName": "OnPlayerLoot",
+            "Name": "OnLootPlayer",
+            "HookName": "OnLootPlayer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
             "Flagged": false,
@@ -710,7 +710,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 36,
+            "InjectionIndex": 41,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0",
@@ -729,7 +729,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "oGUa6SUASfxSttJMk2GPo0cW+0D86synup8TDHXWfYU=",
+            "MSILHash": "GYdE1YXcJeIq8RVLJR0OJVFdXn7L9/DBPGtFZnR2HG8=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -834,7 +834,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "zB98JGrohKkoJpC/XmwBNkxmUFZkc5xnTObDw/Jj7g8=",
+            "MSILHash": "tNCg/vByQC6+yhvrTc924Ow4euaIKrb5UwNpJpHoQMo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -995,7 +995,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "wi7j+uJ/vQ1740UOuT2fJBlxGBhx4l+QNhgvpxgUTGQ=",
+            "MSILHash": "4erqUaFAWibcCcMgqIZyv8Kh9elBYeeliTrK5kscIOo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1842,7 +1842,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "i3xuXZ9ycc5coDeyoCDJdX64ANgayZUoNvlI/cksoxE=",
+            "MSILHash": "0eE6tG+HOS7qO1+wvx4yrYgDJJg8ZuPoHmUwJUpvZHA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2229,7 +2229,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "lyde8sGBoKoyEDIjT6eJVMshjC4AsIoe+83/CZ1Hovs=",
+            "MSILHash": "HgWi2LzQ60EUHeqHOGx9XhHLJdoSU1UxTsdaJihcdew=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2255,7 +2255,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "Xms+10vSHt+Fah9qZeBSeRFJZ/X0LUm8zf7Q2oIPLgM=",
+            "MSILHash": "ZbE3ZJyoYqnSXNIJ9D5vtluQhxyELST3XRrwPvJIUMY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2739,7 +2739,7 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "ModifyTags",
+            "Name": "ModifyTags [patch]",
             "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
@@ -2750,9 +2750,61 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "+QyveNRwJqS2YtQ1VfECQG5IPHQfCRbotDJT6f8P5vg=",
+            "MSILHash": "YTyNrIoU50drj0YScBGBIUTTAOfbSmTRDvfsTpjqCcM=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 17,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnItemSplit",
+            "HookName": "OnItemSplit",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Item",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SplitItem",
+              "ReturnType": "Item",
+              "Parameters": [
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "21Hrd4Qx1PRjDV7/h5usD+98AKrbqJTUrX9MSwugrlU=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0.player",
+            "HookTypeName": "Simple",
+            "Name": "OnCupboardClearList",
+            "HookName": "OnCupboardClearList",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingPrivlidge",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ClearList",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "qQSAQpzp8XmbJe2A6KOhhtypNd1Vy8YZoLei9tbVrx8=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
           }
         }
       ]
