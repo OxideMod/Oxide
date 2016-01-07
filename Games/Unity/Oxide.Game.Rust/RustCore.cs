@@ -31,6 +31,9 @@ namespace Oxide.Game.Rust
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
+        // The language library
+        private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+
         // Track when the server has been initialized
         private bool serverInitialized;
 
