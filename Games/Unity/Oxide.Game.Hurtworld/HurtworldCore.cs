@@ -301,6 +301,19 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
+        /// Called when the server receives input from a player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="character"></param>
+        /// <param name="input"></param>
+        [HookMethod("IOnPlayerInput")]
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input)
+        {
+            var identity = GameManager.Instance.GetIdentity(player);
+            Interface.Oxide.CallHook("OnPlayerInput", identity.ConnectedSession, input);
+        }
+
+        /// <summary>
         /// Called when the player attempts to suicide
         /// </summary>
         /// <param name="player"></param>

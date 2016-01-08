@@ -1076,6 +1076,34 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 28,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a2.sender, a1",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerInput [internal]",
+            "HookName": "IOnPlayerInput",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetMovementServerPlayerOwned",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ReadClientUpdate",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "InputControls&",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "UzBrDU3SXCoy2g1eFmw6rgM2RJvMmV3RiBBucoFTems=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ]
     }
