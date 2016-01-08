@@ -56,13 +56,15 @@ namespace Oxide.Game.Rust
             {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
             {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
             {"NoPluginsFound", "No plugins are currently available"},
+            {"OxideVersion", "Oxide version: {0}, Rust version: {1}"},
             {"PermissionNotFound", "Permission '{0}' doesn't exist"},
             {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
-            {"OxideVersion", "Oxide version: {0}, Hurtworld version: {1}"},
+            {"PlayerLanguage", "Player language set to {0}"},
             {"PluginNotLoaded", "Plugin '{0}' not loaded."},
             {"PluginReloaded", "Reloaded plugin {0} v{1} by {2}"},
             {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
-            {"UnknownChatCommand", "<color=#b8d7a3>Unknown command:</color> {0}"},
+            {"ServerLanguage", "Server language set to {0}"},
+            {"UnknownCommand", "Unknown command: {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
             {"UserNotFound", "User '{0}' not found"},
             {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
@@ -109,7 +111,7 @@ namespace Oxide.Game.Rust
         private bool PermissionsLoaded(ConsoleSystem.Arg arg)
         {
             if (permission.IsLoaded) return true;
-            ReplyWith(arg, "PermissionsNotLoaded", permission.LastException.Message);
+            ReplyWith(arg.connection, "PermissionsNotLoaded", permission.LastException.Message);
             return false;
         }
 
@@ -126,6 +128,9 @@ namespace Oxide.Game.Rust
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust");
             RemoteLogger.SetTag("version", Protocol.printable);
+
+            // Register messages for localization
+            lang.RegisterMessages(messages, this);
 
             // Add general console commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "CmdPlugins");
@@ -417,7 +422,7 @@ namespace Oxide.Game.Rust
             var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
             if (total_plugin_count < 1)
             {
-                ReplyWith(arg, "NoPluginsFound");
+                ReplyWith(arg.connection, "NoPluginsFound");
                 return;
             }
 
@@ -444,7 +449,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                ReplyWith(arg, "CommandUsageLoad");
+                ReplyWith(arg.connection, "CommandUsageLoad");
                 return;
             }
 
@@ -476,7 +481,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                ReplyWith(arg, "CommandUsageReload");
+                ReplyWith(arg.connection, "CommandUsageReload");
                 return;
             }
 
@@ -506,7 +511,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                ReplyWith(arg, "CommandUsageUnload");
+                ReplyWith(arg.connection, "CommandUsageUnload");
                 return;
             }
 
@@ -533,14 +538,15 @@ namespace Oxide.Game.Rust
         {
             var oxide = OxideMod.Version.ToString();
             var game = Protocol.printable;
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game)) ReplyWith(arg, "OxideVersion", oxide, game);
+            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game)) ReplyWith(arg.connection, "OxideVersion", oxide, game);
         }
 
         #endregion
 
         #region Lang Command
+
         /// <summary>
-        /// Called when the "lang" command has been executed
+        /// Called when the "lang" console command has been executed
         /// </summary>
         /// <param name="arg"></param>
         [HookMethod("CmdLang")]
@@ -549,11 +555,11 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
 
             if (arg.HasArgs()) lang.SetServerLanguage(arg.GetString(0));
-            arg.ReplyWith("Server language: " + lang.GetServerLanguage());
+            ReplyWith(arg.connection, "ServerLanguage", lang.GetServerLanguage());
         }
 
         /// <summary>
-        /// Called when the "lang" command has been executed
+        /// Called when the "lang" chat command has been executed
         /// </summary>
         /// <param name="player"></param>
         /// <param name="command"></param>
@@ -562,7 +568,7 @@ namespace Oxide.Game.Rust
         private void CmdChatLang(BasePlayer player, string command, string[] args)
         {
             if (args != null && args.Length > 0) lang.SetLanguage(args[0], player.UserIDString);
-            player.ChatMessage("Language: " + lang.GetLanguage(player.UserIDString));
+            ReplyWith(player.net.connection, "PlayerLanguage", lang.GetLanguage(player.UserIDString));
         }
 
         #endregion
@@ -580,7 +586,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(2))
             {
-                ReplyWith(arg, "CommandUsageGroup");
+                ReplyWith(arg.connection, "CommandUsageGroup");
                 return;
             }
 
@@ -591,50 +597,50 @@ namespace Oxide.Game.Rust
             {
                 if (permission.GroupExists(name))
                 {
-                    ReplyWith(arg, "GroupAlreadyExists", name);
+                    ReplyWith(arg.connection, "GroupAlreadyExists", name);
                     return;
                 }
                 permission.CreateGroup(name, arg.GetString(2), arg.GetInt(3));
-                ReplyWith(arg, "GroupCreated", name);
+                ReplyWith(arg.connection, "GroupCreated", name);
             }
             else if (mode.Equals("remove"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(arg, "GroupNotFound", name);
+                    ReplyWith(arg.connection, "GroupNotFound", name);
                     return;
                 }
                 permission.RemoveGroup(name);
-                ReplyWith(arg, "GroupDeleted", name);
+                ReplyWith(arg.connection, "GroupDeleted", name);
             }
             else if (mode.Equals("set"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(arg, "GroupNotFound", name);
+                    ReplyWith(arg.connection, "GroupNotFound", name);
                     return;
                 }
                 permission.SetGroupTitle(name, arg.GetString(2));
                 permission.SetGroupRank(name, arg.GetInt(3));
-                ReplyWith(arg, "GroupChanged", name);
+                ReplyWith(arg.connection, "GroupChanged", name);
             }
             else if (mode.Equals("parent"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(arg, "GroupNotFound", name);
+                    ReplyWith(arg.connection, "GroupNotFound", name);
                     return;
                 }
                 var parent = arg.GetString(2);
                 if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
-                    ReplyWith(arg, "GroupParentNotFound", parent);
+                    ReplyWith(arg.connection, "GroupParentNotFound", parent);
                     return;
                 }
                 if (permission.SetGroupParent(name, parent))
-                    ReplyWith(arg, "GroupParentChanged", name, parent);
+                    ReplyWith(arg.connection, "GroupParentChanged", name, parent);
                 else
-                    ReplyWith(arg, "GroupParentNotChanged", name);
+                    ReplyWith(arg.connection, "GroupParentNotChanged", name);
             }
         }
 
@@ -653,7 +659,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(3))
             {
-                ReplyWith(arg, "CommandUsageUserGroup");
+                ReplyWith(arg.connection, "CommandUsageUserGroup");
                 return;
             }
 
@@ -664,7 +670,7 @@ namespace Oxide.Game.Rust
             var player = FindPlayer(name);
             if (player == null && !permission.UserExists(name))
             {
-                ReplyWith(arg, "UserNotFound", name);
+                ReplyWith(arg.connection, "UserNotFound", name);
                 return;
             }
             var userId = name;
@@ -678,19 +684,19 @@ namespace Oxide.Game.Rust
 
             if (!permission.GroupExists(group))
             {
-                ReplyWith(arg, "GroupNotFound", name);
+                ReplyWith(arg.connection, "GroupNotFound", name);
                 return;
             }
 
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                ReplyWith(arg, "UserAddedToGroup", name, group);
+                ReplyWith(arg.connection, "UserAddedToGroup", name, group);
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                ReplyWith(arg, "UserRemovedFromGroup", name, group);
+                ReplyWith(arg.connection, "UserRemovedFromGroup", name, group);
             }
         }
 
@@ -709,7 +715,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(3))
             {
-                ReplyWith(arg, "CommandUsageGrant");
+                ReplyWith(arg.connection, "CommandUsageGrant");
                 return;
             }
 
@@ -719,7 +725,7 @@ namespace Oxide.Game.Rust
 
             if (!permission.PermissionExists(perm))
             {
-                ReplyWith(arg, "PermissionNotFound", perm);
+                ReplyWith(arg.connection, "PermissionNotFound", perm);
                 return;
             }
 
@@ -727,18 +733,18 @@ namespace Oxide.Game.Rust
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(arg, "GroupNotFound", name);
+                    ReplyWith(arg.connection, "GroupNotFound", name);
                     return;
                 }
                 permission.GrantGroupPermission(name, perm, null);
-                ReplyWith(arg, "GroupPermissionGranted", name, perm);
+                ReplyWith(arg.connection, "GroupPermissionGranted", name, perm);
             }
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
                 if (player == null && !permission.UserExists(name))
                 {
-                    ReplyWith(arg, "UserNotFound", name);
+                    ReplyWith(arg.connection, "UserNotFound", name);
                     return;
                 }
                 var userId = name;
@@ -749,7 +755,7 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                ReplyWith(arg, "UserPermissionGranted", $"{name} ({userId})", perm);
+                ReplyWith(arg.connection, "UserPermissionGranted", $"{name} ({userId})", perm);
             }
         }
 
@@ -768,7 +774,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs(3))
             {
-                ReplyWith(arg, "CommandUsageRevoke");
+                ReplyWith(arg.connection, "CommandUsageRevoke");
                 return;
             }
 
@@ -778,7 +784,7 @@ namespace Oxide.Game.Rust
 
             if (!permission.PermissionExists(perm))
             {
-                ReplyWith(arg, "PermissionNotFound", perm);
+                ReplyWith(arg.connection, "PermissionNotFound", perm);
                 return;
             }
 
@@ -786,18 +792,18 @@ namespace Oxide.Game.Rust
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(arg, "GroupNotFound", name);
+                    ReplyWith(arg.connection, "GroupNotFound", name);
                     return;
                 }
                 permission.RevokeGroupPermission(name, perm);
-                ReplyWith(arg, "GroupPermissionRevoked", name, perm);
+                ReplyWith(arg.connection, "GroupPermissionRevoked", name, perm);
             }
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
                 if (player == null && !permission.UserExists(name))
                 {
-                    ReplyWith(arg, "UserNotFound", name);
+                    ReplyWith(arg.connection, "UserNotFound", name);
                     return;
                 }
                 var userId = name;
@@ -808,7 +814,7 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                ReplyWith(arg, "UserPermissionRevoked", $"{name} ({userId})", perm);
+                ReplyWith(arg.connection, "UserPermissionRevoked", $"{name} ({userId})", perm);
             }
         }
 
@@ -827,7 +833,7 @@ namespace Oxide.Game.Rust
             if (!IsAdmin(arg)) return;
             if (!arg.HasArgs())
             {
-                ReplyWith(arg, "CommandUsageShow");
+                ReplyWith(arg.connection, "CommandUsageShow");
                 return;
             }
 
@@ -845,7 +851,7 @@ namespace Oxide.Game.Rust
                 var player = FindPlayer(name);
                 if (player == null && !permission.UserExists(name))
                 {
-                    ReplyWith(arg, "UserNotFound");
+                    ReplyWith(arg.connection, "UserNotFound");
                     return;
                 }
                 var userId = name;
@@ -866,7 +872,7 @@ namespace Oxide.Game.Rust
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(arg, "GroupNotFound", name);
+                    ReplyWith(arg.connection, "GroupNotFound", name);
                     return;
                 }
                 var result = "Group '" + name + "' users:\n";
@@ -936,8 +942,7 @@ namespace Oxide.Game.Rust
                 if (player == null)
                     Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
                 else
-                    if (!cmdlib.HandleChatCommand(player, cmd, args))
-                        player.SendConsoleCommand("chat.add", 0, $"Unknown command '{cmd}'!");
+                    if (!cmdlib.HandleChatCommand(player, cmd, args)) ReplyWith(player.net.connection, "UnknownCommand", cmd);
 
                 // Handled
                 arg.ReplyWith(string.Empty);
@@ -1014,24 +1019,27 @@ namespace Oxide.Game.Rust
         private bool IsAdmin(ConsoleSystem.Arg arg)
         {
             if (arg.connection == null || arg.connection.authLevel >= 2) return true;
-            ReplyWith(arg, "YouAreNotAdmin");
+            ReplyWith(arg.connection, "YouAreNotAdmin");
             return false;
         }
 
         /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="connection"></param>
         /// <param name="key"></param>
         /// <param name="args"></param>
-        private void ReplyWith(ConsoleSystem.Arg arg, string key, params object[] args)
+        private void ReplyWith(Connection connection, string key, params object[] args)
         {
-            if (arg.connection == null)
+            var player = connection?.player as BasePlayer;
+
+            if (player == null)
             {
                 Interface.Oxide.LogInfo(string.Format(lang.GetMessage(key, this), args));
                 return;
             }
-            arg.ReplyWith(string.Format(lang.GetMessage(key, this, arg.connection.userid.ToString()), args));
+
+            player.SendConsoleCommand("chat.add", 0, string.Format(lang.GetMessage(key, this, connection.userid.ToString()), args));
         }
 
         private static BasePlayer FindPlayer(string nameOrIdOrIp)
