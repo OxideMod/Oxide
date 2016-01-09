@@ -244,7 +244,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnPlayerConnected")]
         private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
         {
-            // Set the session name
+            // Set the session name and strip HTML tags
             var session = GameManager.Instance.GetSession(player);
             session.Name = Regex.Replace(name, "<.*?>", string.Empty);
 
@@ -262,6 +262,20 @@ namespace Oxide.Game.Hurtworld
             }
 
             Interface.Oxide.CallHook("OnPlayerConnected", session);
+        }
+
+        /// <summary>
+        /// Called when the player has spawned
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="info"></param>
+        [HookMethod("IOnPlayerSpawn")]
+        private void IOnPlayerSpawn(PlayerSession session, uLink.NetworkMessageInfo info)
+        {
+            // Strip HTML tags from name
+            GameManager.Instance.ChangeNameServer(Regex.Replace(session.Name, "<.*?>", string.Empty), info);
+
+            Interface.Oxide.CallHook("OnPlayerSpawn", session);
         }
 
         /// <summary>

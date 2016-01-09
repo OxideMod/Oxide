@@ -698,7 +698,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 3,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, a1.sender",
@@ -1057,10 +1057,10 @@
             "InjectionIndex": 24,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0.ConnectedSession",
+            "ArgumentString": "l0.ConnectedSession, a0",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerSpawn",
-            "HookName": "OnPlayerSpawn",
+            "Name": "IOnPlayerSpawn [internal]",
+            "HookName": "IOnPlayerSpawn",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConstructionManager",
             "Flagged": false,
