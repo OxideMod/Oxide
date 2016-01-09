@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Steamworks;
 
@@ -43,24 +44,31 @@ namespace Oxide.Game.Hurtworld
             {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"},
             {"CommandUsageUnload", "Usage: unload *|<pluginname>+"},
             {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
+            {"GroupAlreadyExists", "Group '{0}' already exists"},
             {"GroupChanged", "Group '{0}' changed"},
             {"GroupCreated", "Group '{0}' created"},
             {"GroupDeleted", "Group '{0}' deleted"},
-            {"GroupNotFound", "Group '{0}' doesn't exist" },
-            {"GroupPermissionGranted", "Group '{0}' granted permission: {1}"},
-            {"GroupPermissionRevoked", "Group '{0}' revoked permission: {1}"},
+            {"GroupNotFound", "Group '{0}' doesn't exist"},
+            {"GroupParentChanged", "Group '{0}' parent changed to '{1}'"},
+            {"GroupParentNotChanged", "Group '{0}' parent was not changed"},
+            {"GroupParentNotFound", "Group parent '{0}' doesn't exist"},
+            {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
+            {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
             {"NoPluginsFound", "No plugins are currently available"},
-            {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
             {"OxideVersion", "Oxide version: {0}, Hurtworld version: {1}"},
+            {"PermissionNotFound", "Permission '{0}' doesn't exist"},
+            {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
+            {"PlayerLanguage", "Player language set to {0}"},
             {"PluginNotLoaded", "Plugin '{0}' not loaded."},
             {"PluginReloaded", "Reloaded plugin {0} v{1} by {2}"},
             {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
+            {"ServerLanguage", "Server language set to {0}"},
             {"UnknownChatCommand", "<color=#b8d7a3>Unknown command:</color> {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
             {"UserNotFound", "User '{0}' not found"},
-            {"UserPermissionGranted", "User '{0}' granted permission: {1}"},
-            {"UserPermissionRevoked", "User '{0}' revoked permission: {1}"},
-            {"UserRemovedFromGroup", "User '{0}' removed from group: {1}"},
+            {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
+            {"UserPermissionRevoked", "User '{0}' revoked permission '{1}'"},
+            {"UserRemovedFromGroup", "User '{0}' removed from group '{1}'"},
             {"YouAreNotAdmin", "You are not an admin"}
         };
 
@@ -236,9 +244,9 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnPlayerConnected")]
         private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
         {
-            // Set the session name for Hurtworld
+            // Set the session name
             var session = GameManager.Instance.GetSession(player);
-            session.Name = name;
+            session.Name = Regex.Replace(name, "<.*?>", string.Empty);
 
             // Let covalence know
             Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(session);
@@ -304,7 +312,6 @@ namespace Oxide.Game.Hurtworld
         /// Called when the server receives input from a player
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="character"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
         private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input)
@@ -357,14 +364,16 @@ namespace Oxide.Game.Hurtworld
             var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
             if (total_plugin_count < 1)
             {
-                ReplyWith(session, lang.GetMessage("NoPluginsFound", this, session.SteamId.ToString()));
+                ReplyWith(session, "NoPluginsFound");
                 return;
             }
 
             var output = $"Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
             var number = 1;
-            foreach (var plugin in loaded_plugins) output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
-            foreach (var plugin_name in unloaded_plugin_errors.Keys) output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            foreach (var plugin in loaded_plugins)
+                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
+            foreach (var plugin_name in unloaded_plugin_errors.Keys)
+                output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
             ReplyWith(session, output);
         }
 
@@ -433,7 +442,6 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                // Reload
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
@@ -476,7 +484,6 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                // Unload
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
@@ -538,7 +545,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupNotFound", name);
+                    ReplyWith(session, "GroupAlreadyExists", name);
                     return;
                 }
                 permission.CreateGroup(name, title, rank);
@@ -564,6 +571,24 @@ namespace Oxide.Game.Hurtworld
                 permission.SetGroupTitle(name, title);
                 permission.SetGroupRank(name, rank);
                 ReplyWith(session, "GroupChanged", name);
+            }
+            else if (mode.Equals("parent"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    ReplyWith(session, "GroupNotFound", name);
+                    return;
+                }
+                var parent = args[2];
+                if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
+                {
+                    ReplyWith(session, "GroupParentNotFound", parent);
+                    return;
+                }
+                if (permission.SetGroupParent(name, parent))
+                    ReplyWith(session, "GroupParentChanged", name, parent);
+                else
+                    ReplyWith(session, "GroupParentNotChanged", name);
             }
         }
 
@@ -649,6 +674,12 @@ namespace Oxide.Game.Hurtworld
             var name = args[1];
             var perm = args[2];
 
+            if (!permission.PermissionExists(perm))
+            {
+                ReplyWith(session, "PermissionNotFound", perm);
+                return;
+            }
+
             if (mode.Equals("group"))
             {
                 if (!permission.GroupExists(name))
@@ -675,7 +706,7 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                ReplyWith(session, "UserPermissionGranted", name, perm);
+                ReplyWith(session, "UserPermissionGranted", $"{name} ({userId})", perm);
             }
         }
 
@@ -704,6 +735,12 @@ namespace Oxide.Game.Hurtworld
             var name = args[1];
             var perm = args[2];
 
+            if (!permission.PermissionExists(perm))
+            {
+                ReplyWith(session, "PermissionNotFound", perm);
+                return;
+            }
+
             if (mode.Equals("group"))
             {
                 if (!permission.GroupExists(name))
@@ -730,7 +767,7 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                ReplyWith(session, "UserPermissionRevoked", name, perm);
+                ReplyWith(session, "UserPermissionRevoked", $"{name} ({userId})", perm);
             }
         }
 
@@ -885,6 +922,8 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
+        #region Helper Methods
+
         /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
@@ -921,5 +960,7 @@ namespace Oxide.Game.Hurtworld
             }
             return session;
         }
+
+        #endregion
     }
 }
