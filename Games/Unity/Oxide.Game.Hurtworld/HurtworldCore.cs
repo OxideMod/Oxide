@@ -265,20 +265,6 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when the player has spawned
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="info"></param>
-        [HookMethod("IOnPlayerSpawn")]
-        private void IOnPlayerSpawn(PlayerSession session, uLink.NetworkMessageInfo info)
-        {
-            // Strip HTML tags from name
-            GameManager.Instance.ChangeNameServer(Regex.Replace(session.Name, "<.*?>", string.Empty), info);
-
-            Interface.Oxide.CallHook("OnPlayerSpawn", session);
-        }
-
-        /// <summary>
         /// Called when the player has disconnected
         /// </summary>
         /// <param name="session"></param>
