@@ -1107,7 +1107,7 @@ namespace Oxide.Game.Rust
         private void IOnLootItem(PlayerLoot source, Item item)
         {
             // Call hook
-            Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), item);
+            Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
 
             // Call depreated hook
             Interface.CallDeprecatedHook("OnPlayerLoot", source, item);
