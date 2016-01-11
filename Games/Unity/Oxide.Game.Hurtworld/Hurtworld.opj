@@ -698,7 +698,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 9,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, a1.sender",
@@ -717,7 +717,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "KjXB+h1Ib7ken5zXI/Vy3R/LrojOTbO+/AhV9fkAjTk=",
+            "MSILHash": "92cOWSbfbFCQ0KicSGRusdsWk+ib5/Sm7W0BFYDi5F4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -765,7 +765,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "zFRACEXsgYhe872rgQyBFw9a1KhpoaOe+8HplKuLLtk=",
+            "MSILHash": "rjXeURFeHtJ2goQ5FHcbTXBwYYC3sF3tL0ovkwTNjqQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
