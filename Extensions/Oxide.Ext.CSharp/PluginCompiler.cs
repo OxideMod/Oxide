@@ -53,6 +53,7 @@ namespace Oxide.Plugins
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
                     binary_path = root_directory + @"/CSharpCompiler";
+                    if (IntPtr.Size != 8) binary_path += ".x86";
                     if (!File.Exists(binary_path))
                     {
                         Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler!");
