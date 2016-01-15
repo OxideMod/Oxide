@@ -141,11 +141,11 @@ namespace Oxide.Core.ServerConsole
             nextUpdate = Interface.Oxide.Now + 0.66f;
             if (!input.Valid) return;
             string left1 = status1Left, left2 = status2Left, left3 = status3Left;
-            input.StatusTextLeft[0] = string.Empty;
+            //input.StatusTextLeft[0] = string.Empty;
             input.StatusTextLeft[1] = left1;
             input.StatusTextLeft[2] = left2;
             input.StatusTextLeft[3] = left3;
-            input.StatusTextRight[0] = string.Empty;
+            //input.StatusTextRight[0] = string.Empty;
             input.StatusTextRight[1] = GetStatusRight(left1.Length, status1Right);
             input.StatusTextRight[2] = GetStatusRight(left2.Length, status2Right);
             input.StatusTextRight[3] = GetStatusRight(left3.Length, status3Right);
