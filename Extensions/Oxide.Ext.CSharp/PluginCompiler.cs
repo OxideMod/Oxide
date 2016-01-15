@@ -33,16 +33,6 @@ namespace Oxide.Plugins
                 case PlatformID.Win32NT:
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
-                    if (!File.Exists(root_directory + @"\mono-2.0.dll"))
-                    {
-                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find mono-2.0.dll!");
-                        return;
-                    }
-                    if (!File.Exists(root_directory + @"\msvcr120.dll") && !File.Exists(Environment.SystemDirectory + @"\msvcr120.dll"))
-                    {
-                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find msvcr120.dll!");
-                        return;
-                    }
                     binary_path = root_directory + @"\CSharpCompiler.exe";
                     if (!File.Exists(binary_path))
                     {
@@ -252,6 +242,25 @@ namespace Oxide.Plugins
                     },
                     EnableRaisingEvents = true
                 };
+                string path;
+                switch (Environment.OSVersion.Platform)
+                {
+                    case PlatformID.Win32S:
+                    case PlatformID.Win32Windows:
+                    case PlatformID.Win32NT:
+                        var currentPath = process.StartInfo.EnvironmentVariables["PATH"] ?? Environment.GetEnvironmentVariable("PATH");
+                        path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, "x86")}";
+                        var newPath = string.IsNullOrEmpty(currentPath) ? path : $"{currentPath}{Path.PathSeparator}{path}";
+                        process.StartInfo.EnvironmentVariables["PATH"] = newPath;
+                        break;
+                    case PlatformID.Unix:
+                    case PlatformID.MacOSX:
+                        var currentLdLibraryPath = process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] ?? Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
+                        path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
+                        var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : $"{currentLdLibraryPath}{Path.PathSeparator}{path}";
+                        process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = newLdLibraryPath;
+                        break;
+                }
                 process.Exited += OnProcessExited;
                 process.Start();
             }
@@ -304,7 +313,9 @@ namespace Oxide.Plugins
                 foreach (var filePath in filePaths)
                     File.Delete(filePath);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+            }
         }
 
         private static string EscapeArgument(string arg)

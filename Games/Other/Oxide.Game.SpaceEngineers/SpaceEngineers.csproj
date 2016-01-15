@@ -87,6 +87,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\$(OutputPath)\*.dll" />
@@ -94,11 +95,11 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\x64\lua*.dll" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\x64\*.dll" />
       <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
-      <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\mono-2.0.dll; $(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" />
+      <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace ObjectStream.IO
 {
@@ -66,7 +68,12 @@ namespace ObjectStream.IO
             var bytesRead = _inStream.Read(lenbuf, 0, lensize);
             if (bytesRead == 0) return 0;
             if (bytesRead != lensize)
+            {
+                //TODO hack to ignore BOM
+                Array.Resize(ref lenbuf, Encoding.UTF8.GetPreamble().Length);
+                if (Encoding.UTF8.GetPreamble().SequenceEqual(lenbuf)) return ReadLength();
                 throw new IOException(string.Format("Expected {0} bytes but read {1}", lensize, bytesRead));
+            }
             return IPAddress.NetworkToHostOrder(BitConverter.ToInt32(lenbuf, 0));
         }
 

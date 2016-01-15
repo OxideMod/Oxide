@@ -89,6 +89,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\$(OutputPath)\*.dll" />
@@ -97,11 +98,11 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
       <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\bolt*.dll; $(TargetDir)\udpkit*.dll; $(TargetDir)\UnityEngine*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\Linux\**" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
       <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
-      <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.dll; $(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
+      <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
