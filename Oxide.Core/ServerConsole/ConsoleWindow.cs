@@ -70,8 +70,9 @@ namespace Oxide.Core.ServerConsole
             }
             oldOutput = Console.Out;
             oldEncoding = Console.OutputEncoding;
-            SetConsoleOutputCP((uint)Encoding.UTF8.CodePage);
-            Console.OutputEncoding = Encoding.UTF8;
+            var encoding = new UTF8Encoding(false);
+            SetConsoleOutputCP((uint)encoding.CodePage);
+            Console.OutputEncoding = encoding;
             Stream outStream;
             try
             {
@@ -82,7 +83,7 @@ namespace Oxide.Core.ServerConsole
             {
                 outStream = Console.OpenStandardOutput();
             }
-            Console.SetOut(new StreamWriter(outStream, Encoding.UTF8) { AutoFlush = true });
+            Console.SetOut(new StreamWriter(outStream, encoding) { AutoFlush = true });
             return true;
         }
 

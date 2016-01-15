@@ -133,6 +133,14 @@ namespace Oxide.Core.Configuration
         }
 
         /// <summary>
+        /// Removes key from config
+        /// </summary>
+        public void Remove(string key)
+        {
+            _keyvalues.Remove(key);
+        }
+
+        /// <summary>
         /// Gets or sets a setting on this config by key
         /// </summary>
         /// <param name="key"></param>

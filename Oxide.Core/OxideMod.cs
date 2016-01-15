@@ -174,6 +174,9 @@ namespace Oxide.Core
             LogInfo("Loading extensions...");
             extensionmanager.LoadAllExtensions(ExtensionDirectory);
 
+            // Remove old files
+            Cleanup.Run();
+
             // Initialize covalence library after extensions (as it depends on things from within an ext)
             covalence.Initialize();
 

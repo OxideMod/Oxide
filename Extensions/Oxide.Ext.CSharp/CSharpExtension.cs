@@ -1,4 +1,6 @@
-﻿using Oxide.Core;
+﻿using System.IO;
+
+using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.Plugins.Watchers;
 
@@ -47,6 +49,9 @@ namespace Oxide.Plugins
 
             // Register engine frame callback
             Interface.Oxide.OnFrame(OnFrame);
+
+            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "mono-2.0.dll"));
+            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "msvcr120.dll"));
         }
 
         /// <summary>

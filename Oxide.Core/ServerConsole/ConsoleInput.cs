@@ -6,15 +6,15 @@ namespace Oxide.Core.ServerConsole
 {
     public class ConsoleInput
     {
-        public string InputString = string.Empty;
-        private readonly List<string> _inputHistory = new List<string>();
+        private string inputString = string.Empty;
+        private readonly List<string> inputHistory = new List<string>();
         private int inputHistoryIndex;
         private float nextUpdate;
         internal event Action<string> OnInputText;
-        internal string[] StatusTextLeft = { string.Empty, string.Empty, string.Empty, string.Empty };
-        internal string[] StatusTextRight = { string.Empty, string.Empty, string.Empty, string.Empty };
-        internal ConsoleColor[] StatusTextLeftColor = { ConsoleColor.White, ConsoleColor.White, ConsoleColor.White, ConsoleColor.White };
-        internal ConsoleColor[] StatusTextRightColor = { ConsoleColor.White, ConsoleColor.White, ConsoleColor.White, ConsoleColor.White };
+        internal readonly string[] StatusTextLeft = { string.Empty, string.Empty, string.Empty, string.Empty };
+        internal readonly string[] StatusTextRight = { string.Empty, string.Empty, string.Empty, string.Empty };
+        internal readonly ConsoleColor[] StatusTextLeftColor = { ConsoleColor.White, ConsoleColor.White, ConsoleColor.White, ConsoleColor.White };
+        internal readonly ConsoleColor[] StatusTextRightColor = { ConsoleColor.White, ConsoleColor.White, ConsoleColor.White, ConsoleColor.White };
 
         public int LineWidth => Console.BufferWidth;
 
@@ -49,12 +49,12 @@ namespace Oxide.Core.ServerConsole
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Green;
                 ClearLine(1);
-                if (InputString.Length == 0)
+                if (inputString.Length == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Gray;
                     return;
                 }
-                Console.Write(InputString.Length >= LineWidth - 2 ? InputString.Substring(InputString.Length - (LineWidth - 2)) : InputString);
+                Console.Write(inputString.Length >= LineWidth - 2 ? inputString.Substring(inputString.Length - (LineWidth - 2)) : inputString);
                 Console.ForegroundColor = ConsoleColor.Gray;
             }
             catch (Exception e)
@@ -86,44 +86,44 @@ namespace Oxide.Core.ServerConsole
                 case ConsoleKey.Enter:
                     ClearLine(StatusTextLeft.Length);
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(string.Concat("> ", InputString));
-                    _inputHistory.Insert(0, InputString);
-                    if (_inputHistory.Count > 50) _inputHistory.RemoveRange(50, _inputHistory.Count - 50);
-                    var str = InputString;
-                    InputString = string.Empty;
+                    Console.WriteLine(string.Concat("> ", inputString));
+                    inputHistory.Insert(0, inputString);
+                    if (inputHistory.Count > 50) inputHistory.RemoveRange(50, inputHistory.Count - 50);
+                    var str = inputString;
+                    inputString = string.Empty;
                     OnInputText?.Invoke(str);
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Backspace:
-                    if (InputString.Length < 1) return;
-                    InputString = InputString.Substring(0, InputString.Length - 1);
+                    if (inputString.Length < 1) return;
+                    inputString = inputString.Substring(0, inputString.Length - 1);
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Escape:
-                    InputString = string.Empty;
+                    inputString = string.Empty;
                     RedrawInputLine();
                     return;
                 case ConsoleKey.UpArrow:
-                    if (_inputHistory.Count == 0) return;
+                    if (inputHistory.Count == 0) return;
                     if (inputHistoryIndex < 0) inputHistoryIndex = 0;
-                    if (inputHistoryIndex >= _inputHistory.Count - 1)
+                    if (inputHistoryIndex >= inputHistory.Count - 1)
                     {
-                        inputHistoryIndex = _inputHistory.Count - 1;
-                        InputString = _inputHistory[inputHistoryIndex];
+                        inputHistoryIndex = inputHistory.Count - 1;
+                        inputString = inputHistory[inputHistoryIndex];
                         RedrawInputLine();
                         return;
                     }
-                    InputString = _inputHistory[inputHistoryIndex++];
+                    inputString = inputHistory[inputHistoryIndex++];
                     RedrawInputLine();
                     return;
                 case ConsoleKey.DownArrow:
-                    if (_inputHistory.Count == 0) return;
-                    if (inputHistoryIndex >= _inputHistory.Count - 1) inputHistoryIndex = _inputHistory.Count - 2;
-                    InputString = inputHistoryIndex < 0 ? string.Empty : _inputHistory[inputHistoryIndex--];
+                    if (inputHistory.Count == 0) return;
+                    if (inputHistoryIndex >= inputHistory.Count - 1) inputHistoryIndex = inputHistory.Count - 2;
+                    inputString = inputHistoryIndex < 0 ? string.Empty : inputHistory[inputHistoryIndex--];
                     RedrawInputLine();
                     return;
                 case ConsoleKey.Tab:
-                    var results = Completion?.Invoke(InputString);
+                    var results = Completion?.Invoke(inputString);
                     if (results == null || results.Length == 0) return;
                     if (results.Length > 1)
                     {
@@ -142,16 +142,16 @@ namespace Oxide.Core.ServerConsole
                             Console.WriteLine(result);
                         }
                         if (lowestDiff > 0)
-                            InputString = results[0].Substring(0, lowestDiff);
+                            inputString = results[0].Substring(0, lowestDiff);
                         RedrawInputLine();
                         return;
                     }
-                    InputString = results[0];
+                    inputString = results[0];
                     RedrawInputLine();
                     return;
             }
             if (consoleKeyInfo.KeyChar == 0) return;
-            InputString = string.Concat(InputString, consoleKeyInfo.KeyChar);
+            inputString = string.Concat(inputString, consoleKeyInfo.KeyChar);
             RedrawInputLine();
         }
 

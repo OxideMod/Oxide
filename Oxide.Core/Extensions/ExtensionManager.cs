@@ -165,7 +165,8 @@ namespace Oxide.Core.Extensions
             {
                 if (file.Contains(".Ext.") && Array.IndexOf(gameFiles, file.Replace(".Ext.", ".Game.")) != -1)
                 {
-                    Logger.Write(LogType.Warning, "Found old game extension '{0}'. Please remove it!", Path.GetFileName(file));
+                    //Logger.Write(LogType.Warning, "Found old game extension '{0}'. Please remove it!", Path.GetFileName(file));
+                    Cleanup.Add(file);
                     continue;
                 }
                 LoadExtension(Path.Combine(directory, file));

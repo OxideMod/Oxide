@@ -9,7 +9,7 @@ before_install:
 # Add build number to version
 before_script: 
   - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
-  - for file in */ ; do file="${file%/*}"; file="$file/${file##*.}Extension.cs"; if [[ -e "$file" ]]; then sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" "$file"; fi done
+  - find . -name "*Extension.cs" -exec sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" {} \;
 
 # Build the project
 solution: Oxide.sln
