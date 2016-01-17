@@ -62,6 +62,7 @@ namespace Oxide.Game.Hurtworld
             {"PluginNotLoaded", "Plugin '{0}' not loaded."},
             {"PluginReloaded", "Reloaded plugin {0} v{1} by {2}"},
             {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
+            {"ShowGroups", "Groups: {0}"},
             {"ServerLanguage", "Server language set to {0}"},
             {"UnknownChatCommand", "<color=#b8d7a3>Unknown command:</color> {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
@@ -113,10 +114,10 @@ namespace Oxide.Game.Hurtworld
         /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
         /// <returns></returns>
-        private bool PermissionsLoaded(PlayerSession session)
+        private bool PermissionsLoaded()
         {
             if (permission.IsLoaded) return true;
-            ReplyWith(session, "PermissionsNotLoaded", permission.LastException.Message);
+            ReplyWith(null, string.Format(GetMessage("PermissionsNotLoaded", permission.LastException.Message)));
             return false;
         }
 
@@ -301,7 +302,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, chatcmd, args))
             {
-                ReplyWith(session, "UnknownChatCommand", chatcmd);
+                ReplyWith(session, string.Format(GetMessage("UnknownChatCommand", chatcmd)));
                 return true;
             }
 
@@ -346,7 +347,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdPlugins")]
         private void CmdPlugins(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
 
             var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
@@ -364,7 +365,7 @@ namespace Oxide.Game.Hurtworld
             var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
             if (total_plugin_count < 1)
             {
-                ReplyWith(session, "NoPluginsFound");
+                ReplyWith(session, string.Format(GetMessage("NoPluginsFound", session.SteamId.ToString())));
                 return;
             }
 
@@ -390,11 +391,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdLoad")]
         private void CmdLoad(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(session, "CommandUsageLoad");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageLoad", session.SteamId.ToString())));
                 return;
             }
 
@@ -424,11 +425,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdReload")]
         private void CmdReload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(session, "CommandUsageReload");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageReload", session.SteamId.ToString())));
                 return;
             }
 
@@ -445,11 +446,11 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    ReplyWith(session, "PluginNotLoaded", name);
+                    ReplyWith(session, string.Format(GetMessage("PluginNotLoaded", session.SteamId.ToString()), name));
                     continue;
                 }
                 Interface.Oxide.ReloadPlugin(name);
-                ReplyWith(session, "PluginReloaded", plugin.Title, plugin.Version, plugin.Author);
+                ReplyWith(session, string.Format(GetMessage("PluginReloaded", session.SteamId.ToString()), plugin.Title, plugin.Version, plugin.Author));
             }
         }
 
@@ -466,11 +467,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdUnload")]
         private void CmdUnload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(session, "CommandUsageUnload");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageUnload", session.SteamId.ToString())));
                 return;
             }
 
@@ -487,11 +488,11 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    ReplyWith(session, "PluginNotLoaded", name);
+                    ReplyWith(session, string.Format(GetMessage("PluginNotLoaded", session.SteamId.ToString()), name));
                     continue;
                 }
                 Interface.Oxide.UnloadPlugin(name);
-                ReplyWith(session, "PluginUnloaded", plugin.Title, plugin.Version, plugin.Author);
+                ReplyWith(session, string.Format(GetMessage("PluginUnloaded", session.SteamId.ToString()), plugin.Title, plugin.Version, plugin.Author));
             }
         }
 
@@ -510,7 +511,8 @@ namespace Oxide.Game.Hurtworld
         {
             var oxide = OxideMod.Version.ToString();
             var game = GameManager.Instance.GetProtocolVersion().ToString();
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game)) ReplyWith(session, "OxideVersion", oxide, game);
+            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game))
+                ReplyWith(session, string.Format(GetMessage("OxideVersion", session.SteamId.ToString()), oxide, game));
         }
 
         #endregion
@@ -526,11 +528,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdGroup")]
         private void CmdGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 2)
             {
-                ReplyWith(session, "CommandUsageGroup");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageGroup", session.SteamId.ToString())));
                 return;
             }
 
@@ -545,50 +547,50 @@ namespace Oxide.Game.Hurtworld
             {
                 if (permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupAlreadyExists", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupAlreadyExists", session.SteamId.ToString()), name));
                     return;
                 }
                 permission.CreateGroup(name, title, rank);
-                ReplyWith(session, "GroupCreated", name);
+                ReplyWith(session, string.Format(GetMessage("GroupCreated", session.SteamId.ToString()), name));
             }
             else if (mode.Equals("remove"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 permission.RemoveGroup(name);
-                ReplyWith(session, "GroupDeleted", name);
+                ReplyWith(session, string.Format(GetMessage("GroupDeleted", session.SteamId.ToString()), name));
             }
             else if (mode.Equals("set"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 permission.SetGroupTitle(name, title);
                 permission.SetGroupRank(name, rank);
-                ReplyWith(session, "GroupChanged", name);
+                ReplyWith(session, string.Format(GetMessage("GroupChanged", session.SteamId.ToString()), name));
             }
             else if (mode.Equals("parent"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 var parent = args[2];
                 if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
-                    ReplyWith(session, "GroupParentNotFound", parent);
+                    ReplyWith(session, string.Format(GetMessage("GroupParentNotFound", session.SteamId.ToString()), parent));
                     return;
                 }
                 if (permission.SetGroupParent(name, parent))
-                    ReplyWith(session, "GroupParentChanged", name, parent);
+                    ReplyWith(session, string.Format(GetMessage("GroupParentChanged", session.SteamId.ToString()), name, parent));
                 else
-                    ReplyWith(session, "GroupParentNotChanged", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupParentNotChanged", session.SteamId.ToString()), name));
             }
         }
 
@@ -605,11 +607,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdUserGroup")]
         private void CmdUserGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(session, "CommandUsageUserGroup");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageUserGroup", session.SteamId.ToString())));
                 return;
             }
 
@@ -620,7 +622,7 @@ namespace Oxide.Game.Hurtworld
             var target = FindSession(name);
             if (target == null && !permission.UserExists(name))
             {
-                ReplyWith(session, "UserNotFound", name);
+                ReplyWith(session, string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name));
                 return;
             }
             var userId = name;
@@ -633,19 +635,19 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.GroupExists(group))
             {
-                ReplyWith(session, "GroupNotFound", name);
+                ReplyWith(session, string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name));
                 return;
             }
 
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                ReplyWith(session, "UserAddedToGroup", name, group);
+                ReplyWith(session, string.Format(GetMessage("UserAddedToGroup", session.SteamId.ToString()), name, group));
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                ReplyWith(session, "UserRemovedFromGroup", name, group);
+                ReplyWith(session, string.Format(GetMessage("UserRemovedFromGroup", session.SteamId.ToString()), name, group));
             }
         }
 
@@ -662,11 +664,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdGrant")]
         private void CmdGrant(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(session, "CommandUsageGrant");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageGrant", session.SteamId.ToString())));
                 return;
             }
 
@@ -676,7 +678,7 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.PermissionExists(perm))
             {
-                ReplyWith(session, "PermissionNotFound", perm);
+                ReplyWith(session, string.Format(GetMessage("PermissionNotFound", session.SteamId.ToString()), perm));
                 return;
             }
 
@@ -684,18 +686,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 permission.GrantGroupPermission(name, perm, null);
-                ReplyWith(session, "GroupPermissionGranted", name, perm);
+                ReplyWith(session, string.Format(GetMessage("GroupPermissionGranted", session.SteamId.ToString()), name, perm));
             }
             else if (mode.Equals("user"))
             {
                 var target = FindSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
-                    ReplyWith(session, "UserNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 var userId = name;
@@ -706,7 +708,7 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                ReplyWith(session, "UserPermissionGranted", $"{name} ({userId})", perm);
+                ReplyWith(session, string.Format(GetMessage("UserPermissionGranted", session.SteamId.ToString()), $"{name} ({userId})", perm));
             }
         }
 
@@ -723,11 +725,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdRevoke")]
         private void CmdRevoke(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
-                ReplyWith(session, "CommandUsageRevoke");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageRevoke", session.SteamId.ToString())));
                 return;
             }
 
@@ -737,7 +739,7 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.PermissionExists(perm))
             {
-                ReplyWith(session, "PermissionNotFound", perm);
+                ReplyWith(session, string.Format(GetMessage("PermissionNotFound", session.SteamId.ToString()), perm));
                 return;
             }
 
@@ -745,18 +747,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 permission.RevokeGroupPermission(name, perm);
-                ReplyWith(session, "GroupPermissionRevoked", name, perm);
+                ReplyWith(session, string.Format(GetMessage("GroupPermissionRevoked", session.SteamId.ToString()), name, perm));
             }
             else if (mode.Equals("user"))
             {
                 var target = FindSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
-                    ReplyWith(session, "UserNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 var userId = name;
@@ -767,7 +769,7 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                ReplyWith(session, "UserPermissionRevoked", $"{name} ({userId})", perm);
+                ReplyWith(session, string.Format(GetMessage("UserPermissionRevoked", session.SteamId.ToString()), $"{name} ({userId})", perm));
             }
         }
 
@@ -784,11 +786,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdShow")]
         private void CmdShow(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
+            if (!PermissionsLoaded()) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
-                ReplyWith(session, "CommandUsageShow");
+                ReplyWith(session, string.Format(GetMessage("CommandUsageShow", session.SteamId.ToString())));
                 return;
             }
 
@@ -806,7 +808,7 @@ namespace Oxide.Game.Hurtworld
                 var target = FindSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
-                    ReplyWith(session, "UserNotFound");
+                    ReplyWith(session, string.Format(GetMessage("UserNotFound", session.SteamId.ToString())));
                     return;
                 }
                 var userId = name;
@@ -827,7 +829,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    ReplyWith(session, "GroupNotFound", name);
+                    ReplyWith(session, string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name));
                     return;
                 }
                 var result = $"Group '{name}' users:\n";
@@ -845,9 +847,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("groups"))
             {
-                var result = "Groups:\n";
-                result += string.Join(", ", permission.GetGroups());
-                ReplyWith(session, result);
+                ReplyWith(session, string.Format(GetMessage("ShowGroups", session.SteamId.ToString()), "\n" + string.Join(", ", permission.GetGroups())));
             }
         }
 
@@ -925,19 +925,25 @@ namespace Oxide.Game.Hurtworld
         #region Helper Methods
 
         /// <summary>
+        /// Gets the localized message from key, with optional user ID
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="userId"></param>
+        string GetMessage(string key, string userId = null) => lang.GetMessage(key, this, userId);
+
+        /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="key"></param>
-        /// <param name="args"></param>
-        private void ReplyWith(PlayerSession session, string key, params object[] args)
+        /// <param name="message"></param>
+        private void ReplyWith(PlayerSession session, string message)
         {
             if (session == null)
             {
-                Interface.Oxide.LogInfo(string.Format(lang.GetMessage(key, this), args));
+                Interface.Oxide.LogInfo(message);
                 return;
             }
-            ChatManager.Instance.RPC("RelayChat", session.Player, string.Format(lang.GetMessage(key, this, session.SteamId.ToString()), args));
+            ChatManager.Instance.RPC("RelayChat", session.Player, message);
         }
 
         /// <summary>
