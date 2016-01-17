@@ -114,10 +114,10 @@ namespace Oxide.Game.Hurtworld
         /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
         /// <returns></returns>
-        private bool PermissionsLoaded()
+        private bool PermissionsLoaded(PlayerSession session)
         {
             if (permission.IsLoaded) return true;
-            ReplyWith(null, string.Format(GetMessage("PermissionsNotLoaded", permission.LastException.Message)));
+            ReplyWith(session, string.Format(GetMessage("PermissionsNotLoaded", permission.LastException.Message)));
             return false;
         }
 
@@ -302,7 +302,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, chatcmd, args))
             {
-                ReplyWith(session, string.Format(GetMessage("UnknownChatCommand", chatcmd)));
+                ReplyWith(session, string.Format(GetMessage("UnknownChatCommand", session.SteamId.ToString()), chatcmd));
                 return true;
             }
 
@@ -347,7 +347,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdPlugins")]
         private void CmdPlugins(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
 
             var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
@@ -391,7 +391,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdLoad")]
         private void CmdLoad(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
@@ -425,7 +425,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdReload")]
         private void CmdReload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
@@ -467,7 +467,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdUnload")]
         private void CmdUnload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
@@ -528,7 +528,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdGroup")]
         private void CmdGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 2)
             {
@@ -607,7 +607,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdUserGroup")]
         private void CmdUserGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
@@ -664,7 +664,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdGrant")]
         private void CmdGrant(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
@@ -725,7 +725,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdRevoke")]
         private void CmdRevoke(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 3)
             {
@@ -786,7 +786,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("CmdShow")]
         private void CmdShow(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded()) return;
+            if (!PermissionsLoaded(session)) return;
             if (!session.IsAdmin) return;
             if (args.Length < 1)
             {
