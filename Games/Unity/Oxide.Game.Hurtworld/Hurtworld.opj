@@ -129,7 +129,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 70,
+            "InjectionIndex": 84,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0.ConnectedSession, a0",
@@ -148,7 +148,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "gkg2LYWZOTgeIxy4zgDuuWLQ3Ju9sZWz0QruSycuRRg=",
+            "MSILHash": "QpaK3uJC1mZBdsEQBECPCHmC8TlKFwmn1BvRzf0NOCg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -349,7 +349,7 @@
             "HookName": "CanExitVehicle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "CanExit",
