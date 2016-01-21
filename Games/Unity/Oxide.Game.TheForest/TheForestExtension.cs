@@ -115,8 +115,8 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="plugindir"></param>
-        public override void LoadPluginWatchers(string plugindir)
+        /// <param name="pluginDirectory"></param>
+        public override void LoadPluginWatchers(string pluginDirectory)
         {
         }
 
@@ -196,7 +196,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.30b"; // TODO: Grab version
+                var gameVersion = "0.31"; // TODO: Grab version
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };

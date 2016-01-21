@@ -326,7 +326,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "nns4j0VjjcvTS6ojVNVdFTz4VfSLxhaby955RCz8Up0=",
+            "MSILHash": "jeFpD4xB0dbr71GP7KkZVeoAfSDiOLph5Rjbi3z8CzI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1132,7 +1132,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "ShXzTL9xUEfCpzoVbtvnLOm8c18C7j1XnvJP+Tc+0X8=",
+            "MSILHash": "gyMp2O6p2tM47ZqckttxHZKaVJfyKNDdX+A4+h2GVcw=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1531,7 +1531,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 4,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -1547,7 +1547,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "UVi+xO17oDRDronmJvhIQ3NQD9p0JPykkA4rxcupffU=",
+            "MSILHash": "BEYXKv2Kc2SW8JEfVOUxQNlaiTsDQL24i3oGrtK6Toc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1624,7 +1624,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "h8fh9JoimtU25xajNcE9Ypheuou6Moh8JxMmZJ77y1M=",
+            "MSILHash": "qCV3OUStlAyHbO2Ch2DqmEHKgyzFp+5XdBW2dj0pUKo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
