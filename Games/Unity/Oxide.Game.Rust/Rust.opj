@@ -2806,6 +2806,58 @@
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "OnLootEntityEnd - LootableCorpse",
+            "HookName": "OnLootEntityEnd",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "LootableCorpse",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PlayerStoppedLooting",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "fh0lODj0U5QJwaBrbTTuLZ9S7cn0tAsolFu1BYNdAJU=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnLootEntityEnd - StorageContainer",
+            "HookName": "OnLootEntityEnd",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "StorageContainer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PlayerStoppedLooting",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "xNJP8Htzff68Is3Jt/j6QFSwBA4XxOyoOjm9ZneBrFw=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ]
     }
