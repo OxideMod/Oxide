@@ -111,8 +111,8 @@ namespace Oxide.Game.SevenDays
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="plugindir"></param>
-        public override void LoadPluginWatchers(string plugindir)
+        /// <param name="pluginDirectory"></param>
+        public override void LoadPluginWatchers(string pluginDirectory)
         {
         }
 
