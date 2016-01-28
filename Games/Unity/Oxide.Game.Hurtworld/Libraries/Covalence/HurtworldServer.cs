@@ -42,7 +42,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public void Broadcast(string message)
         {
             GameManager.Instance.SendLog(string.Concat("[Broadcast] ", message));
-            ChatManager.Instance.RPC("RelayChat", uLink.RPCMode.Others, message);
+            ChatManagerServer.Instance.RPC("RelayChat", uLink.RPCMode.Others, message);
         }
 
         /// <summary>

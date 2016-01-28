@@ -943,7 +943,7 @@ namespace Oxide.Game.Hurtworld
                 Interface.Oxide.LogInfo(message);
                 return;
             }
-            ChatManager.Instance.RPC("RelayChat", session.Player, message);
+            ChatManagerServer.Instance.RPC("RelayChat", session.Player, message);
         }
 
         /// <summary>
