@@ -71,7 +71,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "vKj3GZG1D6KwLJyyQtlSR1VUBsbol3mcPsonAmzBBGE=",
+            "MSILHash": "pbx49b4lOdeNXRCDcJ1ZCOphcZlI4wD5hQp8vR0J/wo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -108,8 +108,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
             "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
+            "Name": "OnServerCommand",
+            "HookName": "OnServerCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConsoleManager",
             "Flagged": false,
@@ -121,7 +121,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "OHdP9KLJ1UKPRJdLxCRp6JdNca1bjl5kmdppP1l34BM=",
+            "MSILHash": "RzzgousRsPkEVmiDHO47lV+pvrOZ+XQK/G785CBCsTI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -137,7 +137,7 @@
             "Name": "IOnPlayerChat [internal]",
             "HookName": "IOnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ChatManager",
+            "TypeName": "ChatManagerServer",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -148,7 +148,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "QpaK3uJC1mZBdsEQBECPCHmC8TlKFwmn1BvRzf0NOCg=",
+            "MSILHash": "xh3LhBMnMpUFdu75tT7iQFXiCHTzcf2R0jpLJ1tEJY8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -717,7 +717,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "92cOWSbfbFCQ0KicSGRusdsWk+ib5/Sm7W0BFYDi5F4=",
+            "MSILHash": "el+60AO8QYXAQ4oU3eCe+hwUz+NeA9Da/SbwrGMVzuY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -765,7 +765,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "zFfagIzU/+wBWYynawU8j1zWZBJk09QMZuj02x9zgMw=",
+            "MSILHash": "nc5vkMWo6cpNDCkVGLL3uBvIfLqh/WDMvJL9rX38Ftg=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -843,7 +843,7 @@
             "Name": "OnConnectionNotice",
             "HookName": "OnConnectionNotice",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ChatManager",
+            "TypeName": "ChatManagerServer",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -853,7 +853,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "Lb6imCtCSjC7GFEatxkHWnt+2q7dAjcm6lFeQk2kRsY=",
+            "MSILHash": "6paRFgvgYGDYrBPnpiFvoBOqJ2Usfwn8V3dReyWjoWc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -869,7 +869,7 @@
             "Name": "OnDeathNotice",
             "HookName": "OnDeathNotice",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ChatManager",
+            "TypeName": "ChatManagerServer",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -880,7 +880,7 @@
                 "EntityEffectSourceData"
               ]
             },
-            "MSILHash": "PNzG5TYqzyKoZDPC31KUHmaoTqPYy7zRiTOc1FD0q8Q=",
+            "MSILHash": "quSLTancQaL70jfLd51OCzenHN3BqWKwJXXB+n1Y1gA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -896,7 +896,7 @@
             "Name": "OnDisconnectionNotice",
             "HookName": "OnDisconnectionNotice",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ChatManager",
+            "TypeName": "ChatManagerServer",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -906,7 +906,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "ouTVrn1AcTe9hkOTHYN0MqKlzgjNpfoYTk6kwTM46bY=",
+            "MSILHash": "SXKxO4DulI+WflASB7vE1j7X+sm/2qZ0V/G6P4G8Tz4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -959,7 +959,7 @@
                 "EntityEffectSourceData"
               ]
             },
-            "MSILHash": "FzDKaLV4K7SxrqA2KLZ0C5bS+EWtEyZ4SzN8oXPw7kc=",
+            "MSILHash": "A1FDZn4/BHAyKuQPd1wUs8icxIziTlugLdbrUnG6IV8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -984,8 +984,8 @@
                 "System.String"
               ]
             },
-            "MSILHash": "OHdP9KLJ1UKPRJdLxCRp6JdNca1bjl5kmdppP1l34BM=",
-            "BaseHookName": "OnRunCommand",
+            "MSILHash": "RzzgousRsPkEVmiDHO47lV+pvrOZ+XQK/G785CBCsTI=",
+            "BaseHookName": "OnServerCommand",
             "HookCategory": "Server"
           }
         },
@@ -1103,6 +1103,33 @@
             "MSILHash": "UzBrDU3SXCoy2g1eFmw6rgM2RJvMmV3RiBBucoFTems=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 9,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnRemoteCommand",
+            "HookName": "OnRemoteCommand",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConsoleManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RCON",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "tB9yvVijtDyq0imPa8JMQ43geWCEbI4vpR1OboAym9A=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
