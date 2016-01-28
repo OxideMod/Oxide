@@ -1119,7 +1119,7 @@ namespace Oxide.Game.Rust
         /// <param name="source"></param>
         /// <param name="target"></param>
         [HookMethod("IOnLootPlayer")]
-        private void IOnLootPlayer(PlayerLoot source, BaseEntity target)
+        private void IOnLootPlayer(PlayerLoot source, BasePlayer target)
         {
             // Call hook
             Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
