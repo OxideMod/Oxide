@@ -1058,8 +1058,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0.player",
             "HookTypeName": "Simple",
-            "Name": "OnStructureDemolish",
-            "HookName": "OnStructureDemolish",
+            "Name": "IOnStructureImmediateDemolish [internal]",
+            "HookName": "IOnStructureImmediateDemolish",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
             "Flagged": false,
@@ -2857,6 +2857,32 @@
             "MSILHash": "xNJP8Htzff68Is3Jt/j6QFSwBA4XxOyoOjm9ZneBrFw=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0.player",
+            "HookTypeName": "Simple",
+            "Name": "IOnStructureDemolish [internal]",
+            "HookName": "IOnStructureDemolish",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoDemolish",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "vkkE8qmYG18V9kdF2TSXq0LrM0hH8JV49pX02zs4DIM=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
           }
         }
       ]

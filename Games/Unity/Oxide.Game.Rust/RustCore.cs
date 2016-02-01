@@ -374,6 +374,22 @@ namespace Oxide.Game.Rust
 
         #endregion
 
+        #region Structure Hooks
+
+        [HookMethod("IOnStructureDemolish")]
+        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player)
+        {
+            return Interface.CallHook("OnStructureDemolish", block, player, false);
+        }
+
+        [HookMethod("IOnStructureImmediateDemolish")]
+        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player)
+        {
+            return Interface.CallHook("OnStructureDemolish", block, player, true);
+        }
+
+        #endregion
+
         #region Item Hooks
 
         /// <summary>
