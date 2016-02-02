@@ -862,8 +862,13 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        [HookMethod("OnRunCommand")]
-        private object OnRunCommand(string arg) => arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
+        [HookMethod("OnServerCommand")]
+        private object OnServerCommand(string arg)
+        {
+            Interface.CallDeprecatedHook("OnRunCommand", arg);
+
+            return arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
+        }
 
         /// <summary>
         /// Parses the specified chat command
@@ -966,17 +971,6 @@ namespace Oxide.Game.Hurtworld
             }
             return session;
         }
-
-        #endregion
-
-        #region Deprecated Hooks
-
-        /// <summary>
-        /// Used to handle the deprecated hook OnRunCommand
-        /// </summary>
-        /// <param name="command"></param>
-        [HookMethod("OnServerCommand")]
-        private object OnServerCommand(string command) => Interface.CallDeprecatedHook("OnRunCommand", command);
 
         #endregion
     }
