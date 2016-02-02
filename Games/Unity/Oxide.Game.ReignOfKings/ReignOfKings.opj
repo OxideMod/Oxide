@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "h+CF6xNVdCx7FO9KE0RrXU43aSE5RPmcy+wUg1Fpbls=",
+            "MSILHash": "B3dgL06Z56URW/uvoXXGLIaD/eWAWu+T1eUGZ/Baw5I=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -307,7 +307,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 182,
+            "InjectionIndex": 185,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -325,7 +325,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerFirstSpawnEvent"
               ]
             },
-            "MSILHash": "LiPKTcBMYI+xB0TULd16frpC7fCwnAlfxk1/tWKlgoU=",
+            "MSILHash": "j8PvmHygg1iUMNIWbjm8KtNiTjrzTvJCkXjnjKdXutY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
