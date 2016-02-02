@@ -22,13 +22,21 @@ namespace Oxide.Game.TheForest
     /// </summary>
     public class TheForestCore : CSPlugin
     {
+        #region Setup
+
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
+        // TODO: Localization of core
+
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
+
+        #endregion
+
+        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the TheForestCore class
@@ -36,7 +44,7 @@ namespace Oxide.Game.TheForest
         public TheForestCore()
         {
             // Set attributes
-            Name = "theforestcore";
+            Name = "TheForestCore";
             Title = "The Forest Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
@@ -54,6 +62,10 @@ namespace Oxide.Game.TheForest
             CallHook("InitLogging", null);
         }
 
+        // TODO: PermissionsLoaded check
+
+        #endregion
+
         #region Plugin Hooks
 
         /// <summary>
@@ -64,7 +76,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("version", "0.31"); // TODO: Grab version progmatically
+            RemoteLogger.SetTag("version", "0.31b"); // TODO: Grab version progmatically
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -108,7 +120,7 @@ namespace Oxide.Game.TheForest
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", IOnGetHostname());
+            RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
         }
 
         /// <summary>
@@ -132,6 +144,9 @@ namespace Oxide.Game.TheForest
             var steamId = connection.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
 
+            // Let covalence know
+            //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(connection);
+
             // Do permission stuff
             if (permission.IsLoaded)
             {
@@ -141,7 +156,7 @@ namespace Oxide.Game.TheForest
                 if (!permission.UserHasAnyGroup(steamId.ToString())) permission.AddUserGroup(steamId.ToString(), DefaultGroups[0]);
             }
 
-            Interface.Oxide.LogInfo($"{steamId}/{name} joined");
+            Debug.Log($"{steamId}/{name} joined");
         }
 
         /// <summary>
@@ -152,10 +167,14 @@ namespace Oxide.Game.TheForest
         private void OnPlayerDisconnected(BoltConnection connection)
         {
             if (connection == null) return;
+
             var steamId = connection.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
 
-            Interface.Oxide.LogInfo($"{steamId}/{name} quit");
+            // Let covalence know
+            //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(connection);
+
+            Debug.Log($"{steamId}/{name} quit");
         }
 
         /// <summary>
@@ -167,13 +186,16 @@ namespace Oxide.Game.TheForest
         {
             var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == e.Sender);
             if (player == null) return;
+
             var steamId = player.source.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
 
-            Interface.Oxide.LogInfo($"{name}: {e.Message}");
+            Debug.Log($"{name}: {e.Message}");
         }
 
         #endregion
+
+        #region Server Magic
 
         /// <summary>
         /// Disables the audio output
@@ -275,18 +297,6 @@ namespace Oxide.Game.TheForest
         }
 
         /// <summary>
-        /// Overrides setting of the server hostname
-        /// </summary>
-        [HookMethod("IOnGetHostname")]
-        private string IOnGetHostname() => PlayerPrefs.GetString("MpGameName");
-
-        /// <summary>
-        /// Overrides setting of the maximum players
-        /// </summary>
-        [HookMethod("IOnGetMaxPlayers")]
-        private int IOnGetMaxPlayers() => PlayerPrefs.GetInt("MpGamePlayerCount");
-
-        /// <summary>
         /// Disables the plane crash scene
         /// </summary>
         /// <param name="scene"></param>
@@ -354,5 +364,7 @@ namespace Oxide.Game.TheForest
             if (/*dir != null && */!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             return dir;
         }
+
+        #endregion
     }
 }
