@@ -53,8 +53,8 @@
         /// <summary>
         /// Loads any plugin watchers pertinent to this extension
         /// </summary>
-        /// <param name="plugindir"></param>
-        public virtual void LoadPluginWatchers(string plugindir)
+        /// <param name="pluginDirectory"></param>
+        public virtual void LoadPluginWatchers(string pluginDirectory)
         {
         }
 

@@ -229,11 +229,11 @@ namespace Oxide.Ext.Python
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="plugindir"></param>
-        public override void LoadPluginWatchers(string plugindir)
+        /// <param name="pluginDirectory"></param>
+        public override void LoadPluginWatchers(string pluginDirectory)
         {
             // Register the watcher
-            watcher = new FSWatcher(plugindir, "*.py");
+            watcher = new FSWatcher(pluginDirectory, "*.py");
             Manager.RegisterPluginChangeWatcher(watcher);
             loader.Watcher = watcher;
         }

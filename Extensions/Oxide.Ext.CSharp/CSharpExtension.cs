@@ -28,6 +28,7 @@ namespace Oxide.Plugins
 
         public FSWatcher Watcher { get; private set; }
 
+        // The .cs plugin loader
         private CSharpPluginLoader loader;
 
         /// <summary>
@@ -57,11 +58,11 @@ namespace Oxide.Plugins
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="PluginDirectory"></param>
-        public override void LoadPluginWatchers(string PluginDirectory)
+        /// <param name="pluginDirectory"></param>
+        public override void LoadPluginWatchers(string pluginDirectory)
         {
             // Register the watcher
-            Watcher = new FSWatcher(PluginDirectory, "*.cs");
+            Watcher = new FSWatcher(pluginDirectory, "*.cs");
             Manager.RegisterPluginChangeWatcher(Watcher);
         }
 

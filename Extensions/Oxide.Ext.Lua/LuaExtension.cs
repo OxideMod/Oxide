@@ -13,7 +13,6 @@ using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins.Watchers;
-
 using Oxide.Ext.Lua.Libraries;
 using Oxide.Ext.Lua.Plugins;
 
@@ -68,8 +67,7 @@ namespace Oxide.Ext.Lua
         /// Initializes a new instance of the LuaExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public LuaExtension(ExtensionManager manager)
-            : base(manager)
+        public LuaExtension(ExtensionManager manager) : base(manager)
         {
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
@@ -81,9 +79,8 @@ namespace Oxide.Ext.Lua
                 var luaex = (LuaScriptException) ex;
                 var outEx = luaex.IsNetException ? luaex.InnerException : luaex;
                 var match = Regex.Match(string.IsNullOrEmpty(luaex.Source) ? luaex.Message : luaex.Source, @"\[string ""(.+)""\]:(\d+): ");
-                if (match.Success)
-                    return string.Format("File: {0} Line: {1} {2}:{3}{4}", match.Groups[1], match.Groups[2], outEx.Message.Replace(match.Groups[0].Value, ""), Environment.NewLine, outEx.StackTrace);
-                return string.Format("{0}{1}:{2}{3}", luaex.Source, outEx.Message, Environment.NewLine, outEx.StackTrace);
+                if (match.Success) return $"File: {match.Groups[1]} Line: {match.Groups[2]} {outEx.Message.Replace(match.Groups[0].Value, "")}:{Environment.NewLine}{outEx.StackTrace}";
+                return $"{luaex.Source}{outEx.Message}:{Environment.NewLine}{outEx.StackTrace}";
             });
         }
 
@@ -526,11 +523,11 @@ end
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="plugindir"></param>
-        public override void LoadPluginWatchers(string plugindir)
+        /// <param name="pluginDirectory"></param>
+        public override void LoadPluginWatchers(string pluginDirectory)
         {
             // Register the watcher
-            watcher = new FSWatcher(plugindir, "*.lua");
+            watcher = new FSWatcher(pluginDirectory, "*.lua");
             Manager.RegisterPluginChangeWatcher(watcher);
             loader.Watcher = watcher;
         }
