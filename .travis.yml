@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 language: csharp
 
 # Update Mono to latest snapshot
