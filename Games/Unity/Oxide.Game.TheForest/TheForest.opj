@@ -210,7 +210,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 29,
+            "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -252,7 +252,7 @@
                 "Steamworks.LobbyCreated_t"
               ]
             },
-            "MSILHash": "FgTnr2rYKDZ/ern4lPxZTuOevmXzdHxHrgCQCH80MuA=",
+            "MSILHash": "rCFFUa9qOGISlaAmD4WtZLprMFr4BrsgZKcEYvSweGE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1084,7 +1084,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "i8MS7Jc2zVeeVkNrDR1dD3bdd3Opiqnkk14eGVIPZpI=",
+            "MSILHash": "oRUbLSldYSnrVNNC1Kgyu/4ssTVV743SQfV7MQPh1ng=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1522,7 +1522,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "yUX149MODXBL6eT8ELZFGSp9VPPMrIzs5PjhNzihDw0=",
+            "MSILHash": "YjZY6yVxK5GN1qzELJLyGZGk1lhspkiFkYBzu5ikxag=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1701,7 +1701,7 @@
                 "UnityEngine.Collider"
               ]
             },
-            "MSILHash": "zAlNK8o5m6q0Q+eJGB1GGOf0v4ibWSxTnRfwrC7m+lI=",
+            "MSILHash": "4vJhjGNrke6zrIqX/qhFx7/j7yGvWWfrdDOG9Bhm8sw=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1727,7 +1727,7 @@
                 "UnityEngine.Collider"
               ]
             },
-            "MSILHash": "qNHemDeK+/cIk/9vmgsqiindoS2geZScL86l7bVXF8Y=",
+            "MSILHash": "PzkCfWEA0T0LpHjJxGAp3C6Mn1ADhokMF08/0y7dLcc=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
