@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using Steamworks;
+using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -290,21 +291,23 @@ namespace Oxide.Game.Hurtworld
             // Is it a chat command?
             if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", session, message);
 
-            // Get the arg string
-            var argstr = message.Substring(1);
+            // Get the command string
+            var command = message.Substring(1);
 
             // Parse it
-            string chatcmd;
+            string cmd;
             string[] args;
-            ParseChatCommand(argstr, out chatcmd, out args);
-            if (chatcmd == null) return null;
+            ParseChatCommand(command, out cmd, out args);
+            if (cmd == null) return null;
 
             // Handle it
-            if (!cmdlib.HandleChatCommand(session, chatcmd, args))
+            if (!cmdlib.HandleChatCommand(session, cmd, args))
             {
-                ReplyWith(string.Format(GetMessage("UnknownChatCommand", session.SteamId.ToString()), chatcmd), session);
+                ReplyWith(string.Format(GetMessage("UnknownChatCommand", session.SteamId.ToString()), cmd), session);
                 return true;
             }
+
+            Interface.Oxide.CallHook("OnChatCommand", session, command);
 
             return true;
         }
@@ -330,6 +333,62 @@ namespace Oxide.Game.Hurtworld
         {
             var session = GameManager.Instance.GetSession(player);
             return Interface.Oxide.CallHook("OnPlayerSuicide", session);
+        }
+
+        #endregion
+
+        #region Vehicle Hooks
+
+        /// <summary>
+        /// Called when a player tries to enter a vehicle
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="passenger"></param>
+        /// <returns></returns>
+        [HookMethod("ICanEnterVehicle")]
+        private object ICanEnterVehicle(uLink.NetworkPlayer player, CharacterMotorSimple passenger)
+        {
+            var session = GetSession(player);
+            return Interface.CallHook("CanEnterVehicle", session, passenger);
+        }
+
+        /// <summary>
+        /// Called when a player tries to exit a vehicle
+        /// </summary>
+        /// <param name="go"></param>
+        /// <returns></returns>
+        [HookMethod("ICanExitVehicle")]
+        private object ICanExitVehicle(GameObject go)
+        {
+            var session = GetSession(go);
+            var passenger = go.GetComponent<CharacterMotorSimple>();
+            return Interface.CallHook("CanExitVehicle", session, passenger);
+        }
+
+        /// <summary>
+        /// Called when a player enters a vehicle
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="passenger"></param>
+        /// <returns></returns>
+        [HookMethod("IOnEnterVehicle")]
+        private object IOnEnterVehicle(uLink.NetworkPlayer player, CharacterMotorSimple passenger)
+        {
+            var session = GetSession(player);
+            return Interface.CallHook("OnEnterVehicle", session, passenger);
+        }
+
+        /// <summary>
+        /// Called when a player exits a vehicle
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="passenger"></param>
+        /// <returns></returns>
+        [HookMethod("IOnExitVehicle")]
+        private object IOnExitVehicle(uLink.NetworkPlayer player, CharacterMotorSimple passenger)
+        {
+            var session = GetSession(player);
+            return Interface.CallHook("OnExitVehicle", session, passenger);
         }
 
         #endregion
@@ -619,7 +678,7 @@ namespace Oxide.Game.Hurtworld
             var name = args[1];
             var group = args[2];
 
-            var target = FindSession(name);
+            var target = GetSession(name);
             if (target == null && !permission.UserExists(name))
             {
                 ReplyWith(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
@@ -694,7 +753,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = FindSession(name);
+                var target = GetSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
                     ReplyWith(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
@@ -755,7 +814,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = FindSession(name);
+                var target = GetSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
                     ReplyWith(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
@@ -805,7 +864,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = FindSession(name);
+                var target = GetSession(name);
                 if (target == null && !permission.UserExists(name))
                 {
                     ReplyWith(GetMessage("UserNotFound", session.SteamId.ToString()), session);
@@ -930,13 +989,6 @@ namespace Oxide.Game.Hurtworld
         #region Helper Methods
 
         /// <summary>
-        /// Gets the localized message from key, with optional user ID
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="userId"></param>
-        string GetMessage(string key, string userId = null) => lang.GetMessage(key, this, userId);
-
-        /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
         /// <param name="session"></param>
@@ -952,24 +1004,47 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Lookup the player session using name, Steam ID, or IP address
+        /// Gets the localized message from key, with optional user ID
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="userId"></param>
+        string GetMessage(string key, string userId = null) => lang.GetMessage(key, this, userId);
+
+        /// <summary>
+        /// Gets the player session using a name, Steam ID, or IP address
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        private PlayerSession FindSession(string nameOrIdOrIp)
+        private PlayerSession GetSession(string nameOrIdOrIp)
         {
             var sessions = GameManager.Instance.GetSessions();
             PlayerSession session = null;
             foreach (var i in sessions)
             {
-                if (nameOrIdOrIp.Equals(i.Value.Name, StringComparison.OrdinalIgnoreCase) ||
-                    nameOrIdOrIp.Equals(i.Value.SteamId.ToString()) || nameOrIdOrIp.Equals(i.Key.ipAddress))
-                {
-                    session = i.Value;
-                    break;
-                }
+                if (!nameOrIdOrIp.Equals(i.Value.Name, StringComparison.OrdinalIgnoreCase) &&
+                    !nameOrIdOrIp.Equals(i.Value.SteamId.ToString()) && !nameOrIdOrIp.Equals(i.Key.ipAddress)) continue;
+                session = i.Value;
+                break;
             }
             return session;
+        }
+
+        /// <summary>
+        /// Gets the player session using a uLink.NetworkPlayer
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private PlayerSession GetSession(uLink.NetworkPlayer player) => GameManager.Instance.GetSession(player);
+
+        /// <summary>
+        /// Gets the player session using a UnityEngine.GameObject
+        /// </summary>
+        /// <param name="go"></param>
+        /// <returns></returns>
+        private PlayerSession GetSession(GameObject go)
+        {
+            var sessions = GameManager.Instance.GetSessions();
+            return (from i in sessions where go.Equals(i.Value.WorldPlayerEntity) select i.Value).FirstOrDefault();
         }
 
         #endregion
