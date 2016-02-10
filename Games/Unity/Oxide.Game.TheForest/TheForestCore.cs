@@ -6,6 +6,7 @@ using System.Reflection;
 using Ceto;
 using ScionEngine;
 using Steamworks;
+using TheForest.Player;
 using TheForest.UI;
 using TheForest.Utils;
 using UnityEngine;
@@ -141,8 +142,8 @@ namespace Oxide.Game.TheForest
         private void OnPlayerConnected(BoltConnection connection)
         {
             if (connection == null) return;
-            var steamId = connection.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+            var userId = connection.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(userId));
 
             // Let covalence know
             //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(connection);
@@ -150,13 +151,13 @@ namespace Oxide.Game.TheForest
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                permission.UpdateNickname(steamId.ToString(), name);
+                permission.UpdateNickname(userId.ToString(), name);
 
                 // Add player to default group
-                if (!permission.UserHasAnyGroup(steamId.ToString())) permission.AddUserGroup(steamId.ToString(), DefaultGroups[0]);
+                if (!permission.UserHasAnyGroup(userId.ToString())) permission.AddUserGroup(userId.ToString(), DefaultGroups[0]);
             }
 
-            Debug.Log($"{steamId}/{name} joined");
+            Debug.Log($"{userId}/{name} joined");
         }
 
         /// <summary>
@@ -168,13 +169,13 @@ namespace Oxide.Game.TheForest
         {
             if (connection == null) return;
 
-            var steamId = connection.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+            var userId = connection.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(userId));
 
             // Let covalence know
             //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(connection);
 
-            Debug.Log($"{steamId}/{name} quit");
+            Debug.Log($"{userId}/{name} quit");
         }
 
         /// <summary>
@@ -187,10 +188,10 @@ namespace Oxide.Game.TheForest
             var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == e.Sender);
             if (player == null) return;
 
-            var steamId = player.source.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+            var userId = player.source.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(userId));
 
-            Debug.Log($"{name}: {e.Message}");
+            Debug.Log($"[Chat] {name}: {e.Message}");
         }
 
         #endregion
@@ -302,7 +303,7 @@ namespace Oxide.Game.TheForest
         /// <param name="scene"></param>
         /// <returns></returns>
         [HookMethod("IOnPlaneCrash")]
-        private bool IOnPlaneCrash(TriggerCutScene scene)
+        private void IOnPlaneCrash(TriggerCutScene scene)
         {
             var skipOpeningAnimation = typeof(TriggerCutScene).GetMethod("skipOpeningAnimation", BindingFlags.NonPublic | BindingFlags.Instance);
             var cleanUp = typeof(TriggerCutScene).GetMethod("CleanUp", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -322,6 +323,21 @@ namespace Oxide.Game.TheForest
             scene.enabled = false;
             scene.gameObject.SetActive(false);
 
+            //LocalPlayer.Entity.CancelInvoke();
+            LocalPlayer.Stats.CancelInvoke();
+            /*scene.Hud.enabled = false;
+            LocalPlayer.Inventory.enabled = false;
+            LocalPlayer.FpCharacter.enabled = false;
+            LocalPlayer.MainCam.SendMessage("GuiOff");*/
+            var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
+            foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
+            var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
+            foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
+            var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
+            foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);
+
+            var amplifyMotionCameras = Resources.FindObjectsOfTypeAll<AmplifyMotionCamera>();
+            foreach (var amplifyMotionCamera in amplifyMotionCameras) UnityEngine.Object.Destroy(amplifyMotionCamera);
             var amplifyMotionEffectBases = Resources.FindObjectsOfTypeAll<AmplifyMotionEffectBase>();
             foreach (var amplifyMotionEffectBase in amplifyMotionEffectBases) UnityEngine.Object.Destroy(amplifyMotionEffectBase);
             var imageEffectBases = Resources.FindObjectsOfTypeAll<ImageEffectBase>();
@@ -342,6 +358,7 @@ namespace Oxide.Game.TheForest
             foreach (var underWater in underWaters) UnityEngine.Object.Destroy(underWater);
             var oceans = Resources.FindObjectsOfTypeAll<Ocean>();
             foreach (var ocean in oceans) UnityEngine.Object.Destroy(ocean);
+
             var behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
             foreach (var behaviour in behaviours)
             {
@@ -349,7 +366,6 @@ namespace Oxide.Game.TheForest
                 behaviour.enabled = false;
                 behaviour.gameObject.SetActive(false);
             }
-            return false;
         }
 
         /// <summary>

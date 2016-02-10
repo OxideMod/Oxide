@@ -211,7 +211,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 1,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -1547,7 +1547,7 @@
             },
             "MSILHash": "QEPB7qE4H5RU9fNoMcO8cIbkWrvQFYbc3wCUcL4CEjk=",
             "BaseHookName": null,
-            "HookCategory": "Server"
+            "HookCategory": "_Patches"
           }
         },
         {
@@ -1570,7 +1570,7 @@
             },
             "MSILHash": "9f3HJFic1Jy60tP4fQYrvqzhT2g1i5LPRnWHhzLEkZo=",
             "BaseHookName": null,
-            "HookCategory": "Server"
+            "HookCategory": "_Patches"
           }
         },
         {
@@ -1596,7 +1596,7 @@
             },
             "MSILHash": "3IGi3edjIc7w6oHpJsLtyqp/B/J2cKu1JKhmYuEmYj8=",
             "BaseHookName": null,
-            "HookCategory": "Server"
+            "HookCategory": "_Patches"
           }
         },
         {
@@ -1622,7 +1622,7 @@
             },
             "MSILHash": "7w/7LxQxw0GrODTKaucDmEb9UV4Y0O/R9rysgEGg/S8=",
             "BaseHookName": null,
-            "HookCategory": "Server"
+            "HookCategory": "_Patches"
           }
         }
       ]
