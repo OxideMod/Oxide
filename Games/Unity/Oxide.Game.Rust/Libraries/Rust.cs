@@ -21,6 +21,8 @@ namespace Oxide.Game.Rust.Libraries
         /// <returns></returns>
         public override bool IsGlobal => false;
 
+        #region Utility
+
         /// <summary>
         /// Gets private bindingflag for accessing private methods, fields, and properties
         /// </summary>
@@ -34,37 +36,9 @@ namespace Oxide.Game.Rust.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
-        /// <summary>
-        /// Returns the Steam ID for the specified connection as a string
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <returns></returns>
-        [LibraryFunction("UserIDFromConnection")]
-        public string UserIDFromConnection(Connection connection) => connection.userid.ToString();
+        #endregion
 
-        /// <summary>
-        /// Returns the Steam ID for the specified building privilege as an array
-        /// </summary>
-        /// <param name="priv"></param>
-        /// <returns></returns>
-        [LibraryFunction("UserIDsFromBuildingPrivilege")]
-        public Array UserIDsFromBuildingPrivlidge(BuildingPrivlidge priv) => priv.authorizedPlayers.Select(eid => eid.userid.ToString()).ToArray();
-
-        /// <summary>
-        /// Returns the Steam ID for the specified player as a string
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        [LibraryFunction("UserIDFromPlayer")]
-        public string UserIDFromPlayer(BasePlayer player) => player.userID.ToString();
-
-        /// <summary>
-        /// Runs a server command
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [LibraryFunction("RunServerCommand")]
-        public void RunServerCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
+        #region Chat
 
         /// <summary>
         /// Broadcasts a chat message to all players
@@ -90,6 +64,53 @@ namespace Oxide.Game.Rust.Libraries
         {
             player?.SendConsoleCommand("chat.add", userId, message != null ? $"<color=orange>{name}</color>: {message}" : name, 1.0);
         }
+
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// Runs a client command
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [LibraryFunction("RunClientCommand")]
+        public void RunClientCommand(BasePlayer player, string command, params object[] args) => player.SendConsoleCommand(command, args);
+
+        /// <summary>
+        /// Runs a server command
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [LibraryFunction("RunServerCommand")]
+        public void RunServerCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
+
+        #endregion
+
+        /// <summary>
+        /// Returns the Steam ID for the specified connection as a string
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDFromConnection")]
+        public string UserIDFromConnection(Connection connection) => connection.userid.ToString();
+
+        /// <summary>
+        /// Returns the Steam ID for the specified building privilege as an array
+        /// </summary>
+        /// <param name="priv"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDsFromBuildingPrivilege")]
+        public Array UserIDsFromBuildingPrivlidge(BuildingPrivlidge priv) => priv.authorizedPlayers.Select(eid => eid.userid.ToString()).ToArray();
+
+        /// <summary>
+        /// Returns the Steam ID for the specified player as a string
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDFromPlayer")]
+        public string UserIDFromPlayer(BasePlayer player) => player.userID.ToString();
 
         /// <summary>
         /// Forces player position (teleportation)
