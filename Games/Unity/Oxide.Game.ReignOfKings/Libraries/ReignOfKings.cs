@@ -21,6 +21,8 @@ namespace Oxide.Game.ReignOfKings.Libraries
         /// <returns></returns>
         public override bool IsGlobal => false;
 
+        #region Utility
+
         /// <summary>
         /// Gets private bindingflag for accessing private methods, fields, and properties
         /// </summary>
@@ -33,6 +35,29 @@ namespace Oxide.Game.ReignOfKings.Libraries
         /// <param name="str"></param>
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
+
+        #endregion
+
+        #region Chat
+
+        /// <summary>
+        /// Broadcasts a chat message to all players
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        [LibraryFunction("BroadcastChat")]
+        public void BroadcastChat(string name, string message = null) => Server.BroadcastMessage(message != null ? $"{name}: {message}" : name);
+
+        /// <summary>
+        /// Sends a chat message to the player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="name"></param>
+        /// <param name="message"></param>
+        [LibraryFunction("SendChatMessage")]
+        public void SendChatMessage(Player player, string name, string message = null) => player.SendMessage(message != null ? $"{name}: {message}" : name);
+
+        #endregion
 
         /// <summary>
         /// Returns the ID for the specified player as a string
@@ -57,22 +82,5 @@ namespace Oxide.Game.ReignOfKings.Libraries
         /// <returns></returns>
         [LibraryFunction("GetEventSenderId")]
         public string GetEventSenderId(NetworkEvent e) => e.SenderId.ToString();
-
-        /// <summary>
-        /// Broadcasts a chat message to all players
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="message"></param>
-        [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null) => Server.BroadcastMessage(message != null ? $"{name}: {message}" : name);
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="name"></param>
-        /// <param name="message"></param>
-        [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(Player player, string name, string message = null) => player.SendMessage(message != null ? $"{name}: {message}" : name);
     }
 }

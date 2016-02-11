@@ -664,13 +664,13 @@ namespace Oxide.Game.ReignOfKings
             if (str.Length == 0) return null;
             if (str[0] != '/') return null;
 
-            // Get the message
-            var message = str.Substring(1);
+            // Get the command string
+            var command = str.Substring(1);
 
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(message, out cmd, out args);
+            ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
             Interface.CallHook("OnPlayerCommand", e.Player, cmd, args);
@@ -743,10 +743,7 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         /// <param name="player"></param>
         /// <param name="message"></param>
-        private static void ReplyWith(Player player, string message)
-        {
-            if (player.IsServer) player.SendMessage($"[950415]Server[FFFFFF]: {message}");
-        }
+        private static void ReplyWith(Player player, string message) => player.SendMessage($"[950415]Server[FFFFFF]: {message}");
 
         /// <summary>
         /// Lookup the player using name, Steam ID, or IP address
