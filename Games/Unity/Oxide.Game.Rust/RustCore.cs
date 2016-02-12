@@ -268,7 +268,7 @@ namespace Oxide.Game.Rust
             var authLevel = player.net.connection.authLevel;
             if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
             {
-                var userId = player.userID.ToString();
+                var userId = player.UserIDString;
                 permission.UpdateNickname(userId, player.displayName);
 
                 // Add player to default group
@@ -692,7 +692,7 @@ namespace Oxide.Game.Rust
             var userId = name;
             if (player != null)
             {
-                userId = player.userID.ToString();
+                userId = player.UserIDString;
                 name = player.displayName;
                 permission.UpdateNickname(userId, name);
                 name += $"({userId})";
@@ -766,7 +766,7 @@ namespace Oxide.Game.Rust
                 var userId = name;
                 if (player != null)
                 {
-                    userId = player.userID.ToString();
+                    userId = player.UserIDString;
                     name = player.displayName;
                     permission.UpdateNickname(userId, name);
                 }
@@ -825,7 +825,7 @@ namespace Oxide.Game.Rust
                 var userId = name;
                 if (player != null)
                 {
-                    userId = player.userID.ToString();
+                    userId = player.UserIDString;
                     name = player.displayName;
                     permission.UpdateNickname(userId, name);
                 }
@@ -873,7 +873,7 @@ namespace Oxide.Game.Rust
                 var userId = name;
                 if (player != null)
                 {
-                    userId = player.userID.ToString();
+                    userId = player.UserIDString;
                     name = player.displayName;
                     permission.UpdateNickname(userId, name);
                     name += $" ({userId})";
@@ -1062,7 +1062,7 @@ namespace Oxide.Game.Rust
         {
             foreach (var activePlayer in BasePlayer.activePlayerList)
             {
-                if (activePlayer.userID.ToString() == nameOrIdOrIp)
+                if (activePlayer.UserIDString == nameOrIdOrIp)
                     return activePlayer;
                 if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
                     return activePlayer;
@@ -1071,7 +1071,7 @@ namespace Oxide.Game.Rust
             }
             foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
             {
-                if (sleepingPlayer.userID.ToString() == nameOrIdOrIp)
+                if (sleepingPlayer.UserIDString == nameOrIdOrIp)
                     return sleepingPlayer;
                 if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
                     return sleepingPlayer;

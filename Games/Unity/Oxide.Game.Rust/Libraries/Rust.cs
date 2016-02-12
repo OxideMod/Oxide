@@ -110,7 +110,15 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromPlayer")]
-        public string UserIDFromPlayer(BasePlayer player) => player.userID.ToString();
+        public string UserIDFromPlayer(BasePlayer player) => player.UserIDString;
+
+        /// <summary>
+        /// Returns the Steam ID for the specified entity as a string
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [LibraryFunction("OwnerIDFromEntity")]
+        public string OwnerIDFromEntity(BaseEntity entity) => entity.OwnerID.ToString();
 
         /// <summary>
         /// Forces player position (teleportation)

@@ -67,10 +67,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         internal void NotifyPlayerConnect(BasePlayer ply)
         {
             NotifyPlayerJoin(ply.userID, ply.net.connection.username);
-            livePlayers[ply.userID.ToString()] = new RustLivePlayer(ply);
+            livePlayers[ply.UserIDString] = new RustLivePlayer(ply);
         }
 
-        internal void NotifyPlayerDisconnect(BasePlayer ply) => livePlayers.Remove(ply.userID.ToString());
+        internal void NotifyPlayerDisconnect(BasePlayer ply) => livePlayers.Remove(ply.UserIDString);
 
         #region Offline Players
 
