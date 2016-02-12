@@ -16,6 +16,8 @@ namespace Oxide.Game.Unturned.Libraries
         /// <returns></returns>
         public override bool IsGlobal => false;
 
+        #region Utility
+
         /// <summary>
         /// Gets private bindingflag for accessing private methods, fields, and properties
         /// </summary>
@@ -28,5 +30,7 @@ namespace Oxide.Game.Unturned.Libraries
         /// <param name="str"></param>
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
+
+        #endregion
     }
 }
