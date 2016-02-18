@@ -95,7 +95,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "w2rjXbZQBcBrNFJbVxB4KuxYaoI0rtIchlaeBV01A9Q=",
+            "MSILHash": "4GGRZS3H2/T7PN8vkMDLfXa9fFVQYDrNo/vivDlxOrc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -103,7 +103,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 28,
+            "InjectionIndex": 32,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0, a0",
@@ -122,7 +122,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "GBs3h7AHXVYClhVVOOP23q8qJzjQpiqMnCLAajnIYQE=",
+            "MSILHash": "Sh97HLdYkWcOgqXhxdMS3gOq9OIdtNUDFO8ceYD0f/A=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -737,7 +737,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 68,
+            "InjectionIndex": 65,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -753,7 +753,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "PBN6fJJaRekXoc+VQgMl/EqxznbDTUJFq7x9pV4sm0A=",
+            "MSILHash": "C1v92VcqTyjJ49OFPRZVh1j4Muf5+4WsUFzE9xbf9o0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -834,7 +834,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "kIMAM9wvs5dR+9PvTIF4ZEgVhdUJsyBBKJ9txNe8XS8=",
+            "MSILHash": "Jb72hyjpXJJfoi29kHWuyTAn9eDFzS5q1SM8SLc56sA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -995,7 +995,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "PvTac0fIamftvWgP1YmYArg86coTmsyHy7wXm/ED83E=",
+            "MSILHash": "DIAKwfdw9Z6cSN08DHTsEnttzK7Vq2UvVkvdrhQ2NzU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1045,7 +1045,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "DIlRnOoXjDZEuCihVUC7wL3VcHqKmd9ZZRrk7Hnm3es=",
+            "MSILHash": "F3t+3jVyfi+B9ooLa0KieGqBlOAQnbqDspHDOCmR/lo=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -1097,7 +1097,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "ti5qNIacAExVvETixOiRGB6bk/g+J1cQj9+QhMuk/Mo=",
+            "MSILHash": "fWneWlBEFvWru2scainSJNxS/LzeRQh526HpxhLgRao=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -1994,7 +1994,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "vKndcvaBYFkZ12O/znTVdL3dSYdVgTGGvrI0wZGJCbM=",
+            "MSILHash": "kAcDFLKc+CZOYNhdGJbpmV+RXLtBkPg+Oc3bk5qzkpE=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2229,35 +2229,9 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "YcAoYfghWxuEdIWQSoh6IEQ4b7ypZU2irrkJJVrsiiE=",
+            "MSILHash": "HgWi2LzQ60EUHeqHOGx9XhHLJdoSU1UxTsdaJihcdew=",
             "BaseHookName": null,
             "HookCategory": "Item"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 25,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0.connection",
-            "HookTypeName": "Simple",
-            "Name": "OnClientAuth",
-            "HookName": "OnClientAuth",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ServerMgr",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnClientAuth",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "Network.Message"
-              ]
-            },
-            "MSILHash": "Bi7vLt3sIKHhsmw4i9vzMfKRKpEX6kryp7GcQcchzl0=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
           }
         },
         {
@@ -2363,7 +2337,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "A/2DRRxZUpqRK2Nu03psWCoHntbYtIeONoXpcwIEwBM=",
+            "MSILHash": "ducrTfsBAdvLdpEt6rYvj+w/wFOHVONK374ci5kRFME=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2389,7 +2363,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "Fdcb+8Bh41vye2+N1tUUQIs/GvE47GYGZHD/TGRW/Ys=",
+            "MSILHash": "/Fg/VfMhoF+CFy+fQB69xQ7IDURnuqdnWrTybaXdHLU=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2750,7 +2724,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2O5Mxk7P19gwAAzn8RnJSBzxMllC4OVLIpA6vUYICA4=",
+            "MSILHash": "nvHjc7rfDd/znPzBWF9fhrriehZKYd05CObKhC+XL60=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2883,6 +2857,32 @@
             "MSILHash": "jlJwMQiTzzzJQVJuP8qukDe5rSn7oM5lpTGGd7o14yA=",
             "BaseHookName": null,
             "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 23,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnClientAuth",
+            "HookName": "OnClientAuth",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConnectionAuth",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnNewConnection",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Network.Connection"
+              ]
+            },
+            "MSILHash": "DIAKwfdw9Z6cSN08DHTsEnttzK7Vq2UvVkvdrhQ2NzU=",
+            "BaseHookName": "IOnUserApprove [internal]",
+            "HookCategory": "Player"
           }
         }
       ]

@@ -195,7 +195,7 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = BasePlayer.activePlayerList.Count;
-                var playerLimit = (Net.sv == null ? 0 : Net.sv.maxConnections);
+                var playerLimit = ConVar.Server.maxplayers;
                 var sleeperCount = BasePlayer.sleepingPlayerList.Count;
                 var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
                 var entitiesCount = BaseNetworkable.serverEntities.Count;
