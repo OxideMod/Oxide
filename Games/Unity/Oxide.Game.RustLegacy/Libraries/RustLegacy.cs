@@ -17,6 +17,8 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <returns></returns>
         public override bool IsGlobal => false;
 
+        #region Utility
+
         /// <summary>
         /// Gets private bindingflag for accessing private methods, fields, and properties
         /// </summary>
@@ -30,13 +32,9 @@ namespace Oxide.Game.RustLegacy.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
-        /// <summary>
-        /// Returns the UserID for the specified player as a string
-        /// </summary>
-        /// <param name="netUser"></param>
-        /// <returns></returns>
-        [LibraryFunction("UserIDFromPlayer")]
-        public string UserIDFromPlayer(NetUser netUser) => netUser.userID.ToString();
+        #endregion
+
+        #region Chat
 
         /// <summary>
         /// Print a message to every players chat log
@@ -62,6 +60,10 @@ namespace Oxide.Game.RustLegacy.Libraries
                 message != null ? $"chat.add {name.Quote()} {message.Quote()}" : $"chat.add \"Server\" {name.Quote()}");
         }
 
+        #endregion
+
+        #region Console
+
         /// <summary>
         /// Print a message to a players console log
         /// </summary>
@@ -82,12 +84,9 @@ namespace Oxide.Game.RustLegacy.Libraries
         [LibraryFunction("BroadcastConsole")]
         public void BroadcastConsole(string format, params object[] args) => ConsoleNetworker.Broadcast($"echo {string.Format(format, args)}");
 
-        /// <summary>
-        /// Runs a console command on the server
-        /// </summary>
-        /// <param name="cmd"></param>
-        [LibraryFunction("RunServerCommand")]
-        public void RunServerCommand(string cmd) => ConsoleSystem.Run(cmd);
+        #endregion
+
+        #region Commands
 
         /// <summary>
         /// Runs a console command for a specific player
@@ -96,6 +95,15 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="cmd"></param>
         [LibraryFunction("RunClientCommand")]
         public void RunClientCommand(NetUser netUser, string cmd) => ConsoleNetworker.SendClientCommand(netUser.networkPlayer, cmd);
+
+        /// <summary>
+        /// Runs a console command on the server
+        /// </summary>
+        /// <param name="cmd"></param>
+        [LibraryFunction("RunServerCommand")]
+        public void RunServerCommand(string cmd) => ConsoleSystem.Run(cmd);
+
+        #endregion
 
         /// <summary>
         /// Finds a player by name, steam id or ip
@@ -113,6 +121,14 @@ namespace Oxide.Game.RustLegacy.Libraries
                 return netUser;
             return null;
         }
+
+        /// <summary>
+        /// Returns the UserID for the specified player as a string
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIDFromPlayer")]
+        public string UserIDFromPlayer(NetUser netUser) => netUser.userID.ToString();
 
         /// <summary>
         /// Returns an array with all online players' NetUser

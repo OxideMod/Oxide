@@ -16,6 +16,8 @@ namespace Oxide.Game.SevenDays.Libraries
         /// <returns></returns>
         public override bool IsGlobal => false;
 
+        #region Utility
+
         /// <summary>
         /// Gets private bindingflag for accessing private methods, fields, and properties
         /// </summary>
@@ -29,6 +31,10 @@ namespace Oxide.Game.SevenDays.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
+        #endregion
+
+        #region Chat
+
         /// <summary>
         /// Broadcasts a chat message
         /// </summary>
@@ -36,5 +42,7 @@ namespace Oxide.Game.SevenDays.Libraries
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name = "SERVER", string message = null) => GameManager.Instance?.GameMessageServer(null, message, name);
+
+        #endregion
     }
 }

@@ -16,6 +16,8 @@ namespace Oxide.Game.Blockstorm.Libraries
         /// <returns></returns>
         public override bool IsGlobal => false;
 
+        #region Utility
+
         /// <summary>
         /// Gets private bindingflag for accessing private methods, fields, and properties
         /// </summary>
@@ -29,5 +31,6 @@ namespace Oxide.Game.Blockstorm.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
+        #endregion
     }
 }
