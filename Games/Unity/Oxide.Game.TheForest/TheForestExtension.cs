@@ -39,7 +39,9 @@ namespace Oxide.Game.TheForest
             "<color=red>Ceto",
             "<color=yellow>Ceto",
             "Body Variation",
+            "Broken ItemCondition, likely serializer didn't load it correctly",
             "CanResume:",
+            "Can't remove Rigidbody because",
             "Cancel/done player respawn",
             "Collapse:",
             "CoopLobby.LeaveActive instance=",
@@ -83,6 +85,7 @@ namespace Oxide.Game.TheForest
             "disablePlaneCrash",
             "doing player in plane",
             "enabled part",
+            "fake plane loaded",
             "going black",
             "null texture passed to GUI.DrawTexture",
             "planeCrash started",
@@ -205,7 +208,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.33b"; // TODO: Grab version
+                var gameVersion = "0.33c"; // TODO: Grab version
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };

@@ -77,7 +77,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("version", "0.33b"); // TODO: Grab version progmatically
+            RemoteLogger.SetTag("version", "0.33c"); // TODO: Grab version progmatically
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -259,6 +259,7 @@ namespace Oxide.Game.TheForest
                 coop.OnCoOp();
                 coop.OnMpHost();
 
+                // Check for saved games
                 if (LevelSerializer.SavedGames.Count > 0)
                 {
                     coop.OnLoad();
@@ -322,7 +323,7 @@ namespace Oxide.Game.TheForest
             }
             catch
             {
-                // ignored
+                // Ignored
             }
 
             scene.CancelInvoke("beginPlaneCrash");
