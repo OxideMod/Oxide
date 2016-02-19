@@ -1101,7 +1101,7 @@
               {
                 "OpCode": "call",
                 "OpType": "Method",
-                "Operand": "System|System.Text.RegularExpressions.Regex|Replace"
+                "Operand": "System|System.Text.RegularExpressions.Regex|Replace(System.String,System.String,System.String)"
               }
             ],
             "HookTypeName": "Modify",
@@ -1109,7 +1109,7 @@
             "HookName": "FixChatLogTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ChatManagerServer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "AppendChatboxServerAll",
