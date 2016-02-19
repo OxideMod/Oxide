@@ -77,7 +77,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("version", "0.32"); // TODO: Grab version progmatically
+            RemoteLogger.SetTag("version", "0.33b"); // TODO: Grab version progmatically
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -122,6 +122,9 @@ namespace Oxide.Game.TheForest
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
+
+            // Save the level every X minutes
+            Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
         }
 
         /// <summary>
@@ -249,19 +252,23 @@ namespace Oxide.Game.TheForest
         private void IOnInitServer()
         {
             VirtualCursor.Instance.enabled = false;
+
             Interface.Oxide.NextTick(() =>
             {
                 var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
                 coop.OnCoOp();
                 coop.OnMpHost();
+
                 if (LevelSerializer.SavedGames.Count > 0)
                 {
                     coop.OnLoad();
-                    coop.OnSlotSelection((int)TitleScreen.StartGameSetup.Slot);
-                    DisableAudio();
-                    return;
+                    coop.OnSlotSelection((int) TitleScreen.StartGameSetup.Slot);
                 }
-                coop.OnNewGame();
+                else
+                {
+                    coop.OnNewGame();
+                }
+
                 DisableAudio();
             });
         }
@@ -280,7 +287,6 @@ namespace Oxide.Game.TheForest
             {
                 var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
                 coop.OnHostLobbySetup();
-                DisableAudio();
             });
         }
 
@@ -314,7 +320,10 @@ namespace Oxide.Game.TheForest
                 skipOpeningAnimation.Invoke(scene, null);
                 cleanUp.Invoke(scene, null);
             }
-            catch (Exception e) { /*Interface.Oxide.LogException("OnTriggerCutSceneAwake: ", e);*/ }
+            catch
+            {
+                // ignored
+            }
 
             scene.CancelInvoke("beginPlaneCrash");
             scene.planeController.CancelInvoke("beginPlaneCrash");
@@ -323,16 +332,28 @@ namespace Oxide.Game.TheForest
             scene.enabled = false;
             scene.gameObject.SetActive(false);
 
-            //LocalPlayer.Entity.CancelInvoke();
+            //DisableClient();
+        }
+
+        /// <summary>
+        /// Disables client-side elements
+        /// </summary>
+        /// <returns></returns>
+        private void DisableClient()
+        {
+            LocalPlayer.Entity.CancelInvoke();
             LocalPlayer.Stats.CancelInvoke();
-            /*scene.Hud.enabled = false;
+            LocalPlayer.Tuts.CancelInvoke();
             LocalPlayer.Inventory.enabled = false;
             LocalPlayer.FpCharacter.enabled = false;
-            LocalPlayer.MainCam.SendMessage("GuiOff");*/
+            LocalPlayer.MainCam.SendMessage("GuiOff");
+
             var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
             foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
             var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
             foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
+            var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
+            foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
             var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
             foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);
 

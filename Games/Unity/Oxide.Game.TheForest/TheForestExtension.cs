@@ -91,6 +91,7 @@ namespace Oxide.Game.TheForest
             "setMale",
             "setPlanePosition site=",
             "setting clothes",
+            "setting group encounter for",
             "smooth unlock",
             "spawner was destroyed",
             "started steam server"
@@ -153,7 +154,7 @@ namespace Oxide.Game.TheForest
             if (commandLine.HasVariable("maxplayers")) PlayerPrefs.SetInt("MpGamePlayerCount", int.Parse(commandLine.GetVariable("maxplayers")));
             if (commandLine.HasVariable("hostname")) PlayerPrefs.SetString("MpGameName", commandLine.GetVariable("hostname"));
             if (commandLine.HasVariable("friendsonly"))  PlayerPrefs.SetInt("MpGameFriendsOnly", int.Parse(commandLine.GetVariable("friendsonly")));
-            if (commandLine.HasVariable("saveslot")) TitleScreen.StartGameSetup.Slot = (TitleScreen.GameSetup.Slots) int.Parse(commandLine.GetVariable("saveslot"));
+            if (commandLine.HasVariable("saveslot")) PlayerPrefs.SetInt("MpGameSaveSlot", int.Parse(commandLine.GetVariable("saveslot")));
             //if (commandLine.HasVariable("saveinterval")) /* TODO */
 
             // Disable client audio for server
@@ -204,7 +205,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.32"; // TODO: Grab version
+                var gameVersion = "0.33b"; // TODO: Grab version
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };

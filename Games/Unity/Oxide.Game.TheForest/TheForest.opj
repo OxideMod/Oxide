@@ -304,7 +304,7 @@
                 "Burn"
               ]
             },
-            "MSILHash": "GO1e4wInJKaoEf37Yb7Mv7eb1wG6ByxXPEXxXVnvapY=",
+            "MSILHash": "1GprAt/Bd+Yp5/kABwJDAtKihH4FsgTES9xFG2dxJU8=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1084,7 +1084,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "oRUbLSldYSnrVNNC1Kgyu/4ssTVV743SQfV7MQPh1ng=",
+            "MSILHash": "PBITdd0Y3TvdgVxkjjmKgy9rMvVTTfxleTowIiaB5e0=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1110,7 +1110,7 @@
                 "SetCorpsePosition"
               ]
             },
-            "MSILHash": "orTYHHhjh70cLltCC5vemzwm8Gp4ELXQ4iZMWjE4V3Q=",
+            "MSILHash": "WYG4D7uv9xWnZSw6nvGbt5By+WqTpgfObII7t26Qlm8=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1214,7 +1214,7 @@
                 "DestroyWithTag"
               ]
             },
-            "MSILHash": "E4td5LUq8QOA6STb42q3P7mljpiZuqpXN3R+0Hm6VHQ=",
+            "MSILHash": "0vIIS34lJdX8wDlouSuNCBp8zxJtjroZ6vp5PIdP/MI=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -1456,30 +1456,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 4,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerSave",
-            "HookName": "OnServerSave",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "PlayerStats",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "JustSave",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "BEYXKv2Kc2SW8JEfVOUxQNlaiTsDQL24i3oGrtK6Toc=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -1522,7 +1498,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "YjZY6yVxK5GN1qzELJLyGZGk1lhspkiFkYBzu5ikxag=",
+            "MSILHash": "q7O4887lYpZVMbgQ437sncQtyb5VTEt1nM2LdSkyvWM=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1623,6 +1599,80 @@
             "MSILHash": "7w/7LxQxw0GrODTKaucDmEb9UV4Y0O/R9rysgEGg/S8=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 123,
+            "RemoveCount": 3,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "NoPlaneCrash [patch]",
+            "HookName": "NoPlaneCrash",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TriggerCutScene",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "beginPlaneCrash",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "IGLGPVWyplPquL4NIHlHzoYhLqwUtUNTRZLrqVad6dY=",
+            "BaseHookName": "IOnPlaneCrash [internal]",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 19,
+            "RemoveCount": 30,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "NoClientInit [patch]",
+            "HookName": "NoClientInit",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SteamManager",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "/wiKpk/LpCD5KKofovhPTqbYZZYGfN3P958zsVcF1Qk=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "LevelSerializer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SaveGame",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.Boolean",
+                "System.Action`2<System.String,System.Boolean>"
+              ]
+            },
+            "MSILHash": "dW5frF5mGVrrjd8tBmjsVu5tQGpNrJzZdfz1UQMTFjw=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
