@@ -2884,6 +2884,88 @@
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 24,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l1",
+            "HookTypeName": "Simple",
+            "Name": "OnCreateWorldProjectile",
+            "HookName": "OnCreateWorldProjectile",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "CreateWorldProjectile",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "HitInfo",
+                "ItemDefinition",
+                "ItemModProjectile",
+                "Projectile",
+                "Item"
+              ]
+            },
+            "MSILHash": "rjRu3+azTIV5Pg4s3+/JKdTwkLYmuE48XMqLYlObVcc=",
+            "BaseHookName": null,
+            "HookCategory": "Weapon"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 13,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.player, this.item",
+            "HookTypeName": "Simple",
+            "Name": "OnItemPickup",
+            "HookName": "OnItemPickup",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "WorldItem",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Pickup",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "azRUuEn1z2zRoF0HUbj/hn/vAiVjhjXaqOaFlLATBPQ=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBypassQueue",
+            "HookName": "OnBypassQueue",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConnectionQueue",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CanJumpQueue",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "Network.Connection"
+              ]
+            },
+            "MSILHash": "uSsc6fwWb/AnTE4fbzn3fd7Wu8teZjY5z1lHwJmNgW4=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ]
     }
