@@ -173,23 +173,12 @@ namespace Oxide.Game.Rust
             Output.OnMessage += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                var players = BasePlayer.activePlayerList.Count;
-                var hostname = ConVar.Server.hostname;
-                return string.Concat(players, " | ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = ConVar.Server.hostname;
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Status1Left = () => ConVar.Server.hostname;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Performance.frameRate;
-                var uptime = Number.FormatSeconds((ulong)Time.realtimeSinceStartup);
-                return string.Concat(fps, "fps, ", uptime);
+                return $"{Performance.frameRate}fps {Number.FormatSeconds((ulong) Time.realtimeSinceStartup)} uptime";
             };
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
@@ -215,12 +204,7 @@ namespace Oxide.Game.Rust
                 var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
                 return string.Concat(" ", gameTime, ", ", ConVar.Server.level, " [", ConVar.Server.worldsize, ", ", ConVar.Server.seed, "]");
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = typeof(Protocol).GetField("network").GetValue(null).ToString();
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
             Interface.Oxide.ServerConsole.Completion = input =>
