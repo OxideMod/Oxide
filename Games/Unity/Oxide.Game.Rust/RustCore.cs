@@ -1084,14 +1084,6 @@ namespace Oxide.Game.Rust
         #region Deprecated Hooks
 
         /// <summary>
-        /// Used to handle the deprecated hook OnItemPickup
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="player"></param>
-        [HookMethod("OnCollectiblePickup")]
-        private object OnCollectiblePickup(Item item, BasePlayer player) => Interface.CallDeprecatedHook("OnItemPickup", player, item);
-
-        /// <summary>
         /// Used to handle the deprecated hook OnWeaponThrown
         /// </summary>
         /// <param name="player"></param>
