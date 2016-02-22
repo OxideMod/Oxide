@@ -115,8 +115,22 @@ namespace Oxide.Core.Plugins
                 sublist = new List<Plugin>();
                 hooksubscriptions.Add(hookname, sublist);
             }
-            sublist.Add(plugin);
+            if (!sublist.Contains(plugin)) sublist.Add(plugin);
             //Logger.Write(LogType.Debug, "Plugin {0} is subscribing to hook '{1}'!", plugin.Name, hookname);
+        }
+
+        /// <summary>
+        /// Unsubscribes the specified plugin to the specified hook
+        /// </summary>
+        /// <param name="hookname"></param>
+        /// <param name="plugin"></param>
+        internal void UnsubscribeToHook(string hookname, Plugin plugin)
+        {
+            if (!loadedplugins.ContainsKey(plugin.Name)) return;
+            IList<Plugin> sublist;
+            if (hooksubscriptions.TryGetValue(hookname, out sublist) && sublist.Contains(plugin))
+                sublist.Remove(plugin);
+            //Logger.Write(LogType.Debug, "Plugin {0} is unsubscribing to hook '{1}'!", plugin.Name, hookname);
         }
 
         /// <summary>
