@@ -147,6 +147,12 @@ namespace Oxide.Core.Plugins
         protected void Subscribe(string hookname) => Manager.SubscribeToHook(hookname, this);
 
         /// <summary>
+        /// Unsubscribes this plugin to the specified hook
+        /// </summary>
+        /// <param name="hookname"></param>
+        protected void Unsubscribe(string hookname) => Manager.UnsubscribeToHook(hookname, this);
+
+        /// <summary>
         /// Called when this plugin has been added to the specified manager
         /// </summary>
         /// <param name="manager"></param>
