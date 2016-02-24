@@ -2966,6 +2966,32 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 8,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnEntityKill",
+            "HookName": "OnEntityKill",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseNetworkable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Kill",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseNetworkable/DestroyMode"
+              ]
+            },
+            "MSILHash": "ZRLv9T8N1dg9+apAlTC1sx6URKeKys9eHXdxiZjRBQM=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
         }
       ]
     }
