@@ -375,6 +375,38 @@ namespace Oxide.Core.Libraries
         public string[] GetPermissions() => new HashSet<string>(permset.Values.SelectMany(v => v)).ToArray();
 
         /// <summary>
+        /// Returns the users with given permission
+        /// </summary>
+        /// <returns></returns>
+        [LibraryFunction("GetPermissionUsers")]
+        public string[] GetPermissionUsers(string perm)
+        {
+            if (string.IsNullOrEmpty(perm)) return new string[0];
+            perm = perm.ToLower();
+            var users = new HashSet<string>();
+            foreach (var data in userdata)
+                if (data.Value.Perms.Contains(perm))
+                    users.Add($"{data.Key}({data.Value.LastSeenNickname})");
+            return users.ToArray();
+        }
+
+        /// <summary>
+        /// Returns the groups with given permission
+        /// </summary>
+        /// <returns></returns>
+        [LibraryFunction("GetPermissionGroups")]
+        public string[] GetPermissionGroups(string perm)
+        {
+            if (string.IsNullOrEmpty(perm)) return new string[0];
+            perm = perm.ToLower();
+            var groups = new HashSet<string>();
+            foreach (var data in groupdata)
+                if (data.Value.Perms.Contains(perm))
+                    groups.Add(data.Key);
+            return groups.ToArray();
+        }
+
+        /// <summary>
         /// Set the group to which the specified user belongs
         /// </summary>
         /// <param name="userid"></param>

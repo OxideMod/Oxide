@@ -862,6 +862,14 @@ namespace Oxide.Game.Rust
                 result += string.Join(", ", permission.GetPermissions());
                 arg.ReplyWith(result);
             }
+            else if (mode.Equals("perm"))
+            {
+                var result = $"Permission '{name}' Users:\n";
+                result += string.Join(", ", permission.GetPermissionUsers(name));
+                result += $"\nPermission '{name}' Groups:\n";
+                result += string.Join(", ", permission.GetPermissionGroups(name));
+                arg.ReplyWith(result);
+            }
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
@@ -878,9 +886,9 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                     name += $" ({userId})";
                 }
-                var result = "User '" + name + "' permissions:\n";
+                var result = $"User '{name}' permissions:\n";
                 result += string.Join(", ", permission.GetUserPermissions(userId));
-                result += "\nUser '" + name + "' groups:\n";
+                result += $"\nUser '{name}' groups:\n";
                 result += string.Join(", ", permission.GetUserGroups(userId));
                 arg.ReplyWith(result);
             }
@@ -891,14 +899,14 @@ namespace Oxide.Game.Rust
                     ReplyWith(arg.connection, "GroupNotFound", name);
                     return;
                 }
-                var result = "Group '" + name + "' users:\n";
+                var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
-                result += "\nGroup '" + name + "' permissions:\n";
+                result += $"\nGroup '{name}' permissions:\n";
                 result += string.Join(", ", permission.GetGroupPermissions(name));
                 var parent = permission.GetGroupParent(name);
                 while (permission.GroupExists(parent))
                 {
-                    result = "\nParent group '" + parent + "' permissions:\n";
+                    result = $"\nParent group '{parent}' permissions:\n";
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
                     parent = permission.GetGroupParent(parent);
                 }
