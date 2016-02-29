@@ -226,7 +226,7 @@ namespace Oxide.Plugins
             if (process != null && !process.HasExited) return true;
             PurgeOldLogs();
             Shutdown();
-            var args = new [] {"/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory)};
+            var args = new[] {"/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory)};
             try
             {
                 process = new Process
@@ -242,23 +242,23 @@ namespace Oxide.Plugins
                     },
                     EnableRaisingEvents = true
                 };
-                string path;
+                //string path;
                 switch (Environment.OSVersion.Platform)
                 {
                     case PlatformID.Win32S:
                     case PlatformID.Win32Windows:
                     case PlatformID.Win32NT:
-                        var currentPath = process.StartInfo.EnvironmentVariables["PATH"] ?? Environment.GetEnvironmentVariable("PATH");
-                        path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, "x86")}";
-                        var newPath = string.IsNullOrEmpty(currentPath) ? path : $"{currentPath}{Path.PathSeparator}{path}";
-                        process.StartInfo.EnvironmentVariables["PATH"] = newPath;
+                        //var currentPath = process.StartInfo.EnvironmentVariables["PATH"] ?? Environment.GetEnvironmentVariable("PATH");
+                        //path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, "x86")}";
+                        //var newPath = string.IsNullOrEmpty(currentPath) ? path : $"{currentPath}{Path.PathSeparator}{path}";
+                        process.StartInfo.EnvironmentVariables["PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, "x86")}";
                         break;
                     case PlatformID.Unix:
                     case PlatformID.MacOSX:
-                        var currentLdLibraryPath = process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] ?? Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
-                        path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
-                        var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : $"{currentLdLibraryPath}{Path.PathSeparator}{path}";
-                        process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = newLdLibraryPath;
+                        //var currentLdLibraryPath = process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] ?? Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
+                        //path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
+                        //var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : $"{currentLdLibraryPath}{Path.PathSeparator}{path}";
+                        process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
                         break;
                 }
                 process.Exited += OnProcessExited;
