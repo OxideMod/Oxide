@@ -50,11 +50,15 @@ namespace Oxide.Ext.Lua.Libraries
 
             // Check if it already exists
             LuaTable table;
-            if (datafilemap.TryGetValue(datafile, out table)) return table;
+            if (datafilemap.TryGetValue(datafile, out table))
+            {
+                table.Dispose();
+                //return table;
+            }
 
             // Create the table
             table = Utility.TableFromConfig(datafile, LuaEnvironment);
-            datafilemap.Add(datafile, table);
+            datafilemap[datafile] = table;
 
             // Return
             return table;

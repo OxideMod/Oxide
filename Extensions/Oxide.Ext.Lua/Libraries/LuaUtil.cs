@@ -66,6 +66,7 @@ namespace Oxide.Ext.Lua.Libraries
         /// </summary>
         /// <param name="table"></param>
         /// <returns></returns>
+        [LibraryFunction("TableToLangDict")]
         public object TableToLangDict(LuaTable table)
         {
             var dict = new Dictionary<string, string>();
