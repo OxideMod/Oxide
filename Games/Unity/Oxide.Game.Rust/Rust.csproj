@@ -135,7 +135,8 @@
       <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
       <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
-    <Exec Command="pdb2mdb %(ManagedFiles.Identity)" IgnoreExitCode="true" Condition="$(Configuration)==Debug" />
+    <RemoveDir Directories="$(BundleDir)\$(GameName);$(BundleDir)\$(GameNameLinux)" />
+    <Exec Command="pdb2mdb %(ManagedFiles.Identity)" IgnoreExitCode="true" Condition="$(Configuration)==Debug And '$(OS)' == 'Windows_NT'" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameNameLinux)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(LinuxFiles)" DestinationFiles="@(LinuxFiles->'$(BundleDir)\$(GameNameLinux)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
