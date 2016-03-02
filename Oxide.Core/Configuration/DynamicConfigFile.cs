@@ -266,7 +266,13 @@ namespace Oxide.Core.Configuration
             if (!_keyvalues.TryGetValue(path[0], out val))
                 _keyvalues[path[0]] = val = new Dictionary<string, object>();
             for (var i = 1; i < path.Length - 1; i++)
-                val = (((Dictionary<string,object>)val)[path[i]] = new Dictionary<string, object>());
+            {
+                if (!(val is Dictionary<string, object>))
+                    throw new ArgumentException("path is not a dictionary");
+                var oldVal = (Dictionary<string, object>)val;
+                if (!oldVal.TryGetValue(path[i], out val))
+                    oldVal[path[i]] = val = new Dictionary<string, object>();
+            }
             ((Dictionary<string, object>)val)[path[path.Length - 1]] = value;
         }
 
