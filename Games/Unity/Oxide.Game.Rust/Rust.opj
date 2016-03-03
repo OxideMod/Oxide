@@ -232,7 +232,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 74,
+            "InjectionIndex": 82,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -251,7 +251,7 @@
                 "UnityEngine.Quaternion"
               ]
             },
-            "MSILHash": "vn8hCjT1ot+lHL5hdixQS6nxcdbdv0aL4GF/ce5Lpwk=",
+            "MSILHash": "aUIEx7CbfN9akqObwMXVg5RrHCKkM/oNuhAng2V1TOQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -808,7 +808,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "t+ykLZInQ8whZfEKtCN/N13rkpzQZQebJ7IzFTAkSRA=",
+            "MSILHash": "l5P+w0svIxWQzmSco+/1Ekmod+Kw1RiKiY4jy6cp588=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -942,7 +942,7 @@
                 "System.Object[]"
               ]
             },
-            "MSILHash": "Lkv6CQIbfGAfmAOgJEoklwFnGNoAbZWl3VLLldhR/xE=",
+            "MSILHash": "ag2pX+MYTzftAfyx4jK8ViDVY4sihXutbpy77KoLLWU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -995,7 +995,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "DIAKwfdw9Z6cSN08DHTsEnttzK7Vq2UvVkvdrhQ2NzU=",
+            "MSILHash": "fWW9tgc/s0Cqq00BTVP/TdzDEwXG/r9ovCi6Qf6rAv4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1442,7 +1442,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 99,
+            "InjectionIndex": 106,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l2, l0",
@@ -1460,7 +1460,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "yoA2melw6D222dXu3v4cptNCgPYdhX+qHvfDv82dssY=",
+            "MSILHash": "O86pcO9Mph3cR9q0v/OBrHDIL6gyDk9HkbBDobedAIA=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -1662,7 +1662,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "yQWqUinm/GqEKMeZJnj5dn9HnmYr40DExRdj8x7FRfY=",
+            "MSILHash": "IrauKKgy3jcVrHfbSfANEkqeg3bRhQAq50iKKt6nU4c=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1686,7 +1686,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "4CAKC5UytzD2uJzaWnQXJ2VEGyypmvO7u7VGT65oUiE=",
+            "MSILHash": "qH0Fx4ZpZ52rsWOYB9nD/cxYExr6N+/oLjCJei6InME=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1772,7 +1772,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 40,
+            "InjectionIndex": 48,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0.player, l3, l1",
@@ -1790,7 +1790,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "clJ2f54704FMqvplMrQr9ZQrxxHHLiZ2HxHxtUMpiG4=",
+            "MSILHash": "chTkIbpqX5xseW3Fze92rVoOBR5MOcB+6Mv0kHMPHiM=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -2229,7 +2229,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "i/nEBaZ1TOCBcoTm1qgZnn+kIEj5SngcPgZCxjTEXyY=",
+            "MSILHash": "KBv4fMKak38cbWxjlYSEObYLYgLM69TM4g25BcZboTQ=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2724,7 +2724,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "nvHjc7rfDd/znPzBWF9fhrriehZKYd05CObKhC+XL60=",
+            "MSILHash": "A7sssaB41tzUp6wr+48AKVcmrNi/BReeMlcpLGbIe4M=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2880,7 +2880,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "DIAKwfdw9Z6cSN08DHTsEnttzK7Vq2UvVkvdrhQ2NzU=",
+            "MSILHash": "fWW9tgc/s0Cqq00BTVP/TdzDEwXG/r9ovCi6Qf6rAv4=",
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }
