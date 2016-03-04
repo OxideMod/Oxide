@@ -940,7 +940,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "fWW9tgc/s0Cqq00BTVP/TdzDEwXG/r9ovCi6Qf6rAv4=",
+            "MSILHash": "Qs5NLZyF2Jt74McwJco+an4KFWf/axuuOJp2V3JIR80=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1387,7 +1387,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 106,
+            "InjectionIndex": 105,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l2, l0",
@@ -1405,7 +1405,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "O86pcO9Mph3cR9q0v/OBrHDIL6gyDk9HkbBDobedAIA=",
+            "MSILHash": "bBc2ka+81fOhz9h1EsrZg7Umkvf9WOM8P7e7NV9QfGw=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -1717,7 +1717,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 48,
+            "InjectionIndex": 55,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0.player, l3, l1",
@@ -1735,7 +1735,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "chTkIbpqX5xseW3Fze92rVoOBR5MOcB+6Mv0kHMPHiM=",
+            "MSILHash": "JEkyIkG4HyzAI9vwdejUYo23o08yi9P/szcjjHQb5OA=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -2654,7 +2654,7 @@
               {
                 "OpCode": "ldstr",
                 "OpType": "String",
-                "Operand": "oxide,modded,mp{0},cp{1},v{2}{3}"
+                "Operand": "oxide,modded,mp{0},cp{1},qp{5},v{2}{3},h{4}"
               }
             ],
             "HookTypeName": "Modify",
@@ -2669,7 +2669,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "A7sssaB41tzUp6wr+48AKVcmrNi/BReeMlcpLGbIe4M=",
+            "MSILHash": "RqE+B9gm9EpAETr5OCv26Hqlg/TxOb8lhWwOZbQYojs=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2825,7 +2825,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "fWW9tgc/s0Cqq00BTVP/TdzDEwXG/r9ovCi6Qf6rAv4=",
+            "MSILHash": "Qs5NLZyF2Jt74McwJco+an4KFWf/axuuOJp2V3JIR80=",
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }
