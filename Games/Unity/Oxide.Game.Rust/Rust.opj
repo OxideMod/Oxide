@@ -895,61 +895,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
-            "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ConsoleSystem/Run",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "Unrestricted",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "System.String",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "rLeEfY86Mgj96KRUI610QqyikDGKMaHF6VfP6e2FC+0=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 13,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l1",
-            "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ConsoleSystem/SystemRealm",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Normal",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "ConsoleSystem/RunOptions",
-                "System.String",
-                "System.Object[]"
-              ]
-            },
-            "MSILHash": "ag2pX+MYTzftAfyx4jK8ViDVY4sihXutbpy77KoLLWU=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
