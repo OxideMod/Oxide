@@ -906,7 +906,7 @@ namespace Oxide.Game.Rust
                 var parent = permission.GetGroupParent(name);
                 while (permission.GroupExists(parent))
                 {
-                    result = $"\nParent group '{parent}' permissions:\n";
+                    result += $"\nParent group '{parent}' permissions:\n";
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
                     parent = permission.GetGroupParent(parent);
                 }

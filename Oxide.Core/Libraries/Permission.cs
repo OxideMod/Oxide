@@ -486,7 +486,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("GetUsersInGroup")]
         public string[] GetUsersInGroup(string groupname)
         {
-            if (!GroupExists(groupname)) return null;
+            if (!GroupExists(groupname)) return new string[0];
             groupname = groupname.ToLower();
             return userdata.Where(u => u.Value.Groups.Contains(groupname)).Select(u => $"{u.Key}({u.Value.LastSeenNickname})").ToArray();
         }
@@ -816,7 +816,7 @@ namespace Oxide.Core.Libraries
                 if (!groups.Add(parentData.ParentGroup)) return true;
 
                 // Get next parent
-                if (!groupdata.TryGetValue(parent, out parentData)) return false;
+                if (!groupdata.TryGetValue(parentData.ParentGroup, out parentData)) return false;
             }
             return false;
         }

@@ -5,6 +5,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Diagnostics;
+using System.Globalization;
+
+using Newtonsoft.Json;
 
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
@@ -108,6 +111,9 @@ namespace Oxide.Core
             RootDirectory = Environment.CurrentDirectory;
             if (RootDirectory.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)))
                 RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings { Culture = CultureInfo.InvariantCulture };
 
             // Create the commandline
             commandline = new CommandLine(Environment.GetCommandLineArgs());
