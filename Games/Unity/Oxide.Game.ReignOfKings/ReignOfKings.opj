@@ -203,12 +203,12 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 407,
+            "InjectionIndex": 80,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentString": "0",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerChat",
+            "Name": "OnPlayerChat [player]",
             "HookName": "OnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Networking.Events.Listeners.PlayerListener",
@@ -640,6 +640,32 @@
             "MSILHash": "ckzM1ddgrV7blL4KogEfvfGuk8grDVKMGLduECZABa4=",
             "BaseHookName": null,
             "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 5,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerChat [guild]",
+            "HookName": "OnPlayerChat",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Networking.Events.Listeners.PlayerListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnPlayerMessage",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
+              ]
+            },
+            "MSILHash": "dSPX3Ft91nlndSiOgT321WuwhHQ3v+u/JRah+XxT4iQ=",
+            "BaseHookName": "OnPlayerChat [player]",
+            "HookCategory": "Player"
           }
         }
       ]
