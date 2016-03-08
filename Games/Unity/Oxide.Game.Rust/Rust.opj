@@ -2937,6 +2937,34 @@
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 10,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a2,a0",
+            "HookTypeName": "Simple",
+            "Name": "CanReveal",
+            "HookName": "CanReveal",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ItemModReveal",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ServerCommand",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Item",
+                "System.String",
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "6dtK4UUaXC0mxCXI01ZXCSSSL7xHsmPvtOEAuqKiDOA=",
+            "BaseHookName": "OnBlueprintReveal",
+            "HookCategory": null
+          }
         }
       ]
     }
