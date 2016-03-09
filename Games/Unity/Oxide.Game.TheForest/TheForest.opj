@@ -902,7 +902,7 @@
                 "GrowGarden"
               ]
             },
-            "MSILHash": "XlCdFQwL6HV+O8YWgP70rHPNuhGd+eIY9LlT08gFNC0=",
+            "MSILHash": "LMt72f1jU3WsznydlL7NWkwEHua5Ki3MpyiYfG41940=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1084,7 +1084,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "PBITdd0Y3TvdgVxkjjmKgy9rMvVTTfxleTowIiaB5e0=",
+            "MSILHash": "2u9F3Jm9n6fRo2quDDsUyrzfnH8yHo86LqRf1Ty02T8=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1110,7 +1110,7 @@
                 "SetCorpsePosition"
               ]
             },
-            "MSILHash": "WYG4D7uv9xWnZSw6nvGbt5By+WqTpgfObII7t26Qlm8=",
+            "MSILHash": "orTYHHhjh70cLltCC5vemzwm8Gp4ELXQ4iZMWjE4V3Q=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1498,7 +1498,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "q7O4887lYpZVMbgQ437sncQtyb5VTEt1nM2LdSkyvWM=",
+            "MSILHash": "MpVoFHCxNeA3+AOvWppcCr1CT/dsiHBXH9i2eO8VSo8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
