@@ -2963,7 +2963,7 @@
             },
             "MSILHash": "6dtK4UUaXC0mxCXI01ZXCSSSL7xHsmPvtOEAuqKiDOA=",
             "BaseHookName": "OnBlueprintReveal",
-            "HookCategory": null
+            "HookCategory": "Player"
           }
         }
       ]
