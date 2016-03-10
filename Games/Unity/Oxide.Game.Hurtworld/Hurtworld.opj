@@ -322,17 +322,18 @@
             "HookName": "IOnExitVehicle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "ExitVehicle",
               "ReturnType": "System.Void",
               "Parameters": [
                 "CharacterMotorSimple",
+                "UnityEngine.Vector3",
                 "UnityEngine.Vector3"
               ]
             },
-            "MSILHash": "q5IV8ikjEam3IuLzXiohyzdUDtGRrplzWoWJqMWAFK4=",
+            "MSILHash": "HnaL7++dMrs+HuzpA+39YAxThvJlrT0qMYkk7G1BVew=",
             "BaseHookName": null,
             "HookCategory": "Vehicle"
           }
