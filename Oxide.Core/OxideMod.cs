@@ -130,17 +130,17 @@ namespace Oxide.Core
                 rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
                 if (string.IsNullOrEmpty(varname) || commandline.HasVariable(varname))
                 {
-                    InstanceDirectory = Path.Combine(RootDirectory, CleanPath(string.Format(format, commandline.GetVariable(varname))));
+                    InstanceDirectory = Path.Combine(RootDirectory, Utility.CleanPath(string.Format(format, commandline.GetVariable(varname))));
                     break;
                 }
             }
             if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
-            ExtensionDirectory = Path.Combine(RootDirectory, CleanPath(rootconfig.ExtensionDirectory));
-            PluginDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.PluginDirectory));
-            DataDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.DataDirectory));
-            LangDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.LangDirectory));
-            LogDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.LogDirectory));
-            ConfigDirectory = Path.Combine(InstanceDirectory, CleanPath(rootconfig.ConfigDirectory));
+            ExtensionDirectory = Path.Combine(RootDirectory, Utility.CleanPath(rootconfig.ExtensionDirectory));
+            PluginDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.PluginDirectory));
+            DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.DataDirectory));
+            LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.LangDirectory));
+            LogDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.LogDirectory));
+            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.ConfigDirectory));
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
@@ -592,11 +592,6 @@ namespace Oxide.Core
         private void watcher_OnPluginRemoved(string name) => UnloadPlugin(name);
 
         #endregion
-
-        private static string CleanPath(string path)
-        {
-            return path?.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-        }
 
         private static void RegisterLibrarySearchPath(string path)
         {

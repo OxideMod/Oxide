@@ -137,5 +137,10 @@ namespace Oxide.Core
             End:
             return value.Substring(firstIndex, (lastIndex - firstIndex + 1));
         }
+
+        public static string CleanPath(string path)
+        {
+            return path?.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+        }
     }
 }

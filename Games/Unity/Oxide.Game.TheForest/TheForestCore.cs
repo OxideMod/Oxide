@@ -88,11 +88,15 @@ namespace Oxide.Game.TheForest
                     var defaultGroup = DefaultGroups[i];
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
-                permission.CleanUp(s =>
+                permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    return ulong.TryParse(s, out temp);
+                    if (!ulong.TryParse(s, out temp))
+                        return false;
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                    return digits >= 17;
                 });
+                permission.CleanUp();
             }
         }
 

@@ -171,11 +171,15 @@ namespace Oxide.Game.Hurtworld
                     var defaultGroup = DefaultGroups[i];
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
-                permission.CleanUp(s =>
+                permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    return ulong.TryParse(s, out temp);
+                    if (!ulong.TryParse(s, out temp))
+                        return false;
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                    return digits >= 17;
                 });
+                permission.CleanUp();
             }
         }
 
@@ -678,7 +682,7 @@ namespace Oxide.Game.Hurtworld
             var group = args[2];
 
             var target = GetSession(name);
-            if (target == null && !permission.UserExists(name))
+            if (target == null && !permission.UserIdValid(name))
             {
                 ReplyWith(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
                 return;
@@ -753,7 +757,7 @@ namespace Oxide.Game.Hurtworld
             else if (mode.Equals("user"))
             {
                 var target = GetSession(name);
-                if (target == null && !permission.UserExists(name))
+                if (target == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
                     return;
@@ -814,7 +818,7 @@ namespace Oxide.Game.Hurtworld
             else if (mode.Equals("user"))
             {
                 var target = GetSession(name);
-                if (target == null && !permission.UserExists(name))
+                if (target == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
                     return;
@@ -864,7 +868,7 @@ namespace Oxide.Game.Hurtworld
             else if (mode.Equals("user"))
             {
                 var target = GetSession(name);
-                if (target == null && !permission.UserExists(name))
+                if (target == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(GetMessage("UserNotFound", session.SteamId.ToString()), session);
                     return;
@@ -897,7 +901,7 @@ namespace Oxide.Game.Hurtworld
                 var parent = permission.GetGroupParent(name);
                 while (permission.GroupExists(parent))
                 {
-                    result = $"\nParent group '{parent}' permissions:\n";
+                    result += $"\nParent group '{parent}' permissions:\n";
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
                     parent = permission.GetGroupParent(parent);
                 }

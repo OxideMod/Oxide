@@ -114,11 +114,15 @@ namespace Oxide.Game.RustLegacy
                     var defaultGroup = DefaultGroups[i];
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
-                permission.CleanUp(s =>
+                permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    return ulong.TryParse(s, out temp);
+                    if (!ulong.TryParse(s, out temp))
+                        return false;
+                    var digits = temp == 0 ? 1 : (int)System.Math.Floor(System.Math.Log10(temp) + 1);
+                    return digits >= 17;
                 });
+                permission.CleanUp();
             }
         }
 
@@ -392,7 +396,7 @@ namespace Oxide.Game.RustLegacy
             var group = arg.GetString(2);
 
             var player = FindPlayer(name);
-            if (player == null && !permission.UserExists(name))
+            if (player == null && !permission.UserIdValid(name))
             {
                 arg.ReplyWith("User '" + name + "' not found");
                 return;
@@ -461,7 +465,7 @@ namespace Oxide.Game.RustLegacy
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null && !permission.UserExists(name))
+                if (player == null && !permission.UserIdValid(name))
                 {
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
@@ -510,7 +514,7 @@ namespace Oxide.Game.RustLegacy
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null && !permission.UserExists(name))
+                if (player == null && !permission.UserIdValid(name))
                 {
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
@@ -558,7 +562,7 @@ namespace Oxide.Game.RustLegacy
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null && !permission.UserExists(name))
+                if (player == null && !permission.UserIdValid(name))
                 {
                     arg.ReplyWith("User '" + name + "' not found");
                     return;
@@ -591,7 +595,7 @@ namespace Oxide.Game.RustLegacy
                 var parent = permission.GetGroupParent(name);
                 while (permission.GroupExists(parent))
                 {
-                    result = "\nParent group '" + parent + "' permissions:\n";
+                    result += "\nParent group '" + parent + "' permissions:\n";
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
                     parent = permission.GetGroupParent(name);
                 }
@@ -599,9 +603,7 @@ namespace Oxide.Game.RustLegacy
             }
             else if (mode.Equals("groups"))
             {
-                var result = "Groups:\n";
-                result += string.Join(", ", permission.GetGroups());
-                arg.ReplyWith(result);
+                arg.ReplyWith("Groups:\n" + string.Join(", ", permission.GetGroups()));
             }
         }
 

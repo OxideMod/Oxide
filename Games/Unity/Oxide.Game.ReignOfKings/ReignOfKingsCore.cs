@@ -111,8 +111,8 @@ namespace Oxide.Game.ReignOfKings
             cmdlib.AddChatCommand("grant", this, "CmdGrant");
             cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
-            //cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
-            //cmdlib.AddChatCommand("show", this, "CmdShow");
+            cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
+            cmdlib.AddChatCommand("show", this, "CmdShow");
         }
 
         /// <summary>
@@ -157,6 +157,15 @@ namespace Oxide.Game.ReignOfKings
                     var defaultGroup = rokGroups[i].Name;
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
+                permission.RegisterValidate(s =>
+                {
+                    ulong temp;
+                    if (!ulong.TryParse(s, out temp))
+                        return false;
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                    return digits >= 17;
+                });
+                permission.CleanUp();
             }
         }
 
@@ -513,7 +522,7 @@ namespace Oxide.Game.ReignOfKings
             var group = args[2];
 
             var target = FindPlayer(name);
-            if (target == null && !permission.UserExists(name))
+            if (target == null && !permission.UserIdValid(name))
             {
                 ReplyWith(player, "User '" + name + "' not found");
                 return;
@@ -578,7 +587,7 @@ namespace Oxide.Game.ReignOfKings
             else if (mode.Equals("user"))
             {
                 var target = FindPlayer(name);
-                if (target == null && !permission.UserExists(name))
+                if (target == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(player, "User '" + name + "' not found");
                     return;
@@ -629,7 +638,7 @@ namespace Oxide.Game.ReignOfKings
             else if (mode.Equals("user"))
             {
                 var target = FindPlayer(name);
-                if (target == null && !permission.UserExists(name))
+                if (target == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(player, "User '" + name + "' not found");
                     return;
@@ -643,6 +652,90 @@ namespace Oxide.Game.ReignOfKings
                 }
                 permission.RevokeUserPermission(userId, perm);
                 ReplyWith(player, "User '" + name + "' revoked permission: " + perm);
+            }
+        }
+
+        #endregion
+
+        #region Show Command
+
+        /// <summary>
+        /// Called when the "show" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdShow")]
+        private void CmdShow(Player player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!HasPermission(player, "admin")) return;
+            if (args.Length < 2)
+            {
+                ReplyWith(player, "Usage: show <group|user> <name>\nUsage: show <groups|perms>");
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+
+            if (mode.Equals("perms"))
+            {
+                ReplyWith(player, "Permissions:\n" + string.Join(", ", permission.GetPermissions()));
+            }
+            else if (mode.Equals("perm"))
+            {
+                var result = $"Permission '{name}' Users:\n";
+                result += string.Join(", ", permission.GetPermissionUsers(name));
+                result += $"\nPermission '{name}' Groups:\n";
+                result += string.Join(", ", permission.GetPermissionGroups(name));
+                ReplyWith(player, result);
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    ReplyWith(player, "User '" + name + "' not found");
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.Id.ToString();
+                    name = target.Name;
+                    permission.UpdateNickname(userId, name);
+                    name += $" ({userId})";
+                }
+                var result = $"User '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetUserPermissions(userId));
+                result += $"\nUser '{name}' groups:\n";
+                result += string.Join(", ", permission.GetUserGroups(userId));
+                ReplyWith(player, result);
+            }
+            else if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    ReplyWith(player, "Group '" + name + "' not found");
+                    return;
+                }
+                var result = $"Group '{name}' users:\n";
+                result += string.Join(", ", permission.GetUsersInGroup(name));
+                result += $"\nGroup '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetGroupPermissions(name));
+                var parent = permission.GetGroupParent(name);
+                while (permission.GroupExists(parent))
+                {
+                    result += $"\nParent group '{parent}' permissions:\n";
+                    result += string.Join(", ", permission.GetGroupPermissions(parent));
+                    parent = permission.GetGroupParent(parent);
+                }
+                ReplyWith(player, result);
+            }
+            else if (mode.Equals("groups"))
+            {
+                ReplyWith(player, "Groups:\n" + string.Join(", ", permission.GetGroups()));
             }
         }
 
