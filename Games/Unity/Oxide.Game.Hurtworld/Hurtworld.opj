@@ -121,7 +121,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "8Vqi+mM+xu3mL/LveHIfpJ6Azj8oUk1DimKw2oIcrYI=",
+            "MSILHash": "oWD0wjerdWb5o1uOvoZid4yOJ68ZZ7soDrvoDuyoOzU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -227,7 +227,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "o/OW+9CgVmHoRphafJcQ8yclRyL0HYv2AG+xilWZq34=",
+            "MSILHash": "DQynNZMDXkxv3W88iFqLk3JuaM70NkbQJKOt9Iu1nSI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -716,7 +716,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Y5Jx2DSVG+oIJLUWV2l5hjfcR5jq6iFNIh+SooYTh2I=",
+            "MSILHash": "tmiiA+vVx5sXuT0bQeYrIrV4qdau/Cjn67gJ3slMGHY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -935,7 +935,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "8Vqi+mM+xu3mL/LveHIfpJ6Azj8oUk1DimKw2oIcrYI=",
+            "MSILHash": "oWD0wjerdWb5o1uOvoZid4yOJ68ZZ7soDrvoDuyoOzU=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "Server"
           }
