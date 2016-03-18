@@ -126,7 +126,7 @@ namespace Oxide.Core.Plugins
         /// <param name="plugin"></param>
         internal void UnsubscribeToHook(string hookname, Plugin plugin)
         {
-            if (!loadedplugins.ContainsKey(plugin.Name)) return;
+            if (!loadedplugins.ContainsKey(plugin.Name) || !plugin.IsCorePlugin && hookname.StartsWith("I")) return;
             IList<Plugin> sublist;
             if (hooksubscriptions.TryGetValue(hookname, out sublist) && sublist.Contains(plugin))
                 sublist.Remove(plugin);

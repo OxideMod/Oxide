@@ -169,11 +169,15 @@ namespace Oxide.Game.Rust
                     var defaultGroup = DefaultGroups[i];
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
                 }
-                permission.CleanUp(s =>
+                permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    return ulong.TryParse(s, out temp);
+                    if (!ulong.TryParse(s, out temp))
+                        return false;
+                    var digits = temp == 0 ? 1 : (int) System.Math.Floor(System.Math.Log10(temp) + 1);
+                    return digits >= 17;
                 });
+                permission.CleanUp();
             }
         }
 
@@ -684,7 +688,7 @@ namespace Oxide.Game.Rust
             var group = arg.GetString(2);
 
             var player = FindPlayer(name);
-            if (player == null && !permission.UserExists(name))
+            if (player == null && !permission.UserIdValid(name))
             {
                 ReplyWith(arg.connection, "UserNotFound", name);
                 return;
@@ -758,7 +762,7 @@ namespace Oxide.Game.Rust
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null && !permission.UserExists(name))
+                if (player == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(arg.connection, "UserNotFound", name);
                     return;
@@ -817,7 +821,7 @@ namespace Oxide.Game.Rust
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null && !permission.UserExists(name))
+                if (player == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(arg.connection, "UserNotFound", name);
                     return;
@@ -858,9 +862,7 @@ namespace Oxide.Game.Rust
 
             if (mode.Equals("perms"))
             {
-                var result = "Permissions:\n";
-                result += string.Join(", ", permission.GetPermissions());
-                arg.ReplyWith(result);
+                arg.ReplyWith("Permissions:\n" + string.Join(", ", permission.GetPermissions()));
             }
             else if (mode.Equals("perm"))
             {
@@ -873,7 +875,7 @@ namespace Oxide.Game.Rust
             else if (mode.Equals("user"))
             {
                 var player = FindPlayer(name);
-                if (player == null && !permission.UserExists(name))
+                if (player == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(arg.connection, "UserNotFound");
                     return;
@@ -914,9 +916,7 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("groups"))
             {
-                var result = "Groups:\n";
-                result += string.Join(", ", permission.GetGroups());
-                arg.ReplyWith(result);
+                arg.ReplyWith("Groups:\n" + string.Join(", ", permission.GetGroups()));
             }
         }
 
@@ -997,7 +997,7 @@ namespace Oxide.Game.Rust
                     {
                         var arg = sb.ToString().Trim();
                         if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
-                        sb = new StringBuilder();
+                        sb.Clear();
                         inlongarg = false;
                     }
                     else
@@ -1009,7 +1009,7 @@ namespace Oxide.Game.Rust
                 {
                     var arg = sb.ToString().Trim();
                     if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
-                    sb = new StringBuilder();
+                    sb.Clear();
                 }
                 else
                 {

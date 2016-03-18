@@ -76,6 +76,8 @@ namespace Oxide.Core.Libraries
         // All group data
         private Dictionary<string, GroupData> groupdata;
 
+        private Func<string, bool> validate;
+
         // Permission status
         public bool IsLoaded { get; private set; }
 
@@ -133,9 +135,20 @@ namespace Oxide.Core.Libraries
         /// </summary>
         private void SaveGroups() => ProtoStorage.Save(groupdata, "oxide.groups");
 
-        public void CleanUp(Func<string, bool> validate)
+        /// <summary>
+        /// Register user id validation
+        /// </summary>
+        public void RegisterValidate(Func<string, bool> validate)
         {
-            if (!IsLoaded) return;
+            this.validate = validate;
+        }
+
+        /// <summary>
+        /// Clean invalid user id entries
+        /// </summary>
+        public void CleanUp()
+        {
+            if (!IsLoaded || validate == null) return;
             var invalid = userdata.Keys.Where(k => !validate(k)).ToArray();
             if (invalid.Length <= 0) return;
             foreach (var i in invalid) userdata.Remove(i);
@@ -225,6 +238,14 @@ namespace Oxide.Core.Libraries
         private void owner_OnRemovedFromManager(Plugin sender, PluginManager manager) => permset.Remove(sender);
 
         #region Querying
+
+        /// <summary>
+        /// Returns if the specified user id is valid
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [LibraryFunction("UserIdValid")]
+        public bool UserIdValid(string userid) => validate == null || validate(userid);
 
         /// <summary>
         /// Returns if the specified user exists
