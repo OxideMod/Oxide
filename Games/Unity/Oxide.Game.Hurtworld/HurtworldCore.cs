@@ -361,7 +361,7 @@ namespace Oxide.Game.Hurtworld
         private object ICanExitVehicle(CharacterMotorSimple passenger)
         {
             var session = GetSession(passenger.gameObject);
-            return Interface.CallHook("CanExitVehicle", session, passenger) == null ? "cancel" : null;
+            return Interface.CallHook("CanExitVehicle", session, passenger);
         }
 
         /// <summary>

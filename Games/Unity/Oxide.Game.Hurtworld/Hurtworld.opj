@@ -1127,58 +1127,27 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 63,
+            "InjectionIndex": 86,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 1,
-            "ArgumentString": "",
+            "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "ICanExitVehicle [internal]",
             "HookName": "ICanExitVehicle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CharacterMotorSimple",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "Simulate",
+              "Exposure": 0,
+              "Name": "SimulateVehicle",
               "ReturnType": "System.Void",
               "Parameters": [
                 "System.Single"
               ]
             },
-            "MSILHash": "eo/wpLlWyo+/GA0Paw59FckKtfMfqubRBJaIjpX72mM=",
+            "MSILHash": "/Zbg61HEsVO3ktOh6osk+KzDyB09QLuT3ixqYJLecc4=",
             "BaseHookName": null,
-            "HookCategory": "Vehicle"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 74,
-            "RemoveCount": 2,
-            "Instructions": [
-              {
-                "OpCode": "beq_s",
-                "OpType": "Instruction",
-                "Operand": 113
-              }
-            ],
-            "HookTypeName": "Modify",
-            "Name": "ICanExitVehicle [patch]",
-            "HookName": "ICanExitVehicle",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CharacterMotorSimple",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Simulate",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Single"
-              ]
-            },
-            "MSILHash": "eo/wpLlWyo+/GA0Paw59FckKtfMfqubRBJaIjpX72mM=",
-            "BaseHookName": "ICanExitVehicle [internal]",
-            "HookCategory": "Vehicle"
+            "HookCategory": null
           }
         }
       ]
