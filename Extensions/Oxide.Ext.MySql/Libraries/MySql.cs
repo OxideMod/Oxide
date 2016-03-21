@@ -21,6 +21,7 @@ namespace Oxide.Ext.MySql.Libraries
         private readonly HashSet<Connection> _runningConnections = new HashSet<Connection>();
         private bool _running = true;
         private readonly Dictionary<string, Dictionary<string, Connection>> _connections = new Dictionary<string, Dictionary<string, Connection>>();
+        private readonly Thread _worker;
 
         /// <summary>
         /// Represents a single MySqlQuery instance
@@ -139,7 +140,8 @@ namespace Oxide.Ext.MySql.Libraries
 
         public MySql()
         {
-            new Thread(Worker) { IsBackground = true }.Start();
+            _worker = new Thread(Worker);
+            _worker.Start();
         }
 
         /// <summary>
@@ -147,7 +149,7 @@ namespace Oxide.Ext.MySql.Libraries
         /// </summary>
         private void Worker()
         {
-            while (_running)
+            while (_running || _queue.Count > 0)
             {
                 MySqlQuery query = null;
                 lock (_syncroot)
@@ -168,7 +170,7 @@ namespace Oxide.Ext.MySql.Libraries
                     if (query.Connection != null) _runningConnections.Add(query.Connection);
                     //lock (_syncroot) _queue.Dequeue();
                 }
-                else
+                else if (_running)
                     _workevent.WaitOne();
             }
         }
@@ -291,6 +293,8 @@ namespace Oxide.Ext.MySql.Libraries
         internal void Shutdown()
         {
             _running = false;
+            _workevent.Set();
+            _worker.Join();
         }
     }
 }
