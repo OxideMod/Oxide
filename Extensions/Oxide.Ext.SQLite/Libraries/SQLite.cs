@@ -24,6 +24,7 @@ namespace Oxide.Ext.SQLite.Libraries
         private readonly HashSet<Connection> _runningConnections = new HashSet<Connection>();
         private bool _running = true;
         private readonly Dictionary<string, Connection> _connections = new Dictionary<string, Connection>();
+        private readonly Thread _worker;
 
         /// <summary>
         /// Represents a single MySqlQuery instance
@@ -137,7 +138,7 @@ namespace Oxide.Ext.SQLite.Libraries
         /// </summary>
         private void Worker()
         {
-            while (_running)
+            while (_running || _queue.Count > 0)
             {
                 SQLiteQuery query = null;
                 lock (_syncroot)
@@ -156,7 +157,7 @@ namespace Oxide.Ext.SQLite.Libraries
                     query.Handle();
                     if (query.Connection != null) _runningConnections.Add(query.Connection);
                 }
-                else
+                else if (_running)
                     _workevent.WaitOne();
             }
         }
@@ -164,7 +165,8 @@ namespace Oxide.Ext.SQLite.Libraries
         public SQLite()
         {
             _dataDirectory = Interface.Oxide.DataDirectory;
-            new Thread(Worker) { IsBackground = true }.Start();
+            _worker = new Thread(Worker);
+            _worker.Start();
         }
 
         [LibraryFunction("OpenDb")]
@@ -282,6 +284,8 @@ namespace Oxide.Ext.SQLite.Libraries
         internal void Shutdown()
         {
             _running = false;
+            _workevent.Set();
+            _worker.Join();
         }
     }
 }
