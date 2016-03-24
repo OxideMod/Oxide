@@ -621,7 +621,7 @@
                 "UnityEngine.Ray"
               ]
             },
-            "MSILHash": "OyZ59ehCihXovwxufR0nTk8H3u7sUBEFFbOVqFTX75o=",
+            "MSILHash": "42k8eZNjGG1icvRsVdjwmvbaD1Cds79OqXcmS3JJuhE=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -649,7 +649,7 @@
                 "System.UInt32"
               ]
             },
-            "MSILHash": "BiGKSYCZBMUNZ2XsePv7jAs+9ybX1fc22yjiiO4EsQk=",
+            "MSILHash": "BzbLHuWkrTniaz8/DTBJXg9yeTZHG5oPZB+ZW9BSJW4=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -729,7 +729,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "GYdE1YXcJeIq8RVLJR0OJVFdXn7L9/DBPGtFZnR2HG8=",
+            "MSILHash": "F6H8CsyDkzRAGamDCMfFfurWWRr2HPbiyxrXE7/cDOE=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -834,7 +834,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "qnD7wvvPfqBjRRKMaquo2lApocvqLLYQ5z/HInqKuh0=",
+            "MSILHash": "9n9OkTI8CtXSKFdo0oxrXCstsrVdk1UuqaBPDlHEsBA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -940,7 +940,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "Qs5NLZyF2Jt74McwJco+an4KFWf/axuuOJp2V3JIR80=",
+            "MSILHash": "bItoLFXPfKkTKyHg5id1qg76sJZ4RIwQf7M4tuyyzG8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1326,7 +1326,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "HkbcQkBebn1FZaHQy7hi6Mi4ZpS0lthC2mSRzuhvQy4=",
+            "MSILHash": "LMSh29lYJz/0/D1SUPCGt57HvwwOczta1W6I+C2+7Bo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1379,7 +1379,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "TJ7LFoHf4FSQ0jlTDpKzOgV/IOV2MuhnHYl0DCXizKs=",
+            "MSILHash": "f1oYd2d5+me1fRGu0B/bXdQErfXhVAnlQm/R8m4sqpU=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -1939,7 +1939,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "HJFKWJ8sbJcAxvIIT/WgdUKViC5ML347YhPIdXe5F/A=",
+            "MSILHash": "j+QSG+0z62sfM8HrjBm53BksVq3NkhsweoewXmRijrM=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2174,7 +2174,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "KBv4fMKak38cbWxjlYSEObYLYgLM69TM4g25BcZboTQ=",
+            "MSILHash": "FFpDLkfsVPaBzLI0cVFL6JOMjBv/oHyuZyaJZfklZNg=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2282,7 +2282,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "v1oevK92FuscYJY3My6fjJO7/K+CLFceNnIRcCJGjlY=",
+            "MSILHash": "skc5ik01wI+pzbjL3kw2nG3B4VUrIf6ZY4Ju+zmqg7o=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2308,7 +2308,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "fjuT+XHJypNsX8Pr9Defhle+e4bMFGnnIKHrRmqFRTY=",
+            "MSILHash": "uLMOjEsBmX5huw5J/8YRBLragy8WqOB1SsVQ2Txuq8k=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2669,7 +2669,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "RqE+B9gm9EpAETr5OCv26Hqlg/TxOb8lhWwOZbQYojs=",
+            "MSILHash": "YAgab24465SOmcnBywcidsouWhNVyPhqNzomcjCxc4g=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2825,7 +2825,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "Qs5NLZyF2Jt74McwJco+an4KFWf/axuuOJp2V3JIR80=",
+            "MSILHash": "bItoLFXPfKkTKyHg5id1qg76sJZ4RIwQf7M4tuyyzG8=",
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }
