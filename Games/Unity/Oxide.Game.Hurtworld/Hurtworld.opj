@@ -121,7 +121,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "oWD0wjerdWb5o1uOvoZid4yOJ68ZZ7soDrvoDuyoOzU=",
+            "MSILHash": "5RerBc0ouQPRlpWdFoXDvzol8nu7s0sdz8iaLEvDeKo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -865,7 +865,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 131,
+            "InjectionIndex": 128,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l2",
@@ -935,7 +935,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "oWD0wjerdWb5o1uOvoZid4yOJ68ZZ7soDrvoDuyoOzU=",
+            "MSILHash": "5RerBc0ouQPRlpWdFoXDvzol8nu7s0sdz8iaLEvDeKo=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "Server"
           }
@@ -1147,7 +1147,7 @@
             },
             "MSILHash": "/Zbg61HEsVO3ktOh6osk+KzDyB09QLuT3ixqYJLecc4=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "Vehicle"
           }
         }
       ]
