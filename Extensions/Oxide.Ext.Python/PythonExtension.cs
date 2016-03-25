@@ -168,7 +168,7 @@ namespace Oxide.Ext.Python
         private bool CheckModule(string moduleName, PythonTuple fromlist)
         {
             if (WhitelistNamespaces?.Any(moduleName.StartsWith) ?? false) return true;
-            if (moduleName.Equals("System") && fromlist.All(@from => Type.GetType($"{moduleName}.{@from}") != null)) return true;
+            if (moduleName.Equals("System") && !fromlist.Any(@from => @from.Equals("IO"))) return true;
             if (_allowedTypes.Contains(moduleName)) return true;
             if (WhitelistModules.Contains(moduleName)) return true;
             string[] parts;
