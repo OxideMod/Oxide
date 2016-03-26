@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 using Oxide.Core;
+using Oxide.Core.Plugins;
 
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -37,6 +38,8 @@ namespace Oxide.Ext.CSharp
         private MethodReference getChars;
         private MethodReference isNullOrEmpty;
         private MethodReference stringEquals;
+
+        private string hook_attribute = typeof(HookMethodAttribute).FullName;
 
         public DirectCallMethod(ModuleDefinition module, TypeDefinition type)
         {
@@ -111,7 +114,7 @@ namespace Oxide.Ext.CSharp
             AddInstruction(OpCodes.Stloc_1);
 
             // Find all hook methods defined by the plugin
-            foreach (var m in type.Methods.Where(m => !m.IsStatic && m.IsPrivate && !m.HasGenericParameters && !m.ReturnType.IsGenericParameter && m.DeclaringType == type && !m.IsSetter && !m.IsGetter))
+            foreach (var m in type.Methods.Where(m => !m.IsStatic && (m.IsPrivate || IsHookMethod(m)) && !m.HasGenericParameters && !m.ReturnType.IsGenericParameter && m.DeclaringType == type && !m.IsSetter && !m.IsGetter))
             {
                 //ignore compiler generated
                 if (m.Name.Contains("<")) continue;
@@ -156,6 +159,16 @@ namespace Oxide.Ext.CSharp
             }
 
             body.OptimizeMacros();
+        }
+
+        private bool IsHookMethod(MethodDefinition method)
+        {
+            foreach (var attribute in method.CustomAttributes)
+            {
+                if (attribute.AttributeType.FullName == hook_attribute)
+                    return true;
+            }
+            return false;
         }
 
         private void BuildNode(Node node, int edge_number)

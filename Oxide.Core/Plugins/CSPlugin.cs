@@ -56,7 +56,7 @@ namespace Oxide.Core.Plugins
             // Add hooks implemented in base classes before user implemented methods
             for (var i = types.Count - 1; i >= 0; i--)
             {
-                foreach (var method in types[i].GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                foreach (var method in types[i].GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
                 {
                     var attr = method.GetCustomAttributes(typeof(HookMethodAttribute), true);
                     if (attr.Length < 1) continue;
