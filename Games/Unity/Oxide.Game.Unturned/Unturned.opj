@@ -9,7 +9,7 @@
           "Type": "Modify",
           "Hook": {
             "InjectionIndex": 6,
-            "RemoveCount": 2,
+            "RemoveCount": 4,
             "Instructions": [],
             "HookTypeName": "Modify",
             "Name": "DisableConsole [patch]",
@@ -23,7 +23,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "xjWy0lgzblhh1FO039zX9nIKLn+5tOqwqD5vFQ+lVv8=",
+            "MSILHash": "Bl9DDX+CoM++uWfMLlEnf45DPNCS/lOMerzNez1JxoY=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -31,7 +31,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 3,
+            "InjectionIndex": 25,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -47,7 +47,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "KF3uobgjYQkbPd383UFbTf/fDlwmGUkm92+xZm6hEM8=",
+            "MSILHash": "Dy5h0seHx42qDZDbc2dnTINSRfxu76/pLdA6elEGkzo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
