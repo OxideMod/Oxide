@@ -88,13 +88,13 @@ namespace Oxide.Game.Blockstorm
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 var players = FpsMultiplayerGame.instance.playersList.method_5().Count;
-                var hostname = DedicatedServerConfiguration.string_10;
+                var hostname = DedicatedServerConfiguration.string_12;
                 return string.Concat(players, " | ", hostname);
             };
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
-                var hostname = DedicatedServerConfiguration.string_10;
+                var hostname = DedicatedServerConfiguration.string_12;
                 return string.Concat(" ", hostname);
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>

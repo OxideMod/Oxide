@@ -79,7 +79,7 @@ namespace Oxide.Game.Blockstorm
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", BlockstormExtension.DedicatedServerConfiguration.string_10);
+            RemoteLogger.SetTag("hostname", BlockstormExtension.DedicatedServerConfiguration.string_12);
         }
 
         /// <summary>
