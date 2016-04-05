@@ -170,12 +170,6 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
-        /// <summary>
         /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies
         /// </summary>
         /// <param name="fullTypeName"></param>

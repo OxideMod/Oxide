@@ -101,30 +101,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 7,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CodeHatch.Engine.Networking.CoreServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Shutdown",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "uYjZe+HMxINI788P6b0QAnDNuh6g3Fy/O1E3H19YEJk=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 22,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
@@ -195,7 +171,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "7ryafEUua8upEjJZvklhsB0ZWGBrBUiJqe5oyD/JOl8=",
+            "MSILHash": "ZW8Cbrb5IXRiY7zmJ1JBRoR8XQSLARNrdEcb4b/ai7c=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -221,7 +197,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "dSPX3Ft91nlndSiOgT321WuwhHQ3v+u/JRah+XxT4iQ=",
+            "MSILHash": "wrPpL69oTTWkggMGNlByhFJv4AZyORp5DLexkv/vSTY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -351,7 +327,7 @@
                 "CodeHatch.Blocks.Networking.Events.CubePlaceEvent"
               ]
             },
-            "MSILHash": "tqZ2yzMqAMuuB/4IKalrhg3gU0CCIWEsokVJaNw9xT4=",
+            "MSILHash": "g1uz22QYpTji+ckJ6xqKBt+5rsiVxDKLQwbt+H72DPY=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -663,7 +639,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "dSPX3Ft91nlndSiOgT321WuwhHQ3v+u/JRah+XxT4iQ=",
+            "MSILHash": "wrPpL69oTTWkggMGNlByhFJv4AZyORp5DLexkv/vSTY=",
             "BaseHookName": "OnPlayerChat [player]",
             "HookCategory": "Player"
           }
