@@ -84,12 +84,6 @@ namespace Oxide.Game.Unturned
             RemoteLogger.SetTag("hostname", Provider.serverName);
         }
 
-        /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
         #endregion
     }
 }

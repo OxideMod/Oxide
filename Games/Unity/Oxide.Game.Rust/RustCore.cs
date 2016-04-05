@@ -70,7 +70,7 @@ namespace Oxide.Game.Rust
             {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
             {"UserPermissionRevoked", "User '{0}' revoked permission '{1}'"},
             {"UserRemovedFromGroup", "User '{0}' removed from group '{1}'"},
-            {"YouAreNotAdmin", "You are not an admin"}
+            {"YouAreNotAdmin", "You are not an admin"} // TODO: Make this clearer
         };
 
         #endregion
@@ -207,12 +207,6 @@ namespace Oxide.Game.Rust
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
         }
-
-        /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when ServerConsole is enabled

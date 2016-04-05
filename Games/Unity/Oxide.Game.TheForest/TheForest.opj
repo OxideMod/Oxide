@@ -188,30 +188,6 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Shutdown",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "/owflklXcVJ2YaOOWJBl9YUY6BAZwymKL+aADA73x2U=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -616,7 +592,7 @@
                 "ItemHolderAddItem"
               ]
             },
-            "MSILHash": "BoRnKzDZTHykJsaCP7AG+YNNxoSE69IacsVDya9Yu44=",
+            "MSILHash": "WjHHfzqazoyUZVBex9ZHcqmRHCgOWS+WepvwcabCZOs=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -668,7 +644,7 @@
                 "ItemHolderTakeItem"
               ]
             },
-            "MSILHash": "7rUmF+2n7QOVwwROJNBUvGxFm3zx6o7hRaXZaZ9BJRE=",
+            "MSILHash": "RYpj6wYLeLfq+2mU7tGTfY8S+CO5fcCp886kVbmxCE4=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -876,7 +852,7 @@
                 "ResetTrap"
               ]
             },
-            "MSILHash": "mtsyXflbA/q8xoV5xf94J48pd10aTUaScBpCBan2Tmo=",
+            "MSILHash": "PTZ/DAmNCApkqkJsPewfzWSDokx6oQdQhVGekHoERW0=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -1084,7 +1060,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "2u9F3Jm9n6fRo2quDDsUyrzfnH8yHo86LqRf1Ty02T8=",
+            "MSILHash": "zYvbPOCb3QfL6pdIyBIrTOsbdmbW7+VMiFFHihEK8+o=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1396,7 +1372,7 @@
                 "AddItemToDoor"
               ]
             },
-            "MSILHash": "WH1zUHs6fW9+pv9zbvuTArYLfZ0JWtiSFwSw3L16o24=",
+            "MSILHash": "lePMTt3Uyc/yw9MVL8nwcc/sdqj3WiG36f/53tq3xUQ=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -1498,7 +1474,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "MpVoFHCxNeA3+AOvWppcCr1CT/dsiHBXH9i2eO8VSo8=",
+            "MSILHash": "ElIlJtpOrpRfoXit1EGPyQ782KAuiVHm+Qbp0AmwghU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

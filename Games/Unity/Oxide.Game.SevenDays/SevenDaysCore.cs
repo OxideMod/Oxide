@@ -82,12 +82,6 @@ namespace Oxide.Game.SevenDays
             RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
         }
 
-        /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
         #endregion
     }
 }

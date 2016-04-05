@@ -61,7 +61,11 @@ namespace Oxide.Ext.Unity
 
         void OnApplicationQuit()
         {
-            if (!oxideMod.IsShuttingDown) Interface.Oxide.OnShutdown();
+            if (!oxideMod.IsShuttingDown)
+            {
+                Interface.Oxide.CallHook("OnServerShutdown");
+                Interface.Oxide.OnShutdown();
+            }
         }
 
         void LogMessageReceived(string message, string stack_trace, LogType type)

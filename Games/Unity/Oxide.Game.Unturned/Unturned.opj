@@ -29,30 +29,6 @@
           }
         },
         {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 25,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnApplicationQuit",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "Dy5h0seHx42qDZDbc2dnTINSRfxu76/pLdA6elEGkzo=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
           "Type": "InitOxide",
           "Hook": {
             "InjectionIndex": 0,

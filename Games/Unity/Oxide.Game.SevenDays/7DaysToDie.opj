@@ -368,30 +368,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ModManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "GameShutdown",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "kVyHzJjf2P5w7ZOhkT8JdGl6i3WV9dWTNQfPxfTeHJk=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 7,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,

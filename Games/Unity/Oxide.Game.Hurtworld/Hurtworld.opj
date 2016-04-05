@@ -121,7 +121,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "5RerBc0ouQPRlpWdFoXDvzol8nu7s0sdz8iaLEvDeKo=",
+            "MSILHash": "oWD0wjerdWb5o1uOvoZid4yOJ68ZZ7soDrvoDuyoOzU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -935,7 +935,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "5RerBc0ouQPRlpWdFoXDvzol8nu7s0sdz8iaLEvDeKo=",
+            "MSILHash": "oWD0wjerdWb5o1uOvoZid4yOJ68ZZ7soDrvoDuyoOzU=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "Server"
           }
