@@ -1456,6 +1456,30 @@
         {
           "Type": "Simple",
           "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Shutdown",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "/owflklXcVJ2YaOOWJBl9YUY6BAZwymKL+aADA73x2U=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
             "InjectionIndex": 13,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,

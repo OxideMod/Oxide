@@ -209,6 +209,12 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
+        /// <summary>
         /// Called when ServerConsole is enabled
         /// </summary>
         [HookMethod("IOnEnableServerConsole")]

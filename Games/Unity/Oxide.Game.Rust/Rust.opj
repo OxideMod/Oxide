@@ -2952,7 +2952,7 @@
             "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Network.Implementation.Raknet.Server",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "Stop",
@@ -2970,11 +2970,11 @@
           "Type": "Modify",
           "Hook": {
             "InjectionIndex": 39,
-            "RemoveCount": 2,
+            "RemoveCount": 75,
             "Instructions": [],
             "HookTypeName": "Modify",
-            "Name": "FixBrokenShutdown",
-            "HookName": "FixBrokenShutdown",
+            "Name": "FixApplicationQuit",
+            "HookName": "FixApplicationQuit",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConVar.Global",
             "Flagged": false,

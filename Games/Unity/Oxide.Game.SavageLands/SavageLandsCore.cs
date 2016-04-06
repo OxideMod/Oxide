@@ -82,6 +82,12 @@ namespace Oxide.Game.SavageLands
             //RemoteLogger.SetTag("hostname", );
         }
 
+        /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
         #endregion
     }
 }

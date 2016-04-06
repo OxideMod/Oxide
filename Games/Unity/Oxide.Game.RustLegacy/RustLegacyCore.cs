@@ -165,6 +165,12 @@ namespace Oxide.Game.RustLegacy
         }
 
         /// <summary>
+        /// Called when the server is shutting down
+        /// </summary>
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
+        /// <summary>
         /// Called when an AI moves
         /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
         /// </summary>

@@ -79,6 +79,30 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Close",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "ccMVJc7QSRMXeNlss97qYQsClVOGk/ajKT6xPk0XAIE=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
