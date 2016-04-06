@@ -6,12 +6,13 @@ using System.Threading;
 using MySql.Data.MySqlClient;
 
 using Oxide.Core;
+using Oxide.Core.Database;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Ext.MySql.Libraries
 {
-    public class MySql : Library
+    public class MySql : Library, IDatabaseProvider
     {
         public override bool IsGlobal => false;
 
@@ -77,7 +78,7 @@ namespace Oxide.Ext.MySql.Libraries
                     if (Connection == null) throw new Exception("Connection is null");
                     //if (_result == null)
                     //{
-                        _connection = Connection.Con;
+                        _connection = (MySqlConnection) Connection.Con;
                         if (_connection.State == ConnectionState.Closed)
                             _connection.Open();
                         _cmd = _connection.CreateCommand();
@@ -178,10 +179,14 @@ namespace Oxide.Ext.MySql.Libraries
         [LibraryFunction("OpenDb")]
         public Connection OpenDb(string host, int port, string database, string user, string password, Plugin plugin, bool persistent = false)
         {
+            return OpenDb($"Server={host};Port={port};Database={database};User={user};Password={password};Pooling=false;CharSet=utf8;", plugin, persistent);
+        }
+
+        public Connection OpenDb(string conStr, Plugin plugin, bool persistent = false)
+        {
             Dictionary<string, Connection> connections;
             if (!_connections.TryGetValue(plugin?.Name ?? "null", out connections))
                 _connections[plugin?.Name ?? "null"] = connections = new Dictionary<string, Connection>();
-            var conStr = $"Server={host};Port={port};Database={database};User={user};Password={password};Pooling=false;CharSet=utf8;";
             Connection connection;
             if (connections.TryGetValue(conStr, out connection))
             {
