@@ -208,7 +208,7 @@ namespace Oxide.Game.TheForest
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = "0.34"; // TODO: Grab version
+                var gameVersion = "0.36"; // TODO: Grab version
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };

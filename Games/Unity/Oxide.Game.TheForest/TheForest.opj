@@ -592,7 +592,7 @@
                 "ItemHolderAddItem"
               ]
             },
-            "MSILHash": "WjHHfzqazoyUZVBex9ZHcqmRHCgOWS+WepvwcabCZOs=",
+            "MSILHash": "Yx/eocD4NxXMRZf4+PGjNS0sfH/r7WrccgvgMukQFPE=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -644,7 +644,7 @@
                 "ItemHolderTakeItem"
               ]
             },
-            "MSILHash": "RYpj6wYLeLfq+2mU7tGTfY8S+CO5fcCp886kVbmxCE4=",
+            "MSILHash": "E0ZaxUbkfJ5J2VM9F+CWVB80v6wyd+aWn9gYw24eTRQ=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1060,7 +1060,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "zYvbPOCb3QfL6pdIyBIrTOsbdmbW7+VMiFFHihEK8+o=",
+            "MSILHash": "2n2WpJKLKhQywanB3/MIgbpkDDdEY+O5CZFgxMNOUnI=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1474,7 +1474,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "ElIlJtpOrpRfoXit1EGPyQ782KAuiVHm+Qbp0AmwghU=",
+            "MSILHash": "NneYs3pbpkHvWCa44ZNk8fYLAY4OdWFHxnl64Y++Q/4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
