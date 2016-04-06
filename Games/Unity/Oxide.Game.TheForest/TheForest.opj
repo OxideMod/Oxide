@@ -1612,7 +1612,7 @@
             "HookName": "NoPlaneCrash",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerCutScene",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "beginPlaneCrash",
@@ -1621,29 +1621,6 @@
             },
             "MSILHash": "IGLGPVWyplPquL4NIHlHzoYhLqwUtUNTRZLrqVad6dY=",
             "BaseHookName": "IOnPlaneCrash [internal]",
-            "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 19,
-            "RemoveCount": 30,
-            "Instructions": [],
-            "HookTypeName": "Modify",
-            "Name": "NoClientInit [patch]",
-            "HookName": "NoClientInit",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SteamManager",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "/wiKpk/LpCD5KKofovhPTqbYZZYGfN3P958zsVcF1Qk=",
-            "BaseHookName": null,
             "HookCategory": "_Patches"
           }
         },

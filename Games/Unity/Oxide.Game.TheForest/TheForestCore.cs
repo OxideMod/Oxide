@@ -127,6 +127,9 @@ namespace Oxide.Game.TheForest
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
+            // Disable unneeded client-side elements
+            DisableClient();
+
             // Save the level every X minutes
             Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
         }
@@ -309,39 +312,7 @@ namespace Oxide.Game.TheForest
         }
 
         /// <summary>
-        /// Disables the plane crash scene
-        /// </summary>
-        /// <param name="scene"></param>
-        /// <returns></returns>
-        [HookMethod("IOnPlaneCrash")]
-        private void IOnPlaneCrash(TriggerCutScene scene)
-        {
-            var skipOpeningAnimation = typeof(TriggerCutScene).GetMethod("skipOpeningAnimation", BindingFlags.NonPublic | BindingFlags.Instance);
-            var cleanUp = typeof(TriggerCutScene).GetMethod("CleanUp", BindingFlags.NonPublic | BindingFlags.Instance);
-            try
-            {
-                var gameObject = GameObject.Find("PlayerPlanePosition");
-                if (gameObject) LocalPlayer.CamFollowHead.planePos = gameObject.transform;
-                skipOpeningAnimation.Invoke(scene, null);
-                cleanUp.Invoke(scene, null);
-            }
-            catch
-            {
-                // Ignored
-            }
-
-            scene.CancelInvoke("beginPlaneCrash");
-            scene.planeController.CancelInvoke("beginPlaneCrash");
-            scene.planeController.enabled = false;
-            scene.planeController.gameObject.SetActive(false);
-            scene.enabled = false;
-            scene.gameObject.SetActive(false);
-
-            //DisableClient();
-        }
-
-        /// <summary>
-        /// Disables client-side elements
+        /// Disables unneeded client-side elements
         /// </summary>
         /// <returns></returns>
         private void DisableClient()
