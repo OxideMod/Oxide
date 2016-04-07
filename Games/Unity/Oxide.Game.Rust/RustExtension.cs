@@ -59,8 +59,7 @@ namespace Oxide.Game.Rust
             "Unsupported encoding: 'utf8'",
             "[AmplifyColor] This image effect is not supported on this platform.",
             "[AmplifyOcclusion]",
-            "[SpawnHandler] populationCounts",
-            "rcon.password" // For user security
+            "[SpawnHandler] populationCounts"
         };
 
         /// <summary>
