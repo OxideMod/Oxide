@@ -58,8 +58,9 @@ namespace Oxide.Game.Rust
             "Unable to find shaders",
             "Unsupported encoding: 'utf8'",
             "[AmplifyColor] This image effect is not supported on this platform.",
+            "[AmplifyOcclusion]",
             "[SpawnHandler] populationCounts",
-            "[AmplifyOcclusion]"
+            "rcon.password" // For user security
         };
 
         /// <summary>

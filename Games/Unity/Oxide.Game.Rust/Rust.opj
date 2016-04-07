@@ -259,7 +259,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 113,
+            "InjectionIndex": 116,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -277,7 +277,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "HmcaGxUwrP/CIbfJVNMcbbQx7ERpO9umP7vbGOfER/g=",
+            "MSILHash": "+RhFOIsFT26J+oqd5bmtrveJC1x51s8qYDTQW+bDSL0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -833,7 +833,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "9n9OkTI8CtXSKFdo0oxrXCstsrVdk1UuqaBPDlHEsBA=",
+            "MSILHash": "VyBe+tvfcOnQJu15CBNsFy+ZVffX0VViz1sdML4aRjo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -939,7 +939,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "XQBfOsx2n4B6b0M5+vcMP5XgXkt0Eats56qnp74qzl0=",
+            "MSILHash": "jE01vpgfnp46+q1GTAIl2dflIdr0EhO5NBqwFqob0fI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1070,7 +1070,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "p1mGBYvffFZHtPNZW/ynU37akiE77LZerF0LmJw34m4=",
+            "MSILHash": "LqQVNxwtNRnl8aNPaoT4yeXCHE634TZi9hjh80qsgLE=",
             "BaseHookName": null,
             "HookCategory": "Sign"
           }
@@ -1275,7 +1275,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "YUG+peYmcu06Xd9MVhGqZB/+2q82/v/rlZlpKMRprqM=",
+            "MSILHash": "F3eDShDawUM1FVlDxAnS9U/W7dxpywcr7fLerTTWVsQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1913,7 +1913,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "j+QSG+0z62sfM8HrjBm53BksVq3NkhsweoewXmRijrM=",
+            "MSILHash": "hZGmiIrq1CHKgHDCsG9uGpiTT/+QRIWPXVNT6jLiVhE=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2148,7 +2148,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "FFpDLkfsVPaBzLI0cVFL6JOMjBv/oHyuZyaJZfklZNg=",
+            "MSILHash": "k8XgFx1rnOGwlmvrQtR7TtzRCwl2FNL7y89f7eFk4cs=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2256,7 +2256,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "skc5ik01wI+pzbjL3kw2nG3B4VUrIf6ZY4Ju+zmqg7o=",
+            "MSILHash": "UYJvBd5VpY0CSrLeGMEG9QbN1Xk7iJku1PZXr3BcI0k=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2282,7 +2282,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "uLMOjEsBmX5huw5J/8YRBLragy8WqOB1SsVQ2Txuq8k=",
+            "MSILHash": "2dNyfo0BGvoEPmmXLS6szgvLIPFzMjag90yUJ0svIgg=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2643,7 +2643,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "bLHmLa5Bu/GpDEizdXkmCRZjkGGFJGnJd2JIBcv3oEA=",
+            "MSILHash": "HldoMwtCjxIL6+hVScqrYWK+4G56GBWUGhkRAd8s2MM=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2799,7 +2799,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "XQBfOsx2n4B6b0M5+vcMP5XgXkt0Eats56qnp74qzl0=",
+            "MSILHash": "jE01vpgfnp46+q1GTAIl2dflIdr0EhO5NBqwFqob0fI=",
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }
@@ -2973,7 +2973,7 @@
             "RemoveCount": 75,
             "Instructions": [],
             "HookTypeName": "Modify",
-            "Name": "FixApplicationQuit",
+            "Name": "FixApplicationQuit [patch]",
             "HookName": "FixApplicationQuit",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConVar.Global",
