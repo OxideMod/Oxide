@@ -52,6 +52,7 @@ namespace Oxide.Game.Rust
             "Failed to load plugin '1' (no source found)",
             "HDR RenderTexture format is not supported on this platform.",
             "Image Effects are not supported on this platform.",
+            "Missing projectileID",
             "The image effect Main Camera",
             "The image effect effect -",
             "Unable to find shaders",
