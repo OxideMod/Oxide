@@ -2,6 +2,7 @@
 clear
 while :
 do
+    echo "Starting server...\n"
     exec ./RustDedicated -batchmode -nographics \
     -server.ip 0.0.0.0 \
     -server.port 28015 \

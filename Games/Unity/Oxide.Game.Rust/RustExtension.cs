@@ -6,7 +6,6 @@ using System.Reflection;
 
 using Facepunch;
 using Network;
-using Rust;
 using UnityEngine;
 
 using Oxide.Core;
@@ -102,10 +101,10 @@ namespace Oxide.Game.Rust
 
             // Check if folder migration is needed
             var config = (OxideConfig)rootconfig.GetValue(Interface.Oxide);
-            string rootDirectory = Interface.Oxide.RootDirectory;
-            string currentDirectory = Interface.Oxide.InstanceDirectory;
-            string fallbackDirectory = Path.Combine(rootDirectory, config.InstanceCommandLines[config.InstanceCommandLines.Length - 1]);
-            string oldFallbackDirectory = Path.Combine(rootDirectory, "server");
+            var rootDirectory = Interface.Oxide.RootDirectory;
+            var currentDirectory = Interface.Oxide.InstanceDirectory;
+            var fallbackDirectory = Path.Combine(rootDirectory, config.InstanceCommandLines[config.InstanceCommandLines.Length - 1]);
+            var oldFallbackDirectory = Path.Combine(rootDirectory, "server");
 
             if (!Directory.Exists(oldFallbackDirectory)) return;
             if (currentDirectory == oldFallbackDirectory) return;
@@ -114,8 +113,8 @@ namespace Oxide.Game.Rust
             string[] oxideDirectories = { config.PluginDirectory, config.ConfigDirectory, config.DataDirectory, config.LogDirectory };
             foreach (var dir in oxideDirectories)
             {
-                string source = Path.Combine(oldFallbackDirectory, dir);
-                string target = Path.Combine(currentDirectory, dir);
+                var source = Path.Combine(oldFallbackDirectory, dir);
+                var target = Path.Combine(currentDirectory, dir);
 
                 if (Directory.Exists(source))
                 {
@@ -128,11 +127,11 @@ namespace Oxide.Game.Rust
                         Directory.CreateDirectory(folders.Target);
                         foreach (var file in Directory.GetFiles(folders.Source, "*"))
                         {
-                            string targetFile = Path.Combine(folders.Target, Path.GetFileName(file));
+                            var targetFile = Path.Combine(folders.Target, Path.GetFileName(file));
                             if (File.Exists(targetFile) && File.Exists(file))
                             {
-                                int i = 1;
-                                string newTargetFile = targetFile + ".old";
+                                var i = 1;
+                                var newTargetFile = targetFile + ".old";
                                 while (File.Exists(newTargetFile)) {
                                     newTargetFile = targetFile + ".old" + i;
                                     i++;
@@ -174,13 +173,10 @@ namespace Oxide.Game.Rust
             Output.OnMessage += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
+            Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname ?? "Unnamed"}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => ConVar.Server.hostname;
-            Interface.Oxide.ServerConsole.Status1Right = () =>
-            {
-                return $"{Performance.frameRate}fps {Number.FormatSeconds((ulong) Time.realtimeSinceStartup)} uptime";
-            };
+            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", ConVar.Server.hostname ?? "Unnamed");
+            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong) Time.realtimeSinceStartup)}";
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
