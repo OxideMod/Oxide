@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Facepunch;
 using Network;
 using Rust;
 using UnityEngine;
@@ -100,7 +100,7 @@ namespace Oxide.Game.Rust
 
             // Cheat references in the default plugin reference list
             var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
-            var fpSystem = Math.unixTimestamp; // Facepunch.System
+            var fpSystem = Facepunch.Math.unixTimestamp; // Facepunch.System
             var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
         }
 
@@ -1066,22 +1066,77 @@ namespace Oxide.Game.Rust
             player.SendConsoleCommand("chat.add", 0, string.Format(lang.GetMessage(key, this, connection.userid.ToString()), args));
         }
 
-        private static BasePlayer FindPlayer(string nameOrIdOrIp)
+        public static BasePlayer FindPlayer(string nameOrIdOrIp)
         {
+            BasePlayer player = null;
             foreach (var activePlayer in BasePlayer.activePlayerList)
             {
-                if (activePlayer.UserIDString == nameOrIdOrIp)
+                if (activePlayer.UserIDString.Equals(nameOrIdOrIp))
+                    return activePlayer;
+                if (activePlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
                     return activePlayer;
                 if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
-                    return activePlayer;
-                if (activePlayer.net?.connection != null && activePlayer.net.connection.ipaddress == nameOrIdOrIp)
+                    player = activePlayer;
+                if (activePlayer.net?.connection != null && activePlayer.net.connection.ipaddress.Equals(nameOrIdOrIp))
                     return activePlayer;
             }
             foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
             {
-                if (sleepingPlayer.UserIDString == nameOrIdOrIp)
+                if (sleepingPlayer.UserIDString.Equals(nameOrIdOrIp))
+                    return sleepingPlayer;
+                if (sleepingPlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
                     return sleepingPlayer;
                 if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
+                    player = sleepingPlayer;
+            }
+            return player;
+        }
+
+        public static BasePlayer FindPlayerByName(string name)
+        {
+            BasePlayer player = null;
+            foreach (var activePlayer in BasePlayer.activePlayerList)
+            {
+                if (activePlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    return activePlayer;
+                if (activePlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
+                    player = activePlayer;
+            }
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (sleepingPlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    return sleepingPlayer;
+                if (sleepingPlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
+                    player = sleepingPlayer;
+            }
+            return player;
+        }
+
+        public static BasePlayer FindPlayerById(ulong userId)
+        {
+            foreach (var activePlayer in BasePlayer.activePlayerList)
+            {
+                if (activePlayer.userID == userId)
+                    return activePlayer;
+            }
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (sleepingPlayer.userID == userId)
+                    return sleepingPlayer;
+            }
+            return null;
+        }
+
+        public static BasePlayer FindPlayerByIdString(string userId)
+        {
+            foreach (var activePlayer in BasePlayer.activePlayerList)
+            {
+                if (activePlayer.UserIDString.Equals(userId))
+                    return activePlayer;
+            }
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (sleepingPlayer.UserIDString.Equals(userId))
                     return sleepingPlayer;
             }
             return null;
