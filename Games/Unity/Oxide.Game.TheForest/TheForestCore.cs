@@ -255,8 +255,8 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Initializes the server
         /// </summary>
-        [HookMethod("IOnInitServer")]
-        private void IOnInitServer()
+        [HookMethod("InitServer")]
+        private void InitServer()
         {
             VirtualCursor.Instance.enabled = false;
 
@@ -284,8 +284,8 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Sets up the coop lobby
         /// </summary>
-        [HookMethod("IOnLobbySetup")]
-        private void IOnLobbySetup(Enum screen)
+        [HookMethod("ILobbySetup")]
+        private void ILobbySetup(Enum screen)
         {
             var type = typeof(CoopSteamNGUI).GetNestedTypes(BindingFlags.NonPublic).FirstOrDefault(x => x.IsEnum && x.Name.Equals("Screens"));
             var enumValue = type?.GetField("LobbySetup", BindingFlags.Static | BindingFlags.Public)?.GetValue(null);
@@ -301,8 +301,8 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Starts the server from lobby screen
         /// </summary>
-        [HookMethod("IOnLobbyReady")]
-        private void IOnLobbyReady()
+        [HookMethod("ILobbyReady")]
+        private void ILobbyReady()
         {
             Interface.Oxide.NextTick(() =>
             {
@@ -317,21 +317,22 @@ namespace Oxide.Game.TheForest
         /// <returns></returns>
         private void DisableClient()
         {
-            LocalPlayer.Entity.CancelInvoke();
-            LocalPlayer.Stats.CancelInvoke();
-            LocalPlayer.Tuts.CancelInvoke();
-            LocalPlayer.Inventory.enabled = false;
-            LocalPlayer.FpCharacter.enabled = false;
-            LocalPlayer.MainCam.SendMessage("GuiOff");
+            //LocalPlayer.Entity?.CancelInvoke();
+            //LocalPlayer.Stats?.CancelInvoke();
+            //LocalPlayer.Tuts?.CancelInvoke();
 
-            var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
+            //LocalPlayer.Inventory.enabled = false;
+            //LocalPlayer.FpCharacter.enabled = false;
+            //LocalPlayer.MainCam.SendMessage("GuiOff");
+
+            /*var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
             foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
             var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
             foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
             var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
             foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
             var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
-            foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);
+            foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);*/
 
             var amplifyMotionCameras = Resources.FindObjectsOfTypeAll<AmplifyMotionCamera>();
             foreach (var amplifyMotionCamera in amplifyMotionCameras) UnityEngine.Object.Destroy(amplifyMotionCamera);
@@ -369,8 +370,8 @@ namespace Oxide.Game.TheForest
         /// Overrides the default save path
         /// </summary>
         /// <returns></returns>
-        [HookMethod("IOnGetSavePath")]
-        private string IOnGetSavePath()
+        [HookMethod("IGetSavePath")]
+        private string IGetSavePath()
         {
             //var dir = Utility.GetDirectoryName(Interface.Oxide.RootDirectory + "\\saves\\");
             var dir = Interface.Oxide.RootDirectory + "\\saves\\" + TitleScreen.StartGameSetup.Slot + "\\";

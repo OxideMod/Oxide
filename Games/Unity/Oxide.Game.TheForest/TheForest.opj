@@ -63,8 +63,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnInitServer [internal]",
-            "HookName": "IOnInitServer",
+            "Name": "InitServer [internal]",
+            "HookName": "InitServer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamManager",
             "Flagged": false,
@@ -87,8 +87,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnLobbySetup [internal]",
-            "HookName": "IOnLobbySetup",
+            "Name": "ILobbySetup [internal]",
+            "HookName": "ILobbySetup",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamNGUI",
             "Flagged": false,
@@ -188,35 +188,11 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnPlaneCrash [internal]",
-            "HookName": "IOnPlaneCrash",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TriggerCutScene",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "beginPlaneCrash",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "IGLGPVWyplPquL4NIHlHzoYhLqwUtUNTRZLrqVad6dY=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnLobbyReady [internal]",
-            "HookName": "IOnLobbyReady",
+            "Name": "ILobbyReady [internal]",
+            "HookName": "ILobbyReady",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopLobbyManager",
             "Flagged": false,
@@ -1604,7 +1580,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 123,
+            "InjectionIndex": 112,
             "RemoveCount": 3,
             "Instructions": [],
             "HookTypeName": "Modify",
@@ -1620,7 +1596,7 @@
               "Parameters": []
             },
             "MSILHash": "IGLGPVWyplPquL4NIHlHzoYhLqwUtUNTRZLrqVad6dY=",
-            "BaseHookName": "IOnPlaneCrash [internal]",
+            "BaseHookName": null,
             "HookCategory": "_Patches"
           }
         },
@@ -1650,6 +1626,64 @@
             "MSILHash": "dW5frF5mGVrrjd8tBmjsVu5tQGpNrJzZdfz1UQMTFjw=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_1",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "MakeDedicated [patch]",
+            "HookName": "MakeDedicated",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamNGUI",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "+vXSViys+wj6tzjMXdmIpWgq+cKvYIIxIM9nrByCLp4=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 2,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_1",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "MakeDedicatedHost [patch]",
+            "HookName": "MakeDedicatedHost",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamNGUI",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "+vXSViys+wj6tzjMXdmIpWgq+cKvYIIxIM9nrByCLp4=",
+            "BaseHookName": "MakeDedicated [patch]",
+            "HookCategory": "_Patches"
           }
         }
       ]
