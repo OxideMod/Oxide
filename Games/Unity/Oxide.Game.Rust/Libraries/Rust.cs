@@ -121,6 +121,38 @@ namespace Oxide.Game.Rust.Libraries
         public string OwnerIDFromEntity(BaseEntity entity) => entity.OwnerID.ToString();
 
         /// <summary>
+        /// Returns the player for the specified name, id or ip
+        /// </summary>
+        /// <param name="nameOrIdOrIp"></param>
+        /// <returns></returns>
+        [LibraryFunction("FindPlayer")]
+        public BasePlayer FindPlayer(string nameOrIdOrIp) => RustCore.FindPlayer(nameOrIdOrIp);
+
+        /// <summary>
+        /// Returns the player for the specified name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [LibraryFunction("FindPlayerByName")]
+        public BasePlayer FindPlayerByName(string name) => RustCore.FindPlayerByName(name);
+
+        /// <summary>
+        /// Returns the player for the specified id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [LibraryFunction("FindPlayerById")]
+        public BasePlayer FindPlayerById(ulong id) => RustCore.FindPlayerById(id);
+
+        /// <summary>
+        /// Returns the player for the specified id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [LibraryFunction("FindPlayerByIdString")]
+        public BasePlayer FindPlayerByIdString(string id) => RustCore.FindPlayerByIdString(id);
+
+        /// <summary>
         /// Forces player position (teleportation)
         /// </summary>
         /// <param name="player"></param>
