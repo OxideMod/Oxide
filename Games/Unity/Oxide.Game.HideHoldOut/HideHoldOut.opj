@@ -25,7 +25,62 @@
             },
             "MSILHash": "4MJXrwEwDQpj9Dv4I+FC4nEpI928wh2h9mnAjzVooLQ=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StartServer",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "FlowCenter"
+              ]
+            },
+            "MSILHash": "4MJXrwEwDQpj9Dv4I+FC4nEpI928wh2h9mnAjzVooLQ=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 20,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldc_r4",
+                "OpType": "Single",
+                "Operand": "0"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableAudio [patch]",
+            "HookName": "DisableAudio",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AudioManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "dF5xDbqECMrvWULFgmvIy0BdzsCUphKNxdk9F7t9GnU=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
           }
         }
       ]
