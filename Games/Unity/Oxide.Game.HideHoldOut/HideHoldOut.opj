@@ -27,32 +27,6 @@
             "BaseHookName": null,
             "HookCategory": null
           }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 1,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "InitLogging [internal]",
-            "HookName": "InitLogging",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ServerManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "StartServer",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "FlowCenter"
-              ]
-            },
-            "MSILHash": "4MJXrwEwDQpj9Dv4I+FC4nEpI928wh2h9mnAjzVooLQ=",
-            "BaseHookName": "InitOxide [internal]",
-            "HookCategory": null
-          }
         }
       ]
     }

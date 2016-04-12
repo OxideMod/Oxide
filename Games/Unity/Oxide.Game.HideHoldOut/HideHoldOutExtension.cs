@@ -39,6 +39,14 @@ namespace Oxide.Game.HideHoldOut
 
         public static string[] Filter =
         {
+            NetworkController.NetManager_.get_GAME_VERSION,
+            "CONNECTION GRANTED",
+            "DataBase_Storing end",
+            "DataBase_Storing start",
+            "Player wants to connect. Waiting for approval",
+            "Resulting playerInfos",
+            "Searching for a player",
+            "b - ServerManager - DataBase_Storing"
         };
 
         /// <summary>
@@ -80,16 +88,16 @@ namespace Oxide.Game.HideHoldOut
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            /*Interface.Oxide.ServerConsole.Title = () =>
+            Interface.Oxide.ServerConsole.Title = () =>
             {
-                var players = Provider.clients.Count;
-                var hostname = Provider.serverName;
+                var players = uLink.Network.connections.Length;
+                var hostname = NetworkController.NetManager_.ServManager.Server_NAME;
                 return string.Concat(players, " | ", hostname);
             };
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
-                var hostname = Provider.serverName;
+                var hostname = NetworkController.NetManager_.ServManager.Server_NAME;
                 return string.Concat(" ", hostname);
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>
@@ -102,30 +110,38 @@ namespace Oxide.Game.HideHoldOut
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = Provider.clients.Count;
-                var playerLimit = Provider.maxPlayers;
+                var players = uLink.Network.connections.Length;
+                var playerLimit = NetworkController.NetManager_.ServManager.NumberOfSlot;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                var bytesReceived = Utility.FormatBytes(Provider.bytesReceived);
-                var bytesSent = Utility.FormatBytes(Provider.bytesSent);
-                return Provider.time <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out");
+                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
+                double bytesSent = 0;
+                double bytesReceived = 0;
+                foreach (var connection in uLink.Network.connections)
+                {
+                    var stats = connection.statistics;
+                    if (stats == null) continue;
+                    bytesSent += stats.bytesSentPerSecond;
+                    bytesReceived += stats.bytesReceivedPerSecond;
+                }
+                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(LightingManager.time)).ToString("h:mm tt").ToLower();
-                var map = Provider.map ?? "Unknown";
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(NetworkController.NetManager_.TimeManager.TIME_display)).ToString("h:mm tt").ToLower();
+                var map = "Unknown";
                 return string.Concat(" ", time, ", ", map);
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                var gameVersion = Provider.APP_VERSION;
+                var gameVersion = NetworkController.NetManager_.get_GAME_VERSION;
                 var oxideVersion = OxideMod.Version.ToString();
                 return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
             };
-            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;*/
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)

@@ -79,7 +79,7 @@ namespace Oxide.Game.HideHoldOut
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", NetworkController.NetManager_.name);
+            RemoteLogger.SetTag("hostname", NetworkController.NetManager_.ServManager.Server_NAME);
         }
 
         /// <summary>
