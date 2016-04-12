@@ -1,0 +1,60 @@
+{
+  "Name": "Hide & Hold Out",
+  "TargetDirectory": "D:\\Servers\\Game\\HideHoldout\\H2o_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp.dll",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StartServer",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "FlowCenter"
+              ]
+            },
+            "MSILHash": "4MJXrwEwDQpj9Dv4I+FC4nEpI928wh2h9mnAjzVooLQ=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StartServer",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "FlowCenter"
+              ]
+            },
+            "MSILHash": "4MJXrwEwDQpj9Dv4I+FC4nEpI928wh2h9mnAjzVooLQ=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": null
+          }
+        }
+      ]
+    }
+  ]
+}
