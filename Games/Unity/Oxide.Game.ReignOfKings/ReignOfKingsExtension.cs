@@ -212,7 +212,7 @@ namespace Oxide.Game.ReignOfKings
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.Network.time <= 0) return "0b/s in, 0b/s out";
+                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
                 var players = Server.AllPlayers;
                 double bytesSent = 0;
                 double bytesReceived = 0;
