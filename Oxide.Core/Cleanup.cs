@@ -19,9 +19,9 @@ namespace Oxide.Core
             {
                 try
                 {
+                    if (!File.Exists(file)) continue;
                     Interface.Oxide.LogDebug("Cleanup file: {0}", file);
-                    if (File.Exists(file))
-                        File.Delete(file);
+                    File.Delete(file);
                 }
                 catch (Exception)
                 {
