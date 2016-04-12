@@ -184,7 +184,7 @@ namespace Oxide.Game.TheForest
                 return string.Concat(fps, "fps, ", uptime);
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {CoopLobby.Instance?.MemberCount ?? 0}/{CoopLobby.Instance?.Info.MemberLimit ?? 0}";
+            Interface.Oxide.ServerConsole.Status2Left = () => $" {CoopLobby.Instance?.MemberCount}/{CoopLobby.Instance?.Info.MemberLimit}";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 // TODO: Network in/out
