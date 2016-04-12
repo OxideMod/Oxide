@@ -88,6 +88,8 @@ namespace Oxide.Game.HideHoldOut
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
+            Interface.Oxide.NextTick(() => Cursor.lockState = CursorLockMode.None); // Disable the server locking the mouse
+
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 var players = uLink.Network.connections.Length;
