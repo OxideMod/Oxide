@@ -58,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +67,9 @@
     <Compile Include="Configuration\ConfigFile.cs" />
     <Compile Include="Configuration\DynamicConfigFile.cs" />
     <Compile Include="Configuration\OxideConfig.cs" />
+    <Compile Include="Database\Connection.cs" />
+    <Compile Include="Database\IDatabaseProvider.cs" />
+    <Compile Include="Database\Sql.cs" />
     <Compile Include="DataFileSystem.cs" />
     <Compile Include="ExceptionHandler.cs" />
     <Compile Include="Extensions\Extension.cs" />

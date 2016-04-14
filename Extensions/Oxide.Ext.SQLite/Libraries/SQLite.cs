@@ -7,12 +7,13 @@ using System.Linq;
 using System.Threading;
 
 using Oxide.Core;
+using Oxide.Core.Database;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Ext.SQLite.Libraries
 {
-    public class SQLite : Library
+    public class SQLite : Library, IDatabaseProvider
     {
         private readonly string _dataDirectory;
 
@@ -77,7 +78,7 @@ namespace Oxide.Ext.SQLite.Libraries
                 try
                 {
                     if (Connection == null) throw new Exception("Connection is null");
-                    _connection = Connection.Con;
+                    _connection = (SQLiteConnection) Connection.Con;
                     if (_connection.State == ConnectionState.Closed)
                         _connection.Open();
                     _cmd = _connection.CreateCommand();
