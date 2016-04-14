@@ -199,7 +199,7 @@ namespace Oxide.Core
 
             // Load all plugins
             LogInfo("Loading plugins...");
-            LoadAllPlugins();
+            LoadAllPlugins(true);
 
             // Hook all watchers
             foreach (var watcher in extensionmanager.GetPluginChangeWatchers())
@@ -274,7 +274,7 @@ namespace Oxide.Core
         /// <summary>
         /// Scans for all available plugins and attempts to load them
         /// </summary>
-        public void LoadAllPlugins()
+        public void LoadAllPlugins(bool init = false)
         {
             var loaders = extensionmanager.GetPluginLoaders();
             // Load all core plugins first
@@ -303,6 +303,7 @@ namespace Oxide.Core
             {
                 foreach (string name in loader.ScanDirectory(PluginDirectory)) LoadPlugin(name);
             }
+            if (!init) return;
             var lastCall = Now;
             foreach (var loader in extensionmanager.GetPluginLoaders())
             {
