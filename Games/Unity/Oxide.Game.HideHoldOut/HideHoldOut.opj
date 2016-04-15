@@ -23,7 +23,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "4MJXrwEwDQpj9Dv4I+FC4nEpI928wh2h9mnAjzVooLQ=",
+            "MSILHash": "1+Dm18y3QLOAUA0XpcQ6xXuLbxzE1Qw5AoMgLjfmBkQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -49,7 +49,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "4MJXrwEwDQpj9Dv4I+FC4nEpI928wh2h9mnAjzVooLQ=",
+            "MSILHash": "1+Dm18y3QLOAUA0XpcQ6xXuLbxzE1Qw5AoMgLjfmBkQ=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -81,6 +81,180 @@
             "MSILHash": "dF5xDbqECMrvWULFgmvIy0BdzsCUphKNxdk9F7t9GnU=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnPlayerApproval",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayerApproval"
+              ]
+            },
+            "MSILHash": "uL7nnv0gltKp8afIAY54/6D9k53uMWNk9a8OMi8RhQQ=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerDisconnected [internal]",
+            "HookName": "IOnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnPlayerDisconnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "h/BPnYbjSOO9cndyW9ZHwsKUeJe7HXi6PRzm6Zb6NEA=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 107,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnServerInitialized",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "ThCXh7buYUDWyNjA/58U8LqdxnmKL5fCCkQOTfb27qE=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 93,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnFindSpawnPoint",
+            "HookName": "OnFindSpawnPoint",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RandomRespawnCalculator",
+              "ReturnType": "UnityEngine.Vector3",
+              "Parameters": []
+            },
+            "MSILHash": "O0qUtULtkgrd6EaXS1vtDtM0kG9YrfAfOcx5Dl80tho=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnApplicationQuit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "dqUS/ITwDXDZDzGuoydHWU/ZWCpBEVTjREnNqDxBWLM=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerConnected [internal]",
+            "HookName": "IOnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnPlayerConnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "Zg8SLrrHgm7UCuUZI0XK3nxUmMcsWe+Ip20rkYbO994=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DataBase_Storing",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "XCpYA60B8hRuidVQ5gDZQVrW3qyJUVceSvVISVwf45A=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
