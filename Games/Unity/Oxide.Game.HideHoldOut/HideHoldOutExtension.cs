@@ -46,7 +46,8 @@ namespace Oxide.Game.HideHoldOut
             "Player wants to connect. Waiting for approval",
             "Resulting playerInfos",
             "Searching for a player",
-            "b - ServerManager - DataBase_Storing"
+            "b - ServerManager - DataBase_Storing",
+            "## The timer between the saves in the database has just STARTED ##"
         };
 
         /// <summary>
