@@ -68,7 +68,6 @@
     <Compile Include="HurtworldExtension.cs" />
     <Compile Include="HurtworldPlugin.cs" />
     <Compile Include="HurtworldPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

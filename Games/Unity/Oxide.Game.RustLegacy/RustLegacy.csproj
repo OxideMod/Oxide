@@ -51,21 +51,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\Command.cs" />
-    <Compile Include="Libraries\RustLegacy.cs" />
     <Compile Include="Libraries\Covalence\RustLegacyCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\RustLegacyCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\RustLegacyLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\RustLegacyPlayer.cs" />
     <Compile Include="Libraries\Covalence\RustLegacyPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\RustLegacyServer.cs" />
+    <Compile Include="Libraries\Command.cs" />
+    <Compile Include="Libraries\RustLegacy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RustLegacyCore.cs" />
     <Compile Include="RustLegacyExtension.cs" />
     <Compile Include="RustLegacyHooks.cs" />
     <Compile Include="RustLegacyPlugin.cs" />
     <Compile Include="RustLegacyPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

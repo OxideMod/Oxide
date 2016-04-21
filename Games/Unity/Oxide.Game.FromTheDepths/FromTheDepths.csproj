@@ -48,7 +48,6 @@
     <Compile Include="FromTheDepthsExtension.cs" />
     <Compile Include="FromTheDepthsPlugin.cs" />
     <Compile Include="FromTheDepthsPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

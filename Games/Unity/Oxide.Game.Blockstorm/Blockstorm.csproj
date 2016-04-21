@@ -48,7 +48,6 @@
     <Compile Include="BlockstormExtension.cs" />
     <Compile Include="BlockstormPlugin.cs" />
     <Compile Include="BlockstormPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

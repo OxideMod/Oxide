@@ -48,7 +48,6 @@
     <Compile Include="InterstellarRiftExtension.cs" />
     <Compile Include="InterstellarRiftPlugin.cs" />
     <Compile Include="InterstellarRiftPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

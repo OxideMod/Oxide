@@ -61,7 +61,6 @@
     <Compile Include="SpaceEngineersExtension.cs" />
     <Compile Include="SpaceEngineersPlugin.cs" />
     <Compile Include="SpaceEngineersPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

@@ -51,7 +51,6 @@
     <Compile Include="UnturnedExtension.cs" />
     <Compile Include="UnturnedPlugin.cs" />
     <Compile Include="UnturnedPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

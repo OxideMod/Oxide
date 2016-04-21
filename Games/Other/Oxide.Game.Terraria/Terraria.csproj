@@ -45,7 +45,6 @@
     <Compile Include="TerrariaExtension.cs" />
     <Compile Include="TerrariaPlugin.cs" />
     <Compile Include="TerrariaPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">
