@@ -3,14 +3,14 @@
 namespace Oxide.Game.HideHoldOut.Libraries.Covalence
 {
     /// <summary>
-    /// Provides Covalence functionality for the game "Hide and Hold Out"
+    /// Provides Covalence functionality for the game "Hide & Hold Out"
     /// </summary>
     public class HideHoldOutCovalenceProvider : ICovalenceProvider
     {
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "Hide and Hold Out";
+        public string GameName => "Hide & Hold Out";
 
         /// <summary>
         /// Gets the singleton instance of this provider

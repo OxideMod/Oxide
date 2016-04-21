@@ -65,13 +65,13 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
         }
 
-        internal void NotifyPlayerConnect(PlayerInfos info)
+        internal void NotifyPlayerConnect(PlayerInfos player)
         {
-            NotifyPlayerJoin(Convert.ToUInt64(info.account_id), info.Nickname);
-            livePlayers[info.account_id] = new HideHoldOutLivePlayer(info);
+            NotifyPlayerJoin(Convert.ToUInt64(player.account_id), player.Nickname);
+            livePlayers[player.account_id] = new HideHoldOutLivePlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(PlayerInfos info) => livePlayers.Remove(info.account_id);
+        internal void NotifyPlayerDisconnect(PlayerInfos player) => livePlayers.Remove(player.account_id);
 
         #region Offline Players
 

@@ -19,6 +19,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Initializes a new instance of the ChatCommandHandler class
         /// </summary>
         /// <param name="callback"></param>
+        /// <param name="commandFilter"></param>
         public ChatCommandHandler(CommandCallback callback, Func<string, bool> commandFilter)
         {
             this.callback = callback;
@@ -29,7 +30,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Handles a chat message from the specified player, returns true if handled
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="message"></param>
+        /// <param name="str"></param>
         public bool HandleChatMessage(ILivePlayer player, string str)
         {
             // Get the args
@@ -39,7 +40,7 @@ namespace Oxide.Core.Libraries.Covalence
             if (str[0] == '/' || str[0] == '!')
             {
                 // Get the message
-                string message = str.Substring(1);
+                var message = str.Substring(1);
 
                 // Parse it
                 string cmd;
@@ -50,8 +51,8 @@ namespace Oxide.Core.Libraries.Covalence
                 // Handle it
                 return HandleChatCommand(player, cmd, args);
             }
-            else
-                return false;
+
+            return false;
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace Oxide.Core.Libraries.Covalence
             if (commandFilter != null && !commandFilter(cmd)) return false;
             if (callback == null) return false;
 
-            // Handle
+            // Handle it
             return callback(cmd, CommandType.Chat, player?.BasePlayer, args);
         }
 
@@ -78,17 +79,17 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="args"></param>
         private void ParseChatCommand(string argstr, out string cmd, out string[] args)
         {
-            List<string> arglist = new List<string>();
-            StringBuilder sb = new StringBuilder();
-            bool inlongarg = false;
-            for (int i = 0; i < argstr.Length; i++)
+            var arglist = new List<string>();
+            var sb = new StringBuilder();
+            var inlongarg = false;
+            for (var i = 0; i < argstr.Length; i++)
             {
-                char c = argstr[i];
+                var c = argstr[i];
                 if (c == '"')
                 {
                     if (inlongarg)
                     {
-                        string arg = sb.ToString().Trim();
+                        var arg = sb.ToString().Trim();
                         if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
                         sb = new StringBuilder();
                         inlongarg = false;
@@ -100,7 +101,7 @@ namespace Oxide.Core.Libraries.Covalence
                 }
                 else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
-                    string arg = sb.ToString().Trim();
+                    var arg = sb.ToString().Trim();
                     if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
                     sb = new StringBuilder();
                 }
@@ -111,7 +112,7 @@ namespace Oxide.Core.Libraries.Covalence
             }
             if (sb.Length > 0)
             {
-                string arg = sb.ToString().Trim();
+                var arg = sb.ToString().Trim();
                 if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
             }
             if (arglist.Count == 0)
@@ -124,6 +125,5 @@ namespace Oxide.Core.Libraries.Covalence
             arglist.RemoveAt(0);
             args = arglist.ToArray();
         }
-
     }
 }

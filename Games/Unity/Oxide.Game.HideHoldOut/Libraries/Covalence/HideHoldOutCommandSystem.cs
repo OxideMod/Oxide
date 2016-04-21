@@ -15,7 +15,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             Initialize();
         }
 
-        // A reference to Hide and Hold Out's internal command dictionary
+        // A reference to Hide & Hold Out's internal command dictionary
         //private IDictionary<string, ConsoleSystem.Command> h2oCommands;
 
         // Chat command handler

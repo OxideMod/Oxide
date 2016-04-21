@@ -36,14 +36,14 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// </summary>
         public object Object { get; private set; }
 
-        private readonly PlayerInfos info;
+        private readonly PlayerInfos player;
 
-        internal HideHoldOutLivePlayer(PlayerInfos info)
+        internal HideHoldOutLivePlayer(PlayerInfos player)
         {
-            this.info = info;
-            steamid = Convert.ToUInt64(info.account_id);
+            this.player = player;
+            steamid = Convert.ToUInt64(player.account_id);
             Character = this;
-            Object = info.Transfo.FindChild("CharacterPreview").gameObject;
+            Object = null; // player.Transfo.gameObject; // TODO: Find a hook location for this
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Kicks this player from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => uLink.Network.CloseConnection(info.NetPlayer, true);
+        public void Kick(string reason) => uLink.Network.CloseConnection(player.NetPlayer, true);
 
         /// <summary>
         /// Causes this player's character to die
@@ -67,7 +67,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => info.Transfo.position = new Vector3(x, y, z);
+        public void Teleport(float x, float y, float z) => player.Transfo.position = new Vector3(x, y, z);
 
         #endregion
 
@@ -79,7 +79,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="message"></param>
         public void Message(string message)
         {
-            //NetworkController.NetManager_.chatManager.GetComponent<NetworkView>().RPC("NET_Receive_msg", info.NetPlayer, message.Quote());
+            //NetworkController.NetManager_.chatManager.GetComponent<NetworkView>().RPC("NET_Receive_msg", player.NetPlayer, message.Quote());
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="z"></param>
         public void GetPosition(out float x, out float y, out float z)
         {
-            var pos = info.Transfo.position;
+            var pos = player.Transfo.position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -116,7 +116,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition GetPosition()
         {
-            var pos = info.Transfo.position;
+            var pos = player.Transfo.position;
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 

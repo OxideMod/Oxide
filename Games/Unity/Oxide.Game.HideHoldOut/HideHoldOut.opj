@@ -95,7 +95,7 @@
             "HookName": "IOnUserApprove",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkController",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "uLink_OnPlayerApproval",
@@ -112,13 +112,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 20,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
             "HookTypeName": "Simple",
-            "Name": "IOnPlayerDisconnected [internal]",
-            "HookName": "IOnPlayerDisconnected",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkController",
             "Flagged": false,
@@ -210,32 +210,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnPlayerConnected [internal]",
-            "HookName": "IOnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "uLink_OnPlayerConnected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayer"
-              ]
-            },
-            "MSILHash": "Zg8SLrrHgm7UCuUZI0XK3nxUmMcsWe+Ip20rkYbO994=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 2,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -255,6 +229,233 @@
             "MSILHash": "fbqrTTC6QhoLTQW96NSlw3wBPCL52vfTWXO/omKn9Qs=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 15,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerRespawn",
+            "HookName": "OnPlayerRespawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "NET_PlayerRespawn",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "dgUilJ4jclXZmR7esr+4SqJj+hIlOdf/y91fO+h2ezk=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 3,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a3, a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ChatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "NET_Send_msg",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.Int32",
+                "System.String",
+                "System.String",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "RB5KW2NDKGZDnEYm3NlKgj30oaVGUcgDxUG2MU9mP5s=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 52,
+            "RemoveCount": 14,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "UnlockMouse [patch]",
+            "HookName": "UnlockMouse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnServerInitialized",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "IaKLYhAEJh+P8npjlnMgcbTr/0wKBhtoyxlKQCANY/k=",
+            "BaseHookName": "OnServerInitialized",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 298,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerRespawned",
+            "HookName": "OnPlayerRespawned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SERVER_PlayerRespawn",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "PlayerInfos",
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "0Yf/iE1EJ3IFJdq7KAV6eFqJFrR7GGlwwlx03YqNGPY=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 15,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDeath",
+            "HookName": "OnPlayerDeath",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "NET_PlayerDeath",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "+2jtrdoYwiaiS4OeaM8wV422E7zmj9p3PYORgnDFbJM=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerTakeHitForced",
+            "HookName": "OnPlayerTakeHitForced",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "NET_SERVER_Player_Take_Hit_FORCED",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "UnityEngine.Vector3",
+                "System.Int32",
+                "System.String",
+                "System.Boolean",
+                "uLink.NetworkViewID"
+              ]
+            },
+            "MSILHash": "l4ltYrQW/V/MZE4XPDRhPox3rBSPXDqBPRWPLw+b2yA=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerTakeHit",
+            "HookName": "OnPlayerTakeHit",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "NET_SERVER_Player_Take_Hit",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "UnityEngine.Vector3",
+                "System.Int32",
+                "System.String",
+                "System.Boolean",
+                "uLink.NetworkViewID"
+              ]
+            },
+            "MSILHash": "vbvFAf4ldaxg3GcNWgOGGu4Az27dkQscqQyjet51imM=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1, a2, a4.sender",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerConnected [internal]",
+            "HookName": "IOnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "NET_PlayerConnection",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkViewID",
+                "System.String",
+                "System.String",
+                "System.String",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "Vv+OL4DacO81fAfVicpVLdNuNc6iL+gsRN7ZcOA86ms=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]

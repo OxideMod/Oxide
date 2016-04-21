@@ -89,8 +89,6 @@ namespace Oxide.Game.HideHoldOut
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            Interface.Oxide.NextTick(() => Cursor.lockState = CursorLockMode.None); // Disable the server locking the mouse
-
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 var players = uLink.Network.connections.Length;
@@ -149,7 +147,11 @@ namespace Oxide.Game.HideHoldOut
 
         private static void ServerConsoleOnInput(string input)
         {
-            //if (!string.IsNullOrEmpty(input)) Commander.execute(CSteamID.Nil, input);
+            var args = input.Split(' ');
+            var command = args[0];
+            var line = ((args.Length > 1) ? input.Remove(0, command.Length + 1) : "");
+
+            Interface.CallHook("OnRunCommand", command, line, input.Split(' '));
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
