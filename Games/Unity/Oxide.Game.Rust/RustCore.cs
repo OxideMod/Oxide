@@ -1048,7 +1048,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Replies to the player with a specific message
+        /// Sends a reply to player with a specific message
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="key"></param>

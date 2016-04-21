@@ -141,12 +141,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets an online player given their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="uniqueId"></param>
         /// <returns></returns>
-        public ILivePlayer GetOnlinePlayer(string uniqueID)
+        public ILivePlayer GetOnlinePlayer(string uniqueId)
         {
             RustLivePlayer player;
-            return livePlayers.TryGetValue(uniqueID, out player) ? player : null;
+            return livePlayers.TryGetValue(uniqueId, out player) ? player : null;
         }
 
         /// <summary>

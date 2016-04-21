@@ -1,10 +1,11 @@
 ﻿using Oxide.Core.Plugins;
-
 using UnityEngine;
 
 namespace Oxide.Plugins
 {
     [Info("CSharp 6 Sample", "Oxide Team", 0.1)]
+    [Description("Just a sample plugin showcasing C# 6 syntax")]
+
     public class SamplePlugin : RustPlugin
     {
         // Implement a custom class representing an online player
@@ -27,8 +28,8 @@ namespace Oxide.Plugins
         // Define a shortcut property to get the amount of seconds since the server started
         float Now => Time.realtimeSinceStartup;
 
-        // Create a dynamic plugin reference which will be the "push" plugin when it is loaded
-        [PluginReference] Plugin push;
+        // Create a dynamic plugin reference which will be the "PushAPI" plugin when it is loaded
+        [PluginReference] Plugin PushAPI;
 
         // Initialize indexes using the new index initialization syntax
         Hash<string, string> weaponAliases = new Hash<string, string>
@@ -50,7 +51,7 @@ namespace Oxide.Plugins
             // Call a method using a named argument for one of the optional arguments
             ItemManager.CreateByItemID(ItemManager.FindItemDefinition("rock").itemid, isBlueprint: true);
             // Send a push notification if the "push" plugin is currently loaded
-            push?.Call("PushMessage", "Player connected", $"{player.displayName} connected", "low");
+            PushAPI?.Call("PushMessage", "Player connected", $"{player.displayName} connected", "low");
         }
 
         void OnPlayerSpawn(BasePlayer player)

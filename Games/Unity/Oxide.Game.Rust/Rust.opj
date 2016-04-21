@@ -833,7 +833,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "VyBe+tvfcOnQJu15CBNsFy+ZVffX0VViz1sdML4aRjo=",
+            "MSILHash": "CdS3kW0xdHc8Re99wRIuvByJ3p9vQUde0gcYIIrNTZQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -859,7 +859,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "zamwjmkbwzt40sJheUbXTJ3a5F6r4JcVZRoJ3qfSBY0=",
+            "MSILHash": "idFL/PoAi8fDvxcmKI/pZU5fMPAPJ/KqnGkxrx4YR1w=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -913,7 +913,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "y0julzJ9I4hqfjiSmuOdkt5S/bAgRIsW8dgeq+Qm5uA=",
+            "MSILHash": "qxzBkQ0CHvTvZr2rzRxmwT4IqGcHXcjgv6bwNbK3+BM=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -939,7 +939,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "ATB3OYWnBBcqC653eJdZIJmC3Tt3NqyUV6JVlRLB6Ns=",
+            "MSILHash": "I77H8JKorpCj89Azvm5oZ36UN0vxn1OP9otytVX9mjk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1481,7 +1481,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "LsnrbG/La1ZgaGlBap/oDH5rVptbH3zwzBes9NkyhzQ=",
+            "MSILHash": "pnunJFpOzkLlI8CX9fNTUU2vgDD9clvkUsYe3Zg6QEE=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -1913,7 +1913,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "hZGmiIrq1CHKgHDCsG9uGpiTT/+QRIWPXVNT6jLiVhE=",
+            "MSILHash": "uRFJ+Rc/jOiYZT8N70AyINd3ijr5hRIJwr94icjclG0=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2148,7 +2148,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "+mK1cL8r7glNUfedoxdpU1lDTVFbNPCfSzbt2aw/L48=",
+            "MSILHash": "vMcdxo4zPQMV6uQKJRUY1Qmkry7zBJvdkZz9DSReJPc=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2256,7 +2256,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "UYJvBd5VpY0CSrLeGMEG9QbN1Xk7iJku1PZXr3BcI0k=",
+            "MSILHash": "E4b+Anx3nWKnGoVc2RkLFfay0XtiHs4Fssn4jOGlls0=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2282,7 +2282,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "2dNyfo0BGvoEPmmXLS6szgvLIPFzMjag90yUJ0svIgg=",
+            "MSILHash": "drpmAwY2yiAJdDgb7l7LNsS3siFzDxBbjzf+9VpMCAA=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2371,7 +2371,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "CanBeTargeted",
+            "Name": "CanBeTargeted [auto]",
             "HookName": "CanBeTargeted",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
@@ -2447,7 +2447,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "CanBeTargeted",
+            "Name": "CanBeTargeted [heli]",
             "HookName": "CanBeTargeted",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HelicopterTurret",
@@ -2643,7 +2643,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ujUUo0ZHHc0P7dbAQRRBpSOZpPGrMxvHf6AM6u23TZ4=",
+            "MSILHash": "/ilp5WDCYt1ZFTKaYdtre+1Ubup5n3EMteR7KBsvqS8=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2708,7 +2708,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "OnLootEntityEnd - LootableCorpse",
+            "Name": "OnLootEntityEnd [corpse]",
             "HookName": "OnLootEntityEnd",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "LootableCorpse",
@@ -2734,7 +2734,7 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnLootEntityEnd - StorageContainer",
+            "Name": "OnLootEntityEnd [storage]",
             "HookName": "OnLootEntityEnd",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "StorageContainer",
@@ -2799,7 +2799,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "ATB3OYWnBBcqC653eJdZIJmC3Tt3NqyUV6JVlRLB6Ns=",
+            "MSILHash": "I77H8JKorpCj89Azvm5oZ36UN0vxn1OP9otytVX9mjk=",
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }

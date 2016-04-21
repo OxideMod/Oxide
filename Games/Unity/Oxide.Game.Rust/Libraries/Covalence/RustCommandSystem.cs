@@ -64,9 +64,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             {
                 // Check if it already exists
                 if (rustCommands != null && rustCommands.ContainsKey(command_name))
-                {
                     throw new CommandAlreadyExistsException(command_name);
-                }
 
                 // Register it
                 var splitName = command_name.Split('.');
@@ -88,9 +86,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                 });
             }
             else if (type == CommandType.Chat)
-            {
                 registeredChatCommands.Add(command_name, callback);
-            }
         }
 
         private static string[] ExtractArgs(ConsoleSystem.Arg arg)

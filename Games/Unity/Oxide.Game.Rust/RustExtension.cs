@@ -83,8 +83,7 @@ namespace Oxide.Game.Rust
         /// Initializes a new instance of the RustExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public RustExtension(ExtensionManager manager)
-            : base(manager)
+        public RustExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -128,6 +127,7 @@ namespace Oxide.Game.Rust
                         Directory.CreateDirectory(folders.Target);
                         foreach (var file in Directory.GetFiles(folders.Source, "*"))
                         {
+                            if (file == null) continue;
                             var targetFile = Path.Combine(folders.Target, Path.GetFileName(file));
                             if (File.Exists(targetFile) && File.Exists(file))
                             {
@@ -144,7 +144,7 @@ namespace Oxide.Game.Rust
                         }
 
                         foreach (var folder in Directory.GetDirectories(folders.Source))
-                            stack.Push(new Folders(folder, Path.Combine(folders.Target, Path.GetFileName(folder))));
+                            if (folder != null) stack.Push(new Folders(folder, Path.Combine(folders.Target, Path.GetFileName(folder))));
                     }
 
                     Directory.Delete(source, true);
