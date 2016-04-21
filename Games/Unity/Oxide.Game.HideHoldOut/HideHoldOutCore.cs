@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+
+using uLink;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -51,7 +54,6 @@ namespace Oxide.Game.HideHoldOut
             {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
             {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
             {"NoPluginsFound", "No plugins are currently available"},
-            {"OxideVersion", "Oxide version: {0}, Hide & Hold Out version: {1}"},
             {"PermissionNotFound", "Permission '{0}' doesn't exist"},
             {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
             {"PlayerLanguage", "Player language set to {0}"},
@@ -77,6 +79,10 @@ namespace Oxide.Game.HideHoldOut
 
         // Track 'load' chat commands
         private readonly Dictionary<string, PlayerInfos> loadingPlugins = new Dictionary<string, PlayerInfos>();
+
+        // Get ChatManager NetworkView
+        private static readonly FieldInfo ChatNetViewField = typeof(ChatManager).GetField("Chat_NetView", BindingFlags.NonPublic | BindingFlags.Instance);
+        public static NetworkView ChatNetView = ChatNetViewField.GetValue(NetworkController.NetManager_.chatManager) as NetworkView;
 
         #endregion
 
@@ -145,6 +151,8 @@ namespace Oxide.Game.HideHoldOut
             cmdlib.AddChatCommand("reload", this, "CmdReload");*/
             cmdlib.AddChatCommand("oxide.version", this, "CmdVersion");
             cmdlib.AddChatCommand("version", this, "CmdVersion");
+            cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
+            cmdlib.AddConsoleCommand("version", this, "CmdVersion");
 
             // Add permission chat commands
             /*cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
@@ -227,7 +235,7 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         /// <param name="approval"></param>
         [HookMethod("IOnUserApprove")]
-        private object IOnUserApprove(uLink.NetworkPlayerApproval approval)
+        private object IOnUserApprove(NetworkPlayerApproval approval)
         {
             // Set PlayerInfos
             var player = new PlayerInfos { account_id = approval.loginData.ReadString(), Nickname = "Unnamed" };
@@ -236,15 +244,15 @@ namespace Oxide.Game.HideHoldOut
             // Reject invalid connections
             if (player.account_id == "0" /*|| string.IsNullOrEmpty(player.Nickname)*/)
             {
-                approval.Deny(uLink.NetworkConnectionError.ConnectionBanned);
+                approval.Deny(NetworkConnectionError.ConnectionBanned);
                 return false;
             }
 
             // Call out and see if we should reject
             var canlogin = Interface.CallHook("CanClientLogin", player);
-            if (canlogin is uLink.NetworkConnectionError)
+            if (canlogin is NetworkConnectionError)
             {
-                approval.Deny((uLink.NetworkConnectionError)canlogin);
+                approval.Deny((NetworkConnectionError)canlogin);
                 return true;
             }
 
@@ -255,10 +263,9 @@ namespace Oxide.Game.HideHoldOut
         /// Called when the player has connected
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="name"></param>
         /// <param name="netPlayer"></param>
         [HookMethod("IOnPlayerConnected")]
-        private void IOnPlayerConnected(string id , string name, uLink.NetworkPlayer netPlayer)
+        private void IOnPlayerConnected(string id, NetworkPlayer netPlayer)
         {
             // Get the PlayerInfos
             var player = FindPlayerById(id);
@@ -337,16 +344,8 @@ namespace Oxide.Game.HideHoldOut
         /// Called when the "version" command has been executed
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
         [HookMethod("CmdVersion")]
-        private void CmdVersion(PlayerInfos player, string command, string[] args)
-        {
-            var oxide = OxideMod.Version.ToString();
-            var game = NetworkController.NetManager_.get_GAME_VERSION;
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game))
-                ReplyWith(string.Format(GetMessage("OxideVersion", player.account_id), oxide, game), player);
-        }
+        private void CmdVersion(PlayerInfos player = null) => ReplyWith($"Oxide v{OxideMod.Version}, H2o v{NetworkController.NetManager_.get_GAME_VERSION}", player);
 
         #endregion
 
@@ -434,7 +433,7 @@ namespace Oxide.Game.HideHoldOut
                 Interface.Oxide.LogInfo(message);
                 return;
             }
-            //ChatManagerServer.Instance.RPC("RelayChat", session.Player, message);
+            ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\r\n" + message, chat_msg_type.standard, player.account_id);
         }
 
         /// <summary>
@@ -463,7 +462,7 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        private PlayerInfos FindPlayerByNetPlayer(uLink.NetworkPlayer player) => NetworkController.NetManager_.ServManager.GetPlayerInfos(player);
+        private PlayerInfos FindPlayerByNetPlayer(NetworkPlayer player) => NetworkController.NetManager_.ServManager.GetPlayerInfos(player);
 
         #endregion
     }

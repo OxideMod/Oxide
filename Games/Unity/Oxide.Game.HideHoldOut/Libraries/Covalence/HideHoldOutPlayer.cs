@@ -64,21 +64,21 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
+        /// <param name="group"></param>
         /// <returns></returns>
-        public bool BelongsToGroup(string groupName) => libPerms.UserHasGroup(UniqueID, groupName);
+        public bool BelongsToGroup(string group) => libPerms.UserHasGroup(UniqueID, group);
 
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        public void AddToGroup(string groupName) => libPerms.AddUserGroup(UniqueID, groupName);
+        /// <param name="group"></param>
+        public void AddToGroup(string group) => libPerms.AddUserGroup(UniqueID, group);
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        public void RemoveFromGroup(string groupName) => libPerms.RemoveUserGroup(UniqueID, groupName);
+        /// <param name="group"></param>
+        public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(UniqueID, group);
 
         #endregion
 

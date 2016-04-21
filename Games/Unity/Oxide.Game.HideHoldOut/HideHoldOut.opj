@@ -434,7 +434,7 @@
             "InjectionIndex": 1,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a1, a2, a4.sender",
+            "ArgumentString": "a1, a4.sender",
             "HookTypeName": "Simple",
             "Name": "IOnPlayerConnected [internal]",
             "HookName": "IOnPlayerConnected",

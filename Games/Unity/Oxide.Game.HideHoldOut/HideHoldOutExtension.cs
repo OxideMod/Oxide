@@ -5,6 +5,7 @@ using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Game.HideHoldOut.Libraries;
 
 namespace Oxide.Game.HideHoldOut
 {
@@ -54,8 +55,7 @@ namespace Oxide.Game.HideHoldOut
         /// Initializes a new instance of the HideHoldOutExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public HideHoldOutExtension(ExtensionManager manager)
-            : base(manager)
+        public HideHoldOutExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -68,6 +68,7 @@ namespace Oxide.Game.HideHoldOut
             Manager.RegisterPluginLoader(new HideHoldOutPluginLoader());
 
             // Register our libraries
+            Manager.RegisterLibrary("Command", new Command());
             Manager.RegisterLibrary("H2o", new Libraries.HideHoldOut());
         }
 

@@ -3,7 +3,6 @@
 using UnityEngine;
 
 using Oxide.Core.Libraries.Covalence;
-using Oxide.Plugins;
 
 namespace Oxide.Game.HideHoldOut.Libraries.Covalence
 {
@@ -79,7 +78,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="message"></param>
         public void Message(string message)
         {
-            //NetworkController.NetManager_.chatManager.GetComponent<NetworkView>().RPC("NET_Receive_msg", player.NetPlayer, message.Quote());
+            HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\r\n" + message, chat_msg_type.standard, player.account_id);
         }
 
         /// <summary>
