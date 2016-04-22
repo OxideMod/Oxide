@@ -76,8 +76,7 @@ namespace Oxide.Game.Hurtworld
         /// Initializes a new instance of the HurtworldExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public HurtworldExtension(ExtensionManager manager)
-            : base(manager)
+        public HurtworldExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -163,12 +162,7 @@ namespace Oxide.Game.Hurtworld
                 var map = GameManager.Instance?.ServerConfig?.Map ?? "Unknown";
                 return string.Concat(" ", gameTime, ", ", map);
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = GameManager.Instance?.GetProtocolVersion().ToString();
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
