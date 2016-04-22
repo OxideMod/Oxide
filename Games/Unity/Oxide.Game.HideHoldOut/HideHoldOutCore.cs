@@ -263,15 +263,18 @@ namespace Oxide.Game.HideHoldOut
         /// Called when the player has connected
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="name"></param>
         /// <param name="netPlayer"></param>
         [HookMethod("IOnPlayerConnected")]
-        private void IOnPlayerConnected(string id, NetworkPlayer netPlayer)
+        private void IOnPlayerConnected(string id, string name, NetworkPlayer netPlayer)
         {
-            // Get the PlayerInfos
+            // Get PlayerInfos
             var player = FindPlayerById(id);
 
-            // Set more PlayerInfos
-            player.NetPlayer = netPlayer; // TODO: Find a better hook location that already has this set
+            // Set PlayerInfos // TODO: Find a better hook location that already has this set
+            player.account_id = id;
+            player.Nickname = name;
+            player.NetPlayer = netPlayer;
 
             // Let covalence know
             Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
