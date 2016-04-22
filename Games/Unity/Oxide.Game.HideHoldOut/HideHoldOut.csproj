@@ -99,7 +99,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
-      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\UnityEngine*.dll" />
+      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\uLink*.dll; $(TargetDir)\UnityEngine*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" />
