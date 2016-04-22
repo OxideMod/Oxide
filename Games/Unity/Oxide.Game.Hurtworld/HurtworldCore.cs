@@ -174,8 +174,7 @@ namespace Oxide.Game.Hurtworld
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    if (!ulong.TryParse(s, out temp))
-                        return false;
+                    if (!ulong.TryParse(s, out temp)) return false;
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
@@ -927,8 +926,6 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("OnServerCommand")]
         private object OnServerCommand(string arg)
         {
-            Interface.CallDeprecatedHook("OnRunCommand", arg);
-
             return arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
         }
 
@@ -994,8 +991,8 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
-        /// <param name="session"></param>
         /// <param name="message"></param>
+        /// <param name="session"></param>
         private void ReplyWith(string message, PlayerSession session = null)
         {
             if (session == null)
