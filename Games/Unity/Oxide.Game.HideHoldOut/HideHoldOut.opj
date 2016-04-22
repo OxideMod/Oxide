@@ -292,8 +292,8 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 52,
-            "RemoveCount": 14,
+            "InjectionIndex": 57,
+            "RemoveCount": 9,
             "Instructions": [],
             "HookTypeName": "Modify",
             "Name": "UnlockMouse [patch]",
