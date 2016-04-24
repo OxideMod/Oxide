@@ -143,19 +143,19 @@ namespace Oxide.Game.HideHoldOut
             // Add general chat commands
             //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
             //cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
-            /*cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
+            cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
             cmdlib.AddChatCommand("load", this, "CmdLoad");
             cmdlib.AddChatCommand("oxide.unload", this, "CmdUnload");
             cmdlib.AddChatCommand("unload", this, "CmdUnload");
             cmdlib.AddChatCommand("oxide.reload", this, "CmdReload");
-            cmdlib.AddChatCommand("reload", this, "CmdReload");*/
+            cmdlib.AddChatCommand("reload", this, "CmdReload");
             cmdlib.AddChatCommand("oxide.version", this, "CmdVersion");
             cmdlib.AddChatCommand("version", this, "CmdVersion");
             cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
             cmdlib.AddConsoleCommand("version", this, "CmdVersion");
 
             // Add permission chat commands
-            /*cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
+            cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
             cmdlib.AddChatCommand("group", this, "CmdGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
             cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");
@@ -164,7 +164,7 @@ namespace Oxide.Game.HideHoldOut
             cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
-            cmdlib.AddChatCommand("show", this, "CmdShow");*/
+            cmdlib.AddChatCommand("show", this, "CmdShow");
 
             if (permission.IsLoaded)
             {

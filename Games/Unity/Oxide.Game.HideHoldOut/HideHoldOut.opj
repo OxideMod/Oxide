@@ -23,7 +23,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "tfEIgC9mOClTbh47wheTVDyWhViLn0uWrRfpH0NQnD0=",
+            "MSILHash": "TXIjVzdOWMqfz2xxpM3YeFVN81gCgSVdDthfE+WB0Bc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -49,7 +49,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "tfEIgC9mOClTbh47wheTVDyWhViLn0uWrRfpH0NQnD0=",
+            "MSILHash": "TXIjVzdOWMqfz2xxpM3YeFVN81gCgSVdDthfE+WB0Bc=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -292,9 +292,25 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 57,
-            "RemoveCount": 9,
-            "Instructions": [],
+            "InjectionIndex": 52,
+            "RemoveCount": 14,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4_1",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "stfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|NetworkController|CONNECTED"
+              }
+            ],
             "HookTypeName": "Modify",
             "Name": "UnlockMouse [patch]",
             "HookName": "UnlockMouse",
