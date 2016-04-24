@@ -1,3 +1,5 @@
+using System.Reflection;
+
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Game.HideHoldOut.Libraries;
