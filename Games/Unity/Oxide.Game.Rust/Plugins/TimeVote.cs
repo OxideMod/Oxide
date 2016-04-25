@@ -10,8 +10,7 @@ namespace Oxide.Plugins
     class TimeVote : RustPlugin
     {
         
-        [HookMethod("LoadDefaultConfig")]
-        void MyConfig()
+        protected override void LoadDefaultConfig()
         {
             PrintWarning("[TimeVote] Creating config file");
             Config.Clear();
@@ -30,6 +29,7 @@ namespace Oxide.Plugins
         [ChatCommand("time")]
         void TimeCommand(BasePlayer ply, string cmd, string[] args)
         {
+            Puts("TimeVote init");
             string prefix = (string)Config["ChatPrefix"];
             var sky = TOD_Sky.Instance;
             if(args.Length == 0)
@@ -54,7 +54,7 @@ namespace Oxide.Plugins
                         votes.Clear();
                         timer.Once(60.0f, () => {
 
-                            if (votes.Count < (int)Config["MinVotes"])
+                            if (votes.Count <= (int)Config["MinVotes"])
                             {
                                 rust.BroadcastChat(prefix, "Not enough votes!");
                                 Puts("Not enough votes!");
@@ -115,5 +115,8 @@ namespace Oxide.Plugins
 
             }
         }
+
+
+
     }
 }
