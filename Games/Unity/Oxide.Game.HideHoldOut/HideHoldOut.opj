@@ -264,7 +264,7 @@
             "InjectionIndex": 3,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a3, a0",
+            "ArgumentString": "a5.sender, a0",
             "HookTypeName": "Simple",
             "Name": "IOnPlayerChat [internal]",
             "HookName": "IOnPlayerChat",

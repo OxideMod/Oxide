@@ -299,16 +299,14 @@ namespace Oxide.Game.HideHoldOut
         /// <summary>
         /// Called when the player sends a message
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="netPlayer"></param>
         /// <param name="message"></param>
         [HookMethod("IOnPlayerChat")]
-        private object IOnPlayerChat(string id, string message)
+        private object IOnPlayerChat(NetworkPlayer netPlayer, string message)
         {
             if (message.Trim().Length <= 1) return true;
             var str = message.Substring(0, 1);
-            var player = FindPlayerById(id);
-
-            Interface.Oxide.LogWarning(player.account_id);
+            var player = FindPlayerByNetPlayer(netPlayer);
 
             // Is it a chat command?
             if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", player, message);
@@ -495,9 +493,7 @@ namespace Oxide.Game.HideHoldOut
                 Interface.Oxide.LogInfo(message);
                 return;
             }
-
-            Interface.Oxide.LogWarning(player.account_id);
-            ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.feedback, player.account_id);
+            ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
         }
 
         /// <summary>
