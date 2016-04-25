@@ -62,7 +62,7 @@ namespace Oxide.Game.HideHoldOut
             {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
             {"ShowGroups", "Groups: {0}"},
             {"ServerLanguage", "Server language set to {0}"},
-            {"UnknownChatCommand", "Unknown command: {0}"},
+            {"UnknownCommand", "Unknown command: {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
             {"UserNotFound", "User '{0}' not found"},
             {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
@@ -119,7 +119,7 @@ namespace Oxide.Game.HideHoldOut
         private bool PermissionsLoaded(PlayerInfos player)
         {
             if (permission.IsLoaded) return true;
-            ReplyWith(string.Format(GetMessage("PermissionsNotLoaded", permission.LastException.Message)), player);
+            Reply(string.Format(Lang("PermissionsNotLoaded", permission.LastException.Message)), player);
             return false;
         }
 
@@ -143,28 +143,28 @@ namespace Oxide.Game.HideHoldOut
             // Add general chat commands
             //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
             //cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
-            cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
+            /*cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
             cmdlib.AddChatCommand("load", this, "CmdLoad");
             cmdlib.AddChatCommand("oxide.unload", this, "CmdUnload");
             cmdlib.AddChatCommand("unload", this, "CmdUnload");
             cmdlib.AddChatCommand("oxide.reload", this, "CmdReload");
-            cmdlib.AddChatCommand("reload", this, "CmdReload");
-            cmdlib.AddChatCommand("oxide.version", this, "CmdVersion");
-            cmdlib.AddChatCommand("version", this, "CmdVersion");
-            cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
-            cmdlib.AddConsoleCommand("version", this, "CmdVersion");
+            cmdlib.AddChatCommand("reload", this, "CmdReload");*/
+            cmdlib.AddChatCommand("oxide.version", this, "ChatVersion");
+            cmdlib.AddChatCommand("version", this, "ChatVersion");
+            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
+            cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
 
             // Add permission chat commands
-            cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
+            /*cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
             cmdlib.AddChatCommand("group", this, "CmdGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
-            cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");
+            cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");*/
             cmdlib.AddChatCommand("oxide.grant", this, "CmdGrant");
             cmdlib.AddChatCommand("grant", this, "CmdGrant");
-            cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
+            /*cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
-            cmdlib.AddChatCommand("show", this, "CmdShow");
+            cmdlib.AddChatCommand("show", this, "CmdShow");*/
 
             if (permission.IsLoaded)
             {
@@ -196,7 +196,7 @@ namespace Oxide.Game.HideHoldOut
             if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
 
             if (!loadingPlugins.ContainsKey(plugin.Name)) return;
-            ReplyWith($"Loaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
+            Reply($"Loaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
             loadingPlugins.Remove(plugin.Name);
         }
 
@@ -238,8 +238,13 @@ namespace Oxide.Game.HideHoldOut
         private object IOnUserApprove(NetworkPlayerApproval approval)
         {
             // Set PlayerInfos
-            var player = new PlayerInfos { account_id = approval.loginData.ReadString(), Nickname = "Unnamed" };
-            // Steamworks.SteamFriends.GetPersonaName(); // TODO: Make use of this?
+            var player = new PlayerInfos
+            {
+                account_id = approval.loginData.ReadString(),
+                Nickname = Steamworks.SteamFriends.GetPersonaName()
+            };
+
+            Interface.Oxide.LogWarning(player.Nickname);
 
             // Reject invalid connections
             if (player.account_id == "0" /*|| string.IsNullOrEmpty(player.Nickname)*/)
@@ -262,20 +267,10 @@ namespace Oxide.Game.HideHoldOut
         /// <summary>
         /// Called when the player has connected
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="netPlayer"></param>
-        [HookMethod("IOnPlayerConnected")]
-        private void IOnPlayerConnected(string id, string name, NetworkPlayer netPlayer)
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(PlayerInfos player)
         {
-            // Get PlayerInfos
-            var player = FindPlayerById(id);
-
-            // Set PlayerInfos // TODO: Find a better hook location that already has this set
-            player.account_id = id;
-            player.Nickname = name;
-            player.NetPlayer = netPlayer;
-
             // Let covalence know
             Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
 
@@ -288,8 +283,6 @@ namespace Oxide.Game.HideHoldOut
                 // Add player to default group
                 if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
             }
-
-            Interface.Oxide.CallHook("OnPlayerConnected", player);
         }
 
         /// <summary>
@@ -315,6 +308,8 @@ namespace Oxide.Game.HideHoldOut
             var str = message.Substring(0, 1);
             var player = FindPlayerById(id);
 
+            Interface.Oxide.LogWarning(player.account_id);
+
             // Is it a chat command?
             if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", player, message);
 
@@ -328,9 +323,9 @@ namespace Oxide.Game.HideHoldOut
             if (cmd == null) return null;
 
             // Handle it
-            if (!cmdlib.HandleChatCommand(player, cmd, args)) // TODO: Fix NRE
+            if (!cmdlib.HandleChatCommand(player, cmd, args))
             {
-                ReplyWith(string.Format(GetMessage("UnknownChatCommand", player.account_id), cmd), player);
+                Reply(string.Format(Lang("UnknownCommand", player.account_id), cmd), player);
                 return true;
             }
 
@@ -344,26 +339,90 @@ namespace Oxide.Game.HideHoldOut
         #region Version Command
 
         /// <summary>
-        /// Called when the "version" command has been executed
+        /// Called when the "version" chat command has been executed
         /// </summary>
         /// <param name="player"></param>
-        [HookMethod("CmdVersion")]
-        private void CmdVersion(PlayerInfos player = null) => ReplyWith($"Oxide v{OxideMod.Version}, H2o v{NetworkController.NetManager_.get_GAME_VERSION}", player);
+        [HookMethod("ChatVersion")]
+        private void ChatVersion(PlayerInfos player) => Reply($"Oxide {OxideMod.Version} for {NetworkController.NetManager_.get_GAME_VERSION}", player);
+
+        /// <summary>
+        /// Called when the "version" console command has been executed
+        /// </summary>
+        [HookMethod("ConsoleVersion")]
+        private void ConsoleVersion() => ChatVersion(null);
+
+        #endregion
+
+        #region Grant Command
+
+        /// <summary>
+        /// Called when the "grant" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("CmdGrant")]
+        private void CmdGrant(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!player.isADMIN) return;
+            if (args.Length < 3)
+            {
+                Reply(Lang("CommandUsageGrant", player.account_id), player);
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
+
+            if (!permission.PermissionExists(perm))
+            {
+                Reply(string.Format(Lang("PermissionNotFound", player.account_id), perm), player);
+                return;
+            }
+
+            if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    return;
+                }
+                permission.GrantGroupPermission(name, perm, null);
+                Reply(string.Format(Lang("GroupPermissionGranted", player.account_id), name, perm), player);
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(string.Format(Lang("UserNotFound", player.account_id), name), player);
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.account_id;
+                    name = target.Nickname;
+                    permission.UpdateNickname(userId, name);
+                }
+                permission.GrantUserPermission(userId, perm, null);
+                Reply(string.Format(Lang("UserPermissionGranted", player.account_id), $"{name} ({userId})", perm), player);
+            }
+        }
 
         #endregion
 
         #region Command Handling
 
-        /*/// <summary>
+        /// <summary>
         /// Called when a console command was run
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
         [HookMethod("OnServerCommand")]
-        private object OnServerCommand(string arg)
-        {
-            return arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
-        }*/
+        private object OnServerCommand(string arg) => arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
 
         /// <summary>
         /// Parses the specified chat command
@@ -429,36 +488,61 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         /// <param name="message"></param>
         /// <param name="player"></param>
-        private void ReplyWith(string message, PlayerInfos player = null)
+        private static void Reply(string message, PlayerInfos player = null)
         {
             if (player == null)
             {
                 Interface.Oxide.LogInfo(message);
                 return;
             }
-            ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\r\n" + message, chat_msg_type.standard, player.account_id);
+
+            Interface.Oxide.LogWarning(player.account_id);
+            ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.feedback, player.account_id);
         }
 
         /// <summary>
-        /// Gets the localized message from key, with optional user ID
+        /// Returns the localized message from key using optional user ID
         /// </summary>
         /// <param name="key"></param>
         /// <param name="userId"></param>
-        string GetMessage(string key, string userId = null) => lang.GetMessage(key, this, userId);
+        string Lang(string key, string userId = null) => lang.GetMessage(key, this, userId);
 
         /// <summary>
-        /// Returns the PlayerInfos for the specified id
+        /// Returns the PlayerInfos for the specified name, Steam ID, or IP address
+        /// </summary>
+        /// <param name="nameOrIdOrIp"></param>
+        /// <returns></returns>
+        private static PlayerInfos FindPlayer(string nameOrIdOrIp)
+        {
+            var server = NetworkController.NetManager_.ServManager;
+
+            var player = server.GetPlayerInfos_nickname(nameOrIdOrIp);
+            if (player == null)
+            {
+                ulong id;
+                if (ulong.TryParse(nameOrIdOrIp, out id)) player = server.GetPlayerInfos_accountID(id.ToString());
+            }
+            if (player == null)
+            {
+                foreach (var target in Network.connections)
+                    if (target.ipAddress == nameOrIdOrIp) player = server.GetPlayerInfos_nickname(target.loginData.ReadString());
+            }
+            return player;
+        }
+
+        /// <summary>
+        /// Returns the PlayerInfos for the specified ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private PlayerInfos FindPlayerById(ulong id) => NetworkController.NetManager_.ServManager.GetPlayerInfos_accountID(id.ToString());
+        private PlayerInfos FindPlayerById(ulong id) => FindPlayer(id.ToString());
 
         /// <summary>
-        /// Returns the PlayerInfos for the specified id
+        /// Returns the PlayerInfos for the specified ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private PlayerInfos FindPlayerById(string id) => NetworkController.NetManager_.ServManager.GetPlayerInfos_accountID(id);
+        private PlayerInfos FindPlayerById(string id) => FindPlayer(id);
 
         /// <summary>
         /// Returns the PlayerInfos for the specified uLink.NetworkPlayer

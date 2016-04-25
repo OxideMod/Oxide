@@ -48,6 +48,7 @@ namespace Oxide.Game.HideHoldOut
             "Resulting playerInfos",
             "Searching for a player",
             "b - ServerManager - DataBase_Storing",
+            "tmp_pos modified by raycast",
             "## The timer between the saves in the database has just STARTED ##"
         };
 
@@ -146,13 +147,9 @@ namespace Oxide.Game.HideHoldOut
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        private static void ServerConsoleOnInput(string input)
+        private void ServerConsoleOnInput(string input)
         {
-            var args = input.Split(' ');
-            var command = args[0];
-            var line = ((args.Length > 1) ? input.Remove(0, command.Length + 1) : "");
-
-            Interface.CallHook("OnRunCommand", command, line, input.Split(' '));
+            if (!string.IsNullOrEmpty(input)) Interface.Oxide.CallHook("OnServerCommand", input);
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

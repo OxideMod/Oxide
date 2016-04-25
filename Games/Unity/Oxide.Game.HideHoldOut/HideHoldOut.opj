@@ -447,29 +447,23 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 1,
+            "InjectionIndex": 572,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a1, a2, a4.sender",
+            "ArgumentString": "this.<tmp_playerInfos>__1",
             "HookTypeName": "Simple",
-            "Name": "IOnPlayerConnected [internal]",
-            "HookName": "IOnPlayerConnected",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
+            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator7F",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "NET_PlayerConnection",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkViewID",
-                "System.String",
-                "System.String",
-                "System.String",
-                "uLink.NetworkMessageInfo"
-              ]
+              "Name": "MoveNext",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
             },
-            "MSILHash": "Vv+OL4DacO81fAfVicpVLdNuNc6iL+gsRN7ZcOA86ms=",
+            "MSILHash": "HJOW7kaeX0kJ4QJ5dGX7v6uvSwJ5BAmUfJD+DAoVXtY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
