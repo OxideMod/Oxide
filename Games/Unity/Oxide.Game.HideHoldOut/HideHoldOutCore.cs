@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 
 using uLink;
+using Steamworks;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -237,17 +238,18 @@ namespace Oxide.Game.HideHoldOut
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(NetworkPlayerApproval approval)
         {
+            var version = approval.loginData.ReadString();
+            var steamId = approval.loginData.ReadUInt64();
+
             // Set PlayerInfos
             var player = new PlayerInfos
             {
-                account_id = approval.loginData.ReadString(),
-                Nickname = Steamworks.SteamFriends.GetPersonaName()
+                steam_id = (CSteamID)steamId,
+                account_id = steamId.ToString()
             };
 
-            Interface.Oxide.LogWarning(player.Nickname);
-
             // Reject invalid connections
-            if (player.account_id == "0" /*|| string.IsNullOrEmpty(player.Nickname)*/)
+            if (player.account_id == "0") // TODO: Improve this check
             {
                 approval.Deny(NetworkConnectionError.ConnectionBanned);
                 return false;
