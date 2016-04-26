@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-using uLink;
 using Steamworks;
+using uLink;
+using UnityEngine;
+using Network = uLink.Network;
+using NetworkConnectionError = uLink.NetworkConnectionError;
+using NetworkPlayer = uLink.NetworkPlayer;
+using NetworkView = uLink.NetworkView;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -238,32 +243,32 @@ namespace Oxide.Game.HideHoldOut
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(NetworkPlayerApproval approval)
         {
-            var version = approval.loginData.ReadString();
-            var steamId = approval.loginData.ReadUInt64();
+            //var version = approval.loginData.ReadString(); // Read order, meh
+            //var userId = approval.loginData.ReadUInt64();
 
             // Set PlayerInfos
-            var player = new PlayerInfos
+            /*var player = new PlayerInfos
             {
                 steam_id = (CSteamID)steamId,
                 account_id = steamId.ToString()
-            };
+            };*/
 
             // Reject invalid connections
-            if (player.account_id == "0") // TODO: Improve this check
+            /*if (player.account_id == "0") // TODO: Improve this check
             {
                 approval.Deny(NetworkConnectionError.ConnectionBanned);
                 return false;
-            }
+            }*/
 
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", player);
+            var canlogin = Interface.CallHook("CanClientLogin", approval);
             if (canlogin is NetworkConnectionError)
             {
                 approval.Deny((NetworkConnectionError)canlogin);
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", approval, player);
+            return Interface.CallHook("OnUserApprove", approval);
         }
 
         /// <summary>
@@ -285,6 +290,8 @@ namespace Oxide.Game.HideHoldOut
                 // Add player to default group
                 if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
             }
+
+            Debug.Log($"{player.account_id}/{player.Nickname} joined");
         }
 
         /// <summary>
@@ -296,6 +303,8 @@ namespace Oxide.Game.HideHoldOut
         {
             // Let covalence know
             Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+
+            Debug.Log($"{player.account_id}/{player.Nickname} quit");
         }
 
         /// <summary>
