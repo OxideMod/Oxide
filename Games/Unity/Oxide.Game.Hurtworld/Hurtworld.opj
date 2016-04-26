@@ -121,7 +121,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "b4m/v7CVUqOT6B28plkUlWw39Xe+IkmeZm6ZK/HKAVs=",
+            "MSILHash": "P6kQWUw7WiomIu0hr5HPk20P0Ax+zgwxIxuUqOZH8vA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -716,7 +716,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "HcIUzkUlTNGXs0A8RcwI//2KNevoLoGsARDYqRqJrno=",
+            "MSILHash": "7tN7hW7KBmYt+4RI7b9bGw9OIYqzEm//NtfyUoRxWCc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -935,7 +935,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "b4m/v7CVUqOT6B28plkUlWw39Xe+IkmeZm6ZK/HKAVs=",
+            "MSILHash": "P6kQWUw7WiomIu0hr5HPk20P0Ax+zgwxIxuUqOZH8vA=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
