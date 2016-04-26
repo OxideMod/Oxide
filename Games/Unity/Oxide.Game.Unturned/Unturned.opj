@@ -23,7 +23,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Bl9DDX+CoM++uWfMLlEnf45DPNCS/lOMerzNez1JxoY=",
+            "MSILHash": "gTfWM3BtuKh+BAIuYYkWzerVaMsHJ/EAeJ+pYnjAR74=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "LU4q58IyN/uT+MP0RYggmKjwI7hUamNTj1mmqxpd3Bo=",
+            "MSILHash": "FH3UjWBNfT3sKq7XJTFrI/VvaU8FUDM4U2PJgVsTHg0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -92,7 +92,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "LU4q58IyN/uT+MP0RYggmKjwI7hUamNTj1mmqxpd3Bo=",
+            "MSILHash": "FH3UjWBNfT3sKq7XJTFrI/VvaU8FUDM4U2PJgVsTHg0=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -105,8 +105,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, l0, l1",
             "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
+            "Name": "OnServerCommand",
+            "HookName": "OnServerCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Commander",
             "Flagged": false,
@@ -127,17 +127,17 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 123,
-            "RemoveCount": 2,
+            "InjectionIndex": 113,
+            "RemoveCount": 1,
             "Instructions": [
               {
-                "OpCode": "ldstr",
-                "OpType": "String",
-                "Operand": ",oxide,modded"
+                "OpCode": "ldc_i4",
+                "OpType": "Int32",
+                "Operand": "10"
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "ModifyTags [patch]",
+            "Name": "ModifyTags [patch] [part 1]",
             "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
@@ -148,8 +148,52 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2g8Sad57b3H4tuOVFlHuGkzAwolEEgtio3gZngkI9Jk=",
+            "MSILHash": "pJv9V5ho0nXMNVqK6vURXsVRlsXylfhP80SMkf1WikM=",
             "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 187,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "dup",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4",
+                "OpType": "Int32",
+                "Operand": "9"
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": ",oxide,modded"
+              },
+              {
+                "OpCode": "stelem_ref",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "ModifyTags [patch] [part 2]",
+            "HookName": "ModifyTags(Clone)",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "openGameServer",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "pJv9V5ho0nXMNVqK6vURXsVRlsXylfhP80SMkf1WikM=",
+            "BaseHookName": "ModifyTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
         }

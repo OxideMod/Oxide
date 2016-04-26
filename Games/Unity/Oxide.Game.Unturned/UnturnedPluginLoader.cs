@@ -5,7 +5,7 @@ using Oxide.Core.Plugins;
 namespace Oxide.Game.Unturned
 {
     /// <summary>
-    /// Responsible for loading Unturned core plugins
+    /// Responsible for loading core plugins for "Unturned"
     /// </summary>
     public class UnturnedPluginLoader : PluginLoader
     {

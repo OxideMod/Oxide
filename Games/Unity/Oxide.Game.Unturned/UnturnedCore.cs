@@ -25,7 +25,7 @@ namespace Oxide.Game.Unturned
         public UnturnedCore()
         {
             // Set attributes
-            Name = "unturnedcore";
+            Name = "UnturnedCore";
             Title = "Unturned Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);

@@ -30,8 +30,14 @@ namespace Oxide.Game.Unturned
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine"
+        };
 
         public static string[] Filter =
         {
@@ -43,8 +49,7 @@ namespace Oxide.Game.Unturned
         /// Initializes a new instance of the UnturnedExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public UnturnedExtension(ExtensionManager manager)
-            : base(manager)
+        public UnturnedExtension(ExtensionManager manager) : base(manager)
         {
         }
 
