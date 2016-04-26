@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -149,28 +150,28 @@ namespace Oxide.Game.HideHoldOut
             // Add general chat commands
             //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
             //cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
-            /*cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
-            cmdlib.AddChatCommand("load", this, "CmdLoad");
-            cmdlib.AddChatCommand("oxide.unload", this, "CmdUnload");
-            cmdlib.AddChatCommand("unload", this, "CmdUnload");
-            cmdlib.AddChatCommand("oxide.reload", this, "CmdReload");
-            cmdlib.AddChatCommand("reload", this, "CmdReload");*/
+            cmdlib.AddChatCommand("oxide.load", this, "ChatLoad");
+            cmdlib.AddChatCommand("load", this, "ChatLoad");
+            cmdlib.AddChatCommand("oxide.unload", this, "ChatUnload");
+            cmdlib.AddChatCommand("unload", this, "ChatUnload");
+            cmdlib.AddChatCommand("oxide.reload", this, "ChatReload");
+            cmdlib.AddChatCommand("reload", this, "ChatReload");
             cmdlib.AddChatCommand("oxide.version", this, "ChatVersion");
             cmdlib.AddChatCommand("version", this, "ChatVersion");
             cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
 
             // Add permission chat commands
-            /*cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
-            cmdlib.AddChatCommand("group", this, "CmdGroup");
-            cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
-            cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");*/
+            cmdlib.AddChatCommand("oxide.group", this, "ChatGroup");
+            cmdlib.AddChatCommand("group", this, "ChatGroup");
+            cmdlib.AddChatCommand("oxide.usergroup", this, "ChatUserGroup");
+            cmdlib.AddChatCommand("usergroup", this, "ChatUserGroup");
             cmdlib.AddChatCommand("oxide.grant", this, "ChatGrant");
             cmdlib.AddChatCommand("grant", this, "ChatGrant");
-            /*cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
-            cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
-            cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
-            cmdlib.AddChatCommand("show", this, "CmdShow");*/
+            cmdlib.AddChatCommand("oxide.revoke", this, "ChatRevoke");
+            cmdlib.AddChatCommand("revoke", this, "ChatRevoke");
+            cmdlib.AddChatCommand("oxide.show", this, "ChatShow");
+            cmdlib.AddChatCommand("show", this, "ChatShow");
 
             if (permission.IsLoaded)
             {
@@ -345,6 +346,168 @@ namespace Oxide.Game.HideHoldOut
 
         #endregion
 
+        #region Plugins Command
+
+        /// <summary>
+        /// Called when the "plugins" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatPlugins")]
+        private void ChatPlugins(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+
+            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
+            var unloadedPluginErrors = new Dictionary<string, string>();
+            foreach (var loader in Interface.Oxide.GetPluginLoaders())
+            {
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
+                {
+                    string msg;
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                }
+            }
+
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
+            {
+                Reply(Lang("NoPluginsFound", player.account_id), player);
+                return;
+            }
+
+            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
+            var number = 1;
+            foreach (var plugin in loadedPlugins)
+                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
+            foreach (var plugin_name in unloadedPluginErrors.Keys)
+                output += $"\n  {number++:00} {plugin_name} - {unloadedPluginErrors[plugin_name]}";
+            Reply(output, player);
+        }
+
+        #endregion
+
+        #region Load Command
+
+        /// <summary>
+        /// Called when the "load" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatLoad")]
+        private void ChatLoad(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+            if (args.Length < 1)
+            {
+                Reply(Lang("CommandUsageLoad", player.account_id), player);
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.LoadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name) || !Interface.Oxide.LoadPlugin(name)) continue;
+                if (!loadingPlugins.ContainsKey(name)) loadingPlugins.Add(name, player);
+            }
+        }
+
+        #endregion
+
+        #region Reload Command
+
+        /// <summary>
+        /// Called when the "reload" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatReload")]
+        private void ChatReload(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+            if (args.Length < 1)
+            {
+                Reply(Lang("CommandUsageReload", player.account_id), player);
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.ReloadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+
+                var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    Reply(string.Format(Lang("PluginNotLoaded", player.account_id), name), player);
+                    continue;
+                }
+                Interface.Oxide.ReloadPlugin(name);
+                Reply(string.Format(Lang("PluginReloaded", player.account_id), plugin.Title, plugin.Version, plugin.Author), player);
+            }
+        }
+
+        #endregion
+
+        #region Unload Command
+
+        /// <summary>
+        /// Called when the "unload" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatUnload")]
+        private void ChatUnload(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+            if (args.Length < 1)
+            {
+                Reply(Lang("CommandUsageUnload", player.account_id), player);
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.UnloadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+
+                var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    Reply(string.Format(Lang("PluginNotLoaded", player.account_id), name), player);
+                    continue;
+                }
+                Interface.Oxide.UnloadPlugin(name);
+                Reply(string.Format(Lang("PluginUnloaded", player.account_id), plugin.Title, plugin.Version, plugin.Author), player);
+            }
+        }
+
+        #endregion
+
         #region Version Command
 
         /// <summary>
@@ -359,6 +522,142 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         [HookMethod("ConsoleVersion")]
         private void ConsoleVersion() => ChatVersion(null);
+
+        #endregion
+
+        #region Group Command
+
+        /// <summary>
+        /// Called when the "group" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatGroup")]
+        private void ChatGroup(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+            if (args.Length < 2)
+            {
+                Reply(Lang("CommandUsageGroup", player.account_id), player);
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var title = args.Length > 2 ? args[2] : string.Empty;
+            int rank;
+            if (args.Length < 4 || !int.TryParse(args[3], out rank))
+                rank = 0;
+
+            if (mode.Equals("add"))
+            {
+                if (permission.GroupExists(name))
+                {
+                    Reply(string.Format(Lang("GroupAlreadyExists", player.account_id), name), player);
+                    return;
+                }
+                permission.CreateGroup(name, title, rank);
+                Reply(string.Format(Lang("GroupCreated", player.account_id), name), player);
+            }
+            else if (mode.Equals("remove"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    return;
+                }
+                permission.RemoveGroup(name);
+                Reply(string.Format(Lang("GroupDeleted", player.account_id), name), player);
+            }
+            else if (mode.Equals("set"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    return;
+                }
+                permission.SetGroupTitle(name, title);
+                permission.SetGroupRank(name, rank);
+                Reply(string.Format(Lang("GroupChanged", player.account_id), name), player);
+            }
+            else if (mode.Equals("parent"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    return;
+                }
+                var parent = args[2];
+                if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
+                {
+                    Reply(string.Format(Lang("GroupParentNotFound", player.account_id), parent), player);
+                    return;
+                }
+                if (permission.SetGroupParent(name, parent))
+                    Reply(string.Format(Lang("GroupParentChanged", player.account_id), name, parent), player);
+                else
+                    Reply(string.Format(Lang("GroupParentNotChanged", player.account_id), name), player);
+            }
+        }
+
+        #endregion
+
+        #region Usergroup Command
+
+        /// <summary>
+        /// Called when the "usergroup" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatUserGroup")]
+        private void ChatUserGroup(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+            if (args.Length < 3)
+            {
+                Reply(Lang("CommandUsageUserGroup", player.account_id), player);
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var group = args[2];
+
+            var target = FindPlayer(name);
+            if (target == null && !permission.UserIdValid(name))
+            {
+                Reply(string.Format(Lang("UserNotFound", player.account_id), name), player);
+                return;
+            }
+            var userId = name;
+            if (target != null)
+            {
+                userId = target.account_id;
+                name = target.Nickname;
+                permission.UpdateNickname(userId, name);
+            }
+
+            if (!permission.GroupExists(group))
+            {
+                Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                return;
+            }
+
+            if (mode.Equals("add"))
+            {
+                permission.AddUserGroup(userId, group);
+                Reply(string.Format(Lang("UserAddedToGroup", player.account_id), name, group), player);
+            }
+            else if (mode.Equals("remove"))
+            {
+                permission.RemoveUserGroup(userId, group);
+                Reply(string.Format(Lang("UserRemovedFromGroup", player.account_id), name, group), player);
+            }
+        }
 
         #endregion
 
@@ -418,6 +717,145 @@ namespace Oxide.Game.HideHoldOut
                 }
                 permission.GrantUserPermission(userId, perm, null);
                 Reply(string.Format(Lang("UserPermissionGranted", player.account_id), $"{name} ({userId})", perm), player);
+            }
+        }
+
+        #endregion
+
+        #region Show Command
+
+        /// <summary>
+        /// Called when the "show" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatShow")]
+        private void ChatShow(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+            if (args.Length < 1)
+            {
+                Reply(Lang("CommandUsageShow", player.account_id), player);
+                return;
+            }
+
+            var mode = args[0];
+            var name = args.Length > 1 ? args[1] : string.Empty;
+
+            if (mode.Equals("perms"))
+            {
+                var result = "Permissions:\n";
+                result += string.Join(", ", permission.GetPermissions());
+                Reply(result, player);
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(Lang("UserNotFound", player.account_id), player);
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.account_id;
+                    name = target.Nickname;
+                    permission.UpdateNickname(userId, name);
+                    name += $" ({userId})";
+                }
+                var result = $"User '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetUserPermissions(userId));
+                result += $"\nUser '{name}' groups:\n";
+                result += string.Join(", ", permission.GetUserGroups(userId));
+                Reply(result, player);
+            }
+            else if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    return;
+                }
+                var result = $"Group '{name}' users:\n";
+                result += string.Join(", ", permission.GetUsersInGroup(name));
+                result += $"\nGroup '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetGroupPermissions(name));
+                var parent = permission.GetGroupParent(name);
+                while (permission.GroupExists(parent))
+                {
+                    result += $"\nParent group '{parent}' permissions:\n";
+                    result += string.Join(", ", permission.GetGroupPermissions(parent));
+                    parent = permission.GetGroupParent(parent);
+                }
+                Reply(result, player);
+            }
+            else if (mode.Equals("groups"))
+            {
+                Reply(string.Format(Lang("ShowGroups", player.account_id), "\n" + string.Join(", ", permission.GetGroups())), player);
+            }
+        }
+
+        #endregion
+
+        #region Revoke Command
+
+        /// <summary>
+        /// Called when the "revoke" command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatRevoke")]
+        private void ChatRevoke(PlayerInfos player, string command, string[] args)
+        {
+            if (!PermissionsLoaded(player)) return;
+            if (!IsAdmin(player)) return;
+            if (args.Length < 3)
+            {
+                Reply(Lang("CommandUsageRevoke", player.account_id), player);
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
+
+            if (!permission.PermissionExists(perm))
+            {
+                Reply(string.Format(Lang("PermissionNotFound", player.account_id), perm), player);
+                return;
+            }
+
+            if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    return;
+                }
+                permission.RevokeGroupPermission(name, perm);
+                Reply(string.Format(Lang("GroupPermissionRevoked", player.account_id), name, perm), player);
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(string.Format(Lang("UserNotFound", player.account_id), name), player);
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.account_id;
+                    name = target.Nickname;
+                    permission.UpdateNickname(userId, name);
+                }
+                permission.RevokeUserPermission(userId, perm);
+                Reply(string.Format(Lang("UserPermissionRevoked", player.account_id), $"{name} ({userId})", perm), player);
             }
         }
 
