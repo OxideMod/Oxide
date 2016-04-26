@@ -159,8 +159,8 @@ namespace Oxide.Game.HideHoldOut
             cmdlib.AddChatCommand("group", this, "CmdGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
             cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");*/
-            cmdlib.AddChatCommand("oxide.grant", this, "CmdGrant");
-            cmdlib.AddChatCommand("grant", this, "CmdGrant");
+            cmdlib.AddChatCommand("oxide.grant", this, "ChatGrant");
+            cmdlib.AddChatCommand("grant", this, "ChatGrant");
             /*cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
             cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
@@ -359,11 +359,11 @@ namespace Oxide.Game.HideHoldOut
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdGrant")]
-        private void CmdGrant(PlayerInfos player, string command, string[] args)
+        [HookMethod("ChatGrant")]
+        private void ChatGrant(PlayerInfos player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.isADMIN) return;
+            if (!IsAdmin(player)) return;
             if (args.Length < 3)
             {
                 Reply(Lang("CommandUsageGrant", player.account_id), player);
@@ -480,6 +480,18 @@ namespace Oxide.Game.HideHoldOut
         #endregion
 
         #region Helper Methods
+
+        /// <summary>
+        /// Returns if specified player is admin
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool IsAdmin(PlayerInfos player)
+        {
+            if (player == null || player.isADMIN) return true;
+            Reply(Lang("YouAreNotAdmin", player.account_id), player);
+            return false;
+        }
 
         /// <summary>
         /// Replies to the player with a specific message

@@ -42,7 +42,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             this.player = player;
             steamid = Convert.ToUInt64(player.account_id);
             Character = this;
-            Object = null; // player.Transfo.gameObject; // TODO: Find a hook location for this
+            Object = player.Transfo.gameObject;
         }
 
         #endregion
@@ -78,7 +78,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="message"></param>
         public void Message(string message)
         {
-            HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\r\n" + message, chat_msg_type.standard, player.account_id);
+            HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="args"></param>
         public void RunCommand(string command, params object[] args)
         {
-            //ConsoleNetworker.SendClientCommand(netUser.networkPlayer, string.Format(command, args));
+            // TODO: Is this even possible?
         }
 
         #endregion
