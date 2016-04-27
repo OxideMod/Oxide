@@ -147,7 +147,7 @@ namespace Oxide.Game.HideHoldOut
             // Register messages for localization
             lang.RegisterMessages(messages, this);
 
-            // Add general chat commands
+            // Add general commands
             //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
             //cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
             cmdlib.AddChatCommand("oxide.load", this, "ChatLoad");
@@ -160,8 +160,10 @@ namespace Oxide.Game.HideHoldOut
             cmdlib.AddChatCommand("version", this, "ChatVersion");
             cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
+            cmdlib.AddConsoleCommand("quit", this, "ConsoleQuit");
+            cmdlib.AddConsoleCommand("shutdown", this, "ConsoleQuit");
 
-            // Add permission chat commands
+            // Add permission commands
             cmdlib.AddChatCommand("oxide.group", this, "ChatGroup");
             cmdlib.AddChatCommand("group", this, "ChatGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "ChatUserGroup");
@@ -522,6 +524,22 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         [HookMethod("ConsoleVersion")]
         private void ConsoleVersion() => ChatVersion(null);
+
+        #endregion
+        
+        #region Quit Command
+
+        /// <summary>
+        /// Called when the "quit" console command has been executed
+        /// </summary>
+        [HookMethod("ConsoleQuit")]
+        private void ConsoleQuit()
+        {
+            NetworkController.isEXITING = true;
+            uLink.MasterServer.UnregisterHost();
+            NetworkController.NetManager_.ServManager.Invoke("DataBase_Storing", 0f);
+            Application.Quit();
+        }
 
         #endregion
 

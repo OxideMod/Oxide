@@ -42,8 +42,6 @@ namespace Oxide.Game.HideHoldOut
         {
             NetworkController.NetManager_.get_GAME_VERSION,
             "CONNECTION GRANTED",
-            "DataBase_Storing end",
-            "DataBase_Storing start",
             "Player wants to connect. Waiting for approval",
             "Resulting playerInfos",
             "Searching for a player",
