@@ -55,60 +55,6 @@ namespace Oxide.Game.TheForest.Libraries
             e.Send();
         }
 
-        /// <summary>
-        /// Broadcasts a chat message
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="message"></param>
-        public void BroadcastChat(NetworkId id, string message)
-        {
-            if (!BoltNetwork.isRunning) return;
-
-            var e = ChatEvent.Create(GlobalTargets.AllClients);
-            e.Message = message;
-            e.Sender = id;
-            e.Send();
-        }
-
-        /// <summary>
-        /// Broadcasts a chat message
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="message"></param>
-        public void BroadcastChat(BoltEntity entity, string message)
-        {
-            if (!BoltNetwork.isRunning) return;
-
-            var e = ChatEvent.Create(GlobalTargets.AllClients);
-            e.Message = message;
-            e.Sender = entity.networkId;
-            e.Send();
-        }
-
-        /// <summary>
-        /// Broadcasts a chat message
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="message"></param>
-        public void BroadcastChat(BoltConnection connection, string message)
-        {
-            if (!BoltNetwork.isRunning) return;
-
-            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(entity => entity.source.RemoteEndPoint.SteamId.Id == connection.RemoteEndPoint.SteamId.Id);
-            if (!player) return;
-
-            var e = ChatEvent.Create(GlobalTargets.AllClients);
-            e.Message = message;
-            e.Sender = player.networkId;
-            e.Send();
-        }
-
-        //ChatEvent.Create();
-        //ChatEvent.Create(entity);
-        //ChatEvent.Create(connection);
-        //ChatEvent.Create(GlobalTargets.AllClients) // Everyone, Others, OnlyServer, AllClients, OnlySelf
-        //ChatEvent.Create(entity, EntityTargets.Everyone); // Everyone, EveryoneExceptOwner, EveryoneExceptController, OnlyController, OnlyOwner, OnlySelf, EveryoneExceptOwnerAndController
-
         #endregion
 
         /// <summary>

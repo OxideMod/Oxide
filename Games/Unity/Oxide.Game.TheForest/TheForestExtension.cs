@@ -117,8 +117,7 @@ namespace Oxide.Game.TheForest
         /// Initializes a new instance of the TheForestExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public TheForestExtension(ExtensionManager manager)
-            : base(manager)
+        public TheForestExtension(ExtensionManager manager) : base(manager)
         {
         }
 

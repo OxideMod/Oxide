@@ -5,7 +5,7 @@ using Oxide.Core.Plugins;
 namespace Oxide.Game.TheForest
 {
     /// <summary>
-    /// Responsible for loading The Forest core plugins
+    /// Responsible for loading core plugins for "The Forest"
     /// </summary>
     public class TheForestPluginLoader : PluginLoader
     {
