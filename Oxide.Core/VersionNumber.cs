@@ -48,7 +48,7 @@
         /// <returns></returns>
         public static bool operator !=(VersionNumber a, VersionNumber b)
         {
-            return a.Major != b.Major || a.Minor != b.Minor || a.Patch == b.Patch;
+            return a.Major != b.Major || a.Minor != b.Minor || a.Patch != b.Patch;
         }
 
         public static bool operator >(VersionNumber a, VersionNumber b)
