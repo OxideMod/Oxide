@@ -6,6 +6,7 @@ using System.Reflection;
 
 using Facepunch;
 using Network;
+using Rust;
 using UnityEngine;
 
 using Oxide.Core;
