@@ -23,7 +23,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "TXIjVzdOWMqfz2xxpM3YeFVN81gCgSVdDthfE+WB0Bc=",
+            "MSILHash": "RpUE5o67ZpqAa9n88mVa7vjsmIqhEOrFo1pgNJvHeOA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -49,7 +49,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "TXIjVzdOWMqfz2xxpM3YeFVN81gCgSVdDthfE+WB0Bc=",
+            "MSILHash": "RpUE5o67ZpqAa9n88mVa7vjsmIqhEOrFo1pgNJvHeOA=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -104,7 +104,7 @@
                 "uLink.NetworkPlayerApproval"
               ]
             },
-            "MSILHash": "cjrrNJ3ghPi189LU+0a/mNRpmHj8TGYIDqaRZrsUSnA=",
+            "MSILHash": "+lIKdhM4OTpHgn6PaZASBdPosilaSjIHJs8mEJmTlM4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -112,7 +112,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 20,
+            "InjectionIndex": 21,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -130,7 +130,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "h/BPnYbjSOO9cndyW9ZHwsKUeJe7HXi6PRzm6Zb6NEA=",
+            "MSILHash": "+ssSuikHmkusbeZMC6ZdLqWpBFvhO67prpDZBuTNvoo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -202,7 +202,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dqUS/ITwDXDZDzGuoydHWU/ZWCpBEVTjREnNqDxBWLM=",
+            "MSILHash": "2HiaxXeNijHCn54CCZELgK3vIvrRJIN3q0E6N6z3WmQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -234,7 +234,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 15,
+            "InjectionIndex": 16,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -253,7 +253,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "dgUilJ4jclXZmR7esr+4SqJj+hIlOdf/y91fO+h2ezk=",
+            "MSILHash": "khNDmjIwhGZsANauAbuHl7uwB83MLWhi9ynj9CsaIWk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -261,7 +261,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 3,
+            "InjectionIndex": 16,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "a5.sender, a0",
@@ -284,7 +284,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "RB5KW2NDKGZDnEYm3NlKgj30oaVGUcgDxUG2MU9mP5s=",
+            "MSILHash": "3aTMBXBdh7wwOMvwuNn4IIBy7j+qejRPizDDn1/ghAQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -331,7 +331,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 298,
+            "InjectionIndex": 299,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -350,7 +350,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "0Yf/iE1EJ3IFJdq7KAV6eFqJFrR7GGlwwlx03YqNGPY=",
+            "MSILHash": "2bfkmh5ks/LGlPqUXsBuRy7PsUyK97ViZxBdTcEnNY8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -358,7 +358,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 15,
+            "InjectionIndex": 16,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -377,7 +377,7 @@
                 "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "+2jtrdoYwiaiS4OeaM8wV422E7zmj9p3PYORgnDFbJM=",
+            "MSILHash": "WMllrGyUjY7McwEgSgGTd6zNZNxAK9i/OMlXvJ9esls=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -385,77 +385,15 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerTakeHitForced",
-            "HookName": "OnPlayerTakeHitForced",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "NET_SERVER_Player_Take_Hit_FORCED",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Int32",
-                "UnityEngine.Vector3",
-                "System.Int32",
-                "System.String",
-                "System.Boolean",
-                "uLink.NetworkViewID"
-              ]
-            },
-            "MSILHash": "l4ltYrQW/V/MZE4XPDRhPox3rBSPXDqBPRWPLw+b2yA=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerTakeHit",
-            "HookName": "OnPlayerTakeHit",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "NET_SERVER_Player_Take_Hit",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Int32",
-                "UnityEngine.Vector3",
-                "System.Int32",
-                "System.String",
-                "System.Boolean",
-                "uLink.NetworkViewID"
-              ]
-            },
-            "MSILHash": "vbvFAf4ldaxg3GcNWgOGGu4Az27dkQscqQyjet51imM=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 572,
+            "InjectionIndex": 639,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this.<tmp_playerInfos>__1",
+            "ArgumentString": "this.<tmp_playerInfos>__3",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator7F",
+            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator7E",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -463,7 +401,7 @@
               "ReturnType": "System.Boolean",
               "Parameters": []
             },
-            "MSILHash": "HJOW7kaeX0kJ4QJ5dGX7v6uvSwJ5BAmUfJD+DAoVXtY=",
+            "MSILHash": "bhP26zv4W99EZwetHuvSj+Bwx80xllcnpEhPy/Q3pVY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

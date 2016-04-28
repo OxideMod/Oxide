@@ -41,13 +41,21 @@ namespace Oxide.Game.HideHoldOut
         public static string[] Filter =
         {
             NetworkController.NetManager_.get_GAME_VERSION,
+            "## The timer between the saves in the database has just STARTED",
             "CONNECTION GRANTED",
+            "EAC RegisterUser: userID",
+            "Ending the session of",
+            "LICENCE APPROVED",
             "Player wants to connect. Waiting for approval",
             "Resulting playerInfos",
+            "SESSION WAITING FOR AUTANTICATION",
             "Searching for a player",
+            "Token added to ConnectionTokens:",
+            "UserAuthenticated:",
             "b - ServerManager - DataBase_Storing",
-            "tmp_pos modified by raycast",
-            "## The timer between the saves in the database has just STARTED ##"
+            "k_EBeginAuthSessionResultOK",
+            "k_EUserHasLicenseResultHasLicense",
+            "tmp_pos modified by raycast"
         };
 
         /// <summary>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Steamworks;
 using uLink;
 using UnityEngine;
 using Network = uLink.Network;
@@ -976,18 +975,18 @@ namespace Oxide.Game.HideHoldOut
         }
 
         /// <summary>
-        /// Returns the localized message from key using optional user ID
+        /// Returns the localized message from key using optional ID string
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="userId"></param>
-        string Lang(string key, string userId = null) => lang.GetMessage(key, this, userId);
+        /// <param name="id"></param>
+        string Lang(string key, string id = null) => lang.GetMessage(key, this, id);
 
         /// <summary>
-        /// Returns the PlayerInfos for the specified name, Steam ID, or IP address
+        /// Returns the PlayerInfos for the specified name, ID, or IP address string
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        private static PlayerInfos FindPlayer(string nameOrIdOrIp)
+        public static PlayerInfos FindPlayer(string nameOrIdOrIp)
         {
             var server = NetworkController.NetManager_.ServManager;
 
@@ -1006,25 +1005,25 @@ namespace Oxide.Game.HideHoldOut
         }
 
         /// <summary>
-        /// Returns the PlayerInfos for the specified ID
+        /// Returns the PlayerInfos for the specified ID ulong
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private PlayerInfos FindPlayerById(ulong id) => FindPlayer(id.ToString());
+        public PlayerInfos FindPlayerById(ulong id) => FindPlayer(id.ToString());
 
         /// <summary>
-        /// Returns the PlayerInfos for the specified ID
+        /// Returns the PlayerInfos for the specified ID string
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private PlayerInfos FindPlayerById(string id) => FindPlayer(id);
+        public PlayerInfos FindPlayerByIdString(string id) => FindPlayer(id);
 
         /// <summary>
         /// Returns the PlayerInfos for the specified uLink.NetworkPlayer
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        private PlayerInfos FindPlayerByNetPlayer(NetworkPlayer player) => NetworkController.NetManager_.ServManager.GetPlayerInfos(player);
+        public PlayerInfos FindPlayerByNetPlayer(NetworkPlayer player) => NetworkController.NetManager_.ServManager.GetPlayerInfos(player);
 
         #endregion
     }
