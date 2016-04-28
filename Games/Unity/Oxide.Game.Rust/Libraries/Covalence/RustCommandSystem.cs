@@ -57,36 +57,36 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             if (rustCommands == null) Initialize();
 
             // Convert to lowercase
-            var command_name = cmd.ToLowerInvariant();
+            var commandName = cmd.ToLowerInvariant();
 
             // Is it a console command?
             if (type == CommandType.Console)
             {
                 // Check if it already exists
-                if (rustCommands != null && rustCommands.ContainsKey(command_name))
-                    throw new CommandAlreadyExistsException(command_name);
+                if (rustCommands != null && rustCommands.ContainsKey(commandName))
+                    throw new CommandAlreadyExistsException(commandName);
 
                 // Register it
-                var splitName = command_name.Split('.');
-                rustCommands?.Add(command_name, new ConsoleSystem.Command
+                var splitName = commandName.Split('.');
+                rustCommands?.Add(commandName, new ConsoleSystem.Command
                 {
                     name = splitName.Length >= 2 ? splitName[1] : splitName[0],
                     parent = splitName.Length >= 2 ? splitName[0] : string.Empty,
-                    namefull = command_name,
+                    namefull = commandName,
                     isCommand = true,
                     isUser = true,
                     isAdmin = true,
                     GetString = () => string.Empty,
-                    SetString = (s) => { },
-                    Call = (arg) =>
+                    SetString = s => { },
+                    Call = arg =>
                     {
                         if (arg == null) return;
-                        callback(command_name, CommandType.Console, consolePlayer, ExtractArgs(arg));
+                        callback(commandName, CommandType.Console, consolePlayer, ExtractArgs(arg));
                     }
                 });
             }
             else if (type == CommandType.Chat)
-                registeredChatCommands.Add(command_name, callback);
+                registeredChatCommands.Add(commandName, callback);
         }
 
         private static string[] ExtractArgs(ConsoleSystem.Arg arg)

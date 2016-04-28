@@ -202,7 +202,7 @@ namespace Oxide.Game.Rust
                 var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
                 return string.Concat(" ", gameTime, ", ", ConVar.Server.level, " [", ConVar.Server.worldsize, ", ", ConVar.Server.seed, "]");
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.printable})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
             Interface.Oxide.ServerConsole.Completion = input =>
