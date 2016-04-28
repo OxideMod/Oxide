@@ -39,6 +39,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public object Object { get; private set; }
 
+        /// <summary>
+        /// Gets this player's last command type
+        /// </summary>
+        public CommandType LastCommand { get; set; }
+
         private readonly Player player;
 
         internal ReignOfKingsLivePlayer(Player player)
@@ -84,6 +89,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         public void Message(string message) => player.SendMessage(message);
+
+        /// <summary>
+        /// Replies to the user
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message)
+        {
+            // TODO
+        }
 
         /// <summary>
         /// Runs the specified console command on this player's client

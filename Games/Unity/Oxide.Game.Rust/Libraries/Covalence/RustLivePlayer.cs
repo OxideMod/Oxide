@@ -31,6 +31,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public object Object { get; private set; }
 
+        /// <summary>
+        /// Gets this player's last command type
+        /// </summary>
+        public CommandType LastCommand { get; set; }
+
         private readonly BasePlayer player;
 
         internal RustLivePlayer(BasePlayer player)
@@ -87,6 +92,23 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="command"></param>
         /// <param name="args"></param>
         public void RunCommand(string command, params object[] args) => player.SendConsoleCommand(command, args);
+
+        /// <summary>
+        /// Replies to the user
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message)
+        {
+            switch (LastCommand)
+            {
+                case CommandType.Chat:
+                    Message(message);
+                    return;
+                case CommandType.Console:
+                    RunCommand("echo", message);
+                    break;
+            }
+        }
 
         #endregion
 

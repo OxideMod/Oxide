@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Oxide.Core.Configuration;
+using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Core.Plugins
@@ -127,6 +128,8 @@ namespace Oxide.Core.Plugins
         }
 
         private IDictionary<string, CommandInfo> commandInfos;
+
+        private Permission permission = Interface.Oxide.GetLibrary<Permission>();
 
         /// <summary>
         /// Initializes an empty version of the Plugin class
@@ -343,6 +346,14 @@ namespace Oxide.Core.Plugins
                 }
                 commandInfos.Add(cmdName, new CommandInfo(commands, perms, callback));
             }
+
+            if (perms == null) return;
+
+            foreach (var perm in perms)
+            {
+                if (permission.PermissionExists(perm)) continue;
+                permission.RegisterPermission(perm, this);
+            }
         }
 
         private void RegisterWithCovalence()
@@ -363,11 +374,14 @@ namespace Oxide.Core.Plugins
                 Interface.Oxide.LogWarning("Plugin.CovalenceCommandCallback received null as the caller (bad game Covalence bindings?)");
                 return false;
             }
-            foreach (var perm in cmdInfo.PermissionsRequired)
+            if (cmdInfo.PermissionsRequired != null)
             {
-                if (caller.HasPermission(perm)) continue;
-                caller.ConnectedPlayer?.Message($"Missing permission '{perm}' to run command '{cmd}'!");
-                return true;
+                foreach (var perm in cmdInfo.PermissionsRequired)
+                {
+                    if (caller.HasPermission(perm)) continue;
+                    caller.ConnectedPlayer?.Message($"Missing permission '{perm}' to run command '{cmd}'!");
+                    return true;
+                }
             }
 
             // Call it

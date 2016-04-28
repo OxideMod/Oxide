@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
+using UnityEngine;
+
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
@@ -81,6 +83,18 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     Call = arg =>
                     {
                         if (arg == null) return;
+
+                        if (arg.connection != null)
+                        {
+                            if (arg.Player())
+                            {
+                                var rustCovalence = RustCovalenceProvider.Instance;
+                                var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+                                livePlayer.LastCommand = CommandType.Console;
+                                callback(commandName, CommandType.Console, livePlayer?.BasePlayer, ExtractArgs(arg));
+                                return;
+                            }
+                        }
                         callback(commandName, CommandType.Console, consolePlayer, ExtractArgs(arg));
                     }
                 });

@@ -34,6 +34,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         public object Object { get; private set; }
 
+        /// <summary>
+        /// Gets this player's last command type
+        /// </summary>
+        public CommandType LastCommand { get; set; }
+
         private readonly NetUser netUser;
 
         internal RustLegacyLivePlayer(NetUser netUser)
@@ -89,6 +94,15 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public void Message(string message)
         {
             ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add \"Server\" {message.Quote()}");
+        }
+
+        /// <summary>
+        /// Replies to the user
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message)
+        {
+            // TODO
         }
 
         /// <summary>

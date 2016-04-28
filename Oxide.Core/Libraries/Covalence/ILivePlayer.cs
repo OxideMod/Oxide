@@ -15,6 +15,11 @@
         /// </summary>
         IPlayerCharacter Character { get; }
 
+        /// <summary>
+        /// Gets the player's last used command type
+        /// </summary>
+        CommandType LastCommand { get; set; }
+
         #region Administration
 
         /// <summary>
@@ -52,6 +57,12 @@
         /// <param name="command"></param>
         /// <param name="args"></param>
         void RunCommand(string command, params object[] args);
+
+        /// <summary>
+        /// Replies to the user
+        /// </summary>
+        /// <param name="message"></param>
+        void Reply(string message);
 
         #endregion
     }

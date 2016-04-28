@@ -66,6 +66,7 @@ namespace Oxide.Core.Libraries.Covalence
             // Check things
             if (commandFilter != null && !commandFilter(cmd)) return false;
             if (callback == null) return false;
+            player.LastCommand = CommandType.Chat;
 
             // Handle it
             return callback(cmd, CommandType.Chat, player?.BasePlayer, args);

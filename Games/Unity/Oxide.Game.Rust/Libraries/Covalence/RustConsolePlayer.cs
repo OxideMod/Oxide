@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
@@ -34,6 +34,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public IPlayerCharacter Character => null;
 
+        /// <summary>
+        /// Gets this player's last command type
+        /// </summary>
+        public CommandType LastCommand { get; set; }
+        
         #region Permissions
 
         /// <summary>
@@ -149,6 +154,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             // TODO: Send message to client
         }
+
+        /// <summary>
+        /// Replies to the user
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Interface.Oxide.LogInfo(message);
 
         /// <summary>
         /// Runs the specified console command on this player's client

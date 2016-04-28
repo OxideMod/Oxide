@@ -26,6 +26,11 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public IPlayerCharacter Character { get; private set; }
 
         /// <summary>
+        /// Gets this player's last command type
+        /// </summary>
+        public CommandType LastCommand { get; set; }
+
+        /// <summary>
         /// Gets the owner of this character
         /// </summary>
         public ILivePlayer Owner => this;
@@ -79,6 +84,15 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public void Message(string message)
         {
             HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
+        }
+        
+        /// <summary>
+        /// Replies to the user
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message)
+        {
+            // TODO
         }
 
         /// <summary>
