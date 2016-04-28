@@ -194,7 +194,7 @@ namespace Oxide.Game.TheForest
             {
                 return string.Concat(" ", TheForestAtmosphere.Instance?.TimeOfDay.ToString() ?? string.Empty); // TODO: Format time
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for 0.36b";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for 0.37";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 

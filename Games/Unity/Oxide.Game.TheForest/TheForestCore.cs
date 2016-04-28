@@ -77,7 +77,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("version", "0.36b"); // TODO: Grab version progmatically
+            RemoteLogger.SetTag("version", "0.37"); // TODO: Grab version progmatically
 
             // Setup the default permission groups
             if (permission.IsLoaded)
