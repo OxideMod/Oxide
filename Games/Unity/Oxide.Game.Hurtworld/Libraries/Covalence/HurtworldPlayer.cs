@@ -94,6 +94,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
 
         #endregion
 
+        #region Chat & Commands
+
+        public void Reply(string message) => ConnectedPlayer.Reply(message);
+
+        #endregion
+
         #region Operator Overloads
 
         public bool Equals(IPlayer other) => UniqueID == other.UniqueID;

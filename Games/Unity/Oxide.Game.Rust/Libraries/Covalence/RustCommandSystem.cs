@@ -30,6 +30,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         // The console player
         private RustConsolePlayer consolePlayer;
 
+        // The covalence provider
+        private readonly RustCovalenceProvider rustCovalence = RustCovalenceProvider.Instance;
+
         /// <summary>
         /// Initializes the command system provider
         /// </summary>
@@ -88,9 +91,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                         {
                             if (arg.Player())
                             {
-                                var rustCovalence = RustCovalenceProvider.Instance;
-                                var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+                                var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString()) as RustLivePlayer;
                                 livePlayer.LastCommand = CommandType.Console;
+                                livePlayer.LastArg = arg;
                                 callback(commandName, CommandType.Console, livePlayer?.BasePlayer, ExtractArgs(arg));
                                 return;
                             }

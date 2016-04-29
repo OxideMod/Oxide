@@ -36,6 +36,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
+        public ConsoleSystem.Arg LastArg { get; set; }
+
         private readonly BasePlayer player;
 
         internal RustLivePlayer(BasePlayer player)
@@ -105,7 +107,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     Message(message);
                     return;
                 case CommandType.Console:
-                    RunCommand("echo", message);
+                    LastArg.ReplyWith(message);
                     break;
             }
         }
