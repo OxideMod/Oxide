@@ -90,10 +90,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Replies to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message)
-        {
-            // TODO
-        }
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Runs the specified console command on this player's client

@@ -81,19 +81,13 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Sends a chat message to this player's client
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
-        {
-            HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
-        }
+        public void Message(string message) => HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
         
         /// <summary>
         /// Replies to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message)
-        {
-            // TODO
-        }
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Runs the specified console command on this player's client

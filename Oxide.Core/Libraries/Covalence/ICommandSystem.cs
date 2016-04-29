@@ -9,11 +9,10 @@
     /// Represents the callback of a chat or console command
     /// </summary>
     /// <param name="cmd"></param>
-    /// <param name="type"></param>
     /// <param name="caller"></param>
     /// <param name="args"></param>
     /// <returns></returns>
-    public delegate bool CommandCallback(string cmd, CommandType type, IPlayer caller, string[] args);
+    public delegate bool CommandCallback(IPlayer caller, string cmd, string[] args);
 
     /// <summary>
     /// Represents a binding to a generic command system
@@ -24,15 +23,13 @@
         /// Registers the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
         /// <param name="callback"></param>
-        void RegisterCommand(string cmd, CommandType type, CommandCallback callback);
+        void RegisterCommand(string cmd, CommandCallback callback);
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
-        void UnregisterCommand(string cmd, CommandType type);
+        void UnregisterCommand(string cmd);
     }
 }

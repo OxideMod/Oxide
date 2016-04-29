@@ -64,6 +64,10 @@ namespace Oxide.Plugins
         /// <param name="args"></param>
         protected void LogError(string format, params object[] args) => Interface.Oxide.LogError("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
 
+        /// <summary>
+        /// Called when this plugin has been added to the specified manager
+        /// </summary>
+        /// <param name="manager"></param>
         public override void HandleAddedToManager(PluginManager manager)
         {
             foreach (var method in GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
@@ -75,9 +79,9 @@ namespace Oxide.Plugins
                 var cmd = command_attribute[0] as CommandAttribute;
                 var perm = permission_attribute.Length <= 0 ? null : permission_attribute[0] as PermissionAttribute;
                 if (cmd == null) continue;
-                AddCovalenceCommand(cmd.Commands, perm?.Permission, (command, type, caller, args) =>
+                AddCovalenceCommand(cmd.Commands, perm?.Permission, (caller, command, args) =>
                 {
-                    method.Invoke(this, new object[] {command, type, caller, args});
+                    method.Invoke(this, new object[] {caller, command, args });
                     return true;
                 });
             }

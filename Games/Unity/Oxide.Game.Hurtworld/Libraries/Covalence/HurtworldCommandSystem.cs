@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
@@ -9,25 +8,62 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// </summary>
     public class HurtworldCommandSystem : ICommandSystem
     {
+        // Chat command handler
+        private ChatCommandHandler commandHandler;
+
+        // All registered commands
+        private IDictionary<string, CommandCallback> registeredCommands;
+
+        // Default constructor
+        public HurtworldCommandSystem()
+        {
+            Initialize();
+        }
+
         /// <summary>
         /// Registers the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandType type, CommandCallback callback)
+        public void RegisterCommand(string cmd, CommandCallback callback)
         {
-            // TODO
+            // Convert to lowercase
+            var commandName = cmd.ToLowerInvariant();
+
+            // Check if it already exists
+            if (registeredCommands.ContainsKey(commandName))
+                throw new CommandAlreadyExistsException(commandName);
+
+            registeredCommands.Add(commandName, callback);
         }
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
-        public void UnregisterCommand(string cmd, CommandType type)
+        public void UnregisterCommand(string cmd) => registeredCommands.Remove(cmd);
+
+        /// <summary>
+        /// Initializes the command system provider
+        /// </summary>
+        private void Initialize()
         {
-            // TODO
+            registeredCommands = new Dictionary<string, CommandCallback>();
+            commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
         }
+
+        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
+        {
+            CommandCallback callback;
+            return registeredCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
+        }
+
+        /// <summary>
+        /// Handles a chat message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public bool HandleChatMessage(ILivePlayer player, string str) => commandHandler.HandleChatMessage(player, str);
     }
 }

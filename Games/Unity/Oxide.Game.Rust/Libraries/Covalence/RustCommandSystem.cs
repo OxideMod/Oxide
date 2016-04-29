@@ -44,19 +44,18 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             consolePlayer = new RustConsolePlayer();
         }
 
-        private bool ChatCommandCallback(string cmd, CommandType type, IPlayer caller, string[] args)
+        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
         {
             CommandCallback callback;
-            return registeredChatCommands.TryGetValue(cmd, out callback) && callback(cmd, type, caller, args);
+            return registeredChatCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
         }
 
         /// <summary>
         /// Registers the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandType type, CommandCallback callback)
+        public void RegisterCommand(string cmd, CommandCallback callback)
         {
             // Initialize if needed
             if (rustCommands == null) Initialize();
@@ -64,46 +63,45 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             // Convert to lowercase
             var commandName = cmd.ToLowerInvariant();
 
-            // Is it a console command?
-            if (type == CommandType.Console)
+            // Register the command as a console command
+            // Check if it already exists
+            if (rustCommands != null && rustCommands.ContainsKey(commandName))
+                throw new CommandAlreadyExistsException(commandName);
+
+            // Register it
+            var splitName = commandName.Split('.');
+            rustCommands?.Add(commandName, new ConsoleSystem.Command
             {
-                // Check if it already exists
-                if (rustCommands != null && rustCommands.ContainsKey(commandName))
-                    throw new CommandAlreadyExistsException(commandName);
-
-                // Register it
-                var splitName = commandName.Split('.');
-                rustCommands?.Add(commandName, new ConsoleSystem.Command
+                name = splitName.Length >= 2 ? splitName[1] : splitName[0],
+                parent = splitName.Length >= 2 ? splitName[0] : "global",
+                namefull = commandName,
+                isCommand = true,
+                isUser = true,
+                isAdmin = true,
+                GetString = () => string.Empty,
+                SetString = s => { },
+                Call = arg =>
                 {
-                    name = splitName.Length >= 2 ? splitName[1] : splitName[0],
-                    parent = splitName.Length >= 2 ? splitName[0] : string.Empty,
-                    namefull = commandName,
-                    isCommand = true,
-                    isUser = true,
-                    isAdmin = true,
-                    GetString = () => string.Empty,
-                    SetString = s => { },
-                    Call = arg =>
-                    {
-                        if (arg == null) return;
+                    if (arg == null) return;
 
-                        if (arg.connection != null)
+                    if (arg.connection != null)
+                    {
+                        if (arg.Player())
                         {
-                            if (arg.Player())
-                            {
-                                var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString()) as RustLivePlayer;
-                                livePlayer.LastCommand = CommandType.Console;
-                                livePlayer.LastArg = arg;
-                                callback(commandName, CommandType.Console, livePlayer?.BasePlayer, ExtractArgs(arg));
-                                return;
-                            }
+                            var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString()) as RustLivePlayer;
+                            if (livePlayer == null) return;
+                            livePlayer.LastCommand = CommandType.Console;
+                            livePlayer.LastArg = arg;
+                            callback(livePlayer?.BasePlayer, commandName, ExtractArgs(arg));
+                            return;
                         }
-                        callback(commandName, CommandType.Console, consolePlayer, ExtractArgs(arg));
                     }
-                });
-            }
-            else if (type == CommandType.Chat)
-                registeredChatCommands.Add(commandName, callback);
+                    callback(consolePlayer, commandName, ExtractArgs(arg));
+                }
+            });
+
+            // Register the command as a chat command
+            registeredChatCommands.Add(commandName, callback);
         }
 
         private static string[] ExtractArgs(ConsoleSystem.Arg arg)
@@ -119,17 +117,16 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Unregisters the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
-        public void UnregisterCommand(string cmd, CommandType type)
+        public void UnregisterCommand(string cmd)
         {
             // Initialize if needed
             if (rustCommands == null) Initialize();
 
-            // Is it a console command?
-            if (type == CommandType.Console)
-                rustCommands?.Remove(cmd);
-            else if (type == CommandType.Chat)
-                registeredChatCommands.Remove(cmd);
+            // Remove the console command
+            rustCommands?.Remove(cmd);
+
+            // Remove the chat command
+            registeredChatCommands.Remove(cmd);
         }
 
         /// <summary>

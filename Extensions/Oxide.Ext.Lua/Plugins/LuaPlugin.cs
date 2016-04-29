@@ -207,9 +207,9 @@ namespace Oxide.Ext.Lua.Plugins
                         cmdPermsArr = new string[0];
 
                     // Register it
-                    AddCovalenceCommand(cmdNamesArr, cmdPermsArr, (cmd, type, caller, args) =>
+                    AddCovalenceCommand(cmdNamesArr, cmdPermsArr, (caller, cmd, args) =>
                     {
-                        HandleCommandCallback(method, cmd, type, caller, args);
+                        HandleCommandCallback(method, caller, cmd, args);
                         return true;
                     });
 
@@ -217,7 +217,7 @@ namespace Oxide.Ext.Lua.Plugins
             }
         }
 
-        private void HandleCommandCallback(LuaFunction func, string cmd, CommandType type, IPlayer caller, string[] args)
+        private void HandleCommandCallback(LuaFunction func, IPlayer caller, string cmd, string[] args)
         {
             LuaEnvironment.NewTable("tmp");
             LuaTable argsTable = LuaEnvironment["tmp"] as LuaTable;
@@ -228,7 +228,7 @@ namespace Oxide.Ext.Lua.Plugins
             }
             try
             {
-                func.Call(Table, caller, argsTable);
+                func.Call(Table, caller, cmd, argsTable);
             }
             catch (Exception)
             {

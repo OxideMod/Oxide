@@ -30,19 +30,18 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
         }
 
-        private bool ChatCommandCallback(string cmd, CommandType type, IPlayer caller, string[] args)
+        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
         {
             CommandCallback callback;
-            return registeredCommands.TryGetValue(cmd, out callback) && callback(cmd, type, caller, args);
+            return registeredCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
         }
 
         /// <summary>
         /// Registers the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandType type, CommandCallback callback)
+        public void RegisterCommand(string cmd, CommandCallback callback)
         {
             // Convert to lowercase
             var commandName = cmd.ToLowerInvariant();
@@ -58,8 +57,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Unregisters the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
-        public void UnregisterCommand(string cmd, CommandType type) => registeredCommands.Remove(cmd);
+        public void UnregisterCommand(string cmd) => registeredCommands.Remove(cmd);
 
         /// <summary>
         /// Handles a chat message

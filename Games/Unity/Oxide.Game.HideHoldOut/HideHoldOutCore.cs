@@ -324,6 +324,10 @@ namespace Oxide.Game.HideHoldOut
             // Is it a chat command?
             if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", player, message);
 
+            // Is this a covalence command?
+            var livePlayer = Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(player.account_id);
+            if (Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
+
             // Get the command string
             var command = message.Substring(1);
 

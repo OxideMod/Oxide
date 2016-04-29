@@ -189,10 +189,10 @@ namespace Oxide.Core.Libraries.Covalence
         public void RegisterCommand(string cmd, CommandCallback callback)
         {
             if (cmdSystem == null) return;
+
             try
             {
-                cmdSystem.RegisterCommand(cmd, CommandType.Chat, callback);
-                cmdSystem.RegisterCommand(cmd, CommandType.Console, callback);
+                cmdSystem.RegisterCommand(cmd, callback);
             }
             catch (CommandAlreadyExistsException)
             {
@@ -204,13 +204,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Unregisters a command (chat + console)
         /// </summary>
         /// <param name="cmd"></param>
-        public void UnregisterCommand(string cmd)
-        {
-            if (cmdSystem == null) return;
-            logger.Write(LogType.Debug, "Covalence is unregistering command '{0}'!", cmd);
-            cmdSystem.UnregisterCommand(cmd, CommandType.Chat);
-            cmdSystem.UnregisterCommand(cmd, CommandType.Console);
-        }
+        public void UnregisterCommand(string cmd) => cmdSystem?.UnregisterCommand(cmd);
 
     }
 }

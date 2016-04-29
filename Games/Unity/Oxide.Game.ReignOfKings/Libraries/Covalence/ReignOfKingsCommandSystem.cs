@@ -1,5 +1,7 @@
-﻿using CodeHatch.Engine.Core.Commands;
+﻿using System.Collections.Generic;
 
+using CodeHatch.Engine.Core.Commands;
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
@@ -8,41 +10,65 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// Represents a binding to a generic command system
     /// </summary>
     public class ReignOfKingsCommandSystem : ICommandSystem
-    {
+    { 
+        // Default constructor
+        public ReignOfKingsCommandSystem()
+        {
+            Initialize();
+        }
+
+        // Chat command handler
+        private ChatCommandHandler commandHandler;
+
+        // All registered commands
+        private IDictionary<string, CommandCallback> registeredCommands;
+
+        /// <summary>
+        /// Initializes the command system provider
+        /// </summary>
+        private void Initialize()
+        {
+            registeredCommands = new Dictionary<string, CommandCallback>();
+            commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+        }
+
+        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
+        {
+            CommandCallback callback;
+            return registeredCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
+        }
+
         /// <summary>
         /// Registers the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandType type, CommandCallback callback)
+        public void RegisterCommand(string cmd, CommandCallback callback)
         {
-            // Is it a console command?
-            if (type == CommandType.Console) return;
-
+            // No console command support so no need to register the command as console command
+            // Register the command as a chat command
             // Convert to lowercase
             var commandName = cmd.ToLowerInvariant();
 
             // Check if it already exists
-            if (CommandManager.RegisteredCommands.ContainsKey(commandName)) throw new CommandAlreadyExistsException(commandName);
+            if (CommandManager.RegisteredCommands.ContainsKey(commandName) || registeredCommands.ContainsKey(commandName))
+                throw new CommandAlreadyExistsException(commandName);
 
-            // Register it
-            var commandAttribute = new CommandAttribute($"/{commandName}", string.Empty)
-            {
-                Method = info =>
-                {
-                    var player = ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetPlayer(info.PlayerId.ToString());
-                    callback(info.Label, CommandType.Chat, player, info.Args);
-                }
-            };
-            CommandManager.RegisteredCommands[commandName] = commandAttribute;
+            registeredCommands.Add(commandName, callback);
         }
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        /// <param name="type"></param>
-        public void UnregisterCommand(string cmd, CommandType type) => CommandManager.RegisteredCommands.Remove(cmd);
+        public void UnregisterCommand(string cmd) => CommandManager.RegisteredCommands.Remove(cmd);
+
+        /// <summary>
+        /// Handles a chat message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public bool HandleChatMessage(ILivePlayer player, string str) => commandHandler.HandleChatMessage(player, str);
     }
 }

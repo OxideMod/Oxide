@@ -294,6 +294,10 @@ namespace Oxide.Game.Hurtworld
             // Is it a chat command?
             if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", session, message);
 
+            // Is this a covalence command?
+            var livePlayer = Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(session.SteamId.m_SteamID.ToString());
+            if (Libraries.Covalence.HurtworldCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
+
             // Get the command string
             var command = message.Substring(1);
 

@@ -155,9 +155,9 @@ namespace Oxide.Ext.Python.Plugins
                         continue;
                     }
                     var funcToCall = func;
-                    AddCovalenceCommand(names, perms, (cmd, type, caller, args) =>
+                    AddCovalenceCommand(names, perms, (caller, cmd, args) =>
                     {
-                        PythonEngine.Operations.Invoke(funcToCall, caller, args);
+                        PythonEngine.Operations.Invoke(funcToCall, caller, cmd, args);
                         return true;
                     });
                 }

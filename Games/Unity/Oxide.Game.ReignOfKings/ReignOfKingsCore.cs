@@ -751,6 +751,10 @@ namespace Oxide.Game.ReignOfKings
             if (str.Length == 0) return null;
             if (str[0] != '/') return null;
 
+            // Is this a covalence command?
+            var livePlayer = Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(e.PlayerId.ToString());
+            if (Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
+
             // Get the command string
             var command = str.Substring(1);
 
@@ -760,10 +764,11 @@ namespace Oxide.Game.ReignOfKings
             ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
-            Interface.CallHook("OnPlayerCommand", e.Player, cmd, args);
-
             // Handle it
             if (!cmdlib.HandleChatCommand(e.Player, cmd, args)) return null;
+
+            Interface.CallDeprecatedHook("OnPlayerCommand", e.Player, cmd, args);
+            Interface.CallHook("OnChatCommand", e.Player, cmd, args);
 
             // Handled
             return true;

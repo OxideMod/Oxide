@@ -359,10 +359,11 @@ namespace Oxide.Core.Plugins
         private void RegisterWithCovalence()
         {
             var covalence = Interface.Oxide.GetLibrary<Covalence>();
-            foreach (var pair in commandInfos) covalence.RegisterCommand(pair.Key, CovalenceCommandCallback);
+            foreach (var pair in commandInfos)
+                covalence.RegisterCommand(pair.Key, CovalenceCommandCallback);
         }
 
-        private bool CovalenceCommandCallback(string cmd, CommandType type, IPlayer caller, string[] args)
+        private bool CovalenceCommandCallback(IPlayer caller, string cmd, string[] args)
         {
             // Get the command
             CommandInfo cmdInfo;
@@ -385,7 +386,7 @@ namespace Oxide.Core.Plugins
             }
 
             // Call it
-            cmdInfo.Callback(cmd, type, caller, args);
+            cmdInfo.Callback(caller, cmd, args);
 
             // Handled
             return true;
