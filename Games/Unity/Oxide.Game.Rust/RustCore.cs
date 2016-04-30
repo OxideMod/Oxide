@@ -70,7 +70,7 @@ namespace Oxide.Game.Rust
             {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
             {"UserPermissionRevoked", "User '{0}' revoked permission '{1}'"},
             {"UserRemovedFromGroup", "User '{0}' removed from group '{1}'"},
-            {"YouAreNotAdmin", "You are not an admin"} // TODO: Make this clearer
+            {"YouAreNotAdmin", "You are not an admin"}
         };
 
         #endregion
@@ -93,7 +93,7 @@ namespace Oxide.Game.Rust
         public RustCore()
         {
             // Set attributes
-            Name = "rustcore";
+            Name = "RustCore";
             Title = "Rust Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
@@ -127,7 +127,7 @@ namespace Oxide.Game.Rust
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "rust");
-            RemoteLogger.SetTag("version", Protocol.printable);
+            RemoteLogger.SetTag("version", BuildInformation.VersionStampDays.ToString());
 
             // Register messages for localization
             lang.RegisterMessages(messages, this);

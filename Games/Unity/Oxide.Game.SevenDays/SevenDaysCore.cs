@@ -23,7 +23,7 @@ namespace Oxide.Game.SevenDays
         public SevenDaysCore()
         {
             // Set attributes
-            Name = "sevendayscore";
+            Name = "SevenDaysCore";
             Title = "Seven Days Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);

@@ -132,8 +132,7 @@ namespace Oxide.Game.ReignOfKings
         /// Initializes a new instance of the ReignOfKingsExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public ReignOfKingsExtension(ExtensionManager manager)
-            : base(manager)
+        public ReignOfKingsExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -166,7 +165,7 @@ namespace Oxide.Game.ReignOfKings
             if (!Interface.Oxide.CheckConsole()) return;
 
             var socketAdminConsole = UnityEngine.Object.FindObjectOfType<SocketAdminConsole>();
-            var socketServer = (SocketServer) SocketServerField.GetValue(socketAdminConsole);
+            var socketServer = (SocketServer)SocketServerField.GetValue(socketAdminConsole);
             if (socketServer.Clients.Count > 0) return;
             socketAdminConsole.enabled = false;
 

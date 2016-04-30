@@ -28,8 +28,14 @@ namespace Oxide.Game.BeastsOfPrey
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine"
+        };
 
         public static string[] Filter =
         {
@@ -39,8 +45,7 @@ namespace Oxide.Game.BeastsOfPrey
         /// Initializes a new instance of the BeastsOfPreyExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public BeastsOfPreyExtension(ExtensionManager manager)
-            : base(manager)
+        public BeastsOfPreyExtension(ExtensionManager manager) : base(manager)
         {
         }
 

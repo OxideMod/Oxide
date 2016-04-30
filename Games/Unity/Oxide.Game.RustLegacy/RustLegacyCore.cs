@@ -52,7 +52,7 @@ namespace Oxide.Game.RustLegacy
         public RustLegacyCore()
         {
             // Set attributes
-            Name = "rustlegacycore";
+            Name = "RustLegacyCore";
             Title = "Rust Legacy Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
@@ -848,12 +848,12 @@ namespace Oxide.Game.RustLegacy
 
         #endregion
 
-        public NetUser FindPlayer(string strNameOrIdorIp)
+        public NetUser FindPlayer(string nameOrIdOrIp)
         {
             NetUser netUser;
-            if ((netUser = PlayerClient.All.Find(p => p.netUser.userID.ToString() == strNameOrIdorIp)?.netUser) != null) return netUser;
-            if ((netUser = PlayerClient.All.Find(p => p.netUser.displayName.ToLower().Contains(strNameOrIdorIp.ToLower()))?.netUser) != null) return netUser;
-            if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == strNameOrIdorIp)?.netUser) != null) return netUser;
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.userID.ToString() == nameOrIdOrIp)?.netUser) != null) return netUser;
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.displayName.ToLower().Contains(nameOrIdOrIp.ToLower()))?.netUser) != null) return netUser;
+            if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == nameOrIdOrIp)?.netUser) != null) return netUser;
             return null;
         }
 

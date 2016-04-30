@@ -3,7 +3,7 @@
   "TargetDirectory": "D:\\Servers\\Game\\BeastsOfPrey\\Latest\\BoPServer_Data\\Managed",
   "Manifests": [
     {
-      "AssemblyName": "Assembly-CSharp",
+      "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
         {
           "Type": "InitOxide",
@@ -22,7 +22,8 @@
               "Parameters": []
             },
             "MSILHash": "DFu67aThgRTuO5TFJ3si6uZwZ/gskutcJXzij+jHDmE=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": null
           }
         },
         {
@@ -45,7 +46,8 @@
               "Parameters": []
             },
             "MSILHash": "iHxxbhzLq/BYocX76rW3YJAA77N1SoULAvpg1dvmZ6M=",
-            "BaseHookName": null
+            "BaseHookName": null,
+            "HookCategory": null
           }
         }
       ]

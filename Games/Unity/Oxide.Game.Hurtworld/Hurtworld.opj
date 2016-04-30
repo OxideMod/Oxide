@@ -157,58 +157,6 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnPostToSlack",
-            "HookName": "OnPostToSlack",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "PostToSlackREST",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "PostMessage",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String"
-              ]
-            },
-            "MSILHash": "3rsiLwEbPi+PZk/yZFjMx3rvqOk4lqMKH6KKBhoVzok=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnPostToSlack",
-            "HookName": "OnPostToSlack",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "PostToSlackREST",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "PostMessage",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "PostToSlackREST/SlackRequestObject"
-              ]
-            },
-            "MSILHash": "HZoACIEH3f3XmjQgROO3MTbF/mhR4V2CW+2hQWehU0E=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -289,8 +237,8 @@
           "Hook": {
             "InjectionIndex": 18,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0.networkView.owner, a0",
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "IOnEnterVehicle [internal]",
             "HookName": "IOnEnterVehicle",
@@ -316,7 +264,7 @@
             "InjectionIndex": 5,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0.networkView.owner, a0",
+            "ArgumentString": "a0",
             "HookTypeName": "Simple",
             "Name": "IOnExitVehicle [internal]",
             "HookName": "IOnExitVehicle",
@@ -396,7 +344,7 @@
             "InjectionIndex": 3,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0.networkView.owner, l0",
+            "ArgumentString": "l0",
             "HookTypeName": "Simple",
             "Name": "ICanEnterVehicle [internal]",
             "HookName": "ICanEnterVehicle",
@@ -937,6 +885,37 @@
             },
             "MSILHash": "P6kQWUw7WiomIu0hr5HPk20P0Ax+zgwxIxuUqOZH8vA=",
             "BaseHookName": "OnServerCommand",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 1719,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4",
+                "OpType": "Int32",
+                "Operand": "244"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "MaxPlayers [patch]",
+            "HookName": "MaxPlayers",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConsoleManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ExecuteCommandRaw",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "P6kQWUw7WiomIu0hr5HPk20P0Ax+zgwxIxuUqOZH8vA=",
+            "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
         },

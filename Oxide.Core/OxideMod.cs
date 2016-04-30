@@ -124,7 +124,7 @@ namespace Oxide.Core
             rootconfig = ConfigFile.Load<OxideConfig>(oxideConfig);
 
             // Work out the instance directory
-            for (int i = 0; i < rootconfig.InstanceCommandLines.Length; i++)
+            for (var i = 0; i < rootconfig.InstanceCommandLines.Length; i++)
             {
                 string varname, format;
                 rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
@@ -229,6 +229,8 @@ namespace Oxide.Core
         /// <returns></returns>
         public IEnumerable<PluginLoader> GetPluginLoaders() => extensionmanager.GetPluginLoaders();
 
+        #region Logging
+
         /// <summary>
         /// Logs a formatted info message to the root logger
         /// </summary>
@@ -269,6 +271,8 @@ namespace Oxide.Core
         /// <returns></returns>
         public void LogException(string message, Exception ex) => RootLogger.WriteException(message, ex);
 
+        #endregion
+
         #region Plugin Management
 
         /// <summary>
@@ -301,7 +305,7 @@ namespace Oxide.Core
             // Scan the plugin directory and load all reported plugins
             foreach (var loader in loaders)
             {
-                foreach (string name in loader.ScanDirectory(PluginDirectory)) LoadPlugin(name);
+                foreach (var name in loader.ScanDirectory(PluginDirectory)) LoadPlugin(name);
             }
             if (!init) return;
             var lastCall = Now;
@@ -478,7 +482,7 @@ namespace Oxide.Core
         public object CallHook(string hookname, params object[] args) => RootPluginManager?.CallHook(hookname, args);
 
         /// <summary>
-        /// Calls a deprecated hook and print a warning
+        /// Calls a deprecated hook and prints a warning
         /// </summary>
         /// <param name="hookname"></param>
         /// <param name="args"></param>
@@ -486,7 +490,7 @@ namespace Oxide.Core
         public object CallDeprecatedHook(string hookname, params object[] args) => RootPluginManager?.CallDeprecatedHook(hookname, args);
 
         /// <summary>
-        /// Queue a callback to be called in the next server frame
+        /// Queues a callback to be called in the next server frame
         /// </summary>
         /// <param name="callback"></param>
         public void NextTick(Action callback)
@@ -495,7 +499,7 @@ namespace Oxide.Core
         }
 
         /// <summary>
-        /// Register a callback which will be called every server frame
+        /// Registers a callback which will be called every server frame
         /// </summary>
         /// <param name="callback"></param>
         public void OnFrame(Action<float> callback) => onFrame += callback;

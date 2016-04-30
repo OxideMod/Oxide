@@ -27,26 +27,26 @@ namespace Oxide.Ext.Unity
         {
             oxideMod = Interface.Oxide;
 
-            var event_info = typeof(Application).GetEvent("logMessageReceived");
-            if (event_info == null)
+            var eventInfo = typeof(Application).GetEvent("logMessageReceived");
+            if (eventInfo == null)
             {
                 // Unity 4
-                var log_callback_field = typeof(Application).GetField("s_LogCallback", BindingFlags.Static | BindingFlags.NonPublic);
-                var log_callback = log_callback_field?.GetValue(null) as Application.LogCallback;
-                if (log_callback == null) Interface.Oxide.LogWarning("No Unity application log callback is registered");
+                var logCallbackField = typeof(Application).GetField("s_LogCallback", BindingFlags.Static | BindingFlags.NonPublic);
+                var logCallback = logCallbackField?.GetValue(null) as Application.LogCallback;
+                if (logCallback == null) Interface.Oxide.LogWarning("No Unity application log callback is registered");
 
                 #pragma warning disable 0618
                 Application.RegisterLogCallback((message, stack_trace, type) =>
                 {
-                    log_callback?.Invoke(message, stack_trace, type);
+                    logCallback?.Invoke(message, stack_trace, type);
                     LogMessageReceived(message, stack_trace, type);
                 });
             }
             else
             {
                 // Unity 5
-                var handle_exception = Delegate.CreateDelegate(event_info.EventHandlerType, this, "LogMessageReceived");
-                event_info.GetAddMethod().Invoke(null, new object[] { handle_exception });
+                var handleException = Delegate.CreateDelegate(eventInfo.EventHandlerType, this, "LogMessageReceived");
+                eventInfo.GetAddMethod().Invoke(null, new object[] { handleException });
             }
         }
 
@@ -68,9 +68,9 @@ namespace Oxide.Ext.Unity
             }
         }
 
-        void LogMessageReceived(string message, string stack_trace, LogType type)
+        void LogMessageReceived(string message, string stackTrace, LogType type)
         {
-            if (type == LogType.Exception && stack_trace.Contains("Oxide")) RemoteLogger.Exception(message, stack_trace);
+            if (type == LogType.Exception && stackTrace.Contains("Oxide")) RemoteLogger.Exception(message, stackTrace);
         }
     }
 }

@@ -5,7 +5,7 @@ using Oxide.Core.Plugins;
 namespace Oxide.Game.BeastsOfPrey
 {
     /// <summary>
-    /// Responsible for loading Beasts of Prey core plugins
+    /// Responsible for loading core plugins for "Beasts of Prey"
     /// </summary>
     public class BeastsOfPreyPluginLoader : PluginLoader
     {

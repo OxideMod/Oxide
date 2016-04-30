@@ -154,7 +154,6 @@ namespace Oxide.Game.RustLegacy.Libraries
         {
             ChatCommand cmd;
             if (!chatCommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
-
             cmd.Plugin.CallHook(cmd.CallbackName, sender, name, args);
 
             return true;

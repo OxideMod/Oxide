@@ -60,7 +60,7 @@ namespace Oxide.Core.Plugins
             if (loadedplugins.ContainsKey(plugin.Name)) return false;
             loadedplugins.Add(plugin.Name, plugin);
             plugin.HandleAddedToManager(this);
-            if (OnPluginAdded != null) OnPluginAdded(plugin);
+            OnPluginAdded?.Invoke(plugin);
             return true;
         }
 
@@ -73,10 +73,10 @@ namespace Oxide.Core.Plugins
         {
             if (!loadedplugins.ContainsKey(plugin.Name)) return false;
             loadedplugins.Remove(plugin.Name);
-            foreach (IList<Plugin> list in hooksubscriptions.Values)
+            foreach (var list in hooksubscriptions.Values)
                 if (list.Contains(plugin)) list.Remove(plugin);
             plugin.HandleRemovedFromManager(this);
-            if (OnPluginRemoved != null) OnPluginRemoved(plugin);
+            OnPluginRemoved?.Invoke(plugin);
             return true;
         }
 
@@ -88,18 +88,14 @@ namespace Oxide.Core.Plugins
         public Plugin GetPlugin(string name)
         {
             Plugin plugin;
-            if (loadedplugins.TryGetValue(name, out plugin)) return plugin;
-            return null;
+            return loadedplugins.TryGetValue(name, out plugin) ? plugin : null;
         }
 
         /// <summary>
         /// Gets all plugins managed by this manager
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Plugin> GetPlugins()
-        {
-            return loadedplugins.Values;
-        }
+        public IEnumerable<Plugin> GetPlugins() => loadedplugins.Values;
 
         /// <summary>
         /// Subscribes the specified plugin to the specified hook
@@ -116,7 +112,7 @@ namespace Oxide.Core.Plugins
                 hooksubscriptions.Add(hookname, sublist);
             }
             if (!sublist.Contains(plugin)) sublist.Add(plugin);
-            //Logger.Write(LogType.Debug, "Plugin {0} is subscribing to hook '{1}'!", plugin.Name, hookname);
+            //Logger.Write(LogType.Debug, $"Plugin {plugin.Name} is subscribing to hook '{hookname}'!");
         }
 
         /// <summary>
@@ -130,7 +126,7 @@ namespace Oxide.Core.Plugins
             IList<Plugin> sublist;
             if (hooksubscriptions.TryGetValue(hookname, out sublist) && sublist.Contains(plugin))
                 sublist.Remove(plugin);
-            //Logger.Write(LogType.Debug, "Plugin {0} is unsubscribing to hook '{1}'!", plugin.Name, hookname);
+            //Logger.Write(LogType.Debug, $"Plugin {plugin.Name} is unsubscribing to hook '{hookname}'!");
         }
 
         /// <summary>
@@ -147,14 +143,14 @@ namespace Oxide.Core.Plugins
             if (plugins.Count == 0) return null;
 
             // Loop each item
-            object[] values = new object[plugins.Count];
-            int returncount = 0;
+            var values = new object[plugins.Count];
+            var returncount = 0;
             object finalvalue = null;
             Plugin finalplugin = null;
-            for (int i = 0; i < plugins.Count; i++)
+            for (var i = 0; i < plugins.Count; i++)
             {
                 // Call the hook
-                object value = plugins[i].CallHook(hookname, args);
+                var value = plugins[i].CallHook(hookname, args);
                 if (value != null)
                 {
                     values[i] = value;
@@ -170,9 +166,9 @@ namespace Oxide.Core.Plugins
             if (returncount > 1 && finalvalue != null)
             {
                 // Notify log of hook conflict
-                string[] conflicts = new string[returncount];
-                int j = 0;
-                for (int i = 0; i < plugins.Count; i++)
+                var conflicts = new string[returncount];
+                var j = 0;
+                for (var i = 0; i < plugins.Count; i++)
                 {
                     if (values[i] != null && values[i] != finalvalue)
                         conflicts[j++] = plugins[i].Name;
@@ -180,7 +176,7 @@ namespace Oxide.Core.Plugins
                 if (j > 0)
                 {
                     conflicts[j] = finalplugin.Name;
-                    Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", conflicts));
+                    Logger.Write(LogType.Warning, $"Calling hook {hookname} resulted in a conflict between the following plugins: {string.Join(", ", conflicts)}");
                 }
             }
             return finalvalue;
@@ -199,11 +195,11 @@ namespace Oxide.Core.Plugins
             if (plugins.Count == 0) return null;
 
             var now = Interface.Oxide.Now;
-            float last_warning_at;
-            if (!lastDeprecatedWarningAt.TryGetValue(name, out last_warning_at) || now - last_warning_at > 300f)
+            float lastWarningAt;
+            if (!lastDeprecatedWarningAt.TryGetValue(name, out lastWarningAt) || now - lastWarningAt > 300f)
             {
                 lastDeprecatedWarningAt[name] = now;
-                Interface.Oxide.LogWarning("'{0} v{1}' plugin is using deprecated hook: {2}", plugins[0].Name, plugins[0].Version, name);
+                Interface.Oxide.LogWarning($"'{plugins[0].Name} v{plugins[0].Version}' plugin is using deprecated hook: {name}");
             }
 
             return CallHook(name, args);

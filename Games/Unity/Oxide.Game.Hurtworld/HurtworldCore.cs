@@ -56,7 +56,6 @@ namespace Oxide.Game.Hurtworld
             {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
             {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
             {"NoPluginsFound", "No plugins are currently available"},
-            {"OxideVersion", "Oxide version: {0}, Hurtworld version: {1}"},
             {"PermissionNotFound", "Permission '{0}' doesn't exist"},
             {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
             {"PlayerLanguage", "Player language set to {0}"},
@@ -65,7 +64,7 @@ namespace Oxide.Game.Hurtworld
             {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
             {"ShowGroups", "Groups: {0}"},
             {"ServerLanguage", "Server language set to {0}"},
-            {"UnknownChatCommand", "<color=#b8d7a3>Unknown command:</color> {0}"},
+            {"UnknownCommand", "Unknown command: {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
             {"UserNotFound", "User '{0}' not found"},
             {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
@@ -134,34 +133,36 @@ namespace Oxide.Game.Hurtworld
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "hurtworld");
-            RemoteLogger.SetTag("version", GameManager.Instance.GetProtocolVersion().ToString());
+            RemoteLogger.SetTag("version", GameManager.Instance.Version.ToString());
 
             // Register messages for localization
             lang.RegisterMessages(messages, this);
 
-            // Add general chat commands
-            //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
-            //cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
-            cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
-            cmdlib.AddChatCommand("load", this, "CmdLoad");
-            cmdlib.AddChatCommand("oxide.unload", this, "CmdUnload");
-            cmdlib.AddChatCommand("unload", this, "CmdUnload");
-            cmdlib.AddChatCommand("oxide.reload", this, "CmdReload");
-            cmdlib.AddChatCommand("reload", this, "CmdReload");
-            cmdlib.AddChatCommand("oxide.version", this, "CmdVersion");
-            cmdlib.AddChatCommand("version", this, "CmdVersion");
+            // Add general commands
+            //cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
+            //cmdlib.AddChatCommand("plugins", this, "ChatPlugins");
+            cmdlib.AddChatCommand("oxide.load", this, "ChatLoad");
+            cmdlib.AddChatCommand("load", this, "ChatLoad");
+            cmdlib.AddChatCommand("oxide.unload", this, "ChatUnload");
+            cmdlib.AddChatCommand("unload", this, "ChatUnload");
+            cmdlib.AddChatCommand("oxide.reload", this, "ChatReload");
+            cmdlib.AddChatCommand("reload", this, "ChatReload");
+            cmdlib.AddChatCommand("oxide.version", this, "ChatChatVersion");
+            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
+            cmdlib.AddChatCommand("version", this, "ChatVersion");
+            cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
 
-            // Add permission chat commands
-            cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
-            cmdlib.AddChatCommand("group", this, "CmdGroup");
-            cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
-            cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");
-            cmdlib.AddChatCommand("oxide.grant", this, "CmdGrant");
-            cmdlib.AddChatCommand("grant", this, "CmdGrant");
-            cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
-            cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
-            cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
-            cmdlib.AddChatCommand("show", this, "CmdShow");
+            // Add permission commands
+            cmdlib.AddChatCommand("oxide.group", this, "ChatGroup");
+            cmdlib.AddChatCommand("group", this, "ChatGroup");
+            cmdlib.AddChatCommand("oxide.usergroup", this, "ChatUserGroup");
+            cmdlib.AddChatCommand("usergroup", this, "ChatUserGroup");
+            cmdlib.AddChatCommand("oxide.grant", this, "ChatGrant");
+            cmdlib.AddChatCommand("grant", this, "ChatGrant");
+            cmdlib.AddChatCommand("oxide.revoke", this, "ChatRevoke");
+            cmdlib.AddChatCommand("revoke", this, "ChatRevoke");
+            cmdlib.AddChatCommand("oxide.show", this, "ChatShow");
+            cmdlib.AddChatCommand("show", this, "ChatShow");
 
             if (permission.IsLoaded)
             {
@@ -250,7 +251,7 @@ namespace Oxide.Game.Hurtworld
         private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
         {
             // Set the session name and strip HTML tags
-            var session = GameManager.Instance.GetSession(player);
+            var session = FindSessionByNetPlayer(player);
             session.Name = Regex.Replace(name, "<.*?>", string.Empty); // TODO: Make sure the name is not blank
 
             // Let covalence know
@@ -310,7 +311,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, cmd, args))
             {
-                Reply(string.Format(GetMessage("UnknownChatCommand", session.SteamId.ToString()), cmd), session);
+                Reply(string.Format(GetMessage("UnknownCommand", session.SteamId.ToString()), cmd), session);
                 return true;
             }
 
@@ -325,22 +326,14 @@ namespace Oxide.Game.Hurtworld
         /// <param name="player"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
-        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input)
-        {
-            var identity = GameManager.Instance.GetIdentity(player);
-            Interface.Oxide.CallHook("OnPlayerInput", identity.ConnectedSession, input);
-        }
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.Oxide.CallHook("OnPlayerInput", FindSessionByNetPlayer(player), input);
 
         /// <summary>
         /// Called when the player attempts to suicide
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("IOnPlayerSuicide")]
-        private object IOnPlayerSuicide(uLink.NetworkPlayer player)
-        {
-            var session = GameManager.Instance.GetSession(player);
-            return Interface.Oxide.CallHook("OnPlayerSuicide", session);
-        }
+        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.Oxide.CallHook("OnPlayerSuicide", FindSessionByNetPlayer(player));
 
         #endregion
 
@@ -349,15 +342,10 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when a player tries to enter a vehicle
         /// </summary>
-        /// <param name="player"></param>
         /// <param name="passenger"></param>
         /// <returns></returns>
         [HookMethod("ICanEnterVehicle")]
-        private object ICanEnterVehicle(uLink.NetworkPlayer player, CharacterMotorSimple passenger)
-        {
-            var session = GetSession(player);
-            return Interface.CallHook("CanEnterVehicle", session, passenger);
-        }
+        private object ICanEnterVehicle(CharacterMotorSimple passenger) => Interface.CallHook("CanEnterVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
 
         /// <summary>
         /// Called when a player tries to exit a vehicle
@@ -365,37 +353,23 @@ namespace Oxide.Game.Hurtworld
         /// <param name="passenger"></param>
         /// <returns></returns>
         [HookMethod("ICanExitVehicle")]
-        private object ICanExitVehicle(CharacterMotorSimple passenger)
-        {
-            var session = GetSession(passenger.gameObject);
-            return Interface.CallHook("CanExitVehicle", session, passenger);
-        }
+        private object ICanExitVehicle(CharacterMotorSimple passenger) => Interface.CallHook("CanExitVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
 
         /// <summary>
         /// Called when a player enters a vehicle
         /// </summary>
-        /// <param name="player"></param>
         /// <param name="passenger"></param>
         /// <returns></returns>
         [HookMethod("IOnEnterVehicle")]
-        private object IOnEnterVehicle(uLink.NetworkPlayer player, CharacterMotorSimple passenger)
-        {
-            var session = GetSession(player);
-            return Interface.CallHook("OnEnterVehicle", session, passenger);
-        }
+        private object IOnEnterVehicle(CharacterMotorSimple passenger) => Interface.CallHook("OnEnterVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
 
         /// <summary>
         /// Called when a player exits a vehicle
         /// </summary>
-        /// <param name="player"></param>
         /// <param name="passenger"></param>
         /// <returns></returns>
         [HookMethod("IOnExitVehicle")]
-        private object IOnExitVehicle(uLink.NetworkPlayer player, CharacterMotorSimple passenger)
-        {
-            var session = GetSession(player);
-            return Interface.CallHook("OnExitVehicle", session, passenger);
-        }
+        private object IOnExitVehicle(CharacterMotorSimple passenger) => Interface.CallHook("OnExitVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
 
         #endregion
 
@@ -409,8 +383,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdPlugins")]
-        private void CmdPlugins(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatPlugins")]
+        private void ChatPlugins(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -453,8 +427,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdLoad")]
-        private void CmdLoad(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatLoad")]
+        private void ChatLoad(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -487,8 +461,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdReload")]
-        private void CmdReload(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatReload")]
+        private void ChatReload(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -529,8 +503,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdUnload")]
-        private void CmdUnload(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatUnload")]
+        private void ChatUnload(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -571,13 +545,21 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdVersion")]
-        private void CmdVersion(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatVersion")]
+        private void ChatVersion(PlayerSession session, string command, string[] args)
         {
-            var oxide = OxideMod.Version.ToString();
-            var game = GameManager.Instance.GetProtocolVersion().ToString();
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game))
-                Reply(string.Format(GetMessage("OxideVersion", session.SteamId.ToString()), oxide, game), session);
+            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance.GetProtocolVersion()}", session);
+        }
+
+        /// <summary>
+        /// Called when the "version" command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleVersion")]
+        private void ConsoleVersion(string command, string[] args)
+        {
+            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance.GetProtocolVersion()}");
         }
 
         #endregion
@@ -590,8 +572,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdGroup")]
-        private void CmdGroup(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatGroup")]
+        private void ChatGroup(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -661,16 +643,16 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
-        #region User Group Command
+        #region Usergroup Command
 
         /// <summary>
-        /// Called when the "group" command has been executed
+        /// Called when the "usergroup" command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdUserGroup")]
-        private void CmdUserGroup(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatUserGroup")]
+        private void ChatUserGroup(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -684,7 +666,7 @@ namespace Oxide.Game.Hurtworld
             var name = args[1];
             var group = args[2];
 
-            var target = GetSession(name);
+            var target = FindSession(name);
             if (target == null && !permission.UserIdValid(name))
             {
                 Reply(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
@@ -726,8 +708,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdGrant")]
-        private void CmdGrant(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatGrant")]
+        private void ChatGrant(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -759,7 +741,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = GetSession(name);
+                var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
@@ -787,8 +769,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdRevoke")]
-        private void CmdRevoke(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatRevoke")]
+        private void ChatRevoke(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -820,7 +802,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = GetSession(name);
+                var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
@@ -848,8 +830,8 @@ namespace Oxide.Game.Hurtworld
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdShow")]
-        private void CmdShow(PlayerSession session, string command, string[] args)
+        [HookMethod("ChatShow")]
+        private void ChatShow(PlayerSession session, string command, string[] args)
         {
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
@@ -870,7 +852,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = GetSession(name);
+                var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(GetMessage("UserNotFound", session.SteamId.ToString()), session);
@@ -1006,7 +988,7 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         /// <param name="message"></param>
         /// <param name="session"></param>
-        private void Reply(string message, PlayerSession session = null)
+        private static void Reply(string message, PlayerSession session = null)
         {
             if (session == null)
             {
@@ -1028,7 +1010,7 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        private PlayerSession GetSession(string nameOrIdOrIp)
+        public PlayerSession FindSession(string nameOrIdOrIp)
         {
             var sessions = GameManager.Instance.GetSessions();
             PlayerSession session = null;
@@ -1047,14 +1029,14 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        private PlayerSession GetSession(uLink.NetworkPlayer player) => GameManager.Instance.GetSession(player);
+        public PlayerSession FindSessionByNetPlayer(uLink.NetworkPlayer player) => GameManager.Instance.GetSession(player);
 
         /// <summary>
         /// Gets the player session using a UnityEngine.GameObject
         /// </summary>
         /// <param name="go"></param>
         /// <returns></returns>
-        private PlayerSession GetSession(GameObject go)
+        public PlayerSession FindSessionByGo(GameObject go)
         {
             var sessions = GameManager.Instance.GetSessions();
             return (from i in sessions where go.Equals(i.Value.WorldPlayerEntity) select i.Value).FirstOrDefault();
