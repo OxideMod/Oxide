@@ -38,6 +38,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
+        /// <summary>
+        /// Gets this player's average network ping
+        /// </summary>
+        public int Ping => session.Player.averagePing;
+
         private readonly PlayerSession session;
 
         internal HurtworldLivePlayer(PlayerSession session)

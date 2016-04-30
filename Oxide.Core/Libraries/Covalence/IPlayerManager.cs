@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 namespace Oxide.Core.Libraries.Covalence
 {
     /// <summary>
@@ -13,14 +12,14 @@ namespace Oxide.Core.Libraries.Covalence
         /// <summary>
         /// Gets an offline player given their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        IPlayer GetPlayer(string uniqueID);
+        IPlayer GetPlayer(string id);
 
         /// <summary>
         /// Gets an offline player given their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         IPlayer this[int id] { get; }
 
@@ -57,9 +56,9 @@ namespace Oxide.Core.Libraries.Covalence
         /// <summary>
         /// Gets an online player given their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        ILivePlayer GetOnlinePlayer(string uniqueID);
+        ILivePlayer GetOnlinePlayer(string id);
 
         /// <summary>
         /// Gets all online players
@@ -88,6 +87,5 @@ namespace Oxide.Core.Libraries.Covalence
         IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName);
 
         #endregion
-
     }
 }

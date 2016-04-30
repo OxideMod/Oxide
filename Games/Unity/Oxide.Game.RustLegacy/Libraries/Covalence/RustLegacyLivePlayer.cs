@@ -39,6 +39,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
+        /// <summary>
+        /// Gets this player's average network ping
+        /// </summary>
+        public int Ping => netUser.networkPlayer.averagePing;
+
         private readonly NetUser netUser;
 
         internal RustLegacyLivePlayer(NetUser netUser)

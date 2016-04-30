@@ -26,9 +26,9 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public IPlayerCharacter Character { get; private set; }
 
         /// <summary>
-        /// Gets this player's last command type
+        /// Gets this player's average network ping
         /// </summary>
-        public CommandType LastCommand { get; set; }
+        public int Ping => player.NetPlayer.averagePing;
 
         /// <summary>
         /// Gets the owner of this character
@@ -39,6 +39,11 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Gets the object that backs this character, if available
         /// </summary>
         public object Object { get; private set; }
+
+        /// <summary>
+        /// Gets this player's last command type
+        /// </summary>
+        public CommandType LastCommand { get; set; }
 
         private readonly PlayerInfos player;
 
@@ -82,7 +87,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         public void Message(string message) => HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
-        
+
         /// <summary>
         /// Replies to the user
         /// </summary>

@@ -38,6 +38,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         public ConsoleSystem.Arg LastArg { get; set; }
 
+        /// <summary>
+        /// Gets this player's average network ping
+        /// </summary>
+        public int Ping => Network.Net.sv.GetAveragePing(player.net.connection);
+
         private readonly BasePlayer player;
 
         internal RustLivePlayer(BasePlayer player)

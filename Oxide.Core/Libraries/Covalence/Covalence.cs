@@ -17,7 +17,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
-        public override bool IsGlobal { get { return false; } }
+        public override bool IsGlobal => false;
 
         /// <summary>
         /// Gets the server mediator
@@ -75,14 +75,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Gets the name of the current game
         /// </summary>
         [LibraryProperty("Game")]
-        public string Game
-        {
-            get
-            {
-                if (provider == null) return string.Empty;
-                return provider.GameName;
-            }
-        }
+        public string Game => provider == null ? string.Empty : provider.GameName;
 
         // The logger
         private Logger logger;
@@ -102,7 +95,7 @@ namespace Oxide.Core.Libraries.Covalence
         internal void Initialize()
         {
             // Search for all provider types
-            Type baseType = typeof(ICovalenceProvider);
+            var baseType = typeof(ICovalenceProvider);
             IEnumerable<Type> candidateSet = null;
             foreach (var ass in AppDomain.CurrentDomain.GetAssemblies())
             {
@@ -120,20 +113,15 @@ namespace Oxide.Core.Libraries.Covalence
                     logger.Write(LogType.Warning, "Covalence: Type {0} could not be loaded from assembly '{1}': {2}", tlEx.TypeName, ass.FullName, tlEx);
                 }
                 if (assTypes != null)
-                {
-                    if (candidateSet == null)
-                        candidateSet = assTypes;
-                    else
-                        candidateSet = candidateSet.Concat(assTypes);
-                }
+                    candidateSet = candidateSet?.Concat(assTypes) ?? assTypes;
             }
             if (candidateSet == null)
             {
                 logger.Write(LogType.Warning, "No Covalence providers found, Covalence will not be functional for this session.");
                 return;
             }
-            List<Type> candidates = new List<Type>(
-                candidateSet.Where((t) => t != null && t.IsClass && !t.IsAbstract && t.FindInterfaces((m, o) => m == baseType, null).Length == 1)
+            var candidates = new List<Type>(
+                candidateSet.Where(t => t != null && t.IsClass && !t.IsAbstract && t.FindInterfaces((m, o) => m == baseType, null).Length == 1)
                 );
 
             // Select a candidate
@@ -143,11 +131,11 @@ namespace Oxide.Core.Libraries.Covalence
                 logger.Write(LogType.Warning, "No Covalence providers found, Covalence will not be functional for this session.");
                 return;
             }
-            else if (candidates.Count > 1)
+            if (candidates.Count > 1)
             {
                 selectedCandidate = candidates[0];
-                StringBuilder sb = new StringBuilder();
-                for (int i = 1; i < candidates.Count; i++)
+                var sb = new StringBuilder();
+                for (var i = 1; i < candidates.Count; i++)
                 {
                     if (i > 1) sb.Append(',');
                     sb.Append(candidates[i].FullName);
@@ -205,6 +193,5 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         /// <param name="cmd"></param>
         public void UnregisterCommand(string cmd) => cmdSystem?.UnregisterCommand(cmd);
-
     }
 }

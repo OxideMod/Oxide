@@ -90,7 +90,7 @@ namespace Oxide.Core.Libraries.Covalence
 
         #endregion
 
-        #region Chat & Commands
+        #region Chat and Commands
 
         void Reply(string message);
 

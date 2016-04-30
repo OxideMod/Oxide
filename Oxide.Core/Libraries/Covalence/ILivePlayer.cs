@@ -20,6 +20,11 @@
         /// </summary>
         CommandType LastCommand { get; set; }
 
+        /// <summary>
+        /// Gets this player's average network ping
+        /// </summary>
+        int Ping { get; }
+
         #region Administration
 
         /// <summary>

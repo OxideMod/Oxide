@@ -2,7 +2,9 @@
 
 namespace Oxide.Plugins
 {
-    [Info("Sample Covalence Plugin", "Oxide Team", 0.1)]
+    [Info("CovalenceSamplePlugin", "Oxide Team", 0.1)]
+    [Description("Sample plugin for Covalence")]
+
     class CovalenceSamplePlugin : CovalencePlugin
     {
         void Loaded()

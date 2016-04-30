@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Oxide.Core.Libraries.Covalence
@@ -48,10 +47,8 @@ namespace Oxide.Core.Libraries.Covalence
                 string[] args;
                 ParseChatCommand(message, out cmd, out args);
 
-                if (cmd == null) return false;
-
                 // Handle it
-                return HandleChatCommand(player, cmd, args);
+                return cmd != null && HandleChatCommand(player, cmd, args);
             }
 
             return false;
@@ -71,7 +68,7 @@ namespace Oxide.Core.Libraries.Covalence
             player.LastCommand = CommandType.Chat;
 
             // Handle it
-            return callback(player?.BasePlayer, cmd, args);
+            return callback(player.BasePlayer, cmd, args);
         }
 
         /// <summary>

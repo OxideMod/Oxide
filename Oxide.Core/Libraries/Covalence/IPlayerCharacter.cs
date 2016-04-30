@@ -60,6 +60,5 @@
         void Teleport(float x, float y, float z);
 
         #endregion
-
     }
 }

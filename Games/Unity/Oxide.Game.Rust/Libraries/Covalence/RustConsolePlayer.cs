@@ -38,7 +38,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Gets this player's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
-        
+
+        /// <summary>
+        /// Gets this player's average network ping
+        /// </summary>
+        public int Ping => 0;
+
         #region Permissions
 
         /// <summary>

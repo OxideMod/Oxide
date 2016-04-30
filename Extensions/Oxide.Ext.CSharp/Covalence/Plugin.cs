@@ -81,7 +81,7 @@ namespace Oxide.Plugins
                 if (cmd == null) continue;
                 AddCovalenceCommand(cmd.Commands, perm?.Permission, (caller, command, args) =>
                 {
-                    method.Invoke(this, new object[] {caller, command, args });
+                    method.Invoke(this, new object[] { caller, command, args });
                     return true;
                 });
             }

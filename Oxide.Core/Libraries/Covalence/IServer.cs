@@ -27,6 +27,9 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         string Version { get; }
 
+        // TODO: Add string Protocol
+        // TODO: Add int MaxPlayers
+
         /// <summary>
         /// Broadcasts a chat message to all players
         /// </summary>
