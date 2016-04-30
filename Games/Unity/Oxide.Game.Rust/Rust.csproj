@@ -47,6 +47,10 @@
     <Reference Include="Facepunch.UnityEngine">
       <HintPath>Dependencies\Facepunch.UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Oxide.Core\Dependencies\Newtonsoft.Json.dll</HintPath>
@@ -77,6 +81,7 @@
     <Compile Include="Libraries\Covalence\RustPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\RustServer.cs" />
     <Compile Include="Libraries\Rust.cs" />
+    <Compile Include="Plugins\BlueprintRecovery.cs" />
     <Compile Include="Plugins\WindupTarget.cs" />
     <Compile Include="Plugins\TimeVote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,6 +90,8 @@
     <Compile Include="RustExtension.cs" />
     <Compile Include="RustPlugin.cs" />
     <Compile Include="RustPluginLoader.cs" />
+    <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Plugins\Hooks.cs" />
     <None Include="Plugins\SamplePlugin.cs" />
   </ItemGroup>
