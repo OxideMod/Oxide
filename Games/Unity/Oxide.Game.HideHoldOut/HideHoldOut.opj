@@ -23,7 +23,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "RpUE5o67ZpqAa9n88mVa7vjsmIqhEOrFo1pgNJvHeOA=",
+            "MSILHash": "3LmkfS0wgZDEFyp6vXP8vtLMe4+9DmToHeWCVLqp1+U=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -49,7 +49,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "RpUE5o67ZpqAa9n88mVa7vjsmIqhEOrFo1pgNJvHeOA=",
+            "MSILHash": "3LmkfS0wgZDEFyp6vXP8vtLMe4+9DmToHeWCVLqp1+U=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -130,7 +130,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "+ssSuikHmkusbeZMC6ZdLqWpBFvhO67prpDZBuTNvoo=",
+            "MSILHash": "C3nb13HY7NmkeA1rxCO+Taes7o3l0xyjaM4eSJPiBg0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -385,7 +385,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 639,
+            "InjectionIndex": 642,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.<tmp_playerInfos>__3",
@@ -401,7 +401,7 @@
               "ReturnType": "System.Boolean",
               "Parameters": []
             },
-            "MSILHash": "bhP26zv4W99EZwetHuvSj+Bwx80xllcnpEhPy/Q3pVY=",
+            "MSILHash": "2wcifRkrmpvl2AFzjAhxWp6MrJ9WtYa5QEp1wyLFNg4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
