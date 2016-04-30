@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "uogUOn9Ls4JPP0SkaD8JUVZIyHlqP5pntgTR+AB1eng=",
+            "MSILHash": "dlv6jSB3j7+5+qlimaWBcmoR8xiO5yPoR0dSdqSBkas=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "uogUOn9Ls4JPP0SkaD8JUVZIyHlqP5pntgTR+AB1eng=",
+            "MSILHash": "dlv6jSB3j7+5+qlimaWBcmoR8xiO5yPoR0dSdqSBkas=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -101,7 +101,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 124,
+            "InjectionIndex": 145,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -119,7 +119,7 @@
                 "Entity"
               ]
             },
-            "MSILHash": "3qGEfo1R1pPz9CM2Ufc6mci2623t0wEPulL9t3MDOiQ=",
+            "MSILHash": "aYzAlKsQfFn70P1N77ODQla35NKzOeDSDF07g56hmWk=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -127,7 +127,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 360,
+            "InjectionIndex": 352,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l9",
@@ -147,7 +147,7 @@
                 "PlayerProfile"
               ]
             },
-            "MSILHash": "h7+eMiAG3MUtt+bMX5irGjiNeWlACOGu3m9RYT1CGok=",
+            "MSILHash": "sM4l9pVa50U/hnEYkqha736MZ8qVxxSzOiZaZuZ7EvA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -254,7 +254,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "s2seK6YSKFw5aX+rOGDIawQNm6HPUaDaifieJa6MNj4=",
+            "MSILHash": "e19WiN440wCf5bzMHujDsB7IC7q67WRLTY+uXyVJYgg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -343,7 +343,7 @@
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a1, a2",
+            "ArgumentString": "a2, a3",
             "HookTypeName": "Simple",
             "Name": "OnPlayerChat",
             "HookName": "OnPlayerChat",
@@ -356,11 +356,15 @@
               "ReturnType": "System.Void",
               "Parameters": [
                 "ClientInfo",
+                "EnumGameMessages",
                 "System.String",
-                "System.String"
+                "System.String",
+                "System.Boolean",
+                "System.String",
+                "System.Boolean"
               ]
             },
-            "MSILHash": "jR2zu/MZqnLTO2x/h8H3TCKqkV8F62aZet/4hx5tHZo=",
+            "MSILHash": "Rmy3FKLXajvOiaOefKyoTnbTsQAkKhJcAXOjUBx48sc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -384,7 +388,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "kVyHzJjf2P5w7ZOhkT8JdGl6i3WV9dWTNQfPxfTeHJk=",
+            "MSILHash": "31Nb7uVCQ5l/Br/eHpxVA5JiiNxlK+dRf8SXbNNCj8E=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
