@@ -17,6 +17,6 @@ namespace Oxide.Plugins
 
         protected void PrintToChat(string message) => PrintToChat("", message);
 
-        protected void PrintToChat(string name, string message) => GameManager.Instance.GameMessageServer(null, message, name);
+        protected void PrintToChat(string name, string message) => GameManager.Instance.GameMessageServer(null, EnumGameMessages.Chat, message, name, false, null, false);
     }
 }
