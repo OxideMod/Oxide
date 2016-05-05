@@ -56,7 +56,6 @@ namespace Oxide.Game.Rust
             {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
             {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
             {"NoPluginsFound", "No plugins are currently available"},
-            {"OxideVersion", "Oxide version: {0}, Rust version: {1}"},
             {"PermissionNotFound", "Permission '{0}' doesn't exist"},
             {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
             {"PlayerLanguage", "Player language set to {0}"},
@@ -100,7 +99,7 @@ namespace Oxide.Game.Rust
 
             // Cheat references in the default plugin reference list
             var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
-            var fpSystem = Facepunch.Math.unixTimestamp; // Facepunch.System
+            var fpSystem = Facepunch.Math.Epoch.Current; // Facepunch.System
             var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
         }
 
@@ -132,34 +131,34 @@ namespace Oxide.Game.Rust
             // Register messages for localization
             lang.RegisterMessages(messages, this);
 
-            // Add general console commands
-            cmdlib.AddConsoleCommand("oxide.plugins", this, "CmdPlugins");
-            cmdlib.AddConsoleCommand("global.plugins", this, "CmdPlugins");
-            cmdlib.AddConsoleCommand("oxide.load", this, "CmdLoad");
-            cmdlib.AddConsoleCommand("global.load", this, "CmdLoad");
-            cmdlib.AddConsoleCommand("oxide.unload", this, "CmdUnload");
-            cmdlib.AddConsoleCommand("global.unload", this, "CmdUnload");
-            cmdlib.AddConsoleCommand("oxide.reload", this, "CmdReload");
-            cmdlib.AddConsoleCommand("global.reload", this, "CmdReload");
-            cmdlib.AddConsoleCommand("oxide.version", this, "CmdVersion");
-            //cmdlib.AddConsoleCommand("global.version", this, "CmdVersion");
-            cmdlib.AddConsoleCommand("oxide.lang", this, "CmdLang");
-            cmdlib.AddConsoleCommand("global.lang", this, "CmdLang");
+            // Add general commands
+            cmdlib.AddConsoleCommand("oxide.plugins", this, "ConsolePlugins");
+            cmdlib.AddConsoleCommand("global.plugins", this, "ConsolePlugins");
+            cmdlib.AddConsoleCommand("oxide.load", this, "ConsoleLoad");
+            cmdlib.AddConsoleCommand("global.load", this, "ConsoleLoad");
+            cmdlib.AddConsoleCommand("oxide.unload", this, "ConsoleUnload");
+            cmdlib.AddConsoleCommand("global.unload", this, "ConsoleUnload");
+            cmdlib.AddChatCommand("reload", this, "ChatReload");
+            cmdlib.AddConsoleCommand("oxide.reload", this, "ConsoleReload");
+            cmdlib.AddConsoleCommand("global.reload", this, "ConsoleReload");
+            cmdlib.AddChatCommand("version", this, "ChatVersion");
+            cmdlib.AddChatCommand("oxide.version", this, "ChatVersion");
+            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
+            cmdlib.AddChatCommand("lang", this, "ChatLang");
+            cmdlib.AddConsoleCommand("oxide.lang", this, "ConsoleLang");
+            cmdlib.AddConsoleCommand("global.lang", this, "ConsoleLang");
 
-            // Add general chat commands
-            cmdlib.AddChatCommand("lang", this, CmdChatLang);
-
-            // Add permission console commands
-            cmdlib.AddConsoleCommand("oxide.group", this, "CmdGroup");
-            cmdlib.AddConsoleCommand("global.group", this, "CmdGroup");
-            cmdlib.AddConsoleCommand("oxide.usergroup", this, "CmdUserGroup");
-            cmdlib.AddConsoleCommand("global.usergroup", this, "CmdUserGroup");
-            cmdlib.AddConsoleCommand("oxide.grant", this, "CmdGrant");
-            cmdlib.AddConsoleCommand("global.grant", this, "CmdGrant");
-            cmdlib.AddConsoleCommand("oxide.revoke", this, "CmdRevoke");
-            cmdlib.AddConsoleCommand("global.revoke", this, "CmdRevoke");
-            cmdlib.AddConsoleCommand("oxide.show", this, "CmdShow");
-            cmdlib.AddConsoleCommand("global.show", this, "CmdShow");
+            // Add permission commands
+            cmdlib.AddConsoleCommand("oxide.group", this, "ConsoleGroup");
+            cmdlib.AddConsoleCommand("global.group", this, "ConsoleGroup");
+            cmdlib.AddConsoleCommand("oxide.usergroup", this, "ConsoleUserGroup");
+            cmdlib.AddConsoleCommand("global.usergroup", this, "ConsoleUserGroup");
+            cmdlib.AddConsoleCommand("oxide.grant", this, "ConsoleGrant");
+            cmdlib.AddConsoleCommand("global.grant", this, "ConsoleGrant");
+            cmdlib.AddConsoleCommand("oxide.revoke", this, "ConsoleRevoke");
+            cmdlib.AddConsoleCommand("global.revoke", this, "ConsoleRevoke");
+            cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
+            cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
 
             if (permission.IsLoaded)
             {
@@ -174,7 +173,7 @@ namespace Oxide.Game.Rust
                     ulong temp;
                     if (!ulong.TryParse(s, out temp))
                         return false;
-                    var digits = temp == 0 ? 1 : (int) System.Math.Floor(System.Math.Log10(temp) + 1);
+                    var digits = temp == 0 ? 1 : (int) Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
                 permission.CleanUp();
@@ -206,6 +205,14 @@ namespace Oxide.Game.Rust
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
+
+            // Destroy default server console
+            if (ServerConsole.Instance != null)
+            {
+                ServerConsole.Instance.enabled = false;
+                UnityEngine.Object.Destroy(ServerConsole.Instance);
+                typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
+            }
         }
 
         /// <summary>
@@ -213,26 +220,6 @@ namespace Oxide.Game.Rust
         /// </summary>
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
-
-        /// <summary>
-        /// Called when ServerConsole is enabled
-        /// </summary>
-        [HookMethod("IOnEnableServerConsole")]
-        private object IOnEnableServerConsole(ServerConsole serverConsole)
-        {
-            if (!Interface.Oxide.CheckConsole(true)) return null;
-            serverConsole.enabled = false;
-            UnityEngine.Object.Destroy(serverConsole);
-            typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
-            RustExtension.EnableConsole();
-            return false;
-        }
-
-        /// <summary>
-        /// Called when ServerConsole is disabled
-        /// </summary>
-        [HookMethod("IOnDisableServerConsole")]
-        private object IOnDisableServerConsole() => !Interface.Oxide.CheckConsole(true) ? (object)null : false;
 
         #endregion
 
@@ -422,36 +409,36 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the "plugins" command has been executed
         /// </summary>
-        [HookMethod("CmdPlugins")]
-        private void CmdPlugins(ConsoleSystem.Arg arg)
+        [HookMethod("ConsolePlugins")]
+        private void ConsolePlugins(ConsoleSystem.Arg arg)
         {
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
 
-            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
-            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
-            var unloaded_plugin_errors = new Dictionary<string, string>();
+            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
+            var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
             {
-                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
                 {
                     string msg;
-                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
                 }
             }
 
-            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
+            var total_plugin_count = loadedPlugins.Length + unloadedPluginErrors.Count;
             if (total_plugin_count < 1)
             {
                 Reply(arg.connection, "NoPluginsFound");
                 return;
             }
 
-            var output = $"Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
+            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
             var number = 1;
-            foreach (var plugin in loaded_plugins)
+            foreach (var plugin in loadedPlugins)
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
-            foreach (var plugin_name in unloaded_plugin_errors.Keys)
-                output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            foreach (var plugin_name in unloadedPluginErrors.Keys)
+                output += $"\n  {number++:00} {plugin_name} - {unloadedPluginErrors[plugin_name]}";
             arg.ReplyWith(output);
         }
 
@@ -463,10 +450,10 @@ namespace Oxide.Game.Rust
         /// Called when the "load" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdLoad")]
-        private void CmdLoad(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleLoad")]
+        private void ConsoleLoad(ConsoleSystem.Arg arg)
         {
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs())
             {
                 Reply(arg.connection, "CommandUsageLoad");
@@ -492,13 +479,39 @@ namespace Oxide.Game.Rust
         #region Reload Command
 
         /// <summary>
-        /// Called when the "reload" command has been executed
+        /// Called when the "reload" chat command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatReload")]
+        private void ChatReload(BasePlayer player, string command, string[] args)
+        {
+            if (!IsAdmin(player)) return;
+            if (args.Length == 0)
+            {
+                Reply(player.net.connection, "CommandUsageReload");
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.ReloadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+                if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
+        }
+
+        /// <summary>
+        /// Called when the "reload" console command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdReload")]
-        private void CmdReload(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleReload")]
+        private void ConsoleReload(ConsoleSystem.Arg arg)
         {
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs())
             {
                 Reply(arg.connection, "CommandUsageReload");
@@ -512,9 +525,7 @@ namespace Oxide.Game.Rust
             }
 
             foreach (var name in arg.Args)
-            {
                 if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
-            }
         }
 
         #endregion
@@ -525,10 +536,10 @@ namespace Oxide.Game.Rust
         /// Called when the "unload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdUnload")]
-        private void CmdUnload(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleUnload")]
+        private void ConsoleUnload(ConsoleSystem.Arg arg)
         {
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs())
             {
                 Reply(arg.connection, "CommandUsageUnload");
@@ -550,15 +561,25 @@ namespace Oxide.Game.Rust
         #region Version Command
 
         /// <summary>
-        /// Called when the "version" command has been executed
+        /// Called when the "version" chat command has been executed
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatVersion")]
+        private void ChatVersion(BasePlayer player, string command, string[] args)
+        {
+            Reply(player.net.connection, $"Oxide version: {OxideMod.Version}, Rust version: {BuildInformation.VersionStampDays} ({Protocol.network})");
+        }
+
+        /// <summary>
+        /// Called when the "version" console command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdVersion")]
-        private void CmdVersion(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleVersion")]
+        private void ConsoleVersion(ConsoleSystem.Arg arg)
         {
-            var oxide = OxideMod.Version.ToString();
-            var game = Protocol.printable;
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game)) Reply(arg.connection, "OxideVersion", oxide, game);
+            Reply(arg.connection, $"Oxide version: {OxideMod.Version}, Rust version: {BuildInformation.VersionStampDays} ({Protocol.network})");
         }
 
         #endregion
@@ -566,29 +587,29 @@ namespace Oxide.Game.Rust
         #region Lang Command
 
         /// <summary>
-        /// Called when the "lang" console command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("CmdLang")]
-        private void CmdLang(ConsoleSystem.Arg arg)
-        {
-            if (!IsAdmin(arg)) return;
-
-            if (arg.HasArgs()) lang.SetServerLanguage(arg.GetString(0));
-            Reply(arg.connection, "ServerLanguage", lang.GetServerLanguage());
-        }
-
-        /// <summary>
         /// Called when the "lang" chat command has been executed
         /// </summary>
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdChatLang")]
-        private void CmdChatLang(BasePlayer player, string command, string[] args)
+        [HookMethod("ChatLang")]
+        private void ChatLang(BasePlayer player, string command, string[] args)
         {
             if (args != null && args.Length > 0) lang.SetLanguage(args[0], player.UserIDString);
             Reply(player.net.connection, "PlayerLanguage", lang.GetLanguage(player.UserIDString));
+        }
+
+        /// <summary>
+        /// Called when the "lang" console command has been executed
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("ConsoleLang")]
+        private void ConsoleLang(ConsoleSystem.Arg arg)
+        {
+            if (!IsAdmin(arg.Player())) return;
+
+            if (arg.HasArgs()) lang.SetServerLanguage(arg.GetString(0));
+            Reply(arg.connection, "ServerLanguage", lang.GetServerLanguage());
         }
 
         #endregion
@@ -599,11 +620,11 @@ namespace Oxide.Game.Rust
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdGroup")]
-        private void CmdGroup(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleGroup")]
+        private void ConsoleGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs(2))
             {
                 Reply(arg.connection, "CommandUsageGroup");
@@ -672,11 +693,11 @@ namespace Oxide.Game.Rust
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdUserGroup")]
-        private void CmdUserGroup(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleUserGroup")]
+        private void ConsoleUserGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs(3))
             {
                 Reply(arg.connection, "CommandUsageUserGroup");
@@ -728,11 +749,11 @@ namespace Oxide.Game.Rust
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdGrant")]
-        private void CmdGrant(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleGrant")]
+        private void ConsoleGrant(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs(3))
             {
                 Reply(arg.connection, "CommandUsageGrant");
@@ -787,11 +808,11 @@ namespace Oxide.Game.Rust
         /// Called when the "revoke" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdRevoke")]
-        private void CmdRevoke(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleRevoke")]
+        private void ConsoleRevoke(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs(3))
             {
                 Reply(arg.connection, "CommandUsageRevoke");
@@ -846,11 +867,11 @@ namespace Oxide.Game.Rust
         /// Called when the "show" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdShow")]
-        private void CmdShow(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleShow")]
+        private void ConsoleShow(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
+            if (!IsAdmin(arg.Player())) return;
             if (!arg.HasArgs())
             {
                 Reply(arg.connection, "CommandUsageShow");
@@ -1038,12 +1059,12 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Returns if specified player is admin
         /// </summary>
-        /// <param name="arg"></param>
+        /// <param name="player"></param>
         /// <returns></returns>
-        private bool IsAdmin(ConsoleSystem.Arg arg)
+        private bool IsAdmin(BasePlayer player)
         {
-            if (arg.connection == null || arg.connection.authLevel >= 2) return true;
-            Reply(arg.connection, "YouAreNotAdmin");
+            if (player == null || player.net.connection.authLevel >= 2) return true;
+            Reply(player.net.connection, "YouAreNotAdmin");
             return false;
         }
 

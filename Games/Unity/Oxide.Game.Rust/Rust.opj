@@ -305,7 +305,7 @@
             },
             "MSILHash": "VOzBIbOCj6kT9pFytK2L6Qu8lbfZNK0+bMVqXBxvOCE=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -331,7 +331,7 @@
             },
             "MSILHash": "P3Mx+v3adUs95vU27ANKY5mvZxgLUs14zJrrTfI5vlw=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -357,7 +357,7 @@
             },
             "MSILHash": "RUYckXw/VpLmkhtoMidoJSiniTSuhHWSO/pmtRX+Czg=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -383,7 +383,7 @@
             },
             "MSILHash": "RUYckXw/VpLmkhtoMidoJSiniTSuhHWSO/pmtRX+Czg=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -409,7 +409,7 @@
             },
             "MSILHash": "KP8odDkmowXYTWwekNrw7ntBJ1y8wRTE2kf3drU7sMA=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -435,7 +435,7 @@
             },
             "MSILHash": "KP8odDkmowXYTWwekNrw7ntBJ1y8wRTE2kf3drU7sMA=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -728,7 +728,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "7bp/CExXC3REwDmVmoS9Ech3cqXFlKQGj8VpiHdN20E=",
+            "MSILHash": "spUBauQPIGBQwAUrMbDELVy853TmtjwmjR7Wvnd4zDY=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -833,7 +833,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "xdunq92lYxaCSkEioIMX+QLtSl01VIxCd3Yr/tWz150=",
+            "MSILHash": "1WXjMYbSTdf7G/WESCCMM5U8liOAW54m6lvik7/LO7M=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -886,7 +886,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "QrSEESH6cFiOB7RPho3b8Xay9VNS1qfpjsL/27SsEwA=",
+            "MSILHash": "q+U0VCnG9Uhx/GJTlVYCSXpNFuDOxZj5BCylUv0kx8M=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -939,7 +939,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "I+LNOUbgI6RwQ452GAxadJyw+DlCLE1I3OmVfxhlAUQ=",
+            "MSILHash": "A6/DYYeDn6DrpCp29Xs1cyhdWhWqPBWNzANEHlZDS00=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1224,7 +1224,7 @@
             },
             "MSILHash": "Na8NwC50uK0DuhwrFSmaucO+6orX4xqVJJ0YvKNAd1U=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -1250,7 +1250,7 @@
             },
             "MSILHash": "DA/+TLpE5StqPt01O2UsA7U20MRrcsbpWhY+ix28/5Q=",
             "BaseHookName": null,
-            "HookCategory": "Door"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -1567,54 +1567,6 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnEnableServerConsole [internal]",
-            "HookName": "IOnEnableServerConsole",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ServerConsole",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnEnable",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "IrauKKgy3jcVrHfbSfANEkqeg3bRhQAq50iKKt6nU4c=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnDisableServerConsole [internal]",
-            "HookName": "IOnDisableServerConsole",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ServerConsole",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnDisable",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "qH0Fx4ZpZ52rsWOYB9nD/cxYExr6N+/oLjCJei6InME=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -1743,7 +1695,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 143,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -1761,7 +1713,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "0eE6tG+HOS7qO1+wvx4yrYgDJJg8ZuPoHmUwJUpvZHA=",
+            "MSILHash": "ioC8Gs7dLuuVFWrX51+La1eh5EUGCAgr2S27cXX4wdw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1913,7 +1865,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "uRFJ+Rc/jOiYZT8N70AyINd3ijr5hRIJwr94icjclG0=",
+            "MSILHash": "SBoU1hHhRxQv6Yq0xaeaMaN5sXoxNVG/nKhG9AlXBPI=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2148,7 +2100,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "vMcdxo4zPQMV6uQKJRUY1Qmkry7zBJvdkZz9DSReJPc=",
+            "MSILHash": "TWIOYUf7UcbxF2lJlOigUlRZcHERnJhNBYk/95XSnqo=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2256,7 +2208,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "E4b+Anx3nWKnGoVc2RkLFfay0XtiHs4Fssn4jOGlls0=",
+            "MSILHash": "9fuTGFzJhOMzr2QGcVSs2ctdtQhQQq2lkYf8SUqBlc4=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2282,7 +2234,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "drpmAwY2yiAJdDgb7l7LNsS3siFzDxBbjzf+9VpMCAA=",
+            "MSILHash": "otgr59HAvmNYL3AesExVBHcGz6PaQqBNMo2gDbzDnfs=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2318,35 +2270,11 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnTurretHasTarget",
-            "HookName": "OnTurretHasTarget",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "AutoTurret",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "HasTarget",
-              "ReturnType": "System.Boolean",
-              "Parameters": []
-            },
-            "MSILHash": "CriNAlY4Ka19CLnlK8H+CEvDlFchxCEgub1BT9rD0D0=",
-            "BaseHookName": null,
-            "HookCategory": "Entity"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnTurretSetTarget",
-            "HookName": "OnTurretSetTarget",
+            "Name": "OnTurretTarget",
+            "HookName": "OnTurretTarget",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
             "Flagged": false,
@@ -2397,8 +2325,8 @@
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnHelicopterSetTarget",
-            "HookName": "OnHelicopterSetTarget",
+            "Name": "OnHelicopterTarget",
+            "HookName": "OnHelicopterTarget",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HelicopterTurret",
             "Flagged": false,
@@ -2411,30 +2339,6 @@
               ]
             },
             "MSILHash": "hJmenfTdtPXjORLmt0ioruue5eyDKWVBTcxSIDcqmZY=",
-            "BaseHookName": null,
-            "HookCategory": "Entity"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnHelicopterTarget",
-            "HookName": "OnHelicopterTarget",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "HelicopterTurret",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "HasTarget",
-              "ReturnType": "System.Boolean",
-              "Parameters": []
-            },
-            "MSILHash": "uz3X/BU6/Yj+WQmLFoQDeGW6knz/EvY3z0tke7Ul6ew=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -2488,7 +2392,7 @@
             },
             "MSILHash": "0GXabgi3HrlJ2sPGEVdg2wJG8VpWWrC+m+SGnbxvOUw=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -2643,7 +2547,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "/MpEke/7GV2NpTTYap+4/TcB5EZYXDk/czW/wbNABKU=",
+            "MSILHash": "yIm0BqTBv0KZVKaY70JkTz+kTEMD444LPUh9fVu3Ie0=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2799,7 +2703,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "I+LNOUbgI6RwQ452GAxadJyw+DlCLE1I3OmVfxhlAUQ=",
+            "MSILHash": "A6/DYYeDn6DrpCp29Xs1cyhdWhWqPBWNzANEHlZDS00=",
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }
@@ -2987,6 +2891,93 @@
               ]
             },
             "MSILHash": "t+YVT+hiCiZCDSIx+bFhmRC4xyb2ib99YEx9uKQG0Zg=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole ",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerConsole",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnEnable",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "IrauKKgy3jcVrHfbSfANEkqeg3bRhQAq50iKKt6nU4c=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerConsole",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnDisable",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "qH0Fx4ZpZ52rsWOYB9nD/cxYExr6N+/oLjCJei6InME=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerConsole",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Update",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "dbFxdC1i2DngvwowXIPatWsbfbfnyS1CMmTbwcK1Jh8=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }

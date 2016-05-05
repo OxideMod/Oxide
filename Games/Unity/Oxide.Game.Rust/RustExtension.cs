@@ -166,11 +166,7 @@ namespace Oxide.Game.Rust
         /// </summary>
         public override void OnModLoad()
         {
-        }
-
-        internal static void EnableConsole()
-        {
-            if (!Interface.Oxide.CheckConsole(true) || !Interface.Oxide.EnableConsole()) return;
+            if (!Interface.Oxide.EnableConsole()) return;
 
             Output.OnMessage += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
