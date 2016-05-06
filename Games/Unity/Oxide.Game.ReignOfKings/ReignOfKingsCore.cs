@@ -767,7 +767,7 @@ namespace Oxide.Game.ReignOfKings
             // Handle it
             if (!cmdlib.HandleChatCommand(e.Player, cmd, args)) return null;
 
-            Interface.CallDeprecatedHook("OnPlayerCommand", e.Player, cmd, args);
+            Interface.CallDeprecatedHook("OnPlayerCommand", "OnChatCommand", new DateTime(2016, 5, 19), e.Player, cmd, args);
             Interface.CallHook("OnChatCommand", e.Player, cmd, args);
 
             // Handled

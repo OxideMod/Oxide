@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Oxide.Core.Logging;
 
@@ -185,24 +186,27 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Calls a hook on all plugins of this manager and prints a deprecation warning
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="oldHook"></param>
+        /// <param name="newHook"></param>
+        /// <param name="expireDate"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallDeprecatedHook(string name, params object[] args)
+        public object CallDeprecatedHook(string oldHook, string newHook, DateTime expireDate, params object[] args)
         {
             IList<Plugin> plugins;
-            if (!hooksubscriptions.TryGetValue(name, out plugins)) return null;
+            if (!hooksubscriptions.TryGetValue(oldHook, out plugins)) return null;
             if (plugins.Count == 0) return null;
+            if (expireDate < DateTime.Now) return null;
 
             var now = Interface.Oxide.Now;
             float lastWarningAt;
-            if (!lastDeprecatedWarningAt.TryGetValue(name, out lastWarningAt) || now - lastWarningAt > 300f)
+            if (!lastDeprecatedWarningAt.TryGetValue(oldHook, out lastWarningAt) || now - lastWarningAt > 300f)
             {
-                lastDeprecatedWarningAt[name] = now;
-                Interface.Oxide.LogWarning($"'{plugins[0].Name} v{plugins[0].Version}' plugin is using deprecated hook: {name}");
+                lastDeprecatedWarningAt[oldHook] = now;
+                Interface.Oxide.LogWarning($"'{plugins[0].Name} v{plugins[0].Version}' is using deprecated hook '{oldHook}', which will stop working on {expireDate.ToString("D")}. Please ask the author to update to '{newHook}'");
             }
 
-            return CallHook(name, args);
+            return CallHook(oldHook, args);
         }
     }
 }

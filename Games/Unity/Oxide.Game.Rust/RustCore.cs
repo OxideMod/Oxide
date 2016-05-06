@@ -1191,7 +1191,7 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <param name="entity"></param>
         [HookMethod("OnExplosiveThrown")]
-        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity) => Interface.CallDeprecatedHook("OnWeaponThrown", player, entity);
+        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity) => Interface.CallDeprecatedHook("OnWeaponThrown", "OnExplosiveThrown", new DateTime(2016, 5, 19), player, entity);
 
         /// <summary>
         /// Used to handle the deprecated hook OnPlayerLoot (entity)
@@ -1205,7 +1205,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", source, entity);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootEntity", new DateTime(2016, 5, 19), source, entity);
         }
 
         /// <summary>
@@ -1220,7 +1220,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", source, item);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootItem", new DateTime(2016, 5, 19), source, item);
         }
 
         /// <summary>
@@ -1235,7 +1235,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", source, target);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootPlayer", new DateTime(2016, 5, 19), source, target);
         }
 
         #endregion
