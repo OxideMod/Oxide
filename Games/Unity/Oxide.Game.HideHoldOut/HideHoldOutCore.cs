@@ -529,7 +529,7 @@ namespace Oxide.Game.HideHoldOut
         private void ConsoleVersion() => ChatVersion(null);
 
         #endregion
-        
+
         #region Quit Command
 
         /// <summary>
