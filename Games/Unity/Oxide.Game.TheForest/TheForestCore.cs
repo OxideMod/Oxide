@@ -128,7 +128,7 @@ namespace Oxide.Game.TheForest
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
             // Disable unneeded client-side elements
-            DisableClient();
+            if (TheForestExtension.DisableClient) DisableClient();
 
             // Save the level every X minutes
             Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
@@ -315,7 +315,7 @@ namespace Oxide.Game.TheForest
         /// Disables unneeded client-side elements
         /// </summary>
         /// <returns></returns>
-        private void DisableClient()
+        private static void DisableClient()
         {
             //LocalPlayer.Entity?.CancelInvoke();
             //LocalPlayer.Stats?.CancelInvoke();

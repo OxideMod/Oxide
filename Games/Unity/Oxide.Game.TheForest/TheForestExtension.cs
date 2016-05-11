@@ -54,6 +54,7 @@ namespace Oxide.Game.TheForest
             "CoopSteamServer.P2PSessionRequest",
             "DestroyPickup:",
             "Displacement Rendertex recreated",
+            "FMOD Error (ERR_INVALID_PARAM)",
             "Frost Damage",
             "Game Activation Sequence step",
             "HDR RenderTexture format is not supported on this platform",
@@ -73,6 +74,7 @@ namespace Oxide.Game.TheForest
             "Reloading Input Mapping",
             "RewiredSpawner",
             "Saving",
+            "Setting fake plane coordinates for testing purposes",
             "Skin Variation",
             "Skipped frame because",
             "Skipped rendering frame because",
@@ -112,6 +114,7 @@ namespace Oxide.Game.TheForest
 
         private const string logFileName = "output_log.txt"; // TODO: Add -logFile support
         private TextWriter logWriter;
+        public static bool DisableClient;
 
         /// <summary>
         /// Initializes a new instance of the TheForestExtension class
@@ -157,17 +160,15 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
             // Override default server settings
-            //var boltInit = UnityEngine.Object.FindObjectOfType<BoltInit>();
-            //var serverAddress = typeof(BoltInit).GetField("serverAddress", BindingFlags.NonPublic | BindingFlags.Instance);
-            //var serverPort = typeof(BoltInit).GetField("serverPort", BindingFlags.NonPublic | BindingFlags.Instance);
             var commandLine = new CommandLine(Environment.GetCommandLineArgs());
-            //if (commandLine.HasVariable("ip")) serverAddress?.SetValue(boltInit, commandLine.GetVariable("ip")); // TODO: Fix and re-enable
-            //if (commandLine.HasVariable("port")) serverPort?.SetValue(boltInit, commandLine.GetVariable("port")); // TODO: Fix and re-enable
             if (commandLine.HasVariable("maxplayers")) PlayerPrefs.SetInt("MpGamePlayerCount", int.Parse(commandLine.GetVariable("maxplayers")));
             if (commandLine.HasVariable("hostname")) PlayerPrefs.SetString("MpGameName", commandLine.GetVariable("hostname"));
             if (commandLine.HasVariable("friendsonly"))  PlayerPrefs.SetInt("MpGameFriendsOnly", int.Parse(commandLine.GetVariable("friendsonly")));
             if (commandLine.HasVariable("saveslot")) PlayerPrefs.SetInt("MpGameSaveSlot", int.Parse(commandLine.GetVariable("saveslot")));
             //if (commandLine.HasVariable("saveinterval")) // TODO: Make this work
+
+            // Check if client should be disabled
+            if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics")) DisableClient = true;
 
             TheForestCore.DisableAudio(); // Disable client audio for server
             PlayerPreferences.MaxFrameRate = 60; // Limit FPS to reduce CPU usage
