@@ -361,7 +361,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 658,
+            "InjectionIndex": 677,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.<tmp_playerInfos>__3",
@@ -377,7 +377,7 @@
               "ReturnType": "System.Boolean",
               "Parameters": []
             },
-            "MSILHash": "3rDDHCy4UNXjO266BFNI6zLnLgQA0sdsOIDIdFHh+S0=",
+            "MSILHash": "Ra4QTGKE50s8pdK1hU25t7qbjjogE/yT7X7jKiR7/o4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

@@ -46,6 +46,7 @@ namespace Oxide.Game.HideHoldOut
             "EAC RegisterUser: userID",
             "Ending the session of",
             "LICENCE APPROVED",
+            "Periodic_Actualizer Started",
             "Player wants to connect. Waiting for approval",
             "Resulting playerInfos",
             "SESSION WAITING FOR AUTANTICATION",
