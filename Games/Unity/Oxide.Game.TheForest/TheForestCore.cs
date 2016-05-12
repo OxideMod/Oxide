@@ -77,7 +77,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", "the forest");
-            RemoteLogger.SetTag("version", "0.37"); // TODO: Grab version progmatically
+            RemoteLogger.SetTag("version", "0.38"); // TODO: Grab version progmatically
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -127,7 +127,7 @@ namespace Oxide.Game.TheForest
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
-            // Disable unneeded client-side elements
+            // Disable client-side elements if not dedicated
             if (TheForestExtension.DisableClient) DisableClient();
 
             // Save the level every X minutes
@@ -277,7 +277,8 @@ namespace Oxide.Game.TheForest
                     coop.OnNewGame();
                 }
 
-                DisableAudio();
+                // Disable client's sound if not dedicated
+                if (TheForestExtension.DisableClient) DisableAudio();
             });
         }
 

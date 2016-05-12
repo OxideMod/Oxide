@@ -170,12 +170,15 @@ namespace Oxide.Game.TheForest
             // Check if client should be disabled
             if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics")) DisableClient = true;
 
-            TheForestCore.DisableAudio(); // Disable client audio for server
-            PlayerPreferences.MaxFrameRate = 60; // Limit FPS to reduce CPU usage
+            // Disable client's sound if not dedicated
+            if (DisableClient) TheForestCore.DisableAudio();
 
-            Interface.Oxide.ServerConsole.Title = () => $"{CoopLobby.Instance?.MemberCount ?? 0} | {CoopLobby.Instance?.Info.Name ?? "Unnamed"}";
+            // Limit FPS to reduce CPU usage
+            PlayerPreferences.MaxFrameRate = 60;
 
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", CoopLobby.Instance?.Info.Name ?? "Unnamed");
+            Interface.Oxide.ServerConsole.Title = () => $"{CoopLobby.Instance?.MemberCount ?? 0} | {CoopLobby.Instance?.Info?.Name ?? "Unnamed"}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", CoopLobby.Instance?.Info?.Name ?? "Unnamed");
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -184,7 +187,7 @@ namespace Oxide.Game.TheForest
                 return string.Concat(fps, "fps, ", uptime);
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {CoopLobby.Instance?.MemberCount}/{CoopLobby.Instance?.Info.MemberLimit}";
+            Interface.Oxide.ServerConsole.Status2Left = () => $" {CoopLobby.Instance?.MemberCount}/{CoopLobby.Instance?.Info?.MemberLimit}";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 // TODO: Network in/out
@@ -195,7 +198,7 @@ namespace Oxide.Game.TheForest
             {
                 return string.Concat(" ", TheForestAtmosphere.Instance?.TimeOfDay.ToString() ?? string.Empty); // TODO: Format time
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for 0.37";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for 0.38";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
