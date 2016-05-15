@@ -64,7 +64,7 @@
     <PropertyGroup>
       <GameName>$(MSBuildProjectName)</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>FC_Oculus_Data\Managed</ManagedDir>
+      <ManagedDir>FC_64_Data\Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
