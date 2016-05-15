@@ -11,6 +11,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.Hurtworld.Libraries;
+using Oxide.Game.Hurtworld.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld
 {
@@ -30,6 +31,9 @@ namespace Oxide.Game.Hurtworld
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The Rust covalence provider
+        private readonly HurtworldCovalenceProvider covalence = HurtworldCovalenceProvider.Instance;
 
         #region Localization
 
@@ -231,7 +235,8 @@ namespace Oxide.Game.Hurtworld
         private object IOnUserApprove(PlayerSession session)
         {
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", session);
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            var canlogin = Interface.CallHook("CanClientLogin", session) ?? Interface.CallHook("CanUserLogin", iplayer);
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
@@ -239,46 +244,7 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", session);
-        }
-
-        /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="player"></param>
-        [HookMethod("IOnPlayerConnected")]
-        private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
-        {
-            // Set the session name and strip HTML tags
-            var session = FindSessionByNetPlayer(player);
-            session.Name = Regex.Replace(name, "<.*?>", string.Empty); // TODO: Make sure the name is not blank
-
-            // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(session);
-
-            // Do permission stuff
-            if (permission.IsLoaded)
-            {
-                var userId = session.SteamId.ToString();
-                permission.UpdateNickname(userId, session.Name);
-
-                // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
-            }
-
-            Interface.Oxide.CallHook("OnPlayerConnected", session);
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="session"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(PlayerSession session)
-        {
-            // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(session);
+            return Interface.CallHook("OnUserApprove", session) ?? Interface.CallHook("OnUserApproved", iplayer);
         }
 
         /// <summary>
@@ -292,12 +258,16 @@ namespace Oxide.Game.Hurtworld
             if (message.Trim().Length <= 1) return true;
             var str = message.Substring(0, 1);
 
+            // Get covalence player
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+
             // Is it a chat command?
-            if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", session, message);
+            if (!str.Equals("/") && !str.Equals("!"))
+                return Interface.CallHook("OnPlayerChat", session, message) ?? Interface.CallHook("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
-            var livePlayer = Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(session.SteamId.m_SteamID.ToString());
-            if (Libraries.Covalence.HurtworldCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
+            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(session.SteamId.ToString());
+            if (covalence.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);
@@ -315,9 +285,71 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
-            Interface.Oxide.CallHook("OnChatCommand", session, command);
+            Interface.CallHook("OnChatCommand", session, command);
 
             return true;
+        }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="player"></param>
+        [HookMethod("IOnPlayerConnected")]
+        private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
+        {
+            // Set the session name and strip HTML tags
+            var session = FindSessionByNetPlayer(player);
+            session.Name = Regex.Replace(name, "<.*?>", string.Empty); // TODO: Make sure the name is not blank
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(session);
+
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var userId = session.SteamId.ToString();
+                permission.UpdateNickname(userId, session.Name);
+
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+            }
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            Interface.CallHook("OnUserConnected", iplayer);
+
+            Interface.CallHook("OnPlayerConnected", session);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="session"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(PlayerSession session)
+        {
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(session);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            Interface.CallHook("OnUserDisconnected", iplayer, null);
+        }
+
+        /// <summary>
+        /// Called when the player has been initialized
+        /// </summary>
+        /// <param name="session"></param>
+        [HookMethod("OnPlayerInit")]
+        private void OnPlayerInit(PlayerSession session)
+        {
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(session);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            Interface.CallHook("OnUserInit", iplayer);
         }
 
         /// <summary>
