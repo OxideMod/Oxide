@@ -1,0 +1,15 @@
+{
+    "ExtensionDirectory": "Nomad Server",
+
+    "PluginDirectory": "plugins",
+    "ConfigDirectory": "config",
+    "DataDirectory": "data",
+    "LangDirectory": "lang",
+    "LogDirectory": "logs",
+
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "Nomad Server\\oxide"
+    ]
+}

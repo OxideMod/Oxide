@@ -1036,7 +1036,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "TMxP5s7qee5VvZFfgzl2mwS/VsAwSzriJwXI0bFh74Y=",
+            "MSILHash": "w7sCvRue3eRHCurPM8VV9YE6oQ12FBYb+/5xZHrUFa0=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1474,7 +1474,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "KKL9WMvg2WUrgXhi+hidQiE2xw+CWICkDtxpfUwnB0A=",
+            "MSILHash": "nJYvDYjN7z0GMLWTnjkmXTo6CMQaKyiT5ggzzWzbATI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1660,29 +1660,6 @@
             },
             "MSILHash": "+vXSViys+wj6tzjMXdmIpWgq+cKvYIIxIM9nrByCLp4=",
             "BaseHookName": "MakeDedicated [patch]",
-            "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 0,
-            "RemoveCount": 8,
-            "Instructions": [],
-            "HookTypeName": "Modify",
-            "Name": "SkipPlaneCrash [patch]",
-            "HookName": "SkipPlaneCrash",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TriggerCutScene",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "Update",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "zsRIWND6tx1+udUXnwygjQj+0zFMctA6etDVbhlzcdE=",
-            "BaseHookName": null,
             "HookCategory": "_Patches"
           }
         }
