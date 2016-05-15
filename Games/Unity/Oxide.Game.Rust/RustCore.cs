@@ -13,6 +13,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Libraries;
+using Oxide.Game.Rust.Libraries.Covalence;
 
 namespace Oxide.Game.Rust
 {
@@ -30,6 +31,9 @@ namespace Oxide.Game.Rust
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The Rust covalence provider
+        private readonly RustCovalenceProvider covalence = RustCovalenceProvider.Instance;
 
         #region Localization
 
@@ -234,7 +238,7 @@ namespace Oxide.Game.Rust
         private object IOnUserApprove(Connection connection)
         {
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection);
+            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection);
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
@@ -242,7 +246,37 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection);
+            return Interface.CallHook("OnUserApprove", connection) ?? Interface.CallHook("OnUserApproved", connection);
+        }
+
+        /// <summary>
+        /// Called when the player has been initialized
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("OnPlayerChat")]
+        private object OnPlayerChat(ConsoleSystem.Arg arg)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
+            return Interface.CallHook("OnUserChat", iplayer, arg.Args[0]);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="reason"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(BasePlayer player, string reason)
+        {
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            Interface.CallHook("OnUserDisconnected", iplayer, reason);
+
+            playerInputState.Remove(player);
         }
 
         /// <summary>
@@ -253,7 +287,11 @@ namespace Oxide.Game.Rust
         private void OnPlayerInit(BasePlayer player)
         {
             // Let covalence know
-            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+            covalence.PlayerManager.NotifyPlayerConnect(player);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            Interface.CallHook("OnUserInit", iplayer);
 
             // Do permission stuff
             var authLevel = player.net.connection.authLevel;
@@ -268,19 +306,6 @@ namespace Oxide.Game.Rust
 
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(BasePlayer player)
-        {
-            // Let covalence know
-            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
-
-            playerInputState.Remove(player);
         }
 
         /// <summary>
@@ -961,8 +986,8 @@ namespace Oxide.Game.Rust
             if (arg.connection != null)
             {
                 if (arg.Player() == null) return true;
-                var livePlayer = Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
-                if (Libraries.Covalence.RustCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
+                var livePlayer = covalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+                if (covalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
             }
 
             // Get the args
