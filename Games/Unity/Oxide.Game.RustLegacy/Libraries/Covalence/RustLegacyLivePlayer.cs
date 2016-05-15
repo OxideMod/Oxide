@@ -12,12 +12,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
     {
         #region Information
 
-        private readonly ulong steamid;
+        private readonly ulong steamId;
 
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer => RustLegacyCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
+        public IPlayer BasePlayer => RustLegacyCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
         /// Gets this player's in-game character, if available
@@ -49,7 +49,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         internal RustLegacyLivePlayer(NetUser netUser)
         {
             this.netUser = netUser;
-            steamid = netUser.userID;
+            steamId = netUser.userID;
             Character = this;
             Object = netUser.playerClient;
         }
@@ -117,7 +117,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
+        public void Command(string command, params object[] args)
         {
             ConsoleNetworker.SendClientCommand(netUser.networkPlayer, string.Format(command, args));
         }
@@ -132,7 +132,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void GetPosition(out float x, out float y, out float z)
+        public void Position(out float x, out float y, out float z)
         {
             var pos = netUser.playerClient.transform.position;
             x = pos.x;
@@ -144,7 +144,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// Gets the position of this character
         /// </summary>
         /// <returns></returns>
-        public GenericPosition GetPosition()
+        public GenericPosition Position()
         {
             var pos = netUser.playerClient.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);

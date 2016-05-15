@@ -61,7 +61,7 @@
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        void RunCommand(string command, params object[] args);
+        void Command(string command, params object[] args);
 
         /// <summary>
         /// Replies to the user

@@ -51,7 +51,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
+        public void Command(string command, params object[] args)
         {
             CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, command + " " + string.Join(" ", args.ToList().ConvertAll(a => (string)a).ToArray()));
         }

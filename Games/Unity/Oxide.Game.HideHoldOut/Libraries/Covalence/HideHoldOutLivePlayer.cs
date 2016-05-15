@@ -13,12 +13,12 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
     {
         #region Information
 
-        private readonly ulong steamid;
+        private readonly ulong steamId;
 
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer => HideHoldOutCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
+        public IPlayer BasePlayer => HideHoldOutCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
         /// Gets this player's in-game character, if available
@@ -50,7 +50,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         internal HideHoldOutLivePlayer(PlayerInfos player)
         {
             this.player = player;
-            steamid = Convert.ToUInt64(player.account_id);
+            steamId = Convert.ToUInt64(player.account_id);
             Character = this;
             Object = player.Transfo.gameObject;
         }
@@ -99,7 +99,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
+        public void Command(string command, params object[] args)
         {
             // TODO: Is this even possible?
         }
@@ -114,7 +114,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void GetPosition(out float x, out float y, out float z)
+        public void Position(out float x, out float y, out float z)
         {
             var pos = player.Transfo.position;
             x = pos.x;
@@ -126,7 +126,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Gets the position of this character
         /// </summary>
         /// <returns></returns>
-        public GenericPosition GetPosition()
+        public GenericPosition Position()
         {
             var pos = player.Transfo.position;
             return new GenericPosition(pos.x, pos.y, pos.z);

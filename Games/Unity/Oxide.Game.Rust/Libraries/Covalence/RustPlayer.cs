@@ -12,32 +12,32 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     public class RustPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
-        private readonly ulong steamid;
+        private readonly ulong steamId;
 
         /// <summary>
-        /// Gets/sets the nickname for this player
+        /// Gets/sets the name for this player
         /// </summary>
-        public string Nickname { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets a unique ID for this player (unique within the current game)
+        /// Gets the ID for this player (unique within the current game)
         /// </summary>
-        public string UniqueID { get; }
+        public string Id { get; }
 
         /// <summary>
         /// Gets the live player if this player is connected
         /// </summary>
-        public ILivePlayer ConnectedPlayer => RustCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(UniqueID);
+        public ILivePlayer ConnectedPlayer => RustCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(Id);
 
-        internal RustPlayer(ulong steamId, string nickname)
+        internal RustPlayer(ulong id, string name)
         {
             // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            Nickname = nickname;
-            steamid = steamId;
-            UniqueID = steamId.ToString();
+            Name = name;
+            steamId = id;
+            Id = id.ToString();
         }
 
         #region Permissions
@@ -47,38 +47,38 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
-        public bool HasPermission(string perm) => libPerms.UserHasPermission(UniqueID, perm);
+        public bool HasPermission(string perm) => libPerms.UserHasPermission(Id, perm);
 
         /// <summary>
         /// Grants the specified permission on this user
         /// </summary>
         /// <param name="perm"></param>
-        public void GrantPermission(string perm) => libPerms.GrantUserPermission(UniqueID, perm, null);
+        public void GrantPermission(string perm) => libPerms.GrantUserPermission(Id, perm, null);
 
         /// <summary>
         /// Strips the specified permission from this user
         /// </summary>
         /// <param name="perm"></param>
-        public void RevokePermission(string perm) => libPerms.RevokeUserPermission(UniqueID, perm);
+        public void RevokePermission(string perm) => libPerms.RevokeUserPermission(Id, perm);
 
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        public bool BelongsToGroup(string groupName) => libPerms.UserHasGroup(UniqueID, groupName);
+        public bool BelongsToGroup(string groupName) => libPerms.UserHasGroup(Id, groupName);
 
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void AddToGroup(string groupName) => libPerms.AddUserGroup(UniqueID, groupName);
+        public void AddToGroup(string groupName) => libPerms.AddUserGroup(Id, groupName);
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void RemoveFromGroup(string groupName) => libPerms.RemoveUserGroup(UniqueID, groupName);
+        public void RemoveFromGroup(string groupName) => libPerms.RemoveUserGroup(Id, groupName);
 
         #endregion
 
@@ -95,7 +95,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             if (IsBanned) return; // TODO: Extend ban duration?
 
             // Set to banned
-            ServerUsers.Set(steamid, ServerUsers.UserGroup.Banned, Nickname, reason);
+            ServerUsers.Set(steamId, ServerUsers.UserGroup.Banned, Name, reason);
             ServerUsers.Save();
 
             // TODO: Set a duration somehow
@@ -110,14 +110,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             if (!IsBanned) return;
 
             // Set to unbanned
-            ServerUsers.Set(steamid, ServerUsers.UserGroup.None, Nickname, string.Empty);
+            ServerUsers.Set(steamId, ServerUsers.UserGroup.None, Name, string.Empty);
             ServerUsers.Save();
         }
 
         /// <summary>
         /// Gets if this player is banned
         /// </summary>
-        public bool IsBanned => ServerUsers.Is(steamid, ServerUsers.UserGroup.Banned);
+        public bool IsBanned => ServerUsers.Is(steamId, ServerUsers.UserGroup.Banned);
 
         /// <summary>
         /// Gets the amount of time remaining on this player's ban
@@ -126,26 +126,26 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         #endregion
 
-        #region Chat & Commands
+        #region Chat and Commands
 
         public void Reply(string message) => ConnectedPlayer.Reply(message);
 
         #endregion
-        
+
         #region Operator Overloads
 
-        public bool Equals(IPlayer other) => UniqueID == other.UniqueID;
+        public bool Equals(IPlayer other) => Id == other.Id;
 
         public override bool Equals(object obj)
         {
             var ply = obj as IPlayer;
             if (ply == null) return false;
-            return UniqueID == ply.UniqueID;
+            return Id == ply.Id;
         }
 
-        public override int GetHashCode() => UniqueID.GetHashCode();
+        public override int GetHashCode() => Id.GetHashCode();
 
-        public override string ToString() => $"Covalence.RustPlayer[{UniqueID},{Nickname}]";
+        public override string ToString() => $"Covalence.RustPlayer[{Id}, {Name}]";
 
         public static bool operator ==(RustPlayer left, IPlayer right) => left != null && left.Equals(right);
 

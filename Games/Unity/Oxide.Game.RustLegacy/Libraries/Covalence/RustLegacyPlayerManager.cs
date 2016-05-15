@@ -17,8 +17,8 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord
         {
-            public string Nickname;
-            public ulong SteamId;
+            public string Name;
+            public ulong Id;
         }
 
         private IDictionary<string, PlayerRecord> playerData;
@@ -31,34 +31,34 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, RustLegacyPlayer>();
-            foreach (var pair in playerData) players.Add(pair.Key, new RustLegacyPlayer(pair.Value.SteamId, pair.Value.Nickname));
+            foreach (var pair in playerData) players.Add(pair.Key, new RustLegacyPlayer(pair.Value.Id, pair.Value.Name));
             livePlayers = new Dictionary<string, RustLegacyLivePlayer>();
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
         {
-            var uniqueId = steamid.ToString();
+            var id = steamid.ToString();
 
             // Do they exist?
             PlayerRecord record;
-            if (playerData.TryGetValue(uniqueId, out record))
+            if (playerData.TryGetValue(id, out record))
             {
                 // Update
-                record.Nickname = nickname;
-                playerData[uniqueId] = record;
+                record.Name = nickname;
+                playerData[id] = record;
 
                 // Swap out Rust player
-                players.Remove(uniqueId);
-                players.Add(uniqueId, new RustLegacyPlayer(steamid, nickname));
+                players.Remove(id);
+                players.Add(id, new RustLegacyPlayer(steamid, nickname));
             }
             else
             {
                 // Insert
-                record = new PlayerRecord {SteamId = steamid, Nickname = nickname};
-                playerData.Add(uniqueId, record);
+                record = new PlayerRecord {Id = steamid, Name = nickname};
+                playerData.Add(id, record);
 
                 // Create Rust player
-                players.Add(uniqueId, new RustLegacyPlayer(steamid, nickname));
+                players.Add(id, new RustLegacyPlayer(steamid, nickname));
             }
 
             // Save
@@ -78,12 +78,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets an offline player using their unique ID
         /// </summary>
-        /// <param name="uniqueId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public IPlayer GetPlayer(string uniqueId)
+        public IPlayer GetPlayer(string id)
         {
             RustLegacyPlayer player;
-            return players.TryGetValue(uniqueId, out player) ? player : null;
+            return players.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
-            return players.Values.Where(p => p.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
+            return players.Values.Where(p => p.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
         }
 
         #endregion
@@ -136,12 +136,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets an online player given their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public ILivePlayer GetOnlinePlayer(string uniqueID)
+        public ILivePlayer GetOnlinePlayer(string id)
         {
             RustLegacyLivePlayer player;
-            return livePlayers.TryGetValue(uniqueID, out player) ? player : null;
+            return livePlayers.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName)
         {
-            return livePlayers.Values .Where(p => p.BasePlayer.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<ILivePlayer>();
+            return livePlayers.Values .Where(p => p.BasePlayer.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<ILivePlayer>();
         }
 
         #endregion

@@ -47,7 +47,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args) => ConsoleSystem.Run(command);
+        public void Command(string command, params object[] args) => ConsoleSystem.Run(command);
 
         #endregion
     }

@@ -14,32 +14,32 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     public class ReignOfKingsPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
-        private readonly ulong steamid;
+        private readonly ulong steamId;
 
         /// <summary>
-        /// Gets/sets the nickname for this player
+        /// Gets/sets the name for this player
         /// </summary>
-        public string Nickname { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets a unique ID for this player (unique within the current game)
+        /// Gets the ID for this player (unique within the current game)
         /// </summary>
-        public string UniqueID { get; }
+        public string Id { get; }
 
         /// <summary>
         /// Gets the live player if this player is connected
         /// </summary>
-        public ILivePlayer ConnectedPlayer => ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(UniqueID);
+        public ILivePlayer ConnectedPlayer => ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(Id);
 
-        internal ReignOfKingsPlayer(ulong steamId, string nickname)
+        internal ReignOfKingsPlayer(ulong id, string name)
         {
             // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            Nickname = nickname;
-            steamid = steamId;
-            UniqueID = steamId.ToString();
+            Name = name;
+            steamId = id;
+            Id = id.ToString();
         }
 
         #region Permissions
@@ -49,55 +49,55 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
-        public bool HasPermission(string perm) => libPerms.UserHasPermission(UniqueID, perm);
+        public bool HasPermission(string perm) => libPerms.UserHasPermission(Id, perm);
 
         /// <summary>
         /// Grants the specified permission on this user
         /// </summary>
         /// <param name="perm"></param>
-        public void GrantPermission(string perm) => libPerms.GrantUserPermission(UniqueID, perm, null);
+        public void GrantPermission(string perm) => libPerms.GrantUserPermission(Id, perm, null);
 
         /// <summary>
         /// Strips the specified permission from this user
         /// </summary>
         /// <param name="perm"></param>
-        public void RevokePermission(string perm) => libPerms.RevokeUserPermission(UniqueID, perm);
+        public void RevokePermission(string perm) => libPerms.RevokeUserPermission(Id, perm);
 
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
         /// <returns></returns>
-        public bool BelongsToGroup(string groupName) => libPerms.UserHasGroup(UniqueID, groupName);
+        public bool BelongsToGroup(string groupName) => libPerms.UserHasGroup(Id, groupName);
 
 
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void AddToGroup(string groupName) => libPerms.AddUserGroup(UniqueID, groupName);
+        public void AddToGroup(string groupName) => libPerms.AddUserGroup(Id, groupName);
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
-        public void RemoveFromGroup(string groupName) => libPerms.RemoveUserGroup(UniqueID, groupName);
+        public void RemoveFromGroup(string groupName) => libPerms.RemoveUserGroup(Id, groupName);
 
         #endregion
 
         #region Administration
 
-        public void Ban(string reason, TimeSpan duration) => Server.Ban(steamid, (int)duration.TotalSeconds, reason);
+        public void Ban(string reason, TimeSpan duration) => Server.Ban(steamId, (int)duration.TotalSeconds, reason);
 
-        public void Unban() => Server.Unban(steamid);
+        public void Unban() => Server.Unban(steamId);
 
-        public bool IsBanned => Server.IdIsBanned(steamid);
+        public bool IsBanned => Server.IdIsBanned(steamId);
 
-        public TimeSpan BanTimeRemaining => new DateTime(Server.GetBannedPlayerFromPlayerId(steamid).ExpireDate) - DateTime.Now;
+        public TimeSpan BanTimeRemaining => new DateTime(Server.GetBannedPlayerFromPlayerId(steamId).ExpireDate) - DateTime.Now;
 
         #endregion
 
-        #region Chat & Commands
+        #region Chat and Commands
 
         public void Reply(string message) => ConnectedPlayer.Reply(message);
 
@@ -105,9 +105,9 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         #region Operator Overloads
 
-        public bool Equals(IPlayer other) => UniqueID == other.UniqueID;
+        public bool Equals(IPlayer other) => Id == other.Id;
 
-        public override int GetHashCode() => UniqueID.GetHashCode();
+        public override int GetHashCode() => Id.GetHashCode();
 
         #endregion
     }
