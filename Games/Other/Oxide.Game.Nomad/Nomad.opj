@@ -1,0 +1,111 @@
+{
+  "Name": "Nomad",
+  "TargetDirectory": "D:\\Servers\\Game\\Nomad\\Nomad Server",
+  "Manifests": [
+    {
+      "AssemblyName": "NomadServer.exe",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "TNet.GameServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Stop",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "2+SIJM2HpQ6iZE9n93HDzmpF22rIjO9gcfOllOktZH4=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "TNet.TcpProtocol",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "VerifyRequestID",
+              "ReturnType": "System.IO.BinaryReader",
+              "Parameters": [
+                "TNet.Buffer",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "Tj77nNwErpHGQHn5/0bJPoijXdG5oa9z1G4UcNoJJcE=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "Application",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Main",
+              "ReturnType": "System.Int32",
+              "Parameters": [
+                "System.String[]"
+              ]
+            },
+            "MSILHash": "k3O8QUAzLDj5PXvzuaoTexhziJOaj6V1henVvpi1Mhw=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "Application",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Main",
+              "ReturnType": "System.Int32",
+              "Parameters": [
+                "System.String[]"
+              ]
+            },
+            "MSILHash": "k3O8QUAzLDj5PXvzuaoTexhziJOaj6V1henVvpi1Mhw=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
+          }
+        }
+      ]
+    }
+  ]
+}
