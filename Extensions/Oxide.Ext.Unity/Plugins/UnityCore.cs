@@ -1,6 +1,5 @@
 ﻿using Oxide.Core;
 using Oxide.Core.Plugins;
-
 using Oxide.Ext.Unity.Logging;
 
 namespace Oxide.Ext.Unity.Plugins

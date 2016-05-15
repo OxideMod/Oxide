@@ -30,8 +30,7 @@ namespace Oxide.Ext.Unity
         /// Initializes a new instance of the UnityExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public UnityExtension(ExtensionManager manager)
-            : base(manager)
+        public UnityExtension(ExtensionManager manager) : base(manager)
         {
         }
 

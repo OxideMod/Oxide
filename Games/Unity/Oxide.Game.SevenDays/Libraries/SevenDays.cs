@@ -41,7 +41,10 @@ namespace Oxide.Game.SevenDays.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name = "SERVER", string message = null) => GameManager.Instance?.GameMessageServer(null, EnumGameMessages.Chat, message, name, false, null, false);
+        public void BroadcastChat(string name = "SERVER", string message = null)
+        {
+            GameManager.Instance?.GameMessageServer(null, EnumGameMessages.Chat, message, name, false, null, false);
+        }
 
         #endregion
     }

@@ -1,5 +1,4 @@
 ﻿using Oxide.Core;
-
 using Oxide.Game.SevenDays.Libraries;
 
 namespace Oxide.Plugins
