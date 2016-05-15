@@ -322,7 +322,7 @@ namespace Oxide.Game.HideHoldOut
             var player = FindPlayerByNetPlayer(netPlayer);
 
             // Is it a chat command?
-            if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", player, message);
+            if (!str.Equals("/") && !str.Equals("!")) return Interface.CallHook("OnPlayerChat", player, message);
 
             // Is this a covalence command?
             var livePlayer = Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(player.account_id);
@@ -344,7 +344,7 @@ namespace Oxide.Game.HideHoldOut
                 return true;
             }
 
-            Interface.Oxide.CallHook("OnChatCommand", player, command);
+            Interface.CallHook("OnChatCommand", player, command);
 
             return true;
         }

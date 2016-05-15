@@ -63,7 +63,7 @@ namespace Oxide.Ext.Unity
         {
             if (!oxideMod.IsShuttingDown)
             {
-                Interface.Oxide.CallHook("OnServerShutdown");
+                Interface.CallHook("OnServerShutdown");
                 Interface.Oxide.OnShutdown();
             }
         }

@@ -22,6 +22,8 @@ namespace Oxide.Game.Rust
     /// </summary>
     public class RustCore : CSPlugin
     {
+        #region Setup
+
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
@@ -87,6 +89,8 @@ namespace Oxide.Game.Rust
 
         // Track if a BasePlayer.OnAttacked call is in progress
         private bool isPlayerTakingDamage;
+
+        #endregion
 
         #region Initialization
 
@@ -238,7 +242,8 @@ namespace Oxide.Game.Rust
         private object IOnUserApprove(Connection connection)
         {
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection);
+            var iplayer = covalence.PlayerManager.GetPlayer(connection.userid.ToString());
+            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", iplayer);
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message

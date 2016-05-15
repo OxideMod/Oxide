@@ -326,14 +326,14 @@ namespace Oxide.Game.Hurtworld
         /// <param name="player"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
-        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.Oxide.CallHook("OnPlayerInput", FindSessionByNetPlayer(player), input);
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.CallHook("OnPlayerInput", FindSessionByNetPlayer(player), input);
 
         /// <summary>
         /// Called when the player attempts to suicide
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("IOnPlayerSuicide")]
-        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.Oxide.CallHook("OnPlayerSuicide", FindSessionByNetPlayer(player));
+        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.CallHook("OnPlayerSuicide", FindSessionByNetPlayer(player));
 
         #endregion
 

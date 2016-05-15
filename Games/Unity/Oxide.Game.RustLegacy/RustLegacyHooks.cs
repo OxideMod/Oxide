@@ -8,7 +8,7 @@ namespace Oxide.Game.RustLegacy
     {
         public void OnDestroy()
         {
-            Interface.Oxide.CallHook("OnServerInitialized", null);
+            Interface.CallHook("OnServerInitialized", null);
         }
     }
 }
