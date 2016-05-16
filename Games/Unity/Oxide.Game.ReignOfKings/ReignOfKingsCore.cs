@@ -7,6 +7,7 @@ using System.Text;
 using CodeHatch.Build;
 using CodeHatch.Common;
 using CodeHatch.Engine.Common;
+using CodeHatch.Engine.Core.Networking;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
 
@@ -240,6 +241,39 @@ namespace Oxide.Game.ReignOfKings
         #endregion
 
         #region Player Hooks
+
+        /// <summary>
+        /// Called when a user is attempting to connect
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("IOnUserApprove")]
+        private object IOnUserApprove(Player player)
+        {
+            // Call out and see if we should reject
+            var canlogin = Interface.CallHook("CanClientLogin", player) ?? Interface.CallHook("CanUserLogin", player.Name, player.Id.ToString());
+            if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
+            {
+                player.ShowPopup("Disconnected", canlogin.ToString());
+                player.Connection.Close();
+                return ConnectionError.NoError;
+            }
+
+            return Interface.CallHook("OnUserApprove", player) ?? Interface.CallHook("OnUserApproved", player.Name, player.Id.ToString());
+        }
+
+        /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="message"></param>
+        [HookMethod("OnPlayerChat")]
+        private object OnPlayerChat(PlayerMessageEvent evt, string message)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString());
+            return Interface.CallHook("OnUserChat", iplayer, message);
+        }
 
         /// <summary>
         /// Called when the player has connected
