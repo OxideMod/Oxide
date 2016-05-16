@@ -14,6 +14,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.ReignOfKings.Libraries;
+using Oxide.Game.ReignOfKings.Libraries.Covalence;
 
 namespace Oxide.Game.ReignOfKings
 {
@@ -22,6 +23,8 @@ namespace Oxide.Game.ReignOfKings
     /// </summary>
     public class ReignOfKingsCore : CSPlugin
     {
+        #region Setup
+
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
@@ -34,6 +37,9 @@ namespace Oxide.Game.ReignOfKings
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
+        // The Reign of Kings covalence provider
+        private readonly ReignOfKingsCovalenceProvider covalence = ReignOfKingsCovalenceProvider.Instance;
+
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
@@ -43,13 +49,17 @@ namespace Oxide.Game.ReignOfKings
 
         private static readonly FieldInfo FoldersField = typeof (FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        #endregion
+
+        #region Initialization
+
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class
         /// </summary>
         public ReignOfKingsCore()
         {
             // Set attributes
-            Name = "reignofkingscore";
+            Name = "ReignOfKingsCore";
             Title = "Reign of Kings Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
@@ -77,6 +87,8 @@ namespace Oxide.Game.ReignOfKings
             ReplyWith(player, "Unable to load permission files! Permissions will not work until resolved.\n => " + permission.LastException.Message);
             return false;
         }
+
+        #endregion
 
         #region Plugin Hooks
 
@@ -238,7 +250,11 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerConnected(Player player)
         {
             // Let covalence know
-            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+            covalence.PlayerManager.NotifyPlayerConnect(player);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
+            Interface.CallHook("OnUserConnected", iplayer);
         }
 
         /// <summary>
@@ -248,8 +264,12 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(Player player)
         {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
+            Interface.CallHook("OnUserDisconnected", iplayer);
+
             // Let covalence know
-            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+            covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
         /// <summary>
@@ -752,8 +772,8 @@ namespace Oxide.Game.ReignOfKings
             if (str[0] != '/') return null;
 
             // Is this a covalence command?
-            var livePlayer = Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(e.PlayerId.ToString());
-            if (Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
+            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(e.PlayerId.ToString());
+            if (covalence.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
 
             // Get the command string
             var command = str.Substring(1);
@@ -830,6 +850,8 @@ namespace Oxide.Game.ReignOfKings
 
         #endregion
 
+        #region Helpers
+
         /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
@@ -870,5 +892,7 @@ namespace Oxide.Game.ReignOfKings
             ReplyWith(player, "You don't have permission to use this command.");
             return false;
         }
+
+        #endregion
     }
 }
