@@ -32,7 +32,7 @@ namespace Oxide.Game.Hurtworld
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
-        // The Rust covalence provider
+        // The Hurtworld covalence provider
         private readonly HurtworldCovalenceProvider covalence = HurtworldCovalenceProvider.Instance;
 
         #region Localization
@@ -235,7 +235,6 @@ namespace Oxide.Game.Hurtworld
         private object IOnUserApprove(PlayerSession session)
         {
             // Call out and see if we should reject
-            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
             var canlogin = Interface.CallHook("CanClientLogin", session) ?? Interface.CallHook("CanUserLogin", session.Name, session.SteamId.ToString());
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
@@ -1001,7 +1000,7 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
-        #region Helper Methods
+        #region Helpers
 
         /// <summary>
         /// Returns if specified player is admin

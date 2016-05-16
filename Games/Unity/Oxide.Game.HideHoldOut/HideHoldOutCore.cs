@@ -36,7 +36,7 @@ namespace Oxide.Game.HideHoldOut
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
-        // The Rust covalence provider
+        // The Hide & Hold Out covalence provider
         private readonly HideHoldOutCovalenceProvider covalence = HideHoldOutCovalenceProvider.Instance;
 
         #region Localization

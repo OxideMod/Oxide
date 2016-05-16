@@ -242,7 +242,6 @@ namespace Oxide.Game.Rust
         private object IOnUserApprove(Connection connection)
         {
             // Call out and see if we should reject
-            var iplayer = covalence.PlayerManager.GetPlayer(connection.userid.ToString());
             var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.username, connection.userid.ToString());
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
@@ -1087,7 +1086,7 @@ namespace Oxide.Game.Rust
 
         #endregion
 
-        #region Helper Methods
+        #region Helpers
 
         /// <summary>
         /// Returns if specified player is admin
