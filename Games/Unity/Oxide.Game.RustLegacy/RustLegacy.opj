@@ -853,6 +853,35 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 4,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "LibRust",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Update",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "DZ3C4oRDzyU378Vnm2cNAFwRn49bVM3+GWxwIzWr3uU=",
+            "BaseHookName": null,
+            "HookCategory": "_Patch"
+          }
         }
       ]
     }

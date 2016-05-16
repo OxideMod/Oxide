@@ -830,7 +830,7 @@ namespace Oxide.Game.RustLegacy
 
         /// <summary>
         /// Called when the GetClientMove packet is received for a player
-        /// Checking the player position in the packet to prevent harmful packets crashing the server
+        /// Checks the player position in the packet to prevent harmful packets crashing the server
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="pos"></param>
