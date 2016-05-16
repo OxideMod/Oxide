@@ -243,7 +243,7 @@ namespace Oxide.Game.Rust
         {
             // Call out and see if we should reject
             var iplayer = covalence.PlayerManager.GetPlayer(connection.userid.ToString());
-            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", iplayer);
+            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.username, connection.userid.ToString());
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
@@ -251,7 +251,7 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection) ?? Interface.CallHook("OnUserApproved", connection);
+            return Interface.CallHook("OnUserApprove", connection) ?? Interface.CallHook("OnUserApproved", connection.username, connection.userid.ToString());
         }
 
         /// <summary>
@@ -274,12 +274,12 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
-            // Let covalence know
-            covalence.PlayerManager.NotifyPlayerDisconnect(player);
-
             // Call covalence hook
             var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
             Interface.CallHook("OnUserDisconnected", iplayer, reason);
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
         }
@@ -296,7 +296,7 @@ namespace Oxide.Game.Rust
 
             // Call covalence hook
             var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
-            Interface.CallHook("OnUserInit", iplayer);
+            Interface.CallHook("OnUserConnected", iplayer);
 
             // Do permission stuff
             var authLevel = player.net.connection.authLevel;
@@ -311,6 +311,9 @@ namespace Oxide.Game.Rust
 
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
+
+            // Call covalence hook
+            Interface.CallHook("OnUserInit", iplayer);
         }
 
         /// <summary>

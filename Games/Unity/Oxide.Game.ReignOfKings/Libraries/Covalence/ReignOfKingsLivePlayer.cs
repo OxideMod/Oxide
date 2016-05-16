@@ -45,6 +45,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public CommandType LastCommand { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => player.Connection.IpAddress;
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         public int Ping => player.Connection.AveragePing;

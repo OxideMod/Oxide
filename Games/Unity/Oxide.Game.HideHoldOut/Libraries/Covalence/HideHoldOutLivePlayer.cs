@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 using UnityEngine;
 
@@ -26,11 +27,6 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public IPlayerCharacter Character { get; private set; }
 
         /// <summary>
-        /// Gets this player's average network ping
-        /// </summary>
-        public int Ping => player.NetPlayer.averagePing;
-
-        /// <summary>
         /// Gets the owner of this character
         /// </summary>
         public ILivePlayer Owner => this;
@@ -44,6 +40,16 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Gets this player's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
+
+        /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => player.NetPlayer.ipAddress;
+
+        /// <summary>
+        /// Gets this player's average network ping
+        /// </summary>
+        public int Ping => player.NetPlayer.averagePing;
 
         private readonly PlayerInfos player;
 

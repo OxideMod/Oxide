@@ -21,6 +21,11 @@
         CommandType LastCommand { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        string Address { get; }
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         int Ping { get; }

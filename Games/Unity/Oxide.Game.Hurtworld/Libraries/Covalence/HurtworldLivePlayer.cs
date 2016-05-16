@@ -39,6 +39,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public CommandType LastCommand { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => session.Player.ipAddress;
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         public int Ping => session.Player.averagePing;

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+
+using Steamworks;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
@@ -39,6 +42,18 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Gets this player's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
+
+        /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address
+        {
+            get
+            {
+                var ip = SteamGameServer.GetPublicIP();
+                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24)).ToString();
+            }
+        }
 
         /// <summary>
         /// Gets this player's average network ping

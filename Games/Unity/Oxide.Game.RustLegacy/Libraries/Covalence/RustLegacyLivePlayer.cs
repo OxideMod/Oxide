@@ -40,6 +40,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public CommandType LastCommand { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => netUser.networkPlayer.ipAddress;
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         public int Ping => netUser.networkPlayer.averagePing;

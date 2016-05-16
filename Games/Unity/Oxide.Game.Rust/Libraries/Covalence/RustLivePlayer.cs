@@ -39,6 +39,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public ConsoleSystem.Arg LastArg { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => player.net.connection.ipaddress;
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         public int Ping => Network.Net.sv.GetAveragePing(player.net.connection);

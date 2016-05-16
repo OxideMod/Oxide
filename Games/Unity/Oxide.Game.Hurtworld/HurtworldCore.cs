@@ -236,7 +236,7 @@ namespace Oxide.Game.Hurtworld
         {
             // Call out and see if we should reject
             var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
-            var canlogin = Interface.CallHook("CanClientLogin", session) ?? Interface.CallHook("CanUserLogin", iplayer);
+            var canlogin = Interface.CallHook("CanClientLogin", session) ?? Interface.CallHook("CanUserLogin", session.Name, session.SteamId.ToString());
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
@@ -244,7 +244,7 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", session) ?? Interface.CallHook("OnUserApproved", iplayer);
+            return Interface.CallHook("OnUserApprove", session) ?? Interface.CallHook("OnUserApproved", session.Name, session.SteamId.ToString());
         }
 
         /// <summary>
@@ -329,12 +329,12 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(PlayerSession session)
         {
-            // Let covalence know
-            covalence.PlayerManager.NotifyPlayerDisconnect(session);
-
             // Call covalence hook
             var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
             Interface.CallHook("OnUserDisconnected", iplayer, null);
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(session);
         }
 
         /// <summary>
