@@ -184,14 +184,7 @@ namespace Oxide.Game.RustLegacy
                 return string.Concat(fps, "fps, ", uptime);
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () =>
-            {
-                var players = NetCull.connections.Length;
-                var playerLimit = NetCull.maxConnections;
-                //var sleeperCount = ;
-                //var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
-                return string.Concat(" ", players, "/", playerLimit, " players"/*, sleepers*/);
-            };
+            Interface.Oxide.ServerConsole.Status2Left = () => $" {NetCull.connections.Length}/{NetCull.maxConnections} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (!NetCull.isServerRunning || NetCull.isNotRunning) return "not connected";
@@ -207,10 +200,7 @@ namespace Oxide.Game.RustLegacy
                 return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
             };
 
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                return $" {EnvironmentControlCenter.Singleton?.GetTime().ToString() ?? "Unknown"}, {server.map} [{(server.pvp ? "PvP" : "PvE")}]";
-            };
+            Interface.Oxide.ServerConsole.Status3Left = () => $" {EnvironmentControlCenter.Singleton?.GetTime().ToString() ?? "Unknown"}, {(server.pvp ? "PvP" : "PvE")}";
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 

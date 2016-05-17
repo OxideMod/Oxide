@@ -70,8 +70,6 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public void Kick(string reason)
         {
             Rust.Notice.Popup(netUser.networkPlayer, "", reason, 10f);
-            //netUser.Kick(NetError.ApprovalDenied, false, true);
-            //ServerManagement.Get().networkView.RPC("KP", netUser.networkPlayer, reason);
             NetCull.CloseConnection(netUser.networkPlayer, false);
         }
 

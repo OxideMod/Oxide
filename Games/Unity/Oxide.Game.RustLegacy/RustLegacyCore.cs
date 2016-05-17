@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using Rust;
 using uLink;
 using UnityEngine;
 
@@ -207,14 +208,15 @@ namespace Oxide.Game.RustLegacy
             if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
             {
                 approval.Deny(uLink.NetworkConnectionError.ConnectionBanned);
-                return false;
+                return true;
             }
 
             // Call out and see if we should reject
             var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, connection.UserID.ToString());
-            if (canlogin is uLink.NetworkConnectionError)
+            if (canlogin != null)
             {
-                approval.Deny((uLink.NetworkConnectionError)canlogin);
+                Notice.Popup(connection.netUser.networkPlayer, "", canlogin.ToString(), 10f);
+                approval.Deny(uLink.NetworkConnectionError.NoError);
                 return true;
             }
 
