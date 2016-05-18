@@ -20,7 +20,7 @@ namespace Oxide.Game.Hurtworld
     /// </summary>
     public class HurtworldCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
@@ -85,10 +85,6 @@ namespace Oxide.Game.Hurtworld
 
         // Track 'load' chat commands
         private readonly Dictionary<string, PlayerSession> loadingPlugins = new Dictionary<string, PlayerSession>();
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class

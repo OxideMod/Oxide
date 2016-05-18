@@ -24,7 +24,7 @@ namespace Oxide.Game.HideHoldOut
     /// </summary>
     public class HideHoldOutCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
@@ -93,10 +93,6 @@ namespace Oxide.Game.HideHoldOut
         // Get ChatManager NetworkView
         private static readonly FieldInfo ChatNetViewField = typeof(ChatManager).GetField("Chat_NetView", BindingFlags.NonPublic | BindingFlags.Instance);
         public static NetworkView ChatNetView = ChatNetViewField.GetValue(NetworkController.NetManager_.chatManager) as NetworkView;
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the HideHoldOutCore class
@@ -254,9 +250,9 @@ namespace Oxide.Game.HideHoldOut
 
             // Call out and see if we should reject
             var canlogin = Interface.CallHook("CanClientLogin", approval, player) ?? Interface.CallHook("CanUserLogin", player.Nickname, id);
-            if (canlogin is NetworkConnectionError)
+            if (canlogin != null && ((canlogin is NetworkConnectionError) || (bool)canlogin == false))
             {
-                approval.Deny((NetworkConnectionError)canlogin);
+                approval.Deny(NetworkConnectionError.NoError);
                 return true;
             }
 

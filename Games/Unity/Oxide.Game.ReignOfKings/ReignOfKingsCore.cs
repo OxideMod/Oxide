@@ -7,7 +7,6 @@ using System.Text;
 using CodeHatch.Build;
 using CodeHatch.Common;
 using CodeHatch.Engine.Common;
-using CodeHatch.Engine.Core.Networking;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
 
@@ -24,7 +23,7 @@ namespace Oxide.Game.ReignOfKings
     /// </summary>
     public class ReignOfKingsCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
@@ -49,10 +48,6 @@ namespace Oxide.Game.ReignOfKings
         private readonly Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
 
         private static readonly FieldInfo FoldersField = typeof (FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class

@@ -22,7 +22,7 @@ namespace Oxide.Game.Rust
     /// </summary>
     public class RustCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
@@ -89,10 +89,6 @@ namespace Oxide.Game.Rust
 
         // Track if a BasePlayer.OnAttacked call is in progress
         private bool isPlayerTakingDamage;
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the RustCore class

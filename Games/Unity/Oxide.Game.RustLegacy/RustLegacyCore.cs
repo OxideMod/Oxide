@@ -20,7 +20,7 @@ namespace Oxide.Game.RustLegacy
     /// </summary>
     public class RustLegacyCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
@@ -52,10 +52,6 @@ namespace Oxide.Game.RustLegacy
 
         // Last Metabolism hacker notification time
         float lastWarningAt;
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the RustCore class
@@ -130,8 +126,7 @@ namespace Oxide.Game.RustLegacy
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    if (!ulong.TryParse(s, out temp))
-                        return false;
+                    if (!ulong.TryParse(s, out temp)) return false;
                     var digits = temp == 0 ? 1 : (int)System.Math.Floor(System.Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
@@ -305,34 +300,34 @@ namespace Oxide.Game.RustLegacy
         /// <summary>
         /// Called when the "plugins" command has been executed
         /// </summary>
-        [HookMethod("cmdPlugins")]
-        private void cmdPlugins(ConsoleSystem.Arg arg)
+        [HookMethod("CmdPlugins")]
+        private void CmdPlugins(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
 
-            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
-            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
-            var unloaded_plugin_errors = new Dictionary<string, string>();
+            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
+            var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
             {
-                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
                 {
                     string msg;
-                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
                 }
             }
 
-            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
-            if (total_plugin_count < 1)
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
             {
                 arg.ReplyWith("[Oxide] No plugins are currently available");
                 return;
             }
 
-            var output = $"[Oxide] Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
+            var output = $"[Oxide] Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
             var number = 1;
-            output = loaded_plugins.Aggregate(output, (current, plugin) => current + $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}");
-            output = unloaded_plugin_errors.Keys.Aggregate(output, (current, plugin_name) => current + $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}");
+            output = loadedPlugins.Aggregate(output, (current, plugin) => current + $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}");
+            output = unloadedPluginErrors.Keys.Aggregate(output, (current, pluginName) => current + $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}");
             arg.ReplyWith(output);
         }
 
@@ -340,8 +335,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "load" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdLoad")]
-        private void cmdLoad(ConsoleSystem.Arg arg)
+        [HookMethod("CmdLoad")]
+        private void CmdLoad(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -369,8 +364,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "unload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdUnload")]
-        private void cmdUnload(ConsoleSystem.Arg arg)
+        [HookMethod("CmdUnload")]
+        private void CmdUnload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -394,8 +389,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "reload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdReload")]
-        private void cmdReload(ConsoleSystem.Arg arg)
+        [HookMethod("CmdReload")]
+        private void CmdReload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -419,8 +414,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "version" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdVersion")]
-        private void cmdVersion(ConsoleSystem.Arg arg)
+        [HookMethod("CmdVersion")]
+        private void CmdVersion(ConsoleSystem.Arg arg)
         {
             var oxide = OxideMod.Version.ToString();
             var rust = Rust.Defines.Connection.protocol.ToString();
@@ -433,8 +428,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdGroup")]
-        private void cmdGroup(ConsoleSystem.Arg arg)
+        [HookMethod("CmdGroup")]
+        private void CmdGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -489,8 +484,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdUserGroup")]
-        private void cmdUserGroup(ConsoleSystem.Arg arg)
+        [HookMethod("CmdUserGroup")]
+        private void CmdUserGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -546,8 +541,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdGrant")]
-        private void cmdGrant(ConsoleSystem.Arg arg)
+        [HookMethod("CmdGrant")]
+        private void CmdGrant(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -595,8 +590,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdRevoke")]
-        private void cmdRevoke(ConsoleSystem.Arg arg)
+        [HookMethod("CmdRevoke")]
+        private void CmdRevoke(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -644,8 +639,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "show" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdShow")]
-        private void cmdShow(ConsoleSystem.Arg arg)
+        [HookMethod("CmdShow")]
+        private void CmdShow(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;

@@ -1,4 +1,6 @@
-﻿using Oxide.Core;
+﻿using System;
+
+using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
@@ -9,6 +11,8 @@ namespace Oxide.Game.SevenDays
     /// </summary>
     public class SevenDaysCore : CSPlugin
     {
+        #region Initialization
+
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
@@ -41,6 +45,8 @@ namespace Oxide.Game.SevenDays
             CallHook("InitLogging", null);
         }
 
+        #endregion
+
         #region Plugins Hooks
 
         /// <summary>
@@ -52,6 +58,25 @@ namespace Oxide.Game.SevenDays
             // Configure remote logging
             RemoteLogger.SetTag("game", "7 days to die");
             RemoteLogger.SetTag("version", GamePrefs.GetString(EnumGamePrefs.GameVersion));
+
+            // Setup the default permission groups
+            if (permission.IsLoaded)
+            {
+                var rank = 0;
+                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+                {
+                    var defaultGroup = DefaultGroups[i];
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
+                permission.RegisterValidate(s =>
+                {
+                    ulong temp;
+                    if (!ulong.TryParse(s, out temp)) return false;
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                    return digits >= 17;
+                });
+                permission.CleanUp();
+            }
         }
 
         /// <summary>

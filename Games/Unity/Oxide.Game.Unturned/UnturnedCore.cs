@@ -1,4 +1,6 @@
-﻿using SDG.Unturned;
+﻿using System;
+
+using SDG.Unturned;
 
 using Oxide.Core;
 using Oxide.Core.Plugins;
@@ -11,6 +13,8 @@ namespace Oxide.Game.Unturned
     /// </summary>
     public class UnturnedCore : CSPlugin
     {
+        #region Initialization
+
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
@@ -43,6 +47,8 @@ namespace Oxide.Game.Unturned
             CallHook("InitLogging", null);
         }
 
+        #endregion
+
         #region Plugin Hooks
 
         /// <summary>
@@ -54,6 +60,25 @@ namespace Oxide.Game.Unturned
             // Configure remote logging
             RemoteLogger.SetTag("game", "unturned");
             RemoteLogger.SetTag("version", Provider.APP_VERSION);
+
+            // Setup the default permission groups
+            if (permission.IsLoaded)
+            {
+                var rank = 0;
+                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+                {
+                    var defaultGroup = DefaultGroups[i];
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
+                permission.RegisterValidate(s =>
+                {
+                    ulong temp;
+                    if (!ulong.TryParse(s, out temp)) return false;
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                    return digits >= 17;
+                });
+                permission.CleanUp();
+            }
         }
 
         /// <summary>
