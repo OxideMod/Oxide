@@ -14,7 +14,7 @@ namespace Oxide.Game.RustLegacy.Libraries
     {
         public override bool IsGlobal => false;
 
-        private struct PluginCallback
+        internal struct PluginCallback
         {
             public readonly Plugin Plugin;
             public readonly string Name;
@@ -26,7 +26,7 @@ namespace Oxide.Game.RustLegacy.Libraries
             }
         }
 
-        private class ConsoleCommand
+        internal class ConsoleCommand
         {
             public readonly string Name;
             public readonly List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
@@ -68,7 +68,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         }
 
         // All console commands that plugins have registered
-        private readonly Dictionary<string, ConsoleCommand> consoleCommands;
+        internal static Dictionary<string, ConsoleCommand> consoleCommands;
 
         // All chat commands that plugins have registered
         private readonly Dictionary<string, ChatCommand> chatCommands;

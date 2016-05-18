@@ -204,12 +204,12 @@ namespace Oxide.Game.RustLegacy
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
-            /*Interface.Oxide.ServerConsole.Completion = input =>
+            Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
                 if (!input.Contains(".")) input = string.Concat("global.", input);
-                return ConsoleSystem.Index.GetAll().Where(c => c.namefull.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.namefull).ToArray();
-            };*/
+                return Command.consoleCommands.Where(c => c.Key.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.Key).ToArray();
+            };
         }
 
         private static void ServerConsoleOnInput(string input)
