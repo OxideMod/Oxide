@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using ProtoBuf;
@@ -28,11 +29,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         internal HurtworldPlayerManager()
         {
             // Load player data
-            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
-            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, HurtworldPlayer>();
             foreach (var pair in playerData) players.Add(pair.Key, new HurtworldPlayer(pair.Value.Id, pair.Value.Name));
             livePlayers = new Dictionary<string, HurtworldLivePlayer>();
+
+            // Cleanup old .data
+            Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
@@ -62,7 +66,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             }
 
             // Save
-            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
+            ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
         internal void NotifyPlayerConnect(PlayerSession session)

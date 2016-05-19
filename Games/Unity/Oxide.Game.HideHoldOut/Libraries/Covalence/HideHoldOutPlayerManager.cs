@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using ProtoBuf;
@@ -28,11 +29,14 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         internal HideHoldOutPlayerManager()
         {
             // Load player data
-            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
-            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, HideHoldOutPlayer>();
             foreach (var pair in playerData) players.Add(pair.Key, new HideHoldOutPlayer(pair.Value.Id, pair.Value.Name));
             livePlayers = new Dictionary<string, HideHoldOutLivePlayer>();
+
+            // Cleanup old .data
+            Core.Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
@@ -62,7 +66,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             }
 
             // Save
-            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
+            ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
         internal void NotifyPlayerConnect(PlayerInfos player)

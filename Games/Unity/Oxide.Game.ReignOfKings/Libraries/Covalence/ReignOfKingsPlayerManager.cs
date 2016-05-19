@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using CodeHatch.Engine.Networking;
@@ -29,11 +30,14 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         internal ReignOfKingsPlayerManager()
         {
             // Load player data
-            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
-            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, ReignOfKingsPlayer>();
             foreach (var pair in playerData) players.Add(pair.Key, new ReignOfKingsPlayer(pair.Value.Id, pair.Value.Name));
             livePlayers = new Dictionary<string, ReignOfKingsLivePlayer>();
+
+            // Cleanup old .data
+            Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
@@ -63,7 +67,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             }
 
             // Save
-            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
+            ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
         internal void NotifyPlayerConnect(Player ply)
