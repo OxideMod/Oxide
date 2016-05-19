@@ -66,7 +66,6 @@
   <Target Name="AfterBuild">
     <PropertyGroup>
       <GameName>$(MSBuildProjectName)</GameName>
-      <GameNameLinux>$(GameName)_Linux</GameNameLinux>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
       <ManagedDir>Unturned_Data\Managed</ManagedDir>
     </PropertyGroup>

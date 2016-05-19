@@ -771,12 +771,19 @@ namespace Oxide.Game.HideHoldOut
             }
             else if (mode.Equals("user"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(Lang("CommandUsageShow", player.account_id), player);
+                    return;
+                }
+
                 var target = FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound", player.account_id), player);
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -793,11 +800,18 @@ namespace Oxide.Game.HideHoldOut
             }
             else if (mode.Equals("group"))
             {
-                if (!permission.GroupExists(name))
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(Lang("CommandUsageShow", player.account_id), player);
+                    return;
+                }
+
+                if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
                     Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";

@@ -27,7 +27,7 @@ namespace Oxide.Core.ServerConsole
         private static extern IntPtr GetConsoleWindow();
 
         [DllImport("kernel32.dll")]
-        private static extern bool SetConsoleOutputCP(uint wCodePageID);
+        private static extern bool SetConsoleOutputCP(uint wCodePageId);
 
         [DllImport("kernel32.dll")]
         private static extern bool SetConsoleTitle(string lpConsoleTitle);

@@ -81,7 +81,6 @@
   <Target Name="AfterBuild">
     <PropertyGroup>
       <GameName>$(MSBuildProjectName)</GameName>
-      <GameNameLinux>$(GameName)_Linux</GameNameLinux>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
       <ManagedDir>H2o_Data\Managed</ManagedDir>
     </PropertyGroup>

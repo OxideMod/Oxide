@@ -728,6 +728,12 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("perm"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    ReplyWith(player, "Usage: show <group|user> <name>\nUsage: show <groups|perms>");
+                    return;
+                }
+
                 var result = $"Permission '{name}' Users:\n";
                 result += string.Join(", ", permission.GetPermissionUsers(name));
                 result += $"\nPermission '{name}' Groups:\n";
@@ -736,12 +742,19 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("user"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    ReplyWith(player, "Usage: show <group|user> <name>\nUsage: show <groups|perms>");
+                    return;
+                }
+
                 var target = FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(player, "User '" + name + "' not found");
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -758,11 +771,18 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("group"))
             {
-                if (!permission.GroupExists(name))
+                if (string.IsNullOrEmpty(name))
+                {
+                    ReplyWith(player, "Usage: show <group|user> <name>\nUsage: show <groups|perms>");
+                    return;
+                }
+
+                if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
                     ReplyWith(player, "Group '" + name + "' not found");
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";

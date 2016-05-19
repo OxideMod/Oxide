@@ -575,7 +575,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatVersion")]
         private void ChatVersion(PlayerSession session, string command, string[] args)
         {
-            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance.GetProtocolVersion()}", session);
+            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()}", session);
         }
 
         /// <summary>
@@ -879,12 +879,19 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(GetMessage("CommandUsageShow", session.SteamId.ToString()), session);
+                    return;
+                }
+
                 var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(GetMessage("UserNotFound", session.SteamId.ToString()), session);
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -901,11 +908,18 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("group"))
             {
-                if (!permission.GroupExists(name))
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(GetMessage("CommandUsageShow", session.SteamId.ToString()), session);
+                    return;
+                }
+
+                if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
                     Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";
