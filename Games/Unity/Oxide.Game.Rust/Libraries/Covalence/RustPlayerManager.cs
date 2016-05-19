@@ -35,7 +35,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             livePlayers = new Dictionary<string, RustLivePlayer>();
 
             // Cleanup old .data
-            Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
+            //Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)

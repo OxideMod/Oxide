@@ -37,7 +37,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             livePlayers = new Dictionary<string, ReignOfKingsLivePlayer>();
 
             // Cleanup old .data
-            Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
+            //Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
