@@ -315,10 +315,9 @@ namespace Oxide.Game.Rust
         /// Called when a player tick is received from a client
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="msg"></param>
         /// <returns></returns>
         [HookMethod("OnPlayerTick")]
-        private object OnPlayerTick(BasePlayer player, PlayerTick msg)
+        private object OnPlayerTick(BasePlayer player)
         {
             InputState input;
             return playerInputState.TryGetValue(player, out input) ? Interface.CallHook("OnPlayerInput", player, input) : null;
@@ -454,8 +453,8 @@ namespace Oxide.Game.Rust
                 }
             }
 
-            var total_plugin_count = loadedPlugins.Length + unloadedPluginErrors.Count;
-            if (total_plugin_count < 1)
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
             {
                 Reply(arg.connection, "NoPluginsFound");
                 return;
@@ -465,8 +464,8 @@ namespace Oxide.Game.Rust
             var number = 1;
             foreach (var plugin in loadedPlugins)
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
-            foreach (var plugin_name in unloadedPluginErrors.Keys)
-                output += $"\n  {number++:00} {plugin_name} - {unloadedPluginErrors[plugin_name]}";
+            foreach (var pluginName in unloadedPluginErrors.Keys)
+                output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
             arg.ReplyWith(output);
         }
 
@@ -915,6 +914,12 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("perm"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(arg.connection, "CommandUsageShow");
+                    return;
+                }
+
                 var result = $"Permission '{name}' Users:\n";
                 result += string.Join(", ", permission.GetPermissionUsers(name));
                 result += $"\nPermission '{name}' Groups:\n";
@@ -923,17 +928,23 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("user"))
             {
-                var player = FindPlayer(name);
-                if (player == null && !permission.UserIdValid(name))
+                if (string.IsNullOrEmpty(name))
                 {
-                    Reply(arg.connection, "UserNotFound");
+                    Reply(arg.connection, "CommandUsageShow");
+                    return;
+                }
+
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(arg.connection, "UserNotFound", name);
                     return;
                 }
                 var userId = name;
-                if (player != null)
+                if (target != null)
                 {
-                    userId = player.UserIDString;
-                    name = player.displayName;
+                    userId = target.UserIDString;
+                    name = target.displayName;
                     permission.UpdateNickname(userId, name);
                     name += $" ({userId})";
                 }
@@ -945,11 +956,18 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("group"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(arg.connection, "CommandUsageShow");
+                    return;
+                }
+
                 if (!permission.GroupExists(name))
                 {
                     Reply(arg.connection, "GroupNotFound", name);
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";
@@ -1219,7 +1237,10 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <param name="entity"></param>
         [HookMethod("OnExplosiveThrown")]
-        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity) => Interface.CallDeprecatedHook("OnWeaponThrown", "OnExplosiveThrown", new DateTime(2016, 5, 19), player, entity);
+        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity)
+        {
+            return Interface.CallDeprecatedHook("OnWeaponThrown", "OnExplosiveThrown", new DateTime(2016, 6, 3), player, entity);
+        }
 
         /// <summary>
         /// Used to handle the deprecated hook OnPlayerLoot (entity)
@@ -1233,7 +1254,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootEntity", new DateTime(2016, 5, 19), source, entity);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootEntity", new DateTime(2016, 6, 3), source, entity);
         }
 
         /// <summary>
@@ -1248,7 +1269,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootItem", new DateTime(2016, 5, 19), source, item);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootItem", new DateTime(2016, 6, 3), source, item);
         }
 
         /// <summary>
@@ -1263,7 +1284,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootPlayer", new DateTime(2016, 5, 19), source, target);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootPlayer", new DateTime(2016, 6, 3), source, target);
         }
 
         #endregion
