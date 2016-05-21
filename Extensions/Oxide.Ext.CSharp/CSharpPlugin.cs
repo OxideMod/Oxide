@@ -271,7 +271,10 @@ namespace Oxide.Plugins
                    if (!required_plugin)
                     continue;
                     
-                   required_plugin.Loader.Load(Interface.Oxide.PluginDirectory, plugin);
+                   if (!required_plugin.Loader.Load(Interface.Oxide.PluginDirectory, plugin))
+                   {
+                       Interface.Oxide.LogException($"{Name} requires plugin '{plugin}' but it could not be loaded!");
+                   }
                 }
             }
 
