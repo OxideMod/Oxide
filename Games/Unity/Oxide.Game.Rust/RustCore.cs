@@ -29,7 +29,7 @@ namespace Oxide.Game.Rust
 
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "player", "moderator", "admin" }; // TODO: Migrate "player" to "default"
+        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -181,6 +181,7 @@ namespace Oxide.Game.Rust
                     return digits >= 17;
                 });
                 permission.CleanUp();
+                permission.Migrate("player", "default");
             }
         }
 

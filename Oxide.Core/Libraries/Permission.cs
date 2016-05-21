@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using ProtoBuf;
@@ -151,6 +152,37 @@ namespace Oxide.Core.Libraries
             var invalid = userdata.Keys.Where(k => !validate(k)).ToArray();
             if (invalid.Length <= 0) return;
             foreach (var i in invalid) userdata.Remove(i);
+            SaveUsers();
+        }
+
+        /// <summary>
+        /// Migrate users and permissions between groups
+        /// </summary>
+        public void Migrate(string oldGroup, string newGroup)
+        {
+            if (!IsLoaded) return;
+
+            if (GroupExists(oldGroup))
+            {
+                var groups = ProtoStorage.GetFileDataPath("oxide.groups.data");
+                var users = ProtoStorage.GetFileDataPath("oxide.users.data");
+                File.Copy(groups, groups + ".old");
+                File.Copy(users, users + ".old");
+
+                oldGroup = oldGroup.ToLower();
+                var ids = userdata.Where(u => u.Value.Groups.Contains(oldGroup)).Select(u => u.Key);
+                foreach (var id in ids)
+                {
+                    AddUserGroup(id, newGroup);
+                    RemoveUserGroup(id, oldGroup);
+                }
+                foreach (var perm in GetGroupPermissions(oldGroup))
+                    GrantGroupPermission(newGroup, perm, null);
+
+                RemoveGroup(oldGroup);
+            }
+
+            SaveGroups();
             SaveUsers();
         }
 
