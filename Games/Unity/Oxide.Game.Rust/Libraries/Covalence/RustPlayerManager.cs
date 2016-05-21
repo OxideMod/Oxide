@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using ProtoBuf;
@@ -16,8 +17,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord
         {
-            public string Nickname;
-            public ulong SteamID;
+            public string Name;
+            public ulong Id;
         }
 
         private IDictionary<string, PlayerRecord> playerData;
@@ -27,41 +28,44 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         internal void Initialize()
         {
             // Load player data
-            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
-            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, RustPlayer>();
-            foreach (var pair in playerData) players.Add(pair.Key, new RustPlayer(pair.Value.SteamID, pair.Value.Nickname));
+            foreach (var pair in playerData) players.Add(pair.Key, new RustPlayer(pair.Value.Id, pair.Value.Name));
             livePlayers = new Dictionary<string, RustLivePlayer>();
+
+            // Cleanup old .data
+            //Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
         {
-            var uniqueId = steamid.ToString();
+            var id = steamid.ToString();
 
             // Do they exist?
             PlayerRecord record;
-            if (playerData.TryGetValue(uniqueId, out record))
+            if (playerData.TryGetValue(id, out record))
             {
                 // Update
-                record.Nickname = nickname;
-                playerData[uniqueId] = record;
+                record.Name = nickname;
+                playerData[id] = record;
 
                 // Swap out Rust player
-                players.Remove(uniqueId);
-                players.Add(uniqueId, new RustPlayer(steamid, nickname));
+                players.Remove(id);
+                players.Add(id, new RustPlayer(steamid, nickname));
             }
             else
             {
                 // Insert
-                record = new PlayerRecord {SteamID = steamid, Nickname = nickname};
-                playerData.Add(uniqueId, record);
+                record = new PlayerRecord {Id = steamid, Name = nickname};
+                playerData.Add(id, record);
 
                 // Create Rust player
-                players.Add(uniqueId, new RustPlayer(steamid, nickname));
+                players.Add(id, new RustPlayer(steamid, nickname));
             }
 
             // Save
-            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
+            ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
         internal void NotifyPlayerConnect(BasePlayer ply)
@@ -77,12 +81,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets an offline player using their unique ID
         /// </summary>
-        /// <param name="uniqueId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public IPlayer GetPlayer(string uniqueId)
+        public IPlayer GetPlayer(string id)
         {
             RustPlayer player;
-            return players.TryGetValue(uniqueId, out player) ? player : null;
+            return players.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
@@ -120,7 +124,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             var name = partialName.ToLower();
             var players = FindPlayers(partialName);
-            return players.SingleOrDefault() ?? players.FirstOrDefault(pl => pl.Nickname.ToLower() == name);
+            return players.SingleOrDefault() ?? players.FirstOrDefault(pl => pl.Name.ToLower() == name);
         }
 
         /// <summary>
@@ -131,7 +135,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
             var name = partialName.ToLower();
-            return players.Values.Where(p => p.Nickname.ToLower().Contains(name)).Cast<IPlayer>();
+            return players.Values.Where(p => p.Name.ToLower().Contains(name)).Cast<IPlayer>();
         }
 
         #endregion
@@ -141,12 +145,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets an online player given their unique ID
         /// </summary>
-        /// <param name="uniqueId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public ILivePlayer GetOnlinePlayer(string uniqueId)
+        public ILivePlayer GetOnlinePlayer(string id)
         {
             RustLivePlayer player;
-            return livePlayers.TryGetValue(uniqueId, out player) ? player : null;
+            return livePlayers.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
@@ -170,7 +174,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             var name = partialName.ToLower();
             var players = FindOnlinePlayers(partialName);
-            return players.SingleOrDefault() ?? players.FirstOrDefault(pl => pl.BasePlayer.Nickname.ToLower() == name);
+            return players.SingleOrDefault() ?? players.FirstOrDefault(pl => pl.BasePlayer.Name.ToLower() == name);
         }
 
         /// <summary>
@@ -181,7 +185,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName)
         {
             var name = partialName.ToLower();
-            return livePlayers.Values.Where(p => p.BasePlayer.Nickname.ToLower().Contains(name)).Cast<ILivePlayer>();
+            return livePlayers.Values.Where(p => p.BasePlayer.Name.ToLower().Contains(name)).Cast<ILivePlayer>();
         }
 
         #endregion

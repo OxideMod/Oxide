@@ -131,6 +131,14 @@ namespace Oxide.Game.RustLegacy.Libraries
         public string UserIDFromPlayer(NetUser netUser) => netUser.userID.ToString();
 
         /// <summary>
+        /// Returns the UserID for the specified player as a string
+        /// </summary>
+        /// <param name="netUser"></param>
+        /// <returns></returns>
+        [LibraryFunction("IdFromPlayer")]
+        public string IdFromPlayer(NetUser netUser) => netUser.userID.ToString();
+
+        /// <summary>
         /// Returns an array with all online players' NetUser
         /// </summary>
         [LibraryFunction("GetAllNetUsers")]

@@ -576,7 +576,7 @@ namespace Oxide.Core.Libraries
             SaveUsers();
 
             // Call hook for plugins
-            Interface.Oxide.CallHook("OnUserPermissionGranted", userid, perm);
+            Interface.CallHook("OnUserPermissionGranted", userid, perm);
         }
 
         /// <summary>
@@ -605,7 +605,7 @@ namespace Oxide.Core.Libraries
             SaveUsers();
 
             // Call hook for plugins
-            Interface.Oxide.CallHook("OnUserPermissionRevoked", userid, perm);
+            Interface.CallHook("OnUserPermissionRevoked", userid, perm);
         }
 
         #endregion
@@ -653,7 +653,7 @@ namespace Oxide.Core.Libraries
             SaveGroups();
 
             // Call hook for plugins
-            Interface.Oxide.CallHook("OnGroupPermissionGranted", groupname, perm);
+            Interface.CallHook("OnGroupPermissionGranted", groupname, perm);
         }
 
         /// <summary>
@@ -683,7 +683,7 @@ namespace Oxide.Core.Libraries
             SaveGroups();
 
             // Call hook for plugins
-            Interface.Oxide.CallHook("OnGroupPermissionRevoked", groupname, perm);
+            Interface.CallHook("OnGroupPermissionRevoked", groupname, perm);
         }
 
         #endregion

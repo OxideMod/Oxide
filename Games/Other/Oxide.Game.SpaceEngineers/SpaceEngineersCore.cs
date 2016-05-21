@@ -1,4 +1,6 @@
-﻿using Sandbox.Common;
+﻿using System;
+
+using Sandbox.Common;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -11,6 +13,8 @@ namespace Oxide.Game.SpaceEngineers
     /// </summary>
     public class SpaceEngineersCore : CSPlugin
     {
+        #region Initialization
+
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
@@ -25,7 +29,7 @@ namespace Oxide.Game.SpaceEngineers
         public SpaceEngineersCore()
         {
             // Set attributes
-            Name = "spaceengineerscore";
+            Name = "SpaceEngineersCore";
             Title = "Space Engineers Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
@@ -40,6 +44,8 @@ namespace Oxide.Game.SpaceEngineers
             CallHook("InitLogging", null);
         }
 
+        #endregion
+
         #region Plugin Hooks
 
         /// <summary>
@@ -51,6 +57,25 @@ namespace Oxide.Game.SpaceEngineers
             // Configure remote logging
             RemoteLogger.SetTag("game", "space engineers");
             RemoteLogger.SetTag("version", MyFinalBuildConstants.APP_VERSION.ToString());
+
+            // Setup the default permission groups
+            if (permission.IsLoaded)
+            {
+                var rank = 0;
+                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
+                {
+                    var defaultGroup = DefaultGroups[i];
+                    if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
+                }
+                permission.RegisterValidate(s =>
+                {
+                    ulong temp;
+                    if (!ulong.TryParse(s, out temp)) return false;
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                    return digits >= 17;
+                });
+                permission.CleanUp();
+            }
         }
 
         /// <summary>
@@ -78,7 +103,7 @@ namespace Oxide.Game.SpaceEngineers
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", ); // TODO
+            //RemoteLogger.SetTag("hostname", MyDedicatedServerBase.HostName); // TODO
         }
 
         /// <summary>

@@ -86,32 +86,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 9,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnUserApprove [internal]",
-            "HookName": "IOnUserApprove",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "uLink_OnPlayerApproval",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayerApproval"
-              ]
-            },
-            "MSILHash": "+lIKdhM4OTpHgn6PaZASBdPosilaSjIHJs8mEJmTlM4=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 21,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
@@ -404,6 +378,32 @@
             "MSILHash": "C3zc2XD2nG2LhFz6K9P/J72KemE12YyiOU2iLrOM7Ag=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 137,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, l4",
+            "HookTypeName": "Simple",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "PlayerApproval",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayerApproval"
+              ]
+            },
+            "MSILHash": "4yRMlP1wDzO5kkXOAIQuBKNgASefONCARFSXE8Ro6yY=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]

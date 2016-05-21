@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using Rust;
 using uLink;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.RustLegacy.Libraries;
+using Oxide.Game.RustLegacy.Libraries.Covalence;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -18,6 +20,8 @@ namespace Oxide.Game.RustLegacy
     /// </summary>
     public class RustLegacyCore : CSPlugin
     {
+        #region Initialization
+
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
@@ -27,6 +31,9 @@ namespace Oxide.Game.RustLegacy
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The Rust Legacy covalence provider
+        private readonly RustLegacyCovalenceProvider covalence = RustLegacyCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;
@@ -68,6 +75,8 @@ namespace Oxide.Game.RustLegacy
             arg.ReplyWith("Unable to load permission files! Permissions will not work until resolved.\r\n => " + permission.LastException.Message);
             return false;
         }
+
+        #endregion
 
         #region Plugin Hooks
 
@@ -117,8 +126,7 @@ namespace Oxide.Game.RustLegacy
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    if (!ulong.TryParse(s, out temp))
-                        return false;
+                    if (!ulong.TryParse(s, out temp)) return false;
                     var digits = temp == 0 ? 1 : (int)System.Math.Floor(System.Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
@@ -139,17 +147,6 @@ namespace Oxide.Game.RustLegacy
         #endregion
 
         #region Server Hooks
-
-        /// <summary>
-        /// Check if player is admin
-        /// </summary>
-        /// <returns></returns>
-        private static bool IsAdmin(ConsoleSystem.Arg arg)
-        {
-            if (arg.argUser == null || arg.argUser.CanAdmin()) return true;
-            arg.ReplyWith("You are not an admin.");
-            return false;
-        }
 
         /// <summary>
         /// Called when the server is first initialized
@@ -191,39 +188,146 @@ namespace Oxide.Game.RustLegacy
 
         #endregion
 
+        #region Player Hooks
+
+        /// <summary>
+        /// Called when a user is attempting to connect
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="approval"></param>
+        /// <param name="acceptor"></param>
+        [HookMethod("IOnUserApprove")]
+        private object IOnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
+        {
+            // Reject invalid connections
+            if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
+            {
+                approval.Deny(uLink.NetworkConnectionError.ConnectionBanned);
+                return true;
+            }
+
+            // Call out and see if we should reject
+            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, connection.UserID.ToString());
+            if (canlogin != null)
+            {
+                Notice.Popup(connection.netUser.networkPlayer, "", canlogin.ToString(), 10f);
+                approval.Deny(uLink.NetworkConnectionError.NoError);
+                return true;
+            }
+
+            return Interface.CallHook("OnUserApprove", connection, approval, acceptor) ?? Interface.CallHook("OnUserApproved", connection.UserName, connection.UserID.ToString());
+        }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="netUser"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(NetUser netUser)
+        {
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(netUser);
+
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var userId = netUser.userID.ToString();
+                permission.UpdateNickname(userId, netUser.displayName);
+
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+            }
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(netUser.userID.ToString());
+            Interface.CallHook("OnUserConnected", iplayer);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="netPlayer"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(uLink.NetworkPlayer netPlayer)
+        {
+            var netUser = netPlayer.GetLocalData() as NetUser;
+            if (netUser != null)
+            {
+                // Call covalence hook
+                var iplayer = covalence.PlayerManager.GetPlayer(netUser.userID.ToString());
+                Interface.CallHook("OnUserDisconnected", iplayer, null);
+
+                // Let covalence know
+                covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
+
+                // Delay removing player until OnPlayerDisconnect has fired in plugins
+                Interface.Oxide.NextTick(() =>
+                {
+                    if (playerData.ContainsKey(netUser)) playerData.Remove(netUser);
+                });
+            }
+        }
+
+        /// <summary>
+        /// Called when the player has spawned
+        /// </summary>
+        /// <param name="client"></param>
+        [HookMethod("OnPlayerSpawned")]
+        private void OnPlayerSpawned(PlayerClient client)
+        {
+            var netUser = client.netUser;
+            if (!playerData.ContainsKey(netUser)) playerData.Add(netUser, new PlayerData());
+            playerData[netUser].character = client.controllable.GetComponent<Character>();
+            playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
+        }
+
+        /// <summary>
+        /// Called when the player is speaking
+        /// </summary>
+        /// <param name="netUser"></param>
+        [HookMethod("IOnPlayerVoice")]
+        private object IOnPlayerVoice(NetUser netUser)
+        {
+            var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
+            playerList.SetValue(null, players);
+            return (int?)Interface.CallHook("OnPlayerVoice", netUser, players);
+        }
+
+        #endregion
+
         #region Console Commands
 
         /// <summary>
         /// Called when the "plugins" command has been executed
         /// </summary>
-        [HookMethod("cmdPlugins")]
-        private void cmdPlugins(ConsoleSystem.Arg arg)
+        [HookMethod("CmdPlugins")]
+        private void CmdPlugins(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
 
-            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
-            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
-            var unloaded_plugin_errors = new Dictionary<string, string>();
+            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
+            var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
             {
-                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
                 {
                     string msg;
-                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
                 }
             }
 
-            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
-            if (total_plugin_count < 1)
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
             {
                 arg.ReplyWith("[Oxide] No plugins are currently available");
                 return;
             }
 
-            var output = $"[Oxide] Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
+            var output = $"[Oxide] Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
             var number = 1;
-            output = loaded_plugins.Aggregate(output, (current, plugin) => current + $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}");
-            output = unloaded_plugin_errors.Keys.Aggregate(output, (current, plugin_name) => current + $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}");
+            output = loadedPlugins.Aggregate(output, (current, plugin) => current + $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}");
+            output = unloadedPluginErrors.Keys.Aggregate(output, (current, pluginName) => current + $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}");
             arg.ReplyWith(output);
         }
 
@@ -231,8 +335,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "load" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdLoad")]
-        private void cmdLoad(ConsoleSystem.Arg arg)
+        [HookMethod("CmdLoad")]
+        private void CmdLoad(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -260,8 +364,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "unload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdUnload")]
-        private void cmdUnload(ConsoleSystem.Arg arg)
+        [HookMethod("CmdUnload")]
+        private void CmdUnload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -285,8 +389,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "reload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdReload")]
-        private void cmdReload(ConsoleSystem.Arg arg)
+        [HookMethod("CmdReload")]
+        private void CmdReload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -310,8 +414,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "version" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdVersion")]
-        private void cmdVersion(ConsoleSystem.Arg arg)
+        [HookMethod("CmdVersion")]
+        private void CmdVersion(ConsoleSystem.Arg arg)
         {
             var oxide = OxideMod.Version.ToString();
             var rust = Rust.Defines.Connection.protocol.ToString();
@@ -324,8 +428,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdGroup")]
-        private void cmdGroup(ConsoleSystem.Arg arg)
+        [HookMethod("CmdGroup")]
+        private void CmdGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -380,8 +484,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdUserGroup")]
-        private void cmdUserGroup(ConsoleSystem.Arg arg)
+        [HookMethod("CmdUserGroup")]
+        private void CmdUserGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -437,8 +541,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdGrant")]
-        private void cmdGrant(ConsoleSystem.Arg arg)
+        [HookMethod("CmdGrant")]
+        private void CmdGrant(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -486,8 +590,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdRevoke")]
-        private void cmdRevoke(ConsoleSystem.Arg arg)
+        [HookMethod("CmdRevoke")]
+        private void CmdRevoke(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -531,14 +635,12 @@ namespace Oxide.Game.RustLegacy
             }
         }
 
-        #endregion
-
         /// <summary>
         /// Called when the "show" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("cmdShow")]
-        private void cmdShow(ConsoleSystem.Arg arg)
+        [HookMethod("CmdShow")]
+        private void CmdShow(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -607,6 +709,8 @@ namespace Oxide.Game.RustLegacy
             }
         }
 
+        #endregion
+
         #region Command Handling
 
         /// <summary>
@@ -630,32 +734,34 @@ namespace Oxide.Game.RustLegacy
                 var str = arg.GetString(0);
                 if (str.Length == 0) return true;
 
+                // Get covalence player
+                var iplayer = covalence.PlayerManager.GetPlayer(arg.argUser.userID.ToString());
+
                 // Is it a chat command?
-                if (str[0] == '/' || str[0] == '!')
+                if (str[0] != '/' && str[0] != '!')
+                    return Interface.CallHook("OnPlayerChat", arg.argUser, str) ?? Interface.CallHook("OnUserChat", iplayer, str);
+
+                // Get the arg string
+                var argstr = str.Substring(1);
+                if (str.Length == 1) return true;
+
+                // Parse it
+                string chatcmd;
+                string[] args;
+                ParseChatCommand(argstr, out chatcmd, out args);
+                if (chatcmd == null) return null;
+
+                // Handle it
+                var ply = arg.argUser;
+                if (ply != null && !cmdlib.HandleChatCommand(ply, chatcmd, args))
                 {
-                    // Get the arg string
-                    var argstr = str.Substring(1);
-                    if (str.Length == 1) return true;
-
-                    // Parse it
-                    string chatcmd;
-                    string[] args;
-                    ParseChatCommand(argstr, out chatcmd, out args);
-                    if (chatcmd == null) return null;
-
-                    // Handle it
-                    var ply = arg.argUser;
-                    if (ply != null && !cmdlib.HandleChatCommand(ply, chatcmd, args))
-                    {
-                        ConsoleNetworker.SendClientCommand(ply.networkPlayer, $"chat.add \"Server\" \" Unknown command {chatcmd}\"");
-                        return true;
-                    }
-
-                    // Handled
-                    arg.ReplyWith(string.Empty);
+                    ConsoleNetworker.SendClientCommand(ply.networkPlayer, $"chat.add \"Server\" \" Unknown command {chatcmd}\"");
                     return true;
                 }
-                return Interface.CallHook("OnPlayerChat", arg.argUser, str);
+
+                // Handled
+                arg.ReplyWith(string.Empty);
+                return true;
             }
 
             return cmdlib.HandleConsoleCommand(arg, wantreply);
@@ -717,103 +823,11 @@ namespace Oxide.Game.RustLegacy
 
         #endregion
 
-        #region Player Hooks
+        #region Anti-Cheat
 
         /// <summary>
-        /// Called when a user is attempting to connect
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="approval"></param>
-        /// <param name="acceptor"></param>
-        [HookMethod("IOnUserApprove")]
-        private object IOnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
-        {
-            // Reject invalid connections
-            if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
-            {
-                approval.Deny(uLink.NetworkConnectionError.ConnectionBanned);
-                return false;
-            }
-
-            // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection);
-            if (canlogin is uLink.NetworkConnectionError)
-            {
-                approval.Deny((uLink.NetworkConnectionError)canlogin);
-                return true;
-            }
-
-            return Interface.CallHook("OnUserApprove", connection, approval, acceptor);
-        }
-
-        /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(NetUser player)
-        {
-            // Do permission stuff
-            if (permission.IsLoaded)
-            {
-                var userId = player.userID.ToString();
-                permission.UpdateNickname(userId, player.displayName);
-
-                // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
-            }
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(uLink.NetworkPlayer player)
-        {
-            // Delay removing player until OnPlayerDisconnect has fired in plugins
-            var netUser = player.GetLocalData() as NetUser;
-            if (netUser != null)
-            {
-                Interface.Oxide.NextTick(() =>
-                {
-                    if (playerData.ContainsKey(netUser)) playerData.Remove(netUser);
-                });
-            }
-        }
-
-        /// <summary>
-        /// Called when the player has spawned
-        /// </summary>
-        /// <param name="client"></param>
-        [HookMethod("OnPlayerSpawned")]
-        private void OnPlayerSpawned(PlayerClient client)
-        {
-            var netUser = client.netUser;
-            if (!playerData.ContainsKey(netUser)) playerData.Add(netUser, new PlayerData());
-            playerData[netUser].character = client.controllable.GetComponent<Character>();
-            playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
-        }
-
-        /// <summary>
-        /// Called when the player is speaking
-        /// </summary>
-        /// <param name="netUser"></param>
-        [HookMethod("IOnPlayerVoice")]
-        private object IOnPlayerVoice(NetUser netUser)
-        {
-            var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
-            playerList.SetValue(null, players);
-            return (int?)Interface.CallHook("OnPlayerVoice", netUser, players);
-        }
-
-        #endregion
-
-        #region Anti-Cheat Hooks
-
-        /// <summary>
-        /// Called when the GetClientMove packed is received for a player
-        /// Checking the player position in the packet to prevent harmful packets crashing the server
+        /// Called when the GetClientMove packet is received for a player
+        /// Checks the player position in the packet to prevent harmful packets crashing the server
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="pos"></param>
@@ -848,6 +862,19 @@ namespace Oxide.Game.RustLegacy
 
         #endregion
 
+        #region Helpers
+
+        /// <summary>
+        /// Check if player is admin
+        /// </summary>
+        /// <returns></returns>
+        private static bool IsAdmin(ConsoleSystem.Arg arg)
+        {
+            if (arg.argUser == null || arg.argUser.CanAdmin()) return true;
+            arg.ReplyWith("You are not an admin.");
+            return false;
+        }
+
         public NetUser FindPlayer(string nameOrIdOrIp)
         {
             NetUser netUser;
@@ -860,5 +887,7 @@ namespace Oxide.Game.RustLegacy
         public static Character GetCharacter(NetUser netUser) => playerData[netUser].character;
 
         public static PlayerInventory GetInventory(NetUser netUser) => playerData[netUser].inventory;
+
+        #endregion
     }
 }

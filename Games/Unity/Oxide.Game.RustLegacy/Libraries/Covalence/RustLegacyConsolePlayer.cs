@@ -10,14 +10,14 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
     public class RustLegacyConsolePlayer : IPlayer, ILivePlayer
     {
         /// <summary>
-        /// Gets the nickname for this player
+        /// Gets the name for this player
         /// </summary>
-        public string Nickname => "Server Console";
+        public string Name => "Server Console";
 
         /// <summary>
-        /// Gets a unique ID for this player (unique within the current game)
+        /// Gets the ID for this player (unique within the current game)
         /// </summary>
-        public string UniqueID => "server_console";
+        public string Id => "server_console";
 
         /// <summary>
         /// Gets the live player if this player is connected
@@ -155,7 +155,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args) => ConsoleSystem.Run(string.Concat(command, " ", args), true);
+        public void Command(string command, params object[] args) => ConsoleSystem.Run(string.Concat(command, " ", args), true);
 
         #endregion
     }

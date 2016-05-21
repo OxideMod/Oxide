@@ -11,12 +11,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     {
         #region Information
 
-        private readonly ulong steamid;
+        private readonly ulong steamId;
 
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer => HurtworldCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
+        public IPlayer BasePlayer => HurtworldCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
         /// Gets this player's in-game character, if available
@@ -39,6 +39,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public CommandType LastCommand { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => session.Player.ipAddress;
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         public int Ping => session.Player.averagePing;
@@ -48,7 +53,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         internal HurtworldLivePlayer(PlayerSession session)
         {
             this.session = session;
-            steamid = (ulong)session.SteamId;
+            steamId = (ulong)session.SteamId;
             Character = this;
             Object = session.WorldPlayerEntity;
         }
@@ -61,7 +66,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Kicks this player from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => GameManager.Instance.KickPlayer(steamid.ToString(), reason);
+        public void Kick(string reason) => GameManager.Instance.KickPlayer(steamId.ToString(), reason);
 
         /// <summary>
         /// Causes this player's character to die
@@ -102,7 +107,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
+        public void Command(string command, params object[] args)
         {
             // TODO: Not available yet
         }
@@ -117,7 +122,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void GetPosition(out float x, out float y, out float z)
+        public void Position(out float x, out float y, out float z)
         {
             var pos = session.WorldPlayerEntity.transform.position;
             x = pos.x;
@@ -129,7 +134,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Gets the position of this character
         /// </summary>
         /// <returns></returns>
-        public GenericPosition GetPosition()
+        public GenericPosition Position()
         {
             var pos = session.WorldPlayerEntity.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);

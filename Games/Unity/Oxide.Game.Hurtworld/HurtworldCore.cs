@@ -11,6 +11,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.Hurtworld.Libraries;
+using Oxide.Game.Hurtworld.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld
 {
@@ -19,7 +20,7 @@ namespace Oxide.Game.Hurtworld
     /// </summary>
     public class HurtworldCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
@@ -30,6 +31,9 @@ namespace Oxide.Game.Hurtworld
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The Hurtworld covalence provider
+        private readonly HurtworldCovalenceProvider covalence = HurtworldCovalenceProvider.Instance;
 
         #region Localization
 
@@ -81,10 +85,6 @@ namespace Oxide.Game.Hurtworld
 
         // Track 'load' chat commands
         private readonly Dictionary<string, PlayerSession> loadingPlugins = new Dictionary<string, PlayerSession>();
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
@@ -231,7 +231,7 @@ namespace Oxide.Game.Hurtworld
         private object IOnUserApprove(PlayerSession session)
         {
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", session);
+            var canlogin = Interface.CallHook("CanClientLogin", session) ?? Interface.CallHook("CanUserLogin", session.Name, session.SteamId.ToString());
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
@@ -239,46 +239,7 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", session);
-        }
-
-        /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="player"></param>
-        [HookMethod("IOnPlayerConnected")]
-        private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
-        {
-            // Set the session name and strip HTML tags
-            var session = FindSessionByNetPlayer(player);
-            session.Name = Regex.Replace(name, "<.*?>", string.Empty); // TODO: Make sure the name is not blank
-
-            // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(session);
-
-            // Do permission stuff
-            if (permission.IsLoaded)
-            {
-                var userId = session.SteamId.ToString();
-                permission.UpdateNickname(userId, session.Name);
-
-                // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
-            }
-
-            Interface.Oxide.CallHook("OnPlayerConnected", session);
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="session"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(PlayerSession session)
-        {
-            // Let covalence know
-            Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(session);
+            return Interface.CallHook("OnUserApprove", session) ?? Interface.CallHook("OnUserApproved", session.Name, session.SteamId.ToString());
         }
 
         /// <summary>
@@ -292,12 +253,16 @@ namespace Oxide.Game.Hurtworld
             if (message.Trim().Length <= 1) return true;
             var str = message.Substring(0, 1);
 
+            // Get covalence player
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+
             // Is it a chat command?
-            if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", session, message);
+            if (!str.Equals("/") && !str.Equals("!"))
+                return Interface.CallHook("OnPlayerChat", session, message) ?? Interface.CallHook("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
-            var livePlayer = Libraries.Covalence.HurtworldCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(session.SteamId.m_SteamID.ToString());
-            if (Libraries.Covalence.HurtworldCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
+            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(session.SteamId.ToString());
+            if (covalence.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);
@@ -315,9 +280,71 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
-            Interface.Oxide.CallHook("OnChatCommand", session, command);
+            Interface.CallHook("OnChatCommand", session, command);
 
             return true;
+        }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="player"></param>
+        [HookMethod("IOnPlayerConnected")]
+        private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
+        {
+            // Set the session name and strip HTML tags
+            var session = FindSessionByNetPlayer(player);
+            session.Name = Regex.Replace(name, "<.*?>", string.Empty); // TODO: Make sure the name is not blank
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(session);
+
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var userId = session.SteamId.ToString();
+                permission.UpdateNickname(userId, session.Name);
+
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+            }
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            Interface.CallHook("OnUserConnected", iplayer);
+
+            Interface.CallHook("OnPlayerConnected", session);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="session"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(PlayerSession session)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            Interface.CallHook("OnUserDisconnected", iplayer, null);
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(session);
+        }
+
+        /// <summary>
+        /// Called when the player has been initialized
+        /// </summary>
+        /// <param name="session"></param>
+        [HookMethod("OnPlayerInit")]
+        private void OnPlayerInit(PlayerSession session)
+        {
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(session);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            Interface.CallHook("OnUserInit", iplayer);
         }
 
         /// <summary>
@@ -326,14 +353,14 @@ namespace Oxide.Game.Hurtworld
         /// <param name="player"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
-        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.Oxide.CallHook("OnPlayerInput", FindSessionByNetPlayer(player), input);
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.CallHook("OnPlayerInput", FindSessionByNetPlayer(player), input);
 
         /// <summary>
         /// Called when the player attempts to suicide
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("IOnPlayerSuicide")]
-        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.Oxide.CallHook("OnPlayerSuicide", FindSessionByNetPlayer(player));
+        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.CallHook("OnPlayerSuicide", FindSessionByNetPlayer(player));
 
         #endregion
 
@@ -548,7 +575,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatVersion")]
         private void ChatVersion(PlayerSession session, string command, string[] args)
         {
-            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance.GetProtocolVersion()}", session);
+            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()}", session);
         }
 
         /// <summary>
@@ -852,12 +879,19 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(GetMessage("CommandUsageShow", session.SteamId.ToString()), session);
+                    return;
+                }
+
                 var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(GetMessage("UserNotFound", session.SteamId.ToString()), session);
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -874,11 +908,18 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("group"))
             {
-                if (!permission.GroupExists(name))
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(GetMessage("CommandUsageShow", session.SteamId.ToString()), session);
+                    return;
+                }
+
+                if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
                     Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";
@@ -969,7 +1010,7 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
-        #region Helper Methods
+        #region Helpers
 
         /// <summary>
         /// Returns if specified player is admin

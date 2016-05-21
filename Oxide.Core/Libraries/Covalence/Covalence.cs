@@ -172,26 +172,26 @@ namespace Oxide.Core.Libraries.Covalence
         /// <summary>
         /// Registers a command (chat + console)
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandCallback callback)
+        public void RegisterCommand(string command, CommandCallback callback)
         {
             if (cmdSystem == null) return;
 
             try
             {
-                cmdSystem.RegisterCommand(cmd, callback);
+                cmdSystem.RegisterCommand(command, callback);
             }
             catch (CommandAlreadyExistsException)
             {
-                logger.Write(LogType.Error, "Tried to register command '{0}', already exists!", cmd);
+                logger.Write(LogType.Error, "Tried to register command '{0}', already exists!", command);
             }
         }
 
         /// <summary>
         /// Unregisters a command (chat + console)
         /// </summary>
-        /// <param name="cmd"></param>
-        public void UnregisterCommand(string cmd) => cmdSystem?.UnregisterCommand(cmd);
+        /// <param name="command"></param>
+        public void UnregisterCommand(string command) => cmdSystem?.UnregisterCommand(command);
     }
 }

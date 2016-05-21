@@ -21,6 +21,11 @@
         CommandType LastCommand { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        string Address { get; }
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         int Ping { get; }
@@ -61,7 +66,7 @@
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        void RunCommand(string command, params object[] args);
+        void Command(string command, params object[] args);
 
         /// <summary>
         /// Replies to the user

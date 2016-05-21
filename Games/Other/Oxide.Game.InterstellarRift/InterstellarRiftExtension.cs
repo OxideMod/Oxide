@@ -38,8 +38,7 @@ namespace Oxide.Game.InterstellarRift
         /// Initializes a new instance of the InterstellarRiftExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public InterstellarRiftExtension(ExtensionManager manager)
-            : base(manager)
+        public InterstellarRiftExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -98,12 +97,12 @@ namespace Oxide.Game.InterstellarRift
                 var playerLimit = string.Empty; // TODO
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
-            Interface.Oxide.ServerConsole.Status2Right = () =>
+            /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(0); // TODO
                 var bytesSent = Utility.FormatBytes(0); // TODO
                 return null <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out"); // TODO
-            };
+            };*/
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {

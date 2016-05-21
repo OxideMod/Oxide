@@ -23,7 +23,7 @@ namespace Oxide.Game.TheForest
     /// </summary>
     public class TheForestCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
@@ -34,10 +34,6 @@ namespace Oxide.Game.TheForest
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the TheForestCore class
@@ -91,8 +87,7 @@ namespace Oxide.Game.TheForest
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    if (!ulong.TryParse(s, out temp))
-                        return false;
+                    if (!ulong.TryParse(s, out temp)) return false;
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });

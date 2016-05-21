@@ -9,12 +9,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     {
         #region Information
 
-        private readonly ulong steamid;
+        private readonly ulong steamId;
 
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer => RustCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
+        public IPlayer BasePlayer => RustCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
         /// Gets this player's in-game character, if available
@@ -39,6 +39,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public ConsoleSystem.Arg LastArg { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => player.net.connection.ipaddress;
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         public int Ping => Network.Net.sv.GetAveragePing(player.net.connection);
@@ -48,7 +53,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         internal RustLivePlayer(BasePlayer player)
         {
             this.player = player;
-            steamid = player.userID;
+            steamId = player.userID;
             Character = this;
             Object = player;
         }
@@ -98,7 +103,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args) => player.SendConsoleCommand(command, args);
+        public void Command(string command, params object[] args) => player.SendConsoleCommand(command, args);
 
         /// <summary>
         /// Replies to the user
@@ -127,7 +132,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void GetPosition(out float x, out float y, out float z)
+        public void Position(out float x, out float y, out float z)
         {
             var pos = player.transform.position;
             x = pos.x;
@@ -139,7 +144,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Gets the position of this character
         /// </summary>
         /// <returns></returns>
-        public GenericPosition GetPosition()
+        public GenericPosition Position()
         {
             var pos = player.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);

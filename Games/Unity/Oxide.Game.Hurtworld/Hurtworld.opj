@@ -183,58 +183,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "CanUseDoor",
-            "HookName": "CanUseDoor",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "DoorController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SetState",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
-            "BaseHookName": null,
-            "HookCategory": "Structure"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 49,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnDoorOpened",
-            "HookName": "OnDoorOpened",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "DoorController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SetState",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
-            "BaseHookName": "CanUseDoor",
-            "HookCategory": "Structure"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 18,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
@@ -310,32 +258,6 @@
             "MSILHash": "f3iTGt9YGC9CVMvoRKQnxA9WZdXWz221Ezq/FmZypKc=",
             "BaseHookName": null,
             "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 69,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnDoorClosed",
-            "HookName": "OnDoorClosed",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "DoorController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SetState",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "CmQO368yJMFSIPlekGBqZoY45HloPdh9+JO2NQ6/a6E=",
-            "BaseHookName": "OnDoorOpened",
-            "HookCategory": "Structure"
           }
         },
         {
@@ -1127,6 +1049,110 @@
             "MSILHash": "Ig7wLwf2mkYF69Klb+x84kV0AgurZt0yD6GvBHvlU10=",
             "BaseHookName": null,
             "HookCategory": "Vehicle"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.OwnerIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseDoor",
+            "HookName": "CanUseDoor",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoubleDoorServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnBeginUseEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "v/55d9Vvj1CgTdKoFMvKCwuJ/aN9QSZL41ekz8a0MBs=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.OwnerIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseGarage",
+            "HookName": "CanUseGarage",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GarageDoorServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnBeginUseEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "tI+n0tRnc+GQKEi7kpf5wHzt6F3uDgm36fpLcHbgUU8=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0.OwnerIdentity.ConnectedSession",
+            "HookTypeName": "Simple",
+            "Name": "OnDoorUsed",
+            "HookName": "OnDoorUsed",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoubleDoorServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnBeginUseEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "v/55d9Vvj1CgTdKoFMvKCwuJ/aN9QSZL41ekz8a0MBs=",
+            "BaseHookName": "CanUseDoor",
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0.OwnerIdentity.ConnectedSession",
+            "HookTypeName": "Simple",
+            "Name": "OnGarageUsed",
+            "HookName": "OnGarageUsed",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GarageDoorServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnBeginUseEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "tI+n0tRnc+GQKEi7kpf5wHzt6F3uDgm36fpLcHbgUU8=",
+            "BaseHookName": "CanUseGarage",
+            "HookCategory": "Structure"
           }
         }
       ]

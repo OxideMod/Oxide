@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+
+using Steamworks;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
@@ -11,14 +14,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     public class RustConsolePlayer : IPlayer, ILivePlayer
     {
         /// <summary>
-        /// Gets the nickname for this player
+        /// Gets the name for this player
         /// </summary>
-        public string Nickname => "Server Console";
+        public string Name => "Server Console";
 
         /// <summary>
-        /// Gets a unique ID for this player (unique within the current game)
+        /// Gets the ID for this player (unique within the current game)
         /// </summary>
-        public string UniqueID => "server_console";
+        public string Id => "server_console";
 
         /// <summary>
         /// Gets the live player if this player is connected
@@ -39,6 +42,18 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Gets this player's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
+
+        /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address
+        {
+            get
+            {
+                var ip = SteamGameServer.GetPublicIP();
+                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24)).ToString();
+            }
+        }
 
         /// <summary>
         /// Gets this player's average network ping
@@ -172,7 +187,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
+        public void Command(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
 
         #endregion
     }

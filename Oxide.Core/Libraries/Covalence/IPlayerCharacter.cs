@@ -36,13 +36,13 @@
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        void GetPosition(out float x, out float y, out float z);
+        void Position(out float x, out float y, out float z);
 
         /// <summary>
         /// Gets the position of this character
         /// </summary>
         /// <returns></returns>
-        GenericPosition GetPosition();
+        GenericPosition Position();
 
         #region Manipulation
 

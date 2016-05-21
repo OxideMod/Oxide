@@ -158,7 +158,7 @@ namespace Oxide.Game.HideHoldOut
 
         private void ServerConsoleOnInput(string input)
         {
-            if (!string.IsNullOrEmpty(input)) Interface.Oxide.CallHook("OnServerCommand", input);
+            if (!string.IsNullOrEmpty(input)) Interface.CallHook("OnServerCommand", input);
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

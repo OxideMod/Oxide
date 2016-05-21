@@ -174,7 +174,7 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname ?? "Unnamed"}";
 
             Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", ConVar.Server.hostname ?? "Unnamed");
-            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong) Time.realtimeSinceStartup)}";
+            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)Time.realtimeSinceStartup)}";
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {

@@ -74,8 +74,7 @@ namespace Oxide.Game.RustLegacy
         /// Initializes a new instance of the RustExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public RustLegacyExtension(ExtensionManager manager)
-            : base(manager)
+        public RustLegacyExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -169,25 +168,56 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public override void OnModLoad()
         {
-            /*if (!Interface.Oxide.CheckConsole(true)) return;
-            var obj = UnityEngine.Object.FindObjectsOfType<LibRust>();
-            if (obj.Length > 0)
-            {
-                obj[0].enabled = false;
-                LibRust.Shutdown();
-            }
-            if (!Interface.Oxide.EnableConsole(true)) return;
+            if (!Interface.Oxide.CheckConsole(true) || !Interface.Oxide.EnableConsole(true)) return;
 
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            ConsoleSystem.RegisterLogCallback(HandleLog, true);*/
+            ConsoleSystem.RegisterLogCallback(HandleLog, true);
+
+            Interface.Oxide.ServerConsole.Title = () => $"{NetCull.connections.Length} | {server.hostname ?? "Unnamed"}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", server.hostname ?? "Unnamed");
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () => $" {NetCull.connections.Length}/{NetCull.maxConnections} players";
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (!NetCull.isServerRunning || NetCull.isNotRunning) return "not connected";
+                double bytesSent = 0;
+                double bytesReceived = 0;
+                foreach (var connection in NetCull.connections)
+                {
+                    var stats = connection.statistics;
+                    if (stats == null) continue;
+                    bytesSent += stats.bytesSentPerSecond;
+                    bytesReceived += stats.bytesReceivedPerSecond;
+                }
+                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () => $" {EnvironmentControlCenter.Singleton?.GetTime().ToString() ?? "Unknown"}, {(server.pvp ? "PvP" : "PvE")}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
+
+            Interface.Oxide.ServerConsole.Completion = input =>
+            {
+                if (string.IsNullOrEmpty(input)) return null;
+                if (!input.Contains(".")) input = string.Concat("global.", input);
+                return Command.consoleCommands.Where(c => c.Key.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.Key).ToArray();
+            };
         }
 
-        private void ServerConsoleOnInput(string input)
+        private static void ServerConsoleOnInput(string input)
         {
             if (!string.IsNullOrEmpty(input)) ConsoleSystem.Run(input, true);
         }
 
-        private void HandleLog(string message, string stackTrace, LogType type)
+        private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 

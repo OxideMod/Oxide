@@ -17,12 +17,12 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     {
         #region Information
 
-        private readonly ulong steamid;
+        private readonly ulong steamId;
 
         /// <summary>
         /// Gets the base player of this player
         /// </summary>
-        public IPlayer BasePlayer => ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetPlayer(steamid.ToString());
+        public IPlayer BasePlayer => ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
         /// Gets this player's in-game character, if available
@@ -45,6 +45,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public CommandType LastCommand { get; set; }
 
         /// <summary>
+        /// Gets this player's IP address
+        /// </summary>
+        public string Address => player.Connection.IpAddress;
+
+        /// <summary>
         /// Gets this player's average network ping
         /// </summary>
         public int Ping => player.Connection.AveragePing;
@@ -54,7 +59,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         internal ReignOfKingsLivePlayer(Player player)
         {
             this.player = player;
-            steamid = player.Id;
+            steamId = player.Id;
             Character = this;
             Object = player.CurrentCharacter;
         }
@@ -106,16 +111,16 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void RunCommand(string command, params object[] args)
+        public void Command(string command, params object[] args)
         {
-            CommandManager.ExecuteCommand(steamid, command + " " + string.Join(" ", args.ToList().ConvertAll(a => (string)a).ToArray()));
+            CommandManager.ExecuteCommand(steamId, command + " " + string.Join(" ", args.ToList().ConvertAll(a => (string)a).ToArray()));
         }
 
         #endregion
 
         #region Location
 
-        public void GetPosition(out float x, out float y, out float z)
+        public void Position(out float x, out float y, out float z)
         {
             var pos = player.CurrentCharacter.SavedPosition;
             x = pos.x;
@@ -123,7 +128,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             z = pos.z;
         }
 
-        public GenericPosition GetPosition()
+        public GenericPosition Position()
         {
             var pos = player.CurrentCharacter.SavedPosition;
             return new GenericPosition(pos.x, pos.y, pos.z);

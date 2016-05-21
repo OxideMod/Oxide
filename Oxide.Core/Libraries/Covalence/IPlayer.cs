@@ -8,14 +8,14 @@ namespace Oxide.Core.Libraries.Covalence
     public interface IPlayer
     {
         /// <summary>
-        /// Gets the nickname for this player
+        /// Gets the name for this player
         /// </summary>
-        string Nickname { get; }
+        string Name { get; }
 
         /// <summary>
-        /// Gets a unique ID for this player (unique within the current game)
+        /// Gets the ID for this player (unique within the current game)
         /// </summary>
-        string UniqueID { get; }
+        string Id { get; }
 
         /// <summary>
         /// Gets the live player if this player is connected

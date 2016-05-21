@@ -19,10 +19,10 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         //private IDictionary<string, ConsoleSystem.Command> rustCommands;
 
         // Chat command handler
-        private ChatCommandHandler chatCommandHandler;
+        //private ChatCommandHandler chatCommandHandler;
 
         // All registered chat commands
-        private IDictionary<string, CommandCallback> registeredChatCommands;
+        //private IDictionary<string, CommandCallback> registeredChatCommands;
 
         // The console player
         //private RustLegacyConsolePlayer consolePlayer;
@@ -38,11 +38,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             consolePlayer = new RustLegacyConsolePlayer();*/
         }
 
-        private bool ChatCommandCallback(string cmd, IPlayer caller, string[] args)
+        /*private bool ChatCommandCallback(string cmd, IPlayer caller, string[] args)
         {
             CommandCallback callback;
             return registeredChatCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
-        }
+        }*/
 
         /// <summary>
         /// Registers the specified command
@@ -72,12 +72,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             // TODO: Unregister a covalence command
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Handles a chat message
         /// </summary>
         /// <param name="player"></param>
         /// <param name="str"></param>
         /// <returns></returns>
-        public bool HandleChatMessage(ILivePlayer player, string str) => chatCommandHandler.HandleChatMessage(player, str);
+        public bool HandleChatMessage(ILivePlayer player, string str) => chatCommandHandler.HandleChatMessage(player, str);*/
     }
 }

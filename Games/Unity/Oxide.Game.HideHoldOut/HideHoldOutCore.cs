@@ -15,6 +15,7 @@ using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Libraries;
 using Oxide.Game.HideHoldOut.Libraries;
+using Oxide.Game.HideHoldOut.Libraries.Covalence;
 
 namespace Oxide.Game.HideHoldOut
 {
@@ -23,7 +24,7 @@ namespace Oxide.Game.HideHoldOut
     /// </summary>
     public class HideHoldOutCore : CSPlugin
     {
-        #region Setup
+        #region Initialization
 
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
@@ -34,6 +35,9 @@ namespace Oxide.Game.HideHoldOut
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The Hide & Hold Out covalence provider
+        private readonly HideHoldOutCovalenceProvider covalence = HideHoldOutCovalenceProvider.Instance;
 
         #region Localization
 
@@ -89,10 +93,6 @@ namespace Oxide.Game.HideHoldOut
         // Get ChatManager NetworkView
         private static readonly FieldInfo ChatNetViewField = typeof(ChatManager).GetField("Chat_NetView", BindingFlags.NonPublic | BindingFlags.Instance);
         public static NetworkView ChatNetView = ChatNetViewField.GetValue(NetworkController.NetManager_.chatManager) as NetworkView;
-
-        #endregion
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the HideHoldOutCore class
@@ -242,71 +242,21 @@ namespace Oxide.Game.HideHoldOut
         /// Called when a user is attempting to connect
         /// </summary>
         /// <param name="approval"></param>
+        /// <param name="id"></param>
         [HookMethod("IOnUserApprove")]
-        private object IOnUserApprove(NetworkPlayerApproval approval)
+        private object IOnUserApprove(NetworkPlayerApproval approval, string id)
         {
-            //var version = approval.loginData.ReadString(); // Read order, meh
-            //var userId = approval.loginData.ReadUInt64();
-
-            // Set PlayerInfos
-            /*var player = new PlayerInfos
-            {
-                steam_id = (CSteamID)steamId,
-                account_id = steamId.ToString()
-            };*/
-
-            // Reject invalid connections
-            /*if (player.account_id == "0") // TODO: Improve this check
-            {
-                approval.Deny(NetworkConnectionError.ConnectionBanned);
-                return false;
-            }*/
+            var player = NetworkController.NetManager_.ServManager.GetPlayerInfos_accountID(id);
 
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", approval);
-            if (canlogin is NetworkConnectionError)
+            var canlogin = Interface.CallHook("CanClientLogin", approval, player) ?? Interface.CallHook("CanUserLogin", player.Nickname, id);
+            if (canlogin != null && ((canlogin is NetworkConnectionError) || (bool)canlogin == false))
             {
-                approval.Deny((NetworkConnectionError)canlogin);
+                approval.Deny(NetworkConnectionError.NoError);
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", approval);
-        }
-
-        /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(PlayerInfos player)
-        {
-            // Let covalence know
-            Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
-
-            // Do permission stuff
-            if (permission.IsLoaded)
-            {
-                var userId = player.account_id;
-                permission.UpdateNickname(userId, player.Nickname);
-
-                // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
-            }
-
-            Debug.Log($"{player.account_id}/{player.Nickname} joined");
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(PlayerInfos player)
-        {
-            // Let covalence know
-            Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
-
-            Debug.Log($"{player.account_id}/{player.Nickname} quit");
+            return Interface.CallHook("OnUserApprove", approval, player) ?? Interface.CallHook("OnUserApproved", player.Nickname, id);
         }
 
         /// <summary>
@@ -321,12 +271,16 @@ namespace Oxide.Game.HideHoldOut
             var str = message.Substring(0, 1);
             var player = FindPlayerByNetPlayer(netPlayer);
 
+            // Get covalence player
+            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
+
             // Is it a chat command?
-            if (!str.Equals("/") && !str.Equals("!")) return Interface.Oxide.CallHook("OnPlayerChat", player, message);
+            if (!str.Equals("/") && !str.Equals("!"))
+                return Interface.CallHook("OnPlayerChat", player, message) ?? Interface.CallHook("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
-            var livePlayer = Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(player.account_id);
-            if (Libraries.Covalence.HideHoldOutCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
+            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(player.account_id);
+            if (covalence.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);
@@ -344,9 +298,53 @@ namespace Oxide.Game.HideHoldOut
                 return true;
             }
 
-            Interface.Oxide.CallHook("OnChatCommand", player, command);
+            Interface.CallHook("OnChatCommand", player, command);
 
             return true;
+        }
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(PlayerInfos player)
+        {
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(player);
+
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var userId = player.account_id;
+                permission.UpdateNickname(userId, player.Nickname);
+
+                // Add player to default group
+                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+            }
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
+            Interface.CallHook("OnUserConnected", iplayer);
+
+            Debug.Log($"{player.account_id}/{player.Nickname} joined");
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(PlayerInfos player)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
+            Interface.CallHook("OnUserDisconnected", iplayer, null);
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+
+            Debug.Log($"{player.account_id}/{player.Nickname} quit");
         }
 
         #endregion
@@ -773,12 +771,19 @@ namespace Oxide.Game.HideHoldOut
             }
             else if (mode.Equals("user"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(Lang("CommandUsageShow", player.account_id), player);
+                    return;
+                }
+
                 var target = FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound", player.account_id), player);
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -795,11 +800,18 @@ namespace Oxide.Game.HideHoldOut
             }
             else if (mode.Equals("group"))
             {
-                if (!permission.GroupExists(name))
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(Lang("CommandUsageShow", player.account_id), player);
+                    return;
+                }
+
+                if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
                     Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";
@@ -949,7 +961,7 @@ namespace Oxide.Game.HideHoldOut
 
         #endregion
 
-        #region Helper Methods
+        #region Helpers
 
         /// <summary>
         /// Returns if specified player is admin
@@ -993,7 +1005,6 @@ namespace Oxide.Game.HideHoldOut
         public static PlayerInfos FindPlayer(string nameOrIdOrIp)
         {
             var server = NetworkController.NetManager_.ServManager;
-
             var player = server.GetPlayerInfos_nickname(nameOrIdOrIp);
             if (player == null)
             {

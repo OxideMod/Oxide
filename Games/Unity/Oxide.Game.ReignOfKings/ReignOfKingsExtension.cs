@@ -162,14 +162,12 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         public override void OnModLoad()
         {
-            if (!Interface.Oxide.CheckConsole()) return;
+            if (!Interface.Oxide.CheckConsole() || !Interface.Oxide.EnableConsole()) return;
 
             var socketAdminConsole = UnityEngine.Object.FindObjectOfType<SocketAdminConsole>();
             var socketServer = (SocketServer)SocketServerField.GetValue(socketAdminConsole);
             if (socketServer.Clients.Count > 0) return;
             socketAdminConsole.enabled = false;
-
-            if (!Interface.Oxide.EnableConsole()) return;
 
             Application.logMessageReceived += HandleLog;
             Logger.DebugLogged += HandleLog;
@@ -179,18 +177,9 @@ namespace Oxide.Game.ReignOfKings
             Logger.ExceptionLogged += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                var players = Server.PlayerCount;
-                var hostname = DedicatedServerBypass.Settings.ServerName;
-                return string.Concat(players, " | ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount}/{DedicatedServerBypass.Settings.ServerName}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = DedicatedServerBypass.Settings.ServerName;
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerBypass.Settings.ServerName}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -231,12 +220,7 @@ namespace Oxide.Game.ReignOfKings
                 var weather = Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown";
                 return string.Concat(" ", gameTime, ", Weather: ", weather);
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = GameInfo.VersionName;
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameInfo.VersionName}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
             Interface.Oxide.ServerConsole.Completion = input =>
@@ -247,7 +231,7 @@ namespace Oxide.Game.ReignOfKings
             };
         }
 
-        private void ServerConsoleOnInput(string input)
+        private static void ServerConsoleOnInput(string input)
         {
             if (!input.StartsWith("/")) input = "/" + input;
             Console.Messages.Clear();

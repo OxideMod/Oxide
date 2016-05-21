@@ -347,32 +347,6 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ServerManagement",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnUserConnected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "NetUser"
-              ]
-            },
-            "MSILHash": "HXUoxG6IuT2ff73Gnq4tU9S57PDqexwQ3g15tuG32GU=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
             "Name": "OnPlayerSpawn",
             "HookName": "OnPlayerSpawn",
             "AssemblyName": "Assembly-CSharp.dll",
@@ -852,6 +826,61 @@
             "MSILHash": "eRdK7MTGBpUJ7RwefOdl4tKMLdvBm68Q+3nVglAwDTQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 4,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "LibRust",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Update",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "DZ3C4oRDzyU378Vnm2cNAFwRn49bVM3+GWxwIzWr3uU=",
+            "BaseHookName": null,
+            "HookCategory": "_Patch"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 57,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConnectionAcceptor",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerConnected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "PVxRarC2urN76858ZX4eAcHyicJjqZsgxIcQzmJxSvc=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]

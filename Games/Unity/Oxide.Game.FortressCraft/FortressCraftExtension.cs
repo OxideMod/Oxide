@@ -71,7 +71,7 @@ namespace Oxide.Game.FortressCraft
         {
             if (!Interface.Oxide.EnableConsole()) return;
 
-            Application.RegisterLogCallback(HandleLog);
+            Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
             // TODO: Add status information

@@ -13,6 +13,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Libraries;
+using Oxide.Game.Rust.Libraries.Covalence;
 
 namespace Oxide.Game.Rust
 {
@@ -21,6 +22,8 @@ namespace Oxide.Game.Rust
     /// </summary>
     public class RustCore : CSPlugin
     {
+        #region Initialization
+
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
@@ -30,6 +33,9 @@ namespace Oxide.Game.Rust
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The Rust covalence provider
+        private readonly RustCovalenceProvider covalence = RustCovalenceProvider.Instance;
 
         #region Localization
 
@@ -83,8 +89,6 @@ namespace Oxide.Game.Rust
 
         // Track if a BasePlayer.OnAttacked call is in progress
         private bool isPlayerTakingDamage;
-
-        #region Initialization
 
         /// <summary>
         /// Initializes a new instance of the RustCore class
@@ -234,7 +238,7 @@ namespace Oxide.Game.Rust
         private object IOnUserApprove(Connection connection)
         {
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection);
+            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.username, connection.userid.ToString());
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
@@ -242,7 +246,37 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection);
+            return Interface.CallHook("OnUserApprove", connection) ?? Interface.CallHook("OnUserApproved", connection.username, connection.userid.ToString());
+        }
+
+        /// <summary>
+        /// Called when the player has been initialized
+        /// </summary>
+        /// <param name="arg"></param>
+        [HookMethod("OnPlayerChat")]
+        private object OnPlayerChat(ConsoleSystem.Arg arg)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
+            return Interface.CallHook("OnUserChat", iplayer, arg.Args[0]);
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="reason"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(BasePlayer player, string reason)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            Interface.CallHook("OnUserDisconnected", iplayer, reason);
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+
+            playerInputState.Remove(player);
         }
 
         /// <summary>
@@ -253,7 +287,11 @@ namespace Oxide.Game.Rust
         private void OnPlayerInit(BasePlayer player)
         {
             // Let covalence know
-            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+            covalence.PlayerManager.NotifyPlayerConnect(player);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            Interface.CallHook("OnUserConnected", iplayer);
 
             // Do permission stuff
             var authLevel = player.net.connection.authLevel;
@@ -268,29 +306,18 @@ namespace Oxide.Game.Rust
 
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
-        }
 
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(BasePlayer player)
-        {
-            // Let covalence know
-            Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
-
-            playerInputState.Remove(player);
+            // Call covalence hook
+            Interface.CallHook("OnUserInit", iplayer);
         }
 
         /// <summary>
         /// Called when a player tick is received from a client
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="msg"></param>
         /// <returns></returns>
         [HookMethod("OnPlayerTick")]
-        private object OnPlayerTick(BasePlayer player, PlayerTick msg)
+        private object OnPlayerTick(BasePlayer player)
         {
             InputState input;
             return playerInputState.TryGetValue(player, out input) ? Interface.CallHook("OnPlayerInput", player, input) : null;
@@ -426,8 +453,8 @@ namespace Oxide.Game.Rust
                 }
             }
 
-            var total_plugin_count = loadedPlugins.Length + unloadedPluginErrors.Count;
-            if (total_plugin_count < 1)
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
             {
                 Reply(arg.connection, "NoPluginsFound");
                 return;
@@ -437,8 +464,8 @@ namespace Oxide.Game.Rust
             var number = 1;
             foreach (var plugin in loadedPlugins)
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
-            foreach (var plugin_name in unloadedPluginErrors.Keys)
-                output += $"\n  {number++:00} {plugin_name} - {unloadedPluginErrors[plugin_name]}";
+            foreach (var pluginName in unloadedPluginErrors.Keys)
+                output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
             arg.ReplyWith(output);
         }
 
@@ -887,6 +914,12 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("perm"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(arg.connection, "CommandUsageShow");
+                    return;
+                }
+
                 var result = $"Permission '{name}' Users:\n";
                 result += string.Join(", ", permission.GetPermissionUsers(name));
                 result += $"\nPermission '{name}' Groups:\n";
@@ -895,17 +928,23 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("user"))
             {
-                var player = FindPlayer(name);
-                if (player == null && !permission.UserIdValid(name))
+                if (string.IsNullOrEmpty(name))
                 {
-                    Reply(arg.connection, "UserNotFound");
+                    Reply(arg.connection, "CommandUsageShow");
+                    return;
+                }
+
+                var target = FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(arg.connection, "UserNotFound", name);
                     return;
                 }
                 var userId = name;
-                if (player != null)
+                if (target != null)
                 {
-                    userId = player.UserIDString;
-                    name = player.displayName;
+                    userId = target.UserIDString;
+                    name = target.displayName;
                     permission.UpdateNickname(userId, name);
                     name += $" ({userId})";
                 }
@@ -917,11 +956,18 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("group"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(arg.connection, "CommandUsageShow");
+                    return;
+                }
+
                 if (!permission.GroupExists(name))
                 {
                     Reply(arg.connection, "GroupNotFound", name);
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";
@@ -961,8 +1007,8 @@ namespace Oxide.Game.Rust
             if (arg.connection != null)
             {
                 if (arg.Player() == null) return true;
-                var livePlayer = Libraries.Covalence.RustCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
-                if (Libraries.Covalence.RustCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
+                var livePlayer = covalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+                if (covalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
             }
 
             // Get the args
@@ -1054,7 +1100,7 @@ namespace Oxide.Game.Rust
 
         #endregion
 
-        #region Helper Methods
+        #region Helpers
 
         /// <summary>
         /// Returns if specified player is admin
@@ -1191,7 +1237,10 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <param name="entity"></param>
         [HookMethod("OnExplosiveThrown")]
-        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity) => Interface.CallDeprecatedHook("OnWeaponThrown", "OnExplosiveThrown", new DateTime(2016, 5, 19), player, entity);
+        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity)
+        {
+            return Interface.CallDeprecatedHook("OnWeaponThrown", "OnExplosiveThrown", new DateTime(2016, 6, 3), player, entity);
+        }
 
         /// <summary>
         /// Used to handle the deprecated hook OnPlayerLoot (entity)
@@ -1205,7 +1254,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootEntity", new DateTime(2016, 5, 19), source, entity);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootEntity", new DateTime(2016, 6, 3), source, entity);
         }
 
         /// <summary>
@@ -1220,7 +1269,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootItem", new DateTime(2016, 5, 19), source, item);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootItem", new DateTime(2016, 6, 3), source, item);
         }
 
         /// <summary>
@@ -1235,7 +1284,7 @@ namespace Oxide.Game.Rust
             Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
 
             // Call depreated hook
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootPlayer", new DateTime(2016, 5, 19), source, target);
+            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootPlayer", new DateTime(2016, 6, 3), source, target);
         }
 
         #endregion

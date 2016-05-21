@@ -14,6 +14,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.ReignOfKings.Libraries;
+using Oxide.Game.ReignOfKings.Libraries.Covalence;
 
 namespace Oxide.Game.ReignOfKings
 {
@@ -22,6 +23,8 @@ namespace Oxide.Game.ReignOfKings
     /// </summary>
     public class ReignOfKingsCore : CSPlugin
     {
+        #region Initialization
+
         // The pluginmanager
         private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
@@ -33,6 +36,9 @@ namespace Oxide.Game.ReignOfKings
 
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The Reign of Kings covalence provider
+        private readonly ReignOfKingsCovalenceProvider covalence = ReignOfKingsCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;
@@ -49,7 +55,7 @@ namespace Oxide.Game.ReignOfKings
         public ReignOfKingsCore()
         {
             // Set attributes
-            Name = "reignofkingscore";
+            Name = "ReignOfKingsCore";
             Title = "Reign of Kings Core";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
@@ -77,6 +83,8 @@ namespace Oxide.Game.ReignOfKings
             ReplyWith(player, "Unable to load permission files! Permissions will not work until resolved.\n => " + permission.LastException.Message);
             return false;
         }
+
+        #endregion
 
         #region Plugin Hooks
 
@@ -230,6 +238,39 @@ namespace Oxide.Game.ReignOfKings
         #region Player Hooks
 
         /// <summary>
+        /// Called when a user is attempting to connect
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("IOnUserApprove")]
+        private object IOnUserApprove(Player player)
+        {
+            // Call out and see if we should reject
+            var canlogin = Interface.CallHook("CanClientLogin", player) ?? Interface.CallHook("CanUserLogin", player.Name, player.Id.ToString());
+            if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
+            {
+                player.ShowPopup("Disconnected", canlogin.ToString());
+                player.Connection.Close();
+                return ConnectionError.NoError;
+            }
+
+            return Interface.CallHook("OnUserApprove", player) ?? Interface.CallHook("OnUserApproved", player.Name, player.Id.ToString());
+        }
+
+        /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="message"></param>
+        [HookMethod("OnPlayerChat")]
+        private object OnPlayerChat(PlayerMessageEvent evt, string message)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString());
+            return Interface.CallHook("OnUserChat", iplayer, message);
+        }
+
+        /// <summary>
         /// Called when the player has connected
         /// </summary>
         /// <param name="player"></param>
@@ -238,7 +279,11 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerConnected(Player player)
         {
             // Let covalence know
-            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(player);
+            covalence.PlayerManager.NotifyPlayerConnect(player);
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
+            Interface.CallHook("OnUserConnected", iplayer);
         }
 
         /// <summary>
@@ -248,8 +293,12 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(Player player)
         {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
+            Interface.CallHook("OnUserDisconnected", iplayer);
+
             // Let covalence know
-            Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(player);
+            covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
         /// <summary>
@@ -679,6 +728,12 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("perm"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    ReplyWith(player, "Usage: show <group|user> <name>\nUsage: show <groups|perms>");
+                    return;
+                }
+
                 var result = $"Permission '{name}' Users:\n";
                 result += string.Join(", ", permission.GetPermissionUsers(name));
                 result += $"\nPermission '{name}' Groups:\n";
@@ -687,12 +742,19 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("user"))
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    ReplyWith(player, "Usage: show <group|user> <name>\nUsage: show <groups|perms>");
+                    return;
+                }
+
                 var target = FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     ReplyWith(player, "User '" + name + "' not found");
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -709,11 +771,18 @@ namespace Oxide.Game.ReignOfKings
             }
             else if (mode.Equals("group"))
             {
-                if (!permission.GroupExists(name))
+                if (string.IsNullOrEmpty(name))
+                {
+                    ReplyWith(player, "Usage: show <group|user> <name>\nUsage: show <groups|perms>");
+                    return;
+                }
+
+                if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
                     ReplyWith(player, "Group '" + name + "' not found");
                     return;
                 }
+
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";
@@ -752,8 +821,8 @@ namespace Oxide.Game.ReignOfKings
             if (str[0] != '/') return null;
 
             // Is this a covalence command?
-            var livePlayer = Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(e.PlayerId.ToString());
-            if (Libraries.Covalence.ReignOfKingsCovalenceProvider.Instance.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
+            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(e.PlayerId.ToString());
+            if (covalence.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
 
             // Get the command string
             var command = str.Substring(1);
@@ -830,6 +899,8 @@ namespace Oxide.Game.ReignOfKings
 
         #endregion
 
+        #region Helpers
+
         /// <summary>
         /// Replies to the player with a specific message
         /// </summary>
@@ -870,5 +941,7 @@ namespace Oxide.Game.ReignOfKings
             ReplyWith(player, "You don't have permission to use this command.");
             return false;
         }
+
+        #endregion
     }
 }

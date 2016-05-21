@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using ProtoBuf;
@@ -17,8 +18,8 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private struct PlayerRecord
         {
-            public string Nickname;
-            public ulong SteamId;
+            public string Name;
+            public ulong Id;
         }
 
         private IDictionary<string, PlayerRecord> playerData;
@@ -28,41 +29,44 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         internal HideHoldOutPlayerManager()
         {
             // Load player data
-            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata");
-            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence.playerdata") ?? new Dictionary<string, PlayerRecord>();
+            Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
+            playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             players = new Dictionary<string, HideHoldOutPlayer>();
-            foreach (var pair in playerData) players.Add(pair.Key, new HideHoldOutPlayer(pair.Value.SteamId, pair.Value.Nickname));
+            foreach (var pair in playerData) players.Add(pair.Key, new HideHoldOutPlayer(pair.Value.Id, pair.Value.Name));
             livePlayers = new Dictionary<string, HideHoldOutLivePlayer>();
+
+            // Cleanup old .data
+            //Core.Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
         {
-            var uniqueId = steamid.ToString();
+            var id = steamid.ToString();
 
             // Do they exist?
             PlayerRecord record;
-            if (playerData.TryGetValue(uniqueId, out record))
+            if (playerData.TryGetValue(id, out record))
             {
                 // Update
-                record.Nickname = nickname;
-                playerData[uniqueId] = record;
+                record.Name = nickname;
+                playerData[id] = record;
 
                 // Swap out Rust player
-                players.Remove(uniqueId);
-                players.Add(uniqueId, new HideHoldOutPlayer(steamid, nickname));
+                players.Remove(id);
+                players.Add(id, new HideHoldOutPlayer(steamid, nickname));
             }
             else
             {
                 // Insert
-                record = new PlayerRecord {SteamId = steamid, Nickname = nickname};
-                playerData.Add(uniqueId, record);
+                record = new PlayerRecord {Id = steamid, Name = nickname};
+                playerData.Add(id, record);
 
                 // Create Rust player
-                players.Add(uniqueId, new HideHoldOutPlayer(steamid, nickname));
+                players.Add(id, new HideHoldOutPlayer(steamid, nickname));
             }
 
             // Save
-            ProtoStorage.Save(playerData, "oxide.covalence.playerdata");
+            ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
         internal void NotifyPlayerConnect(PlayerInfos player)
@@ -78,12 +82,12 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets an offline player using their unique ID
         /// </summary>
-        /// <param name="uniqueId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public IPlayer GetPlayer(string uniqueId)
+        public IPlayer GetPlayer(string id)
         {
             HideHoldOutPlayer player;
-            return players.TryGetValue(uniqueId, out player) ? player : null;
+            return players.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
@@ -126,7 +130,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
-            return players.Values.Where(p => p.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
+            return players.Values.Where(p => p.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
         }
 
         #endregion
@@ -136,12 +140,12 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets an online player given their unique ID
         /// </summary>
-        /// <param name="uniqueID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public ILivePlayer GetOnlinePlayer(string uniqueID)
+        public ILivePlayer GetOnlinePlayer(string id)
         {
             HideHoldOutLivePlayer player;
-            return livePlayers.TryGetValue(uniqueID, out player) ? player : null;
+            return livePlayers.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
@@ -170,7 +174,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName)
         {
-            return livePlayers.Values .Where(p => p.BasePlayer.Nickname.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<ILivePlayer>();
+            return livePlayers.Values .Where(p => p.BasePlayer.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<ILivePlayer>();
         }
 
         #endregion
