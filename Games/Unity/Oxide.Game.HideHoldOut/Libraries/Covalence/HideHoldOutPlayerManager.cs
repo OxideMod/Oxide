@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using ProtoBuf;
@@ -36,7 +35,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             livePlayers = new Dictionary<string, HideHoldOutLivePlayer>();
 
             // Cleanup old .data
-            //Core.Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
+            Core.Cleanup.Add(ProtoStorage.GetFileDataPath("oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)

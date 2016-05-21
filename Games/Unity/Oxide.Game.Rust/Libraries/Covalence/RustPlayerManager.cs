@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using ProtoBuf;
@@ -35,7 +34,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             livePlayers = new Dictionary<string, RustLivePlayer>();
 
             // Cleanup old .data
-            //Cleanup.Add(Path.Combine(Interface.Oxide.DataDirectory, "oxide.covalence.playerdata.data"));
+            Cleanup.Add(ProtoStorage.GetFileDataPath("oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(ulong steamid, string nickname)
