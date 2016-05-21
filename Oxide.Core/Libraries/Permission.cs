@@ -166,8 +166,8 @@ namespace Oxide.Core.Libraries
             {
                 var groups = ProtoStorage.GetFileDataPath("oxide.groups.data");
                 var users = ProtoStorage.GetFileDataPath("oxide.users.data");
-                File.Copy(groups, groups + ".old");
-                File.Copy(users, users + ".old");
+                File.Copy(groups, groups + ".old", true);
+                File.Copy(users, users + ".old", true);
 
                 oldGroup = oldGroup.ToLower();
                 var ids = userdata.Where(u => u.Value.Groups.Contains(oldGroup)).Select(u => u.Key);
