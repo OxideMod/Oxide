@@ -8,16 +8,16 @@ namespace Oxide.Core
 {
     public class ProtoStorage
     {
-        public static IEnumerable<string> GetFiles(string sub_directory)
+        public static IEnumerable<string> GetFiles(string subDirectory)
         {
-            var directory = GetFileDataPath(sub_directory.Replace("..", ""));
+            var directory = GetFileDataPath(subDirectory.Replace("..", ""));
             if (!Directory.Exists(directory)) yield break;
             foreach (var file in Directory.GetFiles(directory, "*.data")) yield return Utility.GetFileNameWithoutExtension(file);
         }
 
-        public static T Load<T>(params string[] sub_paths)
+        public static T Load<T>(params string[] subPaths)
         {
-            var name = GetFileName(sub_paths);
+            var name = GetFileName(subPaths);
             var path = GetFileDataPath(name);
             try
             {
@@ -30,14 +30,14 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogException("Failed to load protobuf data from " + name, ex);
+                Interface.Oxide.LogException($"Failed to load protobuf data from {name}", ex);
             }
             return default(T);
         }
 
-        public static void Save<T>(T data, params string[] sub_paths)
+        public static void Save<T>(T data, params string[] subPaths)
         {
-            var name = GetFileName(sub_paths);
+            var name = GetFileName(subPaths);
             var path = GetFileDataPath(name);
             var directory = Path.GetDirectoryName(path);
             try
@@ -47,15 +47,15 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogException("Failed to save protobuf data to " + name, ex);
+                Interface.Oxide.LogException($"Failed to save protobuf data to {name}", ex);
             }
         }
 
-        public static bool Exists(params string[] sub_paths) => File.Exists(GetFileDataPath(GetFileName(sub_paths)));
+        public static bool Exists(params string[] subPaths) => File.Exists(GetFileDataPath(GetFileName(subPaths)));
 
-        public static string GetFileName(params string[] sub_paths)
+        public static string GetFileName(params string[] subPaths)
         {
-            return string.Join(Path.DirectorySeparatorChar.ToString(), sub_paths).Replace("..", "") + ".data";
+            return string.Join(Path.DirectorySeparatorChar.ToString(), subPaths).Replace("..", "") + ".data";
         }
 
         public static string GetFileDataPath(string name) => Path.Combine(Interface.Oxide.DataDirectory, name);

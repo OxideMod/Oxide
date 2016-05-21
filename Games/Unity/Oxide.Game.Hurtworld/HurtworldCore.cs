@@ -164,6 +164,7 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddChatCommand("oxide.show", this, "ChatShow");
             cmdlib.AddChatCommand("show", this, "ChatShow");
 
+            // Setup the default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;

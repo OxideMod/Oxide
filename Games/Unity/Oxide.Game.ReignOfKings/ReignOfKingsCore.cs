@@ -168,8 +168,7 @@ namespace Oxide.Game.ReignOfKings
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    if (!ulong.TryParse(s, out temp))
-                        return false;
+                    if (!ulong.TryParse(s, out temp)) return false;
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });

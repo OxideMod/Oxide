@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -127,7 +128,7 @@ namespace Oxide.Game.RustLegacy
                 {
                     ulong temp;
                     if (!ulong.TryParse(s, out temp)) return false;
-                    var digits = temp == 0 ? 1 : (int)System.Math.Floor(System.Math.Log10(temp) + 1);
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
                 permission.CleanUp();

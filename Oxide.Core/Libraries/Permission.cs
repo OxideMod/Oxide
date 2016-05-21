@@ -136,19 +136,18 @@ namespace Oxide.Core.Libraries
         private void SaveGroups() => ProtoStorage.Save(groupdata, "oxide.groups");
 
         /// <summary>
-        /// Register user id validation
+        /// Register user ID validation
         /// </summary>
-        public void RegisterValidate(Func<string, bool> validate)
-        {
-            this.validate = validate;
-        }
+        /// <param name="val"></param>
+        public void RegisterValidate(Func<string, bool> val) => validate = val;
 
         /// <summary>
-        /// Clean invalid user id entries
+        /// Clean invalid user ID entries
         /// </summary>
         public void CleanUp()
         {
             if (!IsLoaded || validate == null) return;
+
             var invalid = userdata.Keys.Where(k => !validate(k)).ToArray();
             if (invalid.Length <= 0) return;
             foreach (var i in invalid) userdata.Remove(i);
@@ -484,12 +483,12 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if the specified group exists or not
         /// </summary>
-        /// <param name="groupname"></param>
+        /// <param name="group"></param>
         /// <returns></returns>
         [LibraryFunction("GroupExists")]
-        public bool GroupExists(string groupname)
+        public bool GroupExists(string group)
         {
-            return !string.IsNullOrEmpty(groupname) && (groupname.Equals("*") || groupdata.ContainsKey(groupname.ToLower()));
+            return !string.IsNullOrEmpty(group) && (group.Equals("*") || groupdata.ContainsKey(group.ToLower()));
         }
 
         /// <summary>
@@ -502,29 +501,29 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns users in that group
         /// </summary>
-        /// <param name="groupname"></param>
+        /// <param name="group"></param>
         /// <returns></returns>
         [LibraryFunction("GetUsersInGroup")]
-        public string[] GetUsersInGroup(string groupname)
+        public string[] GetUsersInGroup(string group)
         {
-            if (!GroupExists(groupname)) return new string[0];
-            groupname = groupname.ToLower();
-            return userdata.Where(u => u.Value.Groups.Contains(groupname)).Select(u => $"{u.Key}({u.Value.LastSeenNickname})").ToArray();
+            if (!GroupExists(group)) return new string[0];
+            group = group.ToLower();
+            return userdata.Where(u => u.Value.Groups.Contains(group)).Select(u => $"{u.Key} ({u.Value.LastSeenNickname})").ToArray();
         }
 
         /// <summary>
         /// Returns the rank of the specified group
         /// </summary>
-        /// <param name="groupname"></param>
+        /// <param name="group"></param>
         /// <returns></returns>
         [LibraryFunction("GetGroupRank")]
-        public int GetGroupRank(string groupname)
+        public int GetGroupRank(string group)
         {
-            if (!GroupExists(groupname)) return 0;
+            if (!GroupExists(group)) return 0;
 
             // First, get the group data
             GroupData data;
-            if (!groupdata.TryGetValue(groupname.ToLower(), out data)) return 0;
+            if (!groupdata.TryGetValue(group.ToLower(), out data)) return 0;
 
             // Return the group
             return data.Rank;

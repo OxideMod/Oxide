@@ -7,10 +7,7 @@ namespace Oxide.Core
     public static class Cleanup
     {
         private static HashSet<string> files = new HashSet<string>();
-        public static void Add(string file)
-        {
-            files.Add(file);
-        }
+        public static void Add(string file) => files.Add(file);
 
         public static void Run()
         {

@@ -164,6 +164,7 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
             cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
 
+            // Setup the default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
@@ -175,8 +176,7 @@ namespace Oxide.Game.Rust
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
-                    if (!ulong.TryParse(s, out temp))
-                        return false;
+                    if (!ulong.TryParse(s, out temp)) return false;
                     var digits = temp == 0 ? 1 : (int) Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
