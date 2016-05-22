@@ -181,7 +181,7 @@ namespace Oxide.Game.Rust
                     return digits >= 17;
                 });
                 permission.CleanUp();
-                permission.Migrate("player", "default");
+                permission.MigrateGroup("player", "default");
             }
         }
 
@@ -238,8 +238,18 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(Connection connection)
         {
+            var id = connection.userid.ToString();
+
+            // Migrate user from 'player' group to 'default'
+            if (permission.UserHasGroup(id, "player"))
+            {
+                permission.AddUserGroup(id, "default");
+                permission.RemoveUserGroup(id, "player");
+                Interface.Oxide.LogWarning($"Migrated '{id}' to the new 'default' group");
+            }
+
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.username, connection.userid.ToString());
+            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.username, id);
             if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
             {
                 // Reject the user with the message
@@ -247,7 +257,7 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection) ?? Interface.CallHook("OnUserApproved", connection.username, connection.userid.ToString());
+            return Interface.CallHook("OnUserApprove", connection) ?? Interface.CallHook("OnUserApproved", connection.username, id);
         }
 
         /// <summary>

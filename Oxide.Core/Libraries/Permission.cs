@@ -156,34 +156,22 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
-        /// Migrate users and permissions between groups
+        /// Migrate permissions from one group to another
         /// </summary>
-        public void Migrate(string oldGroup, string newGroup)
+        public void MigrateGroup(string oldGroup, string newGroup)
         {
             if (!IsLoaded) return;
 
             if (GroupExists(oldGroup))
             {
                 var groups = ProtoStorage.GetFileDataPath("oxide.groups.data");
-                var users = ProtoStorage.GetFileDataPath("oxide.users.data");
                 File.Copy(groups, groups + ".old", true);
-                File.Copy(users, users + ".old", true);
 
-                oldGroup = oldGroup.ToLower();
-                var ids = userdata.Where(u => u.Value.Groups.Contains(oldGroup)).Select(u => u.Key);
-                foreach (var id in ids)
-                {
-                    AddUserGroup(id, newGroup);
-                    RemoveUserGroup(id, oldGroup);
-                }
-                foreach (var perm in GetGroupPermissions(oldGroup))
-                    GrantGroupPermission(newGroup, perm, null);
+                foreach (var perm in GetGroupPermissions(oldGroup)) GrantGroupPermission(newGroup, perm, null);
+                if (GetUsersInGroup(oldGroup).Length == 0) RemoveGroup(oldGroup);
 
-                RemoveGroup(oldGroup);
+                SaveGroups();
             }
-
-            SaveGroups();
-            SaveUsers();
         }
 
         #region Permission Management

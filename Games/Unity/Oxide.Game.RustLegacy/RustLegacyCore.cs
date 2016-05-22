@@ -132,7 +132,7 @@ namespace Oxide.Game.RustLegacy
                     return digits >= 17;
                 });
                 permission.CleanUp();
-                permission.Migrate("player", "default");
+                permission.MigrateGroup("player", "default");
             }
         }
 
@@ -201,6 +201,8 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
         {
+            var id = connection.UserID.ToString();
+
             // Reject invalid connections
             if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
             {
@@ -208,8 +210,16 @@ namespace Oxide.Game.RustLegacy
                 return true;
             }
 
+            // Migrate user from 'player' group to 'default'
+            if (permission.UserHasGroup(id, "player"))
+            {
+                permission.AddUserGroup(id, "default");
+                permission.RemoveUserGroup(id, "player");
+                Interface.Oxide.LogWarning($"Migrated '{id}' to the new 'default' group");
+            }
+
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, connection.UserID.ToString());
+            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, id);
             if (canlogin != null)
             {
                 Notice.Popup(connection.netUser.networkPlayer, "", canlogin.ToString(), 10f);
@@ -217,7 +227,7 @@ namespace Oxide.Game.RustLegacy
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection, approval, acceptor) ?? Interface.CallHook("OnUserApproved", connection.UserName, connection.UserID.ToString());
+            return Interface.CallHook("OnUserApprove", connection, approval, acceptor) ?? Interface.CallHook("OnUserApproved", connection.UserName, id);
         }
 
         /// <summary>
