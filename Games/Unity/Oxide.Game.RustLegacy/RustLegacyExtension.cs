@@ -207,8 +207,11 @@ namespace Oxide.Game.RustLegacy
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
+
                 if (!input.Contains(".")) input = string.Concat("global.", input);
-                return Command.consoleCommands.Where(c => c.Key.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.Key).ToArray();
+                var native = Command.DefaultCommands.Where(c => c.StartsWith(input.ToLower())).ToArray();
+                var oxide = Command.ConsoleCommands.Where(c => c.Key.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.Key).ToArray();
+                return native.Concat(oxide).ToArray();
             };
         }
 
