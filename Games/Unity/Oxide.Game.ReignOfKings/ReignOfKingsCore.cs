@@ -99,28 +99,28 @@ namespace Oxide.Game.ReignOfKings
             RemoteLogger.SetTag("version", GameInfo.VersionName.ToLower());
 
             // Add general commands
-            cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
-            cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
-            cmdlib.AddChatCommand("oxide.load", this, "CmdLoad");
-            cmdlib.AddChatCommand("load", this, "CmdLoad");
-            cmdlib.AddChatCommand("oxide.unload", this, "CmdUnload");
-            cmdlib.AddChatCommand("unload", this, "CmdUnload");
-            cmdlib.AddChatCommand("oxide.reload", this, "CmdReload");
-            cmdlib.AddChatCommand("reload", this, "CmdReload");
-            cmdlib.AddChatCommand("oxide.version", this, "CmdVersion");
-            cmdlib.AddChatCommand("version", this, "CmdVersion");
+            cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
+            cmdlib.AddChatCommand("plugins", this, "ChatPlugins");
+            cmdlib.AddChatCommand("oxide.load", this, "ChatLoad");
+            cmdlib.AddChatCommand("load", this, "ChatLoad");
+            cmdlib.AddChatCommand("oxide.unload", this, "ChatUnload");
+            cmdlib.AddChatCommand("unload", this, "ChatUnload");
+            cmdlib.AddChatCommand("oxide.reload", this, "ChatReload");
+            cmdlib.AddChatCommand("reload", this, "ChatReload");
+            cmdlib.AddChatCommand("oxide.version", this, "ChatVersion");
+            cmdlib.AddChatCommand("version", this, "ChatVersion");
 
             // Add permission commands
-            cmdlib.AddChatCommand("oxide.group", this, "CmdGroup");
-            cmdlib.AddChatCommand("group", this, "CmdGroup");
-            cmdlib.AddChatCommand("oxide.usergroup", this, "CmdUserGroup");
-            cmdlib.AddChatCommand("usergroup", this, "CmdUserGroup");
-            cmdlib.AddChatCommand("oxide.grant", this, "CmdGrant");
-            cmdlib.AddChatCommand("grant", this, "CmdGrant");
-            cmdlib.AddChatCommand("oxide.revoke", this, "CmdRevoke");
-            cmdlib.AddChatCommand("revoke", this, "CmdRevoke");
-            cmdlib.AddChatCommand("oxide.show", this, "CmdShow");
-            cmdlib.AddChatCommand("show", this, "CmdShow");
+            cmdlib.AddChatCommand("oxide.group", this, "ChatGroup");
+            cmdlib.AddChatCommand("group", this, "ChatGroup");
+            cmdlib.AddChatCommand("oxide.usergroup", this, "ChatUserGroup");
+            cmdlib.AddChatCommand("usergroup", this, "ChatUserGroup");
+            cmdlib.AddChatCommand("oxide.grant", this, "ChatGrant");
+            cmdlib.AddChatCommand("grant", this, "ChatGrant");
+            cmdlib.AddChatCommand("oxide.revoke", this, "ChatRevoke");
+            cmdlib.AddChatCommand("revoke", this, "ChatRevoke");
+            cmdlib.AddChatCommand("oxide.show", this, "ChatShow");
+            cmdlib.AddChatCommand("show", this, "ChatShow");
         }
 
         /// <summary>
@@ -329,35 +329,35 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdPlugins")]
-        private void CmdPlugins(Player player, string command, string[] args)
+        [HookMethod("ChatPlugins")]
+        private void ChatPlugins(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
 
-            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
-            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
-            var unloaded_plugin_errors = new Dictionary<string, string>();
+            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
+            var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
             {
-                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
                 {
                     string msg;
-                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
                 }
             }
 
-            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
-            if (total_plugin_count < 1)
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
             {
                 ReplyWith(player, "No plugins are currently available");
                 return;
             }
 
-            var output = $"Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
+            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
             var number = 1;
-            foreach (var plugin in loaded_plugins) output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
-            foreach (var plugin_name in unloaded_plugin_errors.Keys) output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            foreach (var plugin in loadedPlugins) output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}";
+            foreach (var pluginName in unloadedPluginErrors.Keys) output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
             ReplyWith(player, output);
         }
 
@@ -367,8 +367,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdLoad")]
-        private void CmdLoad(Player player, string command, string[] args)
+        [HookMethod("ChatLoad")]
+        private void ChatLoad(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
@@ -397,8 +397,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdReload")]
-        private void CmdReload(Player player, string command, string[] args)
+        [HookMethod("ChatReload")]
+        private void ChatReload(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
@@ -436,8 +436,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdUnload")]
-        private void CmdUnload(Player player, string command, string[] args)
+        [HookMethod("ChatUnload")]
+        private void ChatUnload(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
@@ -470,19 +470,13 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called when the "version" command has been executed
+        /// Called when the "version" chat/console command has been executed
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        [HookMethod("CmdVersion")]
-        private void CmdVersion(Player player, string command, string[] args)
+        [HookMethod("ChatVersion")]
+        private void ChatVersion(Player player)
         {
-            var oxide = OxideMod.Version.ToString();
-            var game = GameInfo.VersionName;
-
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(game))
-                ReplyWith(player, $"Oxide version: {oxide}, Reign of Kings version: {game}");
+            ReplyWith(player, $"Oxide {OxideMod.Version} for Reign of Kings {GameInfo.VersionName}");
         }
 
         /// <summary>
@@ -491,8 +485,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdGroup")]
-        private void CmdGroup(Player player, string command, string[] args)
+        [HookMethod("ChatGroup")]
+        private void ChatGroup(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
@@ -548,8 +542,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdUserGroup")]
-        private void CmdUserGroup(Player player, string command, string[] args)
+        [HookMethod("ChatUserGroup")]
+        private void ChatUserGroup(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
@@ -601,8 +595,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdGrant")]
-        private void CmdGrant(Player player, string command, string[] args)
+        [HookMethod("ChatGrant")]
+        private void ChatGrant(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
@@ -652,8 +646,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdRevoke")]
-        private void CmdRevoke(Player player, string command, string[] args)
+        [HookMethod("ChatRevoke")]
+        private void ChatRevoke(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
@@ -707,8 +701,8 @@ namespace Oxide.Game.ReignOfKings
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("CmdShow")]
-        private void CmdShow(Player player, string command, string[] args)
+        [HookMethod("ChatShow")]
+        private void ChatShow(Player player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;

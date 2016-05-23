@@ -92,28 +92,28 @@ namespace Oxide.Game.RustLegacy
             RemoteLogger.SetTag("version", Rust.Defines.Connection.protocol.ToString());
 
             // Add general commands
-            cmdlib.AddConsoleCommand("oxide.plugins", this, "cmdPlugins");
-            cmdlib.AddConsoleCommand("global.plugins", this, "cmdPlugins");
-            cmdlib.AddConsoleCommand("oxide.load", this, "cmdLoad");
-            cmdlib.AddConsoleCommand("global.load", this, "cmdLoad");
-            cmdlib.AddConsoleCommand("oxide.unload", this, "cmdUnload");
-            cmdlib.AddConsoleCommand("global.unload", this, "cmdUnload");
-            cmdlib.AddConsoleCommand("oxide.reload", this, "cmdReload");
-            cmdlib.AddConsoleCommand("global.reload", this, "cmdReload");
-            cmdlib.AddConsoleCommand("oxide.version", this, "cmdVersion");
-            cmdlib.AddConsoleCommand("global.version", this, "cmdVersion");
+            cmdlib.AddConsoleCommand("oxide.plugins", this, "ConsolePlugins");
+            cmdlib.AddConsoleCommand("global.plugins", this, "ConsolePlugins");
+            cmdlib.AddConsoleCommand("oxide.load", this, "ConsoleLoad");
+            cmdlib.AddConsoleCommand("global.load", this, "ConsoleLoad");
+            cmdlib.AddConsoleCommand("oxide.unload", this, "ConsoleUnload");
+            cmdlib.AddConsoleCommand("global.unload", this, "ConsoleUnload");
+            cmdlib.AddConsoleCommand("oxide.reload", this, "ConsoleReload");
+            cmdlib.AddConsoleCommand("global.reload", this, "ConsoleReload");
+            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
+            cmdlib.AddConsoleCommand("global.version", this, "ConsoleVersion");
 
             // Add permission commands
-            cmdlib.AddConsoleCommand("oxide.group", this, "cmdGroup");
-            cmdlib.AddConsoleCommand("global.group", this, "cmdGroup");
-            cmdlib.AddConsoleCommand("oxide.usergroup", this, "cmdUserGroup");
-            cmdlib.AddConsoleCommand("global.usergroup", this, "cmdUserGroup");
-            cmdlib.AddConsoleCommand("oxide.grant", this, "cmdGrant");
-            cmdlib.AddConsoleCommand("global.grant", this, "cmdGrant");
-            cmdlib.AddConsoleCommand("oxide.revoke", this, "cmdRevoke");
-            cmdlib.AddConsoleCommand("global.revoke", this, "cmdRevoke");
-            cmdlib.AddConsoleCommand("oxide.show", this, "cmdShow");
-            cmdlib.AddConsoleCommand("global.show", this, "cmdShow");
+            cmdlib.AddConsoleCommand("oxide.group", this, "ConsoleGroup");
+            cmdlib.AddConsoleCommand("global.group", this, "ConsoleGroup");
+            cmdlib.AddConsoleCommand("oxide.usergroup", this, "ConsoleUserGroup");
+            cmdlib.AddConsoleCommand("global.usergroup", this, "ConsoleUserGroup");
+            cmdlib.AddConsoleCommand("oxide.grant", this, "ConsoleGrant");
+            cmdlib.AddConsoleCommand("global.grant", this, "ConsoleGrant");
+            cmdlib.AddConsoleCommand("oxide.revoke", this, "ConsoleRevoke");
+            cmdlib.AddConsoleCommand("global.revoke", this, "ConsoleRevoke");
+            cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
+            cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -312,8 +312,8 @@ namespace Oxide.Game.RustLegacy
         /// <summary>
         /// Called when the "plugins" command has been executed
         /// </summary>
-        [HookMethod("CmdPlugins")]
-        private void CmdPlugins(ConsoleSystem.Arg arg)
+        [HookMethod("ConsolePlugins")]
+        private void ConsolePlugins(ConsoleSystem.Arg arg)
         {
             if (!IsAdmin(arg)) return;
 
@@ -347,8 +347,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "load" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdLoad")]
-        private void CmdLoad(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleLoad")]
+        private void ConsoleLoad(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -376,8 +376,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "unload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdUnload")]
-        private void CmdUnload(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleUnload")]
+        private void ConsoleUnload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -401,8 +401,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "reload" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdReload")]
-        private void CmdReload(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleReload")]
+        private void ConsoleReload(ConsoleSystem.Arg arg)
         {
             if (arg.argUser != null && !arg.argUser.admin) return;
             if (!IsAdmin(arg)) return;
@@ -426,22 +426,15 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "version" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdVersion")]
-        private void CmdVersion(ConsoleSystem.Arg arg)
-        {
-            var oxide = OxideMod.Version.ToString();
-            var rust = Rust.Defines.Connection.protocol.ToString();
-
-            if (!string.IsNullOrEmpty(oxide) && !string.IsNullOrEmpty(rust))
-                arg.ReplyWith($"Oxide version: {oxide}, Rust Protocol: {rust}");
-        }
+        [HookMethod("ConsoleVersion")]
+        private void ConsoleVersion(ConsoleSystem.Arg arg) => arg.ReplyWith($"Oxide {OxideMod.Version} for Rust {Rust.Defines.Connection.protocol}");
 
         /// <summary>
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdGroup")]
-        private void CmdGroup(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleGroup")]
+        private void ConsoleGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -496,8 +489,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "group" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdUserGroup")]
-        private void CmdUserGroup(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleUserGroup")]
+        private void ConsoleUserGroup(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -553,8 +546,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdGrant")]
-        private void CmdGrant(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleGrant")]
+        private void ConsoleGrant(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -602,8 +595,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "grant" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdRevoke")]
-        private void CmdRevoke(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleRevoke")]
+        private void ConsoleRevoke(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;
@@ -651,8 +644,8 @@ namespace Oxide.Game.RustLegacy
         /// Called when the "show" command has been executed
         /// </summary>
         /// <param name="arg"></param>
-        [HookMethod("CmdShow")]
-        private void CmdShow(ConsoleSystem.Arg arg)
+        [HookMethod("ConsoleShow")]
+        private void ConsoleShow(ConsoleSystem.Arg arg)
         {
             if (!PermissionsLoaded(arg)) return;
             if (!IsAdmin(arg)) return;

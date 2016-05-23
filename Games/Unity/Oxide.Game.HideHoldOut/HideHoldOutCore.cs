@@ -147,8 +147,8 @@ namespace Oxide.Game.HideHoldOut
             lang.RegisterMessages(messages, this);
 
             // Add general commands
-            //cmdlib.AddChatCommand("oxide.plugins", this, "CmdPlugins");
-            //cmdlib.AddChatCommand("plugins", this, "CmdPlugins");
+            //cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
+            //cmdlib.AddChatCommand("plugins", this, "ChatPlugins");
             cmdlib.AddChatCommand("oxide.load", this, "ChatLoad");
             cmdlib.AddChatCommand("load", this, "ChatLoad");
             cmdlib.AddChatCommand("oxide.unload", this, "ChatUnload");
@@ -386,8 +386,8 @@ namespace Oxide.Game.HideHoldOut
             var number = 1;
             foreach (var plugin in loadedPlugins)
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
-            foreach (var plugin_name in unloadedPluginErrors.Keys)
-                output += $"\n  {number++:00} {plugin_name} - {unloadedPluginErrors[plugin_name]}";
+            foreach (var pluginName in unloadedPluginErrors.Keys)
+                output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
             Reply(output, player);
         }
 
@@ -518,7 +518,10 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("ChatVersion")]
-        private void ChatVersion(PlayerInfos player) => Reply($"Oxide {OxideMod.Version} for {NetworkController.NetManager_.get_GAME_VERSION}", player);
+        private void ChatVersion(PlayerInfos player)
+        {
+            Reply($"Oxide {OxideMod.Version} for Hide & Hold Out {NetworkController.NetManager_.get_GAME_VERSION}", player);
+        }
 
         /// <summary>
         /// Called when the "version" console command has been executed

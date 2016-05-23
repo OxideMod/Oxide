@@ -599,26 +599,20 @@ namespace Oxide.Game.Rust
         #region Version Command
 
         /// <summary>
-        /// Called when the "version" chat command has been executed
+        /// Called when the "oxide.version" chat command has been executed
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
         [HookMethod("ChatVersion")]
-        private void ChatVersion(BasePlayer player, string command, string[] args)
+        private void ChatVersion(BasePlayer player)
         {
-            Reply(player.net.connection, $"Oxide version: {OxideMod.Version}, Rust version: {BuildInformation.VersionStampDays} ({Protocol.network})");
+            Reply(player.net.connection, $"Oxide {OxideMod.Version} for Rust {BuildInformation.VersionStampDays} ({Protocol.network})");
         }
 
         /// <summary>
-        /// Called when the "version" console command has been executed
+        /// Called when the "oxide.version" console command has been executed
         /// </summary>
-        /// <param name="arg"></param>
         [HookMethod("ConsoleVersion")]
-        private void ConsoleVersion(ConsoleSystem.Arg arg)
-        {
-            Reply(arg.connection, $"Oxide version: {OxideMod.Version}, Rust version: {BuildInformation.VersionStampDays} ({Protocol.network})");
-        }
+        private void ConsoleVersion() => ChatVersion(null);
 
         #endregion
 
