@@ -79,30 +79,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnFindSpawnPoint",
-            "HookName": "OnFindSpawnPoint",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "GetRandomSpawnPoint",
-              "ReturnType": "UnityEngine.Vector3",
-              "Parameters": []
-            },
-            "MSILHash": "qZ3RMlVKejLOZcEJWMJvqy4R3LFhxETASWqeIuE2CrI=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 27,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
@@ -121,7 +97,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "P6kQWUw7WiomIu0hr5HPk20P0Ax+zgwxIxuUqOZH8vA=",
+            "MSILHash": "TRFdQPlCUHS7JbFR5otWFJHgqbvUsqiUlP38t30ZKYE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -175,7 +151,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "NcEyQz5WzvdHQeIDeWFUDRgNJnYuWccEueD03+C0k6s=",
+            "MSILHash": "D8hrWfLw89wdYcoJhfuGaB23sj4+d1+XToqiU8B1e4U=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -289,16 +265,16 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 26,
+            "InjectionIndex": 6,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0, this",
+            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
             "HookTypeName": "Simple",
             "Name": "CanUseWorkbench",
             "HookName": "CanUseWorkbench",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Workbench",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "HasAuthority",
@@ -309,7 +285,7 @@
             },
             "MSILHash": "FYc4QCT3y++euKFZvpRWEx5s8aXv9anmCsrTmoc+EaI=",
             "BaseHookName": null,
-            "HookCategory": "_WIP"
+            "HookCategory": "Player"
           }
         },
         {
@@ -431,7 +407,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "krouHICmFGNlCHglwDKQ97hGJGqUiuOBnGu0EsLTfqE=",
+            "MSILHash": "GwrqH4LyQUjdeOUWnNwNKBXXosKdLUiNRnCPuLSJ8pU=",
             "BaseHookName": null,
             "HookCategory": "_WIP"
           }
@@ -562,7 +538,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "95FD8+XXP1i502t2NX79qgqVZKBp0x3/Il9mXgy8DJs=",
+            "MSILHash": "a9ayd+6W+P62AwEGqb4a155W5kxbiz0JWWbLCHnzeHM=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -586,7 +562,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "7tN7hW7KBmYt+4RI7b9bGw9OIYqzEm//NtfyUoRxWCc=",
+            "MSILHash": "b4BDJOG39NZa1ozSnKcG859LHsGjenX3UYoysG6tTAo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -753,7 +729,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "ih5mtKy4X47M139ZNo1hKHOXyNwzIX/X0jCS4BMr48E=",
+            "MSILHash": "FnL3owancrYA3RiyNmkci0Wknn//FA7GYJnhmI3yXRk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -805,7 +781,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "P6kQWUw7WiomIu0hr5HPk20P0Ax+zgwxIxuUqOZH8vA=",
+            "MSILHash": "TRFdQPlCUHS7JbFR5otWFJHgqbvUsqiUlP38t30ZKYE=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -813,7 +789,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 1719,
+            "InjectionIndex": 1790,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -836,7 +812,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "P6kQWUw7WiomIu0hr5HPk20P0Ax+zgwxIxuUqOZH8vA=",
+            "MSILHash": "TRFdQPlCUHS7JbFR5otWFJHgqbvUsqiUlP38t30ZKYE=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
@@ -844,7 +820,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 66,
+            "InjectionIndex": 71,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a4.ConnectedSession",
@@ -868,7 +844,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "wSuf+ew0oqCWidFU6tJsEp/mIXyx9Mb4oHq+NVypIvE=",
+            "MSILHash": "JBR+Cm5S8g3n6+nB0Ms4XRECZKQhdHSHgsGRW/F8VTI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1054,104 +1030,234 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0.OwnerIdentity.ConnectedSession, this",
-            "HookTypeName": "Simple",
-            "Name": "CanUseDoor",
-            "HookName": "CanUseDoor",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "DoubleDoorServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnBeginUseEvent",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "WorldItemInteractServer"
-              ]
-            },
-            "MSILHash": "v/55d9Vvj1CgTdKoFMvKCwuJ/aN9QSZL41ekz8a0MBs=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 6,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0.OwnerIdentity.ConnectedSession, this",
-            "HookTypeName": "Simple",
-            "Name": "CanUseGarage",
-            "HookName": "CanUseGarage",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GarageDoorServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnBeginUseEvent",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "WorldItemInteractServer"
-              ]
-            },
-            "MSILHash": "tI+n0tRnc+GQKEi7kpf5wHzt6F3uDgm36fpLcHbgUU8=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 39,
+            "InjectionIndex": 29,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0.OwnerIdentity.ConnectedSession",
+            "ArgumentBehavior": 1,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "OnDoorUsed",
-            "HookName": "OnDoorUsed",
+            "Name": "IOnDoubleDoorUsed [internal]",
+            "HookName": "IOnDoubleDoorUsed",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "DoubleDoorServer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "OnBeginUseEvent",
+              "Exposure": 3,
+              "Name": "FinishMove",
               "ReturnType": "System.Void",
               "Parameters": [
-                "WorldItemInteractServer"
+                "System.Boolean"
               ]
             },
-            "MSILHash": "v/55d9Vvj1CgTdKoFMvKCwuJ/aN9QSZL41ekz8a0MBs=",
-            "BaseHookName": "CanUseDoor",
+            "MSILHash": "luKLyN7PcJGGjshZ0taNdy06oGsdI/JKB0zNLbFM7TM=",
+            "BaseHookName": null,
             "HookCategory": "Structure"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 39,
+            "InjectionIndex": 29,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0.OwnerIdentity.ConnectedSession",
+            "ArgumentBehavior": 1,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "OnGarageUsed",
-            "HookName": "OnGarageUsed",
+            "Name": "IOnGarageDoorUsed [internal]",
+            "HookName": "IOnGarageDoorUsed ",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GarageDoorServer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "OnBeginUseEvent",
+              "Exposure": 3,
+              "Name": "FinishMove",
               "ReturnType": "System.Void",
               "Parameters": [
-                "WorldItemInteractServer"
+                "System.Boolean"
               ]
             },
-            "MSILHash": "tI+n0tRnc+GQKEi7kpf5wHzt6F3uDgm36fpLcHbgUU8=",
-            "BaseHookName": "CanUseGarage",
+            "MSILHash": "TjAKImFUcCCyEhD1+RoWkYLJdTmw0JWPR/8awIHHtPw=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.ConnectedSession",
+            "HookTypeName": "Simple",
+            "Name": "OnFindSpawnPoint",
+            "HookName": "OnFindSpawnPoint",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerSpawnManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetRespawnPoint",
+              "ReturnType": "ISpawnPoint",
+              "Parameters": [
+                "PlayerIdentity"
+              ]
+            },
+            "MSILHash": "geQpL0vX/4NbbrlILhmAi7ufsrcq/zwuRl5omHVIG8g=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseDoubleDoor",
+            "HookName": "CanUseDoubleDoor",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoubleDoorServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HasAuthority",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "HA98aCm7T0pi733OgocoOs/mv/NG8EGiIReEsbYs23I=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseGarageDoor",
+            "HookName": "CanUseGarageDoor",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GarageDoorServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HasAuthority",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "6ryrN7CkRIr6yOY3L1ZMyPsqd+hL53zdTt8TN0t4sZI=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseMachine",
+            "HookName": "CanUseMachine",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseMachine`1",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "HasAuthority",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "cGC0oe3JcUnisRipIKcKC0Bq+3T/Y9iHw5P2V6E6wPk=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseSingleDoor",
+            "HookName": "CanUseSingleDoor",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoorSingleServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HasAuthority",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "KAvD4EX0aCU41+5vinInJC/PNuj/DQjKPq1DgN/APwU=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUsePillboxDoor",
+            "HookName": "CanUsePillboxDoor",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoorPillboxServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HasAuthority",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "JpR8qeA66nxxU9UgxcRW0kTmQ6cV2Oe6ZdZG2A8QrGg=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 26,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnSingleDoorUsed [internal]",
+            "HookName": "IOnSingleDoorUsed",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DoorSingleServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "FinishMove",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "/xK+GDMG7aRUHgYDPUvsI5m8/r+Yb3+zSPW81ICGLF0=",
+            "BaseHookName": null,
             "HookCategory": "Structure"
           }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -262,8 +263,7 @@ namespace Oxide.Game.Hurtworld
                 return Interface.CallHook("OnPlayerChat", session, message) ?? Interface.CallHook("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
-            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(session.SteamId.ToString());
-            if (covalence.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
+            if (covalence.CommandSystem.HandleChatMessage(iplayer.ConnectedPlayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);
@@ -365,6 +365,52 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
+        #region Structure Hooks
+
+        private readonly FieldInfo singleUsedBy = typeof(DoubleDoorServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        /// <summary>
+        /// Called when a single door is used
+        /// </summary>
+        /// <param name="door"></param>
+        /// <returns></returns>
+        [HookMethod("IOnSingleDoorUsed")]
+        private void IOnSingleDoorUsed(DoorSingleServer door)
+        {
+            var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)singleUsedBy.GetValue(door));
+            Interface.CallHook("OnSingleDoorUsed", door, session);
+        }
+
+        private readonly FieldInfo doubleUsedBy = typeof(DoubleDoorServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        /// <summary>
+        /// Called when a double door is used
+        /// </summary>
+        /// <param name="door"></param>
+        /// <returns></returns>
+        [HookMethod("IOnDoubleDoorUsed")]
+        private void IOnDoubleDoorUsed(DoubleDoorServer door)
+        {
+            var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)doubleUsedBy.GetValue(door));
+            Interface.CallHook("OnDoubleDoorUsed", door, session);
+        }
+
+        private readonly FieldInfo garageUsedBy = typeof(GarageDoorServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        /// <summary>
+        /// Called when a garage door is used
+        /// </summary>
+        /// <param name="door"></param>
+        /// <returns></returns>
+        [HookMethod("IOnGarageDoorUsed")]
+        private void IOnGarageDoorUsed(GarageDoorServer door)
+        {
+            var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)garageUsedBy.GetValue(door));
+            Interface.CallHook("OnGarageDoorUsed", door, session);
+        }
+
+        #endregion
+
         #region Vehicle Hooks
 
         /// <summary>
@@ -417,31 +463,31 @@ namespace Oxide.Game.Hurtworld
             if (!PermissionsLoaded(session)) return;
             if (!IsAdmin(session)) return;
 
-            var loaded_plugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
-            var loaded_plugin_names = new HashSet<string>(loaded_plugins.Select(pl => pl.Name));
-            var unloaded_plugin_errors = new Dictionary<string, string>();
+            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
+            var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
             {
-                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loaded_plugin_names))
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
                 {
                     string msg;
-                    unloaded_plugin_errors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
                 }
             }
 
-            var total_plugin_count = loaded_plugins.Length + unloaded_plugin_errors.Count;
-            if (total_plugin_count < 1)
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
             {
                 Reply(GetMessage("NoPluginsFound", session.SteamId.ToString()), session);
                 return;
             }
 
-            var output = $"Listing {loaded_plugins.Length + unloaded_plugin_errors.Count} plugins:";
+            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
             var number = 1;
-            foreach (var plugin in loaded_plugins)
+            foreach (var plugin in loadedPlugins)
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
-            foreach (var plugin_name in unloaded_plugin_errors.Keys)
-                output += $"\n  {number++:00} {plugin_name} - {unloaded_plugin_errors[plugin_name]}";
+            foreach (var pluginName in unloadedPluginErrors.Keys)
+                output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
             Reply(output, session);
         }
 
@@ -568,27 +614,20 @@ namespace Oxide.Game.Hurtworld
         #region Version Command
 
         /// <summary>
-        /// Called when the "version" command has been executed
+        /// Called when the "version" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
         [HookMethod("ChatVersion")]
-        private void ChatVersion(PlayerSession session, string command, string[] args)
+        private void ChatVersion(PlayerSession session)
         {
-            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()}", session);
+            Reply($"Oxide {OxideMod.Version} for Hurtworld {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})", session);
         }
 
         /// <summary>
-        /// Called when the "version" command has been executed
+        /// Called when the "version" console command has been executed
         /// </summary>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
         [HookMethod("ConsoleVersion")]
-        private void ConsoleVersion(string command, string[] args)
-        {
-            Reply($"Oxide version: {OxideMod.Version}, Hurtworld version: {GameManager.Instance.GetProtocolVersion()}");
-        }
+        private void ConsoleVersion() => ChatVersion(null);
 
         #endregion
 
