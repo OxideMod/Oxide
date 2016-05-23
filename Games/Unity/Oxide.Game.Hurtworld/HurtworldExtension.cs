@@ -62,6 +62,7 @@ namespace Oxide.Game.Hurtworld
             "Player entity already exists aborting",
             "Player not using",
             "Player requesting spawn.",
+            "PointOnEdgeException, perturbating vertices slightly",
             "Riped",
             "Sending structures to client",
             "Source was empty",

@@ -367,7 +367,7 @@ namespace Oxide.Game.Hurtworld
 
         #region Structure Hooks
 
-        private readonly FieldInfo singleUsedBy = typeof(DoorSingleServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
+        private readonly FieldInfo singleUsedBy = typeof(DoorSingleServer).GetField("LastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
         /// Called when a single door is used

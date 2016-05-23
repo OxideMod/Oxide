@@ -1062,7 +1062,7 @@
             "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "IOnGarageDoorUsed [internal]",
-            "HookName": "IOnGarageDoorUsed ",
+            "HookName": "IOnGarageDoorUsed",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GarageDoorServer",
             "Flagged": false,
