@@ -1,5 +1,5 @@
 [license]: https://tldrlegal.com/l/mit
-[docs]: http://oxidemod.github.io/Docs/
+[docs]: http://docs.oxidemod.org
 [forums]: http://oxidemod.org/
 [issues]: https://github.com/OxideMod/Oxide/issues
 [downloads]: http://oxidemod.org/downloads/
@@ -21,16 +21,16 @@ Support for each game and plugin language is added via extensions. When loading,
  * Oxide.Ext.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
 
 ## Supported Game Extensions
- * Oxide.Game.BeastsOfPrey - _Provides support for the [Beasts of Prey](http://www.beastsofprey.com/) server_
+ * Oxide.Game.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
+ * Oxide.Game.HideHoldOut - _Provides support for the [Hide & Hold Out](http://h2o-game.net/) server_
+ * Oxide.Game.Nomad - _Provides support for the [Nomad](http://playnomad.net) server_
  * Oxide.Game.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
- * Oxide.Game.Rust - _Provides support for the [Rust](http://playrust.com/) Experimental server_
- * Oxide.Game.RustLegacy - _Provides support for the [Rust](http://playrust.com/) Legacy server_
+ * Oxide.Game.Rust - _Provides support for the new [Rust](http://playrust.com/) server_
+ * Oxide.Game.RustLegacy - _Provides support for the old [Rust](http://playrust.com/) Legacy server_
  * Oxide.Game.SevenDays - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
- * Oxide.Game.TheForest - _Provides support for the [The Forest](http://survivetheforest.com/) server_
-
-## Community Extensions
-
- * [Oxide.Ext.RustIO](http://oxidemod.org/extensions/rust-io.768/) - _Provides generation of map images and a live map for Rust_
+ * Oxide.Game.Terraria - _Provides support for the [Terraria](http://terraria.org/) server_
+ * Oxide.Game.TheForest - _Provides support for [The Forest](http://survivetheforest.com/) server_
+ * Oxide.Game.Unturned - _Provides support for the [Unturned](http://smartlydressedgames.com/) server_
 
 ## Open Source
 
@@ -38,12 +38,19 @@ Oxide is free, open source software distributed under the [MIT License][license]
 
 ## Compiling Source
 
-While we recommend using one of the [official release builds][downloads], you can compile your own builds if you'd like. Keep in mind that only official builds are supported by the Oxide team and community.
+While we recommend using one of the [official release builds][downloads], you can compile your own builds if you'd like. Keep in mind that only official builds are supported by the Oxide team and community. _Good luck!_
 
- 1. Clone the git repository locally using `git clone https://github.com/OxideMod/Oxide.git` or download the [latest ZIP](https://github.com/OxideMod/Oxide/archive/master.zip).
- 2. Open the solution in the latest version of [Visual Studio 2015](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx), which includes .NET Framework 4.6.
- 3. Build the project using the solution. If you get errors, you're likely not using the latest Visual Studio 2015.
- 4. Copy the files from the `Bundles` directory for your game of choice to your server installation.
+ 1. Download a Git client such as [GitHub Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
+
+ 2. Clone the repo `https://github.com/OxideMod/Oxide.git` _(recommended)_ or download and extract the [latest zip](https://github.com/OxideMod/Oxide/archive/master.zip) archive.
+
+ 3. Download and install [Visual Studio 2015](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx) _(community is free, but any edition will work)_ if you do not have it installed already.
+
+ 3. Open the `Oxide.sln` solution file in Visual Studio 2015.
+
+ 4. Build the solution. If you get errors, you're likely not using the latest Visual Studio 2015 which is required as Oxide uses some [C# 6.0](https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6) features.
+
+ 5. Copy the files from the `Bundles` directory for your game of choice to your server installation, then just start the server!
 
 ## Getting Help
 
