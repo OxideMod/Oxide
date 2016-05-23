@@ -6,51 +6,6 @@
       "AssemblyName": "TerrariaServer.exe",
       "Hooks": [
         {
-          "Type": "InitOxide",
-          "Hook": {
-            "InjectionIndex": 0,
-            "HookTypeName": "Initialize Oxide",
-            "Name": "InitOxide [internal]",
-            "HookName": "InitOxide",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.Main",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "Initialize",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "jycKqafW9O1mqNCyiDRhXbFUs5GFOCJ+4TdAfWei8no=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 1,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "InitLogging [internal]",
-            "HookName": "InitLogging",
-            "AssemblyName": "TerrariaServer.exe",
-            "TypeName": "Terraria.Main",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 3,
-              "Name": "Initialize",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "jycKqafW9O1mqNCyiDRhXbFUs5GFOCJ+4TdAfWei8no=",
-            "BaseHookName": "InitOxide [internal]",
-            "HookCategory": "Server"
-          }
-        },
-        {
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
@@ -70,6 +25,51 @@
               "Parameters": []
             },
             "MSILHash": "EDdxK4UC0xqvyyWYcjbwsfEdBf3RJQHD8syh7ENeOf8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Main",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DedServ",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "JDt+GWUHYNCwOZpfE/UeCC2FOfhduvGf6J1AFmPvEiM=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "TerrariaServer.exe",
+            "TypeName": "Terraria.Main",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DedServ",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "JDt+GWUHYNCwOZpfE/UeCC2FOfhduvGf6J1AFmPvEiM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

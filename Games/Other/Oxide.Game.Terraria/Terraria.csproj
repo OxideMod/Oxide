@@ -61,7 +61,6 @@
     <PropertyGroup>
       <GameName>Terraria</GameName>
       <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>Managed</ManagedDir>
     </PropertyGroup>
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
@@ -85,14 +84,10 @@
       <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)%(RecursiveDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(WinFiles)" DestinationFiles="@(WinFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(WinFiles)" DestinationFiles="@(WinFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinGameFiles)" DestinationFiles="@(WinGameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinNativeFiles)" DestinationFiles="@(WinNativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" DestinationFiles="$(BundleDir)\$(GameName)\Oxide.Core.dll" />
-    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" />
-    <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" DestinationFiles="$(BundleDir)\$(GameName)\protobuf-net.dll" />
-    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" />
   </Target>
 </Project>

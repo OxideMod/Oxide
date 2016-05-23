@@ -1,5 +1,5 @@
 {
-    "ExtensionDirectory": "TerrariaServer_Data\\Managed",
+    "ExtensionDirectory": "",
 
     "PluginDirectory": "plugins",
     "ConfigDirectory": "config",
@@ -10,6 +10,6 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "saves\\oxide"
+        "oxide"
     ]
 }

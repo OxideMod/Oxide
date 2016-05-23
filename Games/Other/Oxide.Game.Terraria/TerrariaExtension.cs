@@ -27,8 +27,14 @@ namespace Oxide.Game.Terraria
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "mscorlib", "Oxide.Core", "System", "System.Core" };
-        public override string[] WhitelistNamespaces => new[] { "System.Collections", "System.Security.Cryptography", "System.Text" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "mscorlib", "Oxide.Core", "System", "System.Core"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "System.Collections", "System.Security.Cryptography", "System.Text"
+        };
 
         public static string[] Filter =
         {
@@ -38,8 +44,7 @@ namespace Oxide.Game.Terraria
         /// Initializes a new instance of the TerrariaExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public TerrariaExtension(ExtensionManager manager)
-            : base(manager)
+        public TerrariaExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -72,18 +77,9 @@ namespace Oxide.Game.Terraria
 
             // TODO: Add console log handling
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                var players = Main.numPlayers;
-                var hostname = Main.worldName;
-                return string.Concat(players, " | ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"{Main.numPlayers} | {Main.worldName}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = Main.worldName;
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Status1Left = () => Main.worldName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Main.fpsCount; // Main.fpsTimer
@@ -105,18 +101,8 @@ namespace Oxide.Game.Terraria
                 return Main.time <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out");
             };
 
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
-                // TODO: More info
-                return string.Concat(" ", time);
-            };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = Main.versionNumber;
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Left = () => DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Main.versionNumber2}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
