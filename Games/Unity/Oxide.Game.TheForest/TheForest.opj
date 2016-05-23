@@ -178,7 +178,7 @@
                 "BoltConnection"
               ]
             },
-            "MSILHash": "BAYkqKR9XQnzLNHjKp2qRhTqMGrctv10VdJFN+iehTE=",
+            "MSILHash": "0RGN7pCelDy9anJQGhJ0XBPJ7fQdMMu/WZrRJ2OW304=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -282,7 +282,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "/v0/sFgMMoxj3aeqdzObTYpcE4VMx6hKIBe7Ik8LHq0=",
+            "MSILHash": "RznukKLoVOIQqcmdmYGV6zwHZdmcOdhQ6QDJiIwuJmM=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -412,7 +412,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "huw+Nx3WrQXfj8JkqkTIp+jQMv+fVpCHTJPIQ8yWjXw=",
+            "MSILHash": "BAUwcIrYVEhOBZG4EaBRB7Rpmq65lDGNEdGywOusF0o=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -724,7 +724,7 @@
                 "ClientSuitcasePush"
               ]
             },
-            "MSILHash": "vbJyycfHeb3Oo8V+RgpN+uX9HyDTAb8JtNeuZhobBp4=",
+            "MSILHash": "jUmvP79lSyVJEVawTD9Di+kAavJES0/FLrl6Y0q3MjY=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -1036,7 +1036,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "w7sCvRue3eRHCurPM8VV9YE6oQ12FBYb+/5xZHrUFa0=",
+            "MSILHash": "apTKnCiKs4h6Z8X9f1vQzob80SGuAGfxWs12Pn6L4E0=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1062,7 +1062,7 @@
                 "SetCorpsePosition"
               ]
             },
-            "MSILHash": "orTYHHhjh70cLltCC5vemzwm8Gp4ELXQ4iZMWjE4V3Q=",
+            "MSILHash": "y6TuTqvPqMLfZbM4afjVmCbv+a78t5EuomWUZmtO0sk=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1474,7 +1474,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "nJYvDYjN7z0GMLWTnjkmXTo6CMQaKyiT5ggzzWzbATI=",
+            "MSILHash": "GhpB0+i9y81YTbtKBD32DPegbBEmCH5/hBX6K7msk3U=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1716,58 +1716,6 @@
             "MSILHash": "5zFRSA/rSnMxbYSFz9wZb1it7hFK9gcQrZn9MoB7Jq8=",
             "BaseHookName": null,
             "HookCategory": "Item"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 5,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnFireWarmth",
-            "HookName": "OnFireWarmth",
-            "AssemblyName": "Assembly-UnityScript.dll",
-            "TypeName": "FireWarmth",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnTriggerStay",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "UnityEngine.Collider"
-              ]
-            },
-            "MSILHash": "4vJhjGNrke6zrIqX/qhFx7/j7yGvWWfrdDOG9Bhm8sw=",
-            "BaseHookName": null,
-            "HookCategory": "_TESTED"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 5,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnFireWarmthEnd",
-            "HookName": "OnFireWarmthEnd",
-            "AssemblyName": "Assembly-UnityScript.dll",
-            "TypeName": "FireWarmth",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnTriggerExit",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "UnityEngine.Collider"
-              ]
-            },
-            "MSILHash": "PzkCfWEA0T0LpHjJxGAp3C6Mn1ADhokMF08/0y7dLcc=",
-            "BaseHookName": null,
-            "HookCategory": "_TESTED"
           }
         },
         {
