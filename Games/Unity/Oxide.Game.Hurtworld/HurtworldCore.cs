@@ -418,7 +418,7 @@ namespace Oxide.Game.Hurtworld
             var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)garageUsedBy.GetValue(door));
             if (session == null)
             {
-                Interface.Oxide.LogWarning("Session is null in OnGarageDoorUSed, _lastUsedBy is unavailble or inaccessible");
+                Interface.Oxide.LogWarning("Session is null in OnGarageDoorUsed, _lastUsedBy is unavailble or inaccessible");
                 return;
             }
             Interface.CallHook("OnGarageDoorUsed", door, session);
