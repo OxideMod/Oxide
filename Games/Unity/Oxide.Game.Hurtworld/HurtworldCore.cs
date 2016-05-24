@@ -378,6 +378,11 @@ namespace Oxide.Game.Hurtworld
         private void IOnSingleDoorUsed(DoorSingleServer door)
         {
             var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)singleUsedBy.GetValue(door));
+            if (session == null)
+            {
+                Interface.Oxide.LogWarning("Session is null in OnSingleDoorUsed, LastUsedBy is unavailble or inaccessible");
+                return;
+            }
             Interface.CallHook("OnSingleDoorUsed", door, session);
         }
 
@@ -392,6 +397,11 @@ namespace Oxide.Game.Hurtworld
         private void IOnDoubleDoorUsed(DoubleDoorServer door)
         {
             var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)doubleUsedBy.GetValue(door));
+            if (session == null)
+            {
+                Interface.Oxide.LogWarning("Session is null in OnDoubleDoorUsed, _lastUsedBy is unavailble or inaccessible");
+                return;
+            }
             Interface.CallHook("OnDoubleDoorUsed", door, session);
         }
 
@@ -406,6 +416,11 @@ namespace Oxide.Game.Hurtworld
         private void IOnGarageDoorUsed(GarageDoorServer door)
         {
             var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)garageUsedBy.GetValue(door));
+            if (session == null)
+            {
+                Interface.Oxide.LogWarning("Session is null in OnGarageDoorUSed, _lastUsedBy is unavailble or inaccessible");
+                return;
+            }
             Interface.CallHook("OnGarageDoorUsed", door, session);
         }
 
