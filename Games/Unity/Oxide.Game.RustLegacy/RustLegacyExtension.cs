@@ -168,7 +168,7 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public override void OnModLoad()
         {
-            if (!Interface.Oxide.CheckConsole(true) || !Interface.Oxide.EnableConsole(true)) return;
+            if (!Interface.Oxide.EnableConsole(true)) return;
 
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             ConsoleSystem.RegisterLogCallback(HandleLog, true);
