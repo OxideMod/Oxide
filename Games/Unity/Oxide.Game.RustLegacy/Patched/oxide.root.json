@@ -12,5 +12,6 @@
         "{oxide.directory}",
         "{datadir}\\oxide",
         "serverdata\\oxide"
-    ]
+    ],
+    "DisableConsole": true
 }
