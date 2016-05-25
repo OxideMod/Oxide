@@ -126,7 +126,7 @@ namespace Oxide.Game.TheForest
             if (TheForestExtension.DisableClient) DisableClient();
 
             // Save the level every X minutes
-            Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
+            //Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
         }
 
         /// <summary>
