@@ -127,39 +127,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 160,
+            "InjectionIndex": 216,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l2",
-            "HookTypeName": "Simple",
-            "Name": "IOnUserApprove [internal]",
-            "HookName": "IOnUserApprove",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CodeHatch.Engine.Networking.CoreServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "ProcessConnectionRequest",
-              "ReturnType": "ConnectionError",
-              "Parameters": [
-                "CodeHatch.Engine.Networking.ConnectionRequest"
-              ]
-            },
-            "MSILHash": "ZS5R8i/UHdcK57uS9STq1oZnyVQdIi8hXuPqlxaEmlE=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 217,
-            "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l5",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeHatch.Engine.Networking.CoreServer",
             "Flagged": false,
@@ -641,6 +615,32 @@
             },
             "MSILHash": "wrPpL69oTTWkggMGNlByhFJv4AZyORp5DLexkv/vSTY=",
             "BaseHookName": "OnPlayerChat [player]",
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 70,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Networking.CoreServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "NotifyOfPlayerJoin",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Engine.Networking.Player"
+              ]
+            },
+            "MSILHash": "sxF+G91PFRKdOWxUT6WmL3V09uFaCB75nL7QKljor5Q=",
+            "BaseHookName": null,
             "HookCategory": "Player"
           }
         }

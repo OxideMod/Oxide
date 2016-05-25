@@ -177,7 +177,7 @@ namespace Oxide.Game.ReignOfKings
             Logger.ExceptionLogged += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount}/{DedicatedServerBypass.Settings.ServerName}";
+            Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount} | {DedicatedServerBypass.Settings.ServerName}";
 
             Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerBypass.Settings.ServerName}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
