@@ -743,7 +743,7 @@ namespace Oxide.Game.RustLegacy
                 var iplayer = covalence.PlayerManager.GetPlayer(arg.argUser.userID.ToString());
 
                 // Is it a chat command?
-                if (str[0] != '/' && str[0] != '!')
+                if (str[0] != '/')
                     return Interface.CallHook("OnPlayerChat", arg.argUser, str) ?? Interface.CallHook("OnUserChat", iplayer, str);
 
                 // Get the arg string

@@ -1024,7 +1024,7 @@ namespace Oxide.Game.Rust
             if (str.Length == 0) return null;
 
             // Is it a chat command?
-            if (str[0] == '/' || str[0] == '!')
+            if (str[0] == '/')
             {
                 // Get the message
                 var message = str.Substring(1);
