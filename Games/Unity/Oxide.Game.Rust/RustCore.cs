@@ -612,7 +612,10 @@ namespace Oxide.Game.Rust
         /// Called when the "oxide.version" console command has been executed
         /// </summary>
         [HookMethod("ConsoleVersion")]
-        private void ConsoleVersion() => ChatVersion(null);
+        private void ConsoleVersion(ConsoleSystem.Arg arg)
+        {
+            Reply(arg.connection, $"Oxide {OxideMod.Version} for Rust {BuildInformation.VersionStampDays} ({Protocol.network})");
+        }
 
         #endregion
 
