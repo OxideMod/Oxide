@@ -260,13 +260,12 @@ namespace Oxide.Game.ReignOfKings
         /// Called when the player sends a message
         /// </summary>
         /// <param name="evt"></param>
-        /// <param name="message"></param>
         [HookMethod("OnPlayerChat")]
-        private object OnPlayerChat(PlayerMessageEvent evt, string message)
+        private object OnPlayerChat(PlayerMessageEvent evt)
         {
             // Call covalence hook
             var iplayer = covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString());
-            return Interface.CallHook("OnUserChat", iplayer, message);
+            return Interface.CallHook("OnUserChat", iplayer, evt.Message);
         }
 
         /// <summary>
