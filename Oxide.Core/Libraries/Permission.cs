@@ -660,7 +660,7 @@ namespace Oxide.Core.Libraries
                 }
                 else
                 {
-                    perm = perm.TrimEnd('*');
+                    perm = perm.TrimEnd('*').ToLower();
                     if (!perms.Where(s => s.StartsWith(perm)).Aggregate(false, (c, s) => c | data.Perms.Add(s))) return;
                 }
                 SaveGroups();

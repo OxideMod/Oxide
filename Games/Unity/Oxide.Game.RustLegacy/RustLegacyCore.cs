@@ -132,7 +132,6 @@ namespace Oxide.Game.RustLegacy
                     return digits >= 17;
                 });
                 permission.CleanUp();
-                permission.MigrateGroup("player", "default");
             }
         }
 
@@ -158,6 +157,8 @@ namespace Oxide.Game.RustLegacy
         {
             if (serverInitialized) return;
             serverInitialized = true;
+
+            permission.MigrateGroup("player", "default");
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", server.hostname);

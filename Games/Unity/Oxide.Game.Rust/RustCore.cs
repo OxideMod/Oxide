@@ -181,7 +181,6 @@ namespace Oxide.Game.Rust
                     return digits >= 17;
                 });
                 permission.CleanUp();
-                permission.MigrateGroup("player", "default");
             }
         }
 
@@ -207,6 +206,8 @@ namespace Oxide.Game.Rust
         {
             if (serverInitialized) return;
             serverInitialized = true;
+
+            permission.MigrateGroup("player", "default");
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
