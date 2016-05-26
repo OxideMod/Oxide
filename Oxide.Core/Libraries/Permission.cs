@@ -568,6 +568,9 @@ namespace Oxide.Core.Libraries
             // Get the user data
             var data = GetUserData(userid);
 
+            // Call hook for plugins
+            Interface.CallHook("OnUserPermissionGranted", userid, perm);
+
             perm = perm.ToLower();
 
             if (perm.EndsWith("*"))
@@ -583,7 +586,7 @@ namespace Oxide.Core.Libraries
                 }
                 else
                 {
-                    perm = perm.TrimEnd('*');
+                    perm = perm.TrimEnd('*').ToLower();
                     if (!perms.Where(s => s.StartsWith(perm)).Aggregate(false, (c, s) => c | data.Perms.Add(s))) return;
                 }
                 SaveUsers();
@@ -593,9 +596,6 @@ namespace Oxide.Core.Libraries
             // Add the perm and save
             if (!data.Perms.Add(perm)) return;
             SaveUsers();
-
-            // Call hook for plugins
-            Interface.CallHook("OnUserPermissionGranted", userid, perm);
         }
 
         /// <summary>
@@ -611,6 +611,9 @@ namespace Oxide.Core.Libraries
             // Get the user data
             var data = GetUserData(userid);
 
+            // Call hook for plugins
+            Interface.CallHook("OnUserPermissionRevoked", userid, perm);
+
             if (perm.Equals("*"))
             {
                 if (data.Perms.Count <= 0) return;
@@ -622,9 +625,6 @@ namespace Oxide.Core.Libraries
             // Remove the perm and save
             if (!data.Perms.Remove(perm.ToLower())) return;
             SaveUsers();
-
-            // Call hook for plugins
-            Interface.CallHook("OnUserPermissionRevoked", userid, perm);
         }
 
         #endregion
@@ -646,6 +646,9 @@ namespace Oxide.Core.Libraries
             // Get the group data
             GroupData data;
             if (!groupdata.TryGetValue(groupname.ToLower(), out data)) return;
+
+            // Call hook for plugins
+            Interface.CallHook("OnGroupPermissionGranted", groupname, perm);
 
             if (perm.EndsWith("*"))
             {
@@ -670,9 +673,6 @@ namespace Oxide.Core.Libraries
             // Add the perm and save
             if (!data.Perms.Add(perm.ToLower())) return;
             SaveGroups();
-
-            // Call hook for plugins
-            Interface.CallHook("OnGroupPermissionGranted", groupname, perm);
         }
 
         /// <summary>
@@ -689,6 +689,9 @@ namespace Oxide.Core.Libraries
             GroupData data;
             if (!groupdata.TryGetValue(groupname.ToLower(), out data)) return;
 
+            // Call hook for plugins
+            Interface.CallHook("OnGroupPermissionRevoked", groupname, perm);
+
             if (perm.Equals("*"))
             {
                 if (data.Perms.Count <= 0) return;
@@ -700,9 +703,6 @@ namespace Oxide.Core.Libraries
             // Remove the perm and save
             if (!data.Perms.Remove(perm.ToLower())) return;
             SaveGroups();
-
-            // Call hook for plugins
-            Interface.CallHook("OnGroupPermissionRevoked", groupname, perm);
         }
 
         #endregion
