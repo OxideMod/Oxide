@@ -344,7 +344,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBasePlayerAttacked")]
         private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
-            if (isPlayerTakingDamage) return null;
+            if (!serverInitialized || isPlayerTakingDamage) return null;
             if (Interface.CallHook("OnEntityTakeDamage", player, info) != null) return true;
 
             isPlayerTakingDamage = true;
