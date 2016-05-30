@@ -26,7 +26,7 @@ namespace Oxide.Ext.Lua.Libraries
         /// <summary>
         /// Initializes a new instance of the LuaUtil class
         /// </summary>
-        /// <param name="logger"></param>
+        /// <param name="lua"></param>
         public LuaUtil(NLua.Lua lua)
         {
             LuaEnvironment = lua;
@@ -48,12 +48,12 @@ namespace Oxide.Ext.Lua.Libraries
             }
 
             // Get the length
-            object[] arr = new object[size];
+            var arr = new object[size];
 
             // Create the array
-            foreach (object key in table.Keys)
+            foreach (var key in table.Keys)
             {
-                int index = Convert.ToInt32(key) - 1;
+                var index = Convert.ToInt32(key) - 1;
                 arr[index] = table[key];
             }
 
@@ -89,16 +89,14 @@ namespace Oxide.Ext.Lua.Libraries
             // First of all, check it's actually an array
             int size;
             if (!table.IsArray(out size) || size == 0)
-            {
                 throw new InvalidOperationException("Specified table is not an array");
-            }
 
             // Get the length
-            int result = -1;
+            var result = -1;
             Type type = null;
 
             // Create the array
-            foreach (object key in table.Keys)
+            foreach (var key in table.Keys)
             {
                 if (result < 0)
                 {
@@ -145,13 +143,11 @@ namespace Oxide.Ext.Lua.Libraries
         public LuaTable EvaluateEnumerable(IEnumerable obj)
         {
             LuaEnvironment.NewTable("_tmp_enumerable");
-            LuaTable tbl = LuaEnvironment["_tmp_enumerable"] as LuaTable;
+            var tbl = LuaEnvironment["_tmp_enumerable"] as LuaTable;
             var e = obj.GetEnumerator();
-            int i = 0;
+            var i = 0;
             while (e.MoveNext())
-            {
                 tbl[++i] = e.Current;
-            }
             LuaEnvironment["_tmp_enumerable"] = null;
             return tbl;
         }
@@ -167,10 +163,10 @@ namespace Oxide.Ext.Lua.Libraries
         {
             int cnt;
             if (!argTable.IsArray(out cnt)) throw new ArgumentException("Table is not an array", "argTable");
-            Type[] typeArgs = new Type[cnt];
-            for (int i = 0; i < cnt; i++)
+            var typeArgs = new Type[cnt];
+            for (var i = 0; i < cnt; i++)
             {
-                object obj = argTable[i + 1];
+                var obj = argTable[i + 1];
                 if (obj is LuaTable) obj = (obj as LuaTable)["_type"];
                 if (!(obj is Type)) throw new ArgumentException("Item in table is not a Type", $"argTable[{i + 1}]");
                 typeArgs[i] = obj as Type;

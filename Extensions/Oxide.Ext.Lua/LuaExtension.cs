@@ -49,7 +49,7 @@ namespace Oxide.Ext.Lua
         internal LuaTable PluginMetatable { get; private set; }
 
         // Blacklist and whitelist
-        private bool _typesInit;
+        private bool typesInit;
 
         // Utility
         private LuaFunction setmetatable;
@@ -195,13 +195,12 @@ end
 end
 ", "LuaExtension").Call();
             LuaEnvironment["tmp"] = null;
-
         }
 
         internal void InitializeTypes()
         {
-            if (_typesInit) return;
-            _typesInit = true;
+            if (typesInit) return;
+            typesInit = true;
             var filter = new Regex(@"\$|\<|\>|\#=", RegexOptions.Compiled);
             // Bind all namespaces and types
             foreach (var type in AppDomain.CurrentDomain.GetAssemblies()
@@ -234,24 +233,22 @@ end
             }
             else
             {
-                string[] nspacesplit = nspace.Split('.');
-                LuaTable curtable = LuaEnvironment["_G"] as LuaTable;
+                var nspacesplit = nspace.Split('.');
+                var curtable = LuaEnvironment["_G"] as LuaTable;
                 if (curtable == null)
                 {
                     Interface.Oxide.LogError("_G is null!");
                     return null;
                 }
-                for (int i = 0; i < nspacesplit.Length; i++)
+                for (var i = 0; i < nspacesplit.Length; i++)
                 {
-                    LuaTable prevtable = curtable;
-                    curtable = curtable[nspacesplit[i]] as LuaTable;
-                    if (curtable == null)
-                    {
-                        LuaEnvironment.NewTable("tmp");
-                        curtable = LuaEnvironment["tmp"] as LuaTable;
-                        LuaEnvironment["tmp"] = null;
-                        prevtable[nspacesplit[i]] = curtable;
-                    }
+                    var prevtable = curtable;
+                    curtable = curtable?[nspacesplit[i]] as LuaTable;
+                    if (curtable != null) continue;
+                    LuaEnvironment.NewTable("tmp");
+                    curtable = LuaEnvironment["tmp"] as LuaTable;
+                    LuaEnvironment["tmp"] = null;
+                    if (prevtable != null) prevtable[nspacesplit[i]] = curtable;
                 }
                 return curtable;
             }
@@ -266,7 +263,7 @@ end
         {
             // Make the table
             LuaEnvironment.NewTable("tmp");
-            LuaTable tmp = LuaEnvironment["tmp"] as LuaTable;
+            var tmp = LuaEnvironment["tmp"] as LuaTable;
 
             // Set the type field
             tmp["_type"] = type;
@@ -290,18 +287,18 @@ end
             else
             {
                 // Bind all public static methods
-                MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
-                HashSet<string> processed = new HashSet<string>();
-                foreach (MethodInfo method in methods)
+                var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
+                var processed = new HashSet<string>();
+                foreach (var method in methods)
                 {
                     if (!processed.Contains(method.Name))
                     {
                         // We need to check if this method is overloaded
-                        MethodInfo[] overloads = methods.Where(m => m.Name == method.Name).ToArray();
+                        var overloads = methods.Where(m => m.Name == method.Name).ToArray();
                         if (overloads.Length == 1)
                         {
                             // It's not, simply bind it
-                            LuaEnvironment.RegisterFunction(string.Format("tmp.{0}", method.Name), method);
+                            LuaEnvironment.RegisterFunction($"tmp.{method.Name}", method);
                         }
                         else
                         {
@@ -316,14 +313,12 @@ end
 
                 // Make the public static field table
                 LuaEnvironment.NewTable("sftbl");
-                LuaTable sftbl = LuaEnvironment["sftbl"] as LuaTable;
+                var sftbl = LuaEnvironment["sftbl"] as LuaTable;
                 LuaEnvironment["sftbl"] = null;
                 tmp["_sftbl"] = sftbl;
-                FieldInfo[] fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
-                foreach (FieldInfo field in fields)
-                {
+                var fields = type.GetFields(BindingFlags.Static | BindingFlags.Public);
+                foreach (var field in fields)
                     sftbl[field.Name] = field;
-                }
 
                 // Bind all nested types
                 foreach (var nested in type.GetNestedTypes())
@@ -346,7 +341,7 @@ end
         private LuaTable CreateOverloadSelector(MethodBase[] methods)
         {
             LuaEnvironment.NewTable("overloadselector");
-            LuaTable tbl = LuaEnvironment["overloadselector"] as LuaTable;
+            var tbl = LuaEnvironment["overloadselector"] as LuaTable;
             LuaEnvironment["overloadselector"] = null;
             tbl["methodarray"] = methods;
             setmetatable.Call(tbl, overloadselectormeta);
@@ -376,23 +371,18 @@ end
         private static object ReadStaticProperty(LuaTable tbl, object key)
         {
             Interface.Oxide.LogWarning("__index ReadStaticProperty {0}", key);
-            string keystr = key as string;
+            var keystr = key as string;
             if (keystr == null) return null;
             if (keystr == "_sftbl") return null;
-            LuaTable sftbl = tbl["_sftbl"] as LuaTable;
+            var sftbl = tbl["_sftbl"] as LuaTable;
             if (sftbl == null)
             {
                 Interface.Oxide.RootLogger.Write(LogType.Warning, "Tried to access _sftbl on type table when reading but it doesn't exist!");
                 return null;
             }
-            object prop = sftbl[keystr];
-            if (prop == null) return null;
-            FieldInfo field = prop as FieldInfo;
-            if (field != null)
-            {
-                return field.GetValue(null);
-            }
-            return null;
+            var prop = sftbl[keystr];
+            var field = prop as FieldInfo;
+            return field?.GetValue(null);
         }
 
         /// <summary>
@@ -403,22 +393,18 @@ end
         /// <param name="value"></param>
         private static void WriteStaticProperty(LuaTable tbl, object key, object value)
         {
-            string keystr = key as string;
+            var keystr = key as string;
             if (keystr == null) return;
             if (keystr == "_sftbl") return;
-            LuaTable sftbl = tbl["_sftbl"] as LuaTable;
+            var sftbl = tbl["_sftbl"] as LuaTable;
             if (sftbl == null)
             {
                 Interface.Oxide.LogWarning("Tried to access _sftbl on type table when writing but it doesn't exist!");
                 return;
             }
-            object prop = sftbl[keystr];
-            if (prop == null) return;
-            FieldInfo field = prop as FieldInfo;
-            if (field != null)
-            {
-                field.SetValue(null, value);
-            }
+            var prop = sftbl[keystr];
+            var field = prop as FieldInfo;
+            field?.SetValue(null, value);
         }
 
         /// <summary>
@@ -443,14 +429,14 @@ end
 
             // Respect the whitelist and blacklist
             // The only exception is to allow all value types directly under System
-            string nspace = Utility.GetNamespace(type);
+            var nspace = Utility.GetNamespace(type);
             if (string.IsNullOrEmpty(nspace)) return true;
             if (nspace == "System")
             {
                 if (type.IsValueType || type.Name == "String" || type.Name == "Convert") return true;
             }
             if (WhitelistNamespaces == null) return false;
-            foreach (string whitelist in WhitelistNamespaces)
+            foreach (var whitelist in WhitelistNamespaces)
                 if (nspace.StartsWith(whitelist)) return true;
             return false;
         }
@@ -463,9 +449,9 @@ end
         {
             Action<LuaTable> func = (tbl) =>
             {
-                LuaTable pluginTable = LuaEnvironment["PLUGIN"] as LuaTable;
+                var pluginTable = LuaEnvironment["PLUGIN"] as LuaTable;
                 tbl["_attribName"] = attrName;
-                (LuaEnvironment["rawset"] as LuaFunction).Call(pluginTable, "_activeAttrib", tbl);
+                (LuaEnvironment["rawset"] as LuaFunction)?.Call(pluginTable, "_activeAttrib", tbl);
             };
             LuaEnvironment[attrName] = func;
         }
@@ -480,7 +466,7 @@ end
             //Interface.Oxide.RootLogger.Write(LogType.Debug, "Loading library '{0}' into Lua... (path is '{1}')", library.GetType().Name, path);
 
             // Create the library table if it doesn't exist
-            LuaTable libraryTable = LuaEnvironment[path] as LuaTable;
+            var libraryTable = LuaEnvironment[path] as LuaTable;
             if (libraryTable == null)
             {
                 LuaEnvironment.NewTable(path);
@@ -493,10 +479,10 @@ end
             }
 
             // Bind all methods
-            foreach (string name in library.GetFunctionNames())
+            foreach (var name in library.GetFunctionNames())
             {
-                MethodInfo method = library.GetFunction(name);
-                LuaEnvironment.RegisterFunction(string.Format("{0}.{1}", path, name), library, method);
+                var method = library.GetFunction(name);
+                LuaEnvironment.RegisterFunction($"{path}.{name}", library, method);
             }
 
             // Only bind properties if it's not global
@@ -504,16 +490,16 @@ end
             {
                 // Create properties table
                 LuaEnvironment.NewTable("tmp");
-                LuaTable propertiesTable = LuaEnvironment["tmp"] as LuaTable;
+                var propertiesTable = LuaEnvironment["tmp"] as LuaTable;
                 //Interface.Oxide.RootLogger.Write(LogType.Debug, "Made properties table {0}", propertiesTable);
                 libraryTable["_properties"] = propertiesTable;
                 libraryTable["_object"] = library; // NOTE: Is this a security risk?
                 LuaEnvironment["tmp"] = null;
 
                 // Bind all properties
-                foreach (string name in library.GetPropertyNames())
+                foreach (var name in library.GetPropertyNames())
                 {
-                    PropertyInfo property = library.GetProperty(name);
+                    var property = library.GetProperty(name);
                     propertiesTable[name] = property;
                 }
 
@@ -552,15 +538,14 @@ end
             LoadLibrary(new LuaGlobal(Manager.Logger), "_G");
             LuaEnvironment.NewTable("datafile");
             LoadLibrary(new LuaDatafile(LuaEnvironment), "datafile");
-            if (LuaEnvironment["util"] == null)
-                LuaEnvironment.NewTable("util");
+            if (LuaEnvironment["util"] == null) LuaEnvironment.NewTable("util");
             LoadLibrary(new LuaUtil(LuaEnvironment), "util");
 
             // Bind any libraries to Lua
-            foreach (string name in Manager.GetLibraries())
+            foreach (var name in Manager.GetLibraries())
             {
-                string path = name.ToLowerInvariant();
-                Library lib = Manager.GetLibrary(name);
+                var path = name.ToLowerInvariant();
+                var lib = Manager.GetLibrary(name);
                 if (lib.IsGlobal)
                     path = "_G";
                 else if (LuaEnvironment[path] == null)

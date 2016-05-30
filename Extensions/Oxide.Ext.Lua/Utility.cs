@@ -22,10 +22,10 @@ namespace Oxide.Ext.Lua
         public static bool IsArray(this LuaTable table, out int count)
         {
             count = 0;
-            foreach (object key in table.Keys)
+            foreach (var key in table.Keys)
             {
                 if (!(key is double)) return false;
-                double numkey = (double)key;
+                var numkey = (double)key;
                 if (Math.Floor(numkey) != numkey) return false;
                 if (numkey < 1.0) return false;
                 if (numkey > count) count = (int)numkey;
@@ -52,14 +52,12 @@ namespace Oxide.Ext.Lua
         public static void SetConfigFromTable(DynamicConfigFile config, LuaTable table)
         {
             config.Clear();
-            foreach (object key in table.Keys)
+            foreach (var key in table.Keys)
             {
-                string keystr = key as string;
-                if (keystr != null)
-                {
-                    object value = TranslateLuaItemToConfigItem(table[key]);
-                    if (value != null) config[keystr] = value;
-                }
+                var keystr = key as string;
+                if (keystr == null) continue;
+                var value = TranslateLuaItemToConfigItem(table[key]);
+                if (value != null) config[keystr] = value;
             }
         }
 
@@ -70,49 +68,39 @@ namespace Oxide.Ext.Lua
         /// <returns></returns>
         private static object TranslateLuaItemToConfigItem(object item)
         {
-            if (item is string)
-                return item;
-            else if (item is double)
+            if (item is string) return item;
+            if (item is double)
             {
                 // If it's whole, return it as an int
-                double number = (double)item;
+                var number = (double)item;
                 if (Math.Truncate(number) == number)
                     return (int)number;
-                else
-                    return (float)number;
+                return (float)number;
             }
-            else if (item is bool)
-                return item;
-            else if (item is LuaTable)
+            if (item is bool) return item;
+            if (item is LuaTable)
             {
-                LuaTable table = item as LuaTable;
+                var table = item as LuaTable;
                 int count;
                 if (table.IsArray(out count))
                 {
-                    List<object> list = new List<object>();
-                    for (int i = 0; i < count; i++)
+                    var list = new List<object>();
+                    for (var i = 0; i < count; i++)
                     {
-                        object luaobj = table[(double)(i + 1)];
-                        if (luaobj != null)
-                            list.Add(TranslateLuaItemToConfigItem(luaobj));
-                        else
-                            list.Add(null);
+                        var luaobj = table[(double)(i + 1)];
+                        list.Add(luaobj != null ? TranslateLuaItemToConfigItem(luaobj) : null);
                     }
                     return list;
                 }
-                else
+                var dict = new Dictionary<string, object>();
+                foreach (var key in table.Keys)
                 {
-                    Dictionary<string, object> dict = new Dictionary<string, object>();
-                    foreach (object key in table.Keys)
-                    {
-                        if (key is string)
-                            dict.Add(key as string, TranslateLuaItemToConfigItem(table[key]));
-                    }
-                    return dict;
+                    if (key is string)
+                        dict.Add(key as string, TranslateLuaItemToConfigItem(table[key]));
                 }
+                return dict;
             }
-            else
-                return null;
+            return null;
         }
 
         private static void CreateFullPath(string fullPath, LuaTable tbl, NLua.Lua lua)
@@ -120,14 +108,12 @@ namespace Oxide.Ext.Lua
             var path = fullPath.Split('.');
             for (var i = 0; i < path.Length - 1; i++)
             {
-                if (tbl[path[i]] == null)
-                {
-                    lua.NewTable("tmp");
-                    var table = (LuaTable) lua["tmp"];
-                    tbl[path[i]] = table;
-                    lua["tmp"] = null;
-                    tbl = table;
-                }
+                if (tbl[path[i]] != null) continue;
+                lua.NewTable("tmp");
+                var table = (LuaTable) lua["tmp"];
+                tbl[path[i]] = table;
+                lua["tmp"] = null;
+                tbl = table;
             }
         }
 
@@ -141,7 +127,7 @@ namespace Oxide.Ext.Lua
         {
             // Make a table
             lua.NewTable("tmp");
-            LuaTable tbl = lua["tmp"] as LuaTable;
+            var tbl = lua["tmp"] as LuaTable;
             lua["tmp"] = null;
 
             // Loop each item in config
@@ -174,34 +160,36 @@ namespace Oxide.Ext.Lua
             else if (item is List<object>)
             {
                 lua.NewTable("tmplist");
-                LuaTable tbl = lua["tmplist"] as LuaTable;
+                var tbl = lua["tmplist"] as LuaTable;
                 lua["tmplist"] = null;
 
-                List<object> list = item as List<object>;
-                for (int i = 0; i < list.Count; i++)
+                var list = item as List<object>;
+                for (var i = 0; i < list.Count; i++)
                 {
                     tbl[i + 1] = TranslateConfigItemToLuaItem(lua, list[i]);
                 }
 
                 return tbl;
             }
-            else if (item is Dictionary<string, object>)
-            {
-                lua.NewTable("tmpdict");
-                LuaTable tbl = lua["tmpdict"] as LuaTable;
-                lua["tmpdict"] = null;
-
-                Dictionary<string, object> dict = item as Dictionary<string, object>;
-                foreach (var pair in dict)
-                {
-                    CreateFullPath(pair.Key, tbl, lua);
-                    tbl[pair.Key] = TranslateConfigItemToLuaItem(lua, pair.Value);
-                }
-
-                return tbl;
-            }
             else
+            {
+                if (item is Dictionary<string, object>)
+                {
+                    lua.NewTable("tmpdict");
+                    var tbl = lua["tmpdict"] as LuaTable;
+                    lua["tmpdict"] = null;
+
+                    var dict = item as Dictionary<string, object>;
+                    foreach (var pair in dict)
+                    {
+                        CreateFullPath(pair.Key, tbl, lua);
+                        tbl[pair.Key] = TranslateConfigItemToLuaItem(lua, pair.Value);
+                    }
+
+                    return tbl;
+                }
                 return null;
+            }
         }
 
         /// <summary>
@@ -209,10 +197,7 @@ namespace Oxide.Ext.Lua
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string GetNamespace(Type type)
-        {
-            return type.Namespace ?? string.Empty;
-        }
+        public static string GetNamespace(Type type) => type.Namespace ?? string.Empty;
 
         /// <summary>
         /// Gets the full type name of the specified type
@@ -223,10 +208,9 @@ namespace Oxide.Ext.Lua
         {
             if (type.IsNested)
                 return GetTypeName(type.DeclaringType) + "+" + type.Name;
-            else if (type.IsGenericType)
+            if (type.IsGenericType)
                 return type.Name.Substring(0, type.Name.IndexOf('`'));
-            else
-                return type.Name;
+            return type.Name;
         }
 
         /// <summary>
@@ -253,12 +237,7 @@ namespace Oxide.Ext.Lua
                 }
 
                 foreach (var type in moduleTypes)
-                {
-                    if (type != null)
-                    {
-                        yield return type;
-                    }
-                }
+                    if (type != null) yield return type;
             }
         }
     }

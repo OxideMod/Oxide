@@ -41,10 +41,7 @@ namespace Oxide.Ext.Lua.Plugins
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        protected override Plugin GetPlugin(string filename)
-        {
-            return new LuaPlugin(filename, LuaExtension, Watcher);
-        }
+        protected override Plugin GetPlugin(string filename) => new LuaPlugin(filename, LuaExtension, Watcher);
 
         /// <summary>
         /// Loads a plugin using this loader
