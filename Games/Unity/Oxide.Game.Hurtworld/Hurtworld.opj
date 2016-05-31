@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "yf4rwJAAtFCOoC8/oRmkyuHXVplJ783/5T2YcVNWpHE=",
+            "MSILHash": "IELQNLTxeyM/jfz2SbkYzaNDtxFvGrcR5JXY+Yk+s2o=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "yf4rwJAAtFCOoC8/oRmkyuHXVplJ783/5T2YcVNWpHE=",
+            "MSILHash": "IELQNLTxeyM/jfz2SbkYzaNDtxFvGrcR5JXY+Yk+s2o=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -97,7 +97,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "TRFdQPlCUHS7JbFR5otWFJHgqbvUsqiUlP38t30ZKYE=",
+            "MSILHash": "mm/4RboK2D0WrbTb0nrRZ/M3WVcxJphy7Ah+VMPuKJk=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -151,7 +151,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "D8hrWfLw89wdYcoJhfuGaB23sj4+d1+XToqiU8B1e4U=",
+            "MSILHash": "JrZsmJ7ethDyWR+frejavs/KO9oLHlQj5JvH+gKWfik=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -265,236 +265,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
-            "HookTypeName": "Simple",
-            "Name": "CanUseWorkbench",
-            "HookName": "CanUseWorkbench",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "HasAuthority",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "uLink.NetworkPlayer"
-              ]
-            },
-            "MSILHash": "FYc4QCT3y++euKFZvpRWEx5s8aXv9anmCsrTmoc+EaI=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnCraftingComplete",
-            "HookName": "OnCraftingComplete",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "CompleteCrafting",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "UgUSc09J33A8O52MONyx8JLu7T4UZ5trNgcr6oiBqCM=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnCraftingCancel",
-            "HookName": "OnCraftingCancel",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "ClientCancelItem",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Int32"
-              ]
-            },
-            "MSILHash": "dZMvPeik1ffxmxILmHWhkmLgIlR0Ny4SIZc1XKCtdJo=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnRecipeChange",
-            "HookName": "OnRecipeChange",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "ChangeRecipe",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Int32"
-              ]
-            },
-            "MSILHash": "uNOqDC9s2focZMXzIU2eWxGyfxZFzFruUVfwD54g14w=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnCraftingStart",
-            "HookName": "OnCraftingStart",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "BeginCrafting",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "BJBF6i8si1z9LTB6KAKnYpw4uXD6iS7cQxf/NLg2yY8=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnBuildRecipes",
-            "HookName": "OnBuildRecipies",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "BuildRecipies",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "GwrqH4LyQUjdeOUWnNwNKBXXosKdLUiNRnCPuLSJ8pU=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a1, this",
-            "HookTypeName": "Simple",
-            "Name": "OnRecipeRefund",
-            "HookName": "OnRecipeRefund",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "Refund",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "Assets.Scripts.Core.IStorable",
-                "RecipeDefinition"
-              ]
-            },
-            "MSILHash": "IxiATUhy1H+Aa8PENrWRY8gAxM7C1q+kwBzoxMu5h/4=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "RPCCancelItem",
-            "HookName": "OnRPCCancelItem",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "RPCCancelItem",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Int32",
-                "uLink.NetworkMessageInfo"
-              ]
-            },
-            "MSILHash": "1ANXWmat35b7gf57iwB3YZnztto8ZKhGpWuvWfPVGHU=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "RPCStartCraftingSelected",
-            "HookName": "OnRPCStartCraftingSelected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Workbench",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "RPCStartCraftingSelected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkMessageInfo"
-              ]
-            },
-            "MSILHash": "0NksM0wmcObMQp4TMM/HKv5HMdOS8kb2BEEIhMh5Bws=",
-            "BaseHookName": null,
-            "HookCategory": "_WIP"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 9,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
@@ -562,7 +332,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iBR1rQpZpCCU09sM+38/WCZBvLg1Q0iIqOmtS6bDdqw=",
+            "MSILHash": "CW0/ow5AOx/CHPRlZSyPRxzePFeBEj8OV+e2iDTb1Us=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -781,7 +551,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "TRFdQPlCUHS7JbFR5otWFJHgqbvUsqiUlP38t30ZKYE=",
+            "MSILHash": "mm/4RboK2D0WrbTb0nrRZ/M3WVcxJphy7Ah+VMPuKJk=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -789,7 +559,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 1790,
+            "InjectionIndex": 1847,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -812,7 +582,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "TRFdQPlCUHS7JbFR5otWFJHgqbvUsqiUlP38t30ZKYE=",
+            "MSILHash": "mm/4RboK2D0WrbTb0nrRZ/M3WVcxJphy7Ah+VMPuKJk=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
@@ -1108,7 +878,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 11,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
@@ -1134,7 +904,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 11,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
@@ -1160,7 +930,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 11,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
@@ -1186,7 +956,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 11,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
@@ -1212,7 +982,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 11,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
@@ -1259,6 +1029,32 @@
             "MSILHash": "/xK+GDMG7aRUHgYDPUvsI5m8/r+Yb3+zSPW81ICGLF0=",
             "BaseHookName": null,
             "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 11,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l1.AttachedIdentity.ConnectedSession, this",
+            "HookTypeName": "Simple",
+            "Name": "CanCraft",
+            "HookName": "CanCraft",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CrafterServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "HasAuthority",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "OGTa1nzH12ZOzF2Bu2NebGvxFW1s8aXq4G6SmslrUc0=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]
