@@ -96,7 +96,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
 
         #region Chat and Commands
 
-        public void Reply(string message) => ConnectedPlayer.Reply(message);
+        public void Reply(string message, params object[] args) => ConnectedPlayer.Reply(message, args);
 
         #endregion
 

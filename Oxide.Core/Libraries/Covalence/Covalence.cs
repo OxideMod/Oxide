@@ -117,7 +117,7 @@ namespace Oxide.Core.Libraries.Covalence
             }
             if (candidateSet == null)
             {
-                logger.Write(LogType.Warning, "No Covalence providers found, Covalence will not be functional for this session.");
+                logger.Write(LogType.Warning, "Covalence not available yet for this game");
                 return;
             }
             var candidates = new List<Type>(
@@ -128,7 +128,7 @@ namespace Oxide.Core.Libraries.Covalence
             Type selectedCandidate;
             if (candidates.Count == 0)
             {
-                logger.Write(LogType.Warning, "No Covalence providers found, Covalence will not be functional for this session.");
+                logger.Write(LogType.Warning, "Covalence not available yet for this game");
                 return;
             }
             if (candidates.Count > 1)

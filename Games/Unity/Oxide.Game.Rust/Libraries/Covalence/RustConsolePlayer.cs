@@ -14,37 +14,37 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     public class RustConsolePlayer : IPlayer, ILivePlayer
     {
         /// <summary>
-        /// Gets the name for this player
+        /// Gets the name for the user
         /// </summary>
         public string Name => "Server Console";
 
         /// <summary>
-        /// Gets the ID for this player (unique within the current game)
+        /// Gets the ID for the user (unique within the current game)
         /// </summary>
         public string Id => "server_console";
 
         /// <summary>
-        /// Gets the live player if this player is connected
+        /// Gets the live player if the user is connected
         /// </summary>
         public ILivePlayer ConnectedPlayer => this;
 
         /// <summary>
-        /// Gets the base player of this player
+        /// Gets the base player of the user
         /// </summary>
         public IPlayer BasePlayer => this;
 
         /// <summary>
-        /// Gets this player's in-game character, if available
+        /// Gets the user's in-game character, if available
         /// </summary>
         public IPlayerCharacter Character => null;
 
         /// <summary>
-        /// Gets this player's last command type
+        /// Gets the user's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
 
         /// <summary>
-        /// Gets this player's IP address
+        /// Gets the user's IP address
         /// </summary>
         public string Address
         {
@@ -56,14 +56,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets this player's average network ping
+        /// Gets the user's average network ping
         /// </summary>
         public int Ping => 0;
 
         #region Permissions
 
         /// <summary>
-        /// Gets if this player has the specified permission
+        /// Gets if the user has the specified permission
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
@@ -86,14 +86,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets if this player belongs to the specified usergroup
+        /// Gets if the user belongs to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
         /// <returns></returns>
         public bool BelongsToGroup(string groupName) => false;
 
         /// <summary>
-        /// Adds this player to the specified usergroup
+        /// Adds the user to the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
         public void AddToGroup(string groupName)
@@ -101,7 +101,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Removes this player from the specified usergroup
+        /// Removes the user from the specified usergroup
         /// </summary>
         /// <param name="groupName"></param>
         public void RemoveFromGroup(string groupName)
@@ -113,7 +113,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans this player for the specified reason and duration
+        /// Returns if the user is admin
+        /// </summary>
+        public bool IsAdmin() => true;
+
+        /// <summary>
+        /// Bans the user for the specified reason and duration
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
@@ -122,24 +127,24 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Unbans this player
+        /// Unbans the user
         /// </summary>
         public void Unban()
         {
         }
 
         /// <summary>
-        /// Gets if this player is banned
+        /// Gets if the user is banned
         /// </summary>
         public bool IsBanned => false;
 
         /// <summary>
-        /// Gets the amount of time remaining on this player's ban
+        /// Gets the amount of time remaining on the user's ban
         /// </summary>
         public TimeSpan BanTimeRemaining => TimeSpan.Zero;
 
         /// <summary>
-        /// Kicks this player from the game
+        /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
         public void Kick(string reason)
@@ -147,14 +152,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Causes this player's character to die
+        /// Causes the user's character to die
         /// </summary>
         public void Kill()
         {
         }
 
         /// <summary>
-        /// Teleports this player's character to the specified position
+        /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -168,22 +173,21 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends a chat message to this player's client
+        /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
-        {
-            // TODO: Send message to client
-        }
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args) => Interface.Oxide.LogInfo(string.Format(message, args));
 
         /// <summary>
-        /// Replies to the user
+        /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Interface.Oxide.LogInfo(message);
+        /// <param name="args"></param>
+        public void Reply(string message, params object[] args) => Message(string.Format(message, args));
 
         /// <summary>
-        /// Runs the specified console command on this player's client
+        /// Runs the specified console command on the user
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>

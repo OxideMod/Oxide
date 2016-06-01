@@ -260,6 +260,7 @@ namespace Oxide.Game.ReignOfKings
         /// Called when the player sends a message
         /// </summary>
         /// <param name="evt"></param>
+        /// <returns></returns>
         [HookMethod("OnPlayerChat")]
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
@@ -300,22 +301,38 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Called when the player has been initialized and spawned into the game
+        /// Called when the player spawns
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="evt"></param>
         [HookMethod("OnPlayerSpawn")]
-        private void OnPlayerSpawn(PlayerFirstSpawnEvent e)
+        private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                var userId = e.Player.Id.ToString();
-                permission.UpdateNickname(userId, e.Player.Name);
+                var userId = evt.Player.Id.ToString();
+                permission.UpdateNickname(userId, evt.Player.Name);
 
                 // Add player to default group
                 if (permission.GroupExists("default")) permission.AddUserGroup(userId, "default");
                 else if (permission.GroupExists("guest")) permission.AddUserGroup(userId, "guest");
             }
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString());
+            Interface.CallHook("OnUserSpawn", iplayer);
+        }
+
+        /// <summary>
+        /// Called when the player respawns
+        /// </summary>
+        /// <param name="evt"></param>
+        [HookMethod("OnPlayerRespawn")]
+        private void OnPlayerRespawn(PlayerRespawnEvent evt)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString());
+            Interface.CallHook("OnUserRespawn", iplayer);
         }
 
         #endregion

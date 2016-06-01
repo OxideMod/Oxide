@@ -265,6 +265,7 @@ namespace Oxide.Game.Rust
         /// Called when the player has been initialized
         /// </summary>
         /// <param name="arg"></param>
+        /// <returns></returns>
         [HookMethod("OnPlayerChat")]
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
@@ -324,6 +325,18 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when the player has respawned
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerRespawned")]
+        private void OnPlayerRespawned(BasePlayer player)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            Interface.CallHook("OnUserRespawned", iplayer);
+        }
+
+        /// <summary>
         /// Called when a player tick is received from a client
         /// </summary>
         /// <param name="player"></param>
@@ -377,6 +390,7 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="table"></param>
         /// <param name="chance"></param>
+        /// <returns></returns>
         [HookMethod("IOnItemResearchEnd")]
         private float IOnItemResearchEnd(ResearchTable table, float chance)
         {
@@ -396,6 +410,7 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="info"></param>
+        /// <returns></returns>
         [HookMethod("IOnBaseCombatEntityHurt")]
         private object IOnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
         {
@@ -406,17 +421,23 @@ namespace Oxide.Game.Rust
 
         #region Structure Hooks
 
+        /// <summary>
+        /// Called when a player selects Demolish from the BuildingBlock menu
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
         [HookMethod("IOnStructureDemolish")]
-        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player)
-        {
-            return Interface.CallHook("OnStructureDemolish", block, player, false);
-        }
+        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.CallHook("OnStructureDemolish", block, player, false);
 
+        /// <summary>
+        /// Called when a player selects Demolish Immediate from the BuildingBlock menu
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
         [HookMethod("IOnStructureImmediateDemolish")]
-        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player)
-        {
-            return Interface.CallHook("OnStructureDemolish", block, player, true);
-        }
+        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.CallHook("OnStructureDemolish", block, player, true);
 
         #endregion
 
@@ -427,6 +448,7 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="item"></param>
         /// <param name="amount"></param>
+        /// <returns></returns>
         [HookMethod("IOnLoseCondition")]
         private object IOnLoseCondition(Item item, float amount)
         {

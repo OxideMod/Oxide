@@ -341,7 +341,7 @@ namespace Oxide.Core.Plugins
             {
                 if (commandInfos.ContainsKey(cmdName))
                 {
-                    Interface.Oxide.LogWarning("Plugin.AddCovalenceCommand command alias already exists: {0}", cmdName);
+                    Interface.Oxide.LogWarning("Covalence command alias already exists: {0}", cmdName);
                     continue;
                 }
                 commandInfos.Add(cmdName, new CommandInfo(commands, perms, callback));

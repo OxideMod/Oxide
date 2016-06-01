@@ -20,17 +20,17 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         private readonly ulong steamId;
 
         /// <summary>
-        /// Gets the base player of this player
+        /// Gets the base player of the user
         /// </summary>
         public IPlayer BasePlayer => ReignOfKingsCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
-        /// Gets this player's in-game character, if available
+        /// Gets the user's in-game character, if available
         /// </summary>
         public IPlayerCharacter Character { get; private set; }
 
         /// <summary>
-        /// Gets the owner of this character
+        /// Gets the owner of the character
         /// </summary>
         public ILivePlayer Owner => this;
 
@@ -40,17 +40,17 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public object Object { get; private set; }
 
         /// <summary>
-        /// Gets this player's last command type
+        /// Gets the user's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
 
         /// <summary>
-        /// Gets this player's IP address
+        /// Gets the user's IP address
         /// </summary>
         public string Address => player.Connection.IpAddress;
 
         /// <summary>
-        /// Gets this player's average network ping
+        /// Gets the user's average network ping
         /// </summary>
         public int Ping => player.Connection.AveragePing;
 
@@ -69,18 +69,23 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Kicks this player from the game
+        /// Returns if the user is admin
+        /// </summary>
+        public bool IsAdmin() => player.HasPermission("admin");
+
+        /// <summary>
+        /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
         public void Kick(string reason) => Server.Kick(player, reason);
 
         /// <summary>
-        /// Causes this player's character to die
+        /// Causes the user's character to die
         /// </summary>
         public void Kill() => player.Kill();
 
         /// <summary>
-        /// Teleports this player's character to the specified position
+        /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -95,19 +100,21 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends a chat message to this player's client
+        /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => player.SendMessage(message);
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args) => player.SendMessage(message, args);
 
         /// <summary>
-        /// Replies to the user
+        /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
+        /// <param name="args"></param>
+        public void Reply(string message, params object[] args) => Message(string.Format(message, args));
 
         /// <summary>
-        /// Runs the specified console command on this player's client
+        /// Runs the specified console command on the user
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>

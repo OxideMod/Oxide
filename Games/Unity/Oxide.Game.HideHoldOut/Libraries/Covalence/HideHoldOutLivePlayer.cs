@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 using UnityEngine;
 
@@ -17,37 +16,37 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         private readonly ulong steamId;
 
         /// <summary>
-        /// Gets the base player of this player
+        /// Gets the base player of the player
         /// </summary>
         public IPlayer BasePlayer => HideHoldOutCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
-        /// Gets this player's in-game character, if available
+        /// Gets the user's in-game character, if available
         /// </summary>
         public IPlayerCharacter Character { get; private set; }
 
         /// <summary>
-        /// Gets the owner of this character
+        /// Gets the owner of the character
         /// </summary>
         public ILivePlayer Owner => this;
 
         /// <summary>
-        /// Gets the object that backs this character, if available
+        /// Gets the object that backs the character, if available
         /// </summary>
         public object Object { get; private set; }
 
         /// <summary>
-        /// Gets this player's last command type
+        /// Gets the user's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
 
         /// <summary>
-        /// Gets this player's IP address
+        /// Gets the user's IP address
         /// </summary>
         public string Address => player.NetPlayer.ipAddress;
 
         /// <summary>
-        /// Gets this player's average network ping
+        /// Gets the user's average network ping
         /// </summary>
         public int Ping => player.NetPlayer.averagePing;
 
@@ -66,18 +65,27 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Kicks this player from the game
+        /// Returns if the user is admin
         /// </summary>
-        /// <param name="reason"></param>
-        public void Kick(string reason) => uLink.Network.CloseConnection(player.NetPlayer, true);
+        public bool IsAdmin() => player.isADMIN;
 
         /// <summary>
-        /// Causes this player's character to die
+        /// Kicks the user from the game
+        /// </summary>
+        /// <param name="reason"></param>
+        public void Kick(string reason)
+        {
+            NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, reason);
+            uLink.Network.CloseConnection(player.NetPlayer, true);
+        }
+
+        /// <summary>
+        /// Causes the user's character to die
         /// </summary>
         public void Kill() => NetworkController.Player_ctrl_.TakeDamage(100, Vector3.zero, string.Empty, true, true, string.Empty);
 
         /// <summary>
-        /// Teleports this player's character to the specified position
+        /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -89,19 +97,24 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends a chat message to this player's client
+        /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args)
+        {
+            HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + string.Format(message, args), chat_msg_type.standard, player.account_id);
+        }
 
         /// <summary>
-        /// Replies to the user
+        /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
+        /// <param name="args"></param>
+        public void Reply(string message, params object[] args) => Message(string.Format(message, args));
 
         /// <summary>
-        /// Runs the specified console command on this player's client
+        /// Runs the specified console command on the user
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
@@ -115,7 +128,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of this character
+        /// Gets the position of the character
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -129,7 +142,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of this character
+        /// Gets the position of the character
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

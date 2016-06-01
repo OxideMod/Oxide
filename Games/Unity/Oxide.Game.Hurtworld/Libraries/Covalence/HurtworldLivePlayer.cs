@@ -14,17 +14,17 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         private readonly ulong steamId;
 
         /// <summary>
-        /// Gets the base player of this player
+        /// Gets the base player of the user
         /// </summary>
         public IPlayer BasePlayer => HurtworldCovalenceProvider.Instance.PlayerManager.GetPlayer(steamId.ToString());
 
         /// <summary>
-        /// Gets this player's in-game character, if available
+        /// Gets the user's in-game character, if available
         /// </summary>
         public IPlayerCharacter Character { get; private set; }
 
         /// <summary>
-        /// Gets the owner of this character
+        /// Gets the owner of the character
         /// </summary>
         public ILivePlayer Owner => this;
 
@@ -34,17 +34,17 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public object Object { get; private set; }
 
         /// <summary>
-        /// Gets this player's last command type
+        /// Gets the user's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
 
         /// <summary>
-        /// Gets this player's IP address
+        /// Gets the user's IP address
         /// </summary>
         public string Address => session.Player.ipAddress;
 
         /// <summary>
-        /// Gets this player's average network ping
+        /// Gets the user's average network ping
         /// </summary>
         public int Ping => session.Player.averagePing;
 
@@ -63,13 +63,18 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Kicks this player from the game
+        /// Returns if the user is admin
+        /// </summary>
+        public bool IsAdmin() => session.IsAdmin;
+
+        /// <summary>
+        /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
         public void Kick(string reason) => GameManager.Instance.KickPlayer(steamId.ToString(), reason);
 
         /// <summary>
-        /// Causes this player's character to die
+        /// Causes the user's character to die
         /// </summary>
         public void Kill()
         {
@@ -79,7 +84,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Teleports this player's character to the specified position
+        /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -91,19 +96,21 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends a chat message to this player's client
+        /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => ChatManagerServer.Instance.RPC("RelayChat", session.Player, message);
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args) => ChatManagerServer.Instance.RPC("RelayChat", session.Player, string.Format(message, args));
 
         /// <summary>
-        /// Replies to the user
+        /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
+        /// <param name="args"></param>
+        public void Reply(string message, params object[] args) => Message(message, args);
 
         /// <summary>
-        /// Runs the specified console command on this player's client
+        /// Runs the specified console command on the user
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
@@ -117,7 +124,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of this character
+        /// Gets the position of the character
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -131,7 +138,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of this character
+        /// Gets the position of the character
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

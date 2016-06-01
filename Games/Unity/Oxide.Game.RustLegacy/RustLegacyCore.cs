@@ -170,25 +170,6 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        /// <summary>
-        /// Called when an AI moves
-        /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
-        /// </summary>
-        /// <param name="ai"></param>
-        /// <param name="movement"></param>
-        [HookMethod("IOnAIMovement")]
-        private void IOnAIMovement(BasicWildLifeAI ai, BaseAIMovement movement)
-        {
-            var nmMovement = movement as NavMeshMovement;
-            if (!nmMovement) return;
-
-            if (nmMovement._agent.pathStatus == NavMeshPathStatus.PathInvalid && ai.GetComponent<TakeDamage>().alive)
-            {
-                TakeDamage.KillSelf(ai.GetComponent<IDBase>());
-                Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
-            }
-        }
-
         #endregion
 
         #region Player Hooks
@@ -220,8 +201,8 @@ namespace Oxide.Game.RustLegacy
             }
 
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, id);
-            if (canlogin != null)
+            var canlogin = (string)Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, id);
+            if (canlogin is string)
             {
                 Notice.Popup(connection.netUser.networkPlayer, "", canlogin.ToString(), 10f);
                 approval.Deny(uLink.NetworkConnectionError.NoError);
@@ -282,6 +263,18 @@ namespace Oxide.Game.RustLegacy
         }
 
         /// <summary>
+        /// Called when the player spawns
+        /// </summary>
+        /// <param name="client"></param>
+        [HookMethod("OnPlayerSpawn")]
+        private void OnPlayerSpawn(PlayerClient client)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString());
+            Interface.CallHook("OnUserSpawn", iplayer);
+        }
+
+        /// <summary>
         /// Called when the player has spawned
         /// </summary>
         /// <param name="client"></param>
@@ -292,6 +285,10 @@ namespace Oxide.Game.RustLegacy
             if (!playerData.ContainsKey(netUser)) playerData.Add(netUser, new PlayerData());
             playerData[netUser].character = client.controllable.GetComponent<Character>();
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
+
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(netUser.userID.ToString());
+            Interface.CallHook("OnUserSpawned", iplayer);
         }
 
         /// <summary>
@@ -864,6 +861,29 @@ namespace Oxide.Game.RustLegacy
                 Interface.Oxide.LogInfo("An attempt to use a metabolism hack was prevented.");
             }
             return false;
+        }
+
+        #endregion
+
+        #region Game Fixes
+
+        /// <summary>
+        /// Called when an AI moves
+        /// Checking the NavMeshPathStatus, if the path is invalid the AI is killed to stop NavMesh errors
+        /// </summary>
+        /// <param name="ai"></param>
+        /// <param name="movement"></param>
+        [HookMethod("IOnAIMovement")]
+        private void IOnAIMovement(BasicWildLifeAI ai, BaseAIMovement movement)
+        {
+            var nmMovement = movement as NavMeshMovement;
+            if (!nmMovement) return;
+
+            if (nmMovement._agent.pathStatus == NavMeshPathStatus.PathInvalid && ai.GetComponent<TakeDamage>().alive)
+            {
+                TakeDamage.KillSelf(ai.GetComponent<IDBase>());
+                Interface.Oxide.LogInfo($"{ai} was destroyed for having an invalid NavMeshPath");
+            }
         }
 
         #endregion

@@ -6,12 +6,12 @@
     public interface ILivePlayer
     {
         /// <summary>
-        /// Gets the base player of this player
+        /// Gets the base player of the user
         /// </summary>
         IPlayer BasePlayer { get; }
 
         /// <summary>
-        /// Gets this player's in-game character, if available
+        /// Gets the user's in-game character, if available
         /// </summary>
         IPlayerCharacter Character { get; }
 
@@ -21,30 +21,35 @@
         CommandType LastCommand { get; set; }
 
         /// <summary>
-        /// Gets this player's IP address
+        /// Gets the user's IP address
         /// </summary>
         string Address { get; }
 
         /// <summary>
-        /// Gets this player's average network ping
+        /// Gets the user's average network ping
         /// </summary>
         int Ping { get; }
 
         #region Administration
 
         /// <summary>
-        /// Kicks this player from the game
+        /// Returns if the user is admin
+        /// </summary>
+        bool IsAdmin();
+
+        /// <summary>
+        /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
         void Kick(string reason);
 
         /// <summary>
-        /// Causes this player's character to die
+        /// Causes the player's character to die
         /// </summary>
         void Kill();
 
         /// <summary>
-        /// Teleports this player's character to the specified position
+        /// Teleports the player's character to the specified position
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -56,23 +61,25 @@
         #region Chat and Commands
 
         /// <summary>
-        /// Sends a chat message to this player's client
+        /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        void Message(string message);
+        /// <param name="args"></param>
+        void Message(string message, params object[] args);
 
         /// <summary>
-        /// Runs the specified console command on this player's client
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        void Reply(string message, params object[] args);
+
+        /// <summary>
+        /// Runs the specified console command on the user
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
         void Command(string command, params object[] args);
-
-        /// <summary>
-        /// Replies to the user
-        /// </summary>
-        /// <param name="message"></param>
-        void Reply(string message);
 
         #endregion
     }

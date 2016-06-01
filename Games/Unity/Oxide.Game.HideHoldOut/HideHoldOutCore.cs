@@ -7,7 +7,6 @@ using System.Text;
 using uLink;
 using UnityEngine;
 using Network = uLink.Network;
-using NetworkConnectionError = uLink.NetworkConnectionError;
 using NetworkPlayer = uLink.NetworkPlayer;
 using NetworkView = uLink.NetworkView;
 
@@ -249,10 +248,11 @@ namespace Oxide.Game.HideHoldOut
             var player = NetworkController.NetManager_.ServManager.GetPlayerInfos_accountID(id);
 
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", approval, player) ?? Interface.CallHook("CanUserLogin", player.Nickname, id);
-            if (canlogin != null && ((canlogin is NetworkConnectionError) || (bool)canlogin == false))
+            var canlogin = (string)Interface.CallHook("CanClientLogin", approval, player) ?? Interface.CallHook("CanUserLogin", player.Nickname, id);
+            if (canlogin is string)
             {
-                approval.Deny(NetworkConnectionError.NoError);
+                NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canlogin);
+                Network.CloseConnection(player.NetPlayer, true);
                 return true;
             }
 
@@ -345,6 +345,30 @@ namespace Oxide.Game.HideHoldOut
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             Debug.Log($"{player.account_id}/{player.Nickname} quit");
+        }
+
+        /// <summary>
+        /// Called when the player respawns
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerRespawn")]
+        private void OnPlayerRespawn(PlayerInfos player)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
+            Interface.CallHook("OnUserRespawn", iplayer);
+        }
+
+        /// <summary>
+        /// Called when the player has respawned
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerRespawned")]
+        private void OnPlayerRespawned(PlayerInfos player)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
+            Interface.CallHook("OnUserRespawned", iplayer);
         }
 
         #endregion
