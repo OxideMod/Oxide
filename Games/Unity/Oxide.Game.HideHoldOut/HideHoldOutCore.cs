@@ -100,7 +100,7 @@ namespace Oxide.Game.HideHoldOut
         {
             // Set attributes
             Name = "HideHoldOutCore";
-            Title = "HideHoldOut Core";
+            Title = "Hide & Hold Out";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -124,7 +124,7 @@ namespace Oxide.Game.HideHoldOut
         private bool PermissionsLoaded(PlayerInfos player)
         {
             if (permission.IsLoaded) return true;
-            Reply(string.Format(Lang("PermissionsNotLoaded", permission.LastException.Message)), player);
+            Reply(Lang("PermissionsNotLoaded", permission.LastException.Message), player);
             return false;
         }
 
@@ -139,7 +139,7 @@ namespace Oxide.Game.HideHoldOut
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "hide & hold out");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", NetworkController.NetManager_.get_GAME_VERSION);
 
             // Register messages for localization
@@ -173,6 +173,7 @@ namespace Oxide.Game.HideHoldOut
             cmdlib.AddChatCommand("oxide.show", this, "ChatShow");
             cmdlib.AddChatCommand("show", this, "ChatShow");
 
+            // Setup the default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
@@ -294,7 +295,7 @@ namespace Oxide.Game.HideHoldOut
             // Handle it
             if (!cmdlib.HandleChatCommand(player, cmd, args))
             {
-                Reply(string.Format(Lang("UnknownCommand", player.account_id), cmd), player);
+                Reply(Lang("UnknownCommand", player.account_id, cmd), player);
                 return true;
             }
 
@@ -483,11 +484,11 @@ namespace Oxide.Game.HideHoldOut
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    Reply(string.Format(Lang("PluginNotLoaded", player.account_id), name), player);
+                    Reply(Lang("PluginNotLoaded", player.account_id, name), player);
                     continue;
                 }
                 Interface.Oxide.ReloadPlugin(name);
-                Reply(string.Format(Lang("PluginReloaded", player.account_id), plugin.Title, plugin.Version, plugin.Author), player);
+                Reply(Lang("PluginReloaded", player.account_id, plugin.Title, plugin.Version, plugin.Author), player);
             }
         }
 
@@ -525,11 +526,11 @@ namespace Oxide.Game.HideHoldOut
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    Reply(string.Format(Lang("PluginNotLoaded", player.account_id), name), player);
+                    Reply(Lang("PluginNotLoaded", player.account_id, name), player);
                     continue;
                 }
                 Interface.Oxide.UnloadPlugin(name);
-                Reply(string.Format(Lang("PluginUnloaded", player.account_id), plugin.Title, plugin.Version, plugin.Author), player);
+                Reply(Lang("PluginUnloaded", player.account_id, plugin.Title, plugin.Version, plugin.Author), player);
             }
         }
 
@@ -544,7 +545,7 @@ namespace Oxide.Game.HideHoldOut
         [HookMethod("ChatVersion")]
         private void ChatVersion(PlayerInfos player)
         {
-            Reply($"Oxide {OxideMod.Version} for Hide & Hold Out {NetworkController.NetManager_.get_GAME_VERSION}", player);
+            Reply($"Oxide {OxideMod.Version} for {Title} {NetworkController.NetManager_.get_GAME_VERSION}", player);
         }
 
         /// <summary>
@@ -601,50 +602,50 @@ namespace Oxide.Game.HideHoldOut
             {
                 if (permission.GroupExists(name))
                 {
-                    Reply(string.Format(Lang("GroupAlreadyExists", player.account_id), name), player);
+                    Reply(Lang("GroupAlreadyExists", player.account_id, name), player);
                     return;
                 }
                 permission.CreateGroup(name, title, rank);
-                Reply(string.Format(Lang("GroupCreated", player.account_id), name), player);
+                Reply(Lang("GroupCreated", player.account_id, name), player);
             }
             else if (mode.Equals("remove"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    Reply(Lang("GroupNotFound", player.account_id, name), player);
                     return;
                 }
                 permission.RemoveGroup(name);
-                Reply(string.Format(Lang("GroupDeleted", player.account_id), name), player);
+                Reply(Lang("GroupDeleted", player.account_id, name), player);
             }
             else if (mode.Equals("set"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    Reply(Lang("GroupNotFound", player.account_id, name), player);
                     return;
                 }
                 permission.SetGroupTitle(name, title);
                 permission.SetGroupRank(name, rank);
-                Reply(string.Format(Lang("GroupChanged", player.account_id), name), player);
+                Reply(Lang("GroupChanged", player.account_id, name), player);
             }
             else if (mode.Equals("parent"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    Reply(Lang("GroupNotFound", player.account_id, name), player);
                     return;
                 }
                 var parent = args[2];
                 if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
-                    Reply(string.Format(Lang("GroupParentNotFound", player.account_id), parent), player);
+                    Reply(Lang("GroupParentNotFound", player.account_id, parent), player);
                     return;
                 }
                 if (permission.SetGroupParent(name, parent))
-                    Reply(string.Format(Lang("GroupParentChanged", player.account_id), name, parent), player);
+                    Reply(Lang("GroupParentChanged", player.account_id, name, parent), player);
                 else
-                    Reply(string.Format(Lang("GroupParentNotChanged", player.account_id), name), player);
+                    Reply(Lang("GroupParentNotChanged", player.account_id, name), player);
             }
         }
 
@@ -676,7 +677,7 @@ namespace Oxide.Game.HideHoldOut
             var target = FindPlayer(name);
             if (target == null && !permission.UserIdValid(name))
             {
-                Reply(string.Format(Lang("UserNotFound", player.account_id), name), player);
+                Reply(Lang("UserNotFound", player.account_id, name), player);
                 return;
             }
             var userId = name;
@@ -689,19 +690,19 @@ namespace Oxide.Game.HideHoldOut
 
             if (!permission.GroupExists(group))
             {
-                Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                Reply(Lang("GroupNotFound", player.account_id, name), player);
                 return;
             }
 
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                Reply(string.Format(Lang("UserAddedToGroup", player.account_id), name, group), player);
+                Reply(Lang("UserAddedToGroup", player.account_id, name, group), player);
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                Reply(string.Format(Lang("UserRemovedFromGroup", player.account_id), name, group), player);
+                Reply(Lang("UserRemovedFromGroup", player.account_id, name, group), player);
             }
         }
 
@@ -732,7 +733,7 @@ namespace Oxide.Game.HideHoldOut
 
             if (!permission.PermissionExists(perm))
             {
-                Reply(string.Format(Lang("PermissionNotFound", player.account_id), perm), player);
+                Reply(Lang("PermissionNotFound", player.account_id, perm), player);
                 return;
             }
 
@@ -740,18 +741,18 @@ namespace Oxide.Game.HideHoldOut
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    Reply(Lang("GroupNotFound", player.account_id, name), player);
                     return;
                 }
                 permission.GrantGroupPermission(name, perm, null);
-                Reply(string.Format(Lang("GroupPermissionGranted", player.account_id), name, perm), player);
+                Reply(Lang("GroupPermissionGranted", player.account_id, name, perm), player);
             }
             else if (mode.Equals("user"))
             {
                 var target = FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(string.Format(Lang("UserNotFound", player.account_id), name), player);
+                    Reply(Lang("UserNotFound", player.account_id, name), player);
                     return;
                 }
                 var userId = name;
@@ -762,7 +763,7 @@ namespace Oxide.Game.HideHoldOut
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                Reply(string.Format(Lang("UserPermissionGranted", player.account_id), $"{name} ({userId})", perm), player);
+                Reply(Lang("UserPermissionGranted", player.account_id, $"{name} ({userId})", perm), player);
             }
         }
 
@@ -835,7 +836,7 @@ namespace Oxide.Game.HideHoldOut
 
                 if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
-                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    Reply(Lang("GroupNotFound", player.account_id, name), player);
                     return;
                 }
 
@@ -854,7 +855,7 @@ namespace Oxide.Game.HideHoldOut
             }
             else if (mode.Equals("groups"))
             {
-                Reply(string.Format(Lang("ShowGroups", player.account_id), "\n" + string.Join(", ", permission.GetGroups())), player);
+                Reply(Lang("ShowGroups", player.account_id, "\n" + string.Join(", ", permission.GetGroups())), player);
             }
         }
 
@@ -885,7 +886,7 @@ namespace Oxide.Game.HideHoldOut
 
             if (!permission.PermissionExists(perm))
             {
-                Reply(string.Format(Lang("PermissionNotFound", player.account_id), perm), player);
+                Reply(Lang("PermissionNotFound", player.account_id, perm), player);
                 return;
             }
 
@@ -893,18 +894,18 @@ namespace Oxide.Game.HideHoldOut
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(Lang("GroupNotFound", player.account_id), name), player);
+                    Reply(Lang("GroupNotFound", player.account_id, name), player);
                     return;
                 }
                 permission.RevokeGroupPermission(name, perm);
-                Reply(string.Format(Lang("GroupPermissionRevoked", player.account_id), name, perm), player);
+                Reply(Lang("GroupPermissionRevoked", player.account_id, name, perm), player);
             }
             else if (mode.Equals("user"))
             {
                 var target = FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(string.Format(Lang("UserNotFound", player.account_id), name), player);
+                    Reply(Lang("UserNotFound", player.account_id, name), player);
                     return;
                 }
                 var userId = name;
@@ -915,7 +916,7 @@ namespace Oxide.Game.HideHoldOut
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                Reply(string.Format(Lang("UserPermissionRevoked", player.account_id), $"{name} ({userId})", perm), player);
+                Reply(Lang("UserPermissionRevoked", player.account_id, $"{name} ({userId})", perm), player);
             }
         }
 
@@ -1007,14 +1008,15 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         /// <param name="message"></param>
         /// <param name="player"></param>
-        private static void Reply(string message, PlayerInfos player = null)
+        /// <param name="args"></param>
+        private static void Reply(string message, PlayerInfos player = null, params object[] args)
         {
             if (player == null)
             {
-                Interface.Oxide.LogInfo(message);
+                Interface.Oxide.LogInfo(message, args);
                 return;
             }
-            ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, player.account_id);
+            ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + string.Format(message, args), chat_msg_type.standard, player.account_id);
         }
 
         /// <summary>
@@ -1022,7 +1024,8 @@ namespace Oxide.Game.HideHoldOut
         /// </summary>
         /// <param name="key"></param>
         /// <param name="id"></param>
-        string Lang(string key, string id = null) => lang.GetMessage(key, this, id);
+        /// <param name="args"></param>
+        string Lang(string key, string id = null, params object[] args) => string.Format(lang.GetMessage(key, this, id), args);
 
         /// <summary>
         /// Returns the PlayerInfos for the specified name, ID, or IP address string

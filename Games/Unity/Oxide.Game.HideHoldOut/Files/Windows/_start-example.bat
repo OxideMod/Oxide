@@ -3,7 +3,7 @@ cls
 :start
 echo Starting server...
 
-H2o -batchmode -nographics
+H2o.exe -batchmode -nographics
 
 echo.
 echo Restarting server...
