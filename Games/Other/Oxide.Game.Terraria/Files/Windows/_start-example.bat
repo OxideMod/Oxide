@@ -3,7 +3,7 @@ cls
 :start
 echo Starting server...
 
-TerrariaServer -config serverconfig.txt
+TerrariaServer.exe -config serverconfig.txt
 
 echo.
 echo Restarting server...

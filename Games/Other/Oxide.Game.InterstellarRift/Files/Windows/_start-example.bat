@@ -3,7 +3,7 @@ cls
 :start
 echo Starting server...
 
-Build\IR -server
+Build\IR.exe -server
 
 echo.
 echo Restarting server...
