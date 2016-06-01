@@ -117,6 +117,9 @@ namespace Oxide.Game.Rust.Libraries
         // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustcommands;
 
+        // A reference to the plugin removed callback
+        private Event.Callback<Plugin, PluginManager> removedFromManager;
+
         /// <summary>
         /// Initializes a new instance of the Command class
         /// </summary>
@@ -163,9 +166,7 @@ namespace Oxide.Game.Rust.Libraries
             chatCommands[commandName] = cmd;
 
             // Hook the unload event
-            if (plugin == null) return;
-            plugin.OnRemovedFromManager -= plugin_OnRemovedFromManager;
-            plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
         }
 
         /// <summary>
@@ -192,11 +193,7 @@ namespace Oxide.Game.Rust.Libraries
             if (rustcommands == null) rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
 
             // Hook the unload event
-            if (plugin)
-            {
-                plugin.OnRemovedFromManager -= plugin_OnRemovedFromManager;
-                plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
-            }
+            if (removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
 
             var fullName = name.Trim();
 
@@ -296,7 +293,7 @@ namespace Oxide.Game.Rust.Libraries
                 chatCommands.Remove(cmd.Name);
 
             // Unhook the event
-            sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;
+            Event.Remove(ref removedFromManager);
         }
     }
 }

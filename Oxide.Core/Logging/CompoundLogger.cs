@@ -17,8 +17,7 @@ namespace Oxide.Core.Logging
         /// <summary>
         /// Initializes a new instance of the CompoundLogger class
         /// </summary>
-        public CompoundLogger()
-            : base(true)
+        public CompoundLogger() : base(true)
         {
             // Initialize
             subloggers = new HashSet<Logger>();
@@ -43,7 +42,21 @@ namespace Oxide.Core.Logging
         /// Removes a sublogger from this compound logger
         /// </summary>
         /// <param name="logger"></param>
-        public void RemoveLogger(Logger logger) => subloggers.Remove(logger);
+        public void RemoveLogger(Logger logger)
+        {
+            // Unregister it
+            logger.OnRemoved();
+            subloggers.Remove(logger);
+        }
+
+        /// <summary>
+        /// Removes and cleans up all loggers
+        /// </summary>
+        public void Shutdown()
+        {
+            foreach (var sublogger in subloggers) sublogger.OnRemoved();
+            subloggers.Clear();
+        }
 
         /// <summary>
         /// Writes a message to all subloggers of this logger

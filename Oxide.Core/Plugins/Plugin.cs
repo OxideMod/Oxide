@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries;
@@ -10,7 +11,7 @@ namespace Oxide.Core.Plugins
 {
     public delegate void PluginError(Plugin sender, string message);
 
-    public delegate void PluginManagerEvent(Plugin sender, PluginManager manager);
+    public class PluginManagerEvent : Event<Plugin, PluginManager> { }
 
     /// <summary>
     /// Represents a single plugin
@@ -92,23 +93,29 @@ namespace Oxide.Core.Plugins
         public event PluginError OnError;
 
         /// <summary>
-        /// Called when this plugin was added/removed from a manager
+        /// Called when this plugin was added to a manager
         /// </summary>
-        public event PluginManagerEvent OnAddedToManager, OnRemovedFromManager;
+        public PluginManagerEvent OnAddedToManager = new PluginManagerEvent();
+
+        /// <summary>
+        /// Called when this plugin was removed from a manager
+        /// </summary>
+        public PluginManagerEvent OnRemovedFromManager = new PluginManagerEvent();
 
         /// <summary>
         /// Has this plugins Init/Loaded hook been called
         /// </summary>
         public bool IsLoaded { get; internal set; }
 
-        public float TotalHookTime { get; internal set; }
+        public double TotalHookTime { get; internal set; }
 
         // Used to measure time spent in this plugin
+        private Stopwatch trackStopwatch = new Stopwatch();
+        private Stopwatch stopwatch = new Stopwatch();
         private float trackStartAt;
-        private float startedAt;
-        private float stoppedAt;
         private float averageAt;
-        private float sum;
+        private double sum;
+        private int preHookGcCount;
 
         // The depth of hook call nesting
         protected int nestcount;
@@ -136,8 +143,8 @@ namespace Oxide.Core.Plugins
         /// </summary>
         protected Plugin()
         {
-            Name = "baseplugin";
-            Title = "Base Plugin";
+            Name = GetType().Name;
+            Title = Name.Humanize();
             Author = "System";
             Version = new VersionNumber(1, 0, 0);
             commandInfos = new Dictionary<string, CommandInfo>();
@@ -188,43 +195,60 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Calls a hook on this plugin
         /// </summary>
-        /// <param name="hookname"></param>
+        /// <param name="name"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallHook(string hookname, params object[] args)
+        public object CallHook(string name, params object[] args)
         {
+            var started_at = 0f;
             if (!IsCorePlugin && nestcount == 0)
             {
-                startedAt = Interface.Oxide.Now;
-                if (averageAt < 1) averageAt = startedAt;
+                preHookGcCount = GC.CollectionCount(0);
+                started_at = Interface.Oxide.Now;
+                stopwatch.Start();
+                if (averageAt < 1) averageAt = started_at;
             }
             TrackStart();
             nestcount++;
             try
             {
-                return OnCallHook(hookname, args);
+                return OnCallHook(name, args);
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogException($"Failed to call hook '{hookname}' on plugin '{Name} v{Version}'", ex);
+                Interface.Oxide.LogException($"Failed to call hook '{name}' on plugin '{Name} v{Version}'", ex);
                 return null;
             }
             finally
             {
                 nestcount--;
                 TrackEnd();
-                if (!IsCorePlugin && nestcount == 0)
+                if (started_at > 0)
                 {
-                    stoppedAt = Interface.Oxide.Now;
-                    var runTime = stoppedAt - startedAt;
-                    if (runTime > 0.5) Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took: {(runTime)*1000:0}ms");
-                    sum += runTime;
-                    if (stoppedAt - averageAt > 10)
+                    stopwatch.Stop();
+                    var duration = stopwatch.Elapsed.TotalSeconds;
+                    if (duration > 0.2)
                     {
-                        sum /= stoppedAt - averageAt;
-                        if (sum > 0.25) Interface.Oxide.LogWarning($"CallHook '{hookname}' on plugin '{Name} v{Version}' took average: {sum*1000:0}ms");
+                        var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
+                        Interface.Oxide.LogWarning($"Calling '{name}' on '{Name} v{Version}' took {duration * 1000:0}ms{suffix}");
+                    }
+                    stopwatch.Reset();
+                    var total = sum + duration;
+                    var ended_at = started_at + duration;
+                    if (ended_at - averageAt > 10)
+                    {
+                        total /= ended_at - averageAt;
+                        if (total > 0.2)
+                        {
+                            var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
+                            Interface.Oxide.LogWarning($"Calling '{name}' on '{Name} v{Version}' took average {sum * 1000:0}ms{suffix}");
+                        }
                         sum = 0;
                         averageAt = 0;
+                    }
+                    else
+                    {
+                        sum = total;
                     }
                 }
             }
@@ -264,24 +288,19 @@ namespace Oxide.Core.Plugins
         public void TrackStart()
         {
             if (IsCorePlugin || nestcount > 0) return;
-            if (trackStartAt > 0)
-            {
-                //Interface.Oxide.LogWarning($"Already tracking on plugin '{Name} v{Version}'");
-                return;
-            }
-            trackStartAt = Interface.Oxide.Now;
+            var stopwatch = trackStopwatch;
+            if (stopwatch.IsRunning) return;
+            stopwatch.Start();
         }
 
         public void TrackEnd()
         {
             if (IsCorePlugin || nestcount > 0) return;
-            if (trackStartAt <= 0)
-            {
-                //Interface.Oxide.LogWarning($"Not tracking on plugin '{Name} v{Version}'");
-                return;
-            }
-            TotalHookTime += Interface.Oxide.Now - trackStartAt;
-            trackStartAt = 0;
+            var stopwatch = trackStopwatch;
+            if (!stopwatch.IsRunning) return;
+            stopwatch.Stop();
+            TotalHookTime += stopwatch.Elapsed.TotalSeconds;
+            stopwatch.Reset();
         }
 
         #region Config

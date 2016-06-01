@@ -79,6 +79,9 @@ namespace Oxide.Game.RustLegacy.Libraries
         // All of the default console commands from the server
         internal static List<string> DefaultCommands;
 
+        // A reference to the plugin removed callback
+        private Event.Callback<Plugin, PluginManager> removedFromManager;
+
         /// <summary>
         /// Initializes a new instance of the Command class
         /// </summary>
@@ -121,7 +124,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         public void AddConsoleCommand(string name, Plugin plugin, string callbackName)
         {
             // Hook the unload event
-            if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
 
             var fullName = name.Trim();
 
@@ -170,7 +173,7 @@ namespace Oxide.Game.RustLegacy.Libraries
             ChatCommands[commandName] = cmd;
 
             // Hook the unload event
-            if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
         }
 
         /// <summary>
@@ -219,7 +222,7 @@ namespace Oxide.Game.RustLegacy.Libraries
                 ChatCommands.Remove(cmd.Name);
 
             // Unhook the event
-            sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;
+            Event.Remove(ref removedFromManager);
         }
     }
 }

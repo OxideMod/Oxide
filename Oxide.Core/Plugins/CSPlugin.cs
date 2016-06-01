@@ -32,6 +32,22 @@ namespace Oxide.Core.Plugins
     /// </summary>
     public abstract class CSPlugin : Plugin
     {
+        public struct HookMethod
+        {
+            public MethodInfo Method;
+            public string Name;
+            public ParameterInfo[] Parameters;
+            public bool IsBaseHook;
+
+            public HookMethod(MethodInfo method)
+            {
+                Method = method;
+                Name = method.Name;
+                Parameters = method.GetParameters();
+                IsBaseHook = method.Name.StartsWith("base_");
+            }
+        }
+
         /// <summary>
         /// Gets the library by the specified type or name
         /// </summary>
@@ -40,7 +56,7 @@ namespace Oxide.Core.Plugins
         public static T GetLibrary<T>(string name = null) where T : Library => Interface.Oxide.GetLibrary<T>(name);
 
         // All hooked methods
-        protected IDictionary<string, List<MethodInfo>> hooks = new Dictionary<string, List<MethodInfo>>();
+        protected Dictionary<string, List<HookMethod>> hooks = new Dictionary<string, List<HookMethod>>();
 
         /// <summary>
         /// Initializes a new instance of the CSPlugin class
@@ -92,13 +108,13 @@ namespace Oxide.Core.Plugins
 
         protected void AddHookMethod(string name, MethodInfo method)
         {
-            List<MethodInfo> hook_methods;
+            List<HookMethod> hook_methods;
             if (!hooks.TryGetValue(name, out hook_methods))
             {
-                hook_methods = new List<MethodInfo>();
+                hook_methods = new List<HookMethod>();
                 hooks[name] = hook_methods;
             }
-            hook_methods.Add(method);
+            hook_methods.Add(new HookMethod(method));
         }
 
         /// <summary>
@@ -109,22 +125,23 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         protected sealed override object OnCallHook(string name, object[] args)
         {
-            List<MethodInfo> methods;
+            List<HookMethod> methods;
             if (!hooks.TryGetValue(name, out methods)) return null;
 
             object return_value = null;
-            foreach (var method in methods)
+            for (var i = 0; i < methods.Count; i++)
             {
+                var method = methods[i];
                 var hook_args = args;
-                var parameters = method.GetParameters();
                 var args_received = args?.Length ?? 0;
+                var parameters = method.Parameters;
 
                 if (args_received != parameters.Length)
                 {
                     // The call argument count is different to the declared callback methods argument count
                     hook_args = new object[parameters.Length];
 
-                    if (args_received > 0)
+                    if (args_received > 0 && hook_args.Length > 0)
                     {
                         // Remove any additional arguments which the callback method does not declare
                         Array.Copy(args, hook_args, Math.Min(args_received, hook_args.Length));
@@ -135,7 +152,6 @@ namespace Oxide.Core.Plugins
                         for (var n = args_received; n < hook_args.Length; n++)
                         {
                             var parameter = parameters[n];
-                            // Use the default value if one is provided by the method definition or the argument is a value type
                             if (parameter.DefaultValue != null && parameter.DefaultValue != DBNull.Value)
                             {
                                 // Use the default value that was provided by the method definition
@@ -163,11 +179,12 @@ namespace Oxide.Core.Plugins
                 if (args_received != parameters.Length)
                 {
                     // A copy of the call arguments was used for this method call
-                    for (var i = 0; i < parameters.Length; i++)
+                    for (var n = 0; n < parameters.Length; n++)
                     {
-                        var parameter = parameters[i];
+                        var parameter = parameters[n];
                         // Copy output values for out and by reference arguments back to the calling args
-                        if (parameter.IsOut || parameter.ParameterType.IsByRef) args[i] = hook_args[i];
+                        if (parameter.IsOut || parameter.ParameterType.IsByRef)
+                            args[n] = hook_args[n];
                     }
                 }
             }
@@ -175,6 +192,6 @@ namespace Oxide.Core.Plugins
             return return_value;
         }
 
-        protected virtual object InvokeMethod(MethodInfo method, object[] args) => method.Invoke(this, args);
+        protected virtual object InvokeMethod(HookMethod method, object[] args) => method.Method.Invoke(this, args);
     }
 }

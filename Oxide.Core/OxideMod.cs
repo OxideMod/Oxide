@@ -85,7 +85,7 @@ namespace Oxide.Core
         // Thread safe NextTick callback queue
         private List<Action> nextTickQueue = new List<Action>();
         private List<Action> lastTickQueue = new List<Action>();
-        private object nextTickLock = new object();
+        private readonly object nextTickLock = new object();
 
         // Allow extensions to register a method to be called every frame
         private Action<float> onFrame;
@@ -186,12 +186,13 @@ namespace Oxide.Core
             // Remove old files
             Cleanup.Run();
 
-            // If no clock has been defined, make our own
+            // If no clock has been defined, make our own unreliable clock
             if (getTimeSinceStartup == null)
             {
                 timer = new Stopwatch();
                 timer.Start();
                 getTimeSinceStartup = () => (float)timer.Elapsed.TotalSeconds;
+                LogWarning("A reliable clock is not available, falling back to a clock which may be unreliable on certain hardware");
             }
 
             // Load all watchers
@@ -559,8 +560,12 @@ namespace Oxide.Core
             if (IsShuttingDown) return;
             IsShuttingDown = true;
             UnloadAllPlugins();
-            foreach (var extension in extensionmanager.GetAllExtensions()) extension.OnShutdown();
+            foreach (var extension in extensionmanager.GetAllExtensions())
+                extension.OnShutdown();
+            foreach (var name in extensionmanager.GetLibraries())
+                extensionmanager.GetLibrary(name).Shutdown();
             ServerConsole?.OnDisable();
+            RootLogger.Shutdown();
         }
 
         /// <summary>

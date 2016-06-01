@@ -73,6 +73,7 @@ namespace Oxide.Core.Libraries
             private HttpWebRequest request;
             private WaitHandle waitHandle;
             private RegisteredWaitHandle registeredWaitHandle;
+            private Event.Callback<Plugin, PluginManager> removedFromManager;
 
             /// <summary>
             /// Initializes a new instance of the WebRequest class
@@ -85,7 +86,7 @@ namespace Oxide.Core.Libraries
                 URL = url;
                 Callback = callback;
                 Owner = owner;
-                if (Owner != null) Owner.OnRemovedFromManager += owner_OnRemovedFromManager;
+                removedFromManager = Owner?.OnRemovedFromManager.Add(owner_OnRemovedFromManager);
             }
 
             /// <summary>
@@ -205,13 +206,13 @@ namespace Oxide.Core.Libraries
             {
                 if (timed_out) request?.Abort();
                 if (Owner == null) return;
-                Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
+                Event.Remove(ref removedFromManager);
                 Owner = null;
             }
 
             private void OnComplete()
             {
-                if (Owner != null) Owner.OnRemovedFromManager -= owner_OnRemovedFromManager;
+                Event.Remove(ref removedFromManager);
                 registeredWaitHandle?.Unregister(waitHandle);
                 Interface.Oxide.NextTick(() =>
                 {
@@ -277,8 +278,9 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Shuts down the worker thread
         /// </summary>
-        public void Shutdown()
+        public override void Shutdown()
         {
+            if (shutdown) return;
             shutdown = true;
             workevent.Set();
             Thread.Sleep(250);

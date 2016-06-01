@@ -41,6 +41,9 @@ namespace Oxide.Core.Plugins
         // Stores the last time a deprecation warning was printed for a specific hook
         private Dictionary<string, float> lastDeprecatedWarningAt = new Dictionary<string, float>();
 
+        // Re-usable conflict list used for hook calls
+        List<string> hookConflicts = new List<string>();
+
         /// <summary>
         /// Initializes a new instance of the PluginManager class
         /// </summary>
@@ -167,17 +170,24 @@ namespace Oxide.Core.Plugins
             if (returncount > 1 && finalvalue != null)
             {
                 // Notify log of hook conflict
-                var conflicts = new string[returncount];
-                var j = 0;
-                for (var i = 0; i < plugins.Count; i++)
+                hookConflicts.Clear();
+                for (int i = 0; i < plugins.Count; i++)
                 {
-                    if (values[i] != null && values[i] != finalvalue)
-                        conflicts[j++] = plugins[i].Name;
+                    var value = values[i];
+                    if (value == null) continue;
+                    if (value.GetType().IsValueType)
+                    {
+                        if (!values[i].Equals(finalvalue)) hookConflicts.Add($"{plugins[i].Name} - {value} ({value.GetType().Name})");
+                    }
+                    else
+                    {
+                        if (values[i] != finalvalue) hookConflicts.Add($"{plugins[i].Name} - {value} ({value.GetType().Name})");
+                    }
                 }
-                if (j > 0)
+                if (hookConflicts.Count > 0)
                 {
-                    conflicts[j] = finalplugin.Name;
-                    Logger.Write(LogType.Warning, $"Calling hook {hookname} resulted in a conflict between the following plugins: {string.Join(", ", conflicts)}");
+                    hookConflicts.Add($"{finalplugin.Name} ({finalvalue} ({finalvalue.GetType().Name}))");
+                    Logger.Write(LogType.Warning, "Calling hook {0} resulted in a conflict between the following plugins: {1}", hookname, string.Join(", ", hookConflicts.ToArray()));
                 }
             }
             return finalvalue;

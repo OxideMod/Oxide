@@ -296,27 +296,27 @@ namespace Oxide.Plugins
             return false;
         }
 
-        protected override object InvokeMethod(MethodInfo method, object[] args)
+        protected override object InvokeMethod(HookMethod method, object[] args)
         {
             //TODO ignore base_ methods for now
-            if (!hookDispatchFallback && !method.Name.StartsWith("base_"))
+            if (!hookDispatchFallback && !method.IsBaseHook)
             {
+                if (args != null && args.Length > 0)
+                {
+                    var parameters = method.Parameters;
+                    for (var i = 0; i < args.Length; i++)
+                    {
+                        var value = args[i];
+                        if (value == null) continue;
+                        var parameter_type = parameters[i].ParameterType;
+                        if (!parameter_type.IsValueType) continue;
+                        var argument_type = value.GetType();
+                        if (parameter_type != typeof(object) && argument_type != parameter_type)
+                            args[i] = Convert.ChangeType(value, parameter_type);
+                    }
+                }
                 try
                 {
-                    if (args != null && args.Length > 0)
-                    {
-                        var parameters = method.GetParameters();
-                        for (var i = 0; i < args.Length; i++)
-                        {
-                            var value = args[i];
-                            if (value == null) continue;
-                            var parameter_type = parameters[i].ParameterType;
-                            if (!parameter_type.IsValueType) continue;
-                            var argument_type = value.GetType();
-                            if (parameter_type != typeof(object) && argument_type != parameter_type)
-                                args[i] = Convert.ChangeType(value, parameter_type);
-                        }
-                    }
                     object ret;
                     if (DirectCallHook(method.Name, out ret, args)) return ret;
                     PrintWarning("Unable to call hook directly: " + method.Name);
@@ -334,7 +334,7 @@ namespace Oxide.Plugins
                 }
             }
 
-            return method.Invoke(this, args);
+            return method.Method.Invoke(this, args);
         }
 
         /// <summary>

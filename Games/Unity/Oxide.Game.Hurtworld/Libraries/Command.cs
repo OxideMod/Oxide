@@ -72,6 +72,9 @@ namespace Oxide.Game.Hurtworld.Libraries
         // All chat commands that plugins have registered
         private readonly Dictionary<string, ChatCommand> chatCommands;
 
+        // A reference to the plugin removed callback
+        private Event.Callback<Plugin, PluginManager> removedFromManager;
+
         /// <summary>
         /// Initializes a new instance of the Command class
         /// </summary>
@@ -91,7 +94,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         public void AddConsoleCommand(string name, Plugin plugin, string callback_name)
         {
             // Hook the unload event
-            if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
 
             var full_name = name.Trim();
             ConsoleCommand cmd;
@@ -137,7 +140,7 @@ namespace Oxide.Game.Hurtworld.Libraries
             chatCommands[command_name] = cmd;
 
             // Hook the unload event
-            if (plugin) plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
         }
 
         /// <summary>
@@ -185,7 +188,7 @@ namespace Oxide.Game.Hurtworld.Libraries
             foreach (var cmd in chatCommands.Values.Where(c => c.Plugin == sender).ToArray()) chatCommands.Remove(cmd.Name);
 
             // Unhook the event
-            sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;
+            Event.Remove(ref removedFromManager);
         }
     }
 }

@@ -106,5 +106,12 @@ namespace Oxide.Core.Logging
             Write(LogType.Error, $"{message} ({ex.GetType().Name}: {ex.Message})");
             Write(LogType.Debug, "{0}", ex.StackTrace);
         }
+
+        /// <summary>
+        /// Called when logger is removed
+        /// </summary>
+        public virtual void OnRemoved()
+        {
+        }
     }
 }

@@ -71,7 +71,9 @@
     <Compile Include="Database\IDatabaseProvider.cs" />
     <Compile Include="Database\Sql.cs" />
     <Compile Include="DataFileSystem.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="ExceptionHandler.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Extensions\Extension.cs" />
     <Compile Include="Extensions\ExtensionManager.cs" />
     <Compile Include="Interface.cs" />

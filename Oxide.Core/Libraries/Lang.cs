@@ -137,11 +137,13 @@ namespace Oxide.Core.Libraries
             return languages.ToArray();
         }
 
+        private Event.Callback<Plugin, PluginManager> onremovedFromManager;
+
         private void AddLangFile(string file, Dictionary<string, string> langFile, Plugin plugin)
         {
             langFiles.Add(file, langFile);
-            plugin.OnRemovedFromManager -= plugin_OnRemovedFromManager;
-            plugin.OnRemovedFromManager += plugin_OnRemovedFromManager;
+            if (onremovedFromManager == null)
+                onremovedFromManager = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
         }
 
         private bool MergeMessages(Dictionary<string, string> existingMessages, Dictionary<string, string> messages)
@@ -182,7 +184,7 @@ namespace Oxide.Core.Libraries
         /// <param name="manager"></param>
         private void plugin_OnRemovedFromManager(Plugin sender, PluginManager manager)
         {
-            sender.OnRemovedFromManager -= plugin_OnRemovedFromManager;
+            Event.Remove(ref onremovedFromManager);
             var langs = GetLanguages(sender);
             foreach (var lang in langs) langFiles.Remove($"{sender.Name}.{lang}.json");
         }

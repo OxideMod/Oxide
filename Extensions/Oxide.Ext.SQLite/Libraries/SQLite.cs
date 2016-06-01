@@ -26,6 +26,7 @@ namespace Oxide.Ext.SQLite.Libraries
         private bool _running = true;
         private readonly Dictionary<string, Connection> _connections = new Dictionary<string, Connection>();
         private readonly Thread _worker;
+        private Event.Callback<Plugin, PluginManager> _removedFromManager;
 
         /// <summary>
         /// Represents a single MySqlQuery instance
@@ -197,9 +198,7 @@ namespace Oxide.Ext.SQLite.Libraries
                 };
                 _connections[conStr] = connection;
             }
-            if (plugin == null) return connection;
-            plugin.OnRemovedFromManager -= OnRemovedFromManager;
-            plugin.OnRemovedFromManager += OnRemovedFromManager;
+            if (_removedFromManager == null) _removedFromManager = plugin?.OnRemovedFromManager.Add(OnRemovedFromManager);
             return connection;
         }
 
@@ -217,7 +216,7 @@ namespace Oxide.Ext.SQLite.Libraries
             }
             foreach (var conStr in toRemove)
                 _connections.Remove(conStr);
-            sender.OnRemovedFromManager -= OnRemovedFromManager;
+            Event.Remove(ref _removedFromManager);
         }
 
         [LibraryFunction("CloseDb")]
@@ -226,7 +225,7 @@ namespace Oxide.Ext.SQLite.Libraries
             if (db == null) return;
             _connections.Remove(db.ConnectionString);
             if (db.Plugin != null && _connections.Values.All(c => c.Plugin != db.Plugin))
-                db.Plugin.OnRemovedFromManager -= OnRemovedFromManager;
+                Event.Remove(ref _removedFromManager);
             db.Con?.Close();
             db.Plugin = null;
         }

@@ -133,6 +133,13 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
+        /// Called to perform any library-specific clean up
+        /// </summary>
+        public virtual void Shutdown()
+        {
+        }
+
+        /// <summary>
         /// Gets all function names in this library
         /// </summary>
         /// <returns></returns>

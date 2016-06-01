@@ -198,7 +198,7 @@ namespace Oxide.Core.Libraries
             {
                 set = new HashSet<string>();
                 permset.Add(owner, set);
-                owner.OnRemovedFromManager += owner_OnRemovedFromManager;
+                owner.OnRemovedFromManager.Add(owner_OnRemovedFromManager);
             }
             set.Add(name);
 

@@ -18,8 +18,7 @@ namespace Oxide.Core.Logging
         /// <summary>
         /// Initializes a new instance of the ThreadedLogger class
         /// </summary>
-        public ThreadedLogger()
-            : base(false)
+        public ThreadedLogger() : base(false)
         {
             // Initialize
             waitevent = new AutoResetEvent(false);
@@ -33,6 +32,12 @@ namespace Oxide.Core.Logging
 
         ~ThreadedLogger()
         {
+            OnRemoved();
+        }
+
+        public override void OnRemoved()
+        {
+            if (exit) return;
             exit = true;
             waitevent.Set();
             workerthread.Join();
@@ -72,24 +77,22 @@ namespace Oxide.Core.Logging
                 // Iterate each item in the queue
                 lock (syncroot)
                 {
-                    if (messagequeue.Count > 0)
+                    if (messagequeue.Count <= 0) continue;
+                    BeginBatchProcess();
+                    try
                     {
-                        BeginBatchProcess();
-                        try
+                        while (messagequeue.Count > 0)
                         {
-                            while (messagequeue.Count > 0)
-                            {
-                                // Dequeue
-                                LogMessage message = messagequeue.Dequeue();
+                            // Dequeue
+                            var message = messagequeue.Dequeue();
 
-                                // Process
-                                ProcessMessage(message);
-                            }
+                            // Process
+                            ProcessMessage(message);
                         }
-                        finally
-                        {
-                            FinishBatchProcess();
-                        }
+                    }
+                    finally
+                    {
+                        FinishBatchProcess();
                     }
                 }
             }
