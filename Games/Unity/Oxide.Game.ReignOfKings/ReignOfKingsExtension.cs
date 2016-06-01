@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 
-using CodeHatch.Build;
 using CodeHatch.Common;
 using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
@@ -125,9 +124,6 @@ namespace Oxide.Game.ReignOfKings
             "with authkey System.Byte[]"
         };
 
-        private static readonly FieldInfo SocketServerField = typeof (SocketAdminConsole).GetField("_server", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo MessagesField = typeof (Console).GetField("m_messages", BindingFlags.NonPublic | BindingFlags.Static);
-
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsExtension class
         /// </summary>
@@ -157,6 +153,9 @@ namespace Oxide.Game.ReignOfKings
         {
         }
 
+        private static readonly FieldInfo SocketServerField = typeof(SocketAdminConsole).GetField("_server", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo MessagesField = typeof(Console).GetField("m_messages", BindingFlags.NonPublic | BindingFlags.Static);
+
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
@@ -175,54 +174,12 @@ namespace Oxide.Game.ReignOfKings
             Logger.WarningLogged += HandleLog;
             Logger.ErrorLogged += HandleLog;
             Logger.ExceptionLogged += HandleLog;
+            Application.logMessageReceived += (message, stackTrace, type) =>
+            {
+                if (type == LogType.Exception) Interface.Oxide.LogDebug(message + "\n" + stackTrace);
+            };
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-
-            Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount} | {DedicatedServerBypass.Settings.ServerName}";
-
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerBypass.Settings.ServerName}";
-            Interface.Oxide.ServerConsole.Status1Right = () =>
-            {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
-            };
-
-            Interface.Oxide.ServerConsole.Status2Left = () =>
-            {
-                var players = Server.PlayerCount;
-                var playerLimit = Server.PlayerLimit;
-                var sleepersCount = CodeHatch.StarForge.Sleeping.PlayerSleeperObject.AllSleeperObjects.Count;
-                var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
-                var entitiesCount = CodeHatch.Engine.Core.Cache.Entity.GetAll().Count;
-                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
-                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
-            };
-            Interface.Oxide.ServerConsole.Status2Right = () =>
-            {
-                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
-                var players = Server.AllPlayers;
-                double bytesSent = 0;
-                double bytesReceived = 0;
-                foreach (var player in players)
-                {
-                    if (!player.Connection.IsConnected) continue;
-                    var statistics = player.Connection.Statistics;
-                    bytesSent += statistics.BytesSentPerSecond;
-                    bytesReceived += statistics.BytesReceivedPerSecond;
-                }
-                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
-            };
-
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                var gameTime = GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown";
-                var weather = Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown";
-                return string.Concat(" ", gameTime, ", Weather: ", weather);
-            };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameInfo.VersionName}";
-            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
-
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
@@ -240,24 +197,24 @@ namespace Oxide.Game.ReignOfKings
             if (!string.IsNullOrEmpty(output)) Interface.Oxide.ServerConsole.AddMessage(output);
         }
 
-        private void HandleLog(Exception message, object context, Type type)
+        private static void HandleLog(Exception message, object context, Type type)
         {
             HandleLog(message.ToString(), IDUtil.GetObjectIDString(context), LogType.Error);
         }
 
-        private void HandleLog(string message, object context, Type type)
+        private static void HandleLog(string message, object context, Type type)
         {
             HandleLog(message, IDUtil.GetObjectIDString(context), LogType.Log);
         }
 
-        private void HandleLog(string message, string stackTrace, LogType type)
+        private static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

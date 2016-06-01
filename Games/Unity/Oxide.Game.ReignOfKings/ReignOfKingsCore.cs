@@ -9,6 +9,7 @@ using CodeHatch.Common;
 using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
+using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -56,7 +57,7 @@ namespace Oxide.Game.ReignOfKings
         {
             // Set attributes
             Name = "ReignOfKingsCore";
-            Title = "Reign of Kings Core";
+            Title = "Reign of Kings";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -95,8 +96,8 @@ namespace Oxide.Game.ReignOfKings
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "reign of kings");
-            RemoteLogger.SetTag("version", GameInfo.VersionName.ToLower());
+            RemoteLogger.SetTag("game", Title.ToLower());
+            RemoteLogger.SetTag("version", GameInfo.VersionString);
 
             // Add general commands
             cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
@@ -153,6 +154,47 @@ namespace Oxide.Game.ReignOfKings
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", DedicatedServerBypass.Settings.ServerName);
+
+            // Configure server console window and status bars
+            Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount} | {DedicatedServerBypass.Settings.ServerName}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerBypass.Settings.ServerName}";
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / UnityEngine.Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(UnityEngine.Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var sleepersCount = CodeHatch.StarForge.Sleeping.PlayerSleeperObject.AllSleeperObjects.Count;
+                var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
+                var entitiesCount = CodeHatch.Engine.Core.Cache.Entity.GetAll().Count;
+                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
+                return $" {Server.PlayerCount}/{Server.PlayerLimit} players, {sleepers}, {entities}";
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
+                double bytesSent = 0;
+                double bytesReceived = 0;
+                foreach (var player in Server.AllPlayers)
+                {
+                    if (!player.Connection.IsConnected) continue;
+                    var statistics = player.Connection.Statistics;
+                    bytesSent += statistics.BytesSentPerSecond;
+                    bytesReceived += statistics.BytesReceivedPerSecond;
+                }
+                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+            };
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var gameTime = GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown";
+                var weather = Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown";
+                return $" {gameTime}, Weather: {weather}";
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameInfo.VersionString} ({GameInfo.VersionName})";
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
             // Load default permission groups
             rokPerms = Server.Permissions;
@@ -274,13 +316,16 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(Player player)
+        [HookMethod("IOnPlayerConnected")]
+        private void IOnPlayerConnected(Player player)
         {
+            // Ignore the server player
+            if (player.Id == 9999999999) return;
+
+            Interface.CallHook("OnPlayerConnected", player);
+
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(player);
-
-            // Call covalence hook
             var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
             Interface.CallHook("OnUserConnected", iplayer);
         }
@@ -292,11 +337,14 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(Player player)
         {
-            // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
-            Interface.CallHook("OnUserDisconnected", iplayer);
+            // Ignore the server player
+            if (player.Id == 9999999999) return;
+
+            Interface.CallHook("OnPlayerDisconnected", player);
 
             // Let covalence know
+            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
+            Interface.CallHook("OnUserDisconnected", iplayer);
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
@@ -492,7 +540,7 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("ChatVersion")]
         private void ChatVersion(Player player)
         {
-            ReplyWith(player, $"Oxide {OxideMod.Version} for Reign of Kings {GameInfo.VersionName}");
+            ReplyWith(player, $"Oxide {OxideMod.Version} for {Title} {GameInfo.VersionString} ({GameInfo.VersionName})");
         }
 
         /// <summary>

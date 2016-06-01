@@ -68,7 +68,7 @@ namespace Oxide.Core.ServerConsole
         private string status3Left => GetStatusValue(Status3Left);
         private string status3Right => GetStatusValue(Status3Right).PadLeft(input.LineWidth - 1);
 
-        private static string GetStatusValue(Func<string> status) => status != null ? status() ?? string.Empty : " empty";
+        private static string GetStatusValue(Func<string> status) => status != null ? status() ?? string.Empty : "";
 
         private static string GetStatusRight(int leftLength, string right) => leftLength >= right.Length ? string.Empty : right.Substring(leftLength);
 
