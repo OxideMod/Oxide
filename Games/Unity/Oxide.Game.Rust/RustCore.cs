@@ -1072,7 +1072,10 @@ namespace Oxide.Game.Rust
         private object OnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
-            if (arg.cmd.namefull != "chat.say") return null;
+
+            // Call deprecated hook
+            var oldHook = Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 8, 1), arg);
+            if (arg.cmd.namefull != "chat.say") return oldHook;
 
             if (arg.connection != null)
             {
@@ -1101,15 +1104,16 @@ namespace Oxide.Game.Rust
                 var player = arg.connection.player as BasePlayer;
                 if (player == null)
                     Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
-                else
-                    if (!cmdlib.HandleChatCommand(player, cmd, args)) Reply(player.net.connection, "UnknownCommand", cmd);
+                else if (!cmdlib.HandleChatCommand(player, cmd, args))
+                    Reply(player.net.connection, "UnknownCommand", cmd);
 
                 // Handled
                 arg.ReplyWith(string.Empty);
                 return true;
             }
 
-            return Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 8, 1), arg);
+            // Default behavior
+            return null;
         }
 
         /// <summary>
