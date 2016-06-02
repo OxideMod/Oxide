@@ -1109,7 +1109,7 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            return (bool)Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 8, 1), arg);
+            return Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 8, 1), arg);
         }
 
         /// <summary>
@@ -1328,9 +1328,9 @@ namespace Oxide.Game.Rust
         }
 
         [HookMethod("CanBypassQueue")]
-        private bool CanBypassQueue(Connection connection)
+        private object CanBypassQueue(Connection connection)
         {
-            return (bool)Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), connection);
+            return Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), connection);
         }
 
         [HookMethod("OnBlueprintReveal")]
