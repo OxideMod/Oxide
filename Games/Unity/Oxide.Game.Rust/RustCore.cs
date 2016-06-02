@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using Facepunch;
 using Network;
 using Rust;
 using UnityEngine;
@@ -97,7 +98,7 @@ namespace Oxide.Game.Rust
         {
             // Set attributes
             Name = "RustCore";
-            Title = "Rust Core";
+            Title = "Rust";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -212,6 +213,35 @@ namespace Oxide.Game.Rust
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
+            // Configure server console window and status bars
+            Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {ConVar.Server.hostname}";
+            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)UnityEngine.Time.realtimeSinceStartup)}";
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = BasePlayer.activePlayerList.Count;
+                var playerLimit = ConVar.Server.maxplayers;
+                var sleeperCount = BasePlayer.sleepingPlayerList.Count;
+                var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
+                var entitiesCount = BaseNetworkable.serverEntities.Count;
+                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
+                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
+                var inbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
+                var outbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
+                return string.Concat(inbound, "/s in, ", outbound, "/s out");
+            };
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
+                return $" {gameTime}, {ConVar.Server.level} [{ConVar.Server.worldsize}, {ConVar.Server.seed}]";
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.network})";
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
+
             // Destroy default server console
             if (ServerConsole.Instance != null)
             {
@@ -282,11 +312,9 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
-            // Call covalence hook
+            // Let covalence know
             var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
             Interface.CallHook("OnUserDisconnected", iplayer, reason);
-
-            // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
@@ -301,8 +329,6 @@ namespace Oxide.Game.Rust
         {
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(player);
-
-            // Call covalence hook
             var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
             Interface.CallHook("OnUserConnected", iplayer);
 
@@ -322,6 +348,19 @@ namespace Oxide.Game.Rust
 
             // Call covalence hook
             Interface.CallHook("OnUserInit", iplayer);
+        }
+
+        /// <summary>
+        /// Called when the player is respawning
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("OnPlayerRespawn")]
+        private object OnPlayerRespawn(BasePlayer player)
+        {
+            // Call covalence hook
+            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            return Interface.CallHook("OnUserRespawn", iplayer);
         }
 
         /// <summary>
@@ -1029,8 +1068,8 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        [HookMethod("OnRunCommand")]
-        private object OnRunCommand(ConsoleSystem.Arg arg)
+        [HookMethod("OnServerCommand")]
+        private object OnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
             if (arg.cmd.namefull != "chat.say") return null;
@@ -1070,8 +1109,7 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            // Default behavior
-            return null;
+            return (bool)Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 8, 1), arg);
         }
 
         /// <summary>
@@ -1262,60 +1300,43 @@ namespace Oxide.Game.Rust
 
         #region Deprecated Hooks
 
-        /// <summary>
-        /// Used to handle the deprecated hook OnWeaponThrown
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="entity"></param>
         [HookMethod("OnExplosiveThrown")]
         private object OnExplosiveThrown(BasePlayer player, BaseEntity entity)
         {
             return Interface.CallDeprecatedHook("OnWeaponThrown", "OnExplosiveThrown", new DateTime(2016, 6, 3), player, entity);
         }
 
-        /// <summary>
-        /// Used to handle the deprecated hook OnPlayerLoot (entity)
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="entity"></param>
         [HookMethod("IOnLootEntity")]
         private void IOnLootEntity(PlayerLoot source, BaseEntity entity)
         {
-            // Call hook
             Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
-
-            // Call depreated hook
             Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootEntity", new DateTime(2016, 6, 3), source, entity);
         }
 
-        /// <summary>
-        /// Used to handle the deprecated hook OnPlayerLoot (item)
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="item"></param>
         [HookMethod("IOnLootItem")]
         private void IOnLootItem(PlayerLoot source, Item item)
         {
-            // Call hook
             Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
-
-            // Call depreated hook
             Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootItem", new DateTime(2016, 6, 3), source, item);
         }
 
-        /// <summary>
-        /// Used to handle the deprecated hook OnPlayerLoot (player)
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
         [HookMethod("IOnLootPlayer")]
         private void IOnLootPlayer(PlayerLoot source, BasePlayer target)
         {
-            // Call hook
             Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
-
-            // Call depreated hook
             Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootPlayer", new DateTime(2016, 6, 3), source, target);
+        }
+
+        [HookMethod("CanBypassQueue")]
+        private bool CanBypassQueue(BasePlayer player)
+        {
+            return (bool)Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), player);
+        }
+
+        [HookMethod("OnBlueprintReveal")]
+        private object OnBlueprintReveal(Item item, BasePlayer player)
+        {
+            return Interface.CallDeprecatedHook("CanReveal", "OnBlueprintReveal", new DateTime(2016, 8, 1), player, item);
         }
 
         #endregion

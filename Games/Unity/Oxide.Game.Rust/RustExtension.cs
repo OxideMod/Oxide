@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reflection;
 
 using Facepunch;
-using Network;
-using Rust;
 using UnityEngine;
 
 using Oxide.Core;
@@ -66,7 +64,7 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Caches the OxideMod.rootconfig field
         /// </summary>
-        readonly FieldInfo rootconfig = typeof(OxideMod).GetField("rootconfig", BindingFlags.NonPublic | BindingFlags.Instance);
+        private readonly FieldInfo rootconfig = typeof(OxideMod).GetField("rootconfig", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public class Folders
         {
@@ -169,39 +167,8 @@ namespace Oxide.Game.Rust
             if (!Interface.Oxide.EnableConsole()) return;
 
             Output.OnMessage += HandleLog;
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-
-            Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname ?? "Unnamed"}";
-
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", ConVar.Server.hostname ?? "Unnamed");
-            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)Time.realtimeSinceStartup)}";
-
-            Interface.Oxide.ServerConsole.Status2Left = () =>
-            {
-                var players = BasePlayer.activePlayerList.Count;
-                var playerLimit = ConVar.Server.maxplayers;
-                var sleeperCount = BasePlayer.sleepingPlayerList.Count;
-                var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
-                var entitiesCount = BaseNetworkable.serverEntities.Count;
-                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
-                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
-            };
-            Interface.Oxide.ServerConsole.Status2Right = () =>
-            {
-                if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
-                var inbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
-                var outbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
-                return string.Concat(inbound, "/s in, ", outbound, "/s out");
-            };
-
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
-                return string.Concat(" ", gameTime, ", ", ConVar.Server.level, " [", ConVar.Server.worldsize, ", ", ConVar.Server.seed, "]");
-            };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.network})";
-            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
-
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
@@ -229,6 +196,16 @@ namespace Oxide.Game.Rust
             {
                 color = ConsoleColor.Red;
                 ConVar.Server.Log("Log.Error.txt", message);
+            }
+            else if (type == LogType.Exception || type == LogType.Assert)
+            {
+                color = ConsoleColor.Red;
+                ConVar.Server.Log("Log.Exception.txt", message);
+            }
+            else if (type == LogType.Assert)
+            {
+                color = ConsoleColor.Red;
+                ConVar.Server.Log("Log.Assert.txt", message);
             }
             else if (!message.StartsWith("[CHAT]"))
                 ConVar.Server.Log("Log.Log.txt", message);
