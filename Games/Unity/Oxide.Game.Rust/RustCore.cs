@@ -1328,9 +1328,9 @@ namespace Oxide.Game.Rust
         }
 
         [HookMethod("CanBypassQueue")]
-        private bool CanBypassQueue(BasePlayer player)
+        private bool CanBypassQueue(Connection connection)
         {
-            return (bool)Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), player);
+            return (bool)Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), connection);
         }
 
         [HookMethod("OnBlueprintReveal")]
