@@ -42,7 +42,7 @@ namespace Oxide.Game.TheForest
         {
             // Set attributes
             Name = "TheForestCore";
-            Title = "The Forest Core";
+            Title = "The Forest";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -126,7 +126,7 @@ namespace Oxide.Game.TheForest
             if (TheForestExtension.DisableClient) DisableClient();
 
             // Save the level every X minutes
-            //Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
+            Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
         }
 
         /// <summary>
@@ -186,17 +186,17 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Called when the player sends a message
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="evt"></param>
         [HookMethod("OnPlayerChat")]
-        private void OnPlayerChat(ChatEvent e)
+        private void OnPlayerChat(ChatEvent evt)
         {
-            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == e.Sender);
+            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
             if (player == null) return;
 
             var userId = player.source.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(userId));
 
-            Debug.Log($"[Chat] {name}: {e.Message}");
+            Debug.Log($"[Chat] {name}: {evt.Message}");
         }
 
         #endregion
@@ -340,8 +340,8 @@ namespace Oxide.Game.TheForest
             foreach (var imageEffectOptimizer in imageEffectOptimizers) UnityEngine.Object.Destroy(imageEffectOptimizer);
             var postEffectsBases = Resources.FindObjectsOfTypeAll<PostEffectsBase>();
             foreach (var postEffectsBase in postEffectsBases) UnityEngine.Object.Destroy(postEffectsBase);
-            var scionPostProcesses = Resources.FindObjectsOfTypeAll<ScionPostProcess>();
-            foreach (var scionPostProcess in scionPostProcesses) UnityEngine.Object.Destroy(scionPostProcess);
+            //var scionPostProcesses = Resources.FindObjectsOfTypeAll<ScionPostProcess>();
+            //foreach (var scionPostProcess in scionPostProcesses) UnityEngine.Object.Destroy(scionPostProcess);
             var projectedGrids = Resources.FindObjectsOfTypeAll<ProjectedGrid>();
             foreach (var projectedGrid in projectedGrids) UnityEngine.Object.Destroy(projectedGrid);
             var waveSpectra = Resources.FindObjectsOfTypeAll<WaveSpectrum>();
@@ -358,7 +358,7 @@ namespace Oxide.Game.TheForest
             {
                 if (!behaviour.GetType().FullName.StartsWith("UI")) continue;
                 behaviour.enabled = false;
-                behaviour.gameObject.SetActive(false);
+                //behaviour.gameObject.SetActive(false);
             }
         }
 
