@@ -7,7 +7,7 @@ namespace Oxide.Core
     {
         public delegate void Action<in T1, in T2, in T3, in T4, in T5>(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4);
 
-        internal static Queue<Callback> PooledCallbacks = new Queue<Callback>();
+        //internal static Queue<Callback> PooledCallbacks = new Queue<Callback>();
         
         public static void Remove(ref Callback callback)
         {
@@ -90,13 +90,13 @@ namespace Oxide.Core
                 Previous = null;
                 Next = null;
                 Handler = null;
-                if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
+                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T>
         {
-            internal static Queue<Callback<T>> PooledCallbacks = new Queue<Callback<T>>();
+            //internal static Queue<Callback<T>> PooledCallbacks = new Queue<Callback<T>>();
 
             public Action<T> Invoke;
             internal Callback<T> Previous;
@@ -135,13 +135,13 @@ namespace Oxide.Core
                 Previous = null;
                 Next = null;
                 Handler = null;
-                if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
+                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2>
         {
-            internal static Queue<Callback<T1, T2>> PooledCallbacks = new Queue<Callback<T1, T2>>();
+            //internal static Queue<Callback<T1, T2>> PooledCallbacks = new Queue<Callback<T1, T2>>();
 
             //internal static int nextNumber = 1;
 
@@ -190,13 +190,13 @@ namespace Oxide.Core
                 Previous = null;
                 Next = null;
                 Handler = null;
-                if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
+                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2, T3>
         {
-            internal static Queue<Callback<T1, T2, T3>> PooledCallbacks = new Queue<Callback<T1, T2, T3>>();
+            //internal static Queue<Callback<T1, T2, T3>> PooledCallbacks = new Queue<Callback<T1, T2, T3>>();
 
             public Action<T1, T2, T3> Invoke;
             internal Callback<T1, T2, T3> Previous;
@@ -235,13 +235,13 @@ namespace Oxide.Core
                 Previous = null;
                 Next = null;
                 Handler = null;
-                if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
+                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2, T3, T4>
         {
-            internal static Queue<Callback<T1, T2, T3, T4>> PooledCallbacks = new Queue<Callback<T1, T2, T3, T4>>();
+            //internal static Queue<Callback<T1, T2, T3, T4>> PooledCallbacks = new Queue<Callback<T1, T2, T3, T4>>();
 
             public Action<T1, T2, T3, T4> Invoke;
             internal Callback<T1, T2, T3, T4> Previous;
@@ -280,13 +280,13 @@ namespace Oxide.Core
                 Previous = null;
                 Next = null;
                 Handler = null;
-                if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
+                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2, T3, T4, T5>
         {
-            internal static Queue<Callback<T1, T2, T3, T4, T5>> PooledCallbacks = new Queue<Callback<T1, T2, T3, T4, T5>>();
+            //internal static Queue<Callback<T1, T2, T3, T4, T5>> PooledCallbacks = new Queue<Callback<T1, T2, T3, T4, T5>>();
 
             public Action<T1, T2, T3, T4, T5> Invoke;
             internal Callback<T1, T2, T3, T4, T5> Previous;
@@ -325,7 +325,7 @@ namespace Oxide.Core
                 Previous = null;
                 Next = null;
                 Handler = null;
-                if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
+                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
@@ -353,13 +353,13 @@ namespace Oxide.Core
         public Callback Add(Action callback)
         {
             Callback event_callback;
-            var pooled_callbacks = PooledCallbacks;
+            /*var pooled_callbacks = PooledCallbacks;
             if (pooled_callbacks.Count > 0)
             {
                 event_callback = pooled_callbacks.Dequeue();
                 event_callback.Invoke = callback;
             }
-            else
+            else*/
             {
                 event_callback = new Callback(callback);
             }
@@ -403,13 +403,13 @@ namespace Oxide.Core
         public Event.Callback<T> Add(Action<T> callback)
         {
             Event.Callback<T> event_callback;
-            var pooled_callbacks = Event.Callback<T>.PooledCallbacks;
+            /*var pooled_callbacks = Event.Callback<T>.PooledCallbacks;
             if (pooled_callbacks.Count > 0)
             {
                 event_callback = pooled_callbacks.Dequeue();
                 event_callback.Invoke = callback;
             }
-            else
+            else*/
             {
                 event_callback = new Event.Callback<T>(callback);
             }
@@ -453,13 +453,13 @@ namespace Oxide.Core
         public Event.Callback<T1, T2> Add(Action<T1, T2> callback)
         {
             Event.Callback<T1, T2> event_callback;
-            var pooled_callbacks = Event.Callback<T1, T2>.PooledCallbacks;
+            /*var pooled_callbacks = Event.Callback<T1, T2>.PooledCallbacks;
             if (pooled_callbacks.Count > 0)
             {
                 event_callback = pooled_callbacks.Dequeue();
                 event_callback.Invoke = callback;
             }
-            else
+            else*/
             {
                 event_callback = new Event.Callback<T1, T2>(callback);
             }
@@ -524,13 +524,13 @@ namespace Oxide.Core
         public Event.Callback<T1, T2, T3> Add(Action<T1, T2, T3> callback)
         {
             Event.Callback<T1, T2, T3> event_callback;
-            var pooled_callbacks = Event.Callback<T1, T2, T3>.PooledCallbacks;
+            /*var pooled_callbacks = Event.Callback<T1, T2, T3>.PooledCallbacks;
             if (pooled_callbacks.Count > 0)
             {
                 event_callback = pooled_callbacks.Dequeue();
                 event_callback.Invoke = callback;
             }
-            else
+            else*/
             {
                 event_callback = new Event.Callback<T1, T2, T3>(callback);
             }
@@ -604,13 +604,13 @@ namespace Oxide.Core
         public Event.Callback<T1, T2, T3, T4> Add(Action<T1, T2, T3, T4> callback)
         {
             Event.Callback<T1, T2, T3, T4> event_callback;
-            var pooled_callbacks = Event.Callback<T1, T2, T3, T4>.PooledCallbacks;
+            /*var pooled_callbacks = Event.Callback<T1, T2, T3, T4>.PooledCallbacks;
             if (pooled_callbacks.Count > 0)
             {
                 event_callback = pooled_callbacks.Dequeue();
                 event_callback.Invoke = callback;
             }
-            else
+            else*/
             {
                 event_callback = new Event.Callback<T1, T2, T3, T4>(callback);
             }
@@ -695,13 +695,13 @@ namespace Oxide.Core
         public Event.Callback<T1, T2, T3, T4, T5> Add(Event.Action<T1, T2, T3, T4, T5> callback)
         {
             Event.Callback<T1, T2, T3, T4, T5> event_callback;
-            var pooled_callbacks = Event.Callback<T1, T2, T3, T4, T5>.PooledCallbacks;
+            /*var pooled_callbacks = Event.Callback<T1, T2, T3, T4, T5>.PooledCallbacks;
             if (pooled_callbacks.Count > 0)
             {
                 event_callback = pooled_callbacks.Dequeue();
                 event_callback.Invoke = callback;
             }
-            else
+            else*/
             {
                 event_callback = new Event.Callback<T1, T2, T3, T4, T5>(callback);
             }
