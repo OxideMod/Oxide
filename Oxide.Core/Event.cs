@@ -87,8 +87,6 @@ namespace Oxide.Core
                     if (previous == null) handler.First = next;
                 }
                 Invoke = null;
-                Previous = null;
-                Next = null;
                 Handler = null;
                 //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
@@ -132,8 +130,6 @@ namespace Oxide.Core
                     if (previous == null) handler.First = next;
                 }
                 Invoke = null;
-                Previous = null;
-                Next = null;
                 Handler = null;
                 //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
@@ -187,8 +183,6 @@ namespace Oxide.Core
                     }
                 }
                 Invoke = null;
-                Previous = null;
-                Next = null;
                 Handler = null;
                 //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
@@ -232,8 +226,6 @@ namespace Oxide.Core
                     if (previous == null) handler.First = next;
                 }
                 Invoke = null;
-                Previous = null;
-                Next = null;
                 Handler = null;
                 //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
@@ -277,8 +269,6 @@ namespace Oxide.Core
                     if (previous == null) handler.First = next;
                 }
                 Invoke = null;
-                Previous = null;
-                Next = null;
                 Handler = null;
                 //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
@@ -322,8 +312,6 @@ namespace Oxide.Core
                     if (previous == null) handler.First = next;
                 }
                 Invoke = null;
-                Previous = null;
-                Next = null;
                 Handler = null;
                 //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
@@ -372,7 +360,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke();
+                callback.Invoke?.Invoke();
                 callback = callback.Next;
             }
         }
@@ -422,7 +410,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0);
+                callback.Invoke?.Invoke(arg0);
                 callback = callback.Next;
             }
         }
@@ -473,7 +461,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(default(T1), default(T2));
+                callback.Invoke?.Invoke(default(T1), default(T2));
                 callback = callback.Next;
             }
         }
@@ -483,7 +471,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, default(T2));
+                callback.Invoke?.Invoke(arg0, default(T2));
                 callback = callback.Next;
             }
         }
@@ -493,7 +481,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1);
+                callback.Invoke?.Invoke(arg0, arg1);
                 callback = callback.Next;
             }
         }
@@ -553,7 +541,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, default(T2), default(T3));
+                callback.Invoke?.Invoke(arg0, default(T2), default(T3));
                 callback = callback.Next;
             }
         }
@@ -563,7 +551,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, default(T3));
+                callback.Invoke?.Invoke(arg0, arg1, default(T3));
                 callback = callback.Next;
             }
         }
@@ -573,7 +561,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, arg2);
+                callback.Invoke?.Invoke(arg0, arg1, arg2);
                 callback = callback.Next;
             }
         }
@@ -623,7 +611,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(default(T1), default(T2), default(T3), default(T4));
+                callback.Invoke?.Invoke(default(T1), default(T2), default(T3), default(T4));
                 callback = callback.Next;
             }
         }
@@ -633,7 +621,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, default(T2), default(T3), default(T4));
+                callback.Invoke?.Invoke(arg0, default(T2), default(T3), default(T4));
                 callback = callback.Next;
             }
         }
@@ -643,7 +631,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, default(T3), default(T4));
+                callback.Invoke?.Invoke(arg0, arg1, default(T3), default(T4));
                 callback = callback.Next;
             }
         }
@@ -653,7 +641,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, arg2, default(T4));
+                callback.Invoke?.Invoke(arg0, arg1, arg2, default(T4));
                 callback = callback.Next;
             }
         }
@@ -663,7 +651,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, arg2, arg3);
+                callback.Invoke?.Invoke(arg0, arg1, arg2, arg3);
                 callback = callback.Next;
             }
         }
@@ -714,7 +702,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(default(T1), default(T2), default(T3), default(T4), default(T5));
+                callback.Invoke?.Invoke(default(T1), default(T2), default(T3), default(T4), default(T5));
                 callback = callback.Next;
             }
         }
@@ -724,7 +712,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, default(T2), default(T3), default(T4), default(T5));
+                callback.Invoke?.Invoke(arg0, default(T2), default(T3), default(T4), default(T5));
                 callback = callback.Next;
             }
         }
@@ -734,7 +722,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, default(T3), default(T4), default(T5));
+                callback.Invoke?.Invoke(arg0, arg1, default(T3), default(T4), default(T5));
                 callback = callback.Next;
             }
         }
@@ -744,7 +732,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, arg2, default(T4), default(T5));
+                callback.Invoke?.Invoke(arg0, arg1, arg2, default(T4), default(T5));
                 callback = callback.Next;
             }
         }
@@ -754,7 +742,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, arg2, arg3, default(T5));
+                callback.Invoke?.Invoke(arg0, arg1, arg2, arg3, default(T5));
                 callback = callback.Next;
             }
         }
@@ -764,7 +752,7 @@ namespace Oxide.Core
             var callback = First;
             while (callback != null)
             {
-                callback.Invoke(arg0, arg1, arg2, arg3, arg4);
+                callback.Invoke?.Invoke(arg0, arg1, arg2, arg3, arg4);
                 callback = callback.Next;
             }
         }
