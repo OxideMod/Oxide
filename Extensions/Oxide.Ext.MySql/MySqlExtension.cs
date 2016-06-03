@@ -51,7 +51,5 @@ namespace Oxide.Ext.MySql
         public override void OnModLoad()
         {
         }
-
-        public override void OnShutdown() => mySql?.Shutdown();
     }
 }

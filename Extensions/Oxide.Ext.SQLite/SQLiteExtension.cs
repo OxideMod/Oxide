@@ -56,7 +56,5 @@ namespace Oxide.Ext.SQLite
         public override void OnModLoad()
         {
         }
-
-        public override void OnShutdown() => sqlite?.Shutdown();
     }
 }

@@ -309,7 +309,7 @@ namespace Oxide.Ext.MySql.Libraries
             ExecuteNonQuery(sql, db, callback);
         }
 
-        internal void Shutdown()
+        public override void Shutdown()
         {
             _running = false;
             _workevent.Set();
