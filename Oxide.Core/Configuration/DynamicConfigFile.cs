@@ -231,8 +231,8 @@ namespace Oxide.Core.Configuration
             if (!_keyvalues.TryGetValue(path[0], out val)) return null;
             for (var i = 1; i < path.Length; i++)
             {
-                var dict = (Dictionary<string, object>)val;
-                if (!dict.TryGetValue(path[i], out val)) return null;
+                var dict = val as Dictionary<string, object>;
+                if (dict == null || !dict.TryGetValue(path[i], out val)) return null;
             }
             return val;
         }
