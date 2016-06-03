@@ -260,6 +260,25 @@ namespace Oxide.Game.Rust
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
+        /// <summary>
+        /// Called when ServerConsole is enabled
+        /// </summary>
+        [HookMethod("IOnEnableServerConsole")]
+        private object IOnEnableServerConsole(ServerConsole serverConsole)
+        {
+            if (!Interface.Oxide.CheckConsole(true)) return null;
+            serverConsole.enabled = false;
+            UnityEngine.Object.Destroy(serverConsole);
+            typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
+            return false;
+        }
+
+        /// <summary>
+        /// Called when ServerConsole is disabled
+        /// </summary>
+        [HookMethod("IOnDisableServerConsole")]
+        private object IOnDisableServerConsole() => !Interface.Oxide.CheckConsole(true) ? (object)null : false;
+
         #endregion
 
         #region Player Hooks
