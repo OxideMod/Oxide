@@ -69,7 +69,21 @@ namespace Oxide.Plugins
             this.Description = Description;
         }
     }
+    
+    /// <summary>
+    /// Allows plugins to specify required plugins using an attribute above the plugin class
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
+    public class RequireAttribute : Attribute
+    {
+        public string[] Plugins { get; }
 
+        public RequireAttribute(params string[] Plugins)
+        {
+            this.Plugins = Plugins;
+        }
+    }
+    
     /// <summary>
     /// Indicates that the specified field should be a reference to another plugin when it is loaded
     /// </summary>
@@ -243,6 +257,25 @@ namespace Oxide.Plugins
             {
                 var info = description_attributes[0] as DescriptionAttribute;
                 Description = info.Description;
+            }
+            
+            var require_attributes = GetType().GetCustomAttributes(typeof(RequireAttribute), true);
+            if (require_attributes.Length > 0)
+            {
+                var info = require_attributes[0] as RequireAttribute;
+                
+                foreach (string plugin in info.Plugins)
+                {
+                   var required_plugin = manager.GetPlugin(plugin);
+                   
+                   if (!required_plugin)
+                    continue;
+                    
+                   if (!required_plugin.Loader.Load(Interface.Oxide.PluginDirectory, plugin))
+                   {
+                       Interface.Oxide.LogException($"{Name} requires plugin '{plugin}' but it could not be loaded!");
+                   }
+                }
             }
 
             var method = GetType().GetMethod("LoadDefaultConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
