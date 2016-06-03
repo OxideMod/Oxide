@@ -339,11 +339,14 @@ namespace Oxide.Game.Rust
             var authLevel = player.net.connection.authLevel;
             if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
             {
-                var userId = player.UserIDString;
-                permission.UpdateNickname(userId, player.displayName);
+                var id = player.UserIDString;
+                permission.UpdateNickname(id, player.displayName);
 
                 // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[authLevel]);
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+
+                // Add player to group based on auth level
+                if (authLevel >= 2 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
             }
 
             // Cache serverInput for player so that reflection only needs to be used once

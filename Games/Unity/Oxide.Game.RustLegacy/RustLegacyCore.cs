@@ -225,11 +225,14 @@ namespace Oxide.Game.RustLegacy
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                var userId = netUser.userID.ToString();
-                permission.UpdateNickname(userId, netUser.displayName);
+                var id = netUser.userID.ToString();
+                permission.UpdateNickname(id, netUser.displayName);
 
                 // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+
+                // Add player to admin group if admin
+                if (netUser.CanAdmin() && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
             // Call covalence hook

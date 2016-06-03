@@ -306,11 +306,14 @@ namespace Oxide.Game.Hurtworld
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                var userId = session.SteamId.ToString();
-                permission.UpdateNickname(userId, session.Name);
+                var id = session.SteamId.ToString();
+                permission.UpdateNickname(id, session.Name);
 
                 // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+
+                // Add player to admin group if admin
+                if (session.IsAdmin && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
             // Call covalence hook

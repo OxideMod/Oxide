@@ -325,6 +325,21 @@ namespace Oxide.Game.ReignOfKings
             // Ignore the server player
             if (player.Id == 9999999999) return;
 
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                var id = player.Id.ToString();
+                permission.UpdateNickname(id, player.Name);
+
+                // Add player to default group
+                if (permission.GroupExists("default")) permission.AddUserGroup(id, "default");
+                else if (permission.GroupExists("guest")) permission.AddUserGroup(id, "guest");
+
+                // Add player to admin group if admin
+                if (permission.GroupExists("admin") && player.HasPermission("admin") && !permission.UserHasGroup(id, "admin"))
+                    permission.AddUserGroup(id, "admin");
+            }
+
             Interface.CallHook("OnPlayerConnected", player);
 
             // Let covalence know
@@ -358,17 +373,6 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnPlayerSpawn")]
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
-            // Do permission stuff
-            if (permission.IsLoaded)
-            {
-                var userId = evt.Player.Id.ToString();
-                permission.UpdateNickname(userId, evt.Player.Name);
-
-                // Add player to default group
-                if (permission.GroupExists("default")) permission.AddUserGroup(userId, "default");
-                else if (permission.GroupExists("guest")) permission.AddUserGroup(userId, "guest");
-            }
-
             // Call covalence hook
             var iplayer = covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString());
             Interface.CallHook("OnUserSpawn", iplayer);

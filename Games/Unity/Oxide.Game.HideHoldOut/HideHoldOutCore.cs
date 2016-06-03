@@ -317,11 +317,14 @@ namespace Oxide.Game.HideHoldOut
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                var userId = player.account_id;
-                permission.UpdateNickname(userId, player.Nickname);
+                var id = player.account_id;
+                permission.UpdateNickname(id, player.Nickname);
 
                 // Add player to default group
-                if (!permission.UserHasAnyGroup(userId)) permission.AddUserGroup(userId, DefaultGroups[0]);
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+
+                // Add player to admin group if admin
+                if (player.isADMIN && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
             // Call covalence hook
