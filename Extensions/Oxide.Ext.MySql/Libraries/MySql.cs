@@ -23,7 +23,7 @@ namespace Oxide.Ext.MySql.Libraries
         private bool _running = true;
         private readonly Dictionary<string, Dictionary<string, Connection>> _connections = new Dictionary<string, Dictionary<string, Connection>>();
         private readonly Thread _worker;
-        private Event.Callback<Plugin, PluginManager> _removedFromManager;
+        private readonly Dictionary<Plugin, Event.Callback<Plugin, PluginManager>> _pluginRemovedFromManager;
 
         /// <summary>
         /// Represents a single MySqlQuery instance
@@ -142,6 +142,7 @@ namespace Oxide.Ext.MySql.Libraries
 
         public MySql()
         {
+            _pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
             _worker = new Thread(Worker);
             _worker.Start();
         }
@@ -202,7 +203,8 @@ namespace Oxide.Ext.MySql.Libraries
                 };
                 connections[conStr] = connection;
             }
-            if (_removedFromManager == null) _removedFromManager = plugin?.OnRemovedFromManager.Add(OnRemovedFromManager);
+            if (plugin != null && !_pluginRemovedFromManager.ContainsKey(plugin))
+                _pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(OnRemovedFromManager);
             return connection;
         }
 
@@ -221,7 +223,12 @@ namespace Oxide.Ext.MySql.Libraries
                 }
                 _connections.Remove(sender.Name);
             }
-            Event.Remove(ref _removedFromManager);
+            Event.Callback<Plugin, PluginManager> event_callback;
+            if (_pluginRemovedFromManager.TryGetValue(sender, out event_callback))
+            {
+                event_callback.Remove();
+                _pluginRemovedFromManager.Remove(sender);
+            }
         }
 
         [LibraryFunction("CloseDb")]
@@ -235,7 +242,15 @@ namespace Oxide.Ext.MySql.Libraries
                 if (connections.Count == 0)
                 {
                     _connections.Remove(db.Plugin?.Name ?? "null");
-                    Event.Remove(ref _removedFromManager);
+                    if (db.Plugin != null)
+                    {
+                        Event.Callback<Plugin, PluginManager> event_callback;
+                        if (_pluginRemovedFromManager.TryGetValue(db.Plugin, out event_callback))
+                        {
+                            event_callback.Remove();
+                            _pluginRemovedFromManager.Remove(db.Plugin);
+                        }
+                    }
                 }
             }
             db.Con?.Close();

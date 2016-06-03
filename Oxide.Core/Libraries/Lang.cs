@@ -28,6 +28,7 @@ namespace Oxide.Core.Libraries
         {
             langFiles = new Dictionary<string, Dictionary<string, string>>();
             langData = ProtoStorage.Load<LangData>("oxide.lang") ?? new LangData();
+            pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
         }
 
         /// <summary>
@@ -137,13 +138,14 @@ namespace Oxide.Core.Libraries
             return languages.ToArray();
         }
 
-        private Event.Callback<Plugin, PluginManager> onremovedFromManager;
+        // A reference to the plugin removed callbacks
+        private readonly Dictionary<Plugin, Event.Callback<Plugin, PluginManager>> pluginRemovedFromManager;
 
         private void AddLangFile(string file, Dictionary<string, string> langFile, Plugin plugin)
         {
             langFiles.Add(file, langFile);
-            if (onremovedFromManager == null)
-                onremovedFromManager = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
+            if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
+                pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
         }
 
         private bool MergeMessages(Dictionary<string, string> existingMessages, Dictionary<string, string> messages)
@@ -184,7 +186,12 @@ namespace Oxide.Core.Libraries
         /// <param name="manager"></param>
         private void plugin_OnRemovedFromManager(Plugin sender, PluginManager manager)
         {
-            Event.Remove(ref onremovedFromManager);
+            Event.Callback<Plugin, PluginManager> event_callback;
+            if (pluginRemovedFromManager.TryGetValue(sender, out event_callback))
+            {
+                event_callback.Remove();
+                pluginRemovedFromManager.Remove(sender);
+            }
             var langs = GetLanguages(sender);
             foreach (var lang in langs) langFiles.Remove($"{sender.Name}.{lang}.json");
         }

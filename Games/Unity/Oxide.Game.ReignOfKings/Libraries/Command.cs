@@ -48,8 +48,8 @@ namespace Oxide.Game.ReignOfKings.Libraries
         // All chat commands that plugins have registered
         private Dictionary<string, ChatCommand> chatCommands;
 
-        // A reference to the plugin removed callback
-        private Event.Callback<Plugin, PluginManager> removedFromManager;
+        // A reference to the plugin removed callbacks
+        private readonly Dictionary<Plugin, Event.Callback<Plugin, PluginManager>> pluginRemovedFromManager;
 
         /// <summary>
         /// Initializes a new instance of the Command class
@@ -57,6 +57,7 @@ namespace Oxide.Game.ReignOfKings.Libraries
         public Command()
         {
             chatCommands = new Dictionary<string, ChatCommand>();
+            pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
         }
 
         /// <summary>
@@ -96,7 +97,8 @@ namespace Oxide.Game.ReignOfKings.Libraries
             CommandManager.RegisteredCommands[command_name] = commandAttribute;
 
             // Hook the unload event
-            if (removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
+            if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
+                pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
         }
 
         private void HandleCommand(CommandInfo cmdInfo)
@@ -137,7 +139,12 @@ namespace Oxide.Game.ReignOfKings.Libraries
             }
 
             // Unhook the event
-            Event.Remove(ref removedFromManager);
+            Event.Callback<Plugin, PluginManager> event_callback;
+            if (pluginRemovedFromManager.TryGetValue(sender, out event_callback))
+            {
+                event_callback.Remove();
+                pluginRemovedFromManager.Remove(sender);
+            }
         }
     }
 }

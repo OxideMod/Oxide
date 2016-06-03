@@ -72,8 +72,8 @@ namespace Oxide.Game.HideHoldOut.Libraries
         // All chat commands that plugins have registered
         private readonly Dictionary<string, ChatCommand> chatCommands;
 
-        // A reference to the plugin removed callback
-        private Event.Callback<Plugin, PluginManager> removedFromManager;
+        // A reference to the plugin removed callbacks
+        private readonly Dictionary<Plugin, Event.Callback<Plugin, PluginManager>> pluginRemovedFromManager;
 
         /// <summary>
         /// Initializes a new instance of the Command class
@@ -82,6 +82,7 @@ namespace Oxide.Game.HideHoldOut.Libraries
         {
             consoleCommands = new Dictionary<string, ConsoleCommand>();
             chatCommands = new Dictionary<string, ChatCommand>();
+            pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
         }
 
         /// <summary>
@@ -94,7 +95,8 @@ namespace Oxide.Game.HideHoldOut.Libraries
         public void AddConsoleCommand(string name, Plugin plugin, string callbackName)
         {
             // Hook the unload event
-            if (plugin && removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
+            if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
+                pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
 
             var fullName = name.Trim();
             ConsoleCommand cmd;
@@ -140,7 +142,8 @@ namespace Oxide.Game.HideHoldOut.Libraries
             chatCommands[commandName] = cmd;
 
             // Hook the unload event
-            if (plugin && removedFromManager == null) removedFromManager = plugin?.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
+            if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
+                pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
         }
 
         /// <summary>
@@ -188,7 +191,12 @@ namespace Oxide.Game.HideHoldOut.Libraries
             foreach (var cmd in chatCommands.Values.Where(c => c.Plugin == sender).ToArray()) chatCommands.Remove(cmd.Name);
 
             // Unhook the event
-            Event.Remove(ref removedFromManager);
+            Event.Callback<Plugin, PluginManager> event_callback;
+            if (pluginRemovedFromManager.TryGetValue(sender, out event_callback))
+            {
+                event_callback.Remove();
+                pluginRemovedFromManager.Remove(sender);
+            }
         }
     }
 }
