@@ -16,6 +16,8 @@ namespace Oxide.Core.Libraries
 
         internal static Queue<TimerInstance> PooledInstances = new Queue<TimerInstance>();
 
+        internal static readonly object Lock = new object();
+
         private readonly Thread mainThread = Thread.CurrentThread;
 
         public class TimeSlot
@@ -202,11 +204,14 @@ namespace Oxide.Core.Libraries
             /// </summary>
             public bool Destroy()
             {
-                if (Destroyed) return false;
-                Destroyed = true;
-                Remove();
-                Count--;
+                lock (Lock)
+                {
+                    if (Destroyed) return false;
+                    Destroyed = true;
+                    Remove();
+                }
                 Event.Remove(ref removedFromManager);
+                Count--;
                 return true;
             }
 
@@ -244,8 +249,12 @@ namespace Oxide.Core.Libraries
                     var error_message = $"Failed to run a {Delay:0.00} timer";
                     if (Owner && Owner != null) error_message += $" in '{Owner.Name} v{Owner.Version}'";
                     Interface.Oxide.LogException(error_message, ex);
+                    return;
                 }
-                Owner?.TrackEnd();
+                finally
+                {
+                    Owner?.TrackEnd();
+                }
 
                 if (Repetitions > 0)
                 {
@@ -339,20 +348,23 @@ namespace Oxide.Core.Libraries
             var slots_remaining = (int)((now - last_update_at) / TickDuration);
             var checked_slots = 0;
 
-            while (true)
+            lock (Lock)
             {
-                var current_slot = currentSlot;
-                time_slots[current_slot].Update(now);
+                while (true)
+                {
+                    var current_slot = currentSlot;
+                    time_slots[current_slot].Update(now);
 
-                // Only move to the next slot once real time is out of the current slot so that the current slot is rechecked each frame
-                if (--slots_remaining < 0) break;
+                    // Only move to the next slot once real time is out of the current slot so that the current slot is rechecked each frame
+                    if (--slots_remaining < 0) break;
 
-                checked_slots++;
+                    checked_slots++;
 
-                if (current_slot < LastTimeSlot)
-                    currentSlot = current_slot + 1;
-                else
-                    currentSlot = 0;
+                    if (current_slot < LastTimeSlot)
+                        currentSlot = current_slot + 1;
+                    else
+                        currentSlot = 0;
+                }
             }
 
             if (checked_slots > 0)
@@ -396,7 +408,7 @@ namespace Oxide.Core.Libraries
                 index = current_slot < LastTimeSlot ? current_slot + 1 : 0;
             else
                 index = (int)(timer.ExpiresAt / TickDuration) % MaxTimeSlots;
-            timeSlots[index].InsertTimer(timer);
+            lock (Lock) timeSlots[index].InsertTimer(timer);
         }
 
         /// <summary>

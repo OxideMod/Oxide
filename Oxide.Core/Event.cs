@@ -6,8 +6,6 @@ namespace Oxide.Core
     public class Event
     {
         public delegate void Action<in T1, in T2, in T3, in T4, in T5>(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4);
-
-        //internal static Queue<Callback> PooledCallbacks = new Queue<Callback>();
         
         public static void Remove(ref Callback callback)
         {
@@ -88,14 +86,11 @@ namespace Oxide.Core
                 }
                 Invoke = null;
                 Handler = null;
-                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T>
         {
-            //internal static Queue<Callback<T>> PooledCallbacks = new Queue<Callback<T>>();
-
             public Action<T> Invoke;
             internal Callback<T> Previous;
             internal Callback<T> Next;
@@ -131,23 +126,16 @@ namespace Oxide.Core
                 }
                 Invoke = null;
                 Handler = null;
-                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2>
         {
-            //internal static Queue<Callback<T1, T2>> PooledCallbacks = new Queue<Callback<T1, T2>>();
-
-            //internal static int nextNumber = 1;
-
             public Action<T1, T2> Invoke;
             internal Callback<T1, T2> Previous;
             internal Callback<T1, T2> Next;
             internal Event<T1, T2> Handler;
-
-            //internal int number;
-
+            
             public Callback(Action<T1, T2> callback)
             {
                 Invoke = callback;
@@ -184,14 +172,11 @@ namespace Oxide.Core
                 }
                 Invoke = null;
                 Handler = null;
-                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2, T3>
         {
-            //internal static Queue<Callback<T1, T2, T3>> PooledCallbacks = new Queue<Callback<T1, T2, T3>>();
-
             public Action<T1, T2, T3> Invoke;
             internal Callback<T1, T2, T3> Previous;
             internal Callback<T1, T2, T3> Next;
@@ -227,14 +212,11 @@ namespace Oxide.Core
                 }
                 Invoke = null;
                 Handler = null;
-                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2, T3, T4>
         {
-            //internal static Queue<Callback<T1, T2, T3, T4>> PooledCallbacks = new Queue<Callback<T1, T2, T3, T4>>();
-
             public Action<T1, T2, T3, T4> Invoke;
             internal Callback<T1, T2, T3, T4> Previous;
             internal Callback<T1, T2, T3, T4> Next;
@@ -270,14 +252,11 @@ namespace Oxide.Core
                 }
                 Invoke = null;
                 Handler = null;
-                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
         public class Callback<T1, T2, T3, T4, T5>
         {
-            //internal static Queue<Callback<T1, T2, T3, T4, T5>> PooledCallbacks = new Queue<Callback<T1, T2, T3, T4, T5>>();
-
             public Action<T1, T2, T3, T4, T5> Invoke;
             internal Callback<T1, T2, T3, T4, T5> Previous;
             internal Callback<T1, T2, T3, T4, T5> Next;
@@ -313,7 +292,6 @@ namespace Oxide.Core
                 }
                 Invoke = null;
                 Handler = null;
-                //if (PooledCallbacks.Count < 1024) PooledCallbacks.Enqueue(this);
             }
         }
 
@@ -321,47 +299,45 @@ namespace Oxide.Core
         public Callback First;
         public Callback Last;
 
+        internal object Lock = new object();
+
         public void Add(Callback callback)
         {
             callback.Handler = this;
-            var last = Last;
-            if (last == null)
+            lock (Lock)
             {
-                First = callback;
-                Last = callback;
-            }
-            else
-            {
-                last.Next = callback;
-                callback.Previous = last;
-                Last = callback;
+                var last = Last;
+                if (last == null)
+                {
+                    First = callback;
+                    Last = callback;
+                }
+                else
+                {
+                    last.Next = callback;
+                    callback.Previous = last;
+                    Last = callback;
+                }
             }
         }
 
         public Callback Add(Action callback)
         {
-            Callback event_callback;
-            /*var pooled_callbacks = PooledCallbacks;
-            if (pooled_callbacks.Count > 0)
-            {
-                event_callback = pooled_callbacks.Dequeue();
-                event_callback.Invoke = callback;
-            }
-            else*/
-            {
-                event_callback = new Callback(callback);
-            }
+            var event_callback = new Callback(callback);
             Add(event_callback);
             return event_callback;
         }
 
         public void Invoke()
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke();
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke();
+                    callback = callback.Next;
+                }
             }
         }
     }
@@ -371,47 +347,45 @@ namespace Oxide.Core
         public Event.Callback<T> First;
         public Event.Callback<T> Last;
 
+        internal object Lock = new object();
+
         public void Add(Event.Callback<T> callback)
         {
             callback.Handler = this;
-            var last = Last;
-            if (last == null)
+            lock (Lock)
             {
-                First = callback;
-                Last = callback;
-            }
-            else
-            {
-                last.Next = callback;
-                callback.Previous = last;
-                Last = callback;
+                var last = Last;
+                if (last == null)
+                {
+                    First = callback;
+                    Last = callback;
+                }
+                else
+                {
+                    last.Next = callback;
+                    callback.Previous = last;
+                    Last = callback;
+                }
             }
         }
 
         public Event.Callback<T> Add(Action<T> callback)
         {
-            Event.Callback<T> event_callback;
-            /*var pooled_callbacks = Event.Callback<T>.PooledCallbacks;
-            if (pooled_callbacks.Count > 0)
-            {
-                event_callback = pooled_callbacks.Dequeue();
-                event_callback.Invoke = callback;
-            }
-            else*/
-            {
-                event_callback = new Event.Callback<T>(callback);
-            }
+            var event_callback = new Event.Callback<T>(callback);
             Add(event_callback);
             return event_callback;
         }
 
         public void Invoke(T arg0)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0);
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0);
+                    callback = callback.Next;
+                }
             }
         }
     }
@@ -421,68 +395,71 @@ namespace Oxide.Core
         public Event.Callback<T1, T2> First;
         public Event.Callback<T1, T2> Last;
 
+        internal object Lock = new object();
+
         public void Add(Event.Callback<T1, T2> callback)
         {
             callback.Handler = this;
-            var last = Last;
-            if (last == null)
+            lock (Lock)
             {
-                First = callback;
-                Last = callback;
-            }
-            else
-            {
-                last.Next = callback;
-                callback.Previous = last;
-                Last = callback;
+                var last = Last;
+                if (last == null)
+                {
+                    First = callback;
+                    Last = callback;
+                }
+                else
+                {
+                    last.Next = callback;
+                    callback.Previous = last;
+                    Last = callback;
+                }
             }
         }
 
         public Event.Callback<T1, T2> Add(Action<T1, T2> callback)
         {
-            Event.Callback<T1, T2> event_callback;
-            /*var pooled_callbacks = Event.Callback<T1, T2>.PooledCallbacks;
-            if (pooled_callbacks.Count > 0)
-            {
-                event_callback = pooled_callbacks.Dequeue();
-                event_callback.Invoke = callback;
-            }
-            else*/
-            {
-                event_callback = new Event.Callback<T1, T2>(callback);
-            }
-            //event_callback.number = Event.Callback<T1, T2>.nextNumber++;
+            var event_callback = new Event.Callback<T1, T2>(callback);
             Add(event_callback);
             return event_callback;
         }
         
         public void Invoke()
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(default(T1), default(T2));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(default(T1), default(T2));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, default(T2));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, default(T2));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1);
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1);
+                    callback = callback.Next;
+                }
             }
         }
     }
@@ -492,77 +469,84 @@ namespace Oxide.Core
         public Event.Callback<T1, T2, T3> First;
         public Event.Callback<T1, T2, T3> Last;
 
+        internal object Lock = new object();
+
         public void Add(Event.Callback<T1, T2, T3> callback)
         {
             callback.Handler = this;
-            var last = Last;
-            if (last == null)
+            lock (Lock)
             {
-                First = callback;
-                Last = callback;
-            }
-            else
-            {
-                last.Next = callback;
-                callback.Previous = last;
-                Last = callback;
+                var last = Last;
+                if (last == null)
+                {
+                    First = callback;
+                    Last = callback;
+                }
+                else
+                {
+                    last.Next = callback;
+                    callback.Previous = last;
+                    Last = callback;
+                }
             }
         }
 
         public Event.Callback<T1, T2, T3> Add(Action<T1, T2, T3> callback)
         {
-            Event.Callback<T1, T2, T3> event_callback;
-            /*var pooled_callbacks = Event.Callback<T1, T2, T3>.PooledCallbacks;
-            if (pooled_callbacks.Count > 0)
-            {
-                event_callback = pooled_callbacks.Dequeue();
-                event_callback.Invoke = callback;
-            }
-            else*/
-            {
-                event_callback = new Event.Callback<T1, T2, T3>(callback);
-            }
+            var event_callback = new Event.Callback<T1, T2, T3>(callback);
             Add(event_callback);
             return event_callback;
         }
 
         public void Invoke()
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke(default(T1), default(T2), default(T3));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke(default(T1), default(T2), default(T3));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, default(T2), default(T3));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, default(T2), default(T3));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, default(T3));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, default(T3));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1, T3 arg2)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, arg2);
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, arg2);
+                    callback = callback.Next;
+                }
             }
         }
     }
@@ -572,188 +556,210 @@ namespace Oxide.Core
         public Event.Callback<T1, T2, T3, T4> First;
         public Event.Callback<T1, T2, T3, T4> Last;
 
+        internal object Lock = new object();
+
         public void Add(Event.Callback<T1, T2, T3, T4> callback)
         {
             callback.Handler = this;
-            var last = Last;
-            if (last == null)
+            lock (Lock)
             {
-                First = callback;
-                Last = callback;
-            }
-            else
-            {
-                last.Next = callback;
-                callback.Previous = last;
-                Last = callback;
+                var last = Last;
+                if (last == null)
+                {
+                    First = callback;
+                    Last = callback;
+                }
+                else
+                {
+                    last.Next = callback;
+                    callback.Previous = last;
+                    Last = callback;
+                }
             }
         }
 
         public Event.Callback<T1, T2, T3, T4> Add(Action<T1, T2, T3, T4> callback)
         {
-            Event.Callback<T1, T2, T3, T4> event_callback;
-            /*var pooled_callbacks = Event.Callback<T1, T2, T3, T4>.PooledCallbacks;
-            if (pooled_callbacks.Count > 0)
-            {
-                event_callback = pooled_callbacks.Dequeue();
-                event_callback.Invoke = callback;
-            }
-            else*/
-            {
-                event_callback = new Event.Callback<T1, T2, T3, T4>(callback);
-            }
+            var event_callback = new Event.Callback<T1, T2, T3, T4>(callback);
             Add(event_callback);
             return event_callback;
         }
 
         public void Invoke()
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(default(T1), default(T2), default(T3), default(T4));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(default(T1), default(T2), default(T3), default(T4));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, default(T2), default(T3), default(T4));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, default(T2), default(T3), default(T4));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, default(T3), default(T4));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, default(T3), default(T4));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1, T3 arg2)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, arg2, default(T4));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, arg2, default(T4));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, arg2, arg3);
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, arg2, arg3);
+                    callback = callback.Next;
+                }
             }
         }
     }
-
-
+    
     public class Event<T1, T2, T3, T4, T5>
     {
         public Event.Callback<T1, T2, T3, T4, T5> First;
         public Event.Callback<T1, T2, T3, T4, T5> Last;
 
+        internal object Lock = new object();
+
         public void Add(Event.Callback<T1, T2, T3, T4, T5> callback)
         {
             callback.Handler = this;
-            var last = Last;
-            if (last == null)
+            lock (Lock)
             {
-                First = callback;
-                Last = callback;
-            }
-            else
-            {
-                last.Next = callback;
-                callback.Previous = last;
-                Last = callback;
+                var last = Last;
+                if (last == null)
+                {
+                    First = callback;
+                    Last = callback;
+                }
+                else
+                {
+                    last.Next = callback;
+                    callback.Previous = last;
+                    Last = callback;
+                }
             }
         }
 
         public Event.Callback<T1, T2, T3, T4, T5> Add(Event.Action<T1, T2, T3, T4, T5> callback)
         {
-            Event.Callback<T1, T2, T3, T4, T5> event_callback;
-            /*var pooled_callbacks = Event.Callback<T1, T2, T3, T4, T5>.PooledCallbacks;
-            if (pooled_callbacks.Count > 0)
-            {
-                event_callback = pooled_callbacks.Dequeue();
-                event_callback.Invoke = callback;
-            }
-            else*/
-            {
-                event_callback = new Event.Callback<T1, T2, T3, T4, T5>(callback);
-            }
+            var event_callback = new Event.Callback<T1, T2, T3, T4, T5>(callback);
             Add(event_callback);
             return event_callback;
         }
 
         public void Invoke()
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(default(T1), default(T2), default(T3), default(T4), default(T5));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(default(T1), default(T2), default(T3), default(T4), default(T5));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, default(T2), default(T3), default(T4), default(T5));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, default(T2), default(T3), default(T4), default(T5));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, default(T3), default(T4), default(T5));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, default(T3), default(T4), default(T5));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1, T3 arg2)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, arg2, default(T4), default(T5));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, arg2, default(T4), default(T5));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, arg2, arg3, default(T5));
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, arg2, arg3, default(T5));
+                    callback = callback.Next;
+                }
             }
         }
 
         public void Invoke(T1 arg0, T2 arg1, T3 arg2, T4 arg3, T5 arg4)
         {
-            var callback = First;
-            while (callback != null)
+            lock (Lock)
             {
-                callback.Invoke?.Invoke(arg0, arg1, arg2, arg3, arg4);
-                callback = callback.Next;
+                var callback = First;
+                while (callback != null)
+                {
+                    callback.Invoke?.Invoke(arg0, arg1, arg2, arg3, arg4);
+                    callback = callback.Next;
+                }
             }
         }
     }
