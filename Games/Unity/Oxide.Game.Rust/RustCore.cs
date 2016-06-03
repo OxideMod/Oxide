@@ -346,7 +346,7 @@ namespace Oxide.Game.Rust
                 if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
 
                 // Add player to group based on auth level
-                if (authLevel >= 2 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
+                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
             }
 
             // Cache serverInput for player so that reflection only needs to be used once
