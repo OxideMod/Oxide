@@ -9,7 +9,6 @@ using CodeHatch.Common;
 using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
-using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -155,51 +154,7 @@ namespace Oxide.Game.ReignOfKings
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", DedicatedServerBypass.Settings.ServerName);
 
-            // Configure server console window and status bars
-            if (Interface.Oxide.ServerConsole != null)
-            {
-                Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount} | {DedicatedServerBypass.Settings.ServerName}";
-                Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerBypass.Settings.ServerName}";
-                Interface.Oxide.ServerConsole.Status1Right = () =>
-                {
-                    var fps = Mathf.RoundToInt(1f / UnityEngine.Time.smoothDeltaTime);
-                    var seconds = TimeSpan.FromSeconds(UnityEngine.Time.realtimeSinceStartup);
-                    var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                    return string.Concat(fps, "fps, ", uptime);
-                };
-                Interface.Oxide.ServerConsole.Status2Left = () =>
-                {
-                    var sleepersCount = CodeHatch.StarForge.Sleeping.PlayerSleeperObject.AllSleeperObjects.Count;
-                    var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
-                    var entitiesCount = CodeHatch.Engine.Core.Cache.Entity.GetAll().Count;
-                    var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
-                    return $" {Server.PlayerCount}/{Server.PlayerLimit} players, {sleepers}, {entities}";
-                };
-                Interface.Oxide.ServerConsole.Status2Right = () =>
-                {
-                    if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
-                    double bytesSent = 0;
-                    double bytesReceived = 0;
-                    foreach (var player in Server.AllPlayers)
-                    {
-                        if (!player.Connection.IsConnected) continue;
-                        var statistics = player.Connection.Statistics;
-                        bytesSent += statistics.BytesSentPerSecond;
-                        bytesReceived += statistics.BytesReceivedPerSecond;
-                    }
-                    return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
-                };
-                Interface.Oxide.ServerConsole.Status3Left = () =>
-                {
-                    var gameTime = GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown";
-                    var weather = Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown";
-                    return $" {gameTime}, Weather: {weather}";
-                };
-                Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameInfo.VersionString} ({GameInfo.VersionName})";
-                Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
-            }
-
-            // Load default permission groups
+            // Setup the default permission groups
             rokPerms = Server.Permissions;
             if (permission.IsLoaded)
             {
@@ -219,6 +174,9 @@ namespace Oxide.Game.ReignOfKings
                 });
                 permission.CleanUp();
             }
+
+            // Update server console window and status bars
+            ReignOfKingsExtension.ServerConsole();
         }
 
         /// <summary>
@@ -310,8 +268,7 @@ namespace Oxide.Game.ReignOfKings
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString());
-            return Interface.CallHook("OnUserChat", iplayer, evt.Message);
+            return Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -344,8 +301,7 @@ namespace Oxide.Game.ReignOfKings
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(player);
-            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
-            Interface.CallHook("OnUserConnected", iplayer);
+            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()));
         }
 
         /// <summary>
@@ -361,33 +317,30 @@ namespace Oxide.Game.ReignOfKings
             Interface.CallHook("OnPlayerDisconnected", player);
 
             // Let covalence know
-            var iplayer = covalence.PlayerManager.GetPlayer(player.Id.ToString());
-            Interface.CallHook("OnUserDisconnected", iplayer);
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()));
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
         /// <summary>
-        /// Called when the player spawns
+        /// Called when the player is spawning
         /// </summary>
         /// <param name="evt"></param>
         [HookMethod("OnPlayerSpawn")]
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString());
-            Interface.CallHook("OnUserSpawn", iplayer);
+            Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
         }
 
         /// <summary>
-        /// Called when the player respawns
+        /// Called when the player is respawning
         /// </summary>
         /// <param name="evt"></param>
         [HookMethod("OnPlayerRespawn")]
         private void OnPlayerRespawn(PlayerRespawnEvent evt)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString());
-            Interface.CallHook("OnUserRespawn", iplayer);
+            Interface.CallHook("OnUserRespawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
         }
 
         #endregion

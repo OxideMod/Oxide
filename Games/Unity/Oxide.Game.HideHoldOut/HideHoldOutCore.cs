@@ -226,6 +226,9 @@ namespace Oxide.Game.HideHoldOut
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", NetworkController.NetManager_.ServManager.Server_NAME);
+
+            // Update server console window and status bars
+            HideHoldOutExtension.ServerConsole();
         }
 
         /// <summary>
@@ -1007,7 +1010,7 @@ namespace Oxide.Game.HideHoldOut
         }
 
         /// <summary>
-        /// Replies to the player with a specific message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="player"></param>
@@ -1028,7 +1031,7 @@ namespace Oxide.Game.HideHoldOut
         /// <param name="key"></param>
         /// <param name="id"></param>
         /// <param name="args"></param>
-        string Lang(string key, string id = null, params object[] args) => string.Format(lang.GetMessage(key, this, id), args);
+        private string Lang(string key, string id = null, params object[] args) => string.Format(lang.GetMessage(key, this, id), args);
 
         /// <summary>
         /// Returns the PlayerInfos for the specified name, ID, or IP address string

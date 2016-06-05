@@ -10,7 +10,7 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "Servers/{secureserver}/Oxide",
-        "Oxide"
+        "Servers/{secureserver}/oxide",
+        "oxide"
     ]
 }

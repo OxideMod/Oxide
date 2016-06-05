@@ -1,6 +1,7 @@
 ﻿using System;
 
-using Sandbox.Common;
+using Sandbox.Engine.Multiplayer;
+using Sandbox.Game;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -30,7 +31,7 @@ namespace Oxide.Game.SpaceEngineers
         {
             // Set attributes
             Name = "SpaceEngineersCore";
-            Title = "Space Engineers Core";
+            Title = "Space Engineers";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
         }
@@ -55,8 +56,8 @@ namespace Oxide.Game.SpaceEngineers
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "space engineers");
-            RemoteLogger.SetTag("version", MyFinalBuildConstants.APP_VERSION.ToString());
+            RemoteLogger.SetTag("game", Title.ToLower());
+            RemoteLogger.SetTag("version", MyPerGameSettings.BasicGameInfo.GameVersion.ToString());
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -103,7 +104,10 @@ namespace Oxide.Game.SpaceEngineers
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            //RemoteLogger.SetTag("hostname", MyDedicatedServerBase.HostName); // TODO
+            RemoteLogger.SetTag("hostname", MyMultiplayer.Static?.HostName);
+
+            // Update server console window and status bars
+            SpaceEngineersExtension.ServerConsole();
         }
 
         /// <summary>

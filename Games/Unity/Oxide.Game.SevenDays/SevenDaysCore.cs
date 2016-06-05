@@ -28,7 +28,7 @@ namespace Oxide.Game.SevenDays
         {
             // Set attributes
             Name = "SevenDaysCore";
-            Title = "Seven Days Core";
+            Title = "7 Days to Die";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -56,7 +56,7 @@ namespace Oxide.Game.SevenDays
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "7 days to die");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", GamePrefs.GetString(EnumGamePrefs.GameVersion));
 
             // Setup the default permission groups
@@ -105,6 +105,9 @@ namespace Oxide.Game.SevenDays
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
+
+            // Update server console window and status bars
+            SevenDaysExtension.ServerConsole();
         }
 
         /// <summary>

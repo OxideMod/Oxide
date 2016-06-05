@@ -63,8 +63,8 @@ namespace Oxide.Game.Nomad
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -77,30 +77,24 @@ namespace Oxide.Game.Nomad
 
             // TODO: Add console log handling
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                var players = 0; // TODO
-                var hostname = NomadCore.CommandLine.GetVariable("name");
-                return string.Concat(players, " | ", hostname);
-            };
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = NomadCore.CommandLine.GetVariable("name");
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"? | {NomadCore.CommandLine.GetVariable("name")}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {NomadCore.CommandLine.GetVariable("name")}";
             /*Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Main.fpsCount; // Main.fpsTimer
+                var fps = Main.fpsCount;
                 var seconds = TimeSpan.FromSeconds(Main.time);
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = Main.numPlayers; // Main.player.Count, NetPlay.Clients.Count
+                var players = Main.numPlayers;
                 var playerLimit = Main.maxNetPlayers;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };
@@ -110,11 +104,9 @@ namespace Oxide.Game.Nomad
                 var bytesSent = Utility.FormatBytes(Main.txData);
                 return Main.time <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out");
             };
-
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
-                // TODO: More info
                 return string.Concat(" ", time);
             };*/
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {NomadCore.CommandLine.GetVariable("clientVersion")}";
@@ -124,18 +116,6 @@ namespace Oxide.Game.Nomad
         private static void ServerConsoleOnInput(string input)
         {
             // TODO: Handle console input
-        }
-
-        private void HandleLog(string message, string stackTrace, LogType type)
-        {
-            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
-
-            var color = ConsoleColor.Gray;
-            if (type == LogType.Warning)
-                color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
-                color = ConsoleColor.Red;
-            Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
 }

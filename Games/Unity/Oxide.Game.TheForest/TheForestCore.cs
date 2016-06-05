@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using Ceto;
-using ScionEngine;
 using Steamworks;
-using TheForest.Player;
 using TheForest.UI;
 using TheForest.Utils;
 using UnityEngine;
@@ -72,7 +70,7 @@ namespace Oxide.Game.TheForest
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "the forest");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", "0.39b"); // TODO: Grab version progmatically
 
             // Setup the default permission groups
@@ -125,6 +123,9 @@ namespace Oxide.Game.TheForest
             // Disable client-side elements if not dedicated
             if (TheForestExtension.DisableClient) DisableClient();
 
+            // Update server console window and status bars
+            TheForestExtension.ServerConsole();
+
             // Save the level every X minutes
             Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
         }
@@ -147,8 +148,8 @@ namespace Oxide.Game.TheForest
         private void OnPlayerConnected(BoltConnection connection)
         {
             if (connection == null) return;
-            var userId = connection.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(userId));
+            var id = connection.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
 
             // Let covalence know
             //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(connection);
@@ -156,13 +157,13 @@ namespace Oxide.Game.TheForest
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                permission.UpdateNickname(userId.ToString(), name);
+                permission.UpdateNickname(id.ToString(), name);
 
                 // Add player to default group
-                if (!permission.UserHasAnyGroup(userId.ToString())) permission.AddUserGroup(userId.ToString(), DefaultGroups[0]);
+                if (!permission.UserHasGroup(id.ToString(), DefaultGroups[0])) permission.AddUserGroup(id.ToString(), DefaultGroups[0]);
             }
 
-            Debug.Log($"{userId}/{name} joined");
+            Debug.Log($"{id}/{name} joined");
         }
 
         /// <summary>
@@ -174,13 +175,13 @@ namespace Oxide.Game.TheForest
         {
             if (connection == null) return;
 
-            var userId = connection.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(userId));
+            var id = connection.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
 
             // Let covalence know
             //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(connection);
 
-            Debug.Log($"{userId}/{name} quit");
+            Debug.Log($"{id}/{name} quit");
         }
 
         /// <summary>
@@ -193,8 +194,8 @@ namespace Oxide.Game.TheForest
             var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
             if (player == null) return;
 
-            var userId = player.source.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(userId));
+            var id = player.source.RemoteEndPoint.SteamId.Id;
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
 
             Debug.Log($"[Chat] {name}: {evt.Message}");
         }

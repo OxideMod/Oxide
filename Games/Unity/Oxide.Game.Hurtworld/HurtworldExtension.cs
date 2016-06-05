@@ -5,6 +5,7 @@ using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.ServerConsole;
 using Oxide.Game.Hurtworld.Libraries;
 
 namespace Oxide.Game.Hurtworld
@@ -97,8 +98,8 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -111,20 +112,21 @@ namespace Oxide.Game.Hurtworld
 
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 if (GameManager.Instance == null) return string.Empty;
-                var players = GameManager.Instance.GetPlayerCount();
-                var hostname = GameManager.Instance.ServerConfig.GameName;
-                return string.Concat(players, " | ", hostname);
+                return $"{GameManager.Instance.GetPlayerCount()} | {GameManager.Instance.ServerConfig.GameName}";
             };
-
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
                 if (GameManager.Instance == null) return string.Empty;
-                var hostname = GameManager.Instance.ServerConfig.GameName;
-                return string.Concat(" ", hostname);
+                return $" {GameManager.Instance.ServerConfig.GameName}";
             };
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
@@ -133,13 +135,10 @@ namespace Oxide.Game.Hurtworld
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 if (GameManager.Instance == null) return string.Empty;
-                var players = GameManager.Instance.GetPlayerCount();
-                var playerLimit = GameManager.Instance.ServerConfig.MaxPlayers;
-                return string.Concat(" ", players, "/", playerLimit, " players");
+                return $" {GameManager.Instance.GetPlayerCount()}/{GameManager.Instance.ServerConfig.MaxPlayers} players";
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
@@ -155,7 +154,6 @@ namespace Oxide.Game.Hurtworld
                 }
                 return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
             };
-
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = TimeManager.Instance.GetCurrentGameTime();
@@ -163,7 +161,10 @@ namespace Oxide.Game.Hurtworld
                 var map = GameManager.Instance?.ServerConfig?.Map ?? "Unknown";
                 return string.Concat(" ", gameTime, ", ", map);
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})";
+            Interface.Oxide.ServerConsole.Status3Right = () =>
+            {
+                return $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})";
+            };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
@@ -179,7 +180,7 @@ namespace Oxide.Game.Hurtworld
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

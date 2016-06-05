@@ -27,8 +27,14 @@ namespace Oxide.Game.InterstellarRift
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "mscorlib", "Oxide.Core", "System", "System.Core" };
-        public override string[] WhitelistNamespaces => new[] { "System.Collections", "System.Security.Cryptography", "System.Text" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "mscorlib", "Oxide.Core", "System", "System.Core"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "System.Collections", "System.Security.Cryptography", "System.Text"
+        };
 
         public static string[] Filter =
         {
@@ -57,8 +63,8 @@ namespace Oxide.Game.InterstellarRift
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -70,19 +76,15 @@ namespace Oxide.Game.InterstellarRift
             if (!Interface.Oxide.EnableConsole()) return;
 
             // TODO: Add console log handling
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                var players = string.Empty; // TODO
-                var hostname = Config.Singleton.ServerName;
-                return string.Concat(players, " | ", hostname);
-            };
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = Config.Singleton.ServerName;
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"? | {Config.Singleton.ServerName}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {Config.Singleton.ServerName}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = string.Empty; // TODO
@@ -90,32 +92,24 @@ namespace Oxide.Game.InterstellarRift
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
-            Interface.Oxide.ServerConsole.Status2Left = () =>
+            /*Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = string.Empty; // TODO
                 var playerLimit = string.Empty; // TODO
                 return string.Concat(" ", players, "/", playerLimit, " players");
-            };
+            };*/
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(0); // TODO
                 var bytesSent = Utility.FormatBytes(0); // TODO
                 return null <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out"); // TODO
             };*/
-
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(0)).ToString("h:mm tt").ToLower(); // TODO
-                // TODO: More info
-                return string.Concat(" ", time);
+                return string.Concat(" ", time); // TODO: More info
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = Globals.Version;
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Globals.Version}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 

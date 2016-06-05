@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 
 using Facepunch;
+using Network;
+using Rust;
 using UnityEngine;
 
 using Oxide.Core;
@@ -154,8 +156,8 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -167,7 +169,6 @@ namespace Oxide.Game.Rust
             if (!Interface.Oxide.EnableConsole()) return;
 
             Output.OnMessage += HandleLog;
-
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Completion = input =>
             {
@@ -175,6 +176,39 @@ namespace Oxide.Game.Rust
                 if (!input.Contains(".")) input = string.Concat("global.", input);
                 return ConsoleSystem.Index.GetAll().Where(c => c.namefull.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.namefull).ToArray();
             };
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
+
+            Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {ConVar.Server.hostname}";
+            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)UnityEngine.Time.realtimeSinceStartup)}";
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var players = BasePlayer.activePlayerList.Count;
+                var playerLimit = ConVar.Server.maxplayers;
+                var sleeperCount = BasePlayer.sleepingPlayerList.Count;
+                var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
+                var entitiesCount = BaseNetworkable.serverEntities.Count;
+                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
+                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
+                var inbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
+                var outbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
+                return string.Concat(inbound, "/s in, ", outbound, "/s out");
+            };
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
+                return $" {gameTime}, {ConVar.Server.level} [{ConVar.Server.worldsize}, {ConVar.Server.seed}]";
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.network})";
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)
@@ -197,7 +231,7 @@ namespace Oxide.Game.Rust
                 color = ConsoleColor.Red;
                 ConVar.Server.Log("Log.Error.txt", message);
             }
-            else if (type == LogType.Exception || type == LogType.Assert)
+            else if (type == LogType.Exception)
             {
                 color = ConsoleColor.Red;
                 ConVar.Server.Log("Log.Exception.txt", message);

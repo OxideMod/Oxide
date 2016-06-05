@@ -63,8 +63,8 @@ namespace Oxide.Game.Terraria
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -76,10 +76,15 @@ namespace Oxide.Game.Terraria
             if (!Interface.Oxide.EnableConsole()) return;
 
             // TODO: Add console log handling
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{Main.numPlayers} | {Main.worldName}";
-
-            Interface.Oxide.ServerConsole.Status1Left = () => Main.worldName;
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {Main.worldName}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Main.fpsCount; // Main.fpsTimer
@@ -90,7 +95,7 @@ namespace Oxide.Game.Terraria
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = Main.numPlayers; // Main.player.Count, NetPlay.Clients.Count
+                var players = Main.numPlayers;
                 var playerLimit = Main.maxNetPlayers;
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };

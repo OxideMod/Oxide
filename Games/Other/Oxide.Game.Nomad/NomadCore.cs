@@ -31,7 +31,7 @@ namespace Oxide.Game.Nomad
         {
             // Set attributes
             Name = "NomadCore";
-            Title = "Nomad Core";
+            Title = "Nomad";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
         }
@@ -56,7 +56,7 @@ namespace Oxide.Game.Nomad
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "nomad");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", CommandLine.GetVariable("clientVersion"));
 
             // Setup the default permission groups
@@ -105,6 +105,9 @@ namespace Oxide.Game.Nomad
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", CommandLine.GetVariable("name"));
+
+            // Update server console window and status bars
+            NomadExtension.ServerConsole();
         }
 
         /// <summary>

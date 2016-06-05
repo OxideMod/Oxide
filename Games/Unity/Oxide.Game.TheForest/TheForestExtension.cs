@@ -139,8 +139,8 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -149,23 +149,23 @@ namespace Oxide.Game.TheForest
         /// </summary>
         public override void OnModLoad()
         {
-            if (!Interface.Oxide.EnableConsole()) return;
+            // Override default server settings
+            var commandLine = new CommandLine(Environment.GetCommandLineArgs());
+            if (commandLine.HasVariable("maxplayers")) PlayerPrefs.SetInt("MpGamePlayerCount", int.Parse(commandLine.GetVariable("maxplayers")));
+            if (commandLine.HasVariable("hostname")) PlayerPrefs.SetString("MpGameName", commandLine.GetVariable("hostname"));
+            if (commandLine.HasVariable("friendsonly")) PlayerPrefs.SetInt("MpGameFriendsOnly", int.Parse(commandLine.GetVariable("friendsonly")));
+            if (commandLine.HasVariable("saveslot")) PlayerPrefs.SetInt("MpGameSaveSlot", int.Parse(commandLine.GetVariable("saveslot")));
+            //if (commandLine.HasVariable("saveinterval")) // TODO: Make this work
 
             if (File.Exists(logFileName)) File.Delete(logFileName);
             var logStream = File.AppendText(logFileName);
             logStream.AutoFlush = true;
             logWriter = TextWriter.Synchronized(logStream);
 
-            Application.logMessageReceivedThreaded += HandleLog;
-            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            // Limit FPS to reduce CPU usage
+            PlayerPreferences.MaxFrameRate = 60;
 
-            // Override default server settings
-            var commandLine = new CommandLine(Environment.GetCommandLineArgs());
-            if (commandLine.HasVariable("maxplayers")) PlayerPrefs.SetInt("MpGamePlayerCount", int.Parse(commandLine.GetVariable("maxplayers")));
-            if (commandLine.HasVariable("hostname")) PlayerPrefs.SetString("MpGameName", commandLine.GetVariable("hostname"));
-            if (commandLine.HasVariable("friendsonly"))  PlayerPrefs.SetInt("MpGameFriendsOnly", int.Parse(commandLine.GetVariable("friendsonly")));
-            if (commandLine.HasVariable("saveslot")) PlayerPrefs.SetInt("MpGameSaveSlot", int.Parse(commandLine.GetVariable("saveslot")));
-            //if (commandLine.HasVariable("saveinterval")) // TODO: Make this work
+            if (!Interface.Oxide.EnableConsole()) return;
 
             // Check if client should be disabled
             if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics")) DisableClient = true;
@@ -173,12 +173,16 @@ namespace Oxide.Game.TheForest
             // Disable client's sound if not dedicated
             if (DisableClient) TheForestCore.DisableAudio();
 
-            // Limit FPS to reduce CPU usage
-            PlayerPreferences.MaxFrameRate = 60;
+            Application.logMessageReceivedThreaded += HandleLog;
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{CoopLobby.Instance?.MemberCount ?? 0} | {CoopLobby.Instance?.Info?.Name ?? "Unnamed"}";
-
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", CoopLobby.Instance?.Info?.Name ?? "Unnamed");
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {CoopLobby.Instance?.Info?.Name ?? "Unnamed"}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -186,17 +190,11 @@ namespace Oxide.Game.TheForest
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () => $" {CoopLobby.Instance?.MemberCount}/{CoopLobby.Instance?.Info?.MemberLimit}";
-            Interface.Oxide.ServerConsole.Status2Right = () =>
-            {
-                // TODO: Network in/out
-                return string.Empty;
-            };
-
+            Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                return string.Concat(" ", TheForestAtmosphere.Instance?.TimeOfDay.ToString() ?? string.Empty); // TODO: Format time
+                return $" {TheForestAtmosphere.Instance?.TimeOfDay.ToString() ?? string.Empty}"; // TODO: Format time
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for 0.39b";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
@@ -218,7 +216,7 @@ namespace Oxide.Game.TheForest
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

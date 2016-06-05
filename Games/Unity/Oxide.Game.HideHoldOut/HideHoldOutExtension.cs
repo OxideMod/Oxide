@@ -85,8 +85,8 @@ namespace Oxide.Game.HideHoldOut
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -99,19 +99,14 @@ namespace Oxide.Game.HideHoldOut
 
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                var players = uLink.Network.connections.Length;
-                var hostname = NetworkController.NetManager_.ServManager.Server_NAME;
-                return string.Concat(players, " | ", hostname);
-            };
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = NetworkController.NetManager_.ServManager.Server_NAME;
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"{uLink.Network.connections.Length} | {NetworkController.NetManager_.ServManager.Server_NAME}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {NetworkController.NetManager_.ServManager.Server_NAME}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -119,12 +114,9 @@ namespace Oxide.Game.HideHoldOut
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = uLink.Network.connections.Length;
-                var playerLimit = NetworkController.NetManager_.ServManager.NumberOfSlot;
-                return string.Concat(" ", players, "/", playerLimit, " players");
+                return $" {uLink.Network.connections.Length}/{NetworkController.NetManager_.ServManager.NumberOfSlot} players";
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
@@ -140,19 +132,12 @@ namespace Oxide.Game.HideHoldOut
                 }
                 return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
             };
-
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(NetworkController.NetManager_.TimeManager.TIME_display)).ToString("h:mm tt").ToLower();
-                var map = "Unknown";
-                return string.Concat(" ", time, ", ", map);
+                return $" {time}, Unknown map";
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = NetworkController.NetManager_.get_GAME_VERSION;
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {NetworkController.NetManager_.get_GAME_VERSION}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
@@ -168,7 +153,7 @@ namespace Oxide.Game.HideHoldOut
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

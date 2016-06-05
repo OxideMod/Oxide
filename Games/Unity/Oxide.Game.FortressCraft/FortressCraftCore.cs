@@ -28,7 +28,7 @@ namespace Oxide.Game.FortressCraft
         {
             // Set attributes
             Name = "FortressCraftCore";
-            Title = "FortressCraft Core";
+            Title = "FortressCraft";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -56,7 +56,7 @@ namespace Oxide.Game.FortressCraft
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "fortresscraft");
+            RemoteLogger.SetTag("game", Title.ToLower());
             //RemoteLogger.SetTag("version", ); // TODO
 
             // Setup the default permission groups
@@ -105,6 +105,9 @@ namespace Oxide.Game.FortressCraft
 
             // Configure the hostname after it has been set
             //RemoteLogger.SetTag("hostname", ); // TODO
+
+            // Update server console window and status bars
+            FortressCraftExtension.ServerConsole();
         }
 
         /// <summary>

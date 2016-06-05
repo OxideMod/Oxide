@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
+using CodeHatch.Build;
 using CodeHatch.Common;
 using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
@@ -148,8 +149,8 @@ namespace Oxide.Game.ReignOfKings
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -186,6 +187,51 @@ namespace Oxide.Game.ReignOfKings
                 if (input.StartsWith("/")) input = input.Remove(0, 1);
                 return CommandManager.RegisteredCommands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
             };
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
+
+            Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount} | {DedicatedServerBypass.Settings.ServerName}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerBypass.Settings.ServerName}";
+            Interface.Oxide.ServerConsole.Status1Right = () =>
+            {
+                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
+                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return string.Concat(fps, "fps, ", uptime);
+            };
+            Interface.Oxide.ServerConsole.Status2Left = () =>
+            {
+                var sleepersCount = CodeHatch.StarForge.Sleeping.PlayerSleeperObject.AllSleeperObjects.Count;
+                var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
+                var entitiesCount = CodeHatch.Engine.Core.Cache.Entity.GetAll().Count;
+                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
+                return $" {Server.PlayerCount}/{Server.PlayerLimit} players, {sleepers}, {entities}";
+            };
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
+                double bytesSent = 0;
+                double bytesReceived = 0;
+                foreach (var player in Server.AllPlayers)
+                {
+                    if (!player.Connection.IsConnected) continue;
+                    var statistics = player.Connection.Statistics;
+                    bytesSent += statistics.BytesSentPerSecond;
+                    bytesReceived += statistics.BytesReceivedPerSecond;
+                }
+                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+            };
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var gameTime = GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown";
+                var weather = Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown";
+                return $" {gameTime}, Weather: {weather}";
+            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameInfo.VersionString} ({GameInfo.VersionName})";
+            Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private static void ServerConsoleOnInput(string input)

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Facepunch;
 using Network;
 using Rust;
 using UnityEngine;
@@ -130,7 +129,7 @@ namespace Oxide.Game.Rust
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "rust");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", BuildInformation.VersionStampDays.ToString());
 
             // Register messages for localization
@@ -178,7 +177,7 @@ namespace Oxide.Game.Rust
                 {
                     ulong temp;
                     if (!ulong.TryParse(s, out temp)) return false;
-                    var digits = temp == 0 ? 1 : (int) Math.Floor(Math.Log10(temp) + 1);
+                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
                 permission.CleanUp();
@@ -213,37 +212,8 @@ namespace Oxide.Game.Rust
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
-            // Configure server console window and status bars
-            if (Interface.Oxide.ServerConsole != null)
-            {
-                Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
-                Interface.Oxide.ServerConsole.Status1Left = () => $" {ConVar.Server.hostname}";
-                Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)UnityEngine.Time.realtimeSinceStartup)}";
-                Interface.Oxide.ServerConsole.Status2Left = () =>
-                {
-                    var players = BasePlayer.activePlayerList.Count;
-                    var playerLimit = ConVar.Server.maxplayers;
-                    var sleeperCount = BasePlayer.sleepingPlayerList.Count;
-                    var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
-                    var entitiesCount = BaseNetworkable.serverEntities.Count;
-                    var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
-                    return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
-                };
-                Interface.Oxide.ServerConsole.Status2Right = () =>
-                {
-                    if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
-                    var inbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
-                    var outbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
-                    return string.Concat(inbound, "/s in, ", outbound, "/s out");
-                };
-                Interface.Oxide.ServerConsole.Status3Left = () =>
-                {
-                    var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
-                    return $" {gameTime}, {ConVar.Server.level} [{ConVar.Server.worldsize}, {ConVar.Server.seed}]";
-                };
-                Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.network})";
-                Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
-            }
+            // Update server console window and status bars
+            RustExtension.ServerConsole();
 
             // Destroy default server console
             if (ServerConsole.Instance != null)
@@ -384,8 +354,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerRespawn(BasePlayer player)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
-            return Interface.CallHook("OnUserRespawn", iplayer);
+            return Interface.CallHook("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -396,8 +365,7 @@ namespace Oxide.Game.Rust
         private void OnPlayerRespawned(BasePlayer player)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
-            Interface.CallHook("OnUserRespawned", iplayer);
+            Interface.CallHook("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -692,7 +660,7 @@ namespace Oxide.Game.Rust
         [HookMethod("ChatVersion")]
         private void ChatVersion(BasePlayer player)
         {
-            Reply(player.net.connection, $"Oxide {OxideMod.Version} for Rust {BuildInformation.VersionStampDays} ({Protocol.network})");
+            Reply(player.net.connection, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
         }
 
         /// <summary>
@@ -701,7 +669,7 @@ namespace Oxide.Game.Rust
         [HookMethod("ConsoleVersion")]
         private void ConsoleVersion(ConsoleSystem.Arg arg)
         {
-            Reply(arg.connection, $"Oxide {OxideMod.Version} for Rust {BuildInformation.VersionStampDays} ({Protocol.network})");
+            Reply(arg.connection, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
         }
 
         #endregion
