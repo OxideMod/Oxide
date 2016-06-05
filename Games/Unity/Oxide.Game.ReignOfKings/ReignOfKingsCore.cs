@@ -352,8 +352,8 @@ namespace Oxide.Game.ReignOfKings
         /// Called when the player has disconnected
         /// </summary>
         /// <param name="player"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(Player player)
+        [HookMethod("IOnPlayerDisconnected")]
+        private void IOnPlayerDisconnected(Player player)
         {
             // Ignore the server player
             if (player.Id == 9999999999) return;
