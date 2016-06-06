@@ -30,7 +30,7 @@ namespace Oxide.Game.InterstellarRift
         {
             // Set attributes
             Name = "InterstellarRiftCore";
-            Title = "Interstellar Rift Core";
+            Title = "Interstellar Rift";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
         }
@@ -55,7 +55,7 @@ namespace Oxide.Game.InterstellarRift
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "interstellar rift");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", Globals.Version);
 
             // Setup the default permission groups
@@ -104,6 +104,9 @@ namespace Oxide.Game.InterstellarRift
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", global::Game.Configuration.Config.Singleton.ServerName);
+
+            // Update server console window and status bars
+            InterstellarRiftExtension.ServerConsole();
         }
 
         /// <summary>

@@ -28,8 +28,14 @@ namespace Oxide.Game.Blockstorm
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine"
+        };
 
         public static string[] Filter =
         {
@@ -48,8 +54,7 @@ namespace Oxide.Game.Blockstorm
         /// Initializes a new instance of the BlockstormExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public BlockstormExtension(ExtensionManager manager)
-            : base(manager)
+        public BlockstormExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -68,12 +73,10 @@ namespace Oxide.Game.Blockstorm
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
-
-        public static DedicatedServerConfiguration DedicatedServerConfiguration { get; } = new DedicatedServerConfiguration();
 
         /// <summary>
         /// Called when all other extensions have been loaded
@@ -84,19 +87,19 @@ namespace Oxide.Game.Blockstorm
 
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        internal static DedicatedServerConfiguration DedicatedServerConfiguration { get; } = new DedicatedServerConfiguration();
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
-                var players = FpsMultiplayerGame.instance.playersList.method_5().Count;
-                var hostname = DedicatedServerConfiguration.string_12;
-                return string.Concat(players, " | ", hostname);
+                return $"{FpsMultiplayerGame.instance.playersList.method_5().Count} | {DedicatedServerConfiguration.string_12}";
             };
-
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = DedicatedServerConfiguration.string_12;
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerConfiguration.string_12}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -104,30 +107,13 @@ namespace Oxide.Game.Blockstorm
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = FpsMultiplayerGame.instance.playersList.method_5().Count;
-                var playerLimit = DedicatedServerConfiguration.int_1.ToString();
-                return string.Concat(" ", players, "/", playerLimit, " players");
+                return $" {FpsMultiplayerGame.instance.playersList.method_5().Count}/{DedicatedServerConfiguration.int_1} players";
             };
-            Interface.Oxide.ServerConsole.Status2Right = () =>
-            {
-                // TODO: Network in/out
-                return string.Empty;
-            };
-
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                // TODO: Server game time, map name
-                return string.Empty;
-            };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = Constants.smethod_0();
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
+            Interface.Oxide.ServerConsole.Status3Left = () => string.Empty; // TODO: Server game time, map name
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Constants.smethod_0()}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
@@ -143,7 +129,7 @@ namespace Oxide.Game.Blockstorm
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

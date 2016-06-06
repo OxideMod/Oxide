@@ -28,8 +28,14 @@ namespace Oxide.Game.SavageLands
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine"
+        };
 
         public static string[] Filter =
         {
@@ -39,8 +45,7 @@ namespace Oxide.Game.SavageLands
         /// Initializes a new instance of the SavageLandsExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public SavageLandsExtension(ExtensionManager manager)
-            : base(manager)
+        public SavageLandsExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -59,8 +64,8 @@ namespace Oxide.Game.SavageLands
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -73,8 +78,13 @@ namespace Oxide.Game.SavageLands
 
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
 
-            // TODO: Add status information
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
+
+            // TODO: Console information
         }
 
         private static void ServerConsoleOnInput(string input)
@@ -89,7 +99,7 @@ namespace Oxide.Game.SavageLands
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

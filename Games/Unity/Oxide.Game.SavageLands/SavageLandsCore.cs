@@ -28,7 +28,7 @@ namespace Oxide.Game.SavageLands
         {
             // Set attributes
             Name = "SavageLandsCore";
-            Title = "Savage Lands Core";
+            Title = "Savage Lands";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -56,7 +56,7 @@ namespace Oxide.Game.SavageLands
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "savage lands");
+            RemoteLogger.SetTag("game", Title.ToLower());
             //RemoteLogger.SetTag("version", ); // TODO
 
             // Setup the default permission groups
@@ -105,6 +105,9 @@ namespace Oxide.Game.SavageLands
 
             // Configure the hostname after it has been set
             //RemoteLogger.SetTag("hostname", );
+
+            // Update server console window and status bars
+            SavageLandsExtension.ServerConsole();
         }
 
         /// <summary>

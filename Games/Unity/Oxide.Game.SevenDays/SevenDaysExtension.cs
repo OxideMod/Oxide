@@ -97,8 +97,7 @@ namespace Oxide.Game.SevenDays
         /// Initializes a new instance of the SevenDaysExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public SevenDaysExtension(ExtensionManager manager)
-            : base(manager)
+        public SevenDaysExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -117,8 +116,8 @@ namespace Oxide.Game.SevenDays
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -131,19 +130,17 @@ namespace Oxide.Game.SevenDays
 
             Application.logMessageReceived += HandleLog;
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
-                var players = GameManager.Instance?.World?.Players?.Count;
-                var hostname = GamePrefs.GetString(EnumGamePrefs.ServerName);
-                return string.Concat(players, " | ", hostname);
+                return $"{GameManager.Instance?.World?.Players?.Count} | {GamePrefs.GetString(EnumGamePrefs.ServerName)}";
             };
-
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                var hostname = GamePrefs.GetString(EnumGamePrefs.ServerName);
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {GamePrefs.GetString(EnumGamePrefs.ServerName)}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -151,7 +148,6 @@ namespace Oxide.Game.SevenDays
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = GameManager.Instance?.World?.Players?.Count;
@@ -160,12 +156,7 @@ namespace Oxide.Game.SevenDays
                 var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
                 return string.Concat(" ", players, "/", playerLimit, " players, ", entities);
             };
-            Interface.Oxide.ServerConsole.Status2Right = () =>
-            {
-                // TODO: Network in/out
-                return string.Empty;
-            };
-
+            Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return string.Empty;
@@ -174,14 +165,10 @@ namespace Oxide.Game.SevenDays
                 var seed = GamePrefs.GetString(EnumGamePrefs.GameName);
                 return string.Concat(" ", time, ", ", world, " [", seed, "]");
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = GamePrefs.GetString(EnumGamePrefs.GameVersion);
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GamePrefs.GetString(EnumGamePrefs.GameVersion)}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 return string.IsNullOrEmpty(input) ? null : SdtdConsole.Instance.commands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
@@ -201,7 +188,7 @@ namespace Oxide.Game.SevenDays
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

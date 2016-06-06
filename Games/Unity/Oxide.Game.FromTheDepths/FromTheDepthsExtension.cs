@@ -30,8 +30,14 @@ namespace Oxide.Game.FromTheDepths
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine" };
-        public override string[] WhitelistNamespaces => new[] { "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine"
+        };
 
         public static string[] Filter =
         {
@@ -41,8 +47,7 @@ namespace Oxide.Game.FromTheDepths
         /// Initializes a new instance of the FromTheDepthsExtension class
         /// </summary>
         /// <param name="manager"></param>
-        public FromTheDepthsExtension(ExtensionManager manager)
-            : base(manager)
+        public FromTheDepthsExtension(ExtensionManager manager) : base(manager)
         {
         }
 
@@ -61,8 +66,8 @@ namespace Oxide.Game.FromTheDepths
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -94,21 +99,18 @@ namespace Oxide.Game.FromTheDepths
 
             Application.RegisterLogCallback(HandleLog);
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () =>
             {
                 if (MultiplayerManager.Instance == null) return string.Empty;
-                var players = MultiplayerManager.Instance.Players.PlayerCount;
-                var hostname = MultiplayerManager.Instance.GameDetails.Name;
-                return string.Concat(players, " | ", hostname);
+                return $"{MultiplayerManager.Instance.Players.PlayerCount} | {MultiplayerManager.Instance.GameDetails.Name}";
             };
-
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                if (MultiplayerManager.Instance == null) return string.Empty;
-                var hostname = MultiplayerManager.Instance.GameDetails.Name;
-                return string.Concat(" ", hostname);
-            };
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {MultiplayerManager.Instance?.GameDetails.Name ?? "Unnamed"}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -116,20 +118,12 @@ namespace Oxide.Game.FromTheDepths
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 if (MultiplayerManager.Instance == null) return string.Empty;
-                var players = MultiplayerManager.Instance.Players.PlayerCount;
-                var playerLimit = MultiplayerManager.Instance.GameDetails.PlayerLimit;
-                return string.Concat(" ", players, "/", playerLimit, " players");
+                return $" {MultiplayerManager.Instance.Players.PlayerCount}/{MultiplayerManager.Instance.GameDetails.PlayerLimit}";
             };
-            Interface.Oxide.ServerConsole.Status2Right = () =>
-            {
-                // TODO: Network in/out
-                return string.Empty;
-            };
-
+            Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 if (GameTimer.Instance == null) return string.Empty;
@@ -137,12 +131,7 @@ namespace Oxide.Game.FromTheDepths
                 var map = string.Empty; // TODO: MPGameData.MapName
                 return string.Concat(" ", time, ", ", map);
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                var gameVersion = StaticOptionsManager.version;
-                var oxideVersion = OxideMod.Version.ToString();
-                return string.Concat("Oxide ", oxideVersion, " for ", gameVersion);
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {StaticOptionsManager.version}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
@@ -158,7 +147,7 @@ namespace Oxide.Game.FromTheDepths
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

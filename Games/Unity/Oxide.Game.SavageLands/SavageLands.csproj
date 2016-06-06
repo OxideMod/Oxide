@@ -48,7 +48,6 @@
     <Compile Include="SavageLandsExtension.cs" />
     <Compile Include="SavageLandsPlugin.cs" />
     <Compile Include="SavageLandsPluginLoader.cs" />
-    <None Include="Plugins\Hooks.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

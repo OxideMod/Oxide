@@ -33,6 +33,32 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 266,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyDedicatedServerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Net.IPEndPoint"
+              ]
+            },
+            "MSILHash": "URCifdZDUfu6LzXpRIfdf3P5yGhMkQc/xsLdGgxktJY=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
         }
       ]
     },
@@ -60,7 +86,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "Q+hsFsrT9uuulKvcyrwfFQcEEoTEqGhqhtq3o1DpRKk=",
+            "MSILHash": "+Q0jiaEAnOmFeimRzFbbxU8RzHh20us+Cxg+uMdiFVg=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -99,7 +125,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "Q+hsFsrT9uuulKvcyrwfFQcEEoTEqGhqhtq3o1DpRKk=",
+            "MSILHash": "+Q0jiaEAnOmFeimRzFbbxU8RzHh20us+Cxg+uMdiFVg=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "_Patches"
           }

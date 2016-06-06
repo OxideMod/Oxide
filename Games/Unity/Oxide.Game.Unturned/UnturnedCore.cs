@@ -30,7 +30,7 @@ namespace Oxide.Game.Unturned
         {
             // Set attributes
             Name = "UnturnedCore";
-            Title = "Unturned Core";
+            Title = "Unturned";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -58,7 +58,7 @@ namespace Oxide.Game.Unturned
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "unturned");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", Provider.APP_VERSION);
 
             // Setup the default permission groups
@@ -107,6 +107,9 @@ namespace Oxide.Game.Unturned
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", Provider.serverName);
+
+            // Update server console window and status bars
+            UnturnedExtension.ServerConsole();
         }
 
         /// <summary>

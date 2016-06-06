@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 using Oxide.Core;
 using Oxide.Core.Configuration;
@@ -34,8 +33,15 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public override string Author => "Oxide Team";
 
-        public override string[] WhitelistAssemblies => new[] { "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine", "uLink" };
-        public override string[] WhitelistNamespaces => new[] { "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine", "uLink" };
+        public override string[] WhitelistAssemblies => new[]
+        {
+            "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine", "uLink"
+        };
+        public override string[] WhitelistNamespaces => new[]
+        {
+            "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "System.Security.Cryptography",
+            "System.Text", "UnityEngine", "uLink"
+        };
 
         public static string[] Filter =
         {
@@ -91,7 +97,7 @@ namespace Oxide.Game.RustLegacy
             Manager.RegisterLibrary("Rust", new Libraries.RustLegacy());
 
             // Register the OnServerInitialized hook that we can't hook using the IL injector
-            var serverinit = Object.FindObjectOfType<ServerInit>();
+            var serverinit = UnityEngine.Object.FindObjectOfType<ServerInit>();
             serverinit.gameObject.AddComponent<OnServerInitHook>();
 
             // Check if folder migration is needed
@@ -158,8 +164,8 @@ namespace Oxide.Game.RustLegacy
         /// <summary>
         /// Loads plugin watchers used by this extension
         /// </summary>
-        /// <param name="pluginDirectory"></param>
-        public override void LoadPluginWatchers(string pluginDirectory)
+        /// <param name="directory"></param>
+        public override void LoadPluginWatchers(string directory)
         {
         }
 
@@ -170,12 +176,16 @@ namespace Oxide.Game.RustLegacy
         {
             if (!Interface.Oxide.EnableConsole(true)) return;
 
-            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             ConsoleSystem.RegisterLogCallback(HandleLog, true);
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+        }
+
+        internal static void ServerConsole()
+        {
+            if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{NetCull.connections.Length} | {server.hostname ?? "Unnamed"}";
-
-            Interface.Oxide.ServerConsole.Status1Left = () => string.Concat(" ", server.hostname ?? "Unnamed");
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {server.hostname ?? "Unnamed"}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -183,7 +193,6 @@ namespace Oxide.Game.RustLegacy
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-
             Interface.Oxide.ServerConsole.Status2Left = () => $" {NetCull.connections.Length}/{NetCull.maxConnections} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
@@ -199,11 +208,12 @@ namespace Oxide.Game.RustLegacy
                 }
                 return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
             };
-
-            Interface.Oxide.ServerConsole.Status3Left = () => $" {EnvironmentControlCenter.Singleton?.GetTime().ToString() ?? "Unknown"}, {(server.pvp ? "PvP" : "PvE")}";
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                return $" {EnvironmentControlCenter.Singleton?.GetTime().ToString() ?? "Unknown"}, {(server.pvp ? "PvP" : "PvE")}";
+            };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
-
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
@@ -227,7 +237,7 @@ namespace Oxide.Game.RustLegacy
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
-            else if (type == LogType.Error)
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }

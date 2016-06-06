@@ -94,7 +94,7 @@ namespace Oxide.Game.Hurtworld
         {
             // Set attributes
             Name = "HurtworldCore";
-            Title = "Hurtworld Core";
+            Title = "Hurtworld";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -118,7 +118,7 @@ namespace Oxide.Game.Hurtworld
         private bool PermissionsLoaded(PlayerSession session)
         {
             if (permission.IsLoaded) return true;
-            Reply(string.Format(GetMessage("PermissionsNotLoaded", permission.LastException.Message)), session);
+            Reply(Lang("PermissionsNotLoaded", permission.LastException.Message), session);
             return false;
         }
 
@@ -133,7 +133,7 @@ namespace Oxide.Game.Hurtworld
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "hurtworld");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", GameManager.Instance.Version.ToString());
 
             // Register messages for localization
@@ -218,6 +218,9 @@ namespace Oxide.Game.Hurtworld
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
+
+            // Update server console window and status bars
+            HurtworldExtension.ServerConsole();
         }
 
         #endregion
@@ -279,7 +282,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, cmd, args))
             {
-                Reply(string.Format(GetMessage("UnknownCommand", session.SteamId.ToString()), cmd), session);
+                Reply(Lang("UnknownCommand", session.SteamId.ToString(), cmd), session);
                 return true;
             }
 
@@ -316,11 +319,10 @@ namespace Oxide.Game.Hurtworld
                 if (session.IsAdmin && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
-            // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
-            Interface.CallHook("OnUserConnected", iplayer);
-
             Interface.CallHook("OnPlayerConnected", session);
+
+            // Call covalence hook
+            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
         }
 
         /// <summary>
@@ -331,8 +333,7 @@ namespace Oxide.Game.Hurtworld
         private void OnPlayerDisconnected(PlayerSession session)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
-            Interface.CallHook("OnUserDisconnected", iplayer, null);
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), null);
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(session);
@@ -349,8 +350,7 @@ namespace Oxide.Game.Hurtworld
             covalence.PlayerManager.NotifyPlayerConnect(session);
 
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
-            Interface.CallHook("OnUserInit", iplayer);
+            Interface.CallHook("OnUserInit", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
         }
 
         /// <summary>
@@ -385,8 +385,7 @@ namespace Oxide.Game.Hurtworld
             var player = singleUsedBy.GetValue(door);
             if (player == null) return;
 
-            var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)player);
-            Interface.CallHook("OnSingleDoorUsed", door, session);
+            Interface.CallHook("OnSingleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
         }
 
         private readonly FieldInfo doubleUsedBy = typeof(DoubleDoorServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -402,8 +401,7 @@ namespace Oxide.Game.Hurtworld
             var player = doubleUsedBy.GetValue(door);
             if (player == null) return;
 
-            var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)player);
-            Interface.CallHook("OnDoubleDoorUsed", door, session);
+            Interface.CallHook("OnDoubleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
         }
 
         private readonly FieldInfo garageUsedBy = typeof(GarageDoorServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -419,8 +417,7 @@ namespace Oxide.Game.Hurtworld
             var player = garageUsedBy.GetValue(door);
             if (player == null) return;
 
-            var session = GameManager.Instance.GetSession((uLink.NetworkPlayer)player);
-            Interface.CallHook("OnGarageDoorUsed", door, session);
+            Interface.CallHook("OnGarageDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
         }
 
         #endregion
@@ -492,7 +489,7 @@ namespace Oxide.Game.Hurtworld
             var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
             if (totalPluginCount < 1)
             {
-                Reply(GetMessage("NoPluginsFound", session.SteamId.ToString()), session);
+                Reply(Lang("NoPluginsFound", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -522,7 +519,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 1)
             {
-                Reply(GetMessage("CommandUsageLoad", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageLoad", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -556,7 +553,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 1)
             {
-                Reply(GetMessage("CommandUsageReload", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageReload", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -573,11 +570,11 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    Reply(string.Format(GetMessage("PluginNotLoaded", session.SteamId.ToString()), name), session);
+                    Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
                     continue;
                 }
                 Interface.Oxide.ReloadPlugin(name);
-                Reply(string.Format(GetMessage("PluginReloaded", session.SteamId.ToString()), plugin.Title, plugin.Version, plugin.Author), session);
+                Reply(Lang("PluginReloaded", session.SteamId.ToString(), plugin.Title, plugin.Version, plugin.Author), session);
             }
         }
 
@@ -598,7 +595,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 1)
             {
-                Reply(GetMessage("CommandUsageUnload", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageUnload", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -615,11 +612,11 @@ namespace Oxide.Game.Hurtworld
                 var plugin = pluginmanager.GetPlugin(name);
                 if (plugin == null)
                 {
-                    Reply(string.Format(GetMessage("PluginNotLoaded", session.SteamId.ToString()), name), session);
+                    Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
                     continue;
                 }
                 Interface.Oxide.UnloadPlugin(name);
-                Reply(string.Format(GetMessage("PluginUnloaded", session.SteamId.ToString()), plugin.Title, plugin.Version, plugin.Author), session);
+                Reply(Lang("PluginUnloaded", session.SteamId.ToString(), plugin.Title, plugin.Version, plugin.Author), session);
             }
         }
 
@@ -634,7 +631,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatVersion")]
         private void ChatVersion(PlayerSession session)
         {
-            Reply($"Oxide {OxideMod.Version} for Hurtworld {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})", session);
+            Reply($"Oxide {OxideMod.Version} for {Title} {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})", session);
         }
 
         /// <summary>
@@ -660,7 +657,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 2)
             {
-                Reply(GetMessage("CommandUsageGroup", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageGroup", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -675,50 +672,50 @@ namespace Oxide.Game.Hurtworld
             {
                 if (permission.GroupExists(name))
                 {
-                    Reply(string.Format(GetMessage("GroupAlreadyExists", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupAlreadyExists", session.SteamId.ToString(), name), session);
                     return;
                 }
                 permission.CreateGroup(name, title, rank);
-                Reply(string.Format(GetMessage("GroupCreated", session.SteamId.ToString()), name), session);
+                Reply(Lang("GroupCreated", session.SteamId.ToString(), name), session);
             }
             else if (mode.Equals("remove"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
                 permission.RemoveGroup(name);
-                Reply(string.Format(GetMessage("GroupDeleted", session.SteamId.ToString()), name), session);
+                Reply(Lang("GroupDeleted", session.SteamId.ToString(), name), session);
             }
             else if (mode.Equals("set"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
                 permission.SetGroupTitle(name, title);
                 permission.SetGroupRank(name, rank);
-                Reply(string.Format(GetMessage("GroupChanged", session.SteamId.ToString()), name), session);
+                Reply(Lang("GroupChanged", session.SteamId.ToString(), name), session);
             }
             else if (mode.Equals("parent"))
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
                 var parent = args[2];
                 if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
-                    Reply(string.Format(GetMessage("GroupParentNotFound", session.SteamId.ToString()), parent), session);
+                    Reply(Lang("GroupParentNotFound", session.SteamId.ToString(), parent), session);
                     return;
                 }
                 if (permission.SetGroupParent(name, parent))
-                    Reply(string.Format(GetMessage("GroupParentChanged", session.SteamId.ToString()), name, parent), session);
+                    Reply(Lang("GroupParentChanged", session.SteamId.ToString(), name, parent), session);
                 else
-                    Reply(string.Format(GetMessage("GroupParentNotChanged", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupParentNotChanged", session.SteamId.ToString(), name), session);
             }
         }
 
@@ -739,7 +736,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 3)
             {
-                Reply(GetMessage("CommandUsageUserGroup", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageUserGroup", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -750,7 +747,7 @@ namespace Oxide.Game.Hurtworld
             var target = FindSession(name);
             if (target == null && !permission.UserIdValid(name))
             {
-                Reply(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
+                Reply(Lang("UserNotFound", session.SteamId.ToString(), name), session);
                 return;
             }
             var userId = name;
@@ -763,19 +760,19 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.GroupExists(group))
             {
-                Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
+                Reply(Lang("GroupNotFound", session.SteamId.ToString(), name), session);
                 return;
             }
 
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                Reply(string.Format(GetMessage("UserAddedToGroup", session.SteamId.ToString()), name, group), session);
+                Reply(Lang("UserAddedToGroup", session.SteamId.ToString(), name, group), session);
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                Reply(string.Format(GetMessage("UserRemovedFromGroup", session.SteamId.ToString()), name, group), session);
+                Reply(Lang("UserRemovedFromGroup", session.SteamId.ToString(), name, group), session);
             }
         }
 
@@ -796,7 +793,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 3)
             {
-                Reply(GetMessage("CommandUsageGrant", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageGrant", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -806,7 +803,7 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.PermissionExists(perm))
             {
-                Reply(string.Format(GetMessage("PermissionNotFound", session.SteamId.ToString()), perm), session);
+                Reply(Lang("PermissionNotFound", session.SteamId.ToString(), perm), session);
                 return;
             }
 
@@ -814,18 +811,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
                 permission.GrantGroupPermission(name, perm, null);
-                Reply(string.Format(GetMessage("GroupPermissionGranted", session.SteamId.ToString()), name, perm), session);
+                Reply(Lang("GroupPermissionGranted", session.SteamId.ToString(), name, perm), session);
             }
             else if (mode.Equals("user"))
             {
                 var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("UserNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
                 var userId = name;
@@ -836,7 +833,7 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                Reply(string.Format(GetMessage("UserPermissionGranted", session.SteamId.ToString()), $"{name} ({userId})", perm), session);
+                Reply(Lang("UserPermissionGranted", session.SteamId.ToString(), $"{name} ({userId})", perm), session);
             }
         }
 
@@ -857,7 +854,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 3)
             {
-                Reply(GetMessage("CommandUsageRevoke", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageRevoke", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -867,7 +864,7 @@ namespace Oxide.Game.Hurtworld
 
             if (!permission.PermissionExists(perm))
             {
-                Reply(string.Format(GetMessage("PermissionNotFound", session.SteamId.ToString()), perm), session);
+                Reply(Lang("PermissionNotFound", session.SteamId.ToString(), perm), session);
                 return;
             }
 
@@ -875,18 +872,18 @@ namespace Oxide.Game.Hurtworld
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
                 permission.RevokeGroupPermission(name, perm);
-                Reply(string.Format(GetMessage("GroupPermissionRevoked", session.SteamId.ToString()), name, perm), session);
+                Reply(Lang("GroupPermissionRevoked", session.SteamId.ToString(), name, perm), session);
             }
             else if (mode.Equals("user"))
             {
                 var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(string.Format(GetMessage("UserNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("UserNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
                 var userId = name;
@@ -897,7 +894,7 @@ namespace Oxide.Game.Hurtworld
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                Reply(string.Format(GetMessage("UserPermissionRevoked", session.SteamId.ToString()), $"{name} ({userId})", perm), session);
+                Reply(Lang("UserPermissionRevoked", session.SteamId.ToString(), $"{name} ({userId})", perm), session);
             }
         }
 
@@ -918,7 +915,7 @@ namespace Oxide.Game.Hurtworld
             if (!IsAdmin(session)) return;
             if (args.Length < 1)
             {
-                Reply(GetMessage("CommandUsageShow", session.SteamId.ToString()), session);
+                Reply(Lang("CommandUsageShow", session.SteamId.ToString()), session);
                 return;
             }
 
@@ -935,14 +932,14 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name))
                 {
-                    Reply(GetMessage("CommandUsageShow", session.SteamId.ToString()), session);
+                    Reply(Lang("CommandUsageShow", session.SteamId.ToString()), session);
                     return;
                 }
 
                 var target = FindSession(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(GetMessage("UserNotFound", session.SteamId.ToString()), session);
+                    Reply(Lang("UserNotFound", session.SteamId.ToString()), session);
                     return;
                 }
 
@@ -964,13 +961,13 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name))
                 {
-                    Reply(GetMessage("CommandUsageShow", session.SteamId.ToString()), session);
+                    Reply(Lang("CommandUsageShow", session.SteamId.ToString()), session);
                     return;
                 }
 
                 if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
                 {
-                    Reply(string.Format(GetMessage("GroupNotFound", session.SteamId.ToString()), name), session);
+                    Reply(Lang("GroupNotFound", session.SteamId.ToString(), name), session);
                     return;
                 }
 
@@ -989,7 +986,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("groups"))
             {
-                Reply(string.Format(GetMessage("ShowGroups", session.SteamId.ToString()), "\n" + string.Join(", ", permission.GetGroups())), session);
+                Reply(Lang("ShowGroups", session.SteamId.ToString(), "\n" + string.Join(", ", permission.GetGroups())), session);
             }
         }
 
@@ -1074,31 +1071,33 @@ namespace Oxide.Game.Hurtworld
         private bool IsAdmin(PlayerSession session)
         {
             if (session == null || session.IsAdmin) return true;
-            Reply(GetMessage("YouAreNotAdmin", session.SteamId.ToString()), session);
+            Reply(Lang("YouAreNotAdmin", session.SteamId.ToString()), session);
             return false;
         }
 
         /// <summary>
-        /// Replies to the player with a specific message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="session"></param>
-        private static void Reply(string message, PlayerSession session = null)
+        /// <param name="args"></param>
+        private static void Reply(string message, PlayerSession session = null, params object[] args)
         {
             if (session == null)
             {
-                Interface.Oxide.LogInfo(message);
+                Interface.Oxide.LogInfo(message, args);
                 return;
             }
-            ChatManagerServer.Instance.RPC("RelayChat", session.Player, message);
+            ChatManagerServer.Instance.RPC("RelayChat", session.Player, string.Format(message, args));
         }
 
         /// <summary>
-        /// Gets the localized message from key, with optional user ID
+        /// Returns the localized message from key using optional ID string
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="userId"></param>
-        string GetMessage(string key, string userId = null) => lang.GetMessage(key, this, userId);
+        /// <param name="id"></param>
+        /// <param name="args"></param>
+        private string Lang(string key, string id = null, params object[] args) => string.Format(lang.GetMessage(key, this, id), args);
 
         /// <summary>
         /// Gets the player session using a name, Steam ID, or IP address

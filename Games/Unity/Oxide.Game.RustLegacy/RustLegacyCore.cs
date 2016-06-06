@@ -61,7 +61,7 @@ namespace Oxide.Game.RustLegacy
         {
             // Set attributes
             Name = "RustLegacyCore";
-            Title = "Rust Legacy Core";
+            Title = "Rust Legacy";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
         }
@@ -88,7 +88,7 @@ namespace Oxide.Game.RustLegacy
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "rust legacy");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", Rust.Defines.Connection.protocol.ToString());
 
             // Add general commands
@@ -162,6 +162,9 @@ namespace Oxide.Game.RustLegacy
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", server.hostname);
+
+            // Update server console window and status bars
+            RustLegacyExtension.ServerConsole();
         }
 
         /// <summary>
@@ -236,8 +239,7 @@ namespace Oxide.Game.RustLegacy
             }
 
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(netUser.userID.ToString());
-            Interface.CallHook("OnUserConnected", iplayer);
+            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -248,21 +250,19 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerDisconnected(uLink.NetworkPlayer netPlayer)
         {
             var netUser = netPlayer.GetLocalData() as NetUser;
-            if (netUser != null)
+            if (netUser == null) return;
+
+            // Call covalence hook
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), null);
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
+
+            // Delay removing player until OnPlayerDisconnect has fired in plugins
+            Interface.Oxide.NextTick(() =>
             {
-                // Call covalence hook
-                var iplayer = covalence.PlayerManager.GetPlayer(netUser.userID.ToString());
-                Interface.CallHook("OnUserDisconnected", iplayer, null);
-
-                // Let covalence know
-                covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
-
-                // Delay removing player until OnPlayerDisconnect has fired in plugins
-                Interface.Oxide.NextTick(() =>
-                {
-                    if (playerData.ContainsKey(netUser)) playerData.Remove(netUser);
-                });
-            }
+                if (playerData.ContainsKey(netUser)) playerData.Remove(netUser);
+            });
         }
 
         /// <summary>
@@ -273,8 +273,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString());
-            Interface.CallHook("OnUserSpawn", iplayer);
+            Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -290,8 +289,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(netUser.userID.ToString());
-            Interface.CallHook("OnUserSpawned", iplayer);
+            Interface.CallHook("OnUserSpawned", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>

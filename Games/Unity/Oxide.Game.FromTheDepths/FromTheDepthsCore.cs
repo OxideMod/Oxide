@@ -30,7 +30,7 @@ namespace Oxide.Game.FromTheDepths
         {
             // Set attributes
             Name = "FromTheDepthsCore";
-            Title = "From the Depths Core";
+            Title = "From the Depths";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -58,7 +58,7 @@ namespace Oxide.Game.FromTheDepths
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "from the depths");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", StaticOptionsManager.version);
 
             // Setup the default permission groups
@@ -107,6 +107,9 @@ namespace Oxide.Game.FromTheDepths
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", MultiplayerManager.Instance.GameDetails.Name);
+
+            // Update server console window and status bars
+            FromTheDepthsExtension.ServerConsole();
         }
 
         /// <summary>

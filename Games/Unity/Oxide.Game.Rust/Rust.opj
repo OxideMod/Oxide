@@ -863,7 +863,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 661,
+            "InjectionIndex": 662,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l2",
@@ -881,7 +881,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "TB9BpGTRXUbR2sy1fQpxuRAxfMTI7Ty0THn21ncO39I=",
+            "MSILHash": "2NRQBH2+cfZ/A/tiqavJ+yZ70FWPXt/5Pf06LCa2JSs=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

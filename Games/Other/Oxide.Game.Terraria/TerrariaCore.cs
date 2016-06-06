@@ -30,7 +30,7 @@ namespace Oxide.Game.Terraria
         {
             // Set attributes
             Name = "TerrariaCore";
-            Title = "Terraria Core";
+            Title = "Terraria";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
         }
@@ -55,7 +55,7 @@ namespace Oxide.Game.Terraria
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "terraria");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", Main.versionNumber2);
 
             // Setup the default permission groups
@@ -104,6 +104,9 @@ namespace Oxide.Game.Terraria
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", Main.worldName);
+
+            // Update server console window and status bars
+            TerrariaExtension.ServerConsole();
         }
 
         /// <summary>

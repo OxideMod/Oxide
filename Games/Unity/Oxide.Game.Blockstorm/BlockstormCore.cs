@@ -28,7 +28,7 @@ namespace Oxide.Game.Blockstorm
         {
             // Set attributes
             Name = "BlockstormCore";
-            Title = "Blockstorm Core";
+            Title = "Blockstorm";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
 
@@ -56,7 +56,7 @@ namespace Oxide.Game.Blockstorm
         private void Init()
         {
             // Configure remote logging
-            RemoteLogger.SetTag("game", "blockstorm");
+            RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("version", Constants.smethod_0());
 
             // Setup the default permission groups
@@ -105,6 +105,9 @@ namespace Oxide.Game.Blockstorm
 
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", BlockstormExtension.DedicatedServerConfiguration.string_12);
+
+            // Update server console window and status bars
+            BlockstormExtension.ServerConsole();
         }
 
         /// <summary>
