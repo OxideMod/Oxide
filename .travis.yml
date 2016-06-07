@@ -5,8 +5,8 @@ mono: beta
 
 # Install .NET v3.5 profile
 before_install:
-  - MONO_PATH=`echo /opt/mono/lib/mono` && sudo ln -s $TRAVIS_BUILD_DIR/Mono/2.0 $MONO_PATH/2.0
-  - sudo ln -s $TRAVIS_BUILD_DIR/Mono/xbuild-frameworks/.NETFramework/v3.5 $MONO_PATH/xbuild-frameworks/.NETFramework/v3.5
+  - sudo ln -s $TRAVIS_BUILD_DIR/Mono/2.0 /usr/lib/mono/2.0
+  - sudo ln -s $TRAVIS_BUILD_DIR/Mono/xbuild-frameworks/.NETFramework/v3.5 /usr/lib/mono/xbuild-frameworks/.NETFramework/v3.5
 
 # Add build number to version
 before_script: 
