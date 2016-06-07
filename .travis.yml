@@ -17,7 +17,7 @@ before_script:
 solution: Oxide.sln
 
 # Run deployment script
-after_success: [[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh
+after_success: "[[ $TRAVIS_REPO_SLUG == OxideMod/Oxide ]] && [[ $TRAVIS_PULL_REQUEST == false ]] && [[ $TRAVIS_BRANCH == master ]] && ./deploy.sh"
 
 notifications:
   email: false
