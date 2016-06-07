@@ -23,7 +23,7 @@ notifications:
   email: false
   slack:
     rooms:
-      secure: "rhZ/ZlRhJWfRWquzilEGrgSvG5aV8FaPAPXsiMQQCwP+bjNiOH6siYsm7L0Lqv6no1YQSsCpO2b/DO60DMMJRUpdxBgfdHkT9ioxHJiA4i4ObXEpQOu3qKvRvTKD+pLnYGCghXI6MjtTPZnHDuwaErzg1tOc52t7Z4C+renLfY0="
+      secure: "YxvYLQsNQSnaFyjJa3c1Dx6CiXUYUs/70KNU9//y0fdI42RE0dxQ9XkneBU+k27oZjJY1RmkABPFM5z57ekvqhsUJmsRH1plOB0RToY8xZIuzTo+2H/nBh9mZFFnfQeW1AMglfQg++TZQ50iJDMHdjBFz1ii3jJU5ndD+JngzHM="
 
 env:
   global:
