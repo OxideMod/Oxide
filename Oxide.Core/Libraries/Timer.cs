@@ -214,8 +214,8 @@ namespace Oxide.Core.Libraries
                     if (Destroyed) return false;
                     Destroyed = true;
                     Remove();
+                    Event.Remove(ref removedFromManager);
                 }
-                Event.Remove(ref removedFromManager);
                 return true;
             }
 
@@ -255,6 +255,8 @@ namespace Oxide.Core.Libraries
                         return;
                     }
                 }
+
+                Remove();
 
                 var expires_at = ExpiresAt + Delay;
                 ExpiresAt = expires_at;
@@ -346,7 +348,6 @@ namespace Oxide.Core.Libraries
         public void Update(float delta)
         {
             var now = Oxide.Now;
-            var next_slot_at = nextSlotAt;
             var time_slots = timeSlots;
             var expired_queue = expiredInstanceQueue;
             var checked_slots = 0;
@@ -354,6 +355,7 @@ namespace Oxide.Core.Libraries
             lock (Lock)
             {
                 var current_slot = currentSlot;
+                var next_slot_at = nextSlotAt;
 
                 while (true)
                 {
@@ -404,8 +406,7 @@ namespace Oxide.Core.Libraries
 
         private void InsertTimer(TimerInstance timer, bool in_past = false)
         {
-            var current_slot = currentSlot;
-            var index = in_past ? current_slot : (int)(timer.ExpiresAt / TickDuration) & LastTimeSlot;
+            var index = in_past ? currentSlot : (int)(timer.ExpiresAt / TickDuration) & LastTimeSlot;
             timeSlots[index].InsertTimer(timer);
         }
 

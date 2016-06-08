@@ -40,9 +40,21 @@ namespace Oxide.Plugins
         public Plugin Owner => instance.Owner;
 
         /// <summary>
+        /// Resets the timer optionally changing the delay setting a number of repetitions
+        /// </summary>
+        /// <param name="delay">The new delay between repetitions</param>
+        /// <param name="repetitions">Number of repetitions before being destroyed</param>
+        public void Reset(float delay = -1, int repetitions = 1) => instance.Reset(delay, repetitions);
+
+        /// <summary>
         /// Destroys this timer
         /// </summary>
         public void Destroy() => instance.Destroy();
+
+        /// <summary>
+        /// Destroys this timer and returns the instance to the pool
+        /// </summary>
+        public void DestroyToPool() => instance.DestroyToPool();
     }
 
     public class PluginTimers
@@ -94,6 +106,16 @@ namespace Oxide.Plugins
         public Timer Repeat(float interval, int repeats, Action callback)
         {
             return new Timer(timer.Repeat(interval, repeats, callback, plugin));
+        }
+
+        /// <summary>
+        /// Destroys a timer, returns the instance to the pool and sets the variable to null
+        /// </summary>
+        /// <param name="timer"></param>
+        public void Destroy(ref Timer timer)
+        {
+            timer?.DestroyToPool();
+            timer = null;
         }
     }
 }
