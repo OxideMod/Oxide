@@ -317,7 +317,7 @@ namespace Oxide.Game.ReignOfKings
             Interface.CallHook("OnPlayerDisconnected", player);
 
             // Let covalence know
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()));
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()), "Unknown");
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 

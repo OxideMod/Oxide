@@ -333,7 +333,7 @@ namespace Oxide.Game.Hurtworld
         private void OnPlayerDisconnected(PlayerSession session)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), null);
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), "Unknown");
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(session);

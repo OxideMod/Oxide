@@ -253,7 +253,7 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Call covalence hook
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), null);
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
