@@ -379,7 +379,7 @@ namespace Oxide.Core.Libraries
                 for (var i = 0; i < expired_count; i++)
                 {
                     var instance = expired_queue.Dequeue();
-                    instance.Invoke(now);
+                    if (!instance.Destroyed) instance.Invoke(now);
                 }
             }
         }
