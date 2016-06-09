@@ -308,7 +308,7 @@
                 "UnityEngine.Collider"
               ]
             },
-            "MSILHash": "QOpSvJeWmv0157Fqg7QA5+xY2lvCiDUVKjvlYEg2lJI=",
+            "MSILHash": "iTTFZEopI1nXlk33lIK16Prefb+ZwxZnK5V8fn5F8WA=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -334,7 +334,7 @@
                 "RaftGrab"
               ]
             },
-            "MSILHash": "/dAzGt8UMRyUxFiA2FIme+I6fVduAmBePEnwFQMJboU=",
+            "MSILHash": "+ZX0HZT9Dq3HCGNNQN8wO9v16NZbwtkUnYWh256VPrA=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -363,32 +363,6 @@
             "MSILHash": "T+bL6U4IfPfNXrDilUMtc/3rdwJ2WVnCq/G8F4K81vw=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 15,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 3,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnRaftExit",
-            "HookName": "OnRaftExit",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopPlayerRaft",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnTriggerExit",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "UnityEngine.Collider"
-              ]
-            },
-            "MSILHash": "xtfdE0pvpqqxDgts3lv0ptTJInK029HjmwJOcQNzNB0=",
-            "BaseHookName": null,
-            "HookCategory": "_TESTED"
           }
         },
         {
@@ -1036,7 +1010,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "apTKnCiKs4h6Z8X9f1vQzob80SGuAGfxWs12Pn6L4E0=",
+            "MSILHash": "mrs81a4LRHTsUviSoFwbyaji4W5n7vktwwEdiUo6Adc=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1474,7 +1448,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "GhpB0+i9y81YTbtKBD32DPegbBEmCH5/hBX6K7msk3U=",
+            "MSILHash": "Gn5hCDbolnPzzxVVL0LZ/jBfq+RlvpzoasTt/GcXxXE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

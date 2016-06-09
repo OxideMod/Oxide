@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 using UnityEngine;
 
 using Oxide.Core;
-using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 using Oxide.Game.RustLegacy.Libraries;
 
@@ -55,28 +51,6 @@ namespace Oxide.Game.RustLegacy
         };
 
         /// <summary>
-        /// Caches the OxideMod.rootconfig field
-        /// </summary>
-        readonly FieldInfo rootconfig = typeof(OxideMod).GetField("rootconfig", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        /// <summary>
-        /// Caches the OxideMod.commandline field
-        /// </summary>
-        readonly FieldInfo commandline = typeof(OxideMod).GetField("commandline", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        public class Folders
-        {
-            public string Source { get; }
-            public string Target { get; }
-
-            public Folders(string source, string target)
-            {
-                Source = source;
-                Target = target;
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the RustExtension class
         /// </summary>
         /// <param name="manager"></param>
@@ -99,66 +73,6 @@ namespace Oxide.Game.RustLegacy
             // Register the OnServerInitialized hook that we can't hook using the IL injector
             var serverinit = UnityEngine.Object.FindObjectOfType<ServerInit>();
             serverinit.gameObject.AddComponent<OnServerInitHook>();
-
-            // Check if folder migration is needed
-            var config = (OxideConfig)rootconfig.GetValue(Interface.Oxide);
-            var cmdline = (CommandLine)commandline.GetValue(Interface.Oxide);
-            var rootDirectory = Interface.Oxide.RootDirectory;
-            var currentDirectory = Interface.Oxide.InstanceDirectory;
-            var fallbackDirectory = Path.Combine(rootDirectory, config.InstanceCommandLines[config.InstanceCommandLines.Length - 1]);
-            var oldFallbackDirectory = string.Empty;
-            var oxidedir = cmdline.GetVariable("oxidedir");
-
-            if (cmdline.HasVariable("oxidedir"))
-                oldFallbackDirectory = Path.Combine(rootDirectory, cmdline.GetVariable("oxidedir"));
-
-            if (!Directory.Exists(oldFallbackDirectory))
-                oldFallbackDirectory = Path.Combine(rootDirectory, "save\\oxide");
-
-            if (!Directory.Exists(oldFallbackDirectory)) return;
-            if (currentDirectory == oldFallbackDirectory) return;
-
-            // Migrate existing oxide folders from the old fallback directory to the new one
-            string[] oxideDirectories = { config.PluginDirectory, config.ConfigDirectory, config.DataDirectory, config.LogDirectory };
-            foreach (var dir in oxideDirectories)
-            {
-                var source = Path.Combine(oldFallbackDirectory, dir);
-                var target = Path.Combine(currentDirectory, dir);
-                if (Directory.Exists(source))
-                {
-                    var stack = new Stack<Folders>();
-                    stack.Push(new Folders(source, target));
-
-                    while (stack.Count > 0)
-                    {
-                        var folders = stack.Pop();
-                        Directory.CreateDirectory(folders.Target);
-                        foreach (var file in Directory.GetFiles(folders.Source, "*"))
-                        {
-                            var targetFile = Path.Combine(folders.Target, Path.GetFileName(file));
-                            if (File.Exists(targetFile))
-                            {
-                                var i = 1;
-                                var newTargetFile = targetFile + ".old";
-                                while (File.Exists(newTargetFile))
-                                {
-                                    newTargetFile = targetFile + ".old" + i;
-                                    i++;
-                                }
-                                File.Move(file, newTargetFile);
-                            }
-                            else
-                                File.Move(file, targetFile);
-                        }
-
-                        foreach (var folder in Directory.GetDirectories(folders.Source))
-                            stack.Push(new Folders(folder, Path.Combine(folders.Target, Path.GetFileName(folder))));
-                    }
-
-                    Directory.Delete(source, true);
-                }
-            }
-            Directory.Delete(oldFallbackDirectory, true);
         }
 
         /// <summary>
