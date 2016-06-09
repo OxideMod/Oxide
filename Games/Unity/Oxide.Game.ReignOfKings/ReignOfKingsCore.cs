@@ -850,10 +850,10 @@ namespace Oxide.Game.ReignOfKings
             ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
+            Interface.CallHook("OnChatCommand", e.Player, cmd, args);
+
             // Handle it
             if (!cmdlib.HandleChatCommand(e.Player, cmd, args)) return null;
-
-            Interface.CallHook("OnChatCommand", e.Player, cmd, args);
 
             // Handled
             return true;
