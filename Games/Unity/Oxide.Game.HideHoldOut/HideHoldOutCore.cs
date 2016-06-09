@@ -331,8 +331,7 @@ namespace Oxide.Game.HideHoldOut
             }
 
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
-            Interface.CallHook("OnUserConnected", iplayer);
+            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(player.account_id));
 
             Debug.Log($"{player.account_id}/{player.Nickname} joined");
         }
@@ -345,8 +344,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerDisconnected(PlayerInfos player)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
-            Interface.CallHook("OnUserDisconnected", iplayer, null);
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
@@ -362,8 +360,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawn(PlayerInfos player)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
-            Interface.CallHook("OnUserRespawn", iplayer);
+            Interface.CallHook("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         /// <summary>
@@ -374,8 +371,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawned(PlayerInfos player)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
-            Interface.CallHook("OnUserRespawned", iplayer);
+            Interface.CallHook("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         #endregion

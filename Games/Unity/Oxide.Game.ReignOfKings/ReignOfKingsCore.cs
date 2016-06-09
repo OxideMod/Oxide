@@ -317,7 +317,7 @@ namespace Oxide.Game.ReignOfKings
             Interface.CallHook("OnPlayerDisconnected", player);
 
             // Let covalence know
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()));
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()), "Unknown");
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
@@ -850,11 +850,10 @@ namespace Oxide.Game.ReignOfKings
             ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
+            Interface.CallHook("OnChatCommand", e.Player, cmd, args);
+
             // Handle it
             if (!cmdlib.HandleChatCommand(e.Player, cmd, args)) return null;
-
-            Interface.CallDeprecatedHook("OnPlayerCommand", "OnChatCommand", new DateTime(2016, 5, 19), e.Player, cmd, args);
-            Interface.CallHook("OnChatCommand", e.Player, cmd, args);
 
             // Handled
             return true;
