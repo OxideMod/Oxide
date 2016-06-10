@@ -292,8 +292,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
             // Call covalence hook
-            var iplayer = covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
-            return Interface.CallHook("OnUserChat", iplayer, arg.Args[0]);
+            return Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()), arg.Args[0]);
         }
 
         /// <summary>
@@ -305,8 +304,7 @@ namespace Oxide.Game.Rust
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
             // Let covalence know
-            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
-            Interface.CallHook("OnUserDisconnected", iplayer, reason);
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.UserIDString), reason);
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
