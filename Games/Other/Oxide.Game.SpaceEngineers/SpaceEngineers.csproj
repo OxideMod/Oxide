@@ -96,7 +96,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />
-      <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
+      <PatchedFiles Include="$(ProjectDir)\Patched\*.dll; $(ProjectDir)\Patched\*.config" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" />
       <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\x64\*.dll" />
