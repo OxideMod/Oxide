@@ -62,6 +62,7 @@ namespace Oxide.Game.TheForest
             "HitPlayer:",
             "Hull (UnityEngine.GameObject)",
             "Image Effects are not supported on this platform",
+            "InitMaterial Starfield",
             "Joystick count=",
             "LobbyCreated param.m_eResult=k_EResult",
             "LocalPlayer -> Respawn",
@@ -165,10 +166,10 @@ namespace Oxide.Game.TheForest
             // Limit FPS to reduce CPU usage
             PlayerPreferences.MaxFrameRate = 60;
 
-            if (!Interface.Oxide.EnableConsole()) return;
-
             // Check if client should be disabled
             if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics")) DisableClient = true;
+
+            if (!Interface.Oxide.EnableConsole()) return;
 
             // Disable client's sound if not dedicated
             if (DisableClient) TheForestCore.DisableAudio();
