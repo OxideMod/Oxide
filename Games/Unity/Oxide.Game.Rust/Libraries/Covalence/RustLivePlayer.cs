@@ -114,7 +114,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             switch (LastCommand)
             {
                 case CommandType.Chat:
-                    Message(string.Format(message, args));
+                    Message(message, args);
                     return;
                 case CommandType.Console:
                     LastArg.ReplyWith(string.Format(message, args));
