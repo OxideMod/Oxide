@@ -29,30 +29,6 @@
           }
         },
         {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 25,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnApplicationQuit",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "Dy5h0seHx42qDZDbc2dnTINSRfxu76/pLdA6elEGkzo=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
           "Type": "InitOxide",
           "Hook": {
             "InjectionIndex": 0,
@@ -195,6 +171,56 @@
             "MSILHash": "2vKRUcGBjykWig0hbwoWPxNzTML01OsiYD9cKE1JFJ8=",
             "BaseHookName": "ModifyTags [patch] [part 1]",
             "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 356,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "onLevelLoaded",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "RGaqrmUV/u06ANT5i9I236miJcsUhKPrHL2nY6neyrM=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnApplicationQuit",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "Dy5h0seHx42qDZDbc2dnTINSRfxu76/pLdA6elEGkzo=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
