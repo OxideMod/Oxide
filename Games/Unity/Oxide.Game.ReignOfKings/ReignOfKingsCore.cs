@@ -828,8 +828,8 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        [HookMethod("IOnPlayerCommand")]
-        private object IOnPlayerCommand(PlayerCommandEvent e)
+        [HookMethod("IOnChatCommand")]
+        private object IOnChatCommand(PlayerCommandEvent e)
         {
             if (e?.Player == null || e.Command == null) return null;
 
