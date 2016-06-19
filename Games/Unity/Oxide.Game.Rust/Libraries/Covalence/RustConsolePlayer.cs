@@ -115,7 +115,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin() => true;
+        public bool IsAdmin => true;
 
         /// <summary>
         /// Bans the user for the specified reason and duration

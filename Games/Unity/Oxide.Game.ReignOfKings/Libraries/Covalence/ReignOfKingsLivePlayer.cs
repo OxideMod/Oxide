@@ -71,7 +71,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin() => player.HasPermission("admin");
+        public bool IsAdmin => player.HasPermission("admin");
 
         /// <summary>
         /// Kicks the user from the game

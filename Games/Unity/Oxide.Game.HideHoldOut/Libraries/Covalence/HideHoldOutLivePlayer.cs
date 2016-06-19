@@ -67,7 +67,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin() => player.isADMIN;
+        public bool IsAdmin => player.isADMIN;
 
         /// <summary>
         /// Kicks the user from the game

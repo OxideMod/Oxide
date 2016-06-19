@@ -66,7 +66,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin() => netUser.CanAdmin();
+        public bool IsAdmin => netUser.CanAdmin();
 
         /// <summary>
         /// Kicks the user from the game
