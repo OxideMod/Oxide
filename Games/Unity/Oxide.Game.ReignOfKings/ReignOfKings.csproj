@@ -36,7 +36,6 @@
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />

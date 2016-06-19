@@ -127,10 +127,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 352,
+            "InjectionIndex": 236,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l9",
+            "ArgumentString": "a0",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
@@ -157,8 +157,8 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "OnPlayerDisconnected",
             "HookName": "OnPlayerDisconnected",
@@ -290,8 +290,8 @@
           "Hook": {
             "InjectionIndex": 41,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
             "Name": "OnAirdrop",
             "HookName": "OnAirdrop",
@@ -343,7 +343,7 @@
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a2, a3",
+            "ArgumentString": "a0, a2",
             "HookTypeName": "Simple",
             "Name": "OnPlayerChat",
             "HookName": "OnPlayerChat",
@@ -401,8 +401,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
+            "Name": "OnServerCommand",
+            "HookName": "OnServerCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionManager",
             "Flagged": false,
@@ -418,6 +418,34 @@
             "MSILHash": "nQS7JPb52l9O1PEEpVZdY79+3ZfCDcpaTxTFWRBUsZo=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 363,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpawn",
+            "HookName": "OnPlayerSpawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RequestToSpawnPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ClientInfo",
+                "System.Int32",
+                "PlayerProfile"
+              ]
+            },
+            "MSILHash": "sM4l9pVa50U/hnEYkqha736MZ8qVxxSzOiZaZuZ7EvA=",
+            "BaseHookName": "OnPlayerConnected",
+            "HookCategory": "Player"
           }
         }
       ]

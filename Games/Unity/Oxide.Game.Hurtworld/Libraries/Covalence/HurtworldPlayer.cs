@@ -64,21 +64,21 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
+        /// <param name="group"></param>
         /// <returns></returns>
-        public bool BelongsToGroup(string groupName) => libPerms.UserHasGroup(Id, groupName);
+        public bool BelongsToGroup(string group) => libPerms.UserHasGroup(Id, group);
 
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        public void AddToGroup(string groupName) => libPerms.AddUserGroup(Id, groupName);
+        /// <param name="group"></param>
+        public void AddToGroup(string group) => libPerms.AddUserGroup(Id, group);
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        public void RemoveFromGroup(string groupName) => libPerms.RemoveUserGroup(Id, groupName);
+        /// <param name="group"></param>
+        public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
         #endregion
 

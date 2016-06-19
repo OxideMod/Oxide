@@ -88,23 +88,23 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets if the user belongs to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
+        /// <param name="group"></param>
         /// <returns></returns>
-        public bool BelongsToGroup(string groupName) => false;
+        public bool BelongsToGroup(string group) => false;
 
         /// <summary>
         /// Adds the user to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        public void AddToGroup(string groupName)
+        /// <param name="group"></param>
+        public void AddToGroup(string group)
         {
         }
 
         /// <summary>
         /// Removes the user from the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        public void RemoveFromGroup(string groupName)
+        /// <param name="group"></param>
+        public void RemoveFromGroup(string group)
         {
         }
 

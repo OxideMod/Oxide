@@ -35,6 +35,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
