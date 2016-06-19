@@ -68,12 +68,12 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         internal void NotifyPlayerConnect(BoltEntity player)
         {
-            var id = Convert.ToUInt64(player.source.RemoteEndPoint.SteamId);
+            var id = player.source.RemoteEndPoint.SteamId.Id;
             NotifyPlayerJoin(id, SteamFriends.GetFriendPersonaName(new CSteamID(id)));
             livePlayers[id.ToString()] = new TheForestLivePlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(BoltEntity player) => livePlayers.Remove(player.source.RemoteEndPoint.SteamId.ToString());
+        internal void NotifyPlayerDisconnect(BoltEntity player) => livePlayers.Remove(player.source.RemoteEndPoint.SteamId.Id.ToString());
 
         #region Offline Players
 

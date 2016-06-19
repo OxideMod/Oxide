@@ -103,6 +103,7 @@ namespace Oxide.Game.TheForest
             "killed player",
             "null texture passed to GUI.DrawTexture",
             "planeCrash started",
+            "playerControl enabled at",
             "set trap for dummy mutant",
             "setFemale",
             "setMale",

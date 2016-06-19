@@ -43,7 +43,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => player.source.RemoteEndPoint.ToString();
+        public string Address => player.source.RemoteEndPoint.Address.ToString();
 
         /// <summary>
         /// Gets the user's average network ping
@@ -57,7 +57,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             player = entity;
             steamId = entity.source.RemoteEndPoint.SteamId.Id;
             Character = this;
-            Object = entity.transform.gameObject;
+            Object = entity.gameObject;
         }
 
         #endregion
@@ -86,7 +86,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => player.transform.position = new Vector3(x, y, z);
+        public void Teleport(float x, float y, float z) => player.gameObject.transform.position = new Vector3(x, y, z);
 
         #endregion
 
@@ -131,7 +131,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            var pos = player.transform.position;
+            var pos = player.gameObject.transform.position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -143,7 +143,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            var pos = player.transform.position;
+            var pos = player.gameObject.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
