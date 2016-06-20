@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dlv6jSB3j7+5+qlimaWBcmoR8xiO5yPoR0dSdqSBkas=",
+            "MSILHash": "4jnh8XU4ehmFqwBocF2OL0pHpZGdtiVOXawOWwbITAo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dlv6jSB3j7+5+qlimaWBcmoR8xiO5yPoR0dSdqSBkas=",
+            "MSILHash": "4jnh8XU4ehmFqwBocF2OL0pHpZGdtiVOXawOWwbITAo=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -69,7 +69,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "H7f30iNDFttSNdmmmjr5Zndllvq6lHLnCqR6xkpvvHQ=",
+            "MSILHash": "eqd3E7r6H8UbBsKmkcMqq6uhNzJK9UG312Ble+C9G60=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -119,7 +119,7 @@
                 "Entity"
               ]
             },
-            "MSILHash": "aYzAlKsQfFn70P1N77ODQla35NKzOeDSDF07g56hmWk=",
+            "MSILHash": "bCwPfNYdmbaZhsfrJizhqcvUEFFeWTX33SvfCVkjMFg=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -127,10 +127,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 352,
+            "InjectionIndex": 236,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l9",
+            "ArgumentString": "a0",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
@@ -157,8 +157,8 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "OnPlayerDisconnected",
             "HookName": "OnPlayerDisconnected",
@@ -199,7 +199,7 @@
                 "RespawnType"
               ]
             },
-            "MSILHash": "lVu6hFiwYbTJ7ZqMwSN4/Rl0aopnEPSB0jSvhrhxTQY=",
+            "MSILHash": "6YC/YTloZQms+cxcUDBdeytW3TzlM4oPgeO9W2YW86g=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -254,7 +254,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "e19WiN440wCf5bzMHujDsB7IC7q67WRLTY+uXyVJYgg=",
+            "MSILHash": "s2seK6YSKFw5aX+rOGDIawQNm6HPUaDaifieJa6MNj4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -290,8 +290,8 @@
           "Hook": {
             "InjectionIndex": 41,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0",
             "HookTypeName": "Simple",
             "Name": "OnAirdrop",
             "HookName": "OnAirdrop",
@@ -343,7 +343,7 @@
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a2, a3",
+            "ArgumentString": "a0, a2",
             "HookTypeName": "Simple",
             "Name": "OnPlayerChat",
             "HookName": "OnPlayerChat",
@@ -401,8 +401,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnRunCommand",
-            "HookName": "OnRunCommand",
+            "Name": "OnServerCommand",
+            "HookName": "OnServerCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionManager",
             "Flagged": false,
@@ -418,6 +418,34 @@
             "MSILHash": "nQS7JPb52l9O1PEEpVZdY79+3ZfCDcpaTxTFWRBUsZo=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 363,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpawn",
+            "HookName": "OnPlayerSpawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RequestToSpawnPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ClientInfo",
+                "System.Int32",
+                "PlayerProfile"
+              ]
+            },
+            "MSILHash": "sM4l9pVa50U/hnEYkqha736MZ8qVxxSzOiZaZuZ7EvA=",
+            "BaseHookName": "OnPlayerConnected",
+            "HookCategory": "Player"
           }
         }
       ]

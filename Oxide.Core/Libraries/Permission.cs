@@ -261,28 +261,28 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if the specified user id is valid
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("UserIdValid")]
-        public bool UserIdValid(string userid) => validate == null || validate(userid);
+        public bool UserIdValid(string id) => validate == null || validate(id);
 
         /// <summary>
         /// Returns if the specified user exists
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("UserExists")]
-        public bool UserExists(string userid) => userdata.ContainsKey(userid);
+        public bool UserExists(string id) => userdata.ContainsKey(id);
 
         /// <summary>
         /// Returns the data for the specified user
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        private UserData GetUserData(string userid)
+        private UserData GetUserData(string id)
         {
             UserData data;
-            if (!userdata.TryGetValue(userid, out data)) userdata.Add(userid, data = new UserData());
+            if (!userdata.TryGetValue(id, out data)) userdata.Add(id, data = new UserData());
 
             // Return the data
             return data;
@@ -291,23 +291,23 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Updates the nickname
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <param name="nickname"></param>
         [LibraryFunction("UpdateNickname")]
-        public void UpdateNickname(string userid, string nickname)
+        public void UpdateNickname(string id, string nickname)
         {
-            if (UserExists(userid)) GetUserData(userid).LastSeenNickname = nickname;
+            if (UserExists(id)) GetUserData(id).LastSeenNickname = nickname;
         }
 
         /// <summary>
         /// Check if user has a group
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         [LibraryFunction("UserHasAnyGroup")]
-        public bool UserHasAnyGroup(string userid)
+        public bool UserHasAnyGroup(string id)
         {
-            if (!UserExists(userid)) return false;
-            return GetUserData(userid).Groups.Count > 0;
+            if (!UserExists(id)) return false;
+            return GetUserData(id).Groups.Count > 0;
         }
 
         /// <summary>
@@ -339,17 +339,17 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns if the specified user has the specified permission
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <param name="perm"></param>
         /// <returns></returns>
         [LibraryFunction("UserHasPermission")]
-        public bool UserHasPermission(string userid, string perm)
+        public bool UserHasPermission(string id, string perm)
         {
             if (string.IsNullOrEmpty(perm)) return false;
             perm = perm.ToLower();
 
             // First, get the user data
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
 
             // Check if they have the perm
             if (data.Perms.Contains(perm)) return true;
@@ -361,13 +361,13 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns the group to which the specified user belongs
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("GetUserGroups")]
-        public string[] GetUserGroups(string userid)
+        public string[] GetUserGroups(string id)
         {
             // First, get the user data
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
 
             // Return the group
             return data.Groups.ToArray();
@@ -376,13 +376,13 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Returns the permissions which the specified user has
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("GetUserPermissions")]
-        public string[] GetUserPermissions(string userid)
+        public string[] GetUserPermissions(string id)
         {
             // First, get the user data
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
 
             var perms = data.Perms.ToList();
             foreach (var @group in data.Groups) perms.AddRange(GetGroupPermissions(@group));
@@ -449,15 +449,15 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Set the group to which the specified user belongs
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <param name="groupname"></param>
         /// <returns></returns>
         [LibraryFunction("AddUserGroup")]
-        public void AddUserGroup(string userid, string groupname)
+        public void AddUserGroup(string id, string groupname)
         {
             if (!GroupExists(groupname)) return;
 
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
             if (!data.Groups.Add(groupname.ToLower())) return;
             SaveUsers();
         }
@@ -465,15 +465,15 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Set the group to which the specified user belongs
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <param name="groupname"></param>
         /// <returns></returns>
         [LibraryFunction("RemoveUserGroup")]
-        public void RemoveUserGroup(string userid, string groupname)
+        public void RemoveUserGroup(string id, string groupname)
         {
             if (!GroupExists(groupname)) return;
 
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
             if (groupname.Equals("*"))
             {
                 if (data.Groups.Count <= 0) return;
@@ -488,15 +488,15 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Get if the user belongs to given group
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <param name="groupname"></param>
         /// <returns></returns>
         [LibraryFunction("UserHasGroup")]
-        public bool UserHasGroup(string userid, string groupname)
+        public bool UserHasGroup(string id, string groupname)
         {
             if (!GroupExists(groupname)) return false;
 
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
             return data.Groups.Contains(groupname.ToLower());
         }
 
@@ -556,20 +556,20 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Grants the specified permission to the specified user
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <param name="perm"></param>
         /// <param name="owner"></param>
         [LibraryFunction("GrantUserPermission")]
-        public void GrantUserPermission(string userid, string perm, Plugin owner)
+        public void GrantUserPermission(string id, string perm, Plugin owner)
         {
             // Check it's even a perm
             if (!PermissionExists(perm, owner)) return;
 
             // Get the user data
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
 
             // Call hook for plugins
-            Interface.CallHook("OnUserPermissionGranted", userid, perm);
+            Interface.CallHook("OnUserPermissionGranted", id, perm);
 
             perm = perm.ToLower();
 
@@ -601,18 +601,18 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Revokes the specified permission from the specified user
         /// </summary>
-        /// <param name="userid"></param>
+        /// <param name="id"></param>
         /// <param name="perm"></param>
         [LibraryFunction("RevokeUserPermission")]
-        public void RevokeUserPermission(string userid, string perm)
+        public void RevokeUserPermission(string id, string perm)
         {
             if (string.IsNullOrEmpty(perm)) return;
 
             // Get the user data
-            var data = GetUserData(userid);
+            var data = GetUserData(id);
 
             // Call hook for plugins
-            Interface.CallHook("OnUserPermissionRevoked", userid, perm);
+            Interface.CallHook("OnUserPermissionRevoked", id, perm);
 
             if (perm.Equals("*"))
             {

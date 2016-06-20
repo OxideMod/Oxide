@@ -65,7 +65,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin() => session.IsAdmin;
+        public bool IsAdmin => session.IsAdmin;
 
         /// <summary>
         /// Kicks the user from the game

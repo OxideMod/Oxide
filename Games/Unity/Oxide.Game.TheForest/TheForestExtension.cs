@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 using UnityEngine;
 
@@ -102,6 +103,7 @@ namespace Oxide.Game.TheForest
             "killed player",
             "null texture passed to GUI.DrawTexture",
             "planeCrash started",
+            "playerControl enabled at",
             "set trap for dummy mutant",
             "setFemale",
             "setMale",
@@ -145,11 +147,35 @@ namespace Oxide.Game.TheForest
         {
         }
 
+        public static string GameVersion = "Unknown";
+
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
         public override void OnModLoad()
         {
+            // Get the game's version from mainData
+            var regex = new Regex(@"Version v(\d+\.\d+[a-z]?)");
+            using (var reader = new StreamReader(Path.Combine(Application.dataPath, "mainData")))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var match = regex.Match(line);
+                    if (!match.Success) continue;
+                    GameVersion = match.Groups[1].Value;
+                }
+            }
+
+            if (File.Exists(logFileName)) File.Delete(logFileName);
+            var logStream = File.AppendText(logFileName);
+            logStream.AutoFlush = true;
+            logWriter = TextWriter.Synchronized(logStream);
+            Application.logMessageReceivedThreaded += HandleLog;
+
+            // Limit FPS to reduce CPU usage
+            PlayerPreferences.MaxFrameRate = 60;
+
             // Override default server settings
             var commandLine = new CommandLine(Environment.GetCommandLineArgs());
             if (commandLine.HasVariable("maxplayers")) PlayerPrefs.SetInt("MpGamePlayerCount", int.Parse(commandLine.GetVariable("maxplayers")));
@@ -158,24 +184,14 @@ namespace Oxide.Game.TheForest
             if (commandLine.HasVariable("saveslot")) PlayerPrefs.SetInt("MpGameSaveSlot", int.Parse(commandLine.GetVariable("saveslot")));
             //if (commandLine.HasVariable("saveinterval")) // TODO: Make this work
 
-            if (File.Exists(logFileName)) File.Delete(logFileName);
-            var logStream = File.AppendText(logFileName);
-            logStream.AutoFlush = true;
-            logWriter = TextWriter.Synchronized(logStream);
-
-            // Limit FPS to reduce CPU usage
-            PlayerPreferences.MaxFrameRate = 60;
-
             // Check if client should be disabled
-            if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics")) DisableClient = true;
+            if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics"))
+            {
+                TheForestCore.DisableAudio();
+                DisableClient = true;
+            }
 
-            if (!Interface.Oxide.EnableConsole()) return;
-
-            // Disable client's sound if not dedicated
-            if (DisableClient) TheForestCore.DisableAudio();
-
-            Application.logMessageReceivedThreaded += HandleLog;
-            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            if (Interface.Oxide.EnableConsole()) Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 
         internal static void ServerConsole()
@@ -197,7 +213,7 @@ namespace Oxide.Game.TheForest
             {
                 return $" {TheForestAtmosphere.Instance?.TimeOfDay.ToString() ?? string.Empty}"; // TODO: Format time
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for 0.40";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameVersion}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 

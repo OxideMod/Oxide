@@ -20,7 +20,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
         /// </summary>
-        public IPAddress Address => IPAddress.Parse(uLink.MasterServer.ipAddress);
+        public IPAddress Address => IPAddress.Parse(Rust.Steam.Server.SteamServer_GetPublicIP().ToString());
 
         /// <summary>
         /// Gets the public-facing network port of the server, if known

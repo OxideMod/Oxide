@@ -117,5 +117,75 @@ namespace Oxide.Game.SevenDays
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
+
+        #region Player Hooks
+
+        /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="client"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(ClientInfo client)
+        {
+            // Do permission stuff
+            if (permission.IsLoaded)
+            {
+                permission.UpdateNickname(client.playerId, client.playerName);
+
+                // Add player to default group
+                if (!permission.UserHasGroup(client.playerId, DefaultGroups[0])) permission.AddUserGroup(client.playerId, DefaultGroups[0]);
+            }
+
+            // Let covalence know
+            //covalence.PlayerManager.NotifyPlayerConnect(client);
+            //Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(client.playerId));
+        }
+
+        /// <summary>
+        /// Called when the player has disconnected
+        /// </summary>
+        /// <param name="client"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(ClientInfo client)
+        {
+            // Let covalence know
+            //covalence.PlayerManager.NotifyPlayerDisconnect(client);
+            //Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(client.playerId), "Unknown");
+        }
+
+        /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        [HookMethod("OnPlayerChat")]
+        private void OnPlayerChat(ClientInfo client, string message)
+        {
+            // Call covalence hook
+            //Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(client.playerId), message);
+        }
+
+        /// <summary>
+        /// Called when the player spawns
+        /// </summary>
+        /// <param name="client"></param>
+        [HookMethod("OnPlayerSpawn")]
+        private void OnPlayerSpawn(ClientInfo client)
+        {
+            // Call covalence hook
+            //Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.playerId));
+        }
+
+        #endregion
+
+        #region Deprecated Hooks
+
+        [HookMethod("OnServerCommand")]
+        private object OnServerCommand(ClientInfo client, string command)
+        {
+            return Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 6, 3), client, command);
+        }
+
+        #endregion
     }
 }

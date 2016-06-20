@@ -35,7 +35,7 @@
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        bool IsAdmin();
+        bool IsAdmin { get; }
 
         /// <summary>
         /// Kicks the user from the game

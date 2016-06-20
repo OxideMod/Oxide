@@ -46,21 +46,21 @@ namespace Oxide.Core.Libraries.Covalence
         /// <summary>
         /// Gets if this player belongs to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
+        /// <param name="group"></param>
         /// <returns></returns>
-        bool BelongsToGroup(string groupName);
+        bool BelongsToGroup(string group);
 
         /// <summary>
         /// Adds this player to the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        void AddToGroup(string groupName);
+        /// <param name="group"></param>
+        void AddToGroup(string group);
 
         /// <summary>
         /// Removes this player from the specified usergroup
         /// </summary>
-        /// <param name="groupName"></param>
-        void RemoveFromGroup(string groupName);
+        /// <param name="group"></param>
+        void RemoveFromGroup(string group);
 
         #endregion
 
