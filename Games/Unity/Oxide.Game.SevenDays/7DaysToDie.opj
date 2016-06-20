@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dlv6jSB3j7+5+qlimaWBcmoR8xiO5yPoR0dSdqSBkas=",
+            "MSILHash": "4jnh8XU4ehmFqwBocF2OL0pHpZGdtiVOXawOWwbITAo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dlv6jSB3j7+5+qlimaWBcmoR8xiO5yPoR0dSdqSBkas=",
+            "MSILHash": "4jnh8XU4ehmFqwBocF2OL0pHpZGdtiVOXawOWwbITAo=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -69,7 +69,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "H7f30iNDFttSNdmmmjr5Zndllvq6lHLnCqR6xkpvvHQ=",
+            "MSILHash": "eqd3E7r6H8UbBsKmkcMqq6uhNzJK9UG312Ble+C9G60=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -119,7 +119,7 @@
                 "Entity"
               ]
             },
-            "MSILHash": "aYzAlKsQfFn70P1N77ODQla35NKzOeDSDF07g56hmWk=",
+            "MSILHash": "bCwPfNYdmbaZhsfrJizhqcvUEFFeWTX33SvfCVkjMFg=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -199,7 +199,7 @@
                 "RespawnType"
               ]
             },
-            "MSILHash": "lVu6hFiwYbTJ7ZqMwSN4/Rl0aopnEPSB0jSvhrhxTQY=",
+            "MSILHash": "6YC/YTloZQms+cxcUDBdeytW3TzlM4oPgeO9W2YW86g=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -254,7 +254,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "e19WiN440wCf5bzMHujDsB7IC7q67WRLTY+uXyVJYgg=",
+            "MSILHash": "s2seK6YSKFw5aX+rOGDIawQNm6HPUaDaifieJa6MNj4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -291,7 +291,7 @@
             "InjectionIndex": 41,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0",
+            "ArgumentString": "this, l0",
             "HookTypeName": "Simple",
             "Name": "OnAirdrop",
             "HookName": "OnAirdrop",
