@@ -430,6 +430,30 @@ namespace Oxide.Game.Rust
             return chance;
         }
 
+        /// <summary>
+        /// Called when the player starts looting an entity
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="entity"></param>
+        [HookMethod("IOnLootEntity")]
+        private void IOnLootEntity(PlayerLoot source, BaseEntity entity) => Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
+
+        /// <summary>
+        /// Called when the player starts looting an item
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="item"></param>
+        [HookMethod("IOnLootItem")]
+        private void IOnLootItem(PlayerLoot source, Item item) => Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
+
+        /// <summary>
+        /// Called when the player starts looting another player
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="target"></param>
+        [HookMethod("IOnLootPlayer")]
+        private void IOnLootPlayer(PlayerLoot source, BasePlayer target) => Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
+
         #endregion
 
         #region Entity Hooks
@@ -1294,33 +1318,6 @@ namespace Oxide.Game.Rust
         #endregion
 
         #region Deprecated Hooks
-
-        [HookMethod("OnExplosiveThrown")]
-        private object OnExplosiveThrown(BasePlayer player, BaseEntity entity)
-        {
-            return Interface.CallDeprecatedHook("OnWeaponThrown", "OnExplosiveThrown", new DateTime(2016, 6, 3), player, entity);
-        }
-
-        [HookMethod("IOnLootEntity")]
-        private void IOnLootEntity(PlayerLoot source, BaseEntity entity)
-        {
-            Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootEntity", new DateTime(2016, 6, 3), source, entity);
-        }
-
-        [HookMethod("IOnLootItem")]
-        private void IOnLootItem(PlayerLoot source, Item item)
-        {
-            Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootItem", new DateTime(2016, 6, 3), source, item);
-        }
-
-        [HookMethod("IOnLootPlayer")]
-        private void IOnLootPlayer(PlayerLoot source, BasePlayer target)
-        {
-            Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
-            Interface.CallDeprecatedHook("OnPlayerLoot", "OnLootPlayer", new DateTime(2016, 6, 3), source, target);
-        }
 
         [HookMethod("CanBypassQueue")]
         private object CanBypassQueue(Connection connection)
