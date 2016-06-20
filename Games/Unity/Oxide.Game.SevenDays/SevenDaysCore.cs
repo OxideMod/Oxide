@@ -183,7 +183,7 @@ namespace Oxide.Game.SevenDays
         [HookMethod("OnServerCommand")]
         private object OnServerCommand(ClientInfo client, string command)
         {
-            return Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 6, 3), client, command);
+            return Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 8, 1), client, command);
         }
 
         #endregion
