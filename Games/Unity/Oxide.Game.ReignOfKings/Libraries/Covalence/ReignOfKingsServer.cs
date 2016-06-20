@@ -4,6 +4,7 @@ using System.Net;
 using CodeHatch.Build;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
+using Steamworks;
 
 using Oxide.Core.Libraries.Covalence;
 
@@ -24,7 +25,14 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
         /// </summary>
-        public IPAddress Address => IPAddress.Parse(CodeHatch.Engine.Core.Gaming.Game.ServerData.IP);
+        public IPAddress Address
+        {
+            get
+            {
+                var ip = SteamGameServer.GetPublicIP();
+                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24));
+            }
+        }
 
         /// <summary>
         /// Gets the public-facing network port of the server, if known
