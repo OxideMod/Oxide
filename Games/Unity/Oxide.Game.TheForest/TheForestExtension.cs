@@ -115,10 +115,6 @@ namespace Oxide.Game.TheForest
             "started steam server"
         };
 
-        private const string logFileName = "output_log.txt"; // TODO: Add -logFile support
-        private TextWriter logWriter;
-        public static bool DisableClient;
-
         /// <summary>
         /// Initializes a new instance of the TheForestExtension class
         /// </summary>
@@ -147,7 +143,10 @@ namespace Oxide.Game.TheForest
         {
         }
 
+        public static bool DisableClient;
         public static string GameVersion = "Unknown";
+        private const string logFileName = "logs/output_log.txt"; // TODO: Add -logfile support
+        private TextWriter logWriter;
 
         /// <summary>
         /// Called when all other extensions have been loaded
@@ -167,6 +166,7 @@ namespace Oxide.Game.TheForest
                 }
             }
 
+            if (!Directory.Exists("logs")) Directory.CreateDirectory("logs");
             if (File.Exists(logFileName)) File.Delete(logFileName);
             var logStream = File.AppendText(logFileName);
             logStream.AutoFlush = true;
@@ -211,7 +211,7 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                return $" {TheForestAtmosphere.Instance?.TimeOfDay.ToString() ?? string.Empty}"; // TODO: Format time
+                return $" {DateTime.Today.Add(TimeSpan.FromSeconds(TheForestAtmosphere.Instance.DeltaTimeOfDay)).ToString("h:mm tt").ToLower()}";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameVersion}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

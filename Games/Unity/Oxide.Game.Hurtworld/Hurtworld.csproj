@@ -9,6 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Oxide.Game.Hurtworld</RootNamespace>
     <AssemblyName>Oxide.Game.Hurtworld</AssemblyName>
+    <GameName>$(MSBuildProjectName)</GameName>
+    <GameNameLinux>$(GameName)_Linux</GameNameLinux>
+    <BundleDir>$(SolutionDir)Bundles</BundleDir>
+    <ManagedDir>Hurtworld_Data\Managed</ManagedDir>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -80,12 +84,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <PropertyGroup>
-      <GameName>$(MSBuildProjectName)</GameName>
-      <GameNameLinux>$(GameName)_Linux</GameNameLinux>
-      <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>Hurtworld_Data\Managed</ManagedDir>
-    </PropertyGroup>
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so.1" />
@@ -113,6 +111,7 @@
       <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
       <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
+    <RemoveDir Directories="$(BundleDir)\$(GameName); $(BundleDir)\$(GameNameLinux)" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameNameLinux)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(LinuxFiles)" DestinationFiles="@(LinuxFiles->'$(BundleDir)\$(GameNameLinux)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
@@ -125,5 +124,15 @@
     <Copy SourceFiles="@(WinFiles)" DestinationFiles="@(WinFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinGameFiles)" DestinationFiles="@(WinGameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinNativeFiles)" DestinationFiles="@(WinNativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
+    <CallTarget Targets="Deploy" Condition="Exists('$(SolutionDir).deploy')" />
+  </Target>
+  <Target Name="Deploy">
+    <ReadLinesFromFile File="$(SolutionDir).deploy">
+      <Output PropertyName="DeployPath" TaskParameter="Lines" />
+    </ReadLinesFromFile>
+    <ItemGroup>
+      <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
+    </ItemGroup>
+    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>

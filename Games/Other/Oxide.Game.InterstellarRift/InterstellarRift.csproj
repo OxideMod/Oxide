@@ -9,6 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Oxide.Game.InterstellarRift</RootNamespace>
     <AssemblyName>Oxide.Game.InterstellarRift</AssemblyName>
+    <GameName>$(MSBuildProjectName)</GameName>
+    <BundleDir>$(SolutionDir)Bundles</BundleDir>
+    <ManagedDir>Build\Managed</ManagedDir>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -64,11 +67,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
-    <PropertyGroup>
-      <GameName>$(MSBuildProjectName)</GameName>
-      <BundleDir>$(SolutionDir)\Bundles</BundleDir>
-      <ManagedDir>Build\Managed</ManagedDir>
-    </PropertyGroup>
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
@@ -100,5 +98,15 @@
     <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" />
     <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" DestinationFiles="$(BundleDir)\$(GameName)\Build\protobuf-net.dll" />
     <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" />
+    <CallTarget Targets="Deploy" Condition="Exists('$(SolutionDir).deploy')" />
+  </Target>
+  <Target Name="Deploy">
+    <ReadLinesFromFile File="$(SolutionDir).deploy">
+      <Output PropertyName="DeployPath" TaskParameter="Lines" />
+    </ReadLinesFromFile>
+    <ItemGroup>
+      <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
+    </ItemGroup>
+    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>

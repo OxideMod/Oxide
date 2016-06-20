@@ -5,6 +5,7 @@ using System.Reflection;
 
 using Ceto;
 using Steamworks;
+using TheForest.Player;
 using TheForest.UI;
 using TheForest.Utils;
 using UnityEngine;
@@ -13,6 +14,7 @@ using UnityStandardAssets.ImageEffects;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.TheForest.Libraries.Covalence;
 
 namespace Oxide.Game.TheForest
 {
@@ -26,6 +28,9 @@ namespace Oxide.Game.TheForest
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The Forest covalence provider
+        private readonly TheForestCovalenceProvider covalence = TheForestCovalenceProvider.Instance;
 
         // TODO: Localization of core
 
@@ -57,7 +62,16 @@ namespace Oxide.Game.TheForest
             CallHook("InitLogging", null);
         }
 
-        // TODO: PermissionsLoaded check
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <returns></returns>
+        private bool PermissionsLoaded(BoltEntity player)
+        {
+            if (permission.IsLoaded) return true;
+            // TODO: PermissionsNotLoaded reply to player
+            return false;
+        }
 
         #endregion
 
@@ -120,11 +134,18 @@ namespace Oxide.Game.TheForest
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
-            // Disable client-side elements if not dedicated
-            if (TheForestExtension.DisableClient) DisableClient();
+            // Add 'oxide' and 'modded' tags
+            SteamGameServer.SetGameTags("oxide,modded");
 
             // Update server console window and status bars
             TheForestExtension.ServerConsole();
+
+            // Disable audio and client-side elements if not dedicated
+            if (TheForestExtension.DisableClient)
+            {
+                DisableAudio();
+                DisableClient();
+            }
 
             // Save the level every X minutes
             Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
@@ -143,16 +164,12 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Called when the player has connected
         /// </summary>
-        /// <param name="connection"></param>
+        /// <param name="player"></param>
         [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(BoltConnection connection)
+        private void OnPlayerConnected(BoltEntity player)
         {
-            if (connection == null) return;
-            var id = connection.RemoteEndPoint.SteamId.Id;
+            var id = player.source.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
-
-            // Let covalence know
-            //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerConnect(connection);
 
             // Do permission stuff
             if (permission.IsLoaded)
@@ -163,6 +180,10 @@ namespace Oxide.Game.TheForest
                 if (!permission.UserHasGroup(id.ToString(), DefaultGroups[0])) permission.AddUserGroup(id.ToString(), DefaultGroups[0]);
             }
 
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(player);
+            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(id.ToString()));
+
             Debug.Log($"{id}/{name} joined");
         }
 
@@ -170,16 +191,20 @@ namespace Oxide.Game.TheForest
         /// Called when the player has disconnected
         /// </summary>
         /// <param name="connection"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(BoltConnection connection)
+        [HookMethod("IOnPlayerDisconnected")]
+        private void IOnPlayerDisconnected(BoltConnection connection)
         {
-            if (connection == null) return;
-
             var id = connection.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
+            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.RemoteEndPoint.SteamId.Id == id);
+            if (player == null) return;
+
+            // Call hook for plugins
+            Interface.CallHook("OnPlayerDisconnected", player);
 
             // Let covalence know
-            //Libraries.Covalence.TheForestCovalenceProvider.Instance.PlayerManager.NotifyPlayerDisconnect(connection);
+            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
 
             Debug.Log($"{id}/{name} quit");
         }
@@ -197,7 +222,21 @@ namespace Oxide.Game.TheForest
             var id = player.source.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
 
+            // Call covalence hook
+            Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
+
             Debug.Log($"[Chat] {name}: {evt.Message}");
+        }
+
+        /// <summary>
+        /// Called when the player spawns
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerSpawn")]
+        private void OnPlayerSpawn(BoltEntity player)
+        {
+            // Call covalence hook
+            Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(player.source.RemoteEndPoint.SteamId.Id.ToString()));
         }
 
         #endregion
@@ -215,8 +254,6 @@ namespace Oxide.Game.TheForest
             NGUITools.soundVolume = 0f;
             PlayerPreferences.Volume = 0f;
             PlayerPreferences.MusicVolume = 0f;
-
-            if (Scene.PlaneCrash != null) Scene.PlaneCrash.ShowCrash = false;
 
             var audioListeners = UnityEngine.Object.FindObjectsOfType<AudioListener>();
             foreach (var audioListener in audioListeners) audioListener.enabled = false;
@@ -266,15 +303,12 @@ namespace Oxide.Game.TheForest
                 if (LevelSerializer.SavedGames.Count > 0)
                 {
                     coop.OnLoad();
-                    coop.OnSlotSelection((int) TitleScreen.StartGameSetup.Slot);
+                    coop.OnSlotSelection((int)TitleScreen.StartGameSetup.Slot);
                 }
                 else
                 {
                     coop.OnNewGame();
                 }
-
-                // Disable client's sound if not dedicated
-                if (TheForestExtension.DisableClient) DisableAudio();
             });
         }
 
@@ -309,38 +343,51 @@ namespace Oxide.Game.TheForest
         }
 
         /// <summary>
-        /// Disables unneeded client-side elements
+        /// Overrides the default save path
         /// </summary>
         /// <returns></returns>
+        [HookMethod("IGetSavePath")]
+        private string IGetSavePath()
+        {
+            var saveDir = Path.Combine(Interface.Oxide.RootDirectory, "saves/");
+            if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
+            return saveDir;
+        }
+
+        /// <summary>
+        /// Disables client-side elements
+        /// </summary>
         private static void DisableClient()
         {
-            //LocalPlayer.Entity?.CancelInvoke();
-            //LocalPlayer.Stats?.CancelInvoke();
-            //LocalPlayer.Tuts?.CancelInvoke();
+            //var gameObject = GameObject.Find("PlayerPlanePosition");
+            //if (gameObject) LocalPlayer.CamFollowHead.planePos = gameObject.transform; // Causes NRE
 
-            //LocalPlayer.Inventory.enabled = false;
-            //LocalPlayer.FpCharacter.enabled = false;
-            //LocalPlayer.MainCam.SendMessage("GuiOff");
+            /*if (Scene.SceneTracker.allPlayers.Contains(LocalPlayer.Entity.gameObject)) // Useless?
+                Scene.SceneTracker.allPlayers.Remove(LocalPlayer.Entity.gameObject);
+            if (Scene.SceneTracker.allPlayerEntities.Contains(LocalPlayer.Entity)) // Useless?
+                Scene.SceneTracker.allPlayerEntities.Remove(LocalPlayer.Entity);*/
 
-            /*var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
-            foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
-            var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
-            foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
-            var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
-            foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
-            var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
-            foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);*/
+            //LocalPlayer.Stats.KillMeFast(); // Useless?
 
-            var amplifyMotionCameras = Resources.FindObjectsOfTypeAll<AmplifyMotionCamera>();
-            foreach (var amplifyMotionCamera in amplifyMotionCameras) UnityEngine.Object.Destroy(amplifyMotionCamera);
-            var amplifyMotionEffectBases = Resources.FindObjectsOfTypeAll<AmplifyMotionEffectBase>();
-            foreach (var amplifyMotionEffectBase in amplifyMotionEffectBases) UnityEngine.Object.Destroy(amplifyMotionEffectBase);
-            var imageEffectBases = Resources.FindObjectsOfTypeAll<ImageEffectBase>();
-            foreach (var imageEffectBase in imageEffectBases) UnityEngine.Object.Destroy(imageEffectBase);
-            var imageEffectOptimizers = Resources.FindObjectsOfTypeAll<ImageEffectOptimizer>();
-            foreach (var imageEffectOptimizer in imageEffectOptimizers) UnityEngine.Object.Destroy(imageEffectOptimizer);
-            var postEffectsBases = Resources.FindObjectsOfTypeAll<PostEffectsBase>();
-            foreach (var postEffectsBase in postEffectsBases) UnityEngine.Object.Destroy(postEffectsBase);
+            //var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
+            //foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
+            //var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
+            //foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
+            //var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
+            //foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
+            //var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
+            //foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);*/
+
+            //var amplifyMotionCameras = Resources.FindObjectsOfTypeAll<AmplifyMotionCamera>();
+            //foreach (var amplifyMotionCamera in amplifyMotionCameras) UnityEngine.Object.Destroy(amplifyMotionCamera);
+            //var amplifyMotionEffectBases = Resources.FindObjectsOfTypeAll<AmplifyMotionEffectBase>();
+            //foreach (var amplifyMotionEffectBase in amplifyMotionEffectBases) UnityEngine.Object.Destroy(amplifyMotionEffectBase);
+            //var imageEffectBases = Resources.FindObjectsOfTypeAll<ImageEffectBase>();
+            //foreach (var imageEffectBase in imageEffectBases) UnityEngine.Object.Destroy(imageEffectBase); // Causes PlayerStats.CheckStats NRE
+            //var imageEffectOptimizers = Resources.FindObjectsOfTypeAll<ImageEffectOptimizer>();
+            //foreach (var imageEffectOptimizer in imageEffectOptimizers) UnityEngine.Object.Destroy(imageEffectOptimizer);
+            //var postEffectsBases = Resources.FindObjectsOfTypeAll<PostEffectsBase>();
+            //foreach (var postEffectsBase in postEffectsBases) UnityEngine.Object.Destroy(postEffectsBase);
             //var scionPostProcesses = Resources.FindObjectsOfTypeAll<ScionPostProcess>();
             //foreach (var scionPostProcess in scionPostProcesses) UnityEngine.Object.Destroy(scionPostProcess);
             var projectedGrids = Resources.FindObjectsOfTypeAll<ProjectedGrid>();
@@ -358,22 +405,9 @@ namespace Oxide.Game.TheForest
             foreach (var behaviour in behaviours)
             {
                 if (!behaviour.GetType().FullName.StartsWith("UI")) continue;
-                behaviour.enabled = false;
-                //behaviour.gameObject.SetActive(false);
+                //behaviour.enabled = false;
+                //behaviour.gameObject.SetActive(false); // Causes save "Starting client..." issues
             }
-        }
-
-        /// <summary>
-        /// Overrides the default save path
-        /// </summary>
-        /// <returns></returns>
-        [HookMethod("IGetSavePath")]
-        private string IGetSavePath()
-        {
-            //var dir = Utility.GetDirectoryName(Interface.Oxide.RootDirectory + "\\saves\\");
-            var dir = Interface.Oxide.RootDirectory + "\\saves\\" + TitleScreen.StartGameSetup.Slot + "\\";
-            if (/*dir != null && */!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            return dir;
         }
 
         #endregion
