@@ -78,7 +78,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => CoopKick.UnBanPlayer(steamId); // TODO
+        public void Kill() => player.GetComponentInChildren<EnemyHealth>().Hit(1000);
 
         /// <summary>
         /// Teleports the user's character to the specified position
@@ -99,7 +99,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="args"></param>
         public void Message(string message, params object[] args)
         {
-            // TODO
+            // TODO: Not possible yet?
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO: Is this even possible?
+            // TODO: Not possible yet?
         }
 
         #endregion
