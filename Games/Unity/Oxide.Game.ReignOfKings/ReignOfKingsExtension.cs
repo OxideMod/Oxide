@@ -75,6 +75,7 @@ namespace Oxide.Game.ReignOfKings
             "HDR RenderTexture",
             "HDR and MultisampleAntiAliasing",
             "Instantiating Base and Dedicated",
+            "ItemCacheServiceServer is overwriting a live item cache.",
             "IT WORKED???",
             "Load Server GUID:",
             "Loading: ",
