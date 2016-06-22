@@ -43,7 +43,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => player.source.RemoteEndPoint.Address.ToString();
+        public string Address => player.source.RemoteEndPoint.Address.ToString(); // TODO: Fix, showing as 1.16.0.1 for all
 
         /// <summary>
         /// Gets the user's average network ping
