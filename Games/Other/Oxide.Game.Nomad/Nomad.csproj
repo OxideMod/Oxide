@@ -45,6 +45,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libraries\Covalence\NomadCommandSystem.cs" />
+    <Compile Include="Libraries\Covalence\NomadCovalenceProvider.cs" />
+    <Compile Include="Libraries\Covalence\NomadLivePlayer.cs" />
+    <Compile Include="Libraries\Covalence\NomadPlayer.cs" />
+    <Compile Include="Libraries\Covalence\NomadPlayerManager.cs" />
+    <Compile Include="Libraries\Covalence\NomadServer.cs" />
     <Compile Include="Libraries\Nomad.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NomadCore.cs" />

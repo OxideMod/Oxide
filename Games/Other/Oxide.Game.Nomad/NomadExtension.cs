@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
+
+using TNet;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
-using Oxide.Core.Logging;
 
 namespace Oxide.Game.Nomad
 {
@@ -83,22 +83,17 @@ namespace Oxide.Game.Nomad
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"? | {NomadCore.CommandLine.GetVariable("name")}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {NomadCore.CommandLine.GetVariable("name")}";
+            Interface.Oxide.ServerConsole.Title = () => $"? | {NomadCore.CommandLine.GetVariable("name")}"; // GameServer.name
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {NomadCore.CommandLine.GetVariable("name")}"; // GameServer.name
             /*Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Main.fpsCount;
                 var seconds = TimeSpan.FromSeconds(Main.time);
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
-            };
-            Interface.Oxide.ServerConsole.Status2Left = () =>
-            {
-                var players = Main.numPlayers;
-                var playerLimit = Main.maxNetPlayers;
-                return string.Concat(" ", players, "/", playerLimit, " players");
-            };
-            Interface.Oxide.ServerConsole.Status2Right = () =>
+            };*/
+            //Interface.Oxide.ServerConsole.Status2Left = () => $" {Channel.players.size}/{NomadCore.CommandLine.GetVariable("slots")} players"; // GameServer.playerLimit
+            /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);
                 var bytesSent = Utility.FormatBytes(Main.txData);
@@ -106,10 +101,10 @@ namespace Oxide.Game.Nomad
             };
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower(); // GameServer.mTime
                 return string.Concat(" ", time);
             };*/
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {NomadCore.CommandLine.GetVariable("clientVersion")}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {NomadCore.CommandLine.GetVariable("clientVersion")}"; // GameServer.clientVersion
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
