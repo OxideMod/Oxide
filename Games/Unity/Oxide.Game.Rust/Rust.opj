@@ -3102,6 +3102,29 @@
             "BaseHookName": "OnSignUpdate",
             "HookCategory": "Sign"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 18,
+            "RemoveCount": 4,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "HidePassword [patch]",
+            "HookName": "HidePassword",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Bootstrap",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Init_Tier0",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "dHnYkuna29U3MuwVdEEyh/QsBF8OWtas3qwcT+DGILM=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "_Patches"
+          }
         }
       ]
     }
