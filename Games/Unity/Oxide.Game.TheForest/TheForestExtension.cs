@@ -183,6 +183,7 @@ namespace Oxide.Game.TheForest
             if (commandLine.HasVariable("friendsonly")) PlayerPrefs.SetInt("MpGameFriendsOnly", int.Parse(commandLine.GetVariable("friendsonly")));
             if (commandLine.HasVariable("saveslot")) PlayerPrefs.SetInt("MpGameSaveSlot", int.Parse(commandLine.GetVariable("saveslot")));
             //if (commandLine.HasVariable("saveinterval")) // TODO: Make this work
+            //if (commandLine.HasVariable("gamemode")) // TODO: Make this work
 
             // Check if client should be disabled
             if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics"))
@@ -208,10 +209,21 @@ namespace Oxide.Game.TheForest
                 return string.Concat(fps, "fps, ", uptime);
             };
             Interface.Oxide.ServerConsole.Status2Left = () => $" {CoopLobby.Instance?.MemberCount}/{CoopLobby.Instance?.Info?.MemberLimit}";
-            Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
+            Interface.Oxide.ServerConsole.Status2Right = () =>
+            {
+                if (BoltNetwork.serverTime <= 0) return "0b/s in, 0b/s out";
+                double bytesSent = 0;
+                double bytesReceived = 0;
+                foreach (var connection in BoltNetwork.connections)
+                {
+                    bytesSent += connection.BitsPerSecondIn / 8f;
+                    bytesReceived += connection.BitsPerSecondOut / 8f;
+                }
+                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+            };
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                return $" {DateTime.Today.Add(TimeSpan.FromSeconds(TheForestAtmosphere.Instance.DeltaTimeOfDay)).ToString("h:mm tt").ToLower()}";
+                return $" {DateTime.Today.Add(TimeSpan.FromMinutes(TheForestAtmosphere.Instance.TimeOfDay)).ToString("h:mm tt").ToLower()}";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameVersion}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

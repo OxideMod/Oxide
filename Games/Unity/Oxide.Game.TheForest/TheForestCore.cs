@@ -171,6 +171,8 @@ namespace Oxide.Game.TheForest
             var id = player.source.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
 
+            Debug.Log($"{id}/{name} joined");
+
             // Do permission stuff
             if (permission.IsLoaded)
             {
@@ -182,9 +184,7 @@ namespace Oxide.Game.TheForest
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(id.ToString()));
-
-            Debug.Log($"{id}/{name} joined");
+            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(id.ToString()));
         }
 
         /// <summary>
@@ -199,14 +199,14 @@ namespace Oxide.Game.TheForest
             var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.RemoteEndPoint.SteamId.Id == id);
             if (player == null) return;
 
+            Debug.Log($"{id}/{name} quit");
+
             // Call hook for plugins
-            Interface.CallHook("OnPlayerDisconnected", player);
+            Interface.Call("OnPlayerDisconnected", player);
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
-
-            Debug.Log($"{id}/{name} quit");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
         }
 
         /// <summary>
@@ -214,18 +214,18 @@ namespace Oxide.Game.TheForest
         /// </summary>
         /// <param name="evt"></param>
         [HookMethod("OnPlayerChat")]
-        private void OnPlayerChat(ChatEvent evt)
+        private object OnPlayerChat(ChatEvent evt)
         {
             var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
-            if (player == null) return;
+            if (player == null) return null;
 
             var id = player.source.RemoteEndPoint.SteamId.Id;
             var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
 
-            // Call covalence hook
-            Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
-
             Debug.Log($"[Chat] {name}: {evt.Message}");
+
+            // Call covalence hook
+            return Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace Oxide.Game.TheForest
         private void OnPlayerSpawn(BoltEntity player)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(player.source.RemoteEndPoint.SteamId.Id.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(player.source.RemoteEndPoint.SteamId.Id.ToString()));
         }
 
         #endregion
