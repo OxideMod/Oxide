@@ -50,7 +50,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the version number/build of the server
         /// </summary>
-        public string Version => Protocol.printable;
+        public string Version => $"{BuildInformation.VersionStampDays} ({Protocol.network})";
 
         #endregion
 
