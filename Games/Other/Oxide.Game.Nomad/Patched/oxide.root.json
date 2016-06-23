@@ -10,6 +10,6 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "Nomad Server\\oxide"
+        "oxide"
     ]
 }

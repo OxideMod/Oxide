@@ -32,16 +32,16 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 54,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "ArgumentBehavior": 1,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
             "AssemblyName": "NomadServer.exe",
             "TypeName": "TNet.TcpProtocol",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "VerifyRequestID",
@@ -102,6 +102,82 @@
             },
             "MSILHash": "tAySjGqXMHz4cdJVSQBkpsxBi9scf+99r7w3mpgobO8=",
             "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "TNet.Channel",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SaveTo",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.IO.BinaryWriter"
+              ]
+            },
+            "MSILHash": "1TZPHyrED8/dlGHpWmw6Cog+/bZIKGcIE3hAfS2Tsdc=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "FinishJoiningChannel",
+            "HookName": "OnFinishJoiningChannel",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "TNet.TcpPlayer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "FinishJoiningChannel",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "6DeKoVM8AAQWi7BlUZzN6Y/Zai0GFrzhb9uunnoyUWM=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 40,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "TNet.TcpLobbyServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Start",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "Fn0I45O4v676dZAlgSsmkGIHa9RFJ47VBFkMm9qHDNE=",
+            "BaseHookName": null,
             "HookCategory": "Server"
           }
         }
