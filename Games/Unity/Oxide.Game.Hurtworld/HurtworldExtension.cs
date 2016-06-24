@@ -163,7 +163,7 @@ namespace Oxide.Game.Hurtworld
             };
             Interface.Oxide.ServerConsole.Status3Right = () =>
             {
-                return $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})";
+                return $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.PROTOCOL_VERSION})";
             };
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }

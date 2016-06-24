@@ -235,7 +235,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(PlayerSession session)
         {
-            session.Name = GameManager.Instance.GetIdentity(session.SteamId).Name ?? "Unnamed";
+            session.Name = session.Identity.Name ?? "Unnamed";
 
             // Call out and see if we should reject
             var canlogin = Interface.CallHook("CanClientLogin", session) ?? Interface.CallHook("CanUserLogin", session.Name, session.SteamId.ToString());

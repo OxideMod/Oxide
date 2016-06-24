@@ -43,7 +43,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name, string message = null)
         {
-            GameManager.Instance.SendLog(string.Concat("[Broadcast] ", message != null ? $"{name} {message}" : name));
+            ConsoleManager.SendLog(string.Concat("[Broadcast] ", message != null ? $"{name} {message}" : name));
             ChatManagerServer.Instance.RPC("RelayChat", uLink.RPCMode.Others, message != null ? $"{name} {message}" : name);
         }
 

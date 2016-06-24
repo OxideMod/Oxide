@@ -38,7 +38,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the version number/build of the server
         /// </summary>
-        public string Version => GameManager.Instance.GetProtocolVersion().ToString();
+        public string Version => GameManager.PROTOCOL_VERSION.ToString();
 
         #endregion
 
@@ -50,7 +50,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            GameManager.Instance.SendLog(string.Concat("[Broadcast] ", message));
+            ConsoleManager.SendLog(string.Concat("[Broadcast] ", message));
             ChatManagerServer.Instance.RPC("RelayChat", uLink.RPCMode.Others, message);
         }
 
