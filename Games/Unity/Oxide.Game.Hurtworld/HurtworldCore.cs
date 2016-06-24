@@ -631,7 +631,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatVersion")]
         private void ChatVersion(PlayerSession session)
         {
-            Reply($"Oxide {OxideMod.Version} for {Title} {GameManager.Instance?.Version} ({GameManager.Instance?.GetProtocolVersion()})", session);
+            Reply($"Oxide {OxideMod.Version} for {Title} {GameManager.Instance.Version} ({GameManager.PROTOCOL_VERSION})", session);
         }
 
         /// <summary>
