@@ -372,8 +372,6 @@ namespace Oxide.Game.Hurtworld
 
         #region Structure Hooks
 
-        private readonly FieldInfo singleUsedBy = typeof(DoorSingleServer).GetField("LastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
-
         /// <summary>
         /// Called when a single door is used
         /// </summary>
@@ -382,13 +380,12 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnSingleDoorUsed")]
         private void IOnSingleDoorUsed(DoorSingleServer door)
         {
-            var player = singleUsedBy.GetValue(door);
+            var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.CallHook("OnSingleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
+            Interface.Call("OnSingleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
         }
 
-        private readonly FieldInfo doubleUsedBy = typeof(DoubleDoorServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
         /// Called when a double door is used
@@ -398,13 +395,11 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnDoubleDoorUsed")]
         private void IOnDoubleDoorUsed(DoubleDoorServer door)
         {
-            var player = doubleUsedBy.GetValue(door);
+            var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.CallHook("OnDoubleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
+            Interface.Call("OnDoubleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
         }
-
-        private readonly FieldInfo garageUsedBy = typeof(GarageDoorServer).GetField("_lastUsedBy", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
         /// Called when a garage door is used
@@ -414,10 +409,10 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnGarageDoorUsed")]
         private void IOnGarageDoorUsed(GarageDoorServer door)
         {
-            var player = garageUsedBy.GetValue(door);
+            var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.CallHook("OnGarageDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
+            Interface.Call("OnGarageDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
         }
 
         #endregion
