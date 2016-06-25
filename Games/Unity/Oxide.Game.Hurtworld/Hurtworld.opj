@@ -534,7 +534,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 18,
+            "InjectionIndex": 19,
             "RemoveCount": 5,
             "Instructions": [],
             "HookTypeName": "Modify",
