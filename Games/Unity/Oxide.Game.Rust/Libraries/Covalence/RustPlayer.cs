@@ -15,17 +15,17 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         private readonly ulong steamId;
 
         /// <summary>
-        /// Gets/sets the name for this player
+        /// Gets/sets the name for the player
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets the ID for this player (unique within the current game)
+        /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id { get; }
 
         /// <summary>
-        /// Gets the live player if this player is connected
+        /// Gets the live player if the player is connected
         /// </summary>
         public ILivePlayer ConnectedPlayer => RustCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(Id);
 
@@ -43,7 +43,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Permissions
 
         /// <summary>
-        /// Gets if this player has the specified permission
+        /// Gets if the player has the specified permission
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
@@ -62,20 +62,20 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public void RevokePermission(string perm) => libPerms.RevokeUserPermission(Id, perm);
 
         /// <summary>
-        /// Gets if this player belongs to the specified usergroup
+        /// Gets if the player belongs to the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         public bool BelongsToGroup(string group) => libPerms.UserHasGroup(Id, group);
 
         /// <summary>
-        /// Adds this player to the specified usergroup
+        /// Adds the player to the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         public void AddToGroup(string group) => libPerms.AddUserGroup(Id, group);
 
         /// <summary>
-        /// Removes this player from the specified usergroup
+        /// Removes the player from the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
@@ -85,24 +85,22 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans this player for the specified reason and duration
+        /// Bans the player for the specified reason and duration
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
-        public void Ban(string reason, TimeSpan duration)
+        public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
             // Check already banned
-            if (IsBanned) return; // TODO: Extend ban duration?
+            if (IsBanned) return;
 
             // Set to banned
             ServerUsers.Set(steamId, ServerUsers.UserGroup.Banned, Name, reason);
             ServerUsers.Save();
-
-            // TODO: Set a duration somehow
         }
 
         /// <summary>
-        /// Unbans this player
+        /// Unbans the player
         /// </summary>
         public void Unban()
         {
@@ -115,12 +113,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets if this player is banned
+        /// Gets if the player is banned
         /// </summary>
         public bool IsBanned => ServerUsers.Is(steamId, ServerUsers.UserGroup.Banned);
 
         /// <summary>
-        /// Gets the amount of time remaining on this player's ban
+        /// Gets the amount of time remaining on the player's ban
         /// </summary>
         public TimeSpan BanTimeRemaining => IsBanned ? TimeSpan.MaxValue : TimeSpan.Zero; // TODO: Actually check?
 
@@ -128,12 +126,22 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         #region Chat and Commands
 
+        /// <summary>
+        /// Replies to the player with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public void Reply(string message, params object[] args) => ConnectedPlayer.Reply(message, args);
 
         #endregion
 
         #region Operator Overloads
 
+        /// <summary>
+        /// Returns if player's ID is equal to another player's ID
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(IPlayer other) => Id == other.Id;
 
         public override bool Equals(object obj)
@@ -143,6 +151,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             return Id == ply.Id;
         }
 
+        /// <summary>
+        /// Gets the hash code of the player's ID
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode() => Id.GetHashCode();
 
         public override string ToString() => $"Covalence.RustPlayer[{Id}, {Name}]";

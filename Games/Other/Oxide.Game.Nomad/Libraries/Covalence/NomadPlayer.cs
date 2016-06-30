@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 
 using TNet;
@@ -18,17 +17,17 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         private static Permission libPerms;
 
         /// <summary>
-        /// Gets/sets the name for this player
+        /// Gets/sets the name for the player
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets the ID for this player (unique within the current game)
+        /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id { get; }
 
         /// <summary>
-        /// Gets the live player if this player is connected
+        /// Gets the live player if the player is connected
         /// </summary>
         public ILivePlayer ConnectedPlayer => NomadCovalenceProvider.Instance.PlayerManager.GetOnlinePlayer(Id);
 
@@ -45,7 +44,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         #region Permissions
 
         /// <summary>
-        /// Gets if this player has the specified permission
+        /// Gets if the player has the specified permission
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
@@ -64,20 +63,20 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public void RevokePermission(string perm) => libPerms.RevokeUserPermission(Id, perm);
 
         /// <summary>
-        /// Gets if this player belongs to the specified usergroup
+        /// Gets if the player belongs to the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         public bool BelongsToGroup(string group) => libPerms.UserHasGroup(Id, group);
 
         /// <summary>
-        /// Adds this player to the specified usergroup
+        /// Adds the player to the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         public void AddToGroup(string group) => libPerms.AddUserGroup(Id, group);
 
         /// <summary>
-        /// Removes this player from the specified usergroup
+        /// Removes the player from the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
@@ -89,45 +88,68 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         private readonly MemberInfo[] banList = typeof(GameServer).GetMember("mBan", BindingFlags.NonPublic | BindingFlags.Instance);
         private readonly MethodInfo saveList = typeof(Tools).GetMethod("SaveList", BindingFlags.NonPublic | BindingFlags.Static);
 
-        public void Ban(string reason, TimeSpan duration)
+        /// <summary>
+        /// Bans the player for the specified reason and duration
+        /// </summary>
+        /// <param name="reason"></param>
+        /// <param name="duration"></param>
+        public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
+            // Check already banned
+            if (IsBanned) return;
+
+            // Set to banned
             // TODO
         }
 
+        /// <summary>
+        /// Unbans the player
+        /// </summary>
         public void Unban()
         {
-            // TODO
+            // Check not banned
+            if (!IsBanned) return;
 
-            /*var path = "Config/ban.txt";
-            if (list.size <= 0)
-            {
-                Tools.DeleteFile(path);
-                return;
-            }
-            path = Tools.GetDocumentsPath(path);
-            var directoryName = Path.GetDirectoryName(path);
-            if (!Directory.Exists(directoryName))  Directory.CreateDirectory(directoryName);
-            var streamWriter = new StreamWriter(path, false);
-            for (var i = 0; i < list.size; i++) streamWriter.WriteLine(list[i]);
-            streamWriter.Close();*/
+            // Set to unbanned
+            // TODO
         }
 
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
         public bool IsBanned => false; // TODO
 
+        /// <summary>
+        /// Gets the amount of time remaining on the player's ban
+        /// </summary>
         public TimeSpan BanTimeRemaining => TimeSpan.Zero; // TODO
 
         #endregion
 
         #region Chat and Commands
 
+        /// <summary>
+        /// Replies to the player with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         public void Reply(string message, params object[] args) => ConnectedPlayer.Reply(message, args);
 
         #endregion
 
         #region Operator Overloads
 
+        /// <summary>
+        /// Returns if player's ID is equal to another player's ID
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(IPlayer other) => Id == other.Id;
 
+        /// <summary>
+        /// Gets the hash code of the player's ID
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode() => Id.GetHashCode();
 
         #endregion

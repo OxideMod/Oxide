@@ -8,24 +8,24 @@ namespace Oxide.Core.Libraries.Covalence
     public interface IPlayer
     {
         /// <summary>
-        /// Gets the name for this player
+        /// Gets the name for the player
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// Gets the ID for this player (unique within the current game)
+        /// Gets the ID for the player (unique within the current game)
         /// </summary>
         string Id { get; }
 
         /// <summary>
-        /// Gets the live player if this player is connected
+        /// Gets the live player if the player is connected
         /// </summary>
         ILivePlayer ConnectedPlayer { get; }
 
         #region Permissions
 
         /// <summary>
-        /// Gets if this player has the specified permission
+        /// Gets if the player has the specified permission
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
@@ -44,20 +44,20 @@ namespace Oxide.Core.Libraries.Covalence
         void RevokePermission(string perm);
 
         /// <summary>
-        /// Gets if this player belongs to the specified usergroup
+        /// Gets if the player belongs to the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         bool BelongsToGroup(string group);
 
         /// <summary>
-        /// Adds this player to the specified usergroup
+        /// Adds the player to the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         void AddToGroup(string group);
 
         /// <summary>
-        /// Removes this player from the specified usergroup
+        /// Removes the player from the specified usergroup
         /// </summary>
         /// <param name="group"></param>
         void RemoveFromGroup(string group);
@@ -67,24 +67,24 @@ namespace Oxide.Core.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans this player for the specified reason and duration
+        /// Bans the player for the specified reason and duration
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
-        void Ban(string reason, TimeSpan duration);
+        void Ban(string reason, TimeSpan duration = default(TimeSpan));
 
         /// <summary>
-        /// Unbans this player
+        /// Unbans the player
         /// </summary>
         void Unban();
 
         /// <summary>
-        /// Gets if this player is banned
+        /// Gets if the player is banned
         /// </summary>
         bool IsBanned { get; }
 
         /// <summary>
-        /// Gets the amount of time remaining on this player's ban
+        /// Gets the amount of time remaining on the player's ban
         /// </summary>
         TimeSpan BanTimeRemaining { get; }
 
@@ -92,6 +92,11 @@ namespace Oxide.Core.Libraries.Covalence
 
         #region Chat and Commands
 
+        /// <summary>
+        /// Replies to the player with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         void Reply(string message, params object[] args);
 
         #endregion
