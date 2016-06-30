@@ -112,30 +112,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 120,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerInitialized",
-            "HookName": "OnServerInitialized",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "uLink_OnServerInitialized",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "MHxlxAKOt2hSGAI1ZQP4/2ERrDcs6E1QntKHWFDIY54=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -274,7 +250,7 @@
               "Parameters": []
             },
             "MSILHash": "MHxlxAKOt2hSGAI1ZQP4/2ERrDcs6E1QntKHWFDIY54=",
-            "BaseHookName": "OnServerInitialized",
+            "BaseHookName": null,
             "HookCategory": "_Patches"
           }
         },
@@ -404,6 +380,32 @@
             "MSILHash": "4yRMlP1wDzO5kkXOAIQuBKNgASefONCARFSXE8Ro6yY=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnMasterServerEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.MasterServerEvent"
+              ]
+            },
+            "MSILHash": "C5vRltdZlkAI65brq8QAVeT0FL/RlM1rLOWjM0xZzlQ=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
