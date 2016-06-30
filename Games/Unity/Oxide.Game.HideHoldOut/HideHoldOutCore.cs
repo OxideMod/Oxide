@@ -250,17 +250,19 @@ namespace Oxide.Game.HideHoldOut
         private object IOnUserApprove(NetworkPlayerApproval approval, string id)
         {
             var player = NetworkController.NetManager_.ServManager.GetPlayerInfos_accountID(id);
+            var ip = approval.ipAddress;
 
             // Call out and see if we should reject
-            var canlogin = (string)Interface.CallHook("CanClientLogin", approval, player) ?? Interface.CallHook("CanUserLogin", player.Nickname, id);
-            if (canlogin is string)
+            var canLogin = Interface.Call("CanClientLogin", approval, player) ?? Interface.Call("CanUserLogin", player.Nickname, id, ip);
+            if (canLogin is string)
             {
-                NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canlogin);
+                // Reject the user with the message
+                NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canLogin);
                 Network.CloseConnection(player.NetPlayer, true);
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", approval, player) ?? Interface.CallHook("OnUserApproved", player.Nickname, id);
+            return Interface.Call("OnUserApprove", approval, player) ?? Interface.Call("OnUserApproved", player.Nickname, id, ip);
         }
 
         /// <summary>

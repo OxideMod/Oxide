@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Network;
 using Rust;
@@ -262,6 +263,7 @@ namespace Oxide.Game.Rust
         private object IOnUserApprove(Connection connection)
         {
             var id = connection.userid.ToString();
+            var ip = Regex.Replace(connection.ipaddress, @":{1}[0-9]{1}\d*", "");
 
             // Migrate user from 'player' group to 'default'
             if (permission.UserHasGroup(id, "player"))
@@ -272,15 +274,15 @@ namespace Oxide.Game.Rust
             }
 
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.username, id);
-            if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
+            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.username, id, ip);
+            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
             {
                 // Reject the user with the message
-                ConnectionAuth.Reject(connection, canlogin.ToString());
+                ConnectionAuth.Reject(connection, canLogin.ToString());
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection) ?? Interface.CallHook("OnUserApproved", connection.username, id);
+            return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", connection.username, id, ip);
         }
 
         /// <summary>

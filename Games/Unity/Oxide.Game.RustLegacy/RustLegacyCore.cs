@@ -187,6 +187,7 @@ namespace Oxide.Game.RustLegacy
         private object IOnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
         {
             var id = connection.UserID.ToString();
+            var ip = approval.ipAddress;
 
             // Reject invalid connections
             if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
@@ -204,15 +205,16 @@ namespace Oxide.Game.RustLegacy
             }
 
             // Call out and see if we should reject
-            var canlogin = (string)Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, id);
-            if (canlogin is string)
+            var canLogin = (string)Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
+            if (canLogin is string)
             {
-                Notice.Popup(connection.netUser.networkPlayer, "", canlogin.ToString(), 10f);
+                // Reject the user with the message
+                Notice.Popup(connection.netUser.networkPlayer, "", canLogin.ToString(), 10f);
                 approval.Deny(uLink.NetworkConnectionError.NoError);
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection, approval, acceptor) ?? Interface.CallHook("OnUserApproved", connection.UserName, id);
+            return Interface.Call("OnUserApprove", connection, approval, acceptor) ?? Interface.Call("OnUserApproved", connection.UserName, id, ip);
         }
 
         /// <summary>

@@ -236,17 +236,19 @@ namespace Oxide.Game.Hurtworld
         private object IOnUserApprove(PlayerSession session)
         {
             session.Name = session.Identity.Name ?? "Unnamed";
+            var id = session.SteamId.ToString();
+            var ip = session.Player.ipAddress;
 
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", session) ?? Interface.CallHook("CanUserLogin", session.Name, session.SteamId.ToString());
-            if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
+            var canLogin = Interface.Call("CanClientLogin", session) ?? Interface.Call("CanUserLogin", session.Name, id, ip);
+            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
             {
                 // Reject the user with the message
-                GameManager.Instance.KickPlayer(session.SteamId.ToString(), canlogin.ToString());
+                GameManager.Instance.KickPlayer(id, canLogin.ToString());
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", session) ?? Interface.CallHook("OnUserApproved", session.Name, session.SteamId.ToString());
+            return Interface.Call("OnUserApprove", session) ?? Interface.Call("OnUserApproved", session.Name, id, ip);
         }
 
         /// <summary>

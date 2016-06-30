@@ -247,16 +247,20 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(Player player)
         {
+            var id = player.Id.ToString();
+            var ip = player.Connection.IpAddress;
+
             // Call out and see if we should reject
-            var canlogin = Interface.CallHook("CanClientLogin", player) ?? Interface.CallHook("CanUserLogin", player.Name, player.Id.ToString());
-            if (canlogin != null && (!(canlogin is bool) || !(bool)canlogin))
+            var canLogin = Interface.Call("CanClientLogin", player) ?? Interface.Call("CanUserLogin", player.Name, id, ip);
+            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
             {
-                player.ShowPopup("Disconnected", canlogin.ToString());
+                // Reject the user with the message
+                player.ShowPopup("Disconnected", canLogin.ToString());
                 player.Connection.Close();
                 return ConnectionError.NoError;
             }
 
-            return Interface.CallHook("OnUserApprove", player) ?? Interface.CallHook("OnUserApproved", player.Name, player.Id.ToString());
+            return Interface.Call("OnUserApprove", player) ?? Interface.Call("OnUserApproved", player.Name, id, ip);
         }
 
         /// <summary>
