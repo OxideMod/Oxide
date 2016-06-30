@@ -50,7 +50,7 @@ namespace Oxide.Core.Libraries
         /// <param name="args"></param>
         /// <returns></returns>
         [LibraryFunction("CallHook")]
-        public object CallHook(string hookname, params object[] args) => Interface.CallHook(hookname, args);
+        public object CallHook(string hookname, params object[] args) => Interface.Call(hookname, args);
 
         /// <summary>
         /// Gets an array of all currently loaded plugins

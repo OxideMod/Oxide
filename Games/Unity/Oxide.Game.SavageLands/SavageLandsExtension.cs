@@ -77,6 +77,7 @@ namespace Oxide.Game.SavageLands
             if (!Interface.Oxide.EnableConsole()) return;
 
             Application.RegisterLogCallback(HandleLog);
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 

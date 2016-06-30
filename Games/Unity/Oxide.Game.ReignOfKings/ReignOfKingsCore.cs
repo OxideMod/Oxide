@@ -268,7 +268,7 @@ namespace Oxide.Game.ReignOfKings
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
             // Call covalence hook
-            return Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString()), evt.Message);
+            return Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -297,11 +297,11 @@ namespace Oxide.Game.ReignOfKings
                     permission.AddUserGroup(id, "admin");
             }
 
-            Interface.CallHook("OnPlayerConnected", player);
+            Interface.Call("OnPlayerConnected", player);
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()));
+            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()));
         }
 
         /// <summary>
@@ -314,10 +314,10 @@ namespace Oxide.Game.ReignOfKings
             // Ignore the server player
             if (player.Id == 9999999999) return;
 
-            Interface.CallHook("OnPlayerDisconnected", player);
+            Interface.Call("OnPlayerDisconnected", player);
 
             // Let covalence know
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()), "Unknown");
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
@@ -329,7 +329,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerRespawn(PlayerRespawnEvent evt)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserRespawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserRespawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
         }
 
         #endregion
@@ -850,7 +850,7 @@ namespace Oxide.Game.ReignOfKings
             ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
-            Interface.CallHook("OnChatCommand", e.Player, cmd, args);
+            Interface.Call("OnChatCommand", e.Player, cmd, args);
 
             // Handle it
             if (!cmdlib.HandleChatCommand(e.Player, cmd, args)) return null;

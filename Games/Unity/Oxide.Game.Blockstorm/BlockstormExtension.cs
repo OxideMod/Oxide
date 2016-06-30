@@ -86,6 +86,7 @@ namespace Oxide.Game.Blockstorm
             if (!Interface.Oxide.EnableConsole()) return;
 
             Application.RegisterLogCallback(HandleLog);
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 

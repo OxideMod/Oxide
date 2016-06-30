@@ -96,6 +96,7 @@ namespace Oxide.Game.Rust
             if (!Interface.Oxide.EnableConsole()) return;
 
             Output.OnMessage += HandleLog;
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Completion = input =>
             {

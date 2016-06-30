@@ -239,7 +239,7 @@ namespace Oxide.Game.RustLegacy
             }
 
             // Call covalence hook
-            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Call covalence hook
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
@@ -273,7 +273,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
             // Call covalence hook
-            Interface.CallHook("OnUserSpawned", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserSpawned", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace Oxide.Game.RustLegacy
         {
             var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
             playerList.SetValue(null, players);
-            return (int?)Interface.CallHook("OnPlayerVoice", netUser, players);
+            return (int?)Interface.Call("OnPlayerVoice", netUser, players);
         }
 
         #endregion
@@ -743,7 +743,7 @@ namespace Oxide.Game.RustLegacy
 
                 // Is it a chat command?
                 if (str[0] != '/')
-                    return Interface.CallHook("OnPlayerChat", arg.argUser, str) ?? Interface.CallHook("OnUserChat", iplayer, str);
+                    return Interface.Call("OnPlayerChat", arg.argUser, str) ?? Interface.Call("OnUserChat", iplayer, str);
 
                 // Get the arg string
                 var argstr = str.Substring(1);

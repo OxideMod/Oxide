@@ -58,14 +58,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libraries\Command.cs" />
+    <Compile Include="Libraries\Hurtworld.cs" />
     <Compile Include="Libraries\Covalence\HurtworldCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\HurtworldCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\HurtworldLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\HurtworldPlayer.cs" />
     <Compile Include="Libraries\Covalence\HurtworldPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\HurtworldServer.cs" />
-    <Compile Include="Libraries\Command.cs" />
-    <Compile Include="Libraries\Hurtworld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HurtworldCore.cs" />
     <Compile Include="HurtworldExtension.cs" />

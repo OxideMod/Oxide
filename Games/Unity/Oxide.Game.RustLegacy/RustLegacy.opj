@@ -825,7 +825,7 @@
             },
             "MSILHash": "eRdK7MTGBpUJ7RwefOdl4tKMLdvBm68Q+3nVglAwDTQ=",
             "BaseHookName": null,
-            "HookCategory": "Server"
+            "HookCategory": "_Patch"
           }
         },
         {

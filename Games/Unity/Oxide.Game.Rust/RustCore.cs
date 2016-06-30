@@ -24,8 +24,8 @@ namespace Oxide.Game.Rust
     {
         #region Initialization
 
-        // The pluginmanager
-        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
+        // The plugin manager
+        private readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
 
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
@@ -34,7 +34,7 @@ namespace Oxide.Game.Rust
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
-        // The Rust covalence provider
+        // The covalence provider
         private readonly RustCovalenceProvider covalence = RustCovalenceProvider.Instance;
 
         #region Localization
@@ -292,7 +292,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
             // Call covalence hook
-            return Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()), arg.Args[0]);
+            return Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()), arg.Args[0]);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace Oxide.Game.Rust
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
             // Let covalence know
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.UserIDString), reason);
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.UserIDString), reason);
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
@@ -317,30 +317,35 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerInit")]
         private void OnPlayerInit(BasePlayer player)
         {
-            // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(player);
-            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
-            Interface.CallHook("OnUserConnected", iplayer);
-
             // Do permission stuff
             var authLevel = player.net.connection.authLevel;
             if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
             {
                 var id = player.UserIDString;
+
+                // Check if player has connected before
+                if (!permission.UserExists(id))
+                {
+                    // Add player to default group
+                    if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+
+                    // Add player to group based on auth level
+                    if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
+                }
+
                 permission.UpdateNickname(id, player.displayName);
-
-                // Add player to default group
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-
-                // Add player to group based on auth level
-                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
             }
+
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(player);
 
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
 
-            // Call covalence hook
-            Interface.CallHook("OnUserInit", iplayer);
+            // Call covalence hooks
+            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            Interface.Call("OnUserConnected", iplayer);
+            Interface.Call("OnUserInit", iplayer);
         }
 
         /// <summary>
@@ -352,7 +357,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerRespawn(BasePlayer player)
         {
             // Call covalence hook
-            return Interface.CallHook("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.UserIDString));
+            return Interface.Call("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -363,7 +368,7 @@ namespace Oxide.Game.Rust
         private void OnPlayerRespawned(BasePlayer player)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.UserIDString));
+            Interface.Call("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -375,7 +380,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerTick(BasePlayer player)
         {
             InputState input;
-            return playerInputState.TryGetValue(player, out input) ? Interface.CallHook("OnPlayerInput", player, input) : null;
+            return playerInputState.TryGetValue(player, out input) ? Interface.Call("OnPlayerInput", player, input) : null;
         }
 
         /// <summary>
@@ -388,7 +393,7 @@ namespace Oxide.Game.Rust
         private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
             if (!serverInitialized || isPlayerTakingDamage) return null;
-            if (Interface.CallHook("OnEntityTakeDamage", player, info) != null) return true;
+            if (Interface.Call("OnEntityTakeDamage", player, info) != null) return true;
 
             isPlayerTakingDamage = true;
             try
@@ -412,7 +417,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBasePlayerHurt")]
         private object IOnBasePlayerHurt(BasePlayer entity, HitInfo info)
         {
-            return isPlayerTakingDamage ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
+            return isPlayerTakingDamage ? null : Interface.Call("OnEntityTakeDamage", entity, info);
         }
 
         /// <summary>
@@ -424,7 +429,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnItemResearchEnd")]
         private float IOnItemResearchEnd(ResearchTable table, float chance)
         {
-            var returnvar = Interface.CallHook("OnItemResearchEnd", table, chance);
+            var returnvar = Interface.Call("OnItemResearchEnd", table, chance);
             if (returnvar is float) return (float)returnvar;
             if (returnvar is double) return (float)(double)returnvar;
             return chance;
@@ -436,7 +441,7 @@ namespace Oxide.Game.Rust
         /// <param name="source"></param>
         /// <param name="entity"></param>
         [HookMethod("IOnLootEntity")]
-        private void IOnLootEntity(PlayerLoot source, BaseEntity entity) => Interface.CallHook("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
+        private void IOnLootEntity(PlayerLoot source, BaseEntity entity) => Interface.Call("OnLootEntity", source.GetComponent<BasePlayer>(), entity);
 
         /// <summary>
         /// Called when the player starts looting an item
@@ -444,7 +449,7 @@ namespace Oxide.Game.Rust
         /// <param name="source"></param>
         /// <param name="item"></param>
         [HookMethod("IOnLootItem")]
-        private void IOnLootItem(PlayerLoot source, Item item) => Interface.CallHook("OnLootItem", source.GetComponent<BasePlayer>(), item);
+        private void IOnLootItem(PlayerLoot source, Item item) => Interface.Call("OnLootItem", source.GetComponent<BasePlayer>(), item);
 
         /// <summary>
         /// Called when the player starts looting another player
@@ -452,7 +457,7 @@ namespace Oxide.Game.Rust
         /// <param name="source"></param>
         /// <param name="target"></param>
         [HookMethod("IOnLootPlayer")]
-        private void IOnLootPlayer(PlayerLoot source, BasePlayer target) => Interface.CallHook("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
+        private void IOnLootPlayer(PlayerLoot source, BasePlayer target) => Interface.Call("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
 
         #endregion
 
@@ -468,7 +473,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBaseCombatEntityHurt")]
         private object IOnBaseCombatEntityHurt(BaseCombatEntity entity, HitInfo info)
         {
-            return entity is BasePlayer ? null : Interface.CallHook("OnEntityTakeDamage", entity, info);
+            return entity is BasePlayer ? null : Interface.Call("OnEntityTakeDamage", entity, info);
         }
 
         #endregion
@@ -482,7 +487,7 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <returns></returns>
         [HookMethod("IOnStructureDemolish")]
-        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.CallHook("OnStructureDemolish", block, player, false);
+        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, false);
 
         /// <summary>
         /// Called when a player selects Demolish Immediate from the BuildingBlock menu
@@ -491,7 +496,7 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <returns></returns>
         [HookMethod("IOnStructureImmediateDemolish")]
-        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.CallHook("OnStructureDemolish", block, player, true);
+        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, true);
 
         #endregion
 
@@ -507,7 +512,7 @@ namespace Oxide.Game.Rust
         private object IOnLoseCondition(Item item, float amount)
         {
             var arguments = new object[] { item, amount };
-            Interface.CallHook("OnLoseCondition", arguments);
+            Interface.Call("OnLoseCondition", arguments);
             amount = (float)arguments[1];
             var condition = item.condition;
             item.condition -= amount;
@@ -529,7 +534,7 @@ namespace Oxide.Game.Rust
         {
             if (!IsAdmin(arg.Player())) return;
 
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -585,7 +590,7 @@ namespace Oxide.Game.Rust
             {
                 if (string.IsNullOrEmpty(name)) continue;
                 Interface.Oxide.LoadPlugin(name);
-                pluginmanager.GetPlugin(name);
+                pluginManager.GetPlugin(name);
             }
         }
 

@@ -57,7 +57,7 @@ namespace Oxide.Core.Plugins
         {
             if (LoadingPlugins.Contains(name))
             {
-                Interface.Oxide.LogDebug("Load requested for plugin which is already loading: " + name);
+                Interface.Oxide.LogDebug("Load requested for plugin which is already loading: {0}", name);
                 return null;
             }
 

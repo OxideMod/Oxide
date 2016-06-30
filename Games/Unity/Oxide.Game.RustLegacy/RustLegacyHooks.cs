@@ -1,6 +1,6 @@
-﻿using Oxide.Core;
+﻿using UnityEngine;
 
-using UnityEngine;
+using Oxide.Core;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -8,7 +8,7 @@ namespace Oxide.Game.RustLegacy
     {
         public void OnDestroy()
         {
-            Interface.CallHook("OnServerInitialized", null);
+            Interface.Call("OnServerInitialized", null);
         }
     }
 }

@@ -15,13 +15,13 @@ namespace Oxide.Core.Libraries
 
         private readonly LangData langData;
         private readonly Dictionary<string, Dictionary<string, string>> langFiles;
-        private const string DefaultLang = "en";
+        private const string defaultLang = "en";
 
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         class LangData
         {
-            public string Lang = DefaultLang;
-            public Dictionary<string, string> UserData = new Dictionary<string, string>();
+            public string Lang = defaultLang;
+            public readonly Dictionary<string, string> UserData = new Dictionary<string, string>();
         }
 
         public Lang()
@@ -37,7 +37,7 @@ namespace Oxide.Core.Libraries
         private void SaveData() => ProtoStorage.Save(langData, "oxide.lang");
 
         [LibraryFunction("RegisterMessages")]
-        public void RegisterMessages(Dictionary<string, string> messages, Plugin plugin, string lang = DefaultLang)
+        public void RegisterMessages(Dictionary<string, string> messages, Plugin plugin, string lang = defaultLang)
         {
             if (messages == null || string.IsNullOrEmpty(lang) || plugin == null) return;
             var file = $"{plugin.Name}.{lang}.json";

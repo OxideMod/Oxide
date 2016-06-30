@@ -31,12 +31,12 @@ namespace Oxide.Core
 
         private static Dictionary<string, string> BuildHeaders()
         {
-            var auth_string = string.Join(", ", sentryAuth.Select(x => string.Join("=", x)).ToArray());
-            auth_string += ", sentry_timestamp=" + (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            return new Dictionary<string, string> { { "X-Sentry-Auth", "Sentry " + auth_string } };
+            var authString = string.Join(", ", sentryAuth.Select(x => string.Join("=", x)).ToArray());
+            authString += ", sentry_timestamp=" + (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            return new Dictionary<string, string> { { "X-Sentry-Auth", "Sentry " + authString } };
         }
 
-        private static readonly Dictionary<string, string> tags = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> Tags = new Dictionary<string, string>
         {
             { "arch", IntPtr.Size == 4 ? "x86" : "x64" },
             { "game", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName).ToLower() }
@@ -62,7 +62,7 @@ namespace Oxide.Core
             public string platform = "csharp";
             public string culprit;
             public string release = OxideMod.Version.ToString();
-            public Dictionary<string, string> tags = RemoteLogger.tags;
+            public Dictionary<string, string> tags = Tags;
             public Dictionary<string, string> modules;
             public Dictionary<string, string> extra;
 
@@ -129,33 +129,21 @@ namespace Oxide.Core
         private static readonly List<QueuedReport> QueuedReports = new List<QueuedReport>();
         private static bool submittingReports;
 
-        public static void SetTag(string name, string value) => tags[name] = value;
+        public static void SetTag(string name, string value) => Tags[name] = value;
 
         public static string GetTag(string name)
         {
             string value;
-            return tags.TryGetValue(name, out value) ? value : "unknown";
+            return Tags.TryGetValue(name, out value) ? value : "unknown";
         }
 
-        public static void Debug(string message)
-        {
-            EnqueueReport("debug", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
-        }
+        public static void Debug(string message) => EnqueueReport("debug", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
 
-        public static void Info(string message)
-        {
-            EnqueueReport("info", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
-        }
+        public static void Info(string message) => EnqueueReport("info", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
 
-        public static void Warning(string message)
-        {
-            EnqueueReport("warning", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
-        }
+        public static void Warning(string message) => EnqueueReport("warning", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
 
-        public static void Error(string message)
-        {
-            EnqueueReport("error", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
-        }
+        public static void Error(string message) => EnqueueReport("error", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
 
         public static void Exception(string message, Exception exception)
         {

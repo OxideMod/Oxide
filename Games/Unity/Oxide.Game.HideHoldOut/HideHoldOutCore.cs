@@ -25,8 +25,8 @@ namespace Oxide.Game.HideHoldOut
     {
         #region Initialization
 
-        // The pluginmanager
-        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
+        // The plugin manager
+        private readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
 
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
@@ -35,7 +35,7 @@ namespace Oxide.Game.HideHoldOut
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
-        // The Hide & Hold Out covalence provider
+        // The covalence provider
         private readonly HideHoldOutCovalenceProvider covalence = HideHoldOutCovalenceProvider.Instance;
 
         #region Localization
@@ -279,8 +279,7 @@ namespace Oxide.Game.HideHoldOut
             var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
 
             // Is it a chat command?
-            if (!str.Equals("/"))
-                return Interface.CallHook("OnPlayerChat", player, message) ?? Interface.CallHook("OnUserChat", iplayer, message);
+            if (!str.Equals("/")) return Interface.Call("OnPlayerChat", player, message) ?? Interface.Call("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
             var livePlayer = covalence.PlayerManager.GetOnlinePlayer(player.account_id);
@@ -302,7 +301,7 @@ namespace Oxide.Game.HideHoldOut
                 return true;
             }
 
-            Interface.CallHook("OnChatCommand", player, command);
+            Interface.Call("OnChatCommand", player, command);
 
             return true;
         }
@@ -314,6 +313,8 @@ namespace Oxide.Game.HideHoldOut
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(PlayerInfos player)
         {
+            Debug.Log($"{player.account_id}/{player.Nickname} joined");
+
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(player);
 
@@ -331,9 +332,7 @@ namespace Oxide.Game.HideHoldOut
             }
 
             // Call covalence hook
-            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(player.account_id));
-
-            Debug.Log($"{player.account_id}/{player.Nickname} joined");
+            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         /// <summary>
@@ -343,13 +342,13 @@ namespace Oxide.Game.HideHoldOut
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(PlayerInfos player)
         {
+            Debug.Log($"{player.account_id}/{player.Nickname} quit");
+
             // Call covalence hook
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(player);
-
-            Debug.Log($"{player.account_id}/{player.Nickname} quit");
         }
 
         /// <summary>
@@ -360,7 +359,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawn(PlayerInfos player)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         /// <summary>
@@ -371,7 +370,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawned(PlayerInfos player)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         #endregion
@@ -390,7 +389,7 @@ namespace Oxide.Game.HideHoldOut
             if (!PermissionsLoaded(player)) return;
             if (!IsAdmin(player)) return;
 
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -483,7 +482,7 @@ namespace Oxide.Game.HideHoldOut
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", player.account_id, name), player);
@@ -525,7 +524,7 @@ namespace Oxide.Game.HideHoldOut
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", player.account_id, name), player);
