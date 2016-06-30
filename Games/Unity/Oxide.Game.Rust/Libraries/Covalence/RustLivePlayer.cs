@@ -1,4 +1,7 @@
-﻿using Oxide.Core.Libraries.Covalence;
+﻿using System.Net;
+using System.Text.RegularExpressions;
+
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -41,7 +44,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => player.net.connection.ipaddress;
+        public string Address => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", "");
 
         /// <summary>
         /// Gets the user's average network ping
