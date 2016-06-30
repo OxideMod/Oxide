@@ -23,7 +23,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "r5C29sI5dnxQMEsRt8iIb9/H1gAQYhPv0NFAC1wYf+Q=",
+            "MSILHash": "5M/0lFU1c1UXASEI/mSg2xzVdIz1eAopM6f+8MFtM4c=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -49,7 +49,7 @@
                 "FlowCenter"
               ]
             },
-            "MSILHash": "r5C29sI5dnxQMEsRt8iIb9/H1gAQYhPv0NFAC1wYf+Q=",
+            "MSILHash": "5M/0lFU1c1UXASEI/mSg2xzVdIz1eAopM6f+8MFtM4c=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -112,7 +112,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 105,
+            "InjectionIndex": 120,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -128,7 +128,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "IaKLYhAEJh+P8npjlnMgcbTr/0wKBhtoyxlKQCANY/k=",
+            "MSILHash": "MHxlxAKOt2hSGAI1ZQP4/2ERrDcs6E1QntKHWFDIY54=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -136,7 +136,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 93,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -145,14 +145,14 @@
             "HookName": "OnFindSpawnPoint",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkController",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "RandomRespawnCalculator",
               "ReturnType": "UnityEngine.Vector3",
               "Parameters": []
             },
-            "MSILHash": "O0qUtULtkgrd6EaXS1vtDtM0kG9YrfAfOcx5Dl80tho=",
+            "MSILHash": "9/uUACgGz4uy9lbLozbuddC2hgoKGwmGqXwR0R257CM=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -273,7 +273,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "IaKLYhAEJh+P8npjlnMgcbTr/0wKBhtoyxlKQCANY/k=",
+            "MSILHash": "MHxlxAKOt2hSGAI1ZQP4/2ERrDcs6E1QntKHWFDIY54=",
             "BaseHookName": "OnServerInitialized",
             "HookCategory": "_Patches"
           }
@@ -281,7 +281,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 299,
+            "InjectionIndex": 307,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -300,7 +300,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "2bfkmh5ks/LGlPqUXsBuRy7PsUyK97ViZxBdTcEnNY8=",
+            "MSILHash": "enufKM0o8H3X4OT5lmnykRPvq8Uw7nWf+UK7Uwcjk/E=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -343,7 +343,7 @@
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator7F",
+            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator8C",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -351,7 +351,7 @@
               "ReturnType": "System.Boolean",
               "Parameters": []
             },
-            "MSILHash": "Ra4QTGKE50s8pdK1hU25t7qbjjogE/yT7X7jKiR7/o4=",
+            "MSILHash": "+m7rn32XH2kYXdIayKCqMvp/LMhQTsdHIOXZh4YnvOI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -375,7 +375,7 @@
               "ReturnType": "System.Collections.IEnumerator",
               "Parameters": []
             },
-            "MSILHash": "C3zc2XD2nG2LhFz6K9P/J72KemE12YyiOU2iLrOM7Ag=",
+            "MSILHash": "X4Rgf0rHfaozRhOyZpWr0H7L4pTkCEEEUl52wdCxwsM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

@@ -129,7 +129,12 @@ namespace Oxide.Game.SevenDays
             if (!Interface.Oxide.EnableConsole()) return;
 
             Application.logMessageReceived += HandleLog;
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            Interface.Oxide.ServerConsole.Completion = input =>
+            {
+                return string.IsNullOrEmpty(input) ? null : SdtdConsole.Instance.commands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
+            };
         }
 
         internal static void ServerConsole()
@@ -167,12 +172,6 @@ namespace Oxide.Game.SevenDays
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GamePrefs.GetString(EnumGamePrefs.GameVersion)}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
-
-            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            Interface.Oxide.ServerConsole.Completion = input =>
-            {
-                return string.IsNullOrEmpty(input) ? null : SdtdConsole.Instance.commands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
-            };
         }
 
         private static void ServerConsoleOnInput(string input)
