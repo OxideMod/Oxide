@@ -884,6 +884,39 @@
           }
         }
       ]
+    },
+    {
+      "AssemblyName": "uLink.dll",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 30,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1",
+            "HookTypeName": "Simple",
+            "Name": "IOnRPCError [internal]",
+            "HookName": "IOnRPCError",
+            "AssemblyName": "uLink.dll",
+            "TypeName": "#=qQB5ODMzkFveAQbdO9M7JO3iQNzSFRwop5_3doWwCK38=",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "#=qGMP0P8EuYd_X7F9PRWBL5g==",
+              "ReturnType": "System.Object[]",
+              "Parameters": [
+                "uLink.BitStream",
+                "System.Object",
+                "#=qaL2AMBCaBLCj4lGSCwjcBVYUs_5vzeQVgu44HVklVYQ="
+              ]
+            },
+            "MSILHash": "baCskEq+9itsdXL5hxwnkzyGQNvwFWzvBQY/Gcy1Gzg=",
+            "BaseHookName": null,
+            "HookCategory": "Anti-Cheat"
+          }
+        }
+      ]
     }
   ]
 }
