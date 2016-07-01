@@ -48,7 +48,7 @@ namespace Oxide.Plugins
                 plugin.OnCompilationStarted();
             }
 
-            includePath = Path.Combine(Interface.Oxide.PluginDirectory, "Include");
+            includePath = Path.Combine(Interface.Oxide.PluginDirectory, "include");
             extensionNames = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
             var gameExtension = Interface.Oxide.GetAllExtensions().SingleOrDefault(ext => ext.IsGameExtension);
             gameExtensionName = gameExtension?.Name.ToUpper();
@@ -62,11 +62,11 @@ namespace Oxide.Plugins
             name = (plugins.Count < 2 ? plugins.First().Name : "plugins_") + Math.Round(Interface.Oxide.Now * 10000000f) + ".dll";
         }
 
-        internal void Completed(byte[] raw_assembly = null)
+        internal void Completed(byte[] rawAssembly = null)
         {
             endedAt = Interface.Oxide.Now;
-            if (plugins.Count > 0 && raw_assembly != null)
-                compiledAssembly = new CompiledAssembly(name, plugins.ToArray(), raw_assembly, duration);
+            if (plugins.Count > 0 && rawAssembly != null)
+                compiledAssembly = new CompiledAssembly(name, plugins.ToArray(), rawAssembly, duration);
             Interface.Oxide.NextTick(() => callback(this));
         }
 
@@ -78,17 +78,17 @@ namespace Oxide.Plugins
             plugin.OnCompilationStarted();
             foreach (var pl in Interface.Oxide.RootPluginManager.GetPlugins().Where(pl => pl is CSharpPlugin))
             {
-                var loaded_plugin = CSharpPluginLoader.GetCompilablePlugin(plugin.Directory, pl.Name);
-                if (!loaded_plugin.Requires.Contains(plugin.Name)) continue;
-                AddDependency(loaded_plugin);
+                var loadedPlugin = CSharpPluginLoader.GetCompilablePlugin(plugin.Directory, pl.Name);
+                if (!loadedPlugin.Requires.Contains(plugin.Name)) continue;
+                AddDependency(loadedPlugin);
             }
         }
 
         internal bool IncludesRequiredPlugin(string name)
         {
             if (referencedPlugins.Contains(name)) return true;
-            var compilable_plugin = plugins.SingleOrDefault(pl => pl.Name == name);
-            return compilable_plugin != null && compilable_plugin.CompilerErrors == null;
+            var compilablePlugin = plugins.SingleOrDefault(pl => pl.Name == name);
+            return compilablePlugin != null && compilablePlugin.CompilerErrors == null;
         }
 
         internal void Prepare(Action callback)
@@ -158,7 +158,7 @@ namespace Oxide.Plugins
             plugin.IncludePaths.Clear();
             plugin.Requires.Clear();
 
-            bool parsingNamespace = false;
+            var parsingNamespace = false;
             for (var i = 0; i < plugin.ScriptLines.Length; i++)
             {
                 var line = plugin.ScriptLines[i].Trim();
@@ -179,61 +179,59 @@ namespace Oxide.Plugins
                     match = Regex.Match(line, @"^\s*(?:public|private|protected|internal)?\s*class\s+(\S+)\s+\:\s+\S+Plugin\s*$", RegexOptions.IgnoreCase);
                     if (!match.Success) break;
 
-                    var class_name = match.Groups[1].Value;
-                    if (class_name != plugin.Name)
+                    var className = match.Groups[1].Value;
+                    if (className != plugin.Name)
                     {
-                        Interface.Oxide.LogError($"Plugin filename is incorrect: {plugin.ScriptName}.cs (should be {class_name}.cs)");
-                        plugin.CompilerErrors = $"Filename is incorrect: {plugin.ScriptName}.cs (should be {class_name}.cs)";
+                        Interface.Oxide.LogError($"Plugin filename is incorrect: {plugin.ScriptName}.cs (should be {className}.cs)");
+                        plugin.CompilerErrors = $"Filename is incorrect: {plugin.ScriptName}.cs (should be {className}.cs)";
                         RemovePlugin(plugin);
                     }
 
                     break;
                 }
-                else
+
+                // Include explicit plugin dependencies defined by magic comments in script
+                match = Regex.Match(line, @"^//\s*Requires:\s*(\S+?)(\.cs)?\s*$", RegexOptions.IgnoreCase);
+                if (match.Success)
                 {
-                    // Include explicit plugin dependencies defined by magic comments in script
-                    match = Regex.Match(line, @"^//\s*Requires:\s*(\S+?)(\.cs)?\s*$", RegexOptions.IgnoreCase);
-                    if (match.Success)
+                    var dependencyName = match.Groups[1].Value;
+                    plugin.Requires.Add(dependencyName);
+                    if (!File.Exists(Path.Combine(plugin.Directory, dependencyName + ".cs")))
                     {
-                        var dependency_name = match.Groups[1].Value;
-                        plugin.Requires.Add(dependency_name);
-                        if (!File.Exists(Path.Combine(plugin.Directory, dependency_name + ".cs")))
-                        {
-                            Interface.Oxide.LogError($"{plugin.Name} plugin requires missing dependency: {dependency_name}");
-                            plugin.CompilerErrors = $"Missing dependency: {dependency_name}";
-                            RemovePlugin(plugin);
-                            return;
-                        }
-                        //Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
-                        var dependency_plugin = CSharpPluginLoader.GetCompilablePlugin(plugin.Directory, dependency_name);
-                        AddDependency(dependency_plugin);
-                        continue;
+                        Interface.Oxide.LogError($"{plugin.Name} plugin requires missing dependency: {dependencyName}");
+                        plugin.CompilerErrors = $"Missing dependency: {dependencyName}";
+                        RemovePlugin(plugin);
+                        return;
                     }
-
-                    // Include explicit references defined by magic comments in script
-                    match = Regex.Match(line, @"^//\s*Reference:\s*(\S+)\s*$", RegexOptions.IgnoreCase);
-                    if (match.Success)
-                    {
-                        var result = match.Groups[1].Value;
-                        if (!newGameExtensionNamespace || !result.StartsWith(gameExtensionNamespace.Replace(".Game.", ".Ext.")))
-                            AddReference(plugin, match.Groups[1].Value);
-                        else
-                            Interface.Oxide.LogWarning("Ignored obsolete game extension reference '{0}' in plugin '{1}'", result, plugin.Name);
-                        continue;
-                    }
-
-                    // Include implicit references detected from using statements in script
-                    match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Ext|Game)\.(?:[^\.]+))[^;]*;\s*$", RegexOptions.IgnoreCase);
-                    if (match.Success)
-                    {
-                        AddReference(plugin, match.Groups[1].Value);
-                        continue;
-                    }
-
-                    // Start parsing the Oxide.Plugins namespace contents
-                    match = Regex.Match(line, @"^\s*namespace Oxide\.Plugins\s*(\{\s*)?$", RegexOptions.IgnoreCase);
-                    if (match.Success) parsingNamespace = true;
+                    //Interface.Oxide.LogDebug(plugin.Name + " plugin requires dependency: " + dependency_name);
+                    var dependencyPlugin = CSharpPluginLoader.GetCompilablePlugin(plugin.Directory, dependencyName);
+                    AddDependency(dependencyPlugin);
+                    continue;
                 }
+
+                // Include explicit references defined by magic comments in script
+                match = Regex.Match(line, @"^//\s*Reference:\s*(\S+)\s*$", RegexOptions.IgnoreCase);
+                if (match.Success)
+                {
+                    var result = match.Groups[1].Value;
+                    if (!newGameExtensionNamespace || !result.StartsWith(gameExtensionNamespace.Replace(".Game.", ".Ext.")))
+                        AddReference(plugin, match.Groups[1].Value);
+                    else
+                        Interface.Oxide.LogWarning("Ignored obsolete game extension reference '{0}' in plugin '{1}'", result, plugin.Name);
+                    continue;
+                }
+
+                // Include implicit references detected from using statements in script
+                match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Ext|Game)\.(?:[^\.]+))[^;]*;\s*$", RegexOptions.IgnoreCase);
+                if (match.Success)
+                {
+                    AddReference(plugin, match.Groups[1].Value);
+                    continue;
+                }
+
+                // Start parsing the Oxide.Plugins namespace contents
+                match = Regex.Match(line, @"^\s*namespace Oxide\.Plugins\s*(\{\s*)?$", RegexOptions.IgnoreCase);
+                if (match.Success) parsingNamespace = true;
             }
         }
 
@@ -243,19 +241,19 @@ namespace Oxide.Plugins
             {
                 var match = Regex.Match(reference, @"^(Oxide\.(?:Ext|Game)\.(.+))$", RegexOptions.IgnoreCase);
                 if (!match.Success) continue;
-                var full_name = match.Groups[1].Value;
+                var fullName = match.Groups[1].Value;
                 var name = match.Groups[2].Value;
                 if (extensionNames.Contains(name)) continue;
                 if (Directory.Exists(includePath))
                 {
-                    var include_file_path = Path.Combine(includePath, $"Ext.{name}.cs");
-                    if (File.Exists(include_file_path))
+                    var includeFilePath = Path.Combine(includePath, $"Ext.{name}.cs");
+                    if (File.Exists(includeFilePath))
                     {
-                        plugin.IncludePaths.Add(include_file_path);
+                        plugin.IncludePaths.Add(includeFilePath);
                         continue;
                     }
                 }
-                var message = $"{full_name} is referenced by {plugin.Name} plugin but is not loaded! An appropriate include file needs to be saved to Plugins\\Include\\Ext.{name}.cs if this extension is not required.";
+                var message = $"{fullName} is referenced by {plugin.Name} plugin but is not loaded! An appropriate include file needs to be saved to Plugins\\Include\\Ext.{name}.cs if this extension is not required.";
                 Interface.Oxide.LogError(message);
                 plugin.CompilerErrors = message;
                 RemovePlugin(plugin);
@@ -265,13 +263,13 @@ namespace Oxide.Plugins
         private void AddDependency(CompilablePlugin plugin)
         {
             if (plugin.IsLoading || plugins.Contains(plugin) || queuedPlugins.Contains(plugin)) return;
-            var compiled_dependency = plugin.CompiledAssembly;
-            if (compiled_dependency != null && !compiled_dependency.IsOutdated())
+            var compiledDependency = plugin.CompiledAssembly;
+            if (compiledDependency != null && !compiledDependency.IsOutdated())
             {
                 // The dependency already has a compiled assembly which is up to date
                 referencedPlugins.Add(plugin.Name);
-                if (!references.ContainsKey(compiled_dependency.Name))
-                    references[compiled_dependency.Name] = new CompilerFile(compiled_dependency.Name, compiled_dependency.RawAssembly);
+                if (!references.ContainsKey(compiledDependency.Name))
+                    references[compiledDependency.Name] = new CompilerFile(compiledDependency.Name, compiledDependency.RawAssembly);
             }
             else
             {
@@ -314,8 +312,8 @@ namespace Oxide.Plugins
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
-                var reference_path = Path.Combine(Interface.Oxide.ExtensionDirectory, reference.Name + ".dll");
-                if (!File.Exists(reference_path))
+                var referencePath = Path.Combine(Interface.Oxide.ExtensionDirectory, reference.Name + ".dll");
+                if (!File.Exists(referencePath))
                 {
                     Interface.Oxide.LogWarning($"Reference {reference.Name}.dll from {assembly.GetName().Name}.dll not found");
                     continue;
@@ -333,7 +331,7 @@ namespace Oxide.Plugins
 
         private bool CacheScriptLines(CompilablePlugin plugin)
         {
-            var waiting_for_access = false;
+            var waitingForAccess = false;
             while (true)
             {
                 try
@@ -366,9 +364,9 @@ namespace Oxide.Plugins
                 }
                 catch (IOException)
                 {
-                    if (!waiting_for_access)
+                    if (!waitingForAccess)
                     {
-                        waiting_for_access = true;
+                        waitingForAccess = true;
                         Interface.Oxide.LogWarning("Waiting for another application to stop using script: {0}", plugin.Name);
                     }
                     Thread.Sleep(50);
@@ -378,9 +376,9 @@ namespace Oxide.Plugins
 
         private void CacheModifiedScripts()
         {
-            var modified_plugins = plugins.Where(pl => pl.ScriptLines == null || pl.HasBeenModified() || pl.LastCachedScriptAt != pl.LastModifiedAt).ToArray();
-            if (modified_plugins.Length < 1) return;
-            foreach (var plugin in modified_plugins)
+            var modifiedPlugins = plugins.Where(pl => pl.ScriptLines == null || pl.HasBeenModified() || pl.LastCachedScriptAt != pl.LastModifiedAt).ToArray();
+            if (modifiedPlugins.Length < 1) return;
+            foreach (var plugin in modifiedPlugins)
                 CacheScriptLines(plugin);
             Thread.Sleep(100);
             CacheModifiedScripts();
@@ -393,9 +391,9 @@ namespace Oxide.Plugins
             plugins.Remove(plugin);
             plugin.OnCompilationFailed();
             // Remove plugins which are required by this plugin if they are only being compiled for this requirement
-            foreach (var required_plugin in plugins.Where(pl => !pl.IsCompilationNeeded && plugin.Requires.Contains(pl.Name)).ToArray())
+            foreach (var requiredPlugin in plugins.Where(pl => !pl.IsCompilationNeeded && plugin.Requires.Contains(pl.Name)).ToArray())
             {
-                if (!plugins.Any(pl => pl.Requires.Contains(required_plugin.Name))) RemovePlugin(required_plugin);
+                if (!plugins.Any(pl => pl.Requires.Contains(requiredPlugin.Name))) RemovePlugin(requiredPlugin);
             }
         }
     }

@@ -98,6 +98,7 @@ namespace Oxide.Game.HideHoldOut
             if (!Interface.Oxide.EnableConsole()) return;
 
             Application.logMessageReceived += HandleLog;
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 
@@ -105,8 +106,10 @@ namespace Oxide.Game.HideHoldOut
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{uLink.Network.connections.Length} | {NetworkController.NetManager_.ServManager.Server_NAME}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {NetworkController.NetManager_.ServManager.Server_NAME}";
+            var netManager = NetworkController.NetManager_;
+
+            Interface.Oxide.ServerConsole.Title = () => $"{uLink.Network.connections.Length} | {netManager.ServManager.Server_NAME}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $" {netManager.ServManager.Server_NAME}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -114,10 +117,7 @@ namespace Oxide.Game.HideHoldOut
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-            Interface.Oxide.ServerConsole.Status2Left = () =>
-            {
-                return $" {uLink.Network.connections.Length}/{NetworkController.NetManager_.ServManager.NumberOfSlot} players";
-            };
+            Interface.Oxide.ServerConsole.Status2Left = () => $" {uLink.Network.connections.Length}/{netManager.ServManager.NumberOfSlot} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
@@ -134,16 +134,16 @@ namespace Oxide.Game.HideHoldOut
             };
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(NetworkController.NetManager_.TimeManager.TIME_display)).ToString("h:mm tt").ToLower();
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(netManager.TimeManager.TIME_display)).ToString("h:mm tt").ToLower();
                 return $" {time}, Unknown map";
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {NetworkController.NetManager_.get_GAME_VERSION}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {netManager.get_GAME_VERSION}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
         private void ServerConsoleOnInput(string input)
         {
-            if (!string.IsNullOrEmpty(input)) Interface.CallHook("OnServerCommand", input);
+            if (!string.IsNullOrEmpty(input)) Interface.Call("OnServerCommand", input);
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

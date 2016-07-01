@@ -77,6 +77,7 @@ namespace Oxide.Game.SpaceEngineers
             if (!Interface.Oxide.EnableConsole()) return;
 
             // TODO: Add console log handling
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 

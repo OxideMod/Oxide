@@ -91,7 +91,17 @@ namespace Oxide.Game.RustLegacy
             if (!Interface.Oxide.EnableConsole(true)) return;
 
             ConsoleSystem.RegisterLogCallback(HandleLog, true);
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            Interface.Oxide.ServerConsole.Completion = input =>
+            {
+                if (string.IsNullOrEmpty(input)) return null;
+
+                if (!input.Contains(".")) input = string.Concat("global.", input);
+                var native = Command.DefaultCommands.Where(c => c.StartsWith(input.ToLower())).ToArray();
+                var oxide = Command.ConsoleCommands.Where(c => c.Key.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.Key).ToArray();
+                return native.Concat(oxide).ToArray();
+            };
         }
 
         internal static void ServerConsole()
@@ -128,15 +138,6 @@ namespace Oxide.Game.RustLegacy
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
-            Interface.Oxide.ServerConsole.Completion = input =>
-            {
-                if (string.IsNullOrEmpty(input)) return null;
-
-                if (!input.Contains(".")) input = string.Concat("global.", input);
-                var native = Command.DefaultCommands.Where(c => c.StartsWith(input.ToLower())).ToArray();
-                var oxide = Command.ConsoleCommands.Where(c => c.Key.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.Key).ToArray();
-                return native.Concat(oxide).ToArray();
-            };
         }
 
         private static void ServerConsoleOnInput(string input)

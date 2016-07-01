@@ -67,7 +67,7 @@ namespace Oxide.Core
         public bool IsShuttingDown { get; private set; }
 
         // The extension manager
-        private ExtensionManager extensionmanager;
+        private ExtensionManager extensionManager;
 
         // The command line
         private CommandLine commandline;
@@ -96,7 +96,7 @@ namespace Oxide.Core
 
         private Stopwatch timer;
 
-        private NativeDebugCallback debugCallback;
+        private readonly NativeDebugCallback debugCallback;
 
         public OxideMod(NativeDebugCallback debugCallback)
         {
@@ -161,24 +161,24 @@ namespace Oxide.Core
 
             // Create the managers
             RootPluginManager = new PluginManager(RootLogger) { ConfigPath = ConfigDirectory };
-            extensionmanager = new ExtensionManager(RootLogger);
+            extensionManager = new ExtensionManager(RootLogger);
 
             // Initialize other things
             DataFileSystem = new DataFileSystem(DataDirectory);
 
             // Register core libraries
-            extensionmanager.RegisterLibrary("Global", new Global());
-            extensionmanager.RegisterLibrary("Time", new Time());
-            extensionmanager.RegisterLibrary("Timer", libtimer = new Timer());
-            extensionmanager.RegisterLibrary("Permission", new Permission());
-            extensionmanager.RegisterLibrary("Plugins", new Libraries.Plugins(RootPluginManager));
-            extensionmanager.RegisterLibrary("WebRequests", new WebRequests());
-            extensionmanager.RegisterLibrary("Lang", new Lang());
-            extensionmanager.RegisterLibrary("Covalence", covalence = new Covalence());
+            extensionManager.RegisterLibrary("Covalence", covalence = new Covalence());
+            extensionManager.RegisterLibrary("Global", new Global());
+            extensionManager.RegisterLibrary("Lang", new Lang());
+            extensionManager.RegisterLibrary("Permission", new Permission());
+            extensionManager.RegisterLibrary("Plugins", new Libraries.Plugins(RootPluginManager));
+            extensionManager.RegisterLibrary("Time", new Time());
+            extensionManager.RegisterLibrary("Timer", libtimer = new Timer());
+            extensionManager.RegisterLibrary("WebRequests", new WebRequests());
 
             // Load all extensions
             LogInfo("Loading extensions...");
-            extensionmanager.LoadAllExtensions(ExtensionDirectory);
+            extensionManager.LoadAllExtensions(ExtensionDirectory);
 
             // Initialize covalence library after extensions (as it depends on things from within an ext)
             covalence.Initialize();
@@ -196,14 +196,14 @@ namespace Oxide.Core
             }
 
             // Load all watchers
-            foreach (var ext in extensionmanager.GetAllExtensions()) ext.LoadPluginWatchers(PluginDirectory);
+            foreach (var ext in extensionManager.GetAllExtensions()) ext.LoadPluginWatchers(PluginDirectory);
 
             // Load all plugins
             LogInfo("Loading plugins...");
             LoadAllPlugins(true);
 
             // Hook all watchers
-            foreach (var watcher in extensionmanager.GetPluginChangeWatchers())
+            foreach (var watcher in extensionManager.GetPluginChangeWatchers())
             {
                 watcher.OnPluginSourceChanged += watcher_OnPluginSourceChanged;
                 watcher.OnPluginAdded += watcher_OnPluginAdded;
@@ -216,19 +216,19 @@ namespace Oxide.Core
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public T GetLibrary<T>(string name = null) where T : Library => extensionmanager.GetLibrary(name ?? typeof(T).Name) as T;
+        public T GetLibrary<T>(string name = null) where T : Library => extensionManager.GetLibrary(name ?? typeof(T).Name) as T;
 
         /// <summary>
         /// Gets all loaded extensions
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Extension> GetAllExtensions() => extensionmanager.GetAllExtensions();
+        public IEnumerable<Extension> GetAllExtensions() => extensionManager.GetAllExtensions();
 
         /// <summary>
         /// Gets all loaded extensions
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<PluginLoader> GetPluginLoaders() => extensionmanager.GetPluginLoaders();
+        public IEnumerable<PluginLoader> GetPluginLoaders() => extensionManager.GetPluginLoaders();
 
         #region Logging
 
@@ -281,7 +281,8 @@ namespace Oxide.Core
         /// </summary>
         public void LoadAllPlugins(bool init = false)
         {
-            var loaders = extensionmanager.GetPluginLoaders();
+            var loaders = extensionManager.GetPluginLoaders();
+
             // Load all core plugins first
             if (!hasLoadedCorePlugins)
             {
@@ -303,14 +304,14 @@ namespace Oxide.Core
                     }
                 }
             }
+
             // Scan the plugin directory and load all reported plugins
             foreach (var loader in loaders)
-            {
                 foreach (var name in loader.ScanDirectory(PluginDirectory)) LoadPlugin(name);
-            }
+
             if (!init) return;
             var lastCall = Now;
-            foreach (var loader in extensionmanager.GetPluginLoaders())
+            foreach (var loader in extensionManager.GetPluginLoaders())
             {
                 // Wait until all async plugins have finished loading
                 while (loader.LoadingPlugins.Count > 0)
@@ -340,9 +341,7 @@ namespace Oxide.Core
         public void ReloadAllPlugins(IList<string> skip = null)
         {
             foreach (var plugin in RootPluginManager.GetPlugins().Where(p => !p.IsCorePlugin && (skip == null || !skip.Contains(p.Name))).ToArray())
-            {
                 ReloadPlugin(plugin.Name);
-            }
         }
 
         /// <summary>
@@ -355,7 +354,13 @@ namespace Oxide.Core
             if (RootPluginManager.GetPlugin(name) != null) return false;
 
             // Find all plugin loaders that lay claim to the name
-            var loaders = new HashSet<PluginLoader>(extensionmanager.GetPluginLoaders().Where(l => l.ScanDirectory(PluginDirectory).Contains(name)));
+            var loaders = new HashSet<PluginLoader>();
+            foreach (var l in extensionManager.GetPluginLoaders())
+            {
+                if (!l.ScanDirectory(PluginDirectory).Contains(name, StringComparer.InvariantCultureIgnoreCase)) continue;
+                loaders.Add(l);
+                break;
+            }
             if (loaders.Count == 0)
             {
                 LogError("Failed to load plugin '{0}' (no source found)", name);
@@ -372,7 +377,7 @@ namespace Oxide.Core
             try
             {
                 var plugin = loader.Load(PluginDirectory, name);
-                if (plugin == null) return true; // async load
+                if (plugin == null) return true; // Async load
                 plugin.Loader = loader;
                 PluginLoaded(plugin);
                 return true;
@@ -387,6 +392,7 @@ namespace Oxide.Core
         public bool PluginLoaded(Plugin plugin)
         {
             plugin.OnError += plugin_OnError;
+
             // Log plugin loaded
             LogInfo("Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
@@ -424,7 +430,7 @@ namespace Oxide.Core
             if (plugin == null) return false;
 
             // Let the plugin loader know that this plugin is being unloaded
-            var loader = extensionmanager.GetPluginLoaders().SingleOrDefault(l => l.LoadedPlugins.ContainsKey(name));
+            var loader = extensionManager.GetPluginLoaders().SingleOrDefault(l => l.LoadedPlugins.ContainsKey(name.ToLower()));
             loader?.Unloading(plugin);
 
             // Unload it
@@ -444,22 +450,31 @@ namespace Oxide.Core
         /// <param name="name"></param>
         public bool ReloadPlugin(string name)
         {
-            var is_nested = false;
+            var isNested = false;
             var directory = PluginDirectory;
             if (name.Contains("\\"))
             {
-                is_nested = true;
-                var sub_path = Path.GetDirectoryName(name);
-                directory = Path.Combine(directory, sub_path);
-                name = name.Substring(sub_path.Length + 1);
+                isNested = true;
+                var subPath = Path.GetDirectoryName(name);
+                if (subPath != null)
+                {
+                    directory = Path.Combine(directory, subPath);
+                    name = name.Substring(subPath.Length + 1);
+                }
             }
-            var loader = extensionmanager.GetPluginLoaders().FirstOrDefault(l => l.ScanDirectory(directory).Contains(name));
+            PluginLoader loader = null;
+            foreach (var l in extensionManager.GetPluginLoaders())
+            {
+                if (!l.ScanDirectory(directory).Contains(name, StringComparer.InvariantCultureIgnoreCase)) continue;
+                loader = l;
+                break;
+            }
             if (loader != null)
             {
                 loader.Reload(directory, name);
                 return true;
             }
-            if (is_nested) return false;
+            if (isNested) return false;
             UnloadPlugin(name);
             LoadPlugin(name);
             return true;
@@ -485,12 +500,15 @@ namespace Oxide.Core
         /// <summary>
         /// Calls a deprecated hook and prints a warning
         /// </summary>
-        /// <param name="hookname"></param>
-        /// <param name="newname"></param>
+        /// <param name="oldHook"></param>
+        /// <param name="newHook"></param>
         /// <param name="expireDate"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallDeprecatedHook(string hookname, string newname, DateTime expireDate, params object[] args) => RootPluginManager?.CallDeprecatedHook(hookname, newname, expireDate, args);
+        public object CallDeprecatedHook(string oldHook, string newHook, DateTime expireDate, params object[] args)
+        {
+            return RootPluginManager?.CallDeprecatedHook(oldHook, newHook, expireDate, args);
+        }
 
         /// <summary>
         /// Queues a callback to be called in the next server frame
@@ -560,10 +578,10 @@ namespace Oxide.Core
             if (IsShuttingDown) return;
             IsShuttingDown = true;
             UnloadAllPlugins();
-            foreach (var extension in extensionmanager.GetAllExtensions())
+            foreach (var extension in extensionManager.GetAllExtensions())
                 extension.OnShutdown();
-            foreach (var name in extensionmanager.GetLibraries())
-                extensionmanager.GetLibrary(name).Shutdown();
+            foreach (var name in extensionManager.GetLibraries())
+                extensionManager.GetLibrary(name).Shutdown();
             ServerConsole?.OnDisable();
             RootLogger.Shutdown();
         }
@@ -606,6 +624,8 @@ namespace Oxide.Core
 
         #endregion
 
+        #region Library Paths
+
         private static void RegisterLibrarySearchPath(string path)
         {
             switch (Environment.OSVersion.Platform)
@@ -630,5 +650,7 @@ namespace Oxide.Core
 
         [DllImport("kernel32", SetLastError = true)]
         private static extern bool SetDllDirectory(string lpPathName);
+
+        #endregion
     }
 }

@@ -8,84 +8,76 @@ namespace Oxide.Plugins
     public class CompilablePlugin : CompilableFile
     {
         private static object compileLock = new object();
-        
+
         public CompiledAssembly LastGoodAssembly;
         public bool IsLoading;
-        
-        public CompilablePlugin(CSharpExtension extension, CSharpPluginLoader loader, string directory, string name)
-            : base(extension, loader, directory, name)
-        {
 
+        public CompilablePlugin(CSharpExtension extension, CSharpPluginLoader loader, string directory, string name) : base(extension, loader, directory, name)
+        {
         }
 
-        protected override void OnLoadingStarted()
-        {
-            Loader.PluginLoadingStarted(this);
-        }
+        protected override void OnLoadingStarted() => Loader.PluginLoadingStarted(this);
 
-        protected override void OnCompilationRequested()
-        {
-            Loader.CompilationRequested(this);
-        }
+        protected override void OnCompilationRequested() => Loader.CompilationRequested(this);
 
         internal void LoadPlugin(Action<CSharpPlugin> callback = null)
         {
             if (CompiledAssembly == null)
             {
-                Interface.Oxide.LogError("Load called before a compiled assembly exists: " + Name);
-                RemoteLogger.Error("Load called before a compiled assembly exists: " + Name);
+                Interface.Oxide.LogError("Load called before a compiled assembly exists: {0}", Name);
+                RemoteLogger.Error($"Load called before a compiled assembly exists: {Name}");
                 return;
             }
 
-            loadCallback = callback;
+            LoadCallback = callback;
 
             CompiledAssembly.LoadAssembly(loaded =>
             {
                 if (!loaded)
                 {
-                    if (callback != null) callback(null);
+                    callback?.Invoke(null);
                     return;
                 }
 
                 if (CompilerErrors != null)
                 {
-                    InitFailed("Unable to load " + ScriptName + ". " + CompilerErrors);
+                    InitFailed($"Unable to load {ScriptName}. {CompilerErrors}");
                     return;
                 }
 
-                var type = CompiledAssembly.LoadedAssembly.GetType("Oxide.Plugins." + Name);
+                var type = CompiledAssembly.LoadedAssembly.GetType($"Oxide.Plugins.{Name}");
                 if (type == null)
                 {
-                    InitFailed("Unable to find main plugin class: " + Name);
+                    InitFailed($"Unable to find main plugin class: {Name}");
                     return;
                 }
 
-                CSharpPlugin plugin = null;
+                CSharpPlugin plugin;
                 try
                 {
                     plugin = Activator.CreateInstance(type) as CSharpPlugin;
                 }
                 catch (MissingMethodException)
                 {
-                    InitFailed("Main plugin class should not have a constructor defined: " + Name);
+                    InitFailed($"Main plugin class should not have a constructor defined: {Name}");
                     return;
                 }
-                catch (TargetInvocationException invocation_exception)
+                catch (TargetInvocationException invocationException)
                 {
-                    var ex = invocation_exception.InnerException;
-                    InitFailed("Unable to load " + ScriptName + ". " + ex.ToString());
+                    var ex = invocationException.InnerException;
+                    InitFailed($"Unable to load {ScriptName}. {ex.ToString()}");
                     return;
                 }
                 catch (Exception ex)
                 {
-                    InitFailed("Unable to load " + ScriptName + ". " + ex.ToString());
+                    InitFailed($"Unable to load {ScriptName}. {ex.ToString()}");
                     return;
                 }
 
                 if (plugin == null)
                 {
-                    RemoteLogger.Error("Plugin assembly failed to load: " + ScriptName);
-                    InitFailed("Plugin assembly failed to load: " + ScriptName);
+                    RemoteLogger.Error($"Plugin assembly failed to load: {ScriptName}");
+                    InitFailed($"Plugin assembly failed to load: {ScriptName}");
                     return;
                 }
 
@@ -100,7 +92,7 @@ namespace Oxide.Plugins
                 }
 
                 if (!CompiledAssembly.IsBatch) LastGoodAssembly = CompiledAssembly;
-                if (callback != null) callback(plugin);
+                callback?.Invoke(plugin);
             });
         }
 
@@ -112,13 +104,13 @@ namespace Oxide.Plugins
             foreach (var plugin in Interface.Oxide.RootPluginManager.GetPlugins())
             {
                 if (!(plugin is CSharpPlugin)) continue;
-                var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(Directory, plugin.Name);
-                if (!compilable_plugin.Requires.Contains(Name)) continue;
-                compilable_plugin.CompiledAssembly = null;
-                Loader.Load(compilable_plugin);
+                var compilablePlugin = CSharpPluginLoader.GetCompilablePlugin(Directory, plugin.Name);
+                if (!compilablePlugin.Requires.Contains(Name)) continue;
+                compilablePlugin.CompiledAssembly = null;
+                Loader.Load(compilablePlugin);
             }
         }
-                
+
         protected override void InitFailed(string message = null)
         {
             base.InitFailed(message);

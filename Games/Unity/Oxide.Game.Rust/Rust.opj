@@ -3125,6 +3125,64 @@
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "_Patches"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 16,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0.RemoteEndPoint",
+            "HookTypeName": "Simple",
+            "Name": "OnRconConnection",
+            "HookName": "OnRconConnection",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Facepunch.RCon/RConListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ProcessConnections",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "7j4Zz7sFcFvEMHNrq70/It3Qc+e29nR1wk1ZWEycGCc=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 29,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldloc_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "callvirt",
+                "OpType": "Method",
+                "Operand": "System|System.Net.Sockets.Socket|Close"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "RconCloseSocket [patch]",
+            "HookName": "RconCloseSocket",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Facepunch.RCon/RConListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ProcessConnections",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "7j4Zz7sFcFvEMHNrq70/It3Qc+e29nR1wk1ZWEycGCc=",
+            "BaseHookName": "OnRconConnection",
+            "HookCategory": "_Patches"
+          }
         }
       ]
     }

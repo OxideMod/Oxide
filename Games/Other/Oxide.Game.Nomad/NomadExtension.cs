@@ -76,6 +76,7 @@ namespace Oxide.Game.Nomad
             if (!Interface.Oxide.EnableConsole()) return;
 
             // TODO: Add console log handling
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 

@@ -72,6 +72,39 @@ namespace Oxide.Core.Libraries.Covalence
         }
 
         /// <summary>
+        /// Handle console input from the specified player, returns true if handled
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="str"></param>
+        public bool HandleConsoleMessage(ILivePlayer player, string str)
+        {
+            // Parse it
+            string cmd;
+            string[] args;
+            ParseChatCommand(str, out cmd, out args);
+
+            // Handle it
+            return cmd != null && HandleConsoleCommand(player, cmd, args);
+        }
+
+        /// <summary>
+        /// Handles a console command
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="cmd"></param>
+        /// <param name="args"></param>
+        private bool HandleConsoleCommand(ILivePlayer player, string cmd, string[] args)
+        {
+            // Check things
+            if (commandFilter != null && !commandFilter(cmd)) return false;
+            if (callback == null) return false;
+            player.LastCommand = CommandType.Console;
+
+            // Handle it
+            return callback(player.BasePlayer, cmd, args);
+        }
+
+        /// <summary>
         /// Parses the specified chat command
         /// </summary>
         /// <param name="argstr"></param>

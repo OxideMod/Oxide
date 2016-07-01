@@ -569,7 +569,7 @@ namespace Oxide.Core.Libraries
             var data = GetUserData(id);
 
             // Call hook for plugins
-            Interface.CallHook("OnUserPermissionGranted", id, perm);
+            Interface.Call("OnUserPermissionGranted", id, perm);
 
             perm = perm.ToLower();
 
@@ -612,7 +612,7 @@ namespace Oxide.Core.Libraries
             var data = GetUserData(id);
 
             // Call hook for plugins
-            Interface.CallHook("OnUserPermissionRevoked", id, perm);
+            Interface.Call("OnUserPermissionRevoked", id, perm);
 
             if (perm.Equals("*"))
             {
@@ -648,7 +648,7 @@ namespace Oxide.Core.Libraries
             if (!groupdata.TryGetValue(groupname.ToLower(), out data)) return;
 
             // Call hook for plugins
-            Interface.CallHook("OnGroupPermissionGranted", groupname, perm);
+            Interface.Call("OnGroupPermissionGranted", groupname, perm);
 
             if (perm.EndsWith("*"))
             {
@@ -690,7 +690,7 @@ namespace Oxide.Core.Libraries
             if (!groupdata.TryGetValue(groupname.ToLower(), out data)) return;
 
             // Call hook for plugins
-            Interface.CallHook("OnGroupPermissionRevoked", groupname, perm);
+            Interface.Call("OnGroupPermissionRevoked", groupname, perm);
 
             if (perm.Equals("*"))
             {

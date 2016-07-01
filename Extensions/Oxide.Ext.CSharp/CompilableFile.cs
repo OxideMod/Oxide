@@ -32,9 +32,9 @@ namespace Oxide.Plugins
         public DateTime LastCompiledAt;
         public bool IsCompilationNeeded;
 
-        protected Action<CSharpPlugin> loadCallback;
-        protected Action<bool> compileCallback;
-        protected float compilationQueuedAt;
+        protected Action<CSharpPlugin> LoadCallback;
+        protected Action<bool> CompileCallback;
+        protected float CompilationQueuedAt;
 
         private Core.Libraries.Timer.TimerInstance timeoutTimer;
 
@@ -46,8 +46,8 @@ namespace Oxide.Plugins
             Loader = loader;
             Directory = directory;
             ScriptName = name;
+            ScriptPath = Path.Combine(Directory, $"{ScriptName}.cs");
             Name = Regex.Replace(Regex.Replace(ScriptName, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
-            ScriptPath = Path.Combine(Directory, string.Format("{0}.cs", ScriptName));
             CheckLastModificationTime();
         }
 
@@ -55,9 +55,9 @@ namespace Oxide.Plugins
         {
             lock (compileLock)
             {
-                if (compilationQueuedAt > 0f)
+                if (CompilationQueuedAt > 0f)
                 {
-                    var ago = Interface.Oxide.Now - compilationQueuedAt;
+                    var ago = Interface.Oxide.Now - CompilationQueuedAt;
                     Interface.Oxide.LogDebug($"Plugin compilation is already queued: {ScriptName} ({ago:0.000} ago)");
                     //RemoteLogger.Debug($"Plugin compilation is already queued: {ScriptName} ({ago:0.000} ago)");
                     return;
@@ -73,12 +73,12 @@ namespace Oxide.Plugins
                     }
                 }
                 IsCompilationNeeded = true;
-                compileCallback = callback;
-                compilationQueuedAt = Interface.Oxide.Now;
+                CompileCallback = callback;
+                CompilationQueuedAt = Interface.Oxide.Now;
                 OnCompilationRequested();
             }
         }
-        
+
         internal virtual void OnCompilationStarted()
         {
             //Interface.Oxide.LogDebug("Compiling plugin: {0}", Name);
@@ -92,7 +92,7 @@ namespace Oxide.Plugins
             });
         }
 
-        internal void OnCompilationSucceeded(CompiledAssembly compiled_assembly)
+        internal void OnCompilationSucceeded(CompiledAssembly compiledAssembly)
         {
             if (timeoutTimer == null)
             {
@@ -102,9 +102,9 @@ namespace Oxide.Plugins
             timeoutTimer?.Destroy();
             timeoutTimer = null;
             IsCompilationNeeded = false;
-            compilationQueuedAt = 0f;
-            CompiledAssembly = compiled_assembly;
-            compileCallback?.Invoke(true);
+            CompilationQueuedAt = 0f;
+            CompiledAssembly = compiledAssembly;
+            CompileCallback?.Invoke(true);
         }
 
         internal void OnCompilationFailed()
@@ -116,9 +116,9 @@ namespace Oxide.Plugins
             }
             timeoutTimer?.Destroy();
             timeoutTimer = null;
-            compilationQueuedAt = 0f;
+            CompilationQueuedAt = 0f;
             LastCompiledAt = default(DateTime);
-            compileCallback?.Invoke(false);
+            CompileCallback?.Invoke(false);
             IsCompilationNeeded = false;
         }
 
@@ -131,9 +131,9 @@ namespace Oxide.Plugins
 
         internal bool HasBeenModified()
         {
-            var last_modified_at = LastModifiedAt;
+            var lastModifiedAt = LastModifiedAt;
             CheckLastModificationTime();
-            return LastModifiedAt != last_modified_at;
+            return LastModifiedAt != lastModifiedAt;
         }
 
         internal void CheckLastModificationTime()
@@ -143,8 +143,8 @@ namespace Oxide.Plugins
                 LastModifiedAt = default(DateTime);
                 return;
             }
-            var modified_time = GetLastModificationTime();
-            if (modified_time != default(DateTime)) LastModifiedAt = modified_time;
+            var modifiedTime = GetLastModificationTime();
+            if (modifiedTime != default(DateTime)) LastModifiedAt = modifiedTime;
         }
 
         internal DateTime GetLastModificationTime()
@@ -159,7 +159,7 @@ namespace Oxide.Plugins
                 return default(DateTime);
             }
         }
-        
+
         protected virtual void OnLoadingStarted()
         {
         }
@@ -171,7 +171,7 @@ namespace Oxide.Plugins
         protected virtual void InitFailed(string message = null)
         {
             if (message != null) Interface.Oxide.LogError(message);
-            if (loadCallback != null) loadCallback(null);
+            LoadCallback?.Invoke(null);
         }
     }
 }

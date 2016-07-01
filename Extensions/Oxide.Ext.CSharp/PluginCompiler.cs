@@ -21,11 +21,11 @@ namespace Oxide.Plugins
         public static void CheckCompilerBinary()
         {
             BinaryPath = null;
-            var root_directory = Interface.Oxide.RootDirectory;
-            var binary_path = root_directory + @"\basic.exe";
-            if (File.Exists(binary_path))
+            var rootDirectory = Interface.Oxide.RootDirectory;
+            var binaryPath = rootDirectory + @"\basic.exe";
+            if (File.Exists(binaryPath))
             {
-                BinaryPath = binary_path;
+                BinaryPath = binaryPath;
                 return;
             }
             switch (Environment.OSVersion.Platform)
@@ -33,8 +33,8 @@ namespace Oxide.Plugins
                 case PlatformID.Win32NT:
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
-                    binary_path = root_directory + @"\CSharpCompiler.exe";
-                    if (!File.Exists(binary_path))
+                    binaryPath = rootDirectory + @"\CSharpCompiler.exe";
+                    if (!File.Exists(binaryPath))
                     {
                         Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
                         return;
@@ -42,23 +42,23 @@ namespace Oxide.Plugins
                     break;
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    binary_path = root_directory + @"/CSharpCompiler";
-                    if (IntPtr.Size != 8) binary_path += ".x86";
-                    if (!File.Exists(binary_path))
+                    binaryPath = rootDirectory + @"/CSharpCompiler";
+                    if (IntPtr.Size != 8) binaryPath += ".x86";
+                    if (!File.Exists(binaryPath))
                     {
                         Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler!");
                         return;
                     }
                     break;
             }
-            BinaryPath = binary_path;
+            BinaryPath = binaryPath;
         }
 
         private Process process;
-        private Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
+        private readonly Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
         private ObjectStreamClient<CompilerMessage> client;
-        private Hash<int, Compilation> compilations;
-        private Queue<CompilerMessage> messageQueue;
+        private readonly Hash<int, Compilation> compilations;
+        private readonly Queue<CompilerMessage> messageQueue;
         private volatile int lastId;
         private volatile bool ready;
         private Core.Libraries.Timer.TimerInstance idleTimer;
@@ -80,8 +80,8 @@ namespace Oxide.Plugins
         public void Shutdown()
         {
             ready = false;
-            var ended_process = process;
-            if (ended_process != null) ended_process.Exited -= OnProcessExited;
+            var endedProcess = process;
+            if (endedProcess != null) endedProcess.Exited -= OnProcessExited;
             process = null;
             if (client == null) return;
             client.Message -= OnMessage;
@@ -89,12 +89,12 @@ namespace Oxide.Plugins
             client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
             client.Stop();
             client = null;
-            if (ended_process == null) return;
+            if (endedProcess == null) return;
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 Thread.Sleep(5000);
                 // Calling Close can block up to 60 seconds on certain machines
-                if (!ended_process.HasExited) ended_process.Close();
+                if (!endedProcess.HasExited) endedProcess.Close();
             });
         }
 
@@ -102,7 +102,7 @@ namespace Oxide.Plugins
         {
             if (compilation.plugins.Count < 1)
             {
-                Interface.Oxide.LogDebug("EnqueueCompilation called for an empty compilation");
+                //Interface.Oxide.LogDebug("EnqueueCompilation called for an empty compilation");
                 return;
             }
             if (!CheckCompiler())
@@ -111,14 +111,14 @@ namespace Oxide.Plugins
                 return;
             }
             compilation.Started();
-            //Interface.Oxide.LogDebug("Compiling with references: " + compilation.references.Keys.ToSentence());
-            var source_files = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Distinct().Select(path => new CompilerFile(path)).ToList();
-            source_files.AddRange(compilation.plugins.Select(plugin => new CompilerFile(plugin.ScriptName + ".cs", plugin.ScriptSource)));
-            //Interface.Oxide.LogDebug("Compiling files: " + source_files.Select(f => f.Name).ToSentence());
+            //Interface.Oxide.LogDebug("Compiling with references: {0}", compilation.references.Keys.ToSentence());
+            var sourceFiles = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Distinct().Select(path => new CompilerFile(path)).ToList();
+            sourceFiles.AddRange(compilation.plugins.Select(plugin => new CompilerFile($"{plugin.ScriptName}.cs", plugin.ScriptSource)));
+            //Interface.Oxide.LogDebug("Compiling files: {0}", sourceFiles.Select(f => f.Name).ToSentence());
             var data = new CompilerData
             {
                 OutputFile = compilation.name,
-                SourceFiles = source_files.ToArray(),
+                SourceFiles = sourceFiles.ToArray(),
                 ReferenceFiles = compilation.references.Values.ToArray()
             };
             var message = new CompilerMessage { Id = compilation.id, Data = data, Type = CompilerMessageType.Compile };
@@ -134,7 +134,7 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.NextTick(() =>
                 {
-                    OnCompilerFailed("Compiler disconnected.");
+                    OnCompilerFailed("Compiler disconnected."); // TODO: Expand, warn about possible missing depdencies?
                     Shutdown();
                 });
                 return;
@@ -145,7 +145,7 @@ namespace Oxide.Plugins
                     var compilation = compilations[message.Id];
                     if (compilation == null)
                     {
-                        Interface.Oxide.LogWarning("CSharp compiler compiled an unknown assembly!");
+                        Interface.Oxide.LogWarning("CSharp compiler compiled an unknown assembly!"); // TODO: Clarify?
                         return;
                     }
                     compilation.endedAt = Interface.Oxide.Now;
@@ -159,19 +159,19 @@ namespace Oxide.Plugins
                             {
                                 var value = match.Groups[i].Value;
                                 if (value.Trim() == string.Empty) continue;
-                                var file_name = value.Basename();
-                                var script_name = file_name.Substring(0, file_name.Length - 3);
-                                var compilable_plugin = compilation.plugins.SingleOrDefault(pl => pl.ScriptName == script_name);
-                                if (compilable_plugin == null)
+                                var fileName = value.Basename();
+                                var scriptName = fileName.Substring(0, fileName.Length - 3);
+                                var compilablePlugin = compilation.plugins.SingleOrDefault(pl => pl.ScriptName == scriptName);
+                                if (compilablePlugin == null)
                                 {
-                                    Interface.Oxide.LogError("Unable to resolve script error to plugin: " + line);
+                                    Interface.Oxide.LogError("Unable to resolve script error to plugin: {0}", line);
                                     continue;
                                 }
-                                var missing_requirements = compilable_plugin.Requires.Where(name => !compilation.IncludesRequiredPlugin(name));
-                                if (missing_requirements.Any())
-                                    compilable_plugin.CompilerErrors = $"Missing dependencies: {missing_requirements.ToSentence()}";
+                                var missingRequirements = compilablePlugin.Requires.Where(name => !compilation.IncludesRequiredPlugin(name));
+                                if (missingRequirements.Any())
+                                    compilablePlugin.CompilerErrors = $"Missing dependencies: {missingRequirements.ToSentence()}";
                                 else
-                                    compilable_plugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + Path.DirectorySeparatorChar, string.Empty);
+                                    compilablePlugin.CompilerErrors = line.Trim().Replace(Interface.Oxide.PluginDirectory + Path.DirectorySeparatorChar, string.Empty);
                             }
                         }
                     }
@@ -206,17 +206,13 @@ namespace Oxide.Plugins
                     if (!ready)
                     {
                         ready = true;
-                        while (messageQueue.Count > 0)
-                            connection.PushMessage(messageQueue.Dequeue());
+                        while (messageQueue.Count > 0) connection.PushMessage(messageQueue.Dequeue());
                     }
                     break;
             }
         }
 
-        private void OnError(Exception exception)
-        {
-            Interface.Oxide.LogException("Compilation error: ", exception);
-        }
+        private static void OnError(Exception exception) => Interface.Oxide.LogException("Compilation error: ", exception);
 
         private bool CheckCompiler()
         {
@@ -268,7 +264,7 @@ namespace Oxide.Plugins
             {
                 process?.Dispose();
                 process = null;
-                Interface.Oxide.LogException("Exception while starting compiler: ", ex);
+                Interface.Oxide.LogException("Exception while starting compiler: ", ex); // TODO: Expand, warn that it may not be executable?
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
             }
             if (process == null) return false;
@@ -283,7 +279,7 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.NextTick(() =>
             {
-                OnCompilerFailed("Compiler closed.");
+                OnCompilerFailed("Compiler closed."); // TODO: Expand, warn about possible security software?
                 Shutdown();
             });
         }
@@ -292,16 +288,13 @@ namespace Oxide.Plugins
         {
             foreach (var compilation in compilations.Values)
             {
-                foreach (var plugin in compilation.plugins)
-                {
-                    plugin.CompilerErrors = reason;
-                }
+                foreach (var plugin in compilation.plugins) plugin.CompilerErrors = reason;
                 compilation.Completed();
             }
             compilations.Clear();
         }
 
-        private void PurgeOldLogs()
+        private static void PurgeOldLogs()
         {
             try
             {
@@ -315,6 +308,7 @@ namespace Oxide.Plugins
             }
             catch (Exception)
             {
+                // Ignored
             }
         }
 

@@ -63,13 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libraries\TheForest.cs" />
     <Compile Include="Libraries\Covalence\TheForestCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\TheForestCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\TheForestLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\TheForestPlayer.cs" />
     <Compile Include="Libraries\Covalence\TheForestPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\TheForestServer.cs" />
-    <Compile Include="Libraries\TheForest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TheForestCore.cs" />
     <Compile Include="TheForestExtension.cs" />

@@ -77,6 +77,7 @@ namespace Oxide.Game.FortressCraft
             if (!Interface.Oxide.EnableConsole()) return;
 
             Application.logMessageReceived += HandleLog;
+
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 

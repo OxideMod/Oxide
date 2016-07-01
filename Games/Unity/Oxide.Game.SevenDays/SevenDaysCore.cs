@@ -138,7 +138,7 @@ namespace Oxide.Game.SevenDays
 
             // Let covalence know
             //covalence.PlayerManager.NotifyPlayerConnect(client);
-            //Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(client.playerId));
+            //Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(client.playerId));
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Oxide.Game.SevenDays
         {
             // Let covalence know
             //covalence.PlayerManager.NotifyPlayerDisconnect(client);
-            //Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(client.playerId), "Unknown");
+            //Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(client.playerId), "Unknown");
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerChat(ClientInfo client, string message)
         {
             // Call covalence hook
-            //Interface.CallHook("OnUserChat", covalence.PlayerManager.GetPlayer(client.playerId), message);
+            //Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(client.playerId), message);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerSpawn(ClientInfo client)
         {
             // Call covalence hook
-            //Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.playerId));
+            //Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.playerId));
         }
 
         #endregion

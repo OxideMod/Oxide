@@ -43,18 +43,18 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => player.source.RemoteEndPoint.Address.ToString(); // TODO: Fix, showing as 1.16.0.1 for all
+        public string Address => entity.source.RemoteEndPoint.Address.ToString(); // TODO: Fix, showing as 1.16.0.1 for all
 
         /// <summary>
         /// Gets the user's average network ping
         /// </summary>
-        public int Ping => Convert.ToInt32(player.source.PingNetwork);
+        public int Ping => Convert.ToInt32(entity.source.PingNetwork);
 
-        private readonly BoltEntity player;
+        private readonly BoltEntity entity;
 
         internal TheForestLivePlayer(BoltEntity entity)
         {
-            player = entity;
+            this.entity = entity;
             steamId = entity.source.RemoteEndPoint.SteamId.Id;
             Character = this;
             Object = entity.gameObject;
@@ -67,18 +67,18 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player.source.IsDedicatedServerAdmin();
+        public bool IsAdmin => entity.source.IsDedicatedServerAdmin();
 
         /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => CoopKick.KickPlayer(player, -1, reason);
+        public void Kick(string reason) => CoopKick.KickPlayer(entity, -1, reason);
 
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => player.GetComponentInChildren<EnemyHealth>().Hit(1000);
+        public void Kill() => entity.GetComponentInChildren<EnemyHealth>().Hit(1000);
 
         /// <summary>
         /// Teleports the user's character to the specified position
@@ -86,7 +86,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => player.gameObject.transform.position = new Vector3(x, y, z);
+        public void Teleport(float x, float y, float z) => entity.gameObject.transform.position = new Vector3(x, y, z);
 
         #endregion
 
@@ -131,7 +131,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            var pos = player.gameObject.transform.position;
+            var pos = entity.gameObject.transform.position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -143,7 +143,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            var pos = player.gameObject.transform.position;
+            var pos = entity.gameObject.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 

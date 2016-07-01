@@ -187,6 +187,7 @@ namespace Oxide.Game.RustLegacy
         private object IOnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
         {
             var id = connection.UserID.ToString();
+            var ip = approval.ipAddress;
 
             // Reject invalid connections
             if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
@@ -204,15 +205,16 @@ namespace Oxide.Game.RustLegacy
             }
 
             // Call out and see if we should reject
-            var canlogin = (string)Interface.CallHook("CanClientLogin", connection) ?? Interface.CallHook("CanUserLogin", connection.UserName, id);
-            if (canlogin is string)
+            var canLogin = (string)Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
+            if (canLogin is string)
             {
-                Notice.Popup(connection.netUser.networkPlayer, "", canlogin.ToString(), 10f);
+                // Reject the user with the message
+                Notice.Popup(connection.netUser.networkPlayer, "", canLogin.ToString(), 10f);
                 approval.Deny(uLink.NetworkConnectionError.NoError);
                 return true;
             }
 
-            return Interface.CallHook("OnUserApprove", connection, approval, acceptor) ?? Interface.CallHook("OnUserApproved", connection.UserName, id);
+            return Interface.Call("OnUserApprove", connection, approval, acceptor) ?? Interface.Call("OnUserApproved", connection.UserName, id, ip);
         }
 
         /// <summary>
@@ -239,7 +241,7 @@ namespace Oxide.Game.RustLegacy
             }
 
             // Call covalence hook
-            Interface.CallHook("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -253,7 +255,7 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Call covalence hook
-            Interface.CallHook("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
@@ -273,7 +275,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            Interface.CallHook("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -289,7 +291,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
             // Call covalence hook
-            Interface.CallHook("OnUserSpawned", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserSpawned", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -301,7 +303,7 @@ namespace Oxide.Game.RustLegacy
         {
             var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
             playerList.SetValue(null, players);
-            return (int?)Interface.CallHook("OnPlayerVoice", netUser, players);
+            return (int?)Interface.Call("OnPlayerVoice", netUser, players);
         }
 
         #endregion
@@ -743,7 +745,7 @@ namespace Oxide.Game.RustLegacy
 
                 // Is it a chat command?
                 if (str[0] != '/')
-                    return Interface.CallHook("OnPlayerChat", arg.argUser, str) ?? Interface.CallHook("OnUserChat", iplayer, str);
+                    return Interface.Call("OnPlayerChat", arg.argUser, str) ?? Interface.Call("OnUserChat", iplayer, str);
 
                 // Get the arg string
                 var argstr = str.Substring(1);
