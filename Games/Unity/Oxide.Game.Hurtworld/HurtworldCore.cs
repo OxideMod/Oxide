@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -999,7 +998,15 @@ namespace Oxide.Game.Hurtworld
         /// <param name="arg"></param>
         /// <returns></returns>
         [HookMethod("OnServerCommand")]
-        private object OnServerCommand(string arg) => arg == null || arg.Trim().Length == 0 ? null : cmdlib.HandleConsoleCommand(arg);
+        private object OnServerCommand(string arg)
+        {
+            if (arg == null || arg.Trim().Length == 0) return null;
+
+            // Is this a covalence command?
+            if (covalence.CommandSystem.HandleConsoleMessage(covalence.CommandSystem.consolePlayer, arg)) return true;
+
+            return cmdlib.HandleConsoleCommand(arg);
+        }
 
         /// <summary>
         /// Parses the specified chat command

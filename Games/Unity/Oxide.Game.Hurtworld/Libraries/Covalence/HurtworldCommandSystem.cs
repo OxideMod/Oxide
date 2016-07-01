@@ -12,6 +12,9 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         // Chat command handler
         private ChatCommandHandler commandHandler;
 
+        // The console player
+        public HurtworldConsolePlayer consolePlayer;
+
         // All registered commands
         private IDictionary<string, CommandCallback> registeredCommands;
 
@@ -51,6 +54,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         {
             registeredCommands = new Dictionary<string, CommandCallback>();
             commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            consolePlayer = new HurtworldConsolePlayer();
         }
 
         private bool ChatCommandCallback(IPlayer caller, string command, string[] args)
@@ -66,5 +70,13 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="message"></param>
         /// <returns></returns>
         public bool HandleChatMessage(ILivePlayer player, string message) => commandHandler.HandleChatMessage(player, message);
+
+        /// <summary>
+        /// Handles a chat message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool HandleConsoleMessage(ILivePlayer player, string message) => commandHandler.HandleConsoleMessage(player, message);
     }
 }

@@ -62,6 +62,7 @@
     <Compile Include="Libraries\Hurtworld.cs" />
     <Compile Include="Libraries\Covalence\HurtworldCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\HurtworldCovalenceProvider.cs" />
+    <Compile Include="Libraries\Covalence\HurtworldConsolePlayer.cs" />
     <Compile Include="Libraries\Covalence\HurtworldLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\HurtworldPlayer.cs" />
     <Compile Include="Libraries\Covalence\HurtworldPlayerManager.cs" />
