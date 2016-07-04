@@ -866,6 +866,22 @@ namespace Oxide.Game.RustLegacy
             return false;
         }
 
+        /// <summary>
+        /// Called when an error is thrown because of an invalid RPC message
+        /// </summary>
+        /// <param name="obj"></param>
+        [HookMethod("IOnRPCError")]
+        private void IOnRPCError(object obj)
+        {
+            var info = obj as uLink.NetworkMessageInfo;
+            if (info == null) return;
+            if (info.sender == uLink.NetworkPlayer.server) return;
+            var netuser = info.sender.localData as NetUser;
+            if (netuser == null) return;
+            Interface.Oxide.LogWarning($"An RPC message from {netuser.displayName} has triggered an exception. Kicking the player...");
+            if (netuser.connected) netuser.Kick(NetError.Facepunch_Kick_Violation, true);
+        }
+        
         #endregion
 
         #region Game Fixes
