@@ -325,15 +325,11 @@ namespace Oxide.Game.Rust
             {
                 var id = player.UserIDString;
 
-                // Check if player has connected before
-                if (!permission.UserExists(id))
-                {
-                    // Add player to default group
-                    if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+                // Add player to default group
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
 
-                    // Add player to group based on auth level
-                    if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
-                }
+                // Add player to group based on auth level
+                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
 
                 permission.UpdateNickname(id, player.displayName);
             }
