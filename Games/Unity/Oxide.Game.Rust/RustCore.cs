@@ -208,6 +208,7 @@ namespace Oxide.Game.Rust
             if (serverInitialized) return;
             serverInitialized = true;
 
+            // Migrate default player groups
             permission.MigrateGroup("player", "default");
 
             // Configure the hostname after it has been set
@@ -517,6 +518,50 @@ namespace Oxide.Game.Rust
             if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
             return true;
         }
+
+        #endregion
+
+        #region XP Hooks
+
+        /// <summary>
+        /// Called when a player attempts to spend XP
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="amount"></param>
+        [HookMethod("ICanSpendXp")]
+        private object ICanSpendXp(ulong id, int amount) => Interface.Call("CanSpendXp", FindPlayerById(id), (float)amount);
+
+        /// <summary>
+        /// Called when XP is earned by the player
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="amount"></param>
+        /// <param name="source"></param>
+        [HookMethod("IOnXpEarn")]
+        private object IOnXpEarn(ulong id, float amount, string source = null) => Interface.Call("OnXpEarn", FindPlayerById(id), amount, source);
+
+        /// <summary>
+        /// Called when XP is reset for the player
+        /// </summary>
+        /// <param name="id"></param>
+        [HookMethod("IOnXpReset")]
+        private void IOnXpReset(ulong id) => Interface.Call("OnXpReset", FindPlayerById(id));
+
+        /// <summary>
+        /// Called when XP is set for the player
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="amount"></param>
+        [HookMethod("IOnXpSet")]
+        private void IOnXpSet(ulong id, float amount) => Interface.Call("OnXpSet", FindPlayerById(id), amount);
+
+        /// <summary>
+        /// Called when XP has been spent by the player
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="amount"></param>
+        [HookMethod("IOnXpSpent")]
+        private object IOnXpSpent(ulong id, int amount) => Interface.Call("OnXpSpent", FindPlayerById(id), (float)amount);
 
         #endregion
 
@@ -1326,12 +1371,6 @@ namespace Oxide.Game.Rust
         private object CanBypassQueue(Connection connection)
         {
             return Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), connection);
-        }
-
-        [HookMethod("OnBlueprintReveal")]
-        private object OnBlueprintReveal(Item item, BasePlayer player)
-        {
-            return Interface.CallDeprecatedHook("CanReveal", "OnBlueprintReveal", new DateTime(2016, 8, 1), player, item);
         }
 
         #endregion

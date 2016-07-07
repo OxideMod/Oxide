@@ -50,6 +50,7 @@ namespace Oxide.Game.Rust
             "HDR RenderTexture format is not supported on this platform.",
             "Image Effects are not supported on this platform.",
             "Missing projectileID",
+            "Motion vectors not supported on a platform that does not support",
             "The image effect Main Camera",
             "The image effect effect -",
             "Unable to find shaders",
@@ -93,17 +94,7 @@ namespace Oxide.Game.Rust
         /// </summary>
         public override void OnModLoad()
         {
-            if (!Interface.Oxide.EnableConsole()) return;
-
-            Output.OnMessage += HandleLog;
-
-            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
-            Interface.Oxide.ServerConsole.Completion = input =>
-            {
-                if (string.IsNullOrEmpty(input)) return null;
-                if (!input.Contains(".")) input = string.Concat("global.", input);
-                return ConsoleSystem.Index.GetAll().Where(c => c.namefull.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.namefull).ToArray();
-            };
+            if (Interface.Oxide.EnableConsole()) Output.OnMessage += HandleLog;
         }
 
         internal static void ServerConsole()
@@ -112,7 +103,7 @@ namespace Oxide.Game.Rust
 
             Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
             Interface.Oxide.ServerConsole.Status1Left = () => $" {ConVar.Server.hostname}";
-            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)UnityEngine.Time.realtimeSinceStartup)}";
+            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)Time.realtimeSinceStartup)}";
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = BasePlayer.activePlayerList.Count;
@@ -137,6 +128,14 @@ namespace Oxide.Game.Rust
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.network})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
+
+            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            Interface.Oxide.ServerConsole.Completion = input =>
+            {
+                if (string.IsNullOrEmpty(input)) return null;
+                if (!input.Contains(".")) input = string.Concat("global.", input);
+                return ConsoleSystem.Index.GetAll().Where(c => c.namefull.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.namefull).ToArray();
+            };
         }
 
         private static void ServerConsoleOnInput(string input)
@@ -171,6 +170,7 @@ namespace Oxide.Game.Rust
             }
             else if (!message.StartsWith("[CHAT]"))
                 ConVar.Server.Log("Log.Log.txt", message);
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
