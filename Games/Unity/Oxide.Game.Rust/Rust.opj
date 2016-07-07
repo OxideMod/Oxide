@@ -3156,7 +3156,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 4,
-            "ReturnBehavior": 1,
+            "ReturnBehavior": 3,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a1, a0.Name => a1",
             "HookTypeName": "Simple",
@@ -3282,6 +3282,34 @@
             },
             "MSILHash": "XVG8mHrvnYJDGPdJgUqUqC1eGSGtvS/IyX4ZXihTvhw=",
             "BaseHookName": "ICanSpendXp [Internal]",
+            "HookCategory": "XP"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 107,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.Id, a1, a0.Name",
+            "HookTypeName": "Simple",
+            "Name": "IOnXpEarned [internal]",
+            "HookName": "IOnXpEarned",
+            "AssemblyName": "Rust.Xp.dll",
+            "TypeName": "Rust.Xp.Agent",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Add",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Rust.Xp.Earn.Base",
+                "System.Single",
+                "System.String"
+              ]
+            },
+            "MSILHash": "Qw8ajseJzbIS19aiLxuwHEEHFHhGESZpbeekOms9yI0=",
+            "BaseHookName": "IOnXpEarn [internal]",
             "HookCategory": "XP"
           }
         }
