@@ -96,7 +96,7 @@ namespace Oxide.Core
 
         private Stopwatch timer;
 
-        private readonly NativeDebugCallback debugCallback;
+        private NativeDebugCallback debugCallback;
 
         public OxideMod(NativeDebugCallback debugCallback)
         {
@@ -149,6 +149,7 @@ namespace Oxide.Core
             if (!Directory.Exists(LogDirectory)) Directory.CreateDirectory(LogDirectory);
             if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
 
+            // Register the library path
             RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
 
             // Create the loggers
@@ -354,13 +355,7 @@ namespace Oxide.Core
             if (RootPluginManager.GetPlugin(name) != null) return false;
 
             // Find all plugin loaders that lay claim to the name
-            var loaders = new HashSet<PluginLoader>();
-            foreach (var l in extensionManager.GetPluginLoaders())
-            {
-                if (!l.ScanDirectory(PluginDirectory).Contains(name, StringComparer.InvariantCultureIgnoreCase)) continue;
-                loaders.Add(l);
-                break;
-            }
+            var loaders = new HashSet<PluginLoader>(extensionManager.GetPluginLoaders().Where(l => l.ScanDirectory(PluginDirectory).Contains(name)));
             if (loaders.Count == 0)
             {
                 LogError("Failed to load plugin '{0}' (no source found)", name);
@@ -430,7 +425,7 @@ namespace Oxide.Core
             if (plugin == null) return false;
 
             // Let the plugin loader know that this plugin is being unloaded
-            var loader = extensionManager.GetPluginLoaders().SingleOrDefault(l => l.LoadedPlugins.ContainsKey(name.ToLower()));
+            var loader = extensionManager.GetPluginLoaders().SingleOrDefault(l => l.LoadedPlugins.ContainsKey(name));
             loader?.Unloading(plugin);
 
             // Unload it
@@ -462,13 +457,7 @@ namespace Oxide.Core
                     name = name.Substring(subPath.Length + 1);
                 }
             }
-            PluginLoader loader = null;
-            foreach (var l in extensionManager.GetPluginLoaders())
-            {
-                if (!l.ScanDirectory(directory).Contains(name, StringComparer.InvariantCultureIgnoreCase)) continue;
-                loader = l;
-                break;
-            }
+            var loader = extensionManager.GetPluginLoaders().FirstOrDefault(l => l.ScanDirectory(directory).Contains(name));
             if (loader != null)
             {
                 loader.Reload(directory, name);

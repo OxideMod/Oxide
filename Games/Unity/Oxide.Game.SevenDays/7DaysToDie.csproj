@@ -39,6 +39,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
@@ -50,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\SevenDays.cs" />
+    <Compile Include="Libraries\Covalence\SevenDaysCommandSystem.cs" />
+    <Compile Include="Libraries\Covalence\SevenDaysCovalenceProvider.cs" />
+    <Compile Include="Libraries\Covalence\SevenDaysLivePlayer.cs" />
+    <Compile Include="Libraries\Covalence\SevenDaysPlayer.cs" />
+    <Compile Include="Libraries\Covalence\SevenDaysPlayerManager.cs" />
+    <Compile Include="Libraries\Covalence\SevenDaysServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SevenDaysCore.cs" />
     <Compile Include="SevenDaysExtension.cs" />

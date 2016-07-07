@@ -127,7 +127,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 236,
+            "InjectionIndex": 282,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -256,7 +256,7 @@
             },
             "MSILHash": "s2seK6YSKFw5aX+rOGDIawQNm6HPUaDaifieJa6MNj4=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "XP"
           }
         },
         {
@@ -341,12 +341,12 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, a2",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerChat",
-            "HookName": "OnPlayerChat",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameManager",
             "Flagged": false,

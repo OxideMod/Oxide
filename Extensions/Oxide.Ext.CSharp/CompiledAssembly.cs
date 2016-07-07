@@ -30,7 +30,7 @@ namespace Oxide.Plugins
         public bool IsLoading;
         public bool IsBatch => CompilablePlugins.Length > 1;
 
-        private readonly List<Action<bool>> loadCallbacks = new List<Action<bool>>();
+        private List<Action<bool>> loadCallbacks = new List<Action<bool>>();
         private bool isPatching;
         private bool isLoaded;
 
