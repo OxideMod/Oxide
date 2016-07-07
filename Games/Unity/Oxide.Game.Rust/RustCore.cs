@@ -106,6 +106,7 @@ namespace Oxide.Game.Rust
             var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
             var fpSystem = Facepunch.Math.Epoch.Current; // Facepunch.System
             var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
+            var rustXp = global::Rust.Xp.Config.LevelToXp(1); // Rust.Xp
         }
 
         /// <summary>
