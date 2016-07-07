@@ -1436,7 +1436,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 205,
+            "InjectionIndex": 207,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, l0",
@@ -1454,7 +1454,7 @@
                 "ItemCraftTask"
               ]
             },
-            "MSILHash": "iCfldQXbIxy0bYKlsDVw2zpMnS+rJGjMQEyKuppz6sQ=",
+            "MSILHash": "Ctpzczaj7h0/k2OU8L7fplh3KUKdLwdf4MljHi1ExPo=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
