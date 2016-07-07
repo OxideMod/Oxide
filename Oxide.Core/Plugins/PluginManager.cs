@@ -61,8 +61,8 @@ namespace Oxide.Core.Plugins
         /// <param name="plugin"></param>
         public bool AddPlugin(Plugin plugin)
         {
-            if (loadedPlugins.ContainsKey(plugin.Name.ToLower())) return false;
-            loadedPlugins.Add(plugin.Name.ToLower(), plugin);
+            if (loadedPlugins.ContainsKey(plugin.Name)) return false;
+            loadedPlugins.Add(plugin.Name, plugin);
             plugin.HandleAddedToManager(this);
             OnPluginAdded?.Invoke(plugin);
             return true;
@@ -75,8 +75,8 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         public bool RemovePlugin(Plugin plugin)
         {
-            if (!loadedPlugins.ContainsKey(plugin.Name.ToLower())) return false;
-            loadedPlugins.Remove(plugin.Name.ToLower());
+            if (!loadedPlugins.ContainsKey(plugin.Name)) return false;
+            loadedPlugins.Remove(plugin.Name);
             foreach (var list in hookSubscriptions.Values)
                 if (list.Contains(plugin)) list.Remove(plugin);
             plugin.HandleRemovedFromManager(this);
@@ -92,7 +92,7 @@ namespace Oxide.Core.Plugins
         public Plugin GetPlugin(string name)
         {
             Plugin plugin;
-            return loadedPlugins.TryGetValue(name.ToLower(), out plugin) ? plugin : null;
+            return loadedPlugins.TryGetValue(name, out plugin) ? plugin : null;
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Oxide.Core.Plugins
         /// <param name="plugin"></param>
         internal void SubscribeToHook(string hook, Plugin plugin)
         {
-            if (!loadedPlugins.ContainsKey(plugin.Name.ToLower()) || !plugin.IsCorePlugin && hook.StartsWith("I")) return;
+            if (!loadedPlugins.ContainsKey(plugin.Name) || !plugin.IsCorePlugin && hook.StartsWith("I")) return;
             IList<Plugin> sublist;
             if (!hookSubscriptions.TryGetValue(hook, out sublist))
             {
@@ -126,7 +126,7 @@ namespace Oxide.Core.Plugins
         /// <param name="plugin"></param>
         internal void UnsubscribeToHook(string hook, Plugin plugin)
         {
-            if (!loadedPlugins.ContainsKey(plugin.Name.ToLower()) || !plugin.IsCorePlugin && hook.StartsWith("I")) return;
+            if (!loadedPlugins.ContainsKey(plugin.Name) || !plugin.IsCorePlugin && hook.StartsWith("I")) return;
             IList<Plugin> sublist;
             if (hookSubscriptions.TryGetValue(hook, out sublist) && sublist.Contains(plugin))
                 sublist.Remove(plugin);
