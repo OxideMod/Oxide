@@ -958,7 +958,7 @@
                 "DropItem"
               ]
             },
-            "MSILHash": "BYrKa78G2qvpQE0lO2IJeo6j/3qeGtEjtiUSIoCQ3m8=",
+            "MSILHash": "lA7oqIds8+PbB45GZCXzLXiZkUhY540zEZI5gSkIg40=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -984,7 +984,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "t8BunyrKG+wOXZnj64UVSsZzlqvkQIVyySzDMIUTjZI=",
+            "MSILHash": "e4Dv8o3A0skGE1PmzBt5a9zWFDP6rdlVGkwqPn0bFu8=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1398,7 +1398,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "JMQJryzd5Qngn7EEBYkGXYYzeYgPTs2Zm3A88HQngt0=",
+            "MSILHash": "z3y0x4YcucwZtWSjWZFR+j1HJZbAmMYxKQQGr1dviTY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
