@@ -38,7 +38,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the version number/build of the server
         /// </summary>
-        public string Version => GameManager.PROTOCOL_VERSION.ToString();
+        public string Version => $"{GameManager.Instance?.Version} ({GameManager.PROTOCOL_VERSION})";
 
         #endregion
 
