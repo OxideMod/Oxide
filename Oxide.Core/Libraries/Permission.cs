@@ -586,7 +586,7 @@ namespace Oxide.Core.Libraries
                 }
                 else
                 {
-                    perm = perm.TrimEnd('*').ToLower();
+                    perm = perm.TrimEnd('*');
                     if (!perms.Where(s => s.StartsWith(perm)).Aggregate(false, (c, s) => c | data.Perms.Add(s))) return;
                 }
                 SaveUsers();
@@ -614,16 +614,26 @@ namespace Oxide.Core.Libraries
             // Call hook for plugins
             Interface.Call("OnUserPermissionRevoked", id, perm);
 
-            if (perm.Equals("*"))
+            perm = perm.ToLower();
+
+            if (perm.EndsWith("*"))
             {
-                if (data.Perms.Count <= 0) return;
-                data.Perms.Clear();
+                if (perm.Equals("*"))
+                {
+                    if (data.Perms.Count <= 0) return;
+                    data.Perms.Clear();
+                }
+                else
+                {
+                    perm = perm.TrimEnd('*');
+                    if (data.Perms.RemoveWhere(s => s.StartsWith(perm)) <= 0) return;
+                }
                 SaveUsers();
                 return;
             }
 
             // Remove the perm and save
-            if (!data.Perms.Remove(perm.ToLower())) return;
+            if (!data.Perms.Remove(perm)) return;
             SaveUsers();
         }
 
@@ -650,6 +660,8 @@ namespace Oxide.Core.Libraries
             // Call hook for plugins
             Interface.Call("OnGroupPermissionGranted", groupname, perm);
 
+            perm = perm.ToLower();
+
             if (perm.EndsWith("*"))
             {
                 HashSet<string> perms;
@@ -671,7 +683,7 @@ namespace Oxide.Core.Libraries
             }
 
             // Add the perm and save
-            if (!data.Perms.Add(perm.ToLower())) return;
+            if (!data.Perms.Add(perm)) return;
             SaveGroups();
         }
 
@@ -692,16 +704,26 @@ namespace Oxide.Core.Libraries
             // Call hook for plugins
             Interface.Call("OnGroupPermissionRevoked", groupname, perm);
 
-            if (perm.Equals("*"))
+            perm = perm.ToLower();
+
+            if (perm.EndsWith("*"))
             {
-                if (data.Perms.Count <= 0) return;
-                data.Perms.Clear();
+                if (perm.Equals("*"))
+                {
+                    if (data.Perms.Count <= 0) return;
+                    data.Perms.Clear();
+                }
+                else
+                {
+                    perm = perm.TrimEnd('*').ToLower();
+                    if (data.Perms.RemoveWhere(s => s.StartsWith(perm)) <= 0) return;
+                }
                 SaveGroups();
                 return;
             }
 
             // Remove the perm and save
-            if (!data.Perms.Remove(perm.ToLower())) return;
+            if (!data.Perms.Remove(perm)) return;
             SaveGroups();
         }
 
