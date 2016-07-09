@@ -531,7 +531,11 @@ namespace Oxide.Game.Rust
         /// <param name="amount"></param>
         /// <returns></returns>
         [HookMethod("ICanSpendXp")]
-        private object ICanSpendXp(ulong id, int amount) => Interface.Call("CanSpendXp", FindPlayerById(id), (float)amount);
+        private object ICanSpendXp(ulong id, int amount)
+        {
+            var player = FindPlayerById(id);
+            return player != null ? Interface.Call("CanSpendXp", player, (float) amount) : null;
+        }
 
         /// <summary>
         /// Called before XP is earned by the player
@@ -541,7 +545,11 @@ namespace Oxide.Game.Rust
         /// <param name="source"></param>
         /// <returns></returns>
         [HookMethod("IOnXpEarn")]
-        private object IOnXpEarn(ulong id, float amount, string source = null) => Interface.Call("OnXpEarn", FindPlayerById(id), amount, source);
+        private object IOnXpEarn(ulong id, float amount, string source = null)
+        {
+            var player = FindPlayerById(id);
+            return player != null ? Interface.Call("OnXpEarn", player, amount, source) : null;
+        }
 
         /// <summary>
         /// Called after XP is earned by the player
@@ -550,14 +558,22 @@ namespace Oxide.Game.Rust
         /// <param name="amount"></param>
         /// <param name="source"></param>
         [HookMethod("IOnXpEarned")]
-        private void IOnXpEarned(ulong id, float amount, string source = null) => Interface.Call("OnXpEarned", FindPlayerById(id), amount, source);
+        private void IOnXpEarned(ulong id, float amount, string source = null)
+        {
+            var player = FindPlayerById(id);
+            if (player != null) Interface.Call("OnXpEarned", player, amount, source);
+        }
 
         /// <summary>
         /// Called when XP is reset for the player
         /// </summary>
         /// <param name="id"></param>
         [HookMethod("IOnXpReset")]
-        private void IOnXpReset(ulong id) => Interface.Call("OnXpReset", FindPlayerById(id));
+        private void IOnXpReset(ulong id)
+        {
+            var player = FindPlayerById(id);
+            if (player != null) Interface.Call("OnXpReset", player);
+        }
 
         /// <summary>
         /// Called when XP is set for the player
@@ -565,7 +581,11 @@ namespace Oxide.Game.Rust
         /// <param name="id"></param>
         /// <param name="amount"></param>
         [HookMethod("IOnXpSet")]
-        private void IOnXpSet(ulong id, float amount) => Interface.Call("OnXpSet", FindPlayerById(id), amount);
+        private void IOnXpSet(ulong id, float amount)
+        {
+            var player = FindPlayerById(id);
+            if (player != null) Interface.Call("OnXpSet", player, amount);
+        }
 
         /// <summary>
         /// Called when XP has been spent by the player
@@ -574,7 +594,11 @@ namespace Oxide.Game.Rust
         /// <param name="amount"></param>
         /// <returns></returns>
         [HookMethod("IOnXpSpent")]
-        private object IOnXpSpent(ulong id, int amount) => Interface.Call("OnXpSpent", FindPlayerById(id), (float)amount);
+        private object IOnXpSpent(ulong id, int amount)
+        {
+            var player = FindPlayerById(id);
+            return player != null ? Interface.Call("OnXpSpent", player, (float) amount) : null;
+        }
 
         #endregion
 
