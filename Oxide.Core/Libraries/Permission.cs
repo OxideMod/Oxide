@@ -395,7 +395,7 @@ namespace Oxide.Core.Libraries
         /// <param name="groupname"></param>
         /// <returns></returns>
         [LibraryFunction("GetGroupPermissions")]
-        public string[] GetGroupPermissions(string groupname)
+        public string[] GetGroupPermissions(string groupname, bool traverseparents = true)
         {
             if (!GroupExists(groupname)) return new string[0];
 
@@ -403,7 +403,7 @@ namespace Oxide.Core.Libraries
             if (!groupdata.TryGetValue(groupname.ToLower(), out group)) return new string[0];
 
             var perms = group.Perms.ToList();
-            perms.AddRange(GetGroupPermissions(group.ParentGroup));
+            if (traverseparents) perms.AddRange(GetGroupPermissions(group.ParentGroup));
             return new HashSet<string>(perms).ToArray();
         }
 

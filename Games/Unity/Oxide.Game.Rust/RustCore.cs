@@ -1117,7 +1117,7 @@ namespace Oxide.Game.Rust
                 var result = $"Group '{name}' users:\n";
                 result += string.Join(", ", permission.GetUsersInGroup(name));
                 result += $"\nGroup '{name}' permissions:\n";
-                result += string.Join(", ", permission.GetGroupPermissions(name));
+                result += string.Join(", ", permission.GetGroupPermissions(name, false));
                 var parent = permission.GetGroupParent(name);
                 while (permission.GroupExists(parent))
                 {
