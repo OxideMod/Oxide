@@ -672,6 +672,136 @@
             "BaseHookName": null,
             "HookCategory": "_Patch"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 51,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnThroneCapture",
+            "HookName": "OnThroneCapture",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Thrones.AncientThrone.AncientThroneListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnAncientThroneCapture",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Thrones.AncientThrone.AncientThroneCaptureEvent"
+              ]
+            },
+            "MSILHash": "0fLRMaX2ZJfKTvMv/9tTijWfDDPniaJqmRTMdjYL+iM=",
+            "BaseHookName": null,
+            "HookCategory": "Throne"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 130,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnThroneCaptured",
+            "HookName": "OnThroneCaptured",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Thrones.AncientThrone.AncientThroneListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnAncientThroneCapture",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Thrones.AncientThrone.AncientThroneCaptureEvent"
+              ]
+            },
+            "MSILHash": "0fLRMaX2ZJfKTvMv/9tTijWfDDPniaJqmRTMdjYL+iM=",
+            "BaseHookName": "OnThroneCapture",
+            "HookCategory": "Throne"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnThroneReleased",
+            "HookName": "OnThroneReleased",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Thrones.AncientThrone.AncientThroneListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnAncientThroneRelease",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Thrones.AncientThrone.AncientThroneReleaseEvent"
+              ]
+            },
+            "MSILHash": "TNJu02cS/3NyJ31ZIf27DMdpGPIcuIPu3fHjlmeAgNU=",
+            "BaseHookName": null,
+            "HookCategory": "Throne"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 20,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnThroneRename",
+            "HookName": "OnThroneRename",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Thrones.AncientThrone.AncientThroneListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnAncientThroneRename",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Thrones.AncientThrone.AncientThroneRenameEvent"
+              ]
+            },
+            "MSILHash": "hPpAyN3Q8cNHi4jKTVt993u1VyILCwgGo4gBmRShFeY=",
+            "BaseHookName": null,
+            "HookCategory": "Throne"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 16,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnThroneTax",
+            "HookName": "OnThroneTax",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Thrones.AncientThrone.AncientThroneListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnAncientThroneTax",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Thrones.AncientThrone.AncientThroneTaxEvent"
+              ]
+            },
+            "MSILHash": "XZiQsiipmDF/qpEjsL45Ep915VxUroulLRuwtWuocSU=",
+            "BaseHookName": null,
+            "HookCategory": "Throne"
+          }
         }
       ]
     }
