@@ -3171,7 +3171,7 @@
             },
             "MSILHash": "2JEkuUaCXM9hAZ1J2jONpAEERVPiyN43Ovs7s70hyFo=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "Server"
           }
         }
       ]
@@ -3187,8 +3187,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a1, a0.Name => a1",
             "HookTypeName": "Simple",
-            "Name": "IOnXpEarn [internal]",
-            "HookName": "IOnXpEarn",
+            "Name": "OnXpEarn",
+            "HookName": "OnXpEarn",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
             "Flagged": false,
@@ -3216,8 +3216,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id",
             "HookTypeName": "Simple",
-            "Name": "IOnXpReset [internal]",
-            "HookName": "IOnXpReset",
+            "Name": "OnXpReset",
+            "HookName": "OnXpReset",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
             "Flagged": false,
@@ -3240,8 +3240,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a1",
             "HookTypeName": "Simple",
-            "Name": "IOnXpSet [internal]",
-            "HookName": "IOnXpSet",
+            "Name": "OnXpSet",
+            "HookName": "OnXpSet",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
             "Flagged": false,
@@ -3267,8 +3267,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a0",
             "HookTypeName": "Simple",
-            "Name": "ICanSpendXp [Internal]",
-            "HookName": "ICanSpendXp",
+            "Name": "CanSpendXp",
+            "HookName": "CanSpendXp",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
             "Flagged": false,
@@ -3294,8 +3294,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a0",
             "HookTypeName": "Simple",
-            "Name": "IOnXpSpent [internal]",
-            "HookName": "IOnXpSpent",
+            "Name": "OnXpSpent",
+            "HookName": "OnXpSpent",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
             "Flagged": false,
@@ -3309,7 +3309,7 @@
               ]
             },
             "MSILHash": "XVG8mHrvnYJDGPdJgUqUqC1eGSGtvS/IyX4ZXihTvhw=",
-            "BaseHookName": "ICanSpendXp [Internal]",
+            "BaseHookName": "CanSpendXp",
             "HookCategory": "XP"
           }
         },
@@ -3321,8 +3321,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a1, a0.Name",
             "HookTypeName": "Simple",
-            "Name": "IOnXpEarned [internal]",
-            "HookName": "IOnXpEarned",
+            "Name": "OnXpEarned",
+            "HookName": "OnXpEarned",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
             "Flagged": false,
@@ -3338,7 +3338,7 @@
               ]
             },
             "MSILHash": "l623oGbrycp4jwJ3aXA6Q5qkL7vschHLVaqaiNLyJbw=",
-            "BaseHookName": "IOnXpEarn [internal]",
+            "BaseHookName": "OnXpEarn",
             "HookCategory": "XP"
           }
         }
