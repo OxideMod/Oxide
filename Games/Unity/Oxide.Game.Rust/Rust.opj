@@ -1454,7 +1454,7 @@
                 "ItemCraftTask"
               ]
             },
-            "MSILHash": "Koigk3Swvfe74zIKDPUnkz2Xu1pWBMJ2Ggmwv3HhocY=",
+            "MSILHash": "BR60fGAxxBcS3A8P9HmLQHBwwWdGJdzlNvGgEXImfr4=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -1838,7 +1838,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "wF7nl01i4GHAvzVdXopc7JH7n07P7xGjE6CqdwBnqiU=",
+            "MSILHash": "9pXpqLQr2NhjiXQFpkjGbNvSaO9k8+n0/dNRpWO1Ym0=",
             "BaseHookName": null,
             "HookCategory": "Resource"
           }
@@ -3146,6 +3146,33 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 290,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "OnSaveLoad",
+            "HookName": "OnSaveLoad",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SaveRestore",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Load",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "2JEkuUaCXM9hAZ1J2jONpAEERVPiyN43Ovs7s70hyFo=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
         }
       ]
     },
@@ -3172,10 +3199,11 @@
               "Parameters": [
                 "Rust.Xp.Earn.Base",
                 "System.Single",
-                "System.String"
+                "System.String",
+                "System.UInt64"
               ]
             },
-            "MSILHash": "Qw8ajseJzbIS19aiLxuwHEEHFHhGESZpbeekOms9yI0=",
+            "MSILHash": "l623oGbrycp4jwJ3aXA6Q5qkL7vschHLVaqaiNLyJbw=",
             "BaseHookName": null,
             "HookCategory": "XP"
           }
@@ -3226,7 +3254,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "+/WesfvQilo3tGEyVOf5Ox14vwNC54vgIl2E6RLKIlA=",
+            "MSILHash": "erid6BPBWuFg7/dl6CUijnHSJ2r0SIOmHtzMlv9yxwc=",
             "BaseHookName": null,
             "HookCategory": "XP"
           }
@@ -3288,7 +3316,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 107,
+            "InjectionIndex": 106,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a1, a0.Name",
@@ -3305,10 +3333,11 @@
               "Parameters": [
                 "Rust.Xp.Earn.Base",
                 "System.Single",
-                "System.String"
+                "System.String",
+                "System.UInt64"
               ]
             },
-            "MSILHash": "Qw8ajseJzbIS19aiLxuwHEEHFHhGESZpbeekOms9yI0=",
+            "MSILHash": "l623oGbrycp4jwJ3aXA6Q5qkL7vschHLVaqaiNLyJbw=",
             "BaseHookName": "IOnXpEarn [internal]",
             "HookCategory": "XP"
           }
