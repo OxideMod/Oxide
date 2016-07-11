@@ -46,13 +46,31 @@ namespace Oxide.Core
         /// <returns></returns>
         public static object CallHook(string hookname, params object[] args) => Oxide?.CallHook(hookname, args);
 
+        public static object CallHook(string hookname) => Oxide?.CallHook(hookname);
+        public static object CallHook(string hookname, object arg0) => Oxide?.CallHook(hookname, arg0);
+        public static object CallHook(string hookname, object arg0, object arg1) => Oxide?.CallHook(hookname, arg0, arg1);
+        public static object CallHook(string hookname, object arg0, object arg1, object arg2) => Oxide?.CallHook(hookname, arg0, arg1, arg2);
+        public static object CallHook(string hookname, object arg0, object arg1, object arg2, object arg3) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3);
+        public static object CallHook(string hookname, object arg0, object arg1, object arg2, object arg3, object arg4) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3, arg4);
+        public static object CallHook(string hookname, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3, arg4, arg5);
+        public static object CallHook(string hookname, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+
         /// <summary>
         /// Calls the specified hook
         /// </summary>
         /// <param name="hookname"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static object Call(string hookname, params object[] args) => CallHook(hookname, args);
+        public static object Call(string hookname, params object[] args) => Oxide?.CallHook(hookname, args);
+
+        public static object Call(string hookname) => Oxide?.CallHook(hookname);
+        public static object Call(string hookname, object arg0) => Oxide?.CallHook(hookname, arg0);
+        public static object Call(string hookname, object arg0, object arg1) => Oxide?.CallHook(hookname, arg0, arg1);
+        public static object Call(string hookname, object arg0, object arg1, object arg2) => Oxide?.CallHook(hookname, arg0, arg1, arg2);
+        public static object Call(string hookname, object arg0, object arg1, object arg2, object arg3) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3);
+        public static object Call(string hookname, object arg0, object arg1, object arg2, object arg3, object arg4) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3, arg4);
+        public static object Call(string hookname, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3, arg4, arg5);
+        public static object Call(string hookname, object arg0, object arg1, object arg2, object arg3, object arg4, object arg5, object arg6) => Oxide?.CallHook(hookname, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
 
         /// <summary>
         /// Calls the specified hook and converts the return value to the specified type
