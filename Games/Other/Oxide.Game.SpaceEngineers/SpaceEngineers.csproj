@@ -6,6 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DB451505-3B05-4A36-822B-EE044B49D46F}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Oxide.Game.SpaceEngineers</RootNamespace>
     <AssemblyName>Oxide.Game.SpaceEngineers</AssemblyName>
     <GameName>$(MSBuildProjectName)</GameName>
@@ -49,6 +50,9 @@
     <Reference Include="Sandbox.Game">
       <HintPath>Dependencies\Sandbox.Game.dll</HintPath>
     </Reference>
+    <Reference Include="SteamSDK">
+      <HintPath>Dependencies\SteamSDK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="VRage">
@@ -57,8 +61,8 @@
     <Reference Include="VRage.Dedicated">
       <HintPath>Dependencies\VRage.Dedicated.dll</HintPath>
     </Reference>
-    <Reference Include="VRage.Library">
-      <HintPath>Dependencies\VRage.Library.dll</HintPath>
+    <Reference Include="VRage.Game">
+      <HintPath>Dependencies\VRage.Game.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Math">
       <HintPath>Dependencies\VRage.Math.dll</HintPath>
@@ -66,6 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\SpaceEngineers.cs" />
+    <Compile Include="Libraries\Covalence\SpaceEngineersCommandSystem.cs" />
+    <Compile Include="Libraries\Covalence\SpaceEngineersCovalenceProvider.cs" />
+    <Compile Include="Libraries\Covalence\SpaceEngineersLivePlayer.cs" />
+    <Compile Include="Libraries\Covalence\SpaceEngineersPlayer.cs" />
+    <Compile Include="Libraries\Covalence\SpaceEngineersPlayerManager.cs" />
+    <Compile Include="Libraries\Covalence\SpaceEngineersServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpaceEngineersCore.cs" />
     <Compile Include="SpaceEngineersExtension.cs" />
