@@ -10,7 +10,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "The Forest";
+        public string GameName => "TheForest";
 
         /// <summary>
         /// Gets the singleton instance of this provider
