@@ -125,7 +125,7 @@ namespace Oxide.Plugins
         protected void PrintToConsole(string format, params object[] args)
         {
             if (BasePlayer.activePlayerList.Count < 1) return;
-            ConsoleSystem.Broadcast("echo " + (args.Length > 0 ? string.Format(format, args) : format));
+            ConsoleNetwork.BroadcastToAllClients("echo " + (args.Length > 0 ? string.Format(format, args) : format));
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Oxide.Plugins
         protected void PrintToChat(string format, params object[] args)
         {
             if (BasePlayer.activePlayerList.Count < 1) return;
-            ConsoleSystem.Broadcast("chat.add", 0, args.Length > 0 ? string.Format(format, args) : format, 1f);
+            ConsoleNetwork.BroadcastToAllClients("chat.add", 0, args.Length > 0 ? string.Format(format, args) : format, 1f);
         }
 
         /// <summary>

@@ -60,7 +60,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Broadcasts a chat message to all player clients
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => ConsoleSystem.Broadcast("chat.add", 0, message, 1.0);
+        public void Broadcast(string message) => ConsoleNetwork.BroadcastToAllClients("chat.add", 0, message, 1.0);
 
         /// <summary>
         /// Runs the specified server command

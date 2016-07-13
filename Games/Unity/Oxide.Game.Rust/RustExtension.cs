@@ -2,6 +2,8 @@
 using System.Linq;
 
 using Facepunch;
+using Facepunch.Extend;
+
 using Network;
 using Rust;
 using UnityEngine;
@@ -103,7 +105,7 @@ namespace Oxide.Game.Rust
 
             Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
             Interface.Oxide.ServerConsole.Status1Left = () => $" {ConVar.Server.hostname}";
-            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {Number.FormatSeconds((ulong)Time.realtimeSinceStartup)}";
+            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {((ulong)Time.realtimeSinceStartup).FormatSeconds()}";
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 var players = BasePlayer.activePlayerList.Count;

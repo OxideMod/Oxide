@@ -49,7 +49,7 @@ namespace Oxide.Game.Rust.Libraries
         [LibraryFunction("BroadcastChat")]
         public void BroadcastChat(string name, string message = null, string userId = "0")
         {
-            ConsoleSystem.Broadcast("chat.add", userId, message != null ? $"<color=orange>{name}</color>: {message}" : name, 1.0);
+            ConsoleNetwork.BroadcastToAllClients("chat.add", userId, message != null ? $"<color=orange>{name}</color>: {message}" : name, 1.0);
         }
 
         /// <summary>
