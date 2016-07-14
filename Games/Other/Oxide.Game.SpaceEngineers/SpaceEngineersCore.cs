@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Sandbox.Engine.Multiplayer;
+using Sandbox;
 using Sandbox.Game;
 
 using Oxide.Core;
@@ -104,7 +104,7 @@ namespace Oxide.Game.SpaceEngineers
             serverInitialized = true;
 
             // Configure the hostname after it has been set
-            RemoteLogger.SetTag("hostname", MyMultiplayer.Static?.HostName);
+            RemoteLogger.SetTag("hostname", MySandboxGame.ConfigDedicated.ServerName);
 
             // Update server console window and status bars
             SpaceEngineersExtension.ServerConsole();
