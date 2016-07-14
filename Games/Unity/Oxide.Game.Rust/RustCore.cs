@@ -215,9 +215,6 @@ namespace Oxide.Game.Rust
             // Configure the hostname after it has been set
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
-            // Update server console window and status bars
-            RustExtension.ServerConsole();
-
             // Destroy default server console
             if (ServerConsole.Instance != null)
             {
@@ -225,6 +222,9 @@ namespace Oxide.Game.Rust
                 UnityEngine.Object.Destroy(ServerConsole.Instance);
                 typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
             }
+
+            // Update server console window and status bars
+            RustExtension.ServerConsole();
         }
 
         /// <summary>

@@ -776,7 +776,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "ttDZQnaoXaQGAITiGTWCtc3qJX2oZOPmLyl7vmJUEEk=",
+            "MSILHash": "qzeS4i2XCHuYnK0IcbdyBdJL1ReNGfNRGbcZ02S2K5w=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -864,7 +864,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 627,
+            "InjectionIndex": 628,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l2",
@@ -882,7 +882,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "UHk0Vioax1yyOA2l2OQpr1/4+LVMy3tvN6hmZoeNp78=",
+            "MSILHash": "ojcSmUDOCM2COvE6VEY+b3YeY4eGvVJHnBj00f+rG+4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1323,7 +1323,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "htj5+PX1X5h4qQHX+eyGe0vCPWgoU9U/2rTz3rwWRic=",
+            "MSILHash": "5gYsKkpx1CgwG8VQnhP/defdwV6TLYVUJ71/k6+Z9zQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2098,7 +2098,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "yY7oLBKJns9kTOpnHwE86JiYKi/+36lJakToUH3Y+ew=",
+            "MSILHash": "mp3Cp/grGE6uR5qaLny1vzp3g/s0rEMwU2C11duJdQM=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -3030,7 +3030,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 290,
+            "InjectionIndex": 257,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -3049,7 +3049,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "R7eTEZ+6Zs/Vhn2iYEW5hpwa5n5T0Xx44JA3mwCFO9Q=",
+            "MSILHash": "niShgPlyMeZktGKPfJSJyd+Bt6cCZf9hdPLprAsc3xA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
