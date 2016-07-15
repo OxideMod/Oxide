@@ -3112,10 +3112,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 4,
+            "InjectionIndex": 29,
             "ReturnBehavior": 3,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this.Id, a1, a0.Name => a1",
+            "ArgumentString": "this.Id, a1, a0.Name => l2",
             "HookTypeName": "Simple",
             "Name": "OnXpEarn",
             "HookName": "OnXpEarn",
