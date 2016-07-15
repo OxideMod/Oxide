@@ -47,6 +47,7 @@ namespace Oxide.Game.Rust
 
         public static string[] Filter =
         {
+            "alphamapResolution is clamped to the range of",
             "AngryAnt Behave version",
             "Failed to load plugin '1' (no source found)",
             "HDR RenderTexture format is not supported on this platform.",
