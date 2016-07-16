@@ -2345,7 +2345,7 @@
             "InjectionIndex": 53,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l0",
+            "ArgumentString": "this, l1",
             "HookTypeName": "Simple",
             "Name": "CanBuild",
             "HookName": "CanBuild",
