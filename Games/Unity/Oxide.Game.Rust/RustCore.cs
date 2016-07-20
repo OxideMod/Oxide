@@ -384,6 +384,19 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when a player attacks something
+        /// </summary>
+        /// <param name="melee"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        [HookMethod("IOnPlayerAttack")]
+        private object IOnPlayerAttack(BaseMelee melee, HitInfo info)
+        {
+            var player = melee.GetOwnerPlayer();
+            return Interface.Call("OnPlayerAttack", player, info);
+        }
+
+        /// <summary>
         /// Called when a BasePlayer is attacked
         /// This is used to call OnEntityTakeDamage for a BasePlayer when attacked
         /// </summary>
