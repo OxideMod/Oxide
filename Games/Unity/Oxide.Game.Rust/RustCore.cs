@@ -225,6 +225,9 @@ namespace Oxide.Game.Rust
 
             // Update server console window and status bars
             RustExtension.ServerConsole();
+
+            // Check for 'load' variable
+            if (Interface.Oxide.CommandLine.HasVariable("load")) Interface.Oxide.LogWarning("The 'load' startup variable is unused and can be removed");
         }
 
         /// <summary>
