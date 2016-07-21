@@ -225,6 +225,9 @@ namespace Oxide.Game.Rust
 
             // Update server console window and status bars
             RustExtension.ServerConsole();
+
+            // Check for 'load' variable
+            if (Interface.Oxide.CommandLine.HasVariable("load")) Interface.Oxide.LogWarning("The 'load' startup variable is unused and can be removed");
         }
 
         /// <summary>
@@ -381,6 +384,19 @@ namespace Oxide.Game.Rust
         {
             InputState input;
             return playerInputState.TryGetValue(player, out input) ? Interface.Call("OnPlayerInput", player, input) : null;
+        }
+
+        /// <summary>
+        /// Called when a player attacks something
+        /// </summary>
+        /// <param name="melee"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        [HookMethod("IOnPlayerAttack")]
+        private object IOnPlayerAttack(BaseMelee melee, HitInfo info)
+        {
+            var player = melee.GetOwnerPlayer();
+            return Interface.Call("OnPlayerAttack", player, info);
         }
 
         /// <summary>

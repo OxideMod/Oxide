@@ -70,7 +70,7 @@ namespace Oxide.Core
         private ExtensionManager extensionManager;
 
         // The command line
-        private CommandLine commandline;
+        public CommandLine CommandLine;
 
         // Various configs
         private OxideConfig rootconfig;
@@ -116,7 +116,7 @@ namespace Oxide.Core
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { Culture = CultureInfo.InvariantCulture };
 
             // Create the commandline
-            commandline = new CommandLine(Environment.GetCommandLineArgs());
+            CommandLine = new CommandLine(Environment.GetCommandLineArgs());
 
             // Load the config
             var oxideConfig = Path.Combine(RootDirectory, "oxide.root.json");
@@ -128,9 +128,9 @@ namespace Oxide.Core
             {
                 string varname, format;
                 rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
-                if (string.IsNullOrEmpty(varname) || commandline.HasVariable(varname))
+                if (string.IsNullOrEmpty(varname) || CommandLine.HasVariable(varname))
                 {
-                    InstanceDirectory = Path.Combine(RootDirectory, Utility.CleanPath(string.Format(format, commandline.GetVariable(varname))));
+                    InstanceDirectory = Path.Combine(RootDirectory, Utility.CleanPath(string.Format(format, CommandLine.GetVariable(varname))));
                     break;
                 }
             }

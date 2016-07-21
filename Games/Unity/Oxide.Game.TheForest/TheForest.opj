@@ -776,7 +776,7 @@
                 "ResetTrap"
               ]
             },
-            "MSILHash": "PTZ/DAmNCApkqkJsPewfzWSDokx6oQdQhVGekHoERW0=",
+            "MSILHash": "mtsyXflbA/q8xoV5xf94J48pd10aTUaScBpCBan2Tmo=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -880,7 +880,7 @@
                 "FireAddFuelEvent"
               ]
             },
-            "MSILHash": "dHpqdIv3NuuWw4Ez89fjKGWm6cSxHDAUm1TIJXY7eHE=",
+            "MSILHash": "A1VYpcxV2+Eyqvrcnmm8pgXstPoCO5V8czWFmusjU9Q=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -958,7 +958,7 @@
                 "DropItem"
               ]
             },
-            "MSILHash": "lA7oqIds8+PbB45GZCXzLXiZkUhY540zEZI5gSkIg40=",
+            "MSILHash": "U/uq3qhNqKxmXKLJ737ZVBhrWNZtELFU1+QW+0AjKzg=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -984,7 +984,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "e4Dv8o3A0skGE1PmzBt5a9zWFDP6rdlVGkwqPn0bFu8=",
+            "MSILHash": "4xCo8e5G8dIyYxKEe7j803+WBn7NU2Dx2/YOL17Kkhw=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1398,7 +1398,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "z3y0x4YcucwZtWSjWZFR+j1HJZbAmMYxKQQGr1dviTY=",
+            "MSILHash": "0tepzDOecf4/m/jLmAnheFrtaSY77ePId3pNhv8SiEA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

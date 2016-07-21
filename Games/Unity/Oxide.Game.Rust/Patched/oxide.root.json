@@ -1,11 +1,14 @@
 {
     "ExtensionDirectory": "RustDedicated_Data\\Managed",
-
     "PluginDirectory": "plugins",
     "ConfigDirectory": "config",
     "DataDirectory": "data",
     "LangDirectory": "lang",
     "LogDirectory": "logs",
+
+    "DefaultGroup": "default",
+    "CustomConsole": true,
+    "TimeWarnings": true,
 
     "InstanceCommandLines":
     [
