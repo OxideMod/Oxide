@@ -1,0 +1,10 @@
+{
+    "CustomConsole": true,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "Servers/{secureserver}/oxide",
+        "oxide"
+    ],
+    "ExtensionDirectory": "Unturned_Data\\Managed"
+}

@@ -1,0 +1,9 @@
+{
+    "CustomConsole": true,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "saves\\oxide"
+    ],
+    "ExtensionDirectory": "ROK_Data\\Managed"
+}

@@ -1,0 +1,9 @@
+{
+    "CustomConsole": true,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "oxide"
+    ],
+    "ExtensionDirectory": "TheForest_Data\\Managed"
+}

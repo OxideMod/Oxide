@@ -70,7 +70,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <ItemGroup>
-      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
+      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.config.json" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so.1" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.so" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.so" />

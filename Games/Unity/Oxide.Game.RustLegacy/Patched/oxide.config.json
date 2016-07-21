@@ -1,0 +1,10 @@
+{
+    "CustomConsole": false,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "{datadir}\\oxide",
+        "serverdata\\oxide"
+    ],
+    "ExtensionDirectory": "rust_server_Data\\Managed"
+}

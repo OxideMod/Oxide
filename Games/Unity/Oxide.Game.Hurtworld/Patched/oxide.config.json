@@ -1,0 +1,9 @@
+{
+    "CustomConsole": true,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "oxide"
+    ],
+    "ExtensionDirectory": "Hurtworld_Data\\Managed"
+}

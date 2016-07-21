@@ -85,7 +85,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <ItemGroup>
-      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.root.json" />
+      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.config.json" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />

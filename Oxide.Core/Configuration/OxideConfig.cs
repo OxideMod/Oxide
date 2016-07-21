@@ -3,7 +3,7 @@
 namespace Oxide.Core.Configuration
 {
     /// <summary>
-    /// Represents all "root" oxide config settings
+    /// Represents all "root" Oxide config settings
     /// </summary>
     public class OxideConfig : ConfigFile
     {
@@ -13,29 +13,14 @@ namespace Oxide.Core.Configuration
         public string ExtensionDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets the directory to find plugins (relative to the instance path)
+        /// Gets or sets the default permissions group for new players
         /// </summary>
-        public string PluginDirectory { get; set; }
+        public string DefaultGroup { get; set; }
 
         /// <summary>
-        /// Gets or sets the directory to find plugin config files (relative to the instance path)
+        /// Gets or sets if the Oxide console should be setup
         /// </summary>
-        public string ConfigDirectory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the directory to find plugin data files (relative to the instance path)
-        /// </summary>
-        public string DataDirectory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the directory to find lang files (relative to the instance path)
-        /// </summary>
-        public string LangDirectory { get; set; }
-
-        /// <summary>
-        /// Gets or sets the directory to find log files (relative to the instance path)
-        /// </summary>
-        public string LogDirectory { get; set; }
+        public bool CustomConsole { get; set; }
 
         /// <summary>
         /// Gets or sets the command line arguments to search for the instance directory
@@ -43,20 +28,12 @@ namespace Oxide.Core.Configuration
         public string[] InstanceCommandLines { get; set; }
 
         /// <summary>
-        /// Gets or sets if a console should be setup
-        /// </summary>
-        public bool DisableConsole { get; set; }
-
-        /// <summary>
-        /// Sets defaults for oxide configuration
+        /// Sets defaults for Oxide configuration
         /// </summary>
         public OxideConfig(string filename) : base(filename)
         {
-            PluginDirectory = "plugins";
-            ConfigDirectory = "config";
-            DataDirectory = "data";
-            LangDirectory = "lang";
-            LogDirectory = "logs";
+            DefaultGroup = "default";
+            CustomConsole = false;
         }
 
         /// <summary>
@@ -68,10 +45,11 @@ namespace Oxide.Core.Configuration
         public void GetInstanceCommandLineArg(int index, out string varname, out string format)
         {
             // Format is "folder/{variable}/otherfolder"
-            string cmd = InstanceCommandLines[index];
+            var cmd = InstanceCommandLines[index];
             StringBuilder varnamesb = new StringBuilder(), formatsb = new StringBuilder();
-            int invar = 0;
-            foreach (char c in cmd) {
+            var invar = 0;
+            foreach (var c in cmd)
+            {
                 switch (c)
                 {
                     case '{':

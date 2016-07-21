@@ -11,7 +11,7 @@ namespace Oxide.Core
     public sealed class CommandLine
     {
         // The flags and variables of this command line
-        private Dictionary<string, string> variables = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> variables = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the CommandLine class
@@ -19,30 +19,29 @@ namespace Oxide.Core
         /// <param name="commandline"></param>
         public CommandLine(string[] commandline)
         {
-            string cmdline = string.Empty;
-            string key = string.Empty;
+            var cmdline = string.Empty;
+            var key = string.Empty;
 
-            foreach (string str in commandline) cmdline += "\"" + str.Trim('/', '\\') + "\"";
+            foreach (var str in commandline) cmdline += "\"" + str.Trim('/', '\\') + "\"";
 
-            foreach (string str in Split(cmdline))
+            foreach (var str in Split(cmdline))
             {
-                if (str.Length > 0)
+                if (str.Length <= 0) continue;
+
+                var val = str;
+                if (str[0] == '-' || str[0] == '+')
                 {
-                    var val = str;
-                    if (str[0] == '-' || str[0] == '+')
+                    if (key != string.Empty && !variables.ContainsKey(key)) variables.Add(key, string.Empty);
+                    key = val.Substring(1);
+                }
+                else if (key != string.Empty)
+                {
+                    if (!variables.ContainsKey(key))
                     {
-                        if (key != string.Empty && !variables.ContainsKey(key)) variables.Add(key, string.Empty);
-                        key = val.Substring(1);
+                        if (key.Contains("dir")) val = val.Replace('/', '\\');
+                        variables.Add(key, val);
                     }
-                    else if (key != string.Empty)
-                    {
-                        if (!variables.ContainsKey(key))
-                        {
-                            if (key.Contains("dir")) val = val.Replace('/', '\\');
-                            variables.Add(key, val);
-                        }
-                        key = string.Empty;
-                    }
+                    key = string.Empty;
                 }
             }
 
@@ -57,11 +56,11 @@ namespace Oxide.Core
         public string[] Split(string input)
         {
             input = input.Replace("\\\"", "&qute;");
-            MatchCollection matchs = new Regex("\"([^\"]+)\"|'([^']+)'|\\S+").Matches(input);
-            string[] strArray = new string[matchs.Count];
-            for (int i = 0; i < matchs.Count; i++)
+            var matchs = new Regex("\"([^\"]+)\"|'([^']+)'|\\S+").Matches(input);
+            var strArray = new string[matchs.Count];
+            for (var i = 0; i < matchs.Count; i++)
             {
-                char[] trimChars = new char[] { ' ', '"' };
+                char[] trimChars = { ' ', '"' };
                 strArray[i] = matchs[i].Groups[0].Value.Trim(trimChars);
                 strArray[i] = strArray[i].Replace("&qute;", "\"");
             }
