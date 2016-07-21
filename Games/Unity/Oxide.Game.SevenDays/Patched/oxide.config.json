@@ -1,0 +1,10 @@
+{
+    "CustomConsole": true,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "Data\\oxide",
+        "oxide"
+    ],
+    "ExtensionDirectory": "7DaysToDieServer_Data\\Managed"
+}

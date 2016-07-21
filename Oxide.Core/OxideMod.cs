@@ -58,6 +58,9 @@ namespace Oxide.Core
         public string LangDirectory { get; private set; }
         public string LogDirectory { get; private set; }
 
+        // Permission settings
+        public string DefaultGroup { get; private set; }
+
         // Gets the number of seconds since the server started
         public float Now => getTimeSinceStartup();
 
@@ -73,7 +76,7 @@ namespace Oxide.Core
         public CommandLine CommandLine;
 
         // Various configs
-        private OxideConfig rootconfig;
+        private OxideConfig config;
 
         // Various libraries
         private Timer libtimer;
@@ -119,15 +122,15 @@ namespace Oxide.Core
             CommandLine = new CommandLine(Environment.GetCommandLineArgs());
 
             // Load the config
-            var oxideConfig = Path.Combine(RootDirectory, "oxide.root.json");
-            if (!File.Exists(oxideConfig)) throw new FileNotFoundException("Could not load Oxide root configuration", oxideConfig);
-            rootconfig = ConfigFile.Load<OxideConfig>(oxideConfig);
+            var oxideConfig = Path.Combine(RootDirectory, "oxide.config.json");
+            if (!File.Exists(oxideConfig)) throw new FileNotFoundException("Could not load the Oxide configuration file", oxideConfig);
+            config = ConfigFile.Load<OxideConfig>(oxideConfig);
 
             // Work out the instance directory
-            for (var i = 0; i < rootconfig.InstanceCommandLines.Length; i++)
+            for (var i = 0; i < config.InstanceCommandLines.Length; i++)
             {
                 string varname, format;
-                rootconfig.GetInstanceCommandLineArg(i, out varname, out format);
+                config.GetInstanceCommandLineArg(i, out varname, out format);
                 if (string.IsNullOrEmpty(varname) || CommandLine.HasVariable(varname))
                 {
                     InstanceDirectory = Path.Combine(RootDirectory, Utility.CleanPath(string.Format(format, CommandLine.GetVariable(varname))));
@@ -135,12 +138,16 @@ namespace Oxide.Core
                 }
             }
             if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
-            ExtensionDirectory = Path.Combine(RootDirectory, Utility.CleanPath(rootconfig.ExtensionDirectory));
-            PluginDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.PluginDirectory));
-            DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.DataDirectory));
-            LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.LangDirectory));
-            LogDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.LogDirectory));
-            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(rootconfig.ConfigDirectory));
+
+            // Clean and set directory paths
+            ExtensionDirectory = Path.Combine(RootDirectory, Utility.CleanPath(config.ExtensionDirectory));
+            PluginDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("plugins"));
+            DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("data"));
+            LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("lang"));
+            LogDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("logs"));
+            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("config"));
+
+            // Create directories if needed
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
@@ -151,6 +158,9 @@ namespace Oxide.Core
 
             // Register the library path
             RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
+
+            // Set the default group
+            DefaultGroup = config.DefaultGroup;
 
             // Create the loggers
             RootLogger = new CompoundLogger();
@@ -185,6 +195,7 @@ namespace Oxide.Core
             covalence.Initialize();
 
             // Remove old files
+            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "oxide.root.json"));
             Cleanup.Run();
 
             // If no clock has been defined, make our own unreliable clock
@@ -331,9 +342,7 @@ namespace Oxide.Core
         public void UnloadAllPlugins(IList<string> skip = null)
         {
             foreach (var plugin in RootPluginManager.GetPlugins().Where(p => !p.IsCorePlugin && (skip == null || !skip.Contains(p.Name))).ToArray())
-            {
                 UnloadPlugin(plugin.Name);
-            }
         }
 
         /// <summary>
@@ -581,7 +590,7 @@ namespace Oxide.Core
         /// <param name="method"></param>
         public void RegisterEngineClock(Func<float> method) => getTimeSinceStartup = method;
 
-        public bool CheckConsole(bool force = false) => ConsoleWindow.Check(force) && !rootconfig.DisableConsole;
+        public bool CheckConsole(bool force = false) => ConsoleWindow.Check(force) && config.CustomConsole;
 
         public bool EnableConsole(bool force = false)
         {

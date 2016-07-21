@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -12,21 +11,6 @@ namespace Oxide
     /// </summary>
     public static class ExtensionMethods
     {
-        /// <summary>
-        /// Converts PascalCase and camelCase to multiple words
-        /// </summary>
-        public static string Humanize(this string name)
-        {
-            return Regex.Replace(name, @"(\B[A-Z])", " $1");
-        }
-
-        /// <summary>
-        /// Converts a string to title case
-        /// </summary>
-        public static string Titleize(this string text)
-        {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.Contains('_') ? text.Replace('_', ' ') : text);
-        }
 
         /// <summary>
         /// Returns the last portion of a path separated by slashes
@@ -53,57 +37,67 @@ namespace Oxide
         }
 
         /// <summary>
+        /// Checks if an array contains a specific item
+        /// </summary>
+        public static bool Contains<T>(this T[] array, T value)
+        {
+            foreach (var item in array)
+                if (item.Equals(value)) return true;
+            return false;
+        }
+
+        /// <summary>
         /// Returns the directory portion of a path separated by slashes
         /// </summary>
-        public static string Dirname(this string text)
+        public static string Dirname(this string text) => Regex.Match(text, "(.+)[\\/][^\\/]+$").Groups[1].Value;
+
+        /// <summary>
+        /// Converts PascalCase and camelCase to multiple words
+        /// </summary>
+        public static string Humanize(this string name) => Regex.Replace(name, @"(\B[A-Z])", " $1");
+
+        /// <summary>
+        /// Returns a random value from an array
+        /// </summary>
+        public static T Sample<T>(this T[] array) => array[Core.Random.Range(0, array.Length)];
+
+        /// <summary>
+        /// Converts a string to Title case
+        /// </summary>
+        public static string Titleize(this string text)
         {
-            return Regex.Match(text, "(.+)[\\/][^\\/]+$").Groups[1].Value;
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.Contains('_') ? text.Replace('_', ' ') : text);
         }
 
         /// <summary>
         /// Turns an array of strings into a sentence
         /// </summary>
-        /// <param name="enumerable"></param>
+        /// <param name="items"></param>
         /// <returns></returns>
         public static string ToSentence<T>(this IEnumerable<T> items)
         {
             var enumerator = items.GetEnumerator();
             if (!enumerator.MoveNext()) return string.Empty;
-            var first_item = enumerator.Current;
-            if (!enumerator.MoveNext()) return first_item.ToString();
-            var builder = new StringBuilder(first_item.ToString());
-            var more_items = true;
-            while (more_items)
+            var firstItem = enumerator.Current;
+            if (!enumerator.MoveNext()) return firstItem?.ToString();
+            var builder = new StringBuilder(firstItem?.ToString());
+            var moreItems = true;
+            while (moreItems)
             {
                 var item = enumerator.Current;
-                more_items = enumerator.MoveNext();
-                if (more_items)
-                    builder.Append(", ");
-                else
-                    builder.Append(" and ");
+                moreItems = enumerator.MoveNext();
+                builder.Append(moreItems ? ", " : " and ");
                 builder.Append(item);
             }
             return builder.ToString();
         }
 
         /// <summary>
-        /// Checks if an array contains a specific item
+        /// Shortens a string to the length specified
         /// </summary>
-        public static bool Contains<T>(this T[] array, T value)
-        {
-            foreach (var item in array)
-            {
-                if (item.Equals(value)) return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Returns a random value from an array
-        /// </summary>
-        public static T Sample<T>(this T[] array)
-        {
-            return array[Core.Random.Range(0, array.Length)];
-        }
+        /// <param name="text"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static string Truncate(this string text, int max) => text.Length <= max ? text : text.Substring(0, max) + " ...";
     }
 }

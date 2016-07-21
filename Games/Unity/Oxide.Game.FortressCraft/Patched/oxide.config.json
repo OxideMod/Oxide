@@ -1,0 +1,10 @@
+{
+    "CustomConsole": true,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "default\\oxide",
+        "oxide"
+    ],
+    "ExtensionDirectory": "FC_Oculus_Data\\Managed"
+}
