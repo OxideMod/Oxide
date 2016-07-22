@@ -6,5 +6,6 @@
         "{datadir}\\oxide",
         "serverdata\\oxide"
     ],
+    "ConfigDirectory": "config",
     "ExtensionDirectory": "rust_server_Data\\Managed"
 }

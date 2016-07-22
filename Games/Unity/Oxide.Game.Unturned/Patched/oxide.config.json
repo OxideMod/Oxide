@@ -6,5 +6,6 @@
         "Servers/{secureserver}/oxide",
         "oxide"
     ],
+    "ConfigDirectory": "config",
     "ExtensionDirectory": "Unturned_Data\\Managed"
 }

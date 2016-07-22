@@ -5,5 +5,6 @@
         "{oxide.directory}",
         "saves\\oxide"
     ],
+    "ConfigDirectory": "config",
     "ExtensionDirectory": "ROK_Data\\Managed"
 }
