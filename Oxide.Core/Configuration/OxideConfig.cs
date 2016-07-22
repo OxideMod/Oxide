@@ -13,6 +13,12 @@ namespace Oxide.Core.Configuration
         public string ExtensionDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets the directory to find plugin config files (relative to the instance path)
+        /// Gets or sets if the Oxide console should be setup
+        /// </summary>
+        public string ConfigDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the default permissions group for new players
         /// </summary>
         public string DefaultGroup { get; set; }
@@ -32,6 +38,7 @@ namespace Oxide.Core.Configuration
         /// </summary>
         public OxideConfig(string filename) : base(filename)
         {
+            ConfigDirectory = "config";
             DefaultGroup = "default";
             CustomConsole = false;
         }

@@ -6,5 +6,6 @@
         "default\\oxide",
         "oxide"
     ],
+    "ConfigDirectory": "config",
     "ExtensionDirectory": "FC_Oculus_Data\\Managed"
 }

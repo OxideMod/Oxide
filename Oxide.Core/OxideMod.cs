@@ -145,7 +145,7 @@ namespace Oxide.Core
             DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("data"));
             LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("lang"));
             LogDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("logs"));
-            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("config"));
+            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(config.ConfigDirectory));
 
             // Create directories if needed
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");

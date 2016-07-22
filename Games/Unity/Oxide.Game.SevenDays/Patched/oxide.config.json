@@ -6,5 +6,6 @@
         "Data\\oxide",
         "oxide"
     ],
+    "ConfigDirectory": "config",
     "ExtensionDirectory": "7DaysToDieServer_Data\\Managed"
 }
