@@ -3007,13 +3007,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 257,
-            "ReturnBehavior": 1,
+            "InjectionIndex": 27,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
+            "ArgumentString": "a0",
             "HookTypeName": "Simple",
-            "Name": "OnSaveLoad",
-            "HookName": "OnSaveLoad",
+            "Name": "OnNewSave",
+            "HookName": "OnNewSave",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SaveRestore",
             "Flagged": false,
@@ -3078,6 +3078,33 @@
             },
             "MSILHash": "SzI/7mMw/s7zeUMl5QI3h7byrf8QTTeTQ9IjL7p8SZk=",
             "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 268,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
+            "HookTypeName": "Simple",
+            "Name": "OnSaveLoad",
+            "HookName": "OnSaveLoad",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SaveRestore",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Load",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "QP0cSpsvyRiz5w1OU8lVa0A8aWYDkX9aKgV2B47JO28=",
+            "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
         }
