@@ -120,7 +120,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     Message(message, args);
                     return;
                 case CommandType.Console:
-                    LastArg.ReplyWith(string.Format(message, args));
+                    if (BasePlayer.Id == "server_console")
+                        Puts(string.Format(message, args));
+                    else
+                        player?.ConsoleMessage(string.Format(message, args));
                     break;
             }
         }
