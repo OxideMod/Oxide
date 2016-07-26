@@ -7,13 +7,13 @@
     {
         public readonly float X, Y, Z;
 
+        public GenericPosition()
+        {
+        }
+        
         public GenericPosition(float x, float y, float z)
         {
             X = x; Y = y; Z = z;
-        }
-        
-        public GenericPosition()
-        {
         }
 
         public override string ToString() => $"({X}, {Y}, {Z})";
