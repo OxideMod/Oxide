@@ -11,6 +11,10 @@
         {
             X = x; Y = y; Z = z;
         }
+        
+        public GenericPosition()
+        {
+        }
 
         public override string ToString() => $"({X}, {Y}, {Z})";
     }
