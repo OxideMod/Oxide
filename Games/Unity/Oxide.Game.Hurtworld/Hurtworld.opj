@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DZGB6ZAGwbi85zH1l5X5772dAN18Or1KyKNU2/HSAqM=",
+            "MSILHash": "F6PXm6p2flZCDF9Q0PlA8/MxHm79Vyxz24UIZQVtQ54=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DZGB6ZAGwbi85zH1l5X5772dAN18Or1KyKNU2/HSAqM=",
+            "MSILHash": "F6PXm6p2flZCDF9Q0PlA8/MxHm79Vyxz24UIZQVtQ54=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -97,7 +97,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "89jGJj7c2U0yiprD1F61WppMBPYGwe0E+qGiu8Q2JQ8=",
+            "MSILHash": "H3S91fHgSvnd3VciWr6+qFWhe7zoNkmWKSitPrpLDck=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -151,7 +151,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "OAGAxu0jvH39Vxz46E6xqVONxDYJukaUcjeYWJhkSoY=",
+            "MSILHash": "YHvjoIx/qAiwHlG4Bpm+t5/P013Y65KyI8ytqp779TA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -551,7 +551,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "89jGJj7c2U0yiprD1F61WppMBPYGwe0E+qGiu8Q2JQ8=",
+            "MSILHash": "H3S91fHgSvnd3VciWr6+qFWhe7zoNkmWKSitPrpLDck=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -559,7 +559,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 2115,
+            "InjectionIndex": 2134,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -582,7 +582,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "89jGJj7c2U0yiprD1F61WppMBPYGwe0E+qGiu8Q2JQ8=",
+            "MSILHash": "H3S91fHgSvnd3VciWr6+qFWhe7zoNkmWKSitPrpLDck=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
