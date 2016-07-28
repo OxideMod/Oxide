@@ -3107,6 +3107,32 @@
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.userID, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnXpLevelUp",
+            "HookName": "OnXpLevelUp",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnLevelUp",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "97GpX7aDVj6AE2VzZ6Hg6Qn+yi5ny19HF3CHA+r39Qg=",
+            "BaseHookName": null,
+            "HookCategory": "XP"
+          }
         }
       ]
     },
