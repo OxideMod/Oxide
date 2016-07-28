@@ -1,5 +1,6 @@
 ﻿using System.Net;
 
+using Bolt;
 using Steamworks;
 using TheForest.UI.Multiplayer;
 using TheForest.Utils;
@@ -53,7 +54,17 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            ChatBox.Instance.AddLine(LocalPlayer.Entity.networkId, message);
+            // Set the sender name to "Server"
+            var player = new ChatBox.Player { _name = "Server", _color = Color.cyan };
+            ChatBox.Instance.Players[LocalPlayer.Entity.networkId] = player;
+            LocalPlayer.Entity.GetState<IPlayerState>().name = "Server";
+
+            // Create and send the chat event
+            var entity = ChatEvent.Create(GlobalTargets.Others);
+            entity.Message = message;
+            entity.Sender = LocalPlayer.Entity.networkId;
+            entity.Send();
+
             Debug.Log($"[Broadcast] {message}");
         }
 
