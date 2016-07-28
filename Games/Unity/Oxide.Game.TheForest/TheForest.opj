@@ -136,32 +136,6 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnUserApprove",
-            "HookName": "OnUserApprove",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopPlayerCallbacks",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Connected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "BoltConnection"
-              ]
-            },
-            "MSILHash": "8iAppZRMXJn/uAowjowv0RcSWgWZwNTUqSDNmaQoRIk=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
@@ -1528,87 +1502,6 @@
           }
         },
         {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 0,
-            "RemoveCount": 0,
-            "Instructions": [
-              {
-                "OpCode": "ret",
-                "OpType": "None",
-                "Operand": null
-              }
-            ],
-            "HookTypeName": "Modify",
-            "Name": "NoLocalPlayer [patch]",
-            "HookName": "NoLocalPlayer",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TheForest.Save.PlayerSpawn",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "SnWOkx7J2QLSz4Owl0RYj9HoZ9lD15yhMdkBpRZLq8M=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 2,
-            "RemoveCount": 5,
-            "Instructions": [],
-            "HookTypeName": "Modify",
-            "Name": "NoPlaneScene [patch]",
-            "HookName": "NoPlaneScene",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "planeCrashHeight",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "beginPlaneCrash",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "1iLogorboYEdeFRn/VUaTPCKi9vltIHKYzryeLqAY5k=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 0,
-            "RemoveCount": 0,
-            "Instructions": [
-              {
-                "OpCode": "ret",
-                "OpType": "None",
-                "Operand": null
-              }
-            ],
-            "HookTypeName": "Modify",
-            "Name": "NoLocalPlayer [patch]",
-            "HookName": "NoLocalPlayer",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TheForest.Items.World.BurnableItem",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OnEnable",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "Tj842fcK1NrOxD9I/2UUnSxztB5Vou4hxOZ8itkl4hM=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
-          }
-        },
-        {
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
@@ -1678,7 +1571,91 @@
               "Parameters": []
             },
             "MSILHash": "SnWOkx7J2QLSz4Owl0RYj9HoZ9lD15yhMdkBpRZLq8M=",
-            "BaseHookName": "NoLocalPlayer [patch]",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopAckChecker",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Connected",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BoltConnection"
+              ]
+            },
+            "MSILHash": "+RYkPbHXi1jdo+AlssSIAwZe08Okw7VVqXGKzJRidvg=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableCloudSync [patch]",
+            "HookName": "DisableCloudSync",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopSteamCloud",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ShouldUseCloud",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "I/YxdwPb/qV8m1j/v3RI1roPs+L/PvRZOqPYZAuO2rE=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.cutScene",
+            "HookTypeName": "Simple",
+            "Name": "ISkipCrashScene [internal]",
+            "HookName": "ISkipCrashScene",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "planeCrashHeight",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "beginPlaneCrash",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "1iLogorboYEdeFRn/VUaTPCKi9vltIHKYzryeLqAY5k=",
+            "BaseHookName": null,
             "HookCategory": "Server"
           }
         }
