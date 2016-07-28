@@ -120,7 +120,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     Message(message, args);
                     return;
                 case CommandType.Console:
-                    LastArg.ReplyWith(string.Format(message, args));
+                    Command("echo", args);
                     break;
             }
         }

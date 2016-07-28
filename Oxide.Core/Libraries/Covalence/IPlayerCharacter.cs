@@ -3,10 +3,14 @@
     /// <summary>
     /// Represents a position of a point in 3D space
     /// </summary>
-    public struct GenericPosition
+    public class GenericPosition
     {
         public readonly float X, Y, Z;
 
+        public GenericPosition()
+        {
+        }
+        
         public GenericPosition(float x, float y, float z)
         {
             X = x; Y = y; Z = z;

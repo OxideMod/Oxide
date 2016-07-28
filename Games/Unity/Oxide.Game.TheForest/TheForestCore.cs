@@ -148,7 +148,11 @@ namespace Oxide.Game.TheForest
             }
 
             // Save the level every X minutes
-            Interface.Oxide.GetLibrary<Timer>().Once(300f, () => LevelSerializer.SaveGame("Game"));
+            Interface.Oxide.GetLibrary<Timer>().Once(300f, () =>
+            {
+                LevelSerializer.SaveGame("Game"); // TODO: Make optional
+                Interface.Oxide.LogInfo("Server has beeen saved!");
+            });
         }
 
         /// <summary>
@@ -162,29 +166,53 @@ namespace Oxide.Game.TheForest
         #region Player Hooks
 
         /// <summary>
+        /// Called when a user is attempting to connect
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
+        [HookMethod("IOnUserApprove")]
+        private object IOnUserApprove(BoltConnection connection)
+        {
+            var id = connection.RemoteEndPoint.SteamId.Id.ToString();
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(connection.RemoteEndPoint.SteamId.Id));
+            var ip = connection.RemoteEndPoint.Address.ToString(); // TODO: Fix, showing as 1.16.0.1 for all
+
+            // Call out and see if we should reject
+            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", name, id, ip);
+            if (canLogin is string)
+            {
+                var coopKickToken = new CoopKickToken { KickMessage = canLogin.ToString(), Banned = false };
+                connection.Disconnect(coopKickToken);
+                return true;
+            }
+
+            return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", name, id, ip);
+        }
+
+        /// <summary>
         /// Called when the player has connected
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="entity"></param>
         [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(BoltEntity player)
+        private void OnPlayerConnected(BoltEntity entity)
         {
-            var id = player.source.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
+            var id = entity.source.RemoteEndPoint.SteamId.Id.ToString();
+            var name = SteamFriends.GetFriendPersonaName(new CSteamID(entity.source.RemoteEndPoint.SteamId.Id));
 
             Debug.Log($"{id}/{name} joined");
 
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                permission.UpdateNickname(id.ToString(), name);
+                permission.UpdateNickname(id, name);
 
                 // Add player to default group
-                if (!permission.UserHasGroup(id.ToString(), DefaultGroups[0])) permission.AddUserGroup(id.ToString(), DefaultGroups[0]);
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
             }
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(id.ToString()));
+            covalence.PlayerManager.NotifyPlayerConnect(entity);
+            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(id));
         }
 
         /// <summary>
@@ -195,17 +223,18 @@ namespace Oxide.Game.TheForest
         private void IOnPlayerDisconnected(BoltConnection connection)
         {
             var id = connection.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
-            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.RemoteEndPoint.SteamId.Id == id);
-            if (player == null) return;
+            var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.RemoteEndPoint.SteamId.Id == id);
+            if (entity == null) return;
+
+            var name = entity.GetState<IPlayerState>().name;
 
             Debug.Log($"{id}/{name} quit");
 
             // Call hook for plugins
-            Interface.Call("OnPlayerDisconnected", player);
+            Interface.Call("OnPlayerDisconnected", entity);
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            covalence.PlayerManager.NotifyPlayerDisconnect(entity);
             Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
         }
 
@@ -216,11 +245,11 @@ namespace Oxide.Game.TheForest
         [HookMethod("OnPlayerChat")]
         private object OnPlayerChat(ChatEvent evt)
         {
-            var player = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
-            if (player == null) return null;
+            var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
+            if (entity == null) return null;
 
-            var id = player.source.RemoteEndPoint.SteamId.Id;
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(id));
+            var id = entity.source.RemoteEndPoint.SteamId.Id;
+            var name = entity.GetState<IPlayerState>().name;
 
             Debug.Log($"[Chat] {name}: {evt.Message}");
 
@@ -231,12 +260,12 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Called when the player spawns
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="entity"></param>
         [HookMethod("OnPlayerSpawn")]
-        private void OnPlayerSpawn(BoltEntity player)
+        private void OnPlayerSpawn(BoltEntity entity)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(player.source.RemoteEndPoint.SteamId.Id.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(entity.source.RemoteEndPoint.SteamId.Id.ToString()));
         }
 
         #endregion
