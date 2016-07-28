@@ -3,6 +3,7 @@
 using Steamworks;
 using TheForest.UI.Multiplayer;
 using TheForest.Utils;
+using UnityEngine;
 
 using Oxide.Core.Libraries.Covalence;
 
@@ -50,7 +51,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// Broadcasts a chat message to all player clients
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => ChatBox.Instance.AddLine(LocalPlayer.Entity.networkId, message);
+        public void Broadcast(string message)
+        {
+            ChatBox.Instance.AddLine(LocalPlayer.Entity.networkId, message);
+            Debug.Log($"[Broadcast] {message}");
+        }
 
         /// <summary>
         /// Runs the specified server command
