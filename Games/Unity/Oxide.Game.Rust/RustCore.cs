@@ -1337,15 +1337,5 @@ namespace Oxide.Game.Rust
         }
 
         #endregion
-
-        #region Deprecated Hooks
-
-        [HookMethod("CanBypassQueue")]
-        private object CanBypassQueue(Connection connection)
-        {
-            return Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), connection);
-        }
-
-        #endregion
     }
 }
