@@ -101,8 +101,13 @@ namespace Oxide.Plugins
                     references.Clear();
 
                     // Include references made by the CSharpPlugins project
-                    foreach (var name in CSharpPluginLoader.PluginReferences)
-                        references[name + ".dll"] = new CompilerFile(Interface.Oxide.ExtensionDirectory, name + ".dll");
+                    foreach (var filename in CSharpPluginLoader.PluginReferences)
+                    {
+                        if (File.Exists(Path.Combine(Interface.Oxide.ExtensionDirectory, filename + ".dll")))
+                            references[filename + ".dll"] = new CompilerFile(Interface.Oxide.ExtensionDirectory, filename + ".dll");
+                        if (File.Exists(Path.Combine(Interface.Oxide.ExtensionDirectory, filename + ".exe")))
+                            references[filename + ".exe"] = new CompilerFile(Interface.Oxide.ExtensionDirectory, filename + ".exe");
+                    }
 
                     //Interface.Oxide.LogDebug("Preparing compilation");
 
@@ -147,7 +152,7 @@ namespace Oxide.Plugins
                 catch (Exception ex)
                 {
                     Interface.Oxide.LogException("Exception while resolving plugin references", ex);
-                    RemoteLogger.Exception("Exception while resolving plugin references", ex);
+                    //RemoteLogger.Exception("Exception while resolving plugin references", ex);
                 }
             });
         }
