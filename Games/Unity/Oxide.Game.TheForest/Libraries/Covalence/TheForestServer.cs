@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 
 using Bolt;
 using Steamworks;
@@ -6,7 +7,9 @@ using TheForest.UI.Multiplayer;
 using TheForest.Utils;
 using UnityEngine;
 
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -18,9 +21,18 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the public-facing name of the server
+        /// Gets/sets the public-facing name of the server
         /// </summary>
-        public string Name => CoopLobby.Instance.Info.Name;
+        public string Name
+        {
+            get { return CoopLobby.Instance.Info.Name; }
+            set
+            {
+                PlayerPrefs.SetString("MpGameName", value);
+                CoopLobby.Instance.Info.Name = value;
+                SteamGameServer.SetServerName(value);
+            }
+        }
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -40,9 +52,41 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         public ushort Port => CoopDedicatedServerStarter.EndPoint.Port;
 
         /// <summary>
-        /// Gets the version number/build of the server
+        /// Gets the version or build number of the server
         /// </summary>
         public string Version => TheForestExtension.GameVersion;
+
+        /// <summary>
+        /// Gets the network protocol version of the server
+        /// </summary>
+        public string Protocol => Version;
+
+        /// <summary>
+        /// Gets/sets the maximum players allowed on the server
+        /// </summary>
+        public int MaxPlayers
+        {
+            get { return CoopLobby.Instance.Info.MemberLimit; }
+            set
+            {
+                PlayerPrefs.SetInt("MpGamePlayerCount", value);
+                CoopLobby.Instance.SetMemberLimit(value);
+                SteamGameServer.SetMaxPlayerCount(value);
+            }
+        }
+
+        #endregion
+
+        #region Administration
+
+        /// <summary>
+        /// Saves the server and any related information
+        /// </summary>
+        public void Save()
+        {
+            LevelSerializer.SaveGame("Game"); // TODO: Verify both are needed
+            LevelSerializer.Checkpoint();
+        }
 
         #endregion
 
@@ -76,6 +120,21 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         public void Command(string command, params object[] args)
         {
             // TODO
+        }
+
+        #endregion
+
+        #region Logging
+
+        /// <summary>
+        /// Logs a string of text to a file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="owner"></param>
+        public void Log(string text, Plugin owner)
+        {
+            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
+                writer.WriteLine(text);
         }
 
         #endregion

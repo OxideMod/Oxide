@@ -1,11 +1,15 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game;
+using Sandbox.Game.World;
 using SteamSDK;
 
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
@@ -17,9 +21,13 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the public-facing name of the server
+        /// Gets/sets the public-facing name of the server
         /// </summary>
-        public string Name => MySandboxGame.ConfigDedicated.ServerName;
+        public string Name
+        {
+            get { return MySandboxGame.ConfigDedicated.ServerName; }
+            set { MySandboxGame.ConfigDedicated.ServerName = value; }
+        }
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -39,9 +47,32 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public ushort Port => (ushort)MySandboxGame.ConfigDedicated.ServerPort;
 
         /// <summary>
-        /// Gets the version number/build of the server
+        /// Gets the version or build number of the server
         /// </summary>
         public string Version => MyPerGameSettings.BasicGameInfo.GameVersion.ToString();
+
+        /// <summary>
+        /// Gets the network protocol version of the server
+        /// </summary>
+        public string Protocol => Version;
+
+        /// <summary>
+        /// Gets/sets the maximum players allowed on the server
+        /// </summary>
+        public int MaxPlayers
+        {
+            get { return MyMultiplayer.Static.MaxPlayers; }
+            set { } // TODO
+        }
+
+        #endregion
+
+        #region Administration
+
+        /// <summary>
+        /// Saves the server and any related information
+        /// </summary>
+        public void Save() => MySession.Static.Save();
 
         #endregion
 
@@ -61,6 +92,21 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public void Command(string command, params object[] args)
         {
             // TODO
+        }
+
+        #endregion
+
+        #region Logging
+
+        /// <summary>
+        /// Logs a string of text to a file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="owner"></param>
+        public void Log(string text, Plugin owner)
+        {
+            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
+                writer.WriteLine(text);
         }
 
         #endregion
