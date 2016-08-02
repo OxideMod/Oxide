@@ -1,9 +1,11 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 
 using Steamworks;
 
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
-using Oxide.Plugins;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.HideHoldOut.Libraries.Covalence
 {
@@ -15,9 +17,13 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the public-facing name of the server
+        /// Gets/sets the public-facing name of the server
         /// </summary>
-        public string Name => NetworkController.NetManager_.ServManager.Server_NAME;
+        public string Name
+        {
+            get { return NetworkController.NetManager_.ServManager.Server_NAME; }
+            set { NetworkController.NetManager_.ServManager.Server_NAME = value; }
+        }
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -37,9 +43,32 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public ushort Port => (ushort)uLink.MasterServer.port;
 
         /// <summary>
-        /// Gets the version number/build of the server
+        /// Gets the version or build number of the server
         /// </summary>
         public string Version => NetworkController.NetManager_.get_GAME_VERSION;
+
+        /// <summary>
+        /// Gets the network protocol version of the server
+        /// </summary>
+        public string Protocol => NetworkController.NetManager_.get_GAME_VERSION_steam;
+
+        /// <summary>
+        /// Gets/sets the maximum players allowed on the server
+        /// </summary>
+        public int MaxPlayers
+        {
+            get { return NetworkController.NetManager_.ServManager.NumberOfSlot; }
+            set { NetworkController.NetManager_.ServManager.NumberOfSlot = value; }
+        }
+
+        #endregion
+
+        #region Administration
+
+        /// <summary>
+        /// Saves the server and any related information
+        /// </summary>
+        public void Save() => NetworkController.NetManager_.ServManager.StartCoroutine("Manual_DataBase_Storing");
 
         #endregion
 
@@ -49,7 +78,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Broadcasts a chat message to all player clients
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => NetworkController.NetManager_.chatManager.Send_msg(message.Quote());
+        public void Broadcast(string message) => NetworkController.NetManager_.chatManager.Send_msg(message);
 
         /// <summary>
         /// Runs the specified server command
@@ -59,6 +88,21 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public void Command(string command, params object[] args)
         {
             // TODO
+        }
+
+        #endregion
+
+        #region Logging
+
+        /// <summary>
+        /// Logs a string of text to a file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="owner"></param>
+        public void Log(string text, Plugin owner)
+        {
+            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
+                writer.WriteLine(text);
         }
 
         #endregion

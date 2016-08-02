@@ -1250,8 +1250,10 @@ namespace Oxide.Game.Rust
             BasePlayer player = null;
             foreach (var activePlayer in BasePlayer.activePlayerList)
             {
+                if (string.IsNullOrEmpty(activePlayer.UserIDString)) continue;
                 if (activePlayer.UserIDString.Equals(nameOrIdOrIp))
                     return activePlayer;
+                if (string.IsNullOrEmpty(activePlayer.displayName)) continue;
                 if (activePlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
                     return activePlayer;
                 if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
@@ -1261,8 +1263,10 @@ namespace Oxide.Game.Rust
             }
             foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
             {
+                if (string.IsNullOrEmpty(sleepingPlayer.UserIDString)) continue;
                 if (sleepingPlayer.UserIDString.Equals(nameOrIdOrIp))
                     return sleepingPlayer;
+                if (string.IsNullOrEmpty(sleepingPlayer.displayName)) continue;
                 if (sleepingPlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
                     return sleepingPlayer;
                 if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
@@ -1281,6 +1285,7 @@ namespace Oxide.Game.Rust
             BasePlayer player = null;
             foreach (var activePlayer in BasePlayer.activePlayerList)
             {
+                if (string.IsNullOrEmpty(activePlayer.displayName)) continue;
                 if (activePlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
                     return activePlayer;
                 if (activePlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
@@ -1288,6 +1293,7 @@ namespace Oxide.Game.Rust
             }
             foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
             {
+                if (string.IsNullOrEmpty(sleepingPlayer.displayName)) continue;
                 if (sleepingPlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
                     return sleepingPlayer;
                 if (sleepingPlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
@@ -1325,25 +1331,17 @@ namespace Oxide.Game.Rust
         {
             foreach (var activePlayer in BasePlayer.activePlayerList)
             {
+                if (string.IsNullOrEmpty(activePlayer.UserIDString)) continue;
                 if (activePlayer.UserIDString.Equals(id))
                     return activePlayer;
             }
             foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
             {
+                if (string.IsNullOrEmpty(sleepingPlayer.UserIDString)) continue;
                 if (sleepingPlayer.UserIDString.Equals(id))
                     return sleepingPlayer;
             }
             return null;
-        }
-
-        #endregion
-
-        #region Deprecated Hooks
-
-        [HookMethod("CanBypassQueue")]
-        private object CanBypassQueue(Connection connection)
-        {
-            return Interface.CallDeprecatedHook("OnBypassQueue", "CanBypassQueue", new DateTime(2016, 8, 1), connection);
         }
 
         #endregion

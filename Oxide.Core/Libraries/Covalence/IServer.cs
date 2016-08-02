@@ -1,5 +1,7 @@
 ﻿using System.Net;
 
+using Oxide.Core.Plugins;
+
 namespace Oxide.Core.Libraries.Covalence
 {
     /// <summary>
@@ -7,10 +9,12 @@ namespace Oxide.Core.Libraries.Covalence
     /// </summary>
     public interface IServer
     {
+        #region Information
+
         /// <summary>
-        /// Gets the public-facing name of the server
+        /// Gets/sets the public-facing name of the server
         /// </summary>
-        string Name { get; }
+        string Name { get; set; }
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -23,12 +27,32 @@ namespace Oxide.Core.Libraries.Covalence
         ushort Port { get; }
 
         /// <summary>
-        /// Gets the version number/build of the server
+        /// Gets the version or build number of the server
         /// </summary>
         string Version { get; }
 
-        // TODO: Add string Protocol
-        // TODO: Add int MaxPlayers
+        /// <summary>
+        /// Gets the network protocol version of the server
+        /// </summary>
+        string Protocol { get; }
+
+        /// <summary>
+        /// Gets/sets the maximum players allowed on the server
+        /// </summary>
+        int MaxPlayers { get; set; }
+
+        #endregion
+
+        #region Administration
+
+        /// <summary>
+        /// Saves the server and any related information
+        /// </summary>
+        void Save();
+
+        #endregion
+
+        #region Chat and Commands
 
         /// <summary>
         /// Broadcasts a chat message to all players
@@ -42,5 +66,18 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="command"></param>
         /// <param name="args"></param>
         void Command(string command, params object[] args);
+
+        #endregion
+
+        #region Logging
+
+        /// <summary>
+        /// Logs a string of text to a dated file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="owner"></param>
+        void Log(string text, Plugin owner);
+
+        #endregion
     }
 }

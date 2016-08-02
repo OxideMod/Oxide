@@ -1,10 +1,12 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 
 using ConVar;
-using Rust;
 using Steamworks;
 
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -13,22 +15,16 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustServer : IServer
     {
-        private ServerMgr mgr;
+        #region Information
 
         /// <summary>
-        /// Initializes a new instance of the RustServer class
+        /// Gets/sets the public-facing name of the server
         /// </summary>
-        public RustServer()
+        public string Name
         {
-            mgr = ServerMgr.Instance;
+            get { return Server.hostname; }
+            set { Server.hostname = value; }
         }
-
-        #region Server Information
-
-        /// <summary>
-        /// Gets the public-facing name of the server
-        /// </summary>
-        public string Name => Server.hostname;
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -48,9 +44,36 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public ushort Port => (ushort)Server.port;
 
         /// <summary>
-        /// Gets the version number/build of the server
+        /// Gets the version or build number of the server
         /// </summary>
-        public string Version => $"{BuildInformation.VersionStampDays} ({Protocol.network})";
+        public string Version => BuildInformation.VersionStampDays.ToString();
+
+        /// <summary>
+        /// Gets the network protocol version of the server
+        /// </summary>
+        public string Protocol => global::Rust.Protocol.network.ToString();
+
+        /// <summary>
+        /// Gets/sets the maximum players allowed on the server
+        /// </summary>
+        public int MaxPlayers
+        {
+            get { return Server.maxplayers; }
+            set { Server.maxplayers = value; }
+        }
+
+        #endregion
+
+        #region Administration
+
+        /// <summary>
+        /// Saves the server and any related information
+        /// </summary>
+        public void Save()
+        {
+            Server.save(null);
+            Server.writecfg(null);
+        }
 
         #endregion
 
@@ -68,6 +91,21 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="command"></param>
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
+
+        #endregion
+
+        #region Logging
+
+        /// <summary>
+        /// Logs a string of text to a file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="owner"></param>
+        public void Log(string text, Plugin owner)
+        {
+            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
+                writer.WriteLine(text);
+        }
 
         #endregion
     }

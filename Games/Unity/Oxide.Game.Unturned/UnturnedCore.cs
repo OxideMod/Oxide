@@ -5,6 +5,7 @@ using SDG.Unturned;
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.Libraries;
+using Oxide.Game.Unturned.Libraries.Covalence;
 
 namespace Oxide.Game.Unturned
 {
@@ -18,6 +19,9 @@ namespace Oxide.Game.Unturned
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The Forest covalence provider
+        private readonly UnturnedCovalenceProvider covalence = UnturnedCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;

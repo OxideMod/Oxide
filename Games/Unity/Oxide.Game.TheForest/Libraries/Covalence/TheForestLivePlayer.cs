@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Steamworks;
 using UnityEngine;
 
 using Oxide.Core.Libraries.Covalence;
@@ -43,7 +44,16 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => entity.source.RemoteEndPoint.Address.ToString(); // TODO: Fix, showing as 1.16.0.1 for all
+        public string Address
+        {
+            get
+            {
+                P2PSessionState_t sessionState;
+                SteamGameServerNetworking.GetP2PSessionState(new CSteamID(steamId), out sessionState);
+                var ip = sessionState.m_nRemoteIP;
+                return string.Concat(ip >> 24 & 255, ".", ip >> 16 & 255, ".", ip >> 8 & 255, ".", ip & 255);
+            }
+        }
 
         /// <summary>
         /// Gets the user's average network ping

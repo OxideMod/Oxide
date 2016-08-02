@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 
 using Steamworks;
 
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.SevenDays.Libraries.Covalence
 {
@@ -15,9 +18,13 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the public-facing name of the server
+        /// Gets/sets the public-facing name of the server
         /// </summary>
-        public string Name => GamePrefs.GetString(EnumGamePrefs.ServerName);
+        public string Name
+        {
+            get { return GamePrefs.GetString(EnumGamePrefs.ServerName); }
+            set { throw new NotImplementedException(); } // TODO
+        }
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -37,9 +44,36 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         public ushort Port => Convert.ToUInt16(GamePrefs.GetInt(EnumGamePrefs.ServerPort));
 
         /// <summary>
-        /// Gets the version number/build of the server
+        /// Gets the version or build number of the server
         /// </summary>
         public string Version => GamePrefs.GetString(EnumGamePrefs.GameVersion);
+
+        /// <summary>
+        /// Gets the network protocol version of the server
+        /// </summary>
+        public string Protocol => Version;
+
+        /// <summary>
+        /// Gets/sets the maximum players allowed on the server
+        /// </summary>
+        public int MaxPlayers
+        {
+            get { return GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount); }
+            set { } // TODO
+        }
+
+        #endregion
+
+        #region Administration
+
+        /// <summary>
+        /// Saves the server and any related information
+        /// </summary>
+        public void Save()
+        {
+            GameManager.Instance.SaveLocalPlayerData();
+            GameManager.Instance.SaveWorld();
+        }
 
         #endregion
 
@@ -59,7 +93,25 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => SdtdConsole.Instance.ExecuteSync(string.Concat(command, " ", args), null);
+        public void Command(string command, params object[] args)
+        {
+            SdtdConsole.Instance.ExecuteSync($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}", null);
+        }
+
+        #endregion
+
+        #region Logging
+
+        /// <summary>
+        /// Logs a string of text to a file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="owner"></param>
+        public void Log(string text, Plugin owner)
+        {
+            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
+                writer.WriteLine(text);
+        }
 
         #endregion
     }

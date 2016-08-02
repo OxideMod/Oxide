@@ -145,7 +145,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "kqptt6AgWkulz7IIosuzj9ZdXPJ4IBKUWYrnAvY6xJk=",
+            "MSILHash": "Ue/SHoDtKEF9uIQSJ/yzYVGhxVVXLssmQG3a65sXTmM=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -301,7 +301,7 @@
                 "CodeHatch.Blocks.Networking.Events.CubePlaceEvent"
               ]
             },
-            "MSILHash": "g1uz22QYpTji+ckJ6xqKBt+5rsiVxDKLQwbt+H72DPY=",
+            "MSILHash": "GGiLSEuO2qs4hrel9kzmpzXp7WSL2CTYy9KIRN5ZVAE=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
