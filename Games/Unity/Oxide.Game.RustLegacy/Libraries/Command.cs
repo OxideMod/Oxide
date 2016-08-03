@@ -91,6 +91,7 @@ namespace Oxide.Game.RustLegacy.Libraries
             ChatCommands = new Dictionary<string, ChatCommand>();
             DefaultCommands = new List<string>();
             pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
+
             foreach (var assem in AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach (var type in assem.GetTypes())
@@ -130,11 +131,11 @@ namespace Oxide.Game.RustLegacy.Libraries
 
             var fullName = name.Trim();
 
-            ConsoleCommand cmd;
-            if (ConsoleCommands.TryGetValue(fullName, out cmd))
+            ConsoleCommand command;
+            if (ConsoleCommands.TryGetValue(fullName, out command))
             {
                 // This is a custom command which was already registered by another plugin
-                var previousPluginName = cmd.PluginCallbacks[0].Plugin?.Name ?? "An unknown plugin";
+                var previousPluginName = command.PluginCallbacks[0].Plugin?.Name ?? "An unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{newPluginName} has replaced the '{name}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(msg);
@@ -142,11 +143,11 @@ namespace Oxide.Game.RustLegacy.Libraries
             }
 
             // The command either does not already exist or is replacing a previously registered command
-            cmd = new ConsoleCommand(fullName);
-            cmd.AddCallback(plugin, callbackName);
+            command = new ConsoleCommand(fullName);
+            command.AddCallback(plugin, callbackName);
 
             // Add the new command to collections
-            ConsoleCommands[fullName] = cmd;
+            ConsoleCommands[fullName] = command;
         }
 
         /// <summary>
@@ -160,19 +161,19 @@ namespace Oxide.Game.RustLegacy.Libraries
         {
             var commandName = name.ToLowerInvariant();
 
-            ChatCommand cmd;
-            if (ChatCommands.TryGetValue(commandName, out cmd))
+            ChatCommand command;
+            if (ChatCommands.TryGetValue(commandName, out command))
             {
-                var previousPluginName = cmd.Plugin?.Name ?? "an unknown plugin";
+                var previousPluginName = command.Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var msg = $"{newPluginName} has replaced the '{commandName}' chat command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(msg);
             }
 
-            cmd = new ChatCommand(commandName, plugin, callbackName);
+            command = new ChatCommand(commandName, plugin, callbackName);
 
             // Add the new command to collections
-            ChatCommands[commandName] = cmd;
+            ChatCommands[commandName] = command;
 
             // Hook the unload event
             if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
@@ -187,19 +188,19 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <param name="args"></param>
         internal bool HandleChatCommand(NetUser sender, string name, string[] args)
         {
-            ChatCommand cmd;
-            if (!ChatCommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
-            cmd.Plugin.CallHook(cmd.CallbackName, sender, name, args);
+            ChatCommand command;
+            if (!ChatCommands.TryGetValue(name.ToLowerInvariant(), out command)) return false;
+            command.Plugin.CallHook(command.CallbackName, sender, name, args);
 
             return true;
         }
 
         internal object HandleConsoleCommand(ConsoleSystem.Arg arg, bool wantsReply)
         {
-            ConsoleCommand cmd;
-            if (!ConsoleCommands.TryGetValue($"{arg.Class}.{arg.Function}".ToLowerInvariant(), out cmd)) return null;
+            ConsoleCommand command;
+            if (!ConsoleCommands.TryGetValue($"{arg.Class}.{arg.Function}".ToLowerInvariant(), out command)) return null;
 
-            return cmd.HandleCommand(arg);
+            return command.HandleCommand(arg);
         }
 
         /// <summary>
@@ -211,24 +212,24 @@ namespace Oxide.Game.RustLegacy.Libraries
         {
             // Find all console commands which were registered by the plugin
             var commands = ConsoleCommands.Values.Where(c => c.PluginCallbacks.Any(cb => cb.Plugin == sender)).ToArray();
-            foreach (var cmd in commands)
+            foreach (var command in commands)
             {
-                cmd.PluginCallbacks.RemoveAll(cb => cb.Plugin == sender);
-                if (cmd.PluginCallbacks.Count > 0) continue;
+                command.PluginCallbacks.RemoveAll(cb => cb.Plugin == sender);
+                if (command.PluginCallbacks.Count > 0) continue;
 
                 // This command is no longer registered by any plugins
-                ConsoleCommands.Remove(cmd.Name);
+                ConsoleCommands.Remove(command.Name);
             }
 
             // Remove all chat commands which were registered by the plugin
-            foreach (var cmd in ChatCommands.Values.Where(c => c.Plugin == sender).ToArray())
-                ChatCommands.Remove(cmd.Name);
+            foreach (var command in ChatCommands.Values.Where(c => c.Plugin == sender).ToArray())
+                ChatCommands.Remove(command.Name);
 
             // Unhook the event
-            Event.Callback<Plugin, PluginManager> event_callback;
-            if (pluginRemovedFromManager.TryGetValue(sender, out event_callback))
+            Event.Callback<Plugin, PluginManager> eventCallback;
+            if (pluginRemovedFromManager.TryGetValue(sender, out eventCallback))
             {
-                event_callback.Remove();
+                eventCallback.Remove();
                 pluginRemovedFromManager.Remove(sender);
             }
         }

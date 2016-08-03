@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using CodeHatch.Common;
 using CodeHatch.Engine.Behaviours;
@@ -120,7 +121,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            CommandManager.ExecuteCommand(steamId, command + " " + string.Join(" ", args.ToList().ConvertAll(a => (string)a).ToArray()));
+            CommandManager.ExecuteCommand(steamId, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
         #endregion

@@ -132,7 +132,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => Commander.execute(steamPlayer.playerID.steamID, string.Format(command, args));
+        public void Command(string command, params object[] args)
+        {
+            Commander.execute(steamPlayer.playerID.steamID, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
+        }
 
         #endregion
 

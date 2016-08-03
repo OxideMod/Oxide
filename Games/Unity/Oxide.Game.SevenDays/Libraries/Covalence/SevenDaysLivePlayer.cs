@@ -123,7 +123,10 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => SdtdConsole.Instance.ExecuteSync(string.Concat(command, " ", args), client);
+        public void Command(string command, params object[] args)
+        {
+            SdtdConsole.Instance.ExecuteSync($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}", client);
+        }
 
         #endregion
 
