@@ -54,12 +54,17 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         public string Protocol => Version;
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => GameManager.Instance.World.Players.Count;
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers
         {
             get { return GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount); }
-            set { } // TODO
+            set { GamePrefs.Set(EnumGamePrefs.ServerMaxPlayerCount, value); }
         }
 
         #endregion

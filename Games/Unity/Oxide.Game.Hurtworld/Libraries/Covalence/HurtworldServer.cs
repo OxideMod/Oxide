@@ -54,6 +54,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public string Protocol => GameManager.PROTOCOL_VERSION.ToString();
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => GameManager.Instance.GetPlayerCount();
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers

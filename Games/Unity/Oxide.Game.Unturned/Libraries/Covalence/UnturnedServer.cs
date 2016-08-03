@@ -55,6 +55,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public string Protocol => Version;
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => Provider.clients.Count;
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers

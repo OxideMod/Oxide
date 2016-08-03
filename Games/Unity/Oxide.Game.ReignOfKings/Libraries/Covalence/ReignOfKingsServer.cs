@@ -57,6 +57,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public string Protocol => GameInfo.VersionName;
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => Server.PlayerCount;
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers

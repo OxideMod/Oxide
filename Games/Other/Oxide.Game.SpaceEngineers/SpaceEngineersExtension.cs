@@ -95,7 +95,7 @@ namespace Oxide.Game.SpaceEngineers
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime); // MySession.Static.ElapsedGameTime // MySandboxGame.TotalTimeInMilliseconds
             };*/
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {MyMultiplayer.Static?.MemberCount}/{MyMultiplayer.Static?.MaxPlayers}";
+            Interface.Oxide.ServerConsole.Status2Left = () => $" {MyMultiplayer.Static?.MemberCount}/{MyMultiplayer.Static?.MemberLimit}";
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);

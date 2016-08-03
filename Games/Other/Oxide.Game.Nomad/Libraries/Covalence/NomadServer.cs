@@ -47,6 +47,11 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public string Protocol => Version;
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => LobbyServerLink.mGameServer.playerCount;
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers
@@ -62,7 +67,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Saves the server and any related information
         /// </summary>
-        public void Save() => LobbyServerLink.mGameServer.SaveTo(/*LobbyServerLink.mGameServer.mFilename ?? */"server.dat");
+        public void Save() => LobbyServerLink.mGameServer.SaveTo("server.dat");
 
         #endregion
 

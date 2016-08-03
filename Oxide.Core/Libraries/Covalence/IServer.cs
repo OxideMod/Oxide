@@ -37,6 +37,11 @@ namespace Oxide.Core.Libraries.Covalence
         string Protocol { get; }
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        int Players { get; }
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         int MaxPlayers { get; set; }
@@ -72,7 +77,7 @@ namespace Oxide.Core.Libraries.Covalence
         #region Logging
 
         /// <summary>
-        /// Logs a string of text to a dated file
+        /// Logs a string of text to a file
         /// </summary>
         /// <param name="text"></param>
         /// <param name="owner"></param>

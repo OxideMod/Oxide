@@ -62,6 +62,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         public string Protocol => Version;
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => CoopLobby.Instance.Info.CurrentMembers;
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers

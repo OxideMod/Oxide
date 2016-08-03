@@ -54,6 +54,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public string Protocol => global::Rust.Protocol.network.ToString();
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => BasePlayer.activePlayerList.Count;
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers
