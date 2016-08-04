@@ -3133,6 +3133,176 @@
             "BaseHookName": null,
             "HookCategory": "XP"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, this.spectateFilter",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpectate",
+            "HookName": "OnPlayerSpectate",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StartSpectating",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "EdrIYDZgjXIFTWmENKA7qwzTmSTzqeapcWFsXFoQNS4=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, this.spectateFilter",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpectateEnd",
+            "HookName": "OnPlayerSpectateEnd",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StopSpectating",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "hT9xqK4g6htlFE5IHPcW1zl2fBqGv73aDnkz2ecyQAA=",
+            "BaseHookName": null,
+            "HookCategory": "_UNTESTED"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnTurretStartup",
+            "HookName": "OnTurretStartup",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AutoTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InitiateStartup",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "hee2Kq/IPxYMyRaGAmevNlCdhXZgkxCq00fDBjjllWo=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnTurretShutdown",
+            "HookName": "OnTurretShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AutoTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InitiateShutdown",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "qjsGegpuY/zp0p0qzVHJsNluK3E1j3ytD7UQvSHcM0Y=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this",
+            "HookTypeName": "Simple",
+            "Name": "OnTurretToggle",
+            "HookName": "OnTurretToggle",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AutoTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetIsOnline",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "e6RntPnx33UtFjZtZfrMZR5x4bVoIQmMqmGH5VermaU=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSleep",
+            "HookName": "OnPlayerSleep",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StartSleeping",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "qNGq2aQmUDAsYmlE0gDvlNzFR7rNphzm+0CP6oxeCkg=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 9,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanAttack",
+            "HookName": "CanAttack",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanAttack",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "BA0dmwVt/v3akBoBxEuxBVpBHYqpEZ6Jh180VdpWFdU=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ]
     },
