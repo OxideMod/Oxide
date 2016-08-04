@@ -53,6 +53,11 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public string Protocol => NetworkController.NetManager_.get_GAME_VERSION_steam;
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => NetworkController.NetManager_.ServManager.CheckPlayerCount();
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers

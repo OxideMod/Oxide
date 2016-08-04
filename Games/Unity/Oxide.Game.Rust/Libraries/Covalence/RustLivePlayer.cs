@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 using Oxide.Core.Libraries.Covalence;
 

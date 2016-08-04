@@ -57,12 +57,17 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public string Protocol => Version;
 
         /// <summary>
+        /// Gets the total of players currently on the server
+        /// </summary>
+        public int Players => MyMultiplayer.Static.MemberCount;
+
+        /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers
         {
-            get { return MyMultiplayer.Static.MaxPlayers; }
-            set { } // TODO
+            get { return MyMultiplayer.Static.MemberLimit; }
+            set { MyMultiplayer.Static.MemberLimit = value; }
         }
 
         #endregion

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Plugins;
@@ -126,7 +128,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, string.Format(command, args));
+            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
         #endregion

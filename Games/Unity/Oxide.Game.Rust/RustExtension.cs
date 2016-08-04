@@ -3,7 +3,6 @@ using System.Linq;
 
 using Facepunch;
 using Facepunch.Extend;
-
 using Network;
 using Rust;
 using UnityEngine;

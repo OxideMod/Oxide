@@ -12,11 +12,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustCommandSystem : ICommandSystem
     {
-        // Default constructor
-        public RustCommandSystem()
-        {
-            Initialize();
-        }
+        // The covalence provider
+        private readonly RustCovalenceProvider rustCovalence = RustCovalenceProvider.Instance;
+
+        // The console player
+        private RustConsolePlayer consolePlayer;
 
         // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustCommands;
@@ -27,11 +27,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         // All registered chat commands
         private IDictionary<string, CommandCallback> registeredChatCommands;
 
-        // The console player
-        private RustConsolePlayer consolePlayer;
-
-        // The covalence provider
-        private readonly RustCovalenceProvider rustCovalence = RustCovalenceProvider.Instance;
+        // Default constructor
+        public RustCommandSystem()
+        {
+            Initialize();
+        }
 
         /// <summary>
         /// Initializes the command system provider
@@ -44,24 +44,24 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             consolePlayer = new RustConsolePlayer();
         }
 
-        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
+        private bool ChatCommandCallback(IPlayer caller, string command, string[] args)
         {
             CommandCallback callback;
-            return registeredChatCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
+            return registeredChatCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
 
         /// <summary>
         /// Registers the specified command
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandCallback callback)
+        public void RegisterCommand(string command, CommandCallback callback)
         {
             // Initialize if needed
             if (rustCommands == null) Initialize();
 
             // Convert to lowercase
-            var commandName = cmd.ToLowerInvariant();
+            var commandName = command.ToLowerInvariant();
 
             // Register the command as a console command
             // Check if it already exists
@@ -104,29 +104,20 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             registeredChatCommands.Add(commandName, callback);
         }
 
-        private static string[] ExtractArgs(ConsoleSystem.Arg arg)
-        {
-            if (arg == null) return new string[0];
-            var argsList = new List<string>();
-            var i = 0;
-            while (arg.HasArgs(++i)) argsList.Add(arg.GetString(i - 1));
-            return argsList.ToArray();
-        }
-
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
-        /// <param name="cmd"></param>
-        public void UnregisterCommand(string cmd)
+        /// <param name="command"></param>
+        public void UnregisterCommand(string command)
         {
             // Initialize if needed
             if (rustCommands == null) Initialize();
 
             // Remove the console command
-            rustCommands?.Remove(cmd);
+            rustCommands?.Remove(command);
 
             // Remove the chat command
-            registeredChatCommands.Remove(cmd);
+            registeredChatCommands.Remove(command);
         }
 
         /// <summary>
@@ -136,5 +127,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="str"></param>
         /// <returns></returns>
         public bool HandleChatMessage(ILivePlayer player, string str) => chatCommandHandler.HandleChatMessage(player, str);
+
+        private static string[] ExtractArgs(ConsoleSystem.Arg arg)
+        {
+            if (arg == null) return new string[0];
+            var argsList = new List<string>();
+            var i = 0;
+            while (arg.HasArgs(++i)) argsList.Add(arg.GetString(i - 1));
+            return argsList.ToArray();
+        }
     }
 }

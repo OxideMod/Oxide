@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Net;
-using Oxide.Core;
 
-using Oxide.Core.Libraries.Covalence;
 using Steamworks;
+
+using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -190,7 +191,10 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => ConsoleManager.Instance.ExecuteCommand(string.Concat(command, (string[])args));
+        public void Command(string command, params object[] args)
+        {
+            ConsoleManager.Instance.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
+        }
 
         #endregion
     }

@@ -97,7 +97,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "H3S91fHgSvnd3VciWr6+qFWhe7zoNkmWKSitPrpLDck=",
+            "MSILHash": "rcZZRD3sSyEc7S2ceOJ4NWS560WVW6B6sxMJlaElOxw=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -551,7 +551,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "H3S91fHgSvnd3VciWr6+qFWhe7zoNkmWKSitPrpLDck=",
+            "MSILHash": "rcZZRD3sSyEc7S2ceOJ4NWS560WVW6B6sxMJlaElOxw=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -582,7 +582,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "H3S91fHgSvnd3VciWr6+qFWhe7zoNkmWKSitPrpLDck=",
+            "MSILHash": "rcZZRD3sSyEc7S2ceOJ4NWS560WVW6B6sxMJlaElOxw=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
