@@ -490,7 +490,7 @@
                 "ItemHolderAddItem"
               ]
             },
-            "MSILHash": "veQGzTPTdQPfNTZGciuY13MLKUZJDMwRkdUjvdrNT6E=",
+            "MSILHash": "b/jNJ3N6WM3x7HVNUhRDgB/5MeZ507UDPkpLjcUJp7c=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -542,7 +542,7 @@
                 "ItemHolderTakeItem"
               ]
             },
-            "MSILHash": "E0ZaxUbkfJ5J2VM9F+CWVB80v6wyd+aWn9gYw24eTRQ=",
+            "MSILHash": "1PMFK1vVbefW7K5JWbBJ3cmMobHNP/BWITnQSf9DD/4=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -568,7 +568,7 @@
                 "AddIngredient"
               ]
             },
-            "MSILHash": "MJUh7rfAKJGZeJweVKXDn2a6/CZ3wnpAUIegiQNbvfg=",
+            "MSILHash": "4iiNP2Lcme//Cix7QBEtBlZfBluCiMdydudUPLWB+8k=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -958,7 +958,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "4xCo8e5G8dIyYxKEe7j803+WBn7NU2Dx2/YOL17Kkhw=",
+            "MSILHash": "iqUj6BZd3VtUluHk66+6gXODPkpvnEWHY38l+DKkRkg=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1359,8 +1359,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
+            "Name": "OnPlayerRespawn",
+            "HookName": "OnPlayerRespawn",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopPlayerCallbacks",
             "Flagged": false,
@@ -1372,7 +1372,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "0tepzDOecf4/m/jLmAnheFrtaSY77ePId3pNhv8SiEA=",
+            "MSILHash": "cAJ9LbxgsXTOJrxp8nCMio/+gp01jp8bk5iCjKqxoRM=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1636,27 +1636,26 @@
           }
         },
         {
-          "Type": "Simple",
+          "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 2,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this.cutScene",
-            "HookTypeName": "Simple",
-            "Name": "ISkipCrashScene [internal]",
-            "HookName": "ISkipCrashScene",
+            "InjectionIndex": 0,
+            "RemoveCount": 8,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "SkipPlaneScene [patch]",
+            "HookName": "SkipPlaneScene",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "planeCrashHeight",
-            "Flagged": true,
+            "TypeName": "TriggerCutScene",
+            "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "beginPlaneCrash",
+              "Exposure": 0,
+              "Name": "Update",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1iLogorboYEdeFRn/VUaTPCKi9vltIHKYzryeLqAY5k=",
+            "MSILHash": "zsRIWND6tx1+udUXnwygjQj+0zFMctA6etDVbhlzcdE=",
             "BaseHookName": null,
-            "HookCategory": "Server"
+            "HookCategory": "_Patches"
           }
         }
       ]
