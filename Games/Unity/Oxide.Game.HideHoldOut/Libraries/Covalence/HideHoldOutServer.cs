@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 
 using Steamworks;
@@ -64,6 +65,15 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         {
             get { return NetworkController.NetManager_.ServManager.NumberOfSlot; }
             set { NetworkController.NetManager_.ServManager.NumberOfSlot = value; }
+        }
+
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return new DateTime(NetworkController.NetManager_.TimeManager.TIME_display); }
+            set { NetworkController.NetManager_.TimeManager.SetTime(value.Minute); }
         }
 
         #endregion

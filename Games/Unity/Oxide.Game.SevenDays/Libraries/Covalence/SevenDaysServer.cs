@@ -67,6 +67,15 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             set { GamePrefs.Set(EnumGamePrefs.ServerMaxPlayerCount, value); }
         }
 
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return new DateTime(Convert.ToInt64(GameManager.Instance.World.worldTime)); }
+            set { GameManager.Instance.World.worldTime = Convert.ToUInt64(value); }
+        }
+
         #endregion
 
         #region Administration

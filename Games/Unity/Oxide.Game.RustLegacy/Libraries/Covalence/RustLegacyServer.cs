@@ -59,6 +59,15 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             set { server.maxplayers = value; }
         }
 
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return new DateTime((Convert.ToInt64(EnvironmentControlCenter.Singleton.GetTime()))); }
+            set { EnvironmentControlCenter.Singleton.SetTime(value.Second); }
+        }
+
         #endregion
 
         #region Administration
