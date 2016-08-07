@@ -67,6 +67,15 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             set { GameManager.Instance.ServerConfig.MaxPlayers = value; }
         }
 
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return TOD_Sky.Instance.Cycle.DateTime; }
+            set { TOD_Sky.Instance.Cycle.DateTime = value; }
+        }
+
         #endregion
 
         #region Administration

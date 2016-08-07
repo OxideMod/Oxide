@@ -143,10 +143,97 @@ namespace Oxide.Game.TheForest
         {
         }
 
-        public static bool DisableClient;
         public static string GameVersion = "Unknown";
         private const string logFileName = "logs/output_log.txt"; // TODO: Add -logfile support
         private TextWriter logWriter;
+
+        /// <summary>
+        /// Disables the audio output
+        /// </summary>
+        public static void DisableAudio()
+        {
+            MainMenuAudio.FadeOut();
+            AudioListener.pause = true;
+            AudioListener.volume = 0f;
+            NGUITools.soundVolume = 0f;
+            PlayerPreferences.Volume = 0f;
+            PlayerPreferences.MusicVolume = 0f;
+
+            var audioListeners = UnityEngine.Object.FindObjectsOfType<AudioListener>();
+            foreach (var audioListener in audioListeners) audioListener.enabled = false;
+            var audioSources = UnityEngine.Object.FindObjectsOfType<AudioSource>();
+            foreach (var audioSource in audioSources)
+            {
+                audioSource.Stop();
+                audioSource.loop = false;
+                audioSource.mute = true;
+                audioSource.volume = 0f;
+                audioSource.enabled = false;
+            }
+            /*var carAudios = UnityEngine.Object.FindObjectsOfType<CarAudio>();
+            foreach (var carAudio in carAudios)
+            {
+                var components = carAudio.GetComponents<AudioSource>();
+                foreach (var audioSource in components) UnityEngine.Object.Destroy(audioSource);
+                carAudio.enabled = false;
+            }
+            var eventEmitters = Resources.FindObjectsOfTypeAll<FMOD_StudioEventEmitter>();
+            foreach (var eventEmitter in eventEmitters)
+            {
+                eventEmitter.playOnceOnly = true;
+                eventEmitter.startEventOnAwake = false;
+                eventEmitter.startEventOnTriggerEnter = false;
+                eventEmitter.SetVolume(0f);
+                eventEmitter.Stop();
+                eventEmitter.enabled = false;
+            }*/
+        }
+
+        /// <summary>
+        /// Disables client-side elements
+        /// </summary>
+        private static void DisableClient()
+        {
+            //var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
+            //foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
+            //var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
+            //foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
+            //var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
+            //foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
+            //var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
+            //foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);*/
+
+            //var amplifyMotionCameras = Resources.FindObjectsOfTypeAll<AmplifyMotionCamera>();
+            //foreach (var amplifyMotionCamera in amplifyMotionCameras) UnityEngine.Object.Destroy(amplifyMotionCamera);
+            //var amplifyMotionEffectBases = Resources.FindObjectsOfTypeAll<AmplifyMotionEffectBase>();
+            //foreach (var amplifyMotionEffectBase in amplifyMotionEffectBases) UnityEngine.Object.Destroy(amplifyMotionEffectBase);
+            //var imageEffectBases = Resources.FindObjectsOfTypeAll<ImageEffectBase>();
+            //foreach (var imageEffectBase in imageEffectBases) UnityEngine.Object.Destroy(imageEffectBase); // Causes PlayerStats.CheckStats NRE
+            //var imageEffectOptimizers = Resources.FindObjectsOfTypeAll<ImageEffectOptimizer>();
+            //foreach (var imageEffectOptimizer in imageEffectOptimizers) UnityEngine.Object.Destroy(imageEffectOptimizer);
+            //var postEffectsBases = Resources.FindObjectsOfTypeAll<PostEffectsBase>();
+            //foreach (var postEffectsBase in postEffectsBases) UnityEngine.Object.Destroy(postEffectsBase);
+            //var scionPostProcesses = Resources.FindObjectsOfTypeAll<ScionPostProcess>();
+            //foreach (var scionPostProcess in scionPostProcesses) UnityEngine.Object.Destroy(scionPostProcess);
+            //var projectedGrids = Resources.FindObjectsOfTypeAll<ProjectedGrid>();
+            //foreach (var projectedGrid in projectedGrids) UnityEngine.Object.Destroy(projectedGrid);
+            //var waveSpectra = Resources.FindObjectsOfTypeAll<WaveSpectrum>();
+            //foreach (var waveSpectrum in waveSpectra) UnityEngine.Object.Destroy(waveSpectrum);
+            //var planarReflections = Resources.FindObjectsOfTypeAll<PlanarReflection>();
+            //foreach (var planarReflection in planarReflections) UnityEngine.Object.Destroy(planarReflection);
+            //var underWaters = Resources.FindObjectsOfTypeAll<UnderWater>();
+            //foreach (var underWater in underWaters) UnityEngine.Object.Destroy(underWater);
+            //var oceans = Resources.FindObjectsOfTypeAll<Ocean>();
+            //foreach (var ocean in oceans) UnityEngine.Object.Destroy(ocean);
+
+            /*var behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
+            foreach (var behaviour in behaviours)
+            {
+                if (!behaviour.GetType().FullName.StartsWith("UI")) continue;
+                behaviour.enabled = false;
+                behaviour.gameObject.SetActive(false);
+            }*/
+        }
 
         /// <summary>
         /// Called when all other extensions have been loaded
@@ -188,8 +275,9 @@ namespace Oxide.Game.TheForest
             // Check if client should be disabled
             if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics"))
             {
-                TheForestCore.DisableAudio();
-                DisableClient = true;
+                // Disable audio and client-side elements if not dedicated
+                DisableAudio();
+                DisableClient();
             }
 
             if (Interface.Oxide.EnableConsole()) Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;

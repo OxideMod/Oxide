@@ -3,13 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using Ceto;
 using Steamworks;
-using TheForest.Player;
 using TheForest.UI;
 using TheForest.Utils;
 using UnityEngine;
-using UnityStandardAssets.ImageEffects;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -66,7 +63,7 @@ namespace Oxide.Game.TheForest
         /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
         /// <returns></returns>
-        private bool PermissionsLoaded(BoltEntity player)
+        private bool PermissionsLoaded(BoltEntity entity)
         {
             if (permission.IsLoaded) return true;
             // TODO: PermissionsNotLoaded reply to player
@@ -140,18 +137,12 @@ namespace Oxide.Game.TheForest
             // Update server console window and status bars
             TheForestExtension.ServerConsole();
 
-            // Disable audio and client-side elements if not dedicated
-            if (TheForestExtension.DisableClient)
-            {
-                DisableAudio();
-                DisableClient();
-            }
-
             // Save the level every X minutes
-            Interface.Oxide.GetLibrary<Timer>().Once(300f, () =>
+            Interface.Oxide.GetLibrary<Timer>().Repeat(300f, 0, () =>
             {
                 LevelSerializer.SaveGame("Game"); // TODO: Make optional
-                Interface.Oxide.LogInfo("Server has beeen saved!");
+                LevelSerializer.Checkpoint();
+                Interface.Oxide.LogInfo("Server has been saved!");
             });
         }
 
@@ -174,8 +165,12 @@ namespace Oxide.Game.TheForest
         private object IOnUserApprove(BoltConnection connection)
         {
             var id = connection.RemoteEndPoint.SteamId.Id.ToString();
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(connection.RemoteEndPoint.SteamId.Id));
-            var ip = connection.RemoteEndPoint.Address.ToString(); // TODO: Fix, showing as 1.16.0.1 for all
+            var cSteamId = new CSteamID(connection.RemoteEndPoint.SteamId.Id);
+            var name = SteamFriends.GetFriendPersonaName(cSteamId);
+            P2PSessionState_t sessionState;
+            SteamGameServerNetworking.GetP2PSessionState(cSteamId, out sessionState);
+            var remoteIp = sessionState.m_nRemoteIP;
+            var ip = string.Concat(remoteIp >> 24 & 255, ".", remoteIp >> 16 & 255, ".", remoteIp >> 8 & 255, ".", remoteIp & 255);
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", name, id, ip);
@@ -273,48 +268,6 @@ namespace Oxide.Game.TheForest
         #region Server Magic
 
         /// <summary>
-        /// Disables the audio output
-        /// </summary>
-        public static void DisableAudio()
-        {
-            MainMenuAudio.FadeOut();
-            AudioListener.pause = true;
-            AudioListener.volume = 0f;
-            NGUITools.soundVolume = 0f;
-            PlayerPreferences.Volume = 0f;
-            PlayerPreferences.MusicVolume = 0f;
-
-            var audioListeners = UnityEngine.Object.FindObjectsOfType<AudioListener>();
-            foreach (var audioListener in audioListeners) audioListener.enabled = false;
-            var audioSources = UnityEngine.Object.FindObjectsOfType<AudioSource>();
-            foreach (var audioSource in audioSources)
-            {
-                audioSource.Stop();
-                audioSource.loop = false;
-                audioSource.mute = true;
-                audioSource.volume = 0f;
-                audioSource.enabled = false;
-            }
-            var carAudios = UnityEngine.Object.FindObjectsOfType<CarAudio>();
-            foreach (var carAudio in carAudios)
-            {
-                var components = carAudio.GetComponents<AudioSource>();
-                foreach (var audioSource in components) UnityEngine.Object.Destroy(audioSource);
-                carAudio.enabled = false;
-            }
-            var eventEmitters = Resources.FindObjectsOfTypeAll<FMOD_StudioEventEmitter>();
-            foreach (var eventEmitter in eventEmitters)
-            {
-                eventEmitter.playOnceOnly = true;
-                eventEmitter.startEventOnAwake = false;
-                eventEmitter.startEventOnTriggerEnter = false;
-                eventEmitter.SetVolume(0f);
-                eventEmitter.Stop();
-                eventEmitter.enabled = false;
-            }
-        }
-
-        /// <summary>
         /// Initializes the server
         /// </summary>
         [HookMethod("InitServer")]
@@ -381,62 +334,6 @@ namespace Oxide.Game.TheForest
             var saveDir = Path.Combine(Interface.Oxide.RootDirectory, "saves/");
             if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
             return saveDir;
-        }
-
-        /// <summary>
-        /// Disables client-side elements
-        /// </summary>
-        private static void DisableClient()
-        {
-            //var gameObject = GameObject.Find("PlayerPlanePosition");
-            //if (gameObject) LocalPlayer.CamFollowHead.planePos = gameObject.transform; // Causes NRE
-
-            /*if (Scene.SceneTracker.allPlayers.Contains(LocalPlayer.Entity.gameObject)) // Useless?
-                Scene.SceneTracker.allPlayers.Remove(LocalPlayer.Entity.gameObject);
-            if (Scene.SceneTracker.allPlayerEntities.Contains(LocalPlayer.Entity)) // Useless?
-                Scene.SceneTracker.allPlayerEntities.Remove(LocalPlayer.Entity);*/
-
-            //LocalPlayer.Stats.KillMeFast(); // Useless?
-
-            //var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
-            //foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
-            //var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
-            //foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
-            //var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
-            //foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
-            //var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
-            //foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);*/
-
-            //var amplifyMotionCameras = Resources.FindObjectsOfTypeAll<AmplifyMotionCamera>();
-            //foreach (var amplifyMotionCamera in amplifyMotionCameras) UnityEngine.Object.Destroy(amplifyMotionCamera);
-            //var amplifyMotionEffectBases = Resources.FindObjectsOfTypeAll<AmplifyMotionEffectBase>();
-            //foreach (var amplifyMotionEffectBase in amplifyMotionEffectBases) UnityEngine.Object.Destroy(amplifyMotionEffectBase);
-            //var imageEffectBases = Resources.FindObjectsOfTypeAll<ImageEffectBase>();
-            //foreach (var imageEffectBase in imageEffectBases) UnityEngine.Object.Destroy(imageEffectBase); // Causes PlayerStats.CheckStats NRE
-            //var imageEffectOptimizers = Resources.FindObjectsOfTypeAll<ImageEffectOptimizer>();
-            //foreach (var imageEffectOptimizer in imageEffectOptimizers) UnityEngine.Object.Destroy(imageEffectOptimizer);
-            //var postEffectsBases = Resources.FindObjectsOfTypeAll<PostEffectsBase>();
-            //foreach (var postEffectsBase in postEffectsBases) UnityEngine.Object.Destroy(postEffectsBase);
-            //var scionPostProcesses = Resources.FindObjectsOfTypeAll<ScionPostProcess>();
-            //foreach (var scionPostProcess in scionPostProcesses) UnityEngine.Object.Destroy(scionPostProcess);
-            var projectedGrids = Resources.FindObjectsOfTypeAll<ProjectedGrid>();
-            foreach (var projectedGrid in projectedGrids) UnityEngine.Object.Destroy(projectedGrid);
-            var waveSpectra = Resources.FindObjectsOfTypeAll<WaveSpectrum>();
-            foreach (var waveSpectrum in waveSpectra) UnityEngine.Object.Destroy(waveSpectrum);
-            var planarReflections = Resources.FindObjectsOfTypeAll<PlanarReflection>();
-            foreach (var planarReflection in planarReflections) UnityEngine.Object.Destroy(planarReflection);
-            var underWaters = Resources.FindObjectsOfTypeAll<UnderWater>();
-            foreach (var underWater in underWaters) UnityEngine.Object.Destroy(underWater);
-            var oceans = Resources.FindObjectsOfTypeAll<Ocean>();
-            foreach (var ocean in oceans) UnityEngine.Object.Destroy(ocean);
-
-            var behaviours = Resources.FindObjectsOfTypeAll<MonoBehaviour>();
-            foreach (var behaviour in behaviours)
-            {
-                if (!behaviour.GetType().FullName.StartsWith("UI")) continue;
-                //behaviour.enabled = false;
-                //behaviour.gameObject.SetActive(false); // Causes save "Starting client..." issues
-            }
         }
 
         #endregion

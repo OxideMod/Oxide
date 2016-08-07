@@ -60,6 +60,15 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             set { LobbyServerLink.mGameServer.playerLimit = (ushort)value; }
         }
 
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return new DateTime(DateTime.UtcNow.Ticks / 10000); } // TODO
+            set { throw new NotFiniteNumberException(); } // TODO
+        }
+
         #endregion
 
         #region Administration

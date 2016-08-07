@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 
 using Bolt;
@@ -78,6 +79,15 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
                 CoopLobby.Instance.SetMemberLimit(value);
                 SteamGameServer.SetMaxPlayerCount(value);
             }
+        }
+
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return new DateTime(Convert.ToInt64(TheForestAtmosphere.Instance.TimeOfDay)); }
+            set { TheForestAtmosphere.Instance.TimeOfDay = value.Second; }
         }
 
         #endregion

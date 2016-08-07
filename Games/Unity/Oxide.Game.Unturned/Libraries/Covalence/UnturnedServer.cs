@@ -68,6 +68,15 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             set { Provider.maxPlayers = (byte)value; }
         }
 
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return new DateTime(LightingManager.time); }
+            set { LightingManager.time = (uint)value.Second; }
+        }
+
         #endregion
 
         #region Administration

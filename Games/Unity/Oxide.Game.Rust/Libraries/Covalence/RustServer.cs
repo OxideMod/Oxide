@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 
 using ConVar;
@@ -65,6 +66,15 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             get { return Server.maxplayers; }
             set { Server.maxplayers = value; }
+        }
+
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        public DateTime Time
+        {
+            get { return TOD_Sky.Instance.Cycle.DateTime; }
+            set { TOD_Sky.Instance.Cycle.DateTime = value; }
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 using Oxide.Core.Plugins;
 
@@ -45,6 +46,11 @@ namespace Oxide.Core.Libraries.Covalence
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         int MaxPlayers { get; set; }
+
+        /// <summary>
+        /// Gets/sets the current in-game time on the server
+        /// </summary>
+        DateTime Time { get; set; }
 
         #endregion
 
