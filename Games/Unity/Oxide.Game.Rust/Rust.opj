@@ -41,7 +41,7 @@
             "HookName": "IOnDisableServerConsole",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerConsole",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnDisable",
@@ -62,7 +62,7 @@
             "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Bootstrap",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Init_Tier0",
@@ -86,7 +86,7 @@
             "HookName": "InitLogging",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Bootstrap",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "StartupShared",
@@ -110,7 +110,7 @@
             "HookName": "OnTick",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "DoTick",
@@ -134,7 +134,7 @@
             "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "ClientReady",
@@ -160,7 +160,7 @@
             "HookName": "OnPlayerDisconnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnDisconnected",
@@ -187,7 +187,7 @@
             "HookName": "OnFindSpawnPoint",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "FindSpawnPoint",
@@ -211,7 +211,7 @@
             "HookName": "OnItemRemovedFromContainer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemContainer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "Remove",
@@ -237,7 +237,7 @@
             "HookName": "OnItemAddedToContainer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemContainer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "Insert",
@@ -263,7 +263,7 @@
             "HookName": "OnEntitySpawned",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseNetworkable",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Spawn",
@@ -289,7 +289,7 @@
             "HookName": "OnPlayerRespawn",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "RespawnAt",
@@ -316,7 +316,7 @@
             "HookName": "OnPlayerInit",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "PlayerInit",
@@ -342,7 +342,7 @@
             "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseLock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnTryToOpen",
@@ -368,7 +368,7 @@
             "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseLock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnTryToClose",
@@ -394,7 +394,7 @@
             "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeLock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnTryToOpen",
@@ -420,7 +420,7 @@
             "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeLock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnTryToClose",
@@ -446,7 +446,7 @@
             "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "KeyLock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnTryToClose",
@@ -472,7 +472,7 @@
             "HookName": "CanUseDoor",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "KeyLock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnTryToOpen",
@@ -498,7 +498,7 @@
             "HookName": "OnItemCraft",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemCrafter",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CraftItem",
@@ -528,7 +528,7 @@
             "HookName": "IOnLootEntity",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "StartLootingEntity",
@@ -555,7 +555,7 @@
             "HookName": "IOnLootItem",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "StartLootingItem",
@@ -581,7 +581,7 @@
             "HookName": "IOnLootPlayer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "StartLootingPlayer",
@@ -607,7 +607,7 @@
             "HookName": "OnEntityEnter",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerBase",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "OnEntityEnter",
@@ -633,7 +633,7 @@
             "HookName": "OnEntityLeave",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerBase",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "OnEntityLeave",
@@ -659,7 +659,7 @@
             "HookName": "OnItemDeployed",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Deployer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoDeploy_Regular",
@@ -686,7 +686,7 @@
             "HookName": "OnItemDeployed",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Deployer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoDeploy_Slot",
@@ -714,7 +714,7 @@
             "HookName": "OnEntityBuilt",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Planner",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoBuild",
@@ -741,7 +741,7 @@
             "HookName": "OnEntityDeath",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseCombatEntity",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Die",
@@ -767,7 +767,7 @@
             "HookName": "IOnBaseCombatEntityHurt",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseCombatEntity",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Hurt",
@@ -793,7 +793,7 @@
             "HookName": "OnServerInitialized",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OpenConnection",
@@ -817,7 +817,7 @@
             "HookName": "OnDispenserGather",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ResourceDispenser",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "GiveResourceFromItem",
@@ -847,7 +847,7 @@
             "HookName": "IOnPlayerAttack",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseMelee",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoAttackShared",
@@ -873,7 +873,7 @@
             "HookName": "OnPlayerAttack",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnProjectileAttack",
@@ -899,7 +899,7 @@
             "HookName": "OnServerSave",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SaveRestore",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "DoAutomatedSave",
@@ -925,7 +925,7 @@
             "HookName": "OnRunPlayerMetabolism",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerMetabolism",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "RunMetabolism",
@@ -952,7 +952,7 @@
             "HookName": "IOnUserApprove",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionAuth",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnNewConnection",
@@ -978,7 +978,7 @@
             "HookName": "OnStructureUpgrade",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "DoUpgradeToGrade",
@@ -1004,7 +1004,7 @@
             "HookName": "IOnStructureImmediateDemolish",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "DoImmediateDemolish",
@@ -1030,7 +1030,7 @@
             "HookName": "OnStructureRotate",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "DoRotation",
@@ -1056,7 +1056,7 @@
             "HookName": "OnConsumeFuel",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseOven",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "ConsumeFuel",
@@ -1083,7 +1083,7 @@
             "HookName": "CanUpdateSign",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CanUpdateSign",
@@ -1109,7 +1109,7 @@
             "HookName": "OnSignLocked",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "LockSign",
@@ -1135,7 +1135,7 @@
             "HookName": "OnSignUpdate",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "UpdateSign",
@@ -1161,7 +1161,7 @@
             "HookName": "IOnLoseCondition",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Item",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "LoseCondition",
@@ -1187,7 +1187,7 @@
             "HookName": "OnPlayerSleepEnded",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "EndSleeping",
@@ -1211,7 +1211,7 @@
             "HookName": "OnEntityGroundMissing",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "DestroyOnGroundMissing",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnGroundMissing",
@@ -1235,7 +1235,7 @@
             "HookName": "OnDoorOpened",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Door",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "RPC_OpenDoor",
@@ -1261,7 +1261,7 @@
             "HookName": "OnDoorClosed",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Door",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "RPC_CloseDoor",
@@ -1287,7 +1287,7 @@
             "HookName": "OnPlayerTick",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnReceiveTick",
@@ -1314,7 +1314,7 @@
             "HookName": "IOnBasePlayerAttacked",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "OnAttacked",
@@ -1340,7 +1340,7 @@
             "HookName": "IOnBasePlayerHurt",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Hurt",
@@ -1366,7 +1366,7 @@
             "HookName": "OnExplosiveThrown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ThrownWeapon",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "DoThrow",
@@ -1392,7 +1392,7 @@
             "HookName": "OnMeleeThrown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseMelee",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "CLProject",
@@ -1418,7 +1418,7 @@
             "HookName": "OnItemCraftFinished",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemCrafter",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "FinishCrafting",
@@ -1444,7 +1444,7 @@
             "HookName": "OnTerrainInitialized",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TerrainMeta",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CalculateChecksum",
@@ -1468,7 +1468,7 @@
             "HookName": "OnHealingItemUse",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SyringeWeapon",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "GiveEffectsTo",
@@ -1494,7 +1494,7 @@
             "HookName": "OnHealingItemUse",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "MedicalTool",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "GiveEffectsTo",
@@ -1520,7 +1520,7 @@
             "HookName": "OnItemResearch",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ResearchTable",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoResearch",
@@ -1546,7 +1546,7 @@
             "HookName": "OnItemResearchStart",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ResearchTable",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoResearch",
@@ -1572,7 +1572,7 @@
             "HookName": "CanLootPlayer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CanBeLooted",
@@ -1598,7 +1598,7 @@
             "HookName": "CanBeWounded",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "EligibleForWounding",
@@ -1624,7 +1624,7 @@
             "HookName": "OnRocketLaunched",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseLauncher",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "SV_Launch",
@@ -1650,7 +1650,7 @@
             "HookName": "OnWeaponFired",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseProjectile",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "CLProject",
@@ -1676,7 +1676,7 @@
             "HookName": "OnConsumableUse",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Item",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "UseItem",
@@ -1702,7 +1702,7 @@
             "HookName": "OnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConVar.Chat",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "say",
@@ -1728,7 +1728,7 @@
             "HookName": "OnQuarryGather",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "MiningQuarry",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ProcessResources",
@@ -1752,7 +1752,7 @@
             "HookName": "OnHammerHit",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Hammer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoAttackShared",
@@ -1778,7 +1778,7 @@
             "HookName": "OnSurveyGather",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SurveyCharge",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Explode",
@@ -1802,7 +1802,7 @@
             "HookName": "OnCollectiblePickup",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CollectibleEntity",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Pickup",
@@ -1828,7 +1828,7 @@
             "HookName": "OnAirdrop",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CargoPlane",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "UpdateDropPosition",
@@ -1854,7 +1854,7 @@
             "HookName": "OnStructureRepair",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseCombatEntity",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoRepair",
@@ -1880,7 +1880,7 @@
             "HookName": "OnQuarryEnabled",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "MiningQuarry",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "SetOn",
@@ -1906,7 +1906,7 @@
             "HookName": "OnCropGather",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlantEntity",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "RPC_PickFruit",
@@ -1932,7 +1932,7 @@
             "HookName": "OnItemRepair",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "RepairBench",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "RepairItem",
@@ -1958,7 +1958,7 @@
             "HookName": "OnTrapSnapped",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseTrapTrigger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "OnObjectAdded",
@@ -1984,7 +1984,7 @@
             "HookName": "OnTrapTrigger",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseTrap",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ObjectEntered",
@@ -2010,7 +2010,7 @@
             "HookName": "OnTrapDisarm",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Landmine",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "RPC_Disarm",
@@ -2036,7 +2036,7 @@
             "HookName": "OnTrapArm",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BearTrap",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "RPC_Arm",
@@ -2062,7 +2062,7 @@
             "HookName": "OnMapImageUpdated",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "MapEntity",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ImageUpdate",
@@ -2088,7 +2088,7 @@
             "HookName": "OnItemCraftCancelled",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemCrafter",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CancelTask",
@@ -2115,7 +2115,7 @@
             "HookName": "OnResourceDepositCreated",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ResourceDepositManager",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CreateFromPosition",
@@ -2141,7 +2141,7 @@
             "HookName": "OnItemUpgrade",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemModUpgrade",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ServerCommand",
@@ -2169,7 +2169,7 @@
             "HookName": "OnCupboardAuthorize",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingPrivlidge",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "AddSelfAuthorize",
@@ -2195,7 +2195,7 @@
             "HookName": "OnCupboardDeauthorize",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingPrivlidge",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "RemoveSelfAuthorize",
@@ -2221,7 +2221,7 @@
             "HookName": "CanNetworkTo",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseNetworkable",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ShouldNetworkTo",
@@ -2247,7 +2247,7 @@
             "HookName": "OnTurretTarget",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SetTarget",
@@ -2273,7 +2273,7 @@
             "HookName": "CanBeTargeted",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ObjectVisible",
@@ -2299,7 +2299,7 @@
             "HookName": "OnHelicopterTarget",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HelicopterTurret",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SetTarget",
@@ -2325,7 +2325,7 @@
             "HookName": "CanBeTargeted",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HelicopterTurret",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "InFiringArc",
@@ -2351,7 +2351,7 @@
             "HookName": "CanBuild",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Planner",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "DoBuild",
@@ -2377,7 +2377,7 @@
             "HookName": "OnPlayerLand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnPlayerLanded",
@@ -2403,7 +2403,7 @@
             "HookName": "CanEquipItem",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerInventory",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "CanEquipItem",
@@ -2429,7 +2429,7 @@
             "HookName": "CanWearItem",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerInventory",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "CanWearItem",
@@ -2455,7 +2455,7 @@
             "HookName": "CanAcceptItem",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemContainer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CanAcceptItem",
@@ -2481,7 +2481,7 @@
             "HookName": "OnPlayerLootEnd",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "PlayerLoot",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Clear",
@@ -2510,7 +2510,7 @@
             "HookName": "AddGameTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "UpdateServerInformation",
@@ -2534,7 +2534,7 @@
             "HookName": "OnItemSplit",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Item",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SplitItem",
@@ -2560,7 +2560,7 @@
             "HookName": "OnCupboardClearList",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingPrivlidge",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "ClearList",
@@ -2586,7 +2586,7 @@
             "HookName": "OnLootEntityEnd",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "LootableCorpse",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "PlayerStoppedLooting",
@@ -2612,7 +2612,7 @@
             "HookName": "OnLootEntityEnd",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "StorageContainer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "PlayerStoppedLooting",
@@ -2638,7 +2638,7 @@
             "HookName": "IOnStructureDemolish",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BuildingBlock",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "DoDemolish",
@@ -2664,7 +2664,7 @@
             "HookName": "OnCreateWorldProjectile",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 3,
               "Name": "CreateWorldProjectile",
@@ -2694,7 +2694,7 @@
             "HookName": "OnItemPickup",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "WorldItem",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Pickup",
@@ -2720,7 +2720,7 @@
             "HookName": "CanBypassQueue",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConnectionQueue",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "CanJumpQueue",
@@ -2746,7 +2746,7 @@
             "HookName": "OnEntityKill",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseNetworkable",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Kill",
@@ -2772,7 +2772,7 @@
             "HookName": "OnPlayerRespawned",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "RespawnAt",
@@ -2799,7 +2799,7 @@
             "HookName": "OnMessagePlayer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "ChatMessage",
@@ -2825,7 +2825,7 @@
             "HookName": "OnServerMessage",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ConVar.Chat",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Broadcast",
@@ -2854,7 +2854,7 @@
             "HookName": "CanUnlockSign",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CanUnlockSign",
@@ -2880,7 +2880,7 @@
             "HookName": "CanLockSign",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CanLockSign",
@@ -2906,7 +2906,7 @@
             "HookName": "OnSignUpdated",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Signage",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "UpdateSign",
@@ -2932,7 +2932,7 @@
             "HookName": "OnRconConnection",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Facepunch.RCon/RConListener",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "ProcessConnections",
@@ -2966,7 +2966,7 @@
             "HookName": "CloseRconSocket",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Facepunch.RCon/RConListener",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "ProcessConnections",
@@ -2990,7 +2990,7 @@
             "HookName": "OnClientAuth",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnGiveUserInformation",
@@ -3016,7 +3016,7 @@
             "HookName": "OnNewSave",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SaveRestore",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Load",
@@ -3043,7 +3043,7 @@
             "HookName": "OnPlayerLanded",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnPlayerLanded",
@@ -3069,7 +3069,7 @@
             "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnDisable",
@@ -3093,7 +3093,7 @@
             "HookName": "OnSaveLoad",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SaveRestore",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Load",
@@ -3120,7 +3120,7 @@
             "HookName": "OnXpLevelUp",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OnLevelUp",
@@ -3146,7 +3146,7 @@
             "HookName": "OnPlayerSpectate",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "StartSpectating",
@@ -3170,7 +3170,7 @@
             "HookName": "OnPlayerSpectateEnd",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "StopSpectating",
@@ -3194,7 +3194,7 @@
             "HookName": "OnTurretStartup",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "InitiateStartup",
@@ -3218,7 +3218,7 @@
             "HookName": "OnTurretShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "InitiateShutdown",
@@ -3242,7 +3242,7 @@
             "HookName": "OnTurretToggle",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SetIsOnline",
@@ -3268,7 +3268,7 @@
             "HookName": "OnPlayerSleep",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "StartSleeping",
@@ -3292,7 +3292,7 @@
             "HookName": "CanAttack",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "CanAttack",
@@ -3345,7 +3345,7 @@
             "HookName": "OnXpEarn",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Add",
@@ -3374,7 +3374,7 @@
             "HookName": "OnXpReset",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Reset",
@@ -3398,7 +3398,7 @@
             "HookName": "OnXpSet",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SetValue",
@@ -3425,7 +3425,7 @@
             "HookName": "CanSpendXp",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SpendXp",
@@ -3452,7 +3452,7 @@
             "HookName": "OnXpSpent",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SpendXp",
@@ -3479,7 +3479,7 @@
             "HookName": "OnXpEarned",
             "AssemblyName": "Rust.Xp.dll",
             "TypeName": "Rust.Xp.Agent",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Add",
@@ -3513,7 +3513,7 @@
             "HookName": "OnServerCommand",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem/Run",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Internal",
@@ -3580,7 +3580,7 @@
             "HookName": "HideRconPassword",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem/Run",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Internal",
