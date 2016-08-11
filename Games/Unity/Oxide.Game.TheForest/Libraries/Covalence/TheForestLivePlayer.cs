@@ -80,6 +80,12 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         public bool IsAdmin => entity.source.IsDedicatedServerAdmin();
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount) => entity.GetComponentInChildren<EnemyHealth>().Hit((int)amount);
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>

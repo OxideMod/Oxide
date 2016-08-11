@@ -38,6 +38,12 @@
         bool IsAdmin { get; }
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        void Hurt(float amount);
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>

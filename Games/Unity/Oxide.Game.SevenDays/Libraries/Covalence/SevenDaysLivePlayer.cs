@@ -70,6 +70,16 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         public bool IsAdmin => GameManager.Instance.adminTools.IsAdmin(client.playerId);
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount)
+        {
+            var entity = GameManager.Instance.World.GetEntity(client.entityId);
+            entity.DamageEntity(new DamageSource(EnumDamageSourceType.Undef), (int)amount, false);
+        }
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
@@ -82,7 +92,6 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         {
             var entity = GameManager.Instance.World.GetEntity(client.entityId);
             entity.Kill(DamageResponse.New(new DamageSource(EnumDamageSourceType.Undef), true));
-            //entity.DamageEntity(new DamageSource(EnumDamageSourceType.Bullet), 99999, false);
         }
 
         /// <summary>

@@ -71,6 +71,18 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public bool IsAdmin => netUser.CanAdmin();
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount)
+        {
+            var character = netUser.playerClient.controllable.idMain;
+            if (character == null || !character.alive) return;
+
+            TakeDamage.Hurt(character, character, amount);
+        }
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
@@ -86,10 +98,9 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public void Kill()
         {
             var character = netUser.playerClient.controllable.idMain;
-            if (!character || !character.alive) return;
+            if (character == null || !character.alive) return;
 
-            DamageEvent damageEvent;
-            TakeDamage.Kill(character, character, out damageEvent);
+            TakeDamage.Kill(character, character);
         }
 
         /// <summary>

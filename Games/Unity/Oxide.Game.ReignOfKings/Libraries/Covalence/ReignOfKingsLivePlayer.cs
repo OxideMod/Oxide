@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Linq;
 
 using CodeHatch.Common;
+using CodeHatch.Damaging;
 using CodeHatch.Engine.Behaviours;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
+using CodeHatch.Networking.Events;
+using CodeHatch.Networking.Events.Entities;
+
 using UnityEngine;
 
 using Oxide.Core.Libraries.Covalence;
@@ -62,7 +65,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             this.player = player;
             steamId = player.Id;
             Character = this;
-            Object = player.CurrentCharacter;
+            Object = player.CurrentCharacter.Prefab;
         }
 
         #endregion
@@ -73,6 +76,22 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Returns if the user is admin
         /// </summary>
         public bool IsAdmin => player.HasPermission("admin");
+
+        /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount)
+        {
+            var entity = player.CurrentCharacter.Entity;
+            var damage = new Damage(player.CurrentCharacter.Prefab, null)
+            {
+                Amount = amount,
+                DamageTypes = DamageType.Unknown,
+                Damager = entity
+            };
+            EventManager.CallEvent(new EntityDamageEvent(player.CurrentCharacter.Entity, damage));
+        }
 
         /// <summary>
         /// Kicks the user from the game

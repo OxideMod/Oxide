@@ -70,6 +70,12 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public bool IsAdmin => player.isADMIN;
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount) => NetworkController.Player_ctrl_.TakeDamage((int)amount, Vector3.zero, string.Empty, true, true, string.Empty);
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>

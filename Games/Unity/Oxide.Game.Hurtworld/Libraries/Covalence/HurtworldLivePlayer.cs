@@ -68,6 +68,17 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public bool IsAdmin => session.IsAdmin;
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount)
+        {
+            var effect = new EntityEffectFluid(EEntityFluidEffectType.Damage, EEntityEffectFluidModifierType.AddValuePure, -amount);
+            var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+            effect.Apply(stats);
+        }
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
@@ -78,9 +89,9 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public void Kill()
         {
-            var component = session.WorldPlayerEntity.GetComponent<EntityStats>();
+            var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
             var entityEffectSourceDatum = new EntityEffectSourceData { SourceDescriptionKey = "EntityStats/Sources/Suicide" };
-            component.HandleEvent(new EntityEventData { EventType = EEntityEventType.Die }, entityEffectSourceDatum);
+            stats.HandleEvent(new EntityEventData { EventType = EEntityEventType.Die }, entityEffectSourceDatum);
         }
 
         /// <summary>
