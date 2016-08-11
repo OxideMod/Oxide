@@ -69,6 +69,15 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// </summary>
         public bool IsAdmin => player.isAdmin;
 
+        /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount)
+        {
+            // TODO
+        }
+
         private readonly MethodInfo removePlayer = typeof(GameServer).GetMethod("RemovePlayer", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>

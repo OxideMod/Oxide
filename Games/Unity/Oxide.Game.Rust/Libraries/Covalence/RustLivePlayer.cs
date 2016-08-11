@@ -70,6 +70,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public bool IsAdmin => player.IsAdmin();
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount) => player.Hurt(amount);
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>

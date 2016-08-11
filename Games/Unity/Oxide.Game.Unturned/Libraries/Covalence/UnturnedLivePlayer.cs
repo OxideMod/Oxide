@@ -80,6 +80,16 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public bool IsAdmin => steamPlayer.isAdmin;
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount)
+        {
+            EPlayerKill ePlayerKill;
+            steamPlayer.player.life.askDamage((byte)amount, Vector3.up * amount, EDeathCause.KILL, ELimb.SKULL, CSteamID.Nil, out ePlayerKill);
+        }
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>

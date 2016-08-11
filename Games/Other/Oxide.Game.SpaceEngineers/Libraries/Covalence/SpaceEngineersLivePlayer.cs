@@ -5,6 +5,8 @@ using VRageMath;
 
 using Oxide.Core.Libraries.Covalence;
 
+using VRage.Game;
+
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
     /// <summary>
@@ -69,6 +71,12 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// Returns if the user is admin
         /// </summary>
         public bool IsAdmin => player.IsAdmin;
+
+        /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount) => player.Character.DoDamage(amount, MyDamageType.Unknown, true);
 
         /// <summary>
         /// Kicks the user from the game

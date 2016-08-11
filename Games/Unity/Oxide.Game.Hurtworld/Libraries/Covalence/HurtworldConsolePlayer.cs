@@ -144,6 +144,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public TimeSpan BanTimeRemaining => TimeSpan.Zero;
 
         /// <summary>
+        /// Damages player by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Hurt(float amount)
+        {
+        }
+
+        /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
