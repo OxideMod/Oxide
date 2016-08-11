@@ -1386,7 +1386,7 @@
             "InjectionIndex": 146,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l2, l0",
+            "ArgumentString": "l0, l1",
             "HookTypeName": "Simple",
             "Name": "OnMeleeThrown",
             "HookName": "OnMeleeThrown",
