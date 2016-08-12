@@ -12,6 +12,7 @@ using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
@@ -1108,48 +1109,47 @@ namespace Oxide.Game.Rust
         private object OnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
-
-            // Call deprecated hook
-            var oldHook = Interface.CallDeprecatedHook("OnRunCommand", "OnServerCommand", new DateTime(2016, 8, 1), arg);
-            if (arg.cmd.namefull != "chat.say") return oldHook;
-
-            if (arg.connection != null)
-            {
-                if (arg.Player() == null) return true;
-                var livePlayer = covalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
-                if (covalence.CommandSystem.HandleChatMessage(livePlayer, arg.GetString(0))) return true;
-            }
+            if (arg.cmd.namefull != "chat.say") return null;
 
             // Get the args
             var str = arg.GetString(0, "text");
             if (str.Length == 0) return null;
 
             // Is it a chat command?
-            if (str[0] == '/')
-            {
-                // Get the message
-                var message = str.Substring(1);
+            if (str[0] != '/') return null;
 
-                // Parse it
-                string cmd;
-                string[] args;
-                ParseChatCommand(message, out cmd, out args);
-                if (cmd == null) return null;
+            // Get the full command
+            var message = str.Substring(1);
 
-                // Handle it
-                var player = arg.connection.player as BasePlayer;
-                if (player == null)
-                    Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
-                else if (!cmdlib.HandleChatCommand(player, cmd, args))
-                    Reply(player, "UnknownCommand", cmd);
+            // Parse it
+            string cmd;
+            string[] args;
+            ParseChatCommand(message, out cmd, out args);
+            if (cmd == null) return null;
 
-                // Handled
-                arg.ReplyWith(string.Empty);
-                return true;
-            }
+            // Get the covalence player
+            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
 
-            // Default behavior
-            return null;
+            // Is the command blocked?
+            var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
+            var blockedCovalence = Interface.Call("OnUserCommand", livePlayer.BasePlayer, cmd, args);
+
+            if (blockedSpecific != null || blockedCovalence != null) return true;
+
+            // Is it a covalance command?
+            if (covalence.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
+            
+            // It is a regular chat command
+            // Handle it
+            var player = arg.connection.player as BasePlayer;
+            if (player == null)
+                Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
+            else if (!cmdlib.HandleChatCommand(player, cmd, args))
+                Reply(player, "UnknownCommand", cmd);
+            
+            // Handled
+            arg.ReplyWith(string.Empty);
+            return true;
         }
 
         /// <summary>
