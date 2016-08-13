@@ -123,9 +123,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             {
                 case CommandType.Chat:
                     Message(message, args);
-                    return;
+                    break;
                 case CommandType.Console:
-                    Command("echo", args);
+                    Command($"echo {message}", args);
                     break;
             }
         }
