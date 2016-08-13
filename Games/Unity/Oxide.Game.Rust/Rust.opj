@@ -3139,6 +3139,30 @@
           "Hook": {
             "InjectionIndex": 4,
             "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerWound",
+            "HookName": "OnPlayerWound",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StartWounded",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "LCdBW7Ga98Khjt0wX4SjOegkE03PIpmXf3BbUyJw2qw=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, this.spectateFilter",
             "HookTypeName": "Simple",
@@ -3170,7 +3194,7 @@
             "HookName": "OnPlayerSpectateEnd",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "StopSpectating",
@@ -3259,6 +3283,30 @@
         {
           "Type": "Simple",
           "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerRecover",
+            "HookName": "OnPlayerRecover",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "StopWounded",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "YJlf53yUntWZXiaooT1+Rl4H0m+Ntpdw1RrwU3pEtYY=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
             "InjectionIndex": 4,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 1,
@@ -3301,6 +3349,32 @@
             },
             "MSILHash": "BA0dmwVt/v3akBoBxEuxBVpBHYqpEZ6Jh180VdpWFdU=",
             "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 45,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerRevive [internal]",
+            "HookName": "IOnPlayerRevive",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "MedicalTool",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "GiveEffectsTo",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "IZI2a9veYQepVY+RR8a4EviL/gW1oVmh2rXt2wVVrW0=",
+            "BaseHookName": "OnHealingItemUse [medical]",
             "HookCategory": "Player"
           }
         }
