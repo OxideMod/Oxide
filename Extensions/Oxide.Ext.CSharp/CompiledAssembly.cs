@@ -150,6 +150,7 @@ namespace Oxide.Plugins
                                 var i = 0;
                                 while (i < instructions.Count)
                                 {
+                                    if (changedMethod) break;
                                     var instruction = instructions[i];
                                     if (instruction.OpCode == OpCodes.Ldtoken)
                                     {
@@ -164,20 +165,18 @@ namespace Oxide.Plugins
                                             changedMethod = true;
                                         }
                                     }
-                                    else if (instruction.OpCode == OpCodes.Call)
+                                    else if (instruction.OpCode == OpCodes.Call || instruction.OpCode == OpCodes.Calli || instruction.OpCode == OpCodes.Callvirt)
                                     {
                                         var methodCall = instruction.Operand as MethodReference;
                                         var fullNamespace = methodCall?.DeclaringType.FullName;
 
                                         if ((fullNamespace == "System.Type" && methodCall.Name == "GetType") || IsNamespaceBlacklisted(fullNamespace))
                                         {
-                                            for (var n = 0; n < method.Parameters.Count; n++)
-                                                instructions.Insert(i++, Instruction.Create(OpCodes.Pop));
-
-                                            instructions[i++] = Instruction.Create(OpCodes.Ldstr, $"System access is restricted, you are not allowed to use {fullNamespace}");
-                                            instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, securityException));
-                                            instructions.Insert(i, Instruction.Create(OpCodes.Throw));
-
+                                            var j = 0;
+                                            instructions.Clear();
+                                            instructions.Insert(j++, Instruction.Create(OpCodes.Ldstr, $"System access is restricted, you are not allowed to use {fullNamespace}"));
+                                            instructions.Insert(j++, Instruction.Create(OpCodes.Newobj, securityException));
+                                            instructions.Insert(j, Instruction.Create(OpCodes.Throw));
                                             changedMethod = true;
                                         }
                                     }
