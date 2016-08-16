@@ -1237,7 +1237,7 @@ namespace Oxide.Game.Rust
         /// <param name="args"></param>
         private void Reply(BasePlayer player, string key, params object[] args)
         {
-            player.SendMessage(string.Format(lang.GetMessage(key, this, player.UserIDString), args));
+            player.ChatMessage(string.Format(lang.GetMessage(key, this, player.UserIDString), args));
         }
 
         /// <summary>

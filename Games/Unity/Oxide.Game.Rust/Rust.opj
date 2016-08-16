@@ -3520,7 +3520,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 106,
+            "InjectionIndex": 107,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.Id, a1, a0.Name",
