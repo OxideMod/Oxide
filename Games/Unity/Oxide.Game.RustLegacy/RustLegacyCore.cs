@@ -881,7 +881,7 @@ namespace Oxide.Game.RustLegacy
             Interface.Oxide.LogWarning($"An RPC message from {netuser.displayName} has triggered an exception. Kicking the player...");
             if (netuser.connected) netuser.Kick(NetError.Facepunch_Kick_Violation, true);
         }
-        
+
         #endregion
 
         #region Game Fixes

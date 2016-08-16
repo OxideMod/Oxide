@@ -22,44 +22,44 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             public ulong Id;
         }
 
-        private IDictionary<string, PlayerRecord> playerData;
-        private IDictionary<string, SpaceEngineersPlayer> players;
-        private IDictionary<string, SpaceEngineersLivePlayer> livePlayers;
+        private readonly IDictionary<string, PlayerRecord> playerData;
+        private readonly IDictionary<string, SpaceEngineersPlayer> allPlayers;
+        private readonly IDictionary<string, SpaceEngineersPlayer> connectedPlayers;
 
         internal SpaceEngineersPlayerManager()
         {
             // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
-            players = new Dictionary<string, SpaceEngineersPlayer>();
-            foreach (var pair in playerData) players.Add(pair.Key, new SpaceEngineersPlayer(pair.Value.Id, pair.Value.Name));
-            livePlayers = new Dictionary<string, SpaceEngineersLivePlayer>();
+            allPlayers = new Dictionary<string, SpaceEngineersPlayer>();
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new SpaceEngineersPlayer(pair.Value.Id, pair.Value.Name));
+            connectedPlayers = new Dictionary<string, SpaceEngineersPlayer>();
         }
 
-        private void NotifyPlayerJoin(ulong steamid, string nickname)
+        private void NotifyPlayerJoin(MyPlayer player)
         {
-            var id = steamid.ToString();
+            var id = player.Id.SteamId.ToString();
 
             // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
                 // Update
-                record.Name = nickname;
+                record.Name = player.DisplayName;
                 playerData[id] = record;
 
                 // Swap out Rust player
-                players.Remove(id);
-                players.Add(id, new SpaceEngineersPlayer(steamid, nickname));
+                allPlayers.Remove(id);
+                allPlayers.Add(id, new SpaceEngineersPlayer(player));
             }
             else
             {
                 // Insert
-                record = new PlayerRecord {Id = steamid, Name = nickname};
+                record = new PlayerRecord { Id = player.Id.SteamId, Name = player.DisplayName};
                 playerData.Add(id, record);
 
                 // Create Rust player
-                players.Add(id, new SpaceEngineersPlayer(steamid, nickname));
+                allPlayers.Add(id, new SpaceEngineersPlayer(player));
             }
 
             // Save
@@ -68,27 +68,27 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 
         internal void NotifyPlayerConnect(MyPlayer player)
         {
-            NotifyPlayerJoin(player.Id.SteamId, player.DisplayName);
-            livePlayers[player.Id.SteamId.ToString()] = new SpaceEngineersLivePlayer(player);
+            NotifyPlayerJoin(player);
+            connectedPlayers[player.Id.SteamId.ToString()] = new SpaceEngineersPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(MyPlayer player) => livePlayers.Remove(player.Id.SteamId.ToString());
+        internal void NotifyPlayerDisconnect(MyPlayer player) => connectedPlayers.Remove(player.Id.SteamId.ToString());
 
-        #region Offline Players
+        #region All Players
 
         /// <summary>
-        /// Gets an offline player using their unique ID
+        /// Gets a player using their unique ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public IPlayer GetPlayer(string id)
         {
             SpaceEngineersPlayer player;
-            return players.TryGetValue(id, out player) ? player : null;
+            return allPlayers.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
-        /// Gets an offline player using their unique ID
+        /// Gets a player using their unique ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -97,81 +97,81 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             get
             {
                 SpaceEngineersPlayer player;
-                return players.TryGetValue(id.ToString(), out player) ? player : null;
+                return allPlayers.TryGetValue(id.ToString(), out player) ? player : null;
             }
         }
 
         /// <summary>
-        /// Gets all offline players
+        /// Gets all players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> GetAllPlayers() => players.Values.Cast<IPlayer>();
+        public IEnumerable<IPlayer> GetAllPlayers() => allPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
-        /// Gets all offline players
+        /// Gets all players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> All => players.Values.Cast<IPlayer>();
+        public IEnumerable<IPlayer> All => allPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
-        /// Finds an offline player matching a partial name (case insensitive, null if multiple matches unless exact)
+        /// Finds a player matching a partial name (case insensitive, null if multiple matches unless exact)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
         public IPlayer FindPlayer(string partialName) => FindPlayers(partialName).SingleOrDefault();
 
         /// <summary>
-        /// Finds any number of offline players given a partial name (case insensitive)
+        /// Finds any number of players given a partial name (case insensitive)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
-            return players.Values.Where(p => p.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
+            return allPlayers.Values.Where(p => p.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
         }
 
         #endregion
 
-        #region Online Players
+        #region Connected Players
 
         /// <summary>
-        /// Gets an online player given their unique ID
+        /// Gets a connected player given their unique ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ILivePlayer GetOnlinePlayer(string id)
+        public IPlayer GetConnectedPlayer(string id)
         {
-            SpaceEngineersLivePlayer player;
-            return livePlayers.TryGetValue(id, out player) ? player : null;
+            SpaceEngineersPlayer player;
+            return connectedPlayers.TryGetValue(id, out player) ? player : null;
         }
 
         /// <summary>
-        /// Gets all online players
+        /// Gets all connected players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ILivePlayer> GetAllOnlinePlayers() => livePlayers.Values.Cast<ILivePlayer>();
+        public IEnumerable<IPlayer> GetAllConnectedPlayers() => connectedPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
-        /// Gets all online players
+        /// Gets all connected players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ILivePlayer> Online => livePlayers.Values.Cast<ILivePlayer>();
+        public IEnumerable<IPlayer> Connected => connectedPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
-        /// Finds a single online player matching a partial name (case insensitive, null if multiple matches unless exact)
+        /// Finds a single connected player matching a partial name (case insensitive, null if multiple matches unless exact)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        public ILivePlayer FindOnlinePlayer(string partialName) => FindOnlinePlayers(partialName).SingleOrDefault();
+        public IPlayer FindConnectedPlayer(string partialName) => FindConnectedPlayers(partialName).SingleOrDefault();
 
         /// <summary>
-        /// Finds any number of online players given a partial name (case insensitive)
+        /// Finds any number of connected players given a partial name (case insensitive)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        public IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName)
+        public IEnumerable<IPlayer> FindConnectedPlayers(string partialName)
         {
-            return livePlayers.Values .Where(p => p.BasePlayer.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<ILivePlayer>();
+            return connectedPlayers.Values .Where(p => p.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
         }
 
         #endregion

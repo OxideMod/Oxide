@@ -842,7 +842,7 @@ namespace Oxide.Game.ReignOfKings
             if (str[0] != '/') return null;
 
             // Is this a covalence command?
-            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(e.PlayerId.ToString());
+            var livePlayer = covalence.PlayerManager.GetConnectedPlayer(e.PlayerId.ToString());
             if (covalence.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
 
             // Get the command string

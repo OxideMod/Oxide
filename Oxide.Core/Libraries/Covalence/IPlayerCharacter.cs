@@ -10,7 +10,7 @@
         public GenericPosition()
         {
         }
-        
+
         public GenericPosition(float x, float y, float z)
         {
             X = x; Y = y; Z = z;
@@ -27,7 +27,7 @@
         /// <summary>
         /// Gets the owner of this character
         /// </summary>
-        ILivePlayer Owner { get; }
+        IPlayer Owner { get; }
 
         /// <summary>
         /// Gets the object that backs this character, if available

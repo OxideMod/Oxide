@@ -55,7 +55,6 @@
     <Compile Include="Libraries\ReignOfKings.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsCovalenceProvider.cs" />
-    <Compile Include="Libraries\Covalence\ReignOfKingsLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsPlayer.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsServer.cs" />
