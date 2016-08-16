@@ -171,7 +171,7 @@ namespace Oxide.Game.SevenDays
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return string.Empty;
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(GameManager.Instance.World.GetWorldTime())).ToString("h:mm tt").ToLower();
+                var time = DateTime.Today.Add(TimeSpan.FromSeconds(GameManager.Instance.World.worldTime)).ToString("h:mm tt").ToLower();
                 var world = GamePrefs.GetString(EnumGamePrefs.GameWorld);
                 var seed = GamePrefs.GetString(EnumGamePrefs.GameName);
                 return string.Concat(" ", time, ", ", world, " [", seed, "]");
