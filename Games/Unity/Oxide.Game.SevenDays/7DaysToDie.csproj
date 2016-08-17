@@ -55,7 +55,6 @@
     <Compile Include="Libraries\SevenDays.cs" />
     <Compile Include="Libraries\Covalence\SevenDaysCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\SevenDaysCovalenceProvider.cs" />
-    <Compile Include="Libraries\Covalence\SevenDaysLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\SevenDaysPlayer.cs" />
     <Compile Include="Libraries\Covalence\SevenDaysPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\SevenDaysServer.cs" />

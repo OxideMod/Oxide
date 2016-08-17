@@ -31,7 +31,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         /// <param name="player"></param>
         /// <param name="str"></param>
-        public bool HandleChatMessage(ILivePlayer player, string str)
+        public bool HandleChatMessage(IPlayer player, string str)
         {
             // Get the args
             if (str.Length == 0) return false;
@@ -60,7 +60,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="player"></param>
         /// <param name="cmd"></param>
         /// <param name="args"></param>
-        private bool HandleChatCommand(ILivePlayer player, string cmd, string[] args)
+        private bool HandleChatCommand(IPlayer player, string cmd, string[] args)
         {
             // Check things
             if (commandFilter != null && !commandFilter(cmd)) return false;
@@ -68,7 +68,7 @@ namespace Oxide.Core.Libraries.Covalence
             player.LastCommand = CommandType.Chat;
 
             // Handle it
-            return callback(player.BasePlayer, cmd, args);
+            return callback(player, cmd, args);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         /// <param name="player"></param>
         /// <param name="str"></param>
-        public bool HandleConsoleMessage(ILivePlayer player, string str)
+        public bool HandleConsoleMessage(IPlayer player, string str)
         {
             // Parse it
             string cmd;
@@ -93,7 +93,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="player"></param>
         /// <param name="cmd"></param>
         /// <param name="args"></param>
-        private bool HandleConsoleCommand(ILivePlayer player, string cmd, string[] args)
+        private bool HandleConsoleCommand(IPlayer player, string cmd, string[] args)
         {
             // Check things
             if (commandFilter != null && !commandFilter(cmd)) return false;
@@ -101,7 +101,7 @@ namespace Oxide.Core.Libraries.Covalence
             player.LastCommand = CommandType.Console;
 
             // Handle it
-            return callback(player.BasePlayer, cmd, args);
+            return callback(player, cmd, args);
         }
 
         /// <summary>

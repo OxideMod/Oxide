@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Net;
-
-using Steamworks;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
-namespace Oxide.Game.Rust.Libraries.Covalence
+namespace Oxide.Game.RustLegacy.Libraries.Covalence
 {
     /// <summary>
     /// A player object that represents the server console
     /// </summary>
-    public class RustConsolePlayer : IPlayer
+    public class RustLegacyConsolePlayer : IPlayer
     {
         #region Objects
 
         /// <summary>
-        /// Gets the base player of the user
+        /// Gets the live player if the user is connected
         /// </summary>
-        public IPlayer BasePlayer => this;
+        public IPlayer ConnectedPlayer => this;
 
         /// <summary>
         /// Gets the user's in-game character, if available
@@ -47,14 +44,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address
-        {
-            get
-            {
-                var ip = SteamGameServer.GetPublicIP();
-                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24)).ToString();
-            }
-        }
+        public string Address => Rust.Steam.Server.SteamServer_GetPublicIP().ToString();
 
         /// <summary>
         /// Gets the user's average network ping
@@ -162,7 +152,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => ConsoleSystem.Run.Server.Normal(command, args);
+        public void Command(string command, params object[] args) => ConsoleSystem.Run($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
 
         #endregion
 

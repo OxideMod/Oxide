@@ -32,23 +32,23 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
         }
 
-        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
+        private bool ChatCommandCallback(IPlayer caller, string command, string[] args)
         {
             CommandCallback callback;
-            return registeredCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
+            return registeredCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
 
         /// <summary>
         /// Registers the specified command
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandCallback callback)
+        public void RegisterCommand(string command, CommandCallback callback)
         {
             // No console command support so no need to register the command as console command
             // Register the command as a chat command
             // Convert to lowercase
-            var commandName = cmd.ToLowerInvariant();
+            var commandName = command.ToLowerInvariant();
 
             // Check if it already exists
             if (CommandManager.RegisteredCommands.ContainsKey(commandName) || registeredCommands.ContainsKey(commandName))
@@ -60,15 +60,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
-        /// <param name="cmd"></param>
-        public void UnregisterCommand(string cmd) => CommandManager.RegisteredCommands.Remove(cmd);
+        /// <param name="command"></param>
+        public void UnregisterCommand(string command) => CommandManager.RegisteredCommands.Remove(command);
 
         /// <summary>
         /// Handles a chat message
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="str"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        public bool HandleChatMessage(ILivePlayer player, string str) => commandHandler.HandleChatMessage(player, str);
+        public bool HandleChatMessage(IPlayer player, string message) => commandHandler.HandleChatMessage(player, message);
     }
 }

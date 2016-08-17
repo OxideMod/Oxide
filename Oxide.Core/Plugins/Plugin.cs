@@ -399,7 +399,7 @@ namespace Oxide.Core.Plugins
                 foreach (var perm in cmdInfo.PermissionsRequired)
                 {
                     if (caller.HasPermission(perm)) continue;
-                    caller.ConnectedPlayer?.Message($"Missing permission '{perm}' to run command '{cmd}'!");
+                    caller.Message($"Missing permission '{perm}' to run command '{cmd}'!");
                     return true;
                 }
             }

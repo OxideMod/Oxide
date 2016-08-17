@@ -41,7 +41,6 @@ namespace Oxide.Game.Unturned
 
         public static string[] Filter =
         {
-            Provider.APP_VERSION,
             "The image effect Camera"
         };
 

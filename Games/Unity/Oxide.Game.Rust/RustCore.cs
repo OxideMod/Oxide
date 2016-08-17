@@ -12,7 +12,6 @@ using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
@@ -1128,16 +1127,16 @@ namespace Oxide.Game.Rust
             if (cmd == null) return null;
 
             // Get the covalence player
-            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+            var iplayer = covalence.PlayerManager.GetConnectedPlayer(arg.connection.userid.ToString());
 
             // Is the command blocked?
             var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
-            var blockedCovalence = Interface.Call("OnUserCommand", livePlayer.BasePlayer, cmd, args);
+            var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
 
             if (blockedSpecific != null || blockedCovalence != null) return true;
 
             // Is it a covalance command?
-            if (covalence.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
+            if (covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
             
             // It is a regular chat command
             // Handle it
@@ -1237,7 +1236,7 @@ namespace Oxide.Game.Rust
         /// <param name="args"></param>
         private void Reply(BasePlayer player, string key, params object[] args)
         {
-            player.SendMessage(string.Format(lang.GetMessage(key, this, player.UserIDString), args));
+            player.ChatMessage(string.Format(lang.GetMessage(key, this, player.UserIDString), args));
         }
 
         /// <summary>

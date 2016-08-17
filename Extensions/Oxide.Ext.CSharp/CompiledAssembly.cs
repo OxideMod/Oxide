@@ -41,7 +41,7 @@ namespace Oxide.Plugins
         };
 
         private static IEnumerable<string> WhitelistedNamespaces => new[] {
-            "System.IO.MemoryStream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags",
+            "System.IO.MemoryStream", "System.IO.Stream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Sockets.SocketFlags",
             "System.Security.Cryptography"
         };
 
@@ -146,10 +146,13 @@ namespace Oxide.Plugins
                                 if (replacedMethod) continue;
 
                                 var instructions = method.Body.Instructions;
+                                var ilProcessor = method.Body.GetILProcessor();
+                                var first = instructions.First();
 
                                 var i = 0;
                                 while (i < instructions.Count)
                                 {
+                                    if (changedMethod) break;
                                     var instruction = instructions[i];
                                     if (instruction.OpCode == OpCodes.Ldtoken)
                                     {
@@ -157,27 +160,34 @@ namespace Oxide.Plugins
                                         var token = operand?.ToString();
                                         if (IsNamespaceBlacklisted(token))
                                         {
-                                            instructions[i++] = Instruction.Create(OpCodes.Ldstr,
-                                                $"System access is restricted, you are not allowed to use {token}");
-                                            instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, securityException));
-                                            instructions.Insert(i, Instruction.Create(OpCodes.Throw));
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Ldstr, $"System access is restricted, you are not allowed to use {token}"));
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Newobj, securityException));
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Throw));
                                             changedMethod = true;
                                         }
                                     }
-                                    else if (instruction.OpCode == OpCodes.Call)
+                                    else if (instruction.OpCode == OpCodes.Call || instruction.OpCode == OpCodes.Calli || instruction.OpCode == OpCodes.Callvirt)
                                     {
                                         var methodCall = instruction.Operand as MethodReference;
                                         var fullNamespace = methodCall?.DeclaringType.FullName;
 
                                         if ((fullNamespace == "System.Type" && methodCall.Name == "GetType") || IsNamespaceBlacklisted(fullNamespace))
                                         {
-                                            for (var n = 0; n < method.Parameters.Count; n++)
-                                                instructions.Insert(i++, Instruction.Create(OpCodes.Pop));
-
-                                            instructions[i++] = Instruction.Create(OpCodes.Ldstr, $"System access is restricted, you are not allowed to use {fullNamespace}");
-                                            instructions.Insert(i++, Instruction.Create(OpCodes.Newobj, securityException));
-                                            instructions.Insert(i, Instruction.Create(OpCodes.Throw));
-
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Ldstr, $"System access is restricted, you are not allowed to use {fullNamespace}"));
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Newobj, securityException));
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Throw));
+                                            changedMethod = true;
+                                        }
+                                    }
+                                    else if (instruction.OpCode == OpCodes.Ldfld)
+                                    {
+                                        var fieldType = instruction.Operand as FieldReference;
+                                        var fullNamespace = fieldType?.FieldType.FullName;
+                                        if (IsNamespaceBlacklisted(fullNamespace))
+                                        {
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Ldstr, $"System access is restricted, you are not allowed to use {fullNamespace}"));
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Newobj, securityException));
+                                            ilProcessor.InsertBefore(first, Instruction.Create(OpCodes.Throw));
                                             changedMethod = true;
                                         }
                                     }
