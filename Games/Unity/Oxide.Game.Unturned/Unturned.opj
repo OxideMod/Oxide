@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "8n56XODmkvOrkybmO58Bun2IQ1NEhACFfHQIcvLFNA4=",
+            "MSILHash": "DusGk5XGeq/Q6Kj+0AVPx02WRV14BheyyDSW9jAojnY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "8n56XODmkvOrkybmO58Bun2IQ1NEhACFfHQIcvLFNA4=",
+            "MSILHash": "DusGk5XGeq/Q6Kj+0AVPx02WRV14BheyyDSW9jAojnY=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -117,14 +117,14 @@
             "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "3m5+qHuBn/oY3yz5FavByq6craJsXJ725w4UgP+2EV4=",
+            "MSILHash": "3VrWvAPYKI5fO063MWod8uz2QJkcoYyir0JrAgG/QPI=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -161,14 +161,14 @@
             "HookName": "ModifyTags(Clone)",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "3m5+qHuBn/oY3yz5FavByq6craJsXJ725w4UgP+2EV4=",
+            "MSILHash": "3VrWvAPYKI5fO063MWod8uz2QJkcoYyir0JrAgG/QPI=",
             "BaseHookName": "ModifyTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
@@ -194,7 +194,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "RGaqrmUV/u06ANT5i9I236miJcsUhKPrHL2nY6neyrM=",
+            "MSILHash": "SPWmE4ZNjo+RrZ7se8yZFU8E7Rix5Om9xj8YLvOTz7s=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
