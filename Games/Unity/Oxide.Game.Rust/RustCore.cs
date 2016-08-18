@@ -12,7 +12,6 @@ using UnityEngine;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
@@ -226,9 +225,6 @@ namespace Oxide.Game.Rust
 
             // Update server console window and status bars
             RustExtension.ServerConsole();
-
-            // Check for 'load' variable
-            if (Interface.Oxide.CommandLine.HasVariable("load")) Interface.Oxide.LogWarning("The 'load' startup variable is unused and can be removed");
         }
 
         /// <summary>
@@ -270,14 +266,6 @@ namespace Oxide.Game.Rust
         {
             var id = connection.userid.ToString();
             var ip = Regex.Replace(connection.ipaddress, @":{1}[0-9]{1}\d*", "");
-
-            // Migrate user from 'player' group to 'default'
-            if (permission.UserHasGroup(id, "player"))
-            {
-                permission.AddUserGroup(id, "default");
-                permission.RemoveUserGroup(id, "player");
-                Interface.Oxide.LogWarning($"Migrated '{id}' to the new 'default' group");
-            }
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.username, id, ip);
@@ -1128,17 +1116,17 @@ namespace Oxide.Game.Rust
             if (cmd == null) return null;
 
             // Get the covalence player
-            var livePlayer = covalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString());
+            var iplayer = covalence.PlayerManager.GetConnectedPlayer(arg.connection.userid.ToString());
 
             // Is the command blocked?
             var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
-            var blockedCovalence = Interface.Call("OnUserCommand", livePlayer.BasePlayer, cmd, args);
+            var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
 
             if (blockedSpecific != null || blockedCovalence != null) return true;
 
             // Is it a covalance command?
-            if (covalence.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
-            
+            if (covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
+
             // It is a regular chat command
             // Handle it
             var player = arg.connection.player as BasePlayer;
@@ -1146,7 +1134,7 @@ namespace Oxide.Game.Rust
                 Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
             else if (!cmdlib.HandleChatCommand(player, cmd, args))
                 Reply(player, "UnknownCommand", cmd);
-            
+
             // Handled
             arg.ReplyWith(string.Empty);
             return true;

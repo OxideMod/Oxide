@@ -58,7 +58,6 @@
     <Compile Include="Libraries\HideHoldOut.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutCovalenceProvider.cs" />
-    <Compile Include="Libraries\Covalence\HideHoldOutLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutPlayer.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutServer.cs" />

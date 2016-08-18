@@ -83,7 +83,6 @@
     <Compile Include="Libraries\Covalence\RustCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\RustConsolePlayer.cs" />
     <Compile Include="Libraries\Covalence\RustCovalenceProvider.cs" />
-    <Compile Include="Libraries\Covalence\RustLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\RustPlayer.cs" />
     <Compile Include="Libraries\Covalence\RustPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\RustServer.cs" />

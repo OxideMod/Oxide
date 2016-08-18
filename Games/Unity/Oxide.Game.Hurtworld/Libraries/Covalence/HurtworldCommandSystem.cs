@@ -69,7 +69,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public bool HandleChatMessage(ILivePlayer player, string message) => commandHandler.HandleChatMessage(player, message);
+        public bool HandleChatMessage(IPlayer player, string message) => commandHandler.HandleChatMessage(player, message);
 
         /// <summary>
         /// Handles a chat message
@@ -77,6 +77,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public bool HandleConsoleMessage(ILivePlayer player, string message) => commandHandler.HandleConsoleMessage(player, message);
+        public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player, message);
     }
 }

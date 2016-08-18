@@ -82,7 +82,6 @@
     <Compile Include="Libraries\Covalence\Exceptions.cs" />
     <Compile Include="Libraries\Covalence\ICommandSystem.cs" />
     <Compile Include="Libraries\Covalence\ICovalenceProvider.cs" />
-    <Compile Include="Libraries\Covalence\ILivePlayer.cs" />
     <Compile Include="Libraries\Covalence\IPlayer.cs" />
     <Compile Include="Libraries\Covalence\IPlayerCharacter.cs" />
     <Compile Include="Libraries\Covalence\IPlayerManager.cs" />

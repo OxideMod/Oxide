@@ -72,7 +72,6 @@
     <Compile Include="Libraries\SpaceEngineers.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersCovalenceProvider.cs" />
-    <Compile Include="Libraries\Covalence\SpaceEngineersLivePlayer.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersPlayer.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersServer.cs" />

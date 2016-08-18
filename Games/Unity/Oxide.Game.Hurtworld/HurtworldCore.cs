@@ -269,7 +269,7 @@ namespace Oxide.Game.Hurtworld
                 return Interface.Call("OnPlayerChat", session, message) ?? Interface.Call("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
-            if (covalence.CommandSystem.HandleChatMessage(iplayer.ConnectedPlayer, message)) return true;
+            if (covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);

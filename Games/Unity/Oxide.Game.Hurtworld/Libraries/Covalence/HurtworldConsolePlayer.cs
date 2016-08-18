@@ -11,27 +11,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// <summary>
     /// Represents a connected player
     /// </summary>
-    public class HurtworldConsolePlayer : IPlayer, ILivePlayer
+    public class HurtworldConsolePlayer : IPlayer
     {
-        /// <summary>
-        /// Gets the name for the user
-        /// </summary>
-        public string Name => "Server Console";
-
-        /// <summary>
-        /// Gets the ID for the user (unique within the current game)
-        /// </summary>
-        public string Id => "server_console";
+        #region Objects
 
         /// <summary>
         /// Gets the live player if the user is connected
         /// </summary>
-        public ILivePlayer ConnectedPlayer => this;
-
-        /// <summary>
-        /// Gets the base player of the user
-        /// </summary>
-        public IPlayer BasePlayer => this;
+        public IPlayer ConnectedPlayer => this;
 
         /// <summary>
         /// Gets the user's in-game character, if available
@@ -42,6 +29,20 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Gets the user's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
+
+        #endregion
+
+        #region Information
+
+        /// <summary>
+        /// Gets the name for the user
+        /// </summary>
+        public string Name => "Server Console";
+
+        /// <summary>
+        /// Gets the ID for the user (unique within the current game)
+        /// </summary>
+        public string Id => "server_console";
 
         /// <summary>
         /// Gets the user's IP address
@@ -60,53 +61,15 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public int Ping => 0;
 
-        #region Permissions
+        /// <summary>
+        /// Returns if the user is connected
+        /// </summary>
+        public bool IsConnected => true;
 
         /// <summary>
-        /// Gets if the user has the specified permission
+        /// Returns if the user is sleeping
         /// </summary>
-        /// <param name="perm"></param>
-        /// <returns></returns>
-        public bool HasPermission(string perm) => true;
-
-        /// <summary>
-        /// Grants the specified permission on this user
-        /// </summary>
-        /// <param name="perm"></param>
-        public void GrantPermission(string perm)
-        {
-        }
-
-        /// <summary>
-        /// Strips the specified permission from this user
-        /// </summary>
-        /// <param name="perm"></param>
-        public void RevokePermission(string perm)
-        {
-        }
-
-        /// <summary>
-        /// Gets if the user belongs to the specified usergroup
-        /// </summary>
-        /// <param name="group"></param>
-        /// <returns></returns>
-        public bool BelongsToGroup(string group) => false;
-
-        /// <summary>
-        /// Adds the user to the specified usergroup
-        /// </summary>
-        /// <param name="group"></param>
-        public void AddToGroup(string group)
-        {
-        }
-
-        /// <summary>
-        /// Removes the user from the specified usergroup
-        /// </summary>
-        /// <param name="group"></param>
-        public void RemoveFromGroup(string group)
-        {
-        }
+        public bool IsSleeping => false;
 
         #endregion
 
@@ -144,7 +107,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public TimeSpan BanTimeRemaining => TimeSpan.Zero;
 
         /// <summary>
-        /// Damages player by specified amount
+        /// Damages user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)
@@ -202,6 +165,56 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public void Command(string command, params object[] args)
         {
             ConsoleManager.Instance.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
+        }
+
+        #endregion
+
+        #region Permissions
+
+        /// <summary>
+        /// Gets if the user has the specified permission
+        /// </summary>
+        /// <param name="perm"></param>
+        /// <returns></returns>
+        public bool HasPermission(string perm) => true;
+
+        /// <summary>
+        /// Grants the specified permission on this user
+        /// </summary>
+        /// <param name="perm"></param>
+        public void GrantPermission(string perm)
+        {
+        }
+
+        /// <summary>
+        /// Strips the specified permission from this user
+        /// </summary>
+        /// <param name="perm"></param>
+        public void RevokePermission(string perm)
+        {
+        }
+
+        /// <summary>
+        /// Gets if the user belongs to the specified usergroup
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public bool BelongsToGroup(string group) => false;
+
+        /// <summary>
+        /// Adds the user to the specified usergroup
+        /// </summary>
+        /// <param name="group"></param>
+        public void AddToGroup(string group)
+        {
+        }
+
+        /// <summary>
+        /// Removes the user from the specified usergroup
+        /// </summary>
+        /// <param name="group"></param>
+        public void RemoveFromGroup(string group)
+        {
         }
 
         #endregion

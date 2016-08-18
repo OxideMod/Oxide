@@ -7,43 +7,43 @@ namespace Oxide.Core.Libraries.Covalence
     /// </summary>
     public interface IPlayerManager
     {
-        #region Offline Players
+        #region All Players
 
         /// <summary>
-        /// Gets an offline player given their unique ID
+        /// Gets a player given their unique ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         IPlayer GetPlayer(string id);
 
         /// <summary>
-        /// Gets an offline player given their unique ID
+        /// Gets a player given their unique ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         IPlayer this[int id] { get; }
 
         /// <summary>
-        /// Gets all offline players
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<IPlayer> GetAllPlayers();
-
-        /// <summary>
-        /// Gets all offline players
+        /// Gets all players
         /// </summary>
         /// <returns></returns>
         IEnumerable<IPlayer> All { get; }
 
         /// <summary>
-        /// Finds a single offline player given a partial name (wildcards accepted, multiple matches returns null)
+        /// Gets all players
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IPlayer> GetAllPlayers();
+
+        /// <summary>
+        /// Finds a single player given a partial name (wildcards accepted, multiple matches returns null)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
         IPlayer FindPlayer(string partialName);
 
         /// <summary>
-        /// Finds any number of offline players given a partial name (wildcards accepted)
+        /// Finds any number of players given a partial name (wildcards accepted)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
@@ -51,40 +51,34 @@ namespace Oxide.Core.Libraries.Covalence
 
         #endregion
 
-        #region Online Players
+        #region Connected Players
 
         /// <summary>
-        /// Gets an online player given their unique ID
+        /// Gets a connected player given their unique ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        ILivePlayer GetOnlinePlayer(string id);
+        IPlayer GetConnectedPlayer(string id);
 
         /// <summary>
-        /// Gets all online players
+        /// Gets all connected players
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ILivePlayer> GetAllOnlinePlayers();
+        IEnumerable<IPlayer> Connected { get; }
 
         /// <summary>
-        /// Gets all online players
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<ILivePlayer> Online { get; }
-
-        /// <summary>
-        /// Finds a single online player given a partial name (wildcards accepted, multiple matches returns null)
+        /// Finds a single connected player given a partial name (wildcards accepted, multiple matches returns null)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        ILivePlayer FindOnlinePlayer(string partialName);
+        IPlayer FindConnectedPlayer(string partialName);
 
         /// <summary>
-        /// Finds any number of online players given a partial name (wildcards accepted)
+        /// Finds any number of connected players given a partial name (wildcards accepted)
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        IEnumerable<ILivePlayer> FindOnlinePlayers(string partialName);
+        IEnumerable<IPlayer> FindConnectedPlayers(string partialName);
 
         #endregion
     }

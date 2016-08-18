@@ -88,11 +88,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     {
                         if (arg.Player())
                         {
-                            var livePlayer = rustCovalence.PlayerManager.GetOnlinePlayer(arg.connection.userid.ToString()) as RustLivePlayer;
-                            if (livePlayer == null) return;
-                            livePlayer.LastCommand = CommandType.Console;
-                            livePlayer.LastArg = arg;
-                            callback(livePlayer?.BasePlayer, commandName, ExtractArgs(arg));
+                            var iplayer = rustCovalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()) as RustPlayer;
+                            if (iplayer == null) return;
+                            iplayer.LastCommand = CommandType.Console;
+                            iplayer.LastArg = arg;
+                            callback(iplayer, commandName, ExtractArgs(arg));
                             return;
                         }
                     }
@@ -124,9 +124,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Handles a chat message
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="str"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        public bool HandleChatMessage(ILivePlayer player, string str) => chatCommandHandler.HandleChatMessage(player, str);
+        public bool HandleChatMessage(IPlayer player, string message) => chatCommandHandler.HandleChatMessage(player, message);
 
         private static string[] ExtractArgs(ConsoleSystem.Arg arg)
         {
