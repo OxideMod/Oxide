@@ -221,6 +221,12 @@ namespace Oxide.Core
                 watcher.OnPluginAdded += watcher_OnPluginAdded;
                 watcher.OnPluginRemoved += watcher_OnPluginRemoved;
             }
+
+            // Check for 'load' variable and warn
+            if (CommandLine.HasVariable("load")) LogWarning("The 'load' variable is unused and can be removed");
+
+            // Check for 'nolog' variable and warn
+            if (CommandLine.HasVariable("nolog")) LogWarning("Usage of the 'nolog' variable will prevent logging");
         }
 
         /// <summary>
