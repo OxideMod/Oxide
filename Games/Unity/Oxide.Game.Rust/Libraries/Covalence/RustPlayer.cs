@@ -227,7 +227,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     Message(message, args);
                     break;
                 case CommandType.Console:
-                    Command($"echo {message}", args);
+                    Command(string.Format($"echo {message}", args));
                     break;
             }
         }
@@ -307,9 +307,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         public override string ToString() => $"Covalence.RustPlayer[{Id}, {Name}]";
 
-        public static bool operator ==(RustPlayer left, IPlayer right) => left != null && left.Equals(right);
+        public static bool operator ==(RustPlayer left, RustPlayer right)
+        {
+            if (ReferenceEquals(left, right)) return true;
+            if (ReferenceEquals(left, null) || ReferenceEquals(right, null)) return false;
+            return left.Equals(right);
+        } 
 
-        public static bool operator !=(RustPlayer left, IPlayer right) => left != null && !left.Equals(right);
+        public static bool operator !=(RustPlayer left, RustPlayer right) => !(left == right);
 
         #endregion
     }
