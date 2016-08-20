@@ -114,11 +114,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        public IPlayer FindPlayer(string partialName)
-        {
-            var name = partialName.ToLower();
-            return FindPlayers(partialName).SingleOrDefault() ?? FindPlayers(partialName).FirstOrDefault(pl => pl.Name.ToLower() == name);
-        }
+        public IPlayer FindPlayer(string partialName) => FindPlayers(partialName).SingleOrDefault();
 
         /// <summary>
         /// Finds any number of players given a partial name (wildcards accepted)
@@ -127,8 +123,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialName)
         {
-            var name = partialName.ToLower();
-            return allPlayers.Values.Where(p => p.Name.ToLower().Contains(name)).Cast<IPlayer>();
+            return allPlayers.Values.Where(p => p.Name.ToLower().Contains(partialName.ToLower())).Cast<IPlayer>();
         }
 
         #endregion
@@ -157,11 +152,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="partialName"></param>
         /// <returns></returns>
-        public IPlayer FindConnectedPlayer(string partialName)
-        {
-            var name = partialName.ToLower();
-            return FindConnectedPlayers(partialName).SingleOrDefault() ?? FindConnectedPlayers(partialName).FirstOrDefault(pl => pl.Name.ToLower() == name);
-        }
+        public IPlayer FindConnectedPlayer(string partialName) => FindConnectedPlayers(partialName).SingleOrDefault();
 
         /// <summary>
         /// Finds any number of connected players given a partial name (wildcards accepted)
@@ -170,8 +161,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<IPlayer> FindConnectedPlayers(string partialName)
         {
-            var name = partialName.ToLower();
-            return connectedPlayers.Values.Where(p => p.Name.ToLower().Contains(name)).Cast<IPlayer>();
+            return connectedPlayers.Values.Where(p => p.Name.ToLower().Contains(partialName.ToLower())).Cast<IPlayer>();
         }
 
         #endregion

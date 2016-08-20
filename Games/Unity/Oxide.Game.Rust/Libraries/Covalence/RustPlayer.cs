@@ -89,7 +89,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player.IsAdmin();
+        public bool IsAdmin => player?.IsAdmin() ?? ServerUsers.Get(steamId).@group == ServerUsers.UserGroup.Moderator || ServerUsers.Get(steamId).@group == ServerUsers.UserGroup.Owner;
 
         /// <summary>
         /// Gets if the user is banned
@@ -99,12 +99,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Returns if the user is connected
         /// </summary>
-        public bool IsConnected => player.IsConnected();
+        public bool IsConnected => player?.IsConnected() ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
         /// </summary>
-        public bool IsSleeping => player.IsSleeping();
+        public bool IsSleeping => player?.IsSleeping() ?? BasePlayer.FindSleeping(steamId) != null;
 
         #endregion
 
@@ -227,7 +227,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     Message(message, args);
                     break;
                 case CommandType.Console:
-                    Command($"echo {message}", args);
+                    Command(string.Format($"echo {message}", args));
                     break;
             }
         }
@@ -307,9 +307,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         public override string ToString() => $"Covalence.RustPlayer[{Id}, {Name}]";
 
-        public static bool operator ==(RustPlayer left, IPlayer right) => left != null && left.Equals(right);
+        public static bool operator ==(RustPlayer left, RustPlayer right)
+        {
+            if (ReferenceEquals(left, right)) return true;
+            if (ReferenceEquals(left, null) || ReferenceEquals(right, null)) return false;
+            return left.Equals(right);
+        } 
 
-        public static bool operator !=(RustPlayer left, IPlayer right) => left != null && !left.Equals(right);
+        public static bool operator !=(RustPlayer left, RustPlayer right) => !(left == right);
 
         #endregion
     }
