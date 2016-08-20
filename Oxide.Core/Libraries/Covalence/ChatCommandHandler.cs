@@ -37,21 +37,18 @@ namespace Oxide.Core.Libraries.Covalence
             if (str.Length == 0) return false;
 
             // Is it a chat command?
-            if (str[0] == '/' || str[0] == '!')
-            {
-                // Get the message
-                var message = str.Substring(1);
+            if (str[0] != '/') return false;
 
-                // Parse it
-                string cmd;
-                string[] args;
-                ParseChatCommand(message, out cmd, out args);
+            // Get the message
+            var message = str.Substring(1);
 
-                // Handle it
-                return cmd != null && HandleChatCommand(player, cmd, args);
-            }
+            // Parse it
+            string cmd;
+            string[] args;
+            ParseChatCommand(message, out cmd, out args);
 
-            return false;
+            // Handle it
+            return cmd != null && HandleChatCommand(player, cmd, args);
         }
 
         /// <summary>
@@ -78,6 +75,10 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="str"></param>
         public bool HandleConsoleMessage(IPlayer player, string str)
         {
+            // Handle global classname for console commands
+            if (str.StartsWith("global."))
+                str = str.Substring(7);
+
             // Parse it
             string cmd;
             string[] args;

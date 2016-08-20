@@ -1121,14 +1121,12 @@ namespace Oxide.Game.Rust
             // Is the command blocked?
             var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
             var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
-
             if (blockedSpecific != null || blockedCovalence != null) return true;
 
             // Is it a covalance command?
             if (covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
-            // It is a regular chat command
-            // Handle it
+            // Is it a regular chat command?
             var player = arg.connection.player as BasePlayer;
             if (player == null)
                 Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());

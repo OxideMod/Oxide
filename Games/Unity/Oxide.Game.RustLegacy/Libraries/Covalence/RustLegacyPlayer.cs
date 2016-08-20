@@ -229,7 +229,18 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(string.Format(message, args));
+        public void Reply(string message, params object[] args)
+        {
+            switch (LastCommand)
+            {
+                case CommandType.Chat:
+                    Message(message, args);
+                    break;
+                case CommandType.Console:
+                    Command(string.Format($"echo {message}", args));
+                    break;
+            }
+        }
 
         /// <summary>
         /// Runs the specified console command on the user

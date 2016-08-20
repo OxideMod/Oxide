@@ -9,75 +9,87 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
     /// </summary>
     public class RustLegacyCommandSystem : ICommandSystem
     {
+        // The covalence provider
+        private readonly RustLegacyCovalenceProvider rustCovalence = RustLegacyCovalenceProvider.Instance;
+
+        // The console player
+        private RustLegacyConsolePlayer consolePlayer;
+
+        // Chat command handler
+        private ChatCommandHandler chatCommandHandler;
+
+        // All registered commands
+        private IDictionary<string, CommandCallback> registeredCommands;
+
         // Default constructor
         public RustLegacyCommandSystem()
         {
             Initialize();
         }
 
-        // A reference to Rust Legacy's internal command dictionary
-        //private IDictionary<string, ConsoleSystem.Command> rustCommands;
-
-        // Chat command handler
-        //private ChatCommandHandler chatCommandHandler;
-
-        // All registered chat commands
-        //private IDictionary<string, CommandCallback> registeredChatCommands;
-
-        // The console player
-        //private RustLegacyConsolePlayer consolePlayer;
-
         /// <summary>
         /// Initializes the command system provider
         /// </summary>
         private void Initialize()
         {
-            /*rustCommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
-            registeredChatCommands = new Dictionary<string, CommandCallback>();
-            chatCommandHandler = new ChatCommandHandler(ChatCommandCallback, registeredChatCommands.ContainsKey);
-            consolePlayer = new RustLegacyConsolePlayer();*/
+            registeredCommands = new Dictionary<string, CommandCallback>();
+            chatCommandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            consolePlayer = new RustLegacyConsolePlayer();
         }
 
-        /*private bool ChatCommandCallback(string cmd, IPlayer caller, string[] args)
+        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
         {
             CommandCallback callback;
-            return registeredChatCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
-        }*/
+            return registeredCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
+        }
 
         /// <summary>
         /// Registers the specified command
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string cmd, CommandCallback callback)
+        public void RegisterCommand(string command, CommandCallback callback)
         {
-            // TODO: Register a covalence command as both chat and console command
-        }
+            // Initialize if needed
+            if (registeredCommands == null) Initialize();
 
-        private static string[] ExtractArgs(ConsoleSystem.Arg arg)
-        {
-            if (arg == null) return new string[0];
-            var argsList = new List<string>();
-            var i = 0;
-            while (arg.HasArgs(++i)) argsList.Add(arg.GetString(i - 1));
-            return argsList.ToArray();
+            // Convert to lowercase
+            var commandName = command.ToLowerInvariant();
+
+            // Setup console command name
+            var split = commandName.Split('.');
+            var parent = split.Length >= 2 ? split[0] : "global";
+            var name = split.Length >= 2 ? split[1] : split[0];
+            var fullname = $"{parent}.{name}";
+            
+            // Check if it already exists
+            if (registeredCommands.ContainsKey(commandName) || Command.ChatCommands.ContainsKey(commandName) || Command.ConsoleCommands.ContainsKey(fullname))
+                throw new CommandAlreadyExistsException(commandName);
+            
+            // Register it
+            registeredCommands.Add(commandName, callback);
         }
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        public void UnregisterCommand(string cmd)
-        {
-            // TODO: Unregister a covalence command
-        }
+        public void UnregisterCommand(string cmd) => registeredCommands.Remove(cmd);
 
-        /*/// <summary>
+        /// <summary>
         /// Handles a chat message
         /// </summary>
         /// <param name="player"></param>
         /// <param name="str"></param>
         /// <returns></returns>
-        public bool HandleChatMessage(ILivePlayer player, string str) => chatCommandHandler.HandleChatMessage(player, str);*/
+        public bool HandleChatMessage(IPlayer player, string str) => chatCommandHandler.HandleChatMessage(player, str);
+
+        /// <summary>
+        /// Handles a console message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public bool HandleConsoleMessage(IPlayer player, string str)=> chatCommandHandler.HandleConsoleMessage(player ?? consolePlayer, str);
     }
 }

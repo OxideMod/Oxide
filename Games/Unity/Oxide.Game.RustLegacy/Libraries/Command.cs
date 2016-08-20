@@ -195,10 +195,10 @@ namespace Oxide.Game.RustLegacy.Libraries
             return true;
         }
 
-        internal object HandleConsoleCommand(ConsoleSystem.Arg arg, bool wantsReply)
+        internal bool HandleConsoleCommand(ConsoleSystem.Arg arg, bool wantsReply)
         {
             ConsoleCommand command;
-            if (!ConsoleCommands.TryGetValue($"{arg.Class}.{arg.Function}".ToLowerInvariant(), out command)) return null;
+            if (!ConsoleCommands.TryGetValue($"{arg.Class}.{arg.Function}".ToLowerInvariant(), out command)) return false;
 
             return command.HandleCommand(arg);
         }
