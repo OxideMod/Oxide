@@ -52,6 +52,16 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public int Ping => 0;
 
         /// <summary>
+        /// Returns if the user is admin
+        /// </summary>
+        public bool IsAdmin => true;
+
+        /// <summary>
+        /// Gets if the user is banned
+        /// </summary>
+        public bool IsBanned => false;
+
+        /// <summary>
         /// Returns if the user is connected
         /// </summary>
         public bool IsConnected => true;
@@ -65,10 +75,6 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
 
         #region Administration
 
-        /// <summary>
-        /// Returns if the user is admin
-        /// </summary>
-        public bool IsAdmin => true;
 
         /// <summary>
         /// Bans the user for the specified reason and duration
@@ -80,21 +86,17 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         }
 
         /// <summary>
-        /// Unbans the user
-        /// </summary>
-        public void Unban()
-        {
-        }
-
-        /// <summary>
-        /// Gets if the user is banned
-        /// </summary>
-        public bool IsBanned => false;
-
-        /// <summary>
         /// Gets the amount of time remaining on the user's ban
         /// </summary>
         public TimeSpan BanTimeRemaining => TimeSpan.Zero;
+
+        /// <summary>
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount)
+        {
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount
@@ -126,6 +128,13 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="y"></param>
         /// <param name="z"></param>
         public void Teleport(float x, float y, float z)
+        {
+        }
+
+        /// <summary>
+        /// Unbans the user
+        /// </summary>
+        public void Unban()
         {
         }
 

@@ -127,6 +127,17 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement once supported
 
         /// <summary>
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount)
+        {
+            var effect = new EntityEffectFluid(EEntityFluidEffectType.Health, EEntityEffectFluidModifierType.AddValuePure, amount);
+            var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+            effect.Apply(stats);
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

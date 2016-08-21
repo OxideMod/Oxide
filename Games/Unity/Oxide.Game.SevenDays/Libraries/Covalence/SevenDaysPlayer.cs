@@ -128,13 +128,23 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         public TimeSpan BanTimeRemaining => GameManager.Instance.adminTools.GetAdminToolsClientInfo(Id).BannedUntil.TimeOfDay;
 
         /// <summary>
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount)
+        {
+            var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+            entity?.AddHealth((int)amount);
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)
         {
-            var entity = GameManager.Instance.World.GetEntity(client.entityId);
-            entity.DamageEntity(new DamageSource(EnumDamageSourceType.Undef), (int)amount, false);
+            var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+            entity?.DamageEntity(new DamageSource(EnumDamageSourceType.Undef), (int)amount, false);
         }
 
         /// <summary>
@@ -148,8 +158,8 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// </summary>
         public void Kill()
         {
-            var entity = GameManager.Instance.World.GetEntity(client.entityId);
-            entity.Kill(DamageResponse.New(new DamageSource(EnumDamageSourceType.Undef), true));
+            var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+            entity?.Kill(DamageResponse.New(new DamageSource(EnumDamageSourceType.Undef), true));
         }
 
         /// <summary>
@@ -160,8 +170,8 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// <param name="z"></param>
         public void Teleport(float x, float y, float z)
         {
-            var entity = GameManager.Instance.World.GetEntity(client.entityId);
-            entity.transform.position = new Vector3(x, y, z);
+            var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+            entity?.SetPosition(new Vector3(x, y, z));
         }
 
         /// <summary>

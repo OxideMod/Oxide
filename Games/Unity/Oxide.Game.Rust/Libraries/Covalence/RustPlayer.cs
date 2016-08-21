@@ -129,6 +129,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public TimeSpan BanTimeRemaining => IsBanned ? TimeSpan.MaxValue : TimeSpan.Zero;
 
         /// <summary>
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount) => player.Heal(amount);
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

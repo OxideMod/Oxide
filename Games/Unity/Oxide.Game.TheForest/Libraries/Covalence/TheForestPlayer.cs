@@ -151,10 +151,16 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         }
 
         /// <summary>
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount) => entity.GetComponentInChildren<PlayerStats>().Health += amount;
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Hurt(float amount) => entity.GetComponentInChildren<EnemyHealth>().Hit((int)amount);
+        public void Hurt(float amount) => entity.GetComponentInChildren<PlayerStats>().Hit((int)amount, true);
 
         /// <summary>
         /// Kicks the user from the game
@@ -165,7 +171,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => entity.GetComponentInChildren<EnemyHealth>().Hit(1000);
+        public void Kill() => entity.GetComponentInChildren<PlayerStats>().Hit(1000, true);
 
         /// <summary>
         /// Teleports the user's character to the specified position

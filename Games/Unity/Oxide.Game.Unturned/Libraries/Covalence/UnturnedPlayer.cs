@@ -155,6 +155,12 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         }
 
         /// <summary>
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount) => steamPlayer.player.life.askHeal((byte)amount, true, true);
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

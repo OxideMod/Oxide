@@ -128,6 +128,15 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public TimeSpan BanTimeRemaining => TimeSpan.Zero; // TODO
 
         /// <summary>
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount)
+        {
+            // TODO
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
