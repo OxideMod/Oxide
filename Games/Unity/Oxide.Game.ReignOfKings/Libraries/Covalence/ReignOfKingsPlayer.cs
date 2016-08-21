@@ -143,7 +143,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public TimeSpan BanTimeRemaining => new DateTime(Server.GetBannedPlayerFromPlayerId(steamId).ExpireDate) - DateTime.Now;
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)

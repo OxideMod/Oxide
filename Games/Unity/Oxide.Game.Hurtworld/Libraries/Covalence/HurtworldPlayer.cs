@@ -127,7 +127,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement once supported
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)

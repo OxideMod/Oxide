@@ -107,7 +107,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public TimeSpan BanTimeRemaining => TimeSpan.Zero;
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)

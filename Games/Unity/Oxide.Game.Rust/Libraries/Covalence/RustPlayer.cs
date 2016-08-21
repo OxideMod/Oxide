@@ -129,7 +129,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public TimeSpan BanTimeRemaining => IsBanned ? TimeSpan.MaxValue : TimeSpan.Zero;
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount) => player.Hurt(amount);
@@ -310,7 +310,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             if (ReferenceEquals(left, right)) return true;
             if (ReferenceEquals(left, null) || ReferenceEquals(right, null)) return false;
             return left.Equals(right);
-        } 
+        }
 
         public static bool operator !=(RustPlayer left, RustPlayer right) => !(left == right);
 

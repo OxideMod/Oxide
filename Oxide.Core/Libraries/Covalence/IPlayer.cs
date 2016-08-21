@@ -80,7 +80,7 @@ namespace Oxide.Core.Libraries.Covalence
         TimeSpan BanTimeRemaining { get; }
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         void Hurt(float amount);

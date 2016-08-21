@@ -128,7 +128,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         public TimeSpan BanTimeRemaining => GameManager.Instance.adminTools.GetAdminToolsClientInfo(Id).BannedUntil.TimeOfDay;
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)

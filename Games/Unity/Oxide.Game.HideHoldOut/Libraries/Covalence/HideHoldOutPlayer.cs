@@ -128,7 +128,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement somehow?
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount) => NetworkController.Player_ctrl_.TakeDamage((int)amount, Vector3.zero, string.Empty, true, true, string.Empty);

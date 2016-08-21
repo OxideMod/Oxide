@@ -151,7 +151,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         }
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount) => entity.GetComponentInChildren<EnemyHealth>().Hit((int)amount);
