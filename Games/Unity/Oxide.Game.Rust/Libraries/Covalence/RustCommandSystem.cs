@@ -95,7 +95,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                             var iplayer = rustCovalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()) as RustPlayer;
                             if (iplayer == null) return;
                             iplayer.LastCommand = CommandType.Console;
-                            iplayer.LastArg = arg;
                             callback(iplayer, commandName, ExtractArgs(arg));
                             return;
                         }

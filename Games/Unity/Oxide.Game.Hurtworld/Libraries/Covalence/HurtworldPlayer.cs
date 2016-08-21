@@ -35,7 +35,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             Name = session.Name;
             Id = steamId.ToString();
             Character = this;
-            Object = session.WorldPlayerEntity.gameObject;
         }
 
         #region Objects
@@ -53,7 +52,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs this character, if available
         /// </summary>
-        public object Object { get; private set; }
+        public object Object => session.WorldPlayerEntity?.gameObject;
 
         /// <summary>
         /// Gets the user's last command type

@@ -60,8 +60,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        public ConsoleSystem.Arg LastArg { get; set; }
-
         #endregion
 
         #region Information
