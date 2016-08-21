@@ -35,7 +35,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             Name = session.Name;
             Id = steamId.ToString();
             Character = this;
-            Object = session.WorldPlayerEntity.gameObject;
         }
 
         #region Objects
@@ -53,7 +52,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs this character, if available
         /// </summary>
-        public object Object { get; private set; }
+        public object Object => session.WorldPlayerEntity?.gameObject;
 
         /// <summary>
         /// Gets the user's last command type
@@ -128,7 +127,18 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement once supported
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount)
+        {
+            var effect = new EntityEffectFluid(EEntityFluidEffectType.Health, EEntityEffectFluidModifierType.AddValuePure, amount);
+            var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+            effect.Apply(stats);
+        }
+
+        /// <summary>
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)

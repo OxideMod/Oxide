@@ -63,17 +63,21 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             // Convert to lowercase
             var commandName = command.ToLowerInvariant();
 
-            // Register the command as a console command
             // Check if it already exists
             if (rustCommands != null && rustCommands.ContainsKey(commandName))
                 throw new CommandAlreadyExistsException(commandName);
 
-            // Register it
-            var splitName = commandName.Split('.');
-            rustCommands?.Add(commandName, new ConsoleSystem.Command
+            // Setup console command name
+            var split = commandName.Split('.');
+            var parent = split.Length >= 2 ? split[0] : "global";
+            var name = split.Length >= 2 ? split[1] : split[0];
+            var fullname = $"{parent}.{name}";
+
+            // Register the command as a console command
+            rustCommands?.Add(fullname, new ConsoleSystem.Command
             {
-                name = splitName.Length >= 2 ? splitName[1] : splitName[0],
-                parent = splitName.Length >= 2 ? splitName[0] : "global",
+                name = name,
+                parent = parent,
                 namefull = commandName,
                 isCommand = true,
                 isUser = true,
@@ -91,7 +95,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                             var iplayer = rustCovalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()) as RustPlayer;
                             if (iplayer == null) return;
                             iplayer.LastCommand = CommandType.Console;
-                            iplayer.LastArg = arg;
                             callback(iplayer, commandName, ExtractArgs(arg));
                             return;
                         }

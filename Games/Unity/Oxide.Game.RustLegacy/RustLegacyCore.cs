@@ -728,49 +728,59 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnRunCommand")]
         private object OnRunCommand(ConsoleSystem.Arg arg, bool wantreply)
         {
-            // Sanity checks
             if (arg == null) return null;
+            var cmdnamefull = $"{arg.Class}.{arg.Function}";
 
-            string cmd = $"{arg.Class}.{arg.Function}";
+            // Get the args
+            var str = arg.GetString(0);
 
-            // Is it chat.say?
-            if (cmd == "chat.say")
-            {
-                // Get the args
-                var str = arg.GetString(0);
-                if (str.Length == 0) return true;
+            // Get the covalence player
+            var iplayer = arg.argUser != null ? covalence.PlayerManager.GetConnectedPlayer(arg.argUser.userID.ToString()) : null;
 
-                // Get covalence player
-                var iplayer = covalence.PlayerManager.GetPlayer(arg.argUser.userID.ToString());
-
-                // Is it a chat command?
-                if (str[0] != '/')
-                    return Interface.Call("OnPlayerChat", arg.argUser, str) ?? Interface.Call("OnUserChat", iplayer, str);
-
-                // Get the arg string
-                var argstr = str.Substring(1);
-                if (str.Length == 1) return true;
-
-                // Parse it
-                string chatcmd;
-                string[] args;
-                ParseChatCommand(argstr, out chatcmd, out args);
-                if (chatcmd == null) return null;
-
-                // Handle it
-                var ply = arg.argUser;
-                if (ply != null && !cmdlib.HandleChatCommand(ply, chatcmd, args))
-                {
-                    ConsoleNetworker.SendClientCommand(ply.networkPlayer, $"chat.add \"Server\" \" Unknown command {chatcmd}\"");
-                    return true;
-                }
-
-                // Handled
-                arg.ReplyWith(string.Empty);
-                return true;
+            // Is it a console command?
+            if (cmdnamefull != "chat.say") {
+                if (covalence.CommandSystem.HandleConsoleMessage(iplayer, $"{cmdnamefull} {str}") || cmdlib.HandleConsoleCommand(arg, wantreply)) return true;
+                return null;
             }
 
-            return cmdlib.HandleConsoleCommand(arg, wantreply);
+            if (str.Length == 0) return true;
+
+            // Is it a chat command?
+            if (str[0] != '/')
+            {
+                var chatSpecific = Interface.Call("OnPlayerChat", arg.argUser, str);
+                var chatCovalence = Interface.Call("OnUserChat", iplayer, str);
+                if (chatSpecific != null || chatCovalence != null) return true;
+                return null;
+            }
+
+            // Get the full command
+            var message = str.Substring(1);
+
+            // Parse it
+            string cmd;
+            string[] args;
+            ParseChatCommand(message, out cmd, out args);
+            if (cmd == null) return true;
+
+            // Is the command blocked?
+            var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
+            var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
+            if (blockedSpecific != null || blockedCovalence != null) return true;
+
+            // Is this a Covalence command?
+            if (covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
+
+            // Is it a regular chat command?
+            var player = arg.argUser;
+            if (player == null)
+                Interface.Oxide.LogDebug("Player is actually a {0}!", arg.argUser);
+            else if (!cmdlib.HandleChatCommand(player, cmd, args))
+                ConsoleNetworker.SendClientCommand(player.networkPlayer, $"chat.add \"Server\" \" Unknown command {cmd}\"");
+
+            // Handled
+            arg.ReplyWith(string.Empty);
+            return true;
         }
 
         /// <summary>

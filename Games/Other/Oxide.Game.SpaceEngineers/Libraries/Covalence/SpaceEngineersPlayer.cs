@@ -2,10 +2,12 @@
 
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRageMath;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -132,7 +134,13 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public TimeSpan BanTimeRemaining => TimeSpan.MaxValue;
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount) => player.Character.StatComp.Health.Increase(amount, null);
+
+        /// <summary>
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount) => player.Character.DoDamage(amount, MyDamageType.Unknown, true);
@@ -146,7 +154,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => Sync.Players.KillPlayer(player);
+        public void Kill() => Sync.Players.KillPlayer(player); // TODO: player.Character.Kill(??) ?
 
         /// <summary>
         /// Teleports the user's character to the specified position

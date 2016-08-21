@@ -130,7 +130,13 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement somehow?
 
         /// <summary>
-        /// Damages user's character by specified amount
+        /// Heals the user's character by specified amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(float amount) => netUser.playerClient.controllable.takeDamage.health += amount;
+
+        /// <summary>
+        /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)
@@ -229,7 +235,18 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(string.Format(message, args));
+        public void Reply(string message, params object[] args)
+        {
+            switch (LastCommand)
+            {
+                case CommandType.Chat:
+                    Message(message, args);
+                    break;
+                case CommandType.Console:
+                    Command(string.Format($"echo {message}", args));
+                    break;
+            }
+        }
 
         /// <summary>
         /// Runs the specified console command on the user
