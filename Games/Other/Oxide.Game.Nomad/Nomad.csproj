@@ -45,7 +45,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\Nomad.cs" />
     <Compile Include="Libraries\Covalence\NomadCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\NomadCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\NomadPlayer.cs" />

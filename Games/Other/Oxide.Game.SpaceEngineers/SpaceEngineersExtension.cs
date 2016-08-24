@@ -57,9 +57,6 @@ namespace Oxide.Game.SpaceEngineers
         {
             // Register our loader
             Manager.RegisterPluginLoader(new SpaceEngineersPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("SpaceEng", new Libraries.SpaceEngineers());
         }
 
         /// <summary>

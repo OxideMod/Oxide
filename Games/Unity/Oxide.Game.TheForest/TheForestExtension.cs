@@ -130,9 +130,6 @@ namespace Oxide.Game.TheForest
         {
             // Register our loader
             Manager.RegisterPluginLoader(new TheForestPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Forest", new Libraries.TheForest());
         }
 
         /// <summary>

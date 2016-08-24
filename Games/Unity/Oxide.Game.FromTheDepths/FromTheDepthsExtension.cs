@@ -58,9 +58,6 @@ namespace Oxide.Game.FromTheDepths
         {
             // Register our loader
             Manager.RegisterPluginLoader(new FromTheDepthsPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("FTD", new Libraries.FromTheDepths());
         }
 
         /// <summary>

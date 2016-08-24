@@ -51,7 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\Unturned.cs" />
     <Compile Include="Libraries\Covalence\UnturnedCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\UnturnedCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\UnturnedPlayer.cs" />

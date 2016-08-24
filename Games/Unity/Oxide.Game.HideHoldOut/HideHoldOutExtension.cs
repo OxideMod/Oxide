@@ -79,7 +79,6 @@ namespace Oxide.Game.HideHoldOut
 
             // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("H2o", new Libraries.HideHoldOut());
         }
 
         /// <summary>

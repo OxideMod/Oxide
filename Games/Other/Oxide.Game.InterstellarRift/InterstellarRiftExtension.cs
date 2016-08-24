@@ -55,9 +55,6 @@ namespace Oxide.Game.InterstellarRift
         {
             // Register our loader
             Manager.RegisterPluginLoader(new InterstellarRiftPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Rift", new Libraries.InterstellarRift());
         }
 
         /// <summary>

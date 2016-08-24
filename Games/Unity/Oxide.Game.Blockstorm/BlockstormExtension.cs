@@ -65,9 +65,6 @@ namespace Oxide.Game.Blockstorm
         {
             // Register our loader
             Manager.RegisterPluginLoader(new BlockstormPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Storm", new Libraries.Blockstorm());
         }
 
         /// <summary>

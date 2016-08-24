@@ -52,7 +52,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\PlanetExplorers.cs" />
     <Compile Include="Libraries\Covalence\PlanetExplorersCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\PlanetExplorersCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\PlanetExplorersPlayer.cs" />

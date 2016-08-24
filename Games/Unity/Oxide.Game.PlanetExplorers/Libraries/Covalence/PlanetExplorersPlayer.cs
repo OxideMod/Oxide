@@ -37,7 +37,6 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             Object = player.transform.gameObject;
         }
 
-
         #region Objects
 
         /// <summary>

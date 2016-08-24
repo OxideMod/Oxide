@@ -44,7 +44,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\Terraria.cs" />
+    <Compile Include="Libraries\Covalence\TerrariaCommandSystem.cs" />
+    <Compile Include="Libraries\Covalence\TerrariaCovalenceProvider.cs" />
+    <Compile Include="Libraries\Covalence\TerrariaPlayer.cs" />
+    <Compile Include="Libraries\Covalence\TerrariaPlayerManager.cs" />
+    <Compile Include="Libraries\Covalence\TerrariaServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TerrariaCore.cs" />
     <Compile Include="TerrariaExtension.cs" />

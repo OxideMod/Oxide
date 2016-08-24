@@ -55,9 +55,6 @@ namespace Oxide.Game.Nomad
         {
             // Register our loader
             Manager.RegisterPluginLoader(new NomadPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Nomad", new Libraries.Nomad());
         }
 
         /// <summary>

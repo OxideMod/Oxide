@@ -59,9 +59,6 @@ namespace Oxide.Game.Unturned
         {
             // Register our loader
             Manager.RegisterPluginLoader(new UnturnedPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Unturned", new Libraries.Unturned());
         }
 
         /// <summary>

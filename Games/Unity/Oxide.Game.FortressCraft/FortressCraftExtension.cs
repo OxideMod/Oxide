@@ -56,9 +56,6 @@ namespace Oxide.Game.FortressCraft
         {
             // Register our loader
             Manager.RegisterPluginLoader(new FortressCraftPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Fortress", new Libraries.FortressCraft());
         }
 
         /// <summary>

@@ -61,9 +61,6 @@ namespace Oxide.Game.PlanetExplorers
         {
             // Register our loader
             Manager.RegisterPluginLoader(new PlanetExplorersPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("PlanetEx", new Libraries.PlanetExplorers());
         }
 
         /// <summary>

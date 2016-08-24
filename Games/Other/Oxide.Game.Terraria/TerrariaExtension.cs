@@ -55,9 +55,6 @@ namespace Oxide.Game.Terraria
         {
             // Register our loader
             Manager.RegisterPluginLoader(new TerrariaPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Terraria", new Libraries.Terraria());
         }
 
         /// <summary>
