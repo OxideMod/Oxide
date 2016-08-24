@@ -37,7 +37,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             Name = netUser.displayName;
             Id = steamId.ToString();
             Character = this;
-            Object = netUser.playerClient.gameObject;
+            Object = netUser.playerClient.controllable.gameObject;
         }
 
         #region Objects
@@ -127,7 +127,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets the amount of time remaining on the user's ban
         /// </summary>
-        public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement somehow?
+        public TimeSpan BanTimeRemaining => TimeSpan.MaxValue;
 
         /// <summary>
         /// Heals the user's character by specified amount
@@ -174,7 +174,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => netUser.playerClient.transform.position = new Vector3(x, y, z);
+        public void Teleport(float x, float y, float z) => netUser.playerClient.controllable.transform.position = new Vector3(x, y, z);
 
         /// <summary>
         /// Unbans the user
@@ -200,7 +200,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            var pos = netUser.playerClient.transform.position;
+            var pos = netUser.playerClient.controllable.transform.position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -212,7 +212,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            var pos = netUser.playerClient.transform.position;
+            var pos = netUser.playerClient.controllable.transform.position;
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
