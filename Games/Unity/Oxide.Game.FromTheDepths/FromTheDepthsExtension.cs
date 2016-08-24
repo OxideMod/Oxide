@@ -111,20 +111,22 @@ namespace Oxide.Game.FromTheDepths
                 if (MultiplayerManager.Instance == null) return string.Empty;
                 return $"{MultiplayerManager.Instance.Players.PlayerCount} | {MultiplayerManager.Instance.GameDetails.Name}";
             };
+
             Interface.Oxide.ServerConsole.Status1Left = () => $" {MultiplayerManager.Instance?.GameDetails.Name ?? "Unnamed"}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
+
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 if (MultiplayerManager.Instance == null) return string.Empty;
                 return $" {MultiplayerManager.Instance.Players.PlayerCount}/{MultiplayerManager.Instance.GameDetails.PlayerLimit}";
             };
             Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 if (GameTimer.Instance == null) return string.Empty;

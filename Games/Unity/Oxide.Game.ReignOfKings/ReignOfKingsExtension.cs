@@ -195,36 +195,39 @@ namespace Oxide.Game.ReignOfKings
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{Server.PlayerCount} | {DedicatedServerBypass.Settings.ServerName}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerBypass.Settings.ServerName}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => DedicatedServerBypass.Settings.ServerName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
+
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var sleepersCount = CodeHatch.StarForge.Sleeping.PlayerSleeperObject.AllSleeperObjects.Count;
-                var sleepers = sleepersCount + (sleepersCount.Equals(1) ? " sleeper" : " sleepers");
-                var entitiesCount = CodeHatch.Engine.Core.Cache.Entity.GetAll().Count;
-                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
-                return $" {Server.PlayerCount}/{Server.PlayerLimit} players, {sleepers}, {entities}";
+                var players = $"{Server.PlayerCount}/{Server.PlayerLimit} players";
+                var sleepers = CodeHatch.StarForge.Sleeping.PlayerSleeperObject.AllSleeperObjects.Count;
+                var entities = CodeHatch.Engine.Core.Cache.Entity.GetAll().Count;
+                return $"{players}, {sleepers + (sleepers.Equals(1) ? " sleeper" : " sleepers")}, {entities + (entities.Equals(1) ? " entity" : " entities")}";
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
-                double bytesSent = 0;
+                if (uLink.NetworkTime.serverTime <= 0) return "not connected";
+
                 double bytesReceived = 0;
+                double bytesSent = 0;
                 foreach (var player in Server.AllPlayers)
                 {
                     if (!player.Connection.IsConnected) continue;
+
                     var statistics = player.Connection.Statistics;
-                    bytesSent += statistics.BytesSentPerSecond;
                     bytesReceived += statistics.BytesReceivedPerSecond;
+                    bytesSent += statistics.BytesSentPerSecond;
                 }
-                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+                return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var gameTime = GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown";

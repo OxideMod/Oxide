@@ -92,7 +92,7 @@ namespace Oxide.Core.ServerConsole
             if (oldOutput != null) Console.SetOut(oldOutput);
             if (oldEncoding != null)
             {
-                SetConsoleOutputCP((uint) oldEncoding.CodePage);
+                SetConsoleOutputCP((uint)oldEncoding.CodePage);
                 Console.OutputEncoding = oldEncoding;
             }
             FreeConsole();

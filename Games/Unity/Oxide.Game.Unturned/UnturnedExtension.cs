@@ -92,21 +92,23 @@ namespace Oxide.Game.Unturned
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{Provider.clients.Count} | {Provider.serverName}";
+
             Interface.Oxide.ServerConsole.Status1Left = () => $" {Provider.serverName}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
+
             Interface.Oxide.ServerConsole.Status2Left = () => $" {Provider.clients.Count}/{Provider.maxPlayers} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Provider.bytesReceived);
                 var bytesSent = Utility.FormatBytes(Provider.bytesSent);
-                return Provider.time <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out");
+                return Provider.time <= 0 ? "0b/s in, 0b/s out" : $"{bytesReceived}/s in, {bytesSent}/s out";
             };
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(LightingManager.time)).ToString("h:mm tt").ToLower();

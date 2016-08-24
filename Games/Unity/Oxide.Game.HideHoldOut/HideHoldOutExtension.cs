@@ -109,33 +109,37 @@ namespace Oxide.Game.HideHoldOut
             var netManager = NetworkController.NetManager_;
 
             Interface.Oxide.ServerConsole.Title = () => $"{uLink.Network.connections.Length} | {netManager.ServManager.Server_NAME}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {netManager.ServManager.Server_NAME}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => netManager.ServManager.Server_NAME;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {uLink.Network.connections.Length}/{netManager.ServManager.NumberOfSlot} players";
+
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{uLink.Network.connections.Length}/{netManager.ServManager.NumberOfSlot} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
-                double bytesSent = 0;
+                if (uLink.NetworkTime.serverTime <= 0) return "not connected";
+
                 double bytesReceived = 0;
+                double bytesSent = 0;
                 foreach (var connection in uLink.Network.connections)
                 {
                     var stats = connection.statistics;
                     if (stats == null) continue;
-                    bytesSent += stats.bytesSentPerSecond;
+
                     bytesReceived += stats.bytesReceivedPerSecond;
+                    bytesSent += stats.bytesSentPerSecond;
                 }
-                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+                return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(netManager.TimeManager.TIME_display)).ToString("h:mm tt").ToLower();
-                return $" {time}, Unknown map";
+                return $"{time}, Unknown map";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {netManager.get_GAME_VERSION}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

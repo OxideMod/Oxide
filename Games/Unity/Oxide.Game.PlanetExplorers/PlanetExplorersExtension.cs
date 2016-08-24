@@ -92,29 +92,33 @@ namespace Oxide.Game.PlanetExplorers
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{uLink.Network.connections.Length} | {ServerConfig.ServerName}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {ServerConfig.ServerName}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => ServerConfig.ServerName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {uLink.Network.connections.Length}/{ServerConfig.MaxConnections} players";
+
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{uLink.Network.connections.Length}/{ServerConfig.MaxConnections} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.Network.time <= 0) return "0b/s in, 0b/s out";
-                double bytesSent = 0;
+                if (uLink.Network.time <= 0) return "not connected";
+
                 double bytesReceived = 0;
+                double bytesSent = 0;
                 foreach (var connection in uLink.Network.connections)
                 {
                     var stats = connection.statistics;
                     if (stats == null) continue;
-                    bytesSent += stats.bytesSentPerSecond;
+
                     bytesReceived += stats.bytesReceivedPerSecond;
+                    bytesSent += stats.bytesSentPerSecond;
                 }
-                return string.Concat(Core.Utility.FormatBytes(bytesReceived), "/s in, ", Core.Utility.FormatBytes(bytesSent), "/s out");
+                return $"{Core.Utility.FormatBytes(bytesReceived)}/s in, {Core.Utility.FormatBytes(bytesSent)}/s out";
             };
+
             /*Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = TimeManager.Instance.GetCurrentGameTime();

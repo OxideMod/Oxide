@@ -96,24 +96,26 @@ namespace Oxide.Game.Blockstorm
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                return $"{FpsMultiplayerGame.instance.playersList.method_5().Count} | {DedicatedServerConfiguration.string_12}";
-            };
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {DedicatedServerConfiguration.string_12}";
+            Interface.Oxide.ServerConsole.Title = () => $"{FpsMultiplayerGame.instance.playersList.method_5().Count} | {DedicatedServerConfiguration.string_12}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => DedicatedServerConfiguration.string_12;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
-            Interface.Oxide.ServerConsole.Status2Left = () =>
+
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{FpsMultiplayerGame.instance.playersList.method_5().Count}/{DedicatedServerConfiguration.int_1} players";
+            Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                return $" {FpsMultiplayerGame.instance.playersList.method_5().Count}/{DedicatedServerConfiguration.int_1} players";
+                return string.Empty; // TODO: Network in/out
             };
-            Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
-            Interface.Oxide.ServerConsole.Status3Left = () => string.Empty; // TODO: Server game time, map name
+
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                return string.Empty; // TODO: Server game time, map name
+            };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Constants.smethod_0()}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }

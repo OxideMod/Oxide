@@ -110,9 +110,10 @@ namespace Oxide.Core.ServerConsole
             }
         }
 
-        public static void PrintColoured(params object[] objects)
+        public static void PrintColored(params object[] objects)
         {
             if (Interface.Oxide.ServerConsole == null) return;
+
             Interface.Oxide.ServerConsole.input.ClearLine(Interface.Oxide.ServerConsole.input.StatusTextLeft.Length);
             for (var i = 0; i < objects.Length; i++)
             {
@@ -128,9 +129,11 @@ namespace Oxide.Core.ServerConsole
         public void Update()
         {
             if (!init) return;
+
             UpdateStatus();
             input.Update();
             if (nextTitleUpdate > Interface.Oxide.Now) return;
+
             nextTitleUpdate = Interface.Oxide.Now + 1f;
             console.SetTitle(title);
         }
@@ -138,6 +141,7 @@ namespace Oxide.Core.ServerConsole
         private void UpdateStatus()
         {
             if (nextUpdate > Interface.Oxide.Now) return;
+
             nextUpdate = Interface.Oxide.Now + 0.66f;
             if (!input.Valid) return;
             string left1 = status1Left, left2 = status2Left, left3 = status3Left;

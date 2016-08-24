@@ -43,7 +43,7 @@ namespace Oxide.Core.Libraries
             /// <summary>
             /// Gets the destination URL
             /// </summary>
-            public string URL { get; }
+            public string Url { get; }
 
             /// <summary>
             /// Gets or sets the request body
@@ -83,7 +83,7 @@ namespace Oxide.Core.Libraries
             /// <param name="owner"></param>
             public WebRequest(string url, Action<int, string> callback, Plugin owner)
             {
-                URL = url;
+                Url = url;
                 Callback = callback;
                 Owner = owner;
                 removedFromManager = Owner?.OnRemovedFromManager.Add(owner_OnRemovedFromManager);
@@ -97,12 +97,12 @@ namespace Oxide.Core.Libraries
                 try
                 {
                     // Create the request
-                    request = (HttpWebRequest)System.Net.WebRequest.Create(URL);
+                    request = (HttpWebRequest)System.Net.WebRequest.Create(Url);
                     request.Method = Method;
                     request.Credentials = CredentialCache.DefaultCredentials;
                     request.Proxy = null;
                     request.KeepAlive = false;
-                    request.Timeout = (int)Math.Round((Timeout == 0f ? WebRequests.Timeout : Timeout) * 1000f);
+                    request.Timeout = (int)Math.Round((Timeout.Equals(0f) ? WebRequests.Timeout : Timeout) * 1000f);
                     request.ServicePoint.MaxIdleTime = request.Timeout;
                     request.ServicePoint.Expect100Continue = ServicePointManager.Expect100Continue;
                     request.ServicePoint.ConnectionLimit = ServicePointManager.DefaultConnectionLimit;
@@ -147,7 +147,7 @@ namespace Oxide.Core.Libraries
                 catch (Exception ex)
                 {
                     ResponseText = ex.Message.Trim('\r', '\n', ' ');
-                    var message = $"Web request produced exception (Url: {URL})";
+                    var message = $"Web request produced exception (Url: {Url})";
                     if (Owner) message += $" in '{Owner.Name} v{Owner.Version}' plugin";
                     Interface.Oxide.LogException(message, ex);
                     request?.Abort();
@@ -190,7 +190,7 @@ namespace Oxide.Core.Libraries
                     catch (Exception ex)
                     {
                         ResponseText = ex.Message.Trim('\r', '\n', ' ');
-                        var message = $"Web request produced exception (Url: {URL})";
+                        var message = $"Web request produced exception (Url: {Url})";
                         if (Owner) message += $" in '{Owner.Name} v{Owner.Version}' plugin";
                         Interface.Oxide.LogException(message, ex);
                     }
@@ -202,9 +202,9 @@ namespace Oxide.Core.Libraries
                 registeredWaitHandle = ThreadPool.RegisterWaitForSingleObject(waitHandle, OnTimeout, null, request.Timeout, true);
             }
 
-            private void OnTimeout(object state, bool timed_out)
+            private void OnTimeout(object state, bool timedOut)
             {
-                if (timed_out) request?.Abort();
+                if (timedOut) request?.Abort();
                 if (Owner == null) return;
                 Event.Remove(ref removedFromManager);
                 Owner = null;
@@ -242,9 +242,9 @@ namespace Oxide.Core.Libraries
             private void owner_OnRemovedFromManager(Plugin sender, PluginManager manager)
             {
                 if (request == null) return;
-                var outstanding_request = request;
+                var outstandingRequest = request;
                 request = null;
-                outstanding_request.Abort();
+                outstandingRequest.Abort();
             }
         }
 
@@ -263,12 +263,12 @@ namespace Oxide.Core.Libraries
         {
             // Initialize SSL
             ServicePointManager.Expect100Continue = false;
-            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             ServicePointManager.DefaultConnectionLimit = 200;
 
             ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
-            maxCompletionPortThreads = (int) (maxCompletionPortThreads * 0.6);
-            maxWorkerThreads = (int) (maxWorkerThreads * 0.75);
+            maxCompletionPortThreads = (int)(maxCompletionPortThreads * 0.6);
+            maxWorkerThreads = (int)(maxWorkerThreads * 0.75);
 
             // Start worker thread
             workerthread = new Thread(Worker);
