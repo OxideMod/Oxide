@@ -100,7 +100,7 @@ namespace Oxide.Game.Terraria
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () => DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Main.versionNumber2}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Main.versionNumber}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
