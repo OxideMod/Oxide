@@ -56,9 +56,6 @@ namespace Oxide.Game.SavageLands
         {
             // Register our loader
             Manager.RegisterPluginLoader(new SavageLandsPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Savage", new Libraries.SavageLands());
         }
 
         /// <summary>

@@ -109,33 +109,34 @@ namespace Oxide.Game.RustLegacy
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{NetCull.connections.Length} | {server.hostname ?? "Unnamed"}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {server.hostname ?? "Unnamed"}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => server.hostname ?? "Unnamed";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
+
             Interface.Oxide.ServerConsole.Status2Left = () => $" {NetCull.connections.Length}/{NetCull.maxConnections} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (!NetCull.isServerRunning || NetCull.isNotRunning) return "not connected";
-                double bytesSent = 0;
+
                 double bytesReceived = 0;
+                double bytesSent = 0;
                 foreach (var connection in NetCull.connections)
                 {
                     var stats = connection.statistics;
                     if (stats == null) continue;
-                    bytesSent += stats.bytesSentPerSecond;
+
                     bytesReceived += stats.bytesReceivedPerSecond;
+                    bytesSent += stats.bytesSentPerSecond;
                 }
-                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+                return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                return $" {EnvironmentControlCenter.Singleton?.GetTime().ToString() ?? "Unknown"}, {(server.pvp ? "PvP" : "PvE")}";
-            };
+
+            Interface.Oxide.ServerConsole.Status3Left = () => $"{EnvironmentControlCenter.Singleton.GetTime()}, {(server.pvp ? "PvP" : "PvE")}";
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }

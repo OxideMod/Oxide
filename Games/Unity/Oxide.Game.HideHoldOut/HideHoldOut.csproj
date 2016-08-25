@@ -55,7 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Command.cs" />
-    <Compile Include="Libraries\HideHoldOut.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\HideHoldOutPlayer.cs" />

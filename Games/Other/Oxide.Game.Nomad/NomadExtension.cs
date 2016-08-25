@@ -1,9 +1,9 @@
 ﻿using System;
 
+using TNet;
+
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
-using TNet;
 
 namespace Oxide.Game.Nomad
 {
@@ -55,9 +55,6 @@ namespace Oxide.Game.Nomad
         {
             // Register our loader
             Manager.RegisterPluginLoader(new NomadPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Nomad", new Libraries.Nomad());
         }
 
         /// <summary>
@@ -84,8 +81,9 @@ namespace Oxide.Game.Nomad
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"? | {LobbyServerLink.mGameServer.name}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {LobbyServerLink.mGameServer.name}";
+            Interface.Oxide.ServerConsole.Title = () => $"{LobbyServerLink.mGameServer.playerCount} | {LobbyServerLink.mGameServer.name}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => LobbyServerLink.mGameServer.name;
             /*Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Main.fpsCount;
@@ -93,13 +91,15 @@ namespace Oxide.Game.Nomad
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };*/
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {LobbyServerLink.mGameServer.playerCount}/{LobbyServerLink.mGameServer.playerLimit} players";
+
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{LobbyServerLink.mGameServer.playerCount}/{LobbyServerLink.mGameServer.playerLimit} players";
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);
                 var bytesSent = Utility.FormatBytes(Main.txData);
                 return Main.time <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out");
             };
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();

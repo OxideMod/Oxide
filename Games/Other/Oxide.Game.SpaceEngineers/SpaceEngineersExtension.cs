@@ -57,9 +57,6 @@ namespace Oxide.Game.SpaceEngineers
         {
             // Register our loader
             Manager.RegisterPluginLoader(new SpaceEngineersPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("SpaceEng", new Libraries.SpaceEngineers());
         }
 
         /// <summary>
@@ -87,7 +84,7 @@ namespace Oxide.Game.SpaceEngineers
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{MyMultiplayer.Static?.MemberCount} | {MySandboxGame.ConfigDedicated.ServerName}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {MySandboxGame.ConfigDedicated.ServerName}";
+            Interface.Oxide.ServerConsole.Status1Left = () => MySandboxGame.ConfigDedicated.ServerName;
             /*Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Sandbox.Engine.Utils.MyFpsManager.GetFps();
@@ -95,7 +92,7 @@ namespace Oxide.Game.SpaceEngineers
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime); // MySession.Static.ElapsedGameTime // MySandboxGame.TotalTimeInMilliseconds
             };*/
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {MyMultiplayer.Static?.MemberCount}/{MyMultiplayer.Static?.MemberLimit}";
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{MyMultiplayer.Static?.MemberCount}/{MyMultiplayer.Static?.MemberLimit}";
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);

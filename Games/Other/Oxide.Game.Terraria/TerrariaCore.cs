@@ -56,7 +56,7 @@ namespace Oxide.Game.Terraria
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", Main.versionNumber2);
+            RemoteLogger.SetTag("version", Main.versionNumber);
 
             // Setup the default permission groups
             if (permission.IsLoaded)

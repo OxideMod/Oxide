@@ -55,9 +55,6 @@ namespace Oxide.Game.Terraria
         {
             // Register our loader
             Manager.RegisterPluginLoader(new TerrariaPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Terraria", new Libraries.Terraria());
         }
 
         /// <summary>
@@ -85,30 +82,25 @@ namespace Oxide.Game.Terraria
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{Main.numPlayers} | {Main.worldName}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {Main.worldName}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => Main.worldName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Main.fpsCount; // Main.fpsTimer
-                var seconds = TimeSpan.FromSeconds(Main.time);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Main.time);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Main.fpsCount}fps, {uptime}";
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () =>
-            {
-                var players = Main.numPlayers;
-                var playerLimit = Main.maxNetPlayers;
-                return string.Concat(" ", players, "/", playerLimit, " players");
-            };
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{Main.numPlayers}/{Main.maxNetPlayers}";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);
                 var bytesSent = Utility.FormatBytes(Main.txData);
-                return Main.time <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out");
+                return Main.time <= 0 ? "not connected" : $"{bytesReceived}/s in, {bytesSent}/s out";
             };
 
             Interface.Oxide.ServerConsole.Status3Left = () => DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Main.versionNumber2}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Main.versionNumber}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 

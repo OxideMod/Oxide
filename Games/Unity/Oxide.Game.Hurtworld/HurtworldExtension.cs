@@ -118,53 +118,41 @@ namespace Oxide.Game.Hurtworld
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                if (GameManager.Instance == null) return string.Empty;
-                return $"{GameManager.Instance.GetPlayerCount()} | {GameManager.Instance.ServerConfig.GameName}";
-            };
-            Interface.Oxide.ServerConsole.Status1Left = () =>
-            {
-                if (GameManager.Instance == null) return string.Empty;
-                return $" {GameManager.Instance.ServerConfig.GameName}";
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"{GameManager.Instance.GetPlayerCount()} | {GameManager.Instance.ServerConfig.GameName}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => GameManager.Instance.ServerConfig.GameName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
-            Interface.Oxide.ServerConsole.Status2Left = () =>
-            {
-                if (GameManager.Instance == null) return string.Empty;
-                return $" {GameManager.Instance.GetPlayerCount()}/{GameManager.Instance.ServerConfig.MaxPlayers} players";
-            };
+
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{GameManager.Instance.GetPlayerCount()}/{GameManager.Instance.ServerConfig.MaxPlayers} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (uLink.NetworkTime.serverTime <= 0) return "0b/s in, 0b/s out";
-                double bytesSent = 0;
+                if (uLink.NetworkTime.serverTime <= 0) return "not connected";
+
                 double bytesReceived = 0;
+                double bytesSent = 0;
                 foreach (var connection in uLink.Network.connections)
                 {
                     var stats = connection.statistics;
                     if (stats == null) continue;
-                    bytesSent += stats.bytesSentPerSecond;
+
                     bytesReceived += stats.bytesReceivedPerSecond;
+                    bytesSent += stats.bytesSentPerSecond;
                 }
-                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+                return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = TimeManager.Instance.GetCurrentGameTime();
                 var gameTime = $"{(time.Hour > 12 ? (time.Hour - 12) : time.Hour)}:{time.Minute:D2} {(time.Hour >= 12 ? "pm" : "am")}";
-                var map = GameManager.Instance?.ServerConfig?.Map ?? "Unknown";
-                return string.Concat(" ", gameTime, ", ", map);
+                return $"{gameTime}, {GameManager.Instance?.ServerConfig?.Map ?? "Unknown"}";
             };
-            Interface.Oxide.ServerConsole.Status3Right = () =>
-            {
-                return $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.PROTOCOL_VERSION})";
-            };
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.PROTOCOL_VERSION})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 

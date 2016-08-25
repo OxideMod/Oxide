@@ -105,29 +105,30 @@ namespace Oxide.Game.Rust
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {ConVar.Server.hostname}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => ConVar.Server.hostname;
             Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {((ulong)Time.realtimeSinceStartup).FormatSeconds()}";
+
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = BasePlayer.activePlayerList.Count;
-                var playerLimit = ConVar.Server.maxplayers;
-                var sleeperCount = BasePlayer.sleepingPlayerList.Count;
-                var sleepers = sleeperCount + (sleeperCount.Equals(1) ? " sleeper" : " sleepers");
-                var entitiesCount = BaseNetworkable.serverEntities.Count;
-                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
-                return string.Concat(" ", players, "/", playerLimit, " players, ", sleepers, ", ", entities);
+                var players = $"{BasePlayer.activePlayerList.Count}/{ConVar.Server.maxplayers} players";
+                var sleepers = BasePlayer.sleepingPlayerList.Count;
+                var entities = BaseNetworkable.serverEntities.Count;
+                return $"{players}, {sleepers + (sleepers.Equals(1) ? " sleeper" : " sleepers")}, {entities + (entities.Equals(1) ? " entity" : " entities")}";
             };
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (Net.sv == null || !Net.sv.IsConnected()) return "not connected";
-                var inbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond));
-                var outbound = Utility.FormatBytes(Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond));
-                return string.Concat(inbound, "/s in, ", outbound, "/s out");
+
+                var bytesReceived = Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesReceived_LastSecond);
+                var bytesSent = Net.sv.GetStat(null, NetworkPeer.StatTypeLong.BytesSent_LastSecond);
+                return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt").ToLower();
-                return $" {gameTime}, {ConVar.Server.level} [{ConVar.Server.worldsize}, {ConVar.Server.seed}]";
+                var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt");
+                return $"{gameTime.ToLower()}, {ConVar.Server.level} [{ConVar.Server.worldsize}, {ConVar.Server.seed}]";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.network})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

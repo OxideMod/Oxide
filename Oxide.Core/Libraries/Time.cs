@@ -12,14 +12,14 @@ namespace Oxide.Core.Libraries
         /// </summary>
         public override bool IsGlobal => false;
 
-        private static readonly DateTime epoch = new DateTime(1970, 1, 1);
+        private static readonly DateTime Epoch = new DateTime(1970, 1, 1);
 
         /// <summary>
         /// Returns a Unix timestamp for the current time
         /// </summary>
         /// <returns></returns>
         [LibraryFunction("GetUnixTimestamp")]
-        public uint GetUnixTimestamp() => (uint)DateTime.UtcNow.Subtract(epoch).TotalSeconds;
+        public uint GetUnixTimestamp() => (uint)DateTime.UtcNow.Subtract(Epoch).TotalSeconds;
 
         /// <summary>
         /// Returns DateTime.UtcNow

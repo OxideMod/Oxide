@@ -55,9 +55,6 @@ namespace Oxide.Game.InterstellarRift
         {
             // Register our loader
             Manager.RegisterPluginLoader(new InterstellarRiftPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Rift", new Libraries.InterstellarRift());
         }
 
         /// <summary>
@@ -85,12 +82,13 @@ namespace Oxide.Game.InterstellarRift
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"? | {Config.Singleton.ServerName}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {Config.Singleton.ServerName}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => Config.Singleton.ServerName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = string.Empty; // TODO
-                var seconds = TimeSpan.FromSeconds(0); // TODO
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                var time = TimeSpan.FromSeconds(0); // TODO
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
             /*Interface.Oxide.ServerConsole.Status2Left = () =>
@@ -105,6 +103,7 @@ namespace Oxide.Game.InterstellarRift
                 var bytesSent = Utility.FormatBytes(0); // TODO
                 return null <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out"); // TODO
             };*/
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = DateTime.Today.Add(TimeSpan.FromSeconds(0)).ToString("h:mm tt").ToLower(); // TODO

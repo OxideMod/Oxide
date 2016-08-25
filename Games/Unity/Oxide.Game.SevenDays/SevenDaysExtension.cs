@@ -147,34 +147,29 @@ namespace Oxide.Game.SevenDays
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () =>
-            {
-                return $"{GameManager.Instance?.World?.Players?.Count} | {GamePrefs.GetString(EnumGamePrefs.ServerName)}";
-            };
+            Interface.Oxide.ServerConsole.Title = () => $"{GameManager.Instance.World.Players.Count} | {GamePrefs.GetString(EnumGamePrefs.ServerName)}";
+
             Interface.Oxide.ServerConsole.Status1Left = () => $" {GamePrefs.GetString(EnumGamePrefs.ServerName)}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
-                var seconds = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
-                var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
-                return string.Concat(fps, "fps, ", uptime);
+                var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
+                var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
+                return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
+
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = GameManager.Instance?.World?.Players?.Count;
-                var playerLimit = GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount);
-                var entitiesCount = GameManager.Instance?.World?.Entities?.Count;
-                var entities = entitiesCount + (entitiesCount.Equals(1) ? " entity" : " entities");
-                return string.Concat(" ", players, "/", playerLimit, " players, ", entities);
+                var players = $"{GameManager.Instance.World.Players.Count}/{GamePrefs.GetInt(EnumGamePrefs.ServerMaxPlayerCount)}";
+                var entities = GameManager.Instance.World.Entities.Count;
+                return $" {players}, {entities + (entities.Equals(1) ? " entity" : " entities")}";
             };
             Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                if (GameManager.Instance == null || GameManager.Instance.World == null) return string.Empty;
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(GameManager.Instance.World.worldTime)).ToString("h:mm tt").ToLower();
-                var world = GamePrefs.GetString(EnumGamePrefs.GameWorld);
-                var seed = GamePrefs.GetString(EnumGamePrefs.GameName);
-                return string.Concat(" ", time, ", ", world, " [", seed, "]");
+                var gameTime = GameManager.Instance.World.worldTime;
+                var dateTime = Convert.ToDateTime($"{GameUtils.WorldTimeToHours(gameTime)}:{GameUtils.WorldTimeToMinutes(gameTime)}").ToString("h:mm tt");
+                return $" {dateTime.ToLower()}, {GamePrefs.GetString(EnumGamePrefs.GameWorld)} [{GamePrefs.GetString(EnumGamePrefs.GameName)}]";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GamePrefs.GetString(EnumGamePrefs.GameVersion)}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

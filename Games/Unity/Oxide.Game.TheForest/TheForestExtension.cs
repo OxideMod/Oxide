@@ -130,9 +130,6 @@ namespace Oxide.Game.TheForest
         {
             // Register our loader
             Manager.RegisterPluginLoader(new TheForestPluginLoader());
-
-            // Register our libraries
-            Manager.RegisterLibrary("Forest", new Libraries.TheForest());
         }
 
         /// <summary>
@@ -288,7 +285,8 @@ namespace Oxide.Game.TheForest
             if (Interface.Oxide.ServerConsole == null) return;
 
             Interface.Oxide.ServerConsole.Title = () => $"{CoopLobby.Instance?.MemberCount ?? 0} | {CoopLobby.Instance?.Info?.Name ?? "Unnamed"}";
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {CoopLobby.Instance?.Info?.Name ?? "Unnamed"}";
+
+            Interface.Oxide.ServerConsole.Status1Left = () => CoopLobby.Instance?.Info.Name ?? "Unnamed";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -296,19 +294,22 @@ namespace Oxide.Game.TheForest
                 var uptime = $"{seconds.TotalHours:00}h{seconds.Minutes:00}m{seconds.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {CoopLobby.Instance?.MemberCount}/{CoopLobby.Instance?.Info?.MemberLimit}";
+
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{CoopLobby.Instance?.MemberCount}/{CoopLobby.Instance?.Info.MemberLimit}";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (BoltNetwork.serverTime <= 0) return "0b/s in, 0b/s out";
-                double bytesSent = 0;
+                if (BoltNetwork.serverTime <= 0) return "not connected";
+
                 double bytesReceived = 0;
+                double bytesSent = 0;
                 foreach (var connection in BoltNetwork.connections)
                 {
-                    bytesSent += connection.BitsPerSecondIn / 8f;
                     bytesReceived += connection.BitsPerSecondOut / 8f;
+                    bytesSent += connection.BitsPerSecondIn / 8f;
                 }
-                return string.Concat(Utility.FormatBytes(bytesReceived), "/s in, ", Utility.FormatBytes(bytesSent), "/s out");
+                return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
+
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 return $" {DateTime.Today.Add(TimeSpan.FromMinutes(TheForestAtmosphere.Instance.TimeOfDay)).ToString("h:mm tt").ToLower()}";

@@ -48,7 +48,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Libraries\InterstellarRift.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InterstellarRiftCore.cs" />
     <Compile Include="InterstellarRiftExtension.cs" />
