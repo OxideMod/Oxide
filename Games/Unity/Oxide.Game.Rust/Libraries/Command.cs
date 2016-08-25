@@ -217,7 +217,7 @@ namespace Oxide.Game.Rust.Libraries
             // Setup console command name
             var split = command.Split('.');
             var parent = split.Length >= 2 ? split[0].Trim() : "global";
-            var name = split.Length >= 2 ? split[1].Trim() : split[0].Trim();
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
             var fullName = $"{parent}.{name}";
 
             // Setup a new RustPlugin console command
@@ -238,7 +238,7 @@ namespace Oxide.Game.Rust.Libraries
                 if (consoleCommand.OriginalCallback != null)
                     cmd.OriginalCallback = consoleCommand.OriginalCallback;
 
-                var previousPluginName = cmd.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
+                var previousPluginName = consoleCommand.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var message = $"{newPluginName} has replaced the '{command}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
@@ -349,7 +349,7 @@ namespace Oxide.Game.Rust.Libraries
         {
             var split = command.Split('.');
             var parent = split.Length >= 2 ? split[0].Trim() : "global";
-            var name = split.Length >= 2 ? split[1].Trim() : split[0].Trim();
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
             var fullname = $"{parent}.{name}";
 
             RustCommandSystem.RegisteredCommand cmd;

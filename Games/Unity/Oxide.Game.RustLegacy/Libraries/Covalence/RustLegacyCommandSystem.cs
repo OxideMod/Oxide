@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
@@ -60,7 +61,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             // Setup console command name
             var split = commandName.Split('.');
             var parent = split.Length >= 2 ? split[0].Trim() : "global";
-            var name = split.Length >= 2 ? split[1].Trim() : split[0].Trim();
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
             var fullname = $"{parent}.{name}";
 
             // Check if it already exists
