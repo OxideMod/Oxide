@@ -6,6 +6,7 @@ using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.Rust.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries
 {
@@ -17,7 +18,7 @@ namespace Oxide.Game.Rust.Libraries
         private static string ReturnEmptyString() => string.Empty;
         private static void DoNothing(string str) { }
 
-        private struct PluginCallback
+        internal struct PluginCallback
         {
             public readonly Plugin Plugin;
             public readonly string Name;
@@ -38,7 +39,7 @@ namespace Oxide.Game.Rust.Libraries
             }
         }
 
-        private class ConsoleCommand
+        internal class ConsoleCommand
         {
             public readonly string Name;
             public readonly List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
@@ -57,6 +58,7 @@ namespace Oxide.Game.Rust.Libraries
                     isCommand = true,
                     isUser = true,
                     isAdmin = true,
+                    isVariable = false,
                     GetString = ReturnEmptyString,
                     SetString = DoNothing,
                     Call = HandleCommand
@@ -82,12 +84,10 @@ namespace Oxide.Game.Rust.Libraries
                     pluginCallback.Plugin?.TrackEnd();
                     if (result) return;
                 }
-
-                OriginalCallback?.Invoke(arg);
             }
         }
 
-        private class ChatCommand
+        internal class ChatCommand
         {
             public readonly string Name;
             public readonly Plugin Plugin;
@@ -109,10 +109,10 @@ namespace Oxide.Game.Rust.Libraries
         }
 
         // All console commands that plugins have registered
-        private readonly Dictionary<string, ConsoleCommand> consoleCommands;
+        internal readonly Dictionary<string, ConsoleCommand> consoleCommands;
 
         // All chat commands that plugins have registered
-        private readonly Dictionary<string, ChatCommand> chatCommands;
+        internal readonly Dictionary<string, ChatCommand> chatCommands;
 
         // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustcommands;
@@ -152,6 +152,13 @@ namespace Oxide.Game.Rust.Libraries
         {
             var commandName = name.ToLowerInvariant();
 
+            if (!CanOverrideCommand(name, "chat"))
+            {
+                var pluginName = plugin?.Name ?? "An unknown plugin";
+                Interface.Oxide.LogError("{0} tried to register command '{1}', this command already exists and cannot be overridden!", pluginName, commandName);
+                return;
+            }
+
             ChatCommand cmd;
             if (chatCommands.TryGetValue(commandName, out cmd))
             {
@@ -159,6 +166,16 @@ namespace Oxide.Game.Rust.Libraries
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var message = $"{newPluginName} has replaced the '{commandName}' chat command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
+            }
+
+            RustCommandSystem.RegisteredCommand covalenceCommand;
+            if (RustCore.Covalence.CommandSystem.registeredCommands.TryGetValue(commandName, out covalenceCommand))
+            {
+                var previousPluginName = covalenceCommand.Source?.Name ?? "an unknown plugin";
+                var newPluginName = plugin?.Name ?? "An unknown plugin";
+                var message = $"{newPluginName} has replaced the '{commandName}' command previously registered by {previousPluginName}";
+                Interface.Oxide.LogWarning(message);
+                RustCore.Covalence.CommandSystem.UnregisterCommand(commandName, covalenceCommand.Source);
             }
 
             cmd = new ChatCommand(commandName, plugin, callback);
@@ -185,10 +202,10 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Adds a console command with a delegate callback
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="command"></param>
         /// <param name="plugin"></param>
         /// <param name="callback"></param>
-        public void AddConsoleCommand(string name, Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
+        public void AddConsoleCommand(string command, Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
         {
             // Hack us the dictionary
             if (rustcommands == null) rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
@@ -197,30 +214,54 @@ namespace Oxide.Game.Rust.Libraries
             if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
                 pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
 
-            var fullName = name.Trim();
+            // Setup console command name
+            var split = command.Split('.');
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? split[1].Trim() : split[0].Trim();
+            var fullName = $"{parent}.{name}";
 
-            ConsoleCommand cmd;
-            if (consoleCommands.TryGetValue(fullName, out cmd))
+            // Setup a new RustPlugin console command
+            var cmd = new ConsoleCommand(fullName);
+
+            // Check if the command can be overridden
+            if (!CanOverrideCommand(parent == "global" ? name : fullName, "console"))
             {
-                // Another plugin registered this command
-                if (cmd.OriginalCallback != null)
-                {
-                    // This is a vanilla rust command which has already been pre-hooked by another plugin
-                    cmd.AddCallback(plugin, callback);
-                    return;
-                }
+                var pluginName = plugin?.Name ?? "An unknown plugin";
+                Interface.Oxide.LogError("{0} tried to register command '{1}', this command already exists and cannot be overridden!", pluginName, fullName);
+                return;
+            }
 
-                // This is a custom command which was already registered by another plugin
+            // Check if it already exists in a Rust plugin as a console command
+            ConsoleCommand consoleCommand;
+            if (consoleCommands.TryGetValue(fullName, out consoleCommand))
+            {
+                if (consoleCommand.OriginalCallback != null)
+                    cmd.OriginalCallback = consoleCommand.OriginalCallback;
+
                 var previousPluginName = cmd.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
-                var message = $"{newPluginName} has replaced the '{name}' console command previously registered by {previousPluginName}";
+                var message = $"{newPluginName} has replaced the '{command}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
-                rustcommands.Remove(fullName);
-                ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
+
+                rustcommands.Remove(consoleCommand.RustCommand.namefull);
+                ConsoleSystem.Index.GetAll().Remove(consoleCommand.RustCommand);
+            }
+
+            RustCommandSystem.RegisteredCommand covalenceCommand;
+            if (RustCore.Covalence.CommandSystem.registeredCommands.TryGetValue(parent == "global" ? name : fullName, out covalenceCommand))
+            {
+                if (covalenceCommand.OriginalCallback != null)
+                    cmd.OriginalCallback = covalenceCommand.OriginalCallback;
+
+                var previousPluginName = covalenceCommand.Source?.Name ?? "an unknown plugin";
+                var newPluginName = plugin?.Name ?? "An unknown plugin";
+                var message = $"{newPluginName} has replaced the '{fullName}' command previously registered by {previousPluginName}";
+                Interface.Oxide.LogWarning(message);
+
+                RustCore.Covalence.CommandSystem.UnregisterCommand(parent == "global" ? name : fullName, covalenceCommand.Source);
             }
 
             // The command either does not already exist or is replacing a previously registered command
-            cmd = new ConsoleCommand(fullName);
             cmd.AddCallback(plugin, callback);
 
             ConsoleSystem.Command rustCommand;
@@ -233,16 +274,12 @@ namespace Oxide.Game.Rust.Libraries
                     Interface.Oxide.LogError($"{newPluginName} tried to register the {name} console variable as a command!");
                     return;
                 }
-                cmd.OriginalCallback = cmd.RustCommand.Call;
-                cmd.RustCommand.Call = cmd.HandleCommand;
-            }
-            else
-            {
-                // This is a custom command which needs to be created
-                rustcommands[cmd.RustCommand.namefull] = cmd.RustCommand;
-                ConsoleSystem.Index.GetAll().Add(cmd.RustCommand);
+                cmd.OriginalCallback = rustCommand.Call;
             }
 
+            // Register the console command
+            rustcommands[fullName] = cmd.RustCommand;
+            ConsoleSystem.Index.GetAll().Add(cmd.RustCommand);
             consoleCommands[fullName] = cmd;
         }
 
@@ -277,16 +314,15 @@ namespace Oxide.Game.Rust.Libraries
                 // This command is no longer registered by any plugins
                 consoleCommands.Remove(cmd.Name);
 
-                if (cmd.OriginalCallback == null)
+                // If this was originally a vanilla rust command then restore it, otherwise remove it
+                if (cmd.OriginalCallback != null)
                 {
-                    // This is a custom command, remove it completely
-                    rustcommands.Remove(cmd.RustCommand.namefull);
-                    ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
+                    rustcommands[cmd.RustCommand.namefull].Call = cmd.OriginalCallback;
                 }
                 else
                 {
-                    // This is a vanilla rust command, restore the original callback
-                    cmd.RustCommand.Call = cmd.OriginalCallback;
+                    rustcommands.Remove(cmd.RustCommand.namefull);
+                    ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
                 }
             }
 
@@ -301,6 +337,42 @@ namespace Oxide.Game.Rust.Libraries
                 event_callback.Remove();
                 pluginRemovedFromManager.Remove(sender);
             }
+        }
+
+        /// <summary>
+        /// Checks if a command can be overridden
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private bool CanOverrideCommand(string command, string type)
+        {
+            var split = command.Split('.');
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? split[1].Trim() : split[0].Trim();
+            var fullname = $"{parent}.{name}";
+
+            RustCommandSystem.RegisteredCommand cmd;
+            if (RustCore.Covalence.CommandSystem.registeredCommands.TryGetValue(command, out cmd))
+                if (cmd.Source.IsCorePlugin)
+                    return false;
+
+            if (type == "chat")
+            {
+                ChatCommand chatCommand;
+                if (chatCommands.TryGetValue(command, out chatCommand))
+                    if (chatCommand.Plugin.IsCorePlugin)
+                        return false;
+            }
+            else if (type == "console")
+            {
+                ConsoleCommand consoleCommand;
+                if (consoleCommands.TryGetValue(parent == "global" ? name : fullname, out consoleCommand))
+                    if (consoleCommand.PluginCallbacks[0].Plugin.IsCorePlugin)
+                        return false;
+            }
+
+            return !RustCore.RestrictedCommands.Contains(command) && !RustCore.RestrictedCommands.Contains(fullname);
         }
     }
 }

@@ -179,11 +179,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill()
-        {
-            EPlayerKill ePlayerKill;
-            steamPlayer.player.life.askDamage(101, Vector3.up * 101f, EDeathCause.KILL, ELimb.SKULL, CSteamID.Nil, out ePlayerKill);
-        }
+        public void Kill() => Hurt(101f);
 
         /// <summary>
         /// Teleports the user's character to the specified position

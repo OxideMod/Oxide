@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -45,7 +46,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string command, CommandCallback callback)
+        public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
             // Convert to lowercase
             var commandName = command.ToLowerInvariant();
@@ -61,7 +62,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Unregisters the specified command
         /// </summary>
         /// <param name="command"></param>
-        public void UnregisterCommand(string command) => registeredCommands.Remove(command);
+        public void UnregisterCommand(string command, Plugin plugin) => registeredCommands.Remove(command);
 
         /// <summary>
         /// Handles a chat message

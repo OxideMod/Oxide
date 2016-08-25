@@ -3,6 +3,7 @@
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.PlanetExplorers.Libraries.Covalence;
 
 namespace Oxide.Game.PlanetExplorers
 {
@@ -16,6 +17,9 @@ namespace Oxide.Game.PlanetExplorers
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The covalence provider
+        internal static readonly PlanetExplorersCovalenceProvider Covalence = PlanetExplorersCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;

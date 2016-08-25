@@ -1,4 +1,6 @@
-﻿namespace Oxide.Core.Libraries.Covalence
+﻿using Oxide.Core.Plugins;
+
+namespace Oxide.Core.Libraries.Covalence
 {
     /// <summary>
     /// Represents a source of commands
@@ -23,13 +25,14 @@
         /// Registers the specified command
         /// </summary>
         /// <param name="cmd"></param>
+        /// <param name="plugin"></param>
         /// <param name="callback"></param>
-        void RegisterCommand(string cmd, CommandCallback callback);
+        void RegisterCommand(string cmd, Plugin plugin, CommandCallback callback);
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="cmd"></param>
-        void UnregisterCommand(string cmd);
+        void UnregisterCommand(string cmd, Plugin plugin);
     }
 }

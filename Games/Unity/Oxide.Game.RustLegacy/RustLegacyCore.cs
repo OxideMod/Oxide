@@ -186,9 +186,6 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(ClientConnection connection, NetworkPlayerApproval approval, ConnectionAcceptor acceptor)
         {
-            var id = connection.UserID.ToString();
-            var ip = approval.ipAddress;
-
             // Reject invalid connections
             if (connection.UserID == 0 || string.IsNullOrEmpty(connection.UserName))
             {
@@ -196,13 +193,8 @@ namespace Oxide.Game.RustLegacy
                 return true;
             }
 
-            // Migrate user from 'player' group to 'default'
-            if (permission.UserHasGroup(id, "player"))
-            {
-                permission.AddUserGroup(id, "default");
-                permission.RemoveUserGroup(id, "player");
-                Interface.Oxide.LogWarning($"Migrated '{id}' to the new 'default' group");
-            }
+            var id = connection.UserID.ToString();
+            var ip = approval.ipAddress;
 
             // Call out and see if we should reject
             var canLogin = (string)Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
@@ -212,6 +204,14 @@ namespace Oxide.Game.RustLegacy
                 Notice.Popup(connection.netUser.networkPlayer, "", canLogin.ToString(), 10f);
                 approval.Deny(uLink.NetworkConnectionError.NoError);
                 return true;
+            }
+
+            // Migrate user from 'player' group to 'default'
+            if (permission.UserHasGroup(id, "player"))
+            {
+                permission.AddUserGroup(id, "default");
+                permission.RemoveUserGroup(id, "player");
+                Interface.Oxide.LogWarning($"Migrated '{id}' to the new 'default' group");
             }
 
             return Interface.Call("OnUserApprove", connection, approval, acceptor) ?? Interface.Call("OnUserApproved", connection.UserName, id, ip);

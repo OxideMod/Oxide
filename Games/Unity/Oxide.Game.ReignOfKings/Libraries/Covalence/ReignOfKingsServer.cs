@@ -75,7 +75,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return TOD_Sky.Instance.Cycle.DateTime; }
+            get { return TOD_Sky.Instance.Cycle.DateTime; } // TODO: Fix NRE (OnServerInitialized test)
             set { TOD_Sky.Instance.Cycle.DateTime = value; }
         }
 

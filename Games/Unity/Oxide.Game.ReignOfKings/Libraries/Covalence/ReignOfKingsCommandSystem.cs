@@ -3,6 +3,7 @@
 using CodeHatch.Engine.Core.Commands;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
@@ -43,7 +44,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string command, CommandCallback callback)
+        public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
             // No console command support so no need to register the command as console command
             // Register the command as a chat command
@@ -61,7 +62,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Unregisters the specified command
         /// </summary>
         /// <param name="command"></param>
-        public void UnregisterCommand(string command) => CommandManager.RegisteredCommands.Remove(command);
+        public void UnregisterCommand(string command, Plugin plugin) => CommandManager.RegisteredCommands.Remove(command);
 
         /// <summary>
         /// Handles a chat message

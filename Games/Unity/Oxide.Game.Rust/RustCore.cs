@@ -36,7 +36,7 @@ namespace Oxide.Game.Rust
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // The covalence provider
-        private readonly RustCovalenceProvider covalence = RustCovalenceProvider.Instance;
+        internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
 
         #region Localization
 
@@ -90,6 +90,11 @@ namespace Oxide.Game.Rust
 
         // Track if a BasePlayer.OnAttacked call is in progress
         private bool isPlayerTakingDamage;
+
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[] {
+            "ownerid", "moderatorid"
+        };
 
         /// <summary>
         /// Initializes a new instance of the RustCore class
@@ -288,7 +293,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
             // Call covalence hook
-            return Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()), arg.Args[0]);
+            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()), arg.Args[0]);
         }
 
         /// <summary>
@@ -300,8 +305,8 @@ namespace Oxide.Game.Rust
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
             // Let covalence know
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.UserIDString), reason);
-            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.UserIDString), reason);
+            Covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
         }
@@ -329,13 +334,13 @@ namespace Oxide.Game.Rust
             }
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(player);
+            Covalence.PlayerManager.NotifyPlayerConnect(player);
 
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
 
             // Call covalence hooks
-            var iplayer = covalence.PlayerManager.GetPlayer(player.UserIDString);
+            var iplayer = Covalence.PlayerManager.GetPlayer(player.UserIDString);
             Interface.Call("OnUserConnected", iplayer);
             Interface.Call("OnUserInit", iplayer);
         }
@@ -349,7 +354,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerRespawn(BasePlayer player)
         {
             // Call covalence hook
-            return Interface.Call("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.UserIDString));
+            return Interface.Call("OnUserRespawn", Covalence.PlayerManager.GetPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -360,7 +365,7 @@ namespace Oxide.Game.Rust
         private void OnPlayerRespawned(BasePlayer player)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.UserIDString));
+            Interface.Call("OnUserRespawned", Covalence.PlayerManager.GetPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -1116,7 +1121,7 @@ namespace Oxide.Game.Rust
             if (cmd == null) return null;
 
             // Get the covalence player
-            var iplayer = covalence.PlayerManager.GetConnectedPlayer(arg.connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.GetConnectedPlayer(arg.connection.userid.ToString());
 
             // Is the command blocked?
             var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
@@ -1124,7 +1129,7 @@ namespace Oxide.Game.Rust
             if (blockedSpecific != null || blockedCovalence != null) return true;
 
             // Is it a covalance command?
-            if (covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
             // Is it a regular chat command?
             var player = arg.connection.player as BasePlayer;

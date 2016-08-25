@@ -36,7 +36,7 @@ namespace Oxide.Game.HideHoldOut
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // The covalence provider
-        private readonly HideHoldOutCovalenceProvider covalence = HideHoldOutCovalenceProvider.Instance;
+        internal static readonly HideHoldOutCovalenceProvider Covalence = HideHoldOutCovalenceProvider.Instance;
 
         #region Localization
 
@@ -278,14 +278,13 @@ namespace Oxide.Game.HideHoldOut
             var player = FindPlayerByNetPlayer(netPlayer);
 
             // Get covalence player
-            var iplayer = covalence.PlayerManager.GetPlayer(player.account_id);
+            var iplayer = Covalence.PlayerManager.GetPlayer(player.account_id);
 
             // Is it a chat command?
             if (!str.Equals("/")) return Interface.Call("OnPlayerChat", player, message) ?? Interface.Call("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
-            var livePlayer = covalence.PlayerManager.GetConnectedPlayer(player.account_id);
-            if (covalence.CommandSystem.HandleChatMessage(livePlayer, message)) return true;
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);
@@ -318,7 +317,7 @@ namespace Oxide.Game.HideHoldOut
             Debug.Log($"{player.account_id}/{player.Nickname} joined");
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(player);
+            Covalence.PlayerManager.NotifyPlayerConnect(player);
 
             // Do permission stuff
             if (permission.IsLoaded)
@@ -334,7 +333,7 @@ namespace Oxide.Game.HideHoldOut
             }
 
             // Call covalence hook
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         /// <summary>
@@ -347,10 +346,10 @@ namespace Oxide.Game.HideHoldOut
             Debug.Log($"{player.account_id}/{player.Nickname} quit");
 
             // Call covalence hook
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            Covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
         /// <summary>
@@ -361,7 +360,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawn(PlayerInfos player)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawn", covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserRespawn", Covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         /// <summary>
@@ -372,7 +371,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawned(PlayerInfos player)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawned", covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserRespawned", Covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
         #endregion

@@ -32,8 +32,8 @@ namespace Oxide.Game.Hurtworld
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
-        // The Hurtworld covalence provider
-        private readonly HurtworldCovalenceProvider covalence = HurtworldCovalenceProvider.Instance;
+        // The covalence provider
+        internal static readonly HurtworldCovalenceProvider Covalence = HurtworldCovalenceProvider.Instance;
 
         #region Localization
 
@@ -262,14 +262,14 @@ namespace Oxide.Game.Hurtworld
             var str = message.Substring(0, 1);
 
             // Get covalence player
-            var iplayer = covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            var iplayer = Covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
 
             // Is it a chat command?
             if (!str.Equals("/"))
                 return Interface.Call("OnPlayerChat", session, message) ?? Interface.Call("OnUserChat", iplayer, message);
 
             // Is this a covalence command?
-            if (covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);
@@ -305,7 +305,7 @@ namespace Oxide.Game.Hurtworld
             session.Name = Regex.Replace(name, "<.*?>", string.Empty); // TODO: Make sure the name is not blank
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(session);
+            Covalence.PlayerManager.NotifyPlayerConnect(session);
 
             // Do permission stuff
             if (permission.IsLoaded)
@@ -323,7 +323,7 @@ namespace Oxide.Game.Hurtworld
             Interface.Call("OnPlayerConnected", session);
 
             // Call covalence hook
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
         }
 
         /// <summary>
@@ -334,10 +334,10 @@ namespace Oxide.Game.Hurtworld
         private void OnPlayerDisconnected(PlayerSession session)
         {
             // Call covalence hook
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), "Unknown");
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerDisconnect(session);
+            Covalence.PlayerManager.NotifyPlayerDisconnect(session);
         }
 
         /// <summary>
@@ -348,10 +348,10 @@ namespace Oxide.Game.Hurtworld
         private void OnPlayerInit(PlayerSession session)
         {
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(session);
+            Covalence.PlayerManager.NotifyPlayerConnect(session);
 
             // Call covalence hook
-            Interface.Call("OnUserInit", covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
+            Interface.Call("OnUserInit", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
         }
 
         /// <summary>
@@ -1003,7 +1003,7 @@ namespace Oxide.Game.Hurtworld
             if (arg == null || arg.Trim().Length == 0) return null;
 
             // Is this a covalence command?
-            if (covalence.CommandSystem.HandleConsoleMessage(covalence.CommandSystem.consolePlayer, arg)) return true;
+            if (Covalence.CommandSystem.HandleConsoleMessage(Covalence.CommandSystem.consolePlayer, arg)) return true;
 
             return cmdlib.HandleConsoleCommand(arg);
         }
