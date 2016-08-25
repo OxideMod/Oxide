@@ -169,13 +169,13 @@ namespace Oxide.Game.Rust.Libraries
             }
 
             RustCommandSystem.RegisteredCommand covalenceCommand;
-            if (RustCore.covalence.CommandSystem.registeredCommands.TryGetValue(commandName, out covalenceCommand))
+            if (RustCore.Covalence.CommandSystem.registeredCommands.TryGetValue(commandName, out covalenceCommand))
             {
                 var previousPluginName = covalenceCommand.Source?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var message = $"{newPluginName} has replaced the '{commandName}' command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
-                RustCore.covalence.CommandSystem.UnregisterCommand(commandName, covalenceCommand.Source);
+                RustCore.Covalence.CommandSystem.UnregisterCommand(commandName, covalenceCommand.Source);
             }
 
             cmd = new ChatCommand(commandName, plugin, callback);
@@ -248,7 +248,7 @@ namespace Oxide.Game.Rust.Libraries
             }
 
             RustCommandSystem.RegisteredCommand covalenceCommand;
-            if (RustCore.covalence.CommandSystem.registeredCommands.TryGetValue(parent == "global" ? name : fullName, out covalenceCommand))
+            if (RustCore.Covalence.CommandSystem.registeredCommands.TryGetValue(parent == "global" ? name : fullName, out covalenceCommand))
             {
                 if (covalenceCommand.OriginalCallback != null)
                     cmd.OriginalCallback = covalenceCommand.OriginalCallback;
@@ -258,7 +258,7 @@ namespace Oxide.Game.Rust.Libraries
                 var message = $"{newPluginName} has replaced the '{fullName}' command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
 
-                RustCore.covalence.CommandSystem.UnregisterCommand(parent == "global" ? name : fullName, covalenceCommand.Source);
+                RustCore.Covalence.CommandSystem.UnregisterCommand(parent == "global" ? name : fullName, covalenceCommand.Source);
             }
 
             // The command either does not already exist or is replacing a previously registered command
@@ -353,7 +353,7 @@ namespace Oxide.Game.Rust.Libraries
             var fullname = $"{parent}.{name}";
 
             RustCommandSystem.RegisteredCommand cmd;
-            if (RustCore.covalence.CommandSystem.registeredCommands.TryGetValue(command, out cmd))
+            if (RustCore.Covalence.CommandSystem.registeredCommands.TryGetValue(command, out cmd))
                 if (cmd.Source.IsCorePlugin)
                     return false;
 

@@ -19,7 +19,7 @@ namespace Oxide.Game.SevenDays
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
         // The covalence provider
-        private readonly SevenDaysCovalenceProvider covalence = SevenDaysCovalenceProvider.Instance;
+        internal static readonly SevenDaysCovalenceProvider Covalence = SevenDaysCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;
@@ -141,8 +141,8 @@ namespace Oxide.Game.SevenDays
             }
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(client);
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(client.playerId));
+            Covalence.PlayerManager.NotifyPlayerConnect(client);
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(client.playerId));
         }
 
         /// <summary>
@@ -153,8 +153,8 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerDisconnected(ClientInfo client)
         {
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerDisconnect(client);
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(client.playerId), "Unknown");
+            Covalence.PlayerManager.NotifyPlayerDisconnect(client);
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(client.playerId), "Unknown");
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Oxide.Game.SevenDays
             if (client == null || string.IsNullOrEmpty(message)) return null;
 
             return Interface.Call("OnPlayerChat", client, message)
-                ??  Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(client.playerId), message);
+                ??  Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(client.playerId), message);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerSpawn(ClientInfo client)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.playerId));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.GetPlayer(client.playerId));
         }
 
         #endregion

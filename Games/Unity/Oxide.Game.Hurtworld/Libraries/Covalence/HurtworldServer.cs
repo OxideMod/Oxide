@@ -72,8 +72,18 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return TOD_Sky.Instance.Cycle.DateTime; }
-            set { TOD_Sky.Instance.Cycle.DateTime = value; }
+            get
+            {
+                var time = TimeManager.Instance.GetCurrentGameTime();
+                var date = DateTime.Now.AddDays(time.Day);
+                return Convert.ToDateTime($"{date} {time.Hour}:{time.Minute}:{Math.Floor(time.Second)}");
+            }
+            set
+            {
+                var dayPercentage = TimeManager.Instance.GetCurrentGameTime().DayPercentage;
+                var newTime = (value.Second - dayPercentage) * 86400 + TimeManager.Instance.InitialTimeOffset;
+                TimeManager.Instance.InitialTimeOffset = newTime;
+            }
         }
 
         #endregion

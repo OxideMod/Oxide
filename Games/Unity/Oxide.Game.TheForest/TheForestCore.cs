@@ -26,8 +26,8 @@ namespace Oxide.Game.TheForest
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
-        // The Forest covalence provider
-        private readonly TheForestCovalenceProvider covalence = TheForestCovalenceProvider.Instance;
+        // The covalence provider
+        internal static readonly TheForestCovalenceProvider Covalence = TheForestCovalenceProvider.Instance;
 
         // TODO: Localization of core
 
@@ -206,8 +206,8 @@ namespace Oxide.Game.TheForest
             }
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(entity);
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(id));
+            Covalence.PlayerManager.NotifyPlayerConnect(entity);
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(id));
         }
 
         /// <summary>
@@ -229,8 +229,8 @@ namespace Oxide.Game.TheForest
             Interface.Call("OnPlayerDisconnected", entity);
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerDisconnect(entity);
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
+            Covalence.PlayerManager.NotifyPlayerDisconnect(entity);
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace Oxide.Game.TheForest
             Debug.Log($"[Chat] {name}: {evt.Message}");
 
             // Call covalence hook
-            return Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
+            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace Oxide.Game.TheForest
         private void OnPlayerSpawn(BoltEntity entity)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(entity.source.RemoteEndPoint.SteamId.Id.ToString()));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.GetPlayer(entity.source.RemoteEndPoint.SteamId.Id.ToString()));
         }
 
         #endregion

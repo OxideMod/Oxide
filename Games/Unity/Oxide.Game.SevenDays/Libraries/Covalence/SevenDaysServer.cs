@@ -23,7 +23,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         public string Name
         {
             get { return GamePrefs.GetString(EnumGamePrefs.ServerName); }
-            set { throw new NotImplementedException(); } // TODO
+            set { GamePrefs.Set(EnumGamePrefs.ServerName, value); }
         }
 
         /// <summary>
@@ -72,8 +72,13 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return new DateTime(Convert.ToInt64(GameManager.Instance.World.worldTime)); }
-            set { GameManager.Instance.World.worldTime = Convert.ToUInt64(value); }
+            get
+            {
+                var time = GameManager.Instance.World.worldTime;
+                var date = DateTime.Now.AddDays(GameUtils.WorldTimeToDays(time));
+                return Convert.ToDateTime($"{date} {GameUtils.WorldTimeToHours(time)}:{GameUtils.WorldTimeToMinutes(time)}");
+            }
+            set { GameUtils.DayTimeToWorldTime(value.Day, value.Hour, value.Minute); }
         }
 
         #endregion

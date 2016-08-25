@@ -20,13 +20,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         private readonly RustCovalenceProvider rustCovalence = RustCovalenceProvider.Instance;
 
         // The console player
-        private RustConsolePlayer consolePlayer;
+        private readonly RustConsolePlayer consolePlayer;
 
         // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustCommands;
 
         // Chat command handler
-        private ChatCommandHandler chatCommandHandler;
+        private readonly ChatCommandHandler chatCommandHandler;
 
         // All registered commands
         internal IDictionary<string, RegisteredCommand> registeredCommands;
@@ -143,7 +143,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var message = $"{newPluginName} has replaced the '{commandName}' chat command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
-                
+
                 cmdlib.chatCommands.Remove(commandName);
             }
 
@@ -230,7 +230,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
             // Check if the command belongs to the plugin
             if (plugin != cmd.Source) return;
-            
+
             // Setup console command name
             var split = command.Split('.');
             var parent = split.Length >= 2 ? split[0].Trim() : "global";
@@ -239,7 +239,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
             // Remove the chat command
             registeredCommands.Remove(command);
-            
+
             // If this was originally a vanilla rust command then restore it, otherwise remove it
             if (cmd.OriginalCallback != null)
             {

@@ -171,7 +171,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => entity.GetComponentInChildren<PlayerStats>().Hit(1000, true);
+        public void Kill() => Hurt(1000f);
 
         /// <summary>
         /// Teleports the user's character to the specified position

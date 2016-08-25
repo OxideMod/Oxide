@@ -152,7 +152,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => NetworkController.Player_ctrl_.TakeDamage(100, Vector3.zero, string.Empty, true, true, string.Empty);
+        public void Kill() => Hurt(100f);
 
         /// <summary>
         /// Teleports the user's character to the specified position

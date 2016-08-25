@@ -62,11 +62,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             var parent = split.Length >= 2 ? split[0].Trim() : "global";
             var name = split.Length >= 2 ? split[1].Trim() : split[0].Trim();
             var fullname = $"{parent}.{name}";
-            
+
             // Check if it already exists
             if (registeredCommands.ContainsKey(commandName) || Command.ChatCommands.ContainsKey(commandName) || Command.ConsoleCommands.ContainsKey(fullname))
                 throw new CommandAlreadyExistsException(commandName);
-            
+
             // Register it
             registeredCommands.Add(commandName, callback);
         }

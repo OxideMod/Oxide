@@ -20,8 +20,8 @@ namespace Oxide.Game.Unturned
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
-        // The Forest covalence provider
-        private readonly UnturnedCovalenceProvider covalence = UnturnedCovalenceProvider.Instance;
+        // The covalence provider
+        internal static readonly UnturnedCovalenceProvider Covalence = UnturnedCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;

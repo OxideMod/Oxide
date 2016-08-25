@@ -6,6 +6,7 @@ using Sandbox.Game;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.SpaceEngineers.Libraries.Covalence;
 
 namespace Oxide.Game.SpaceEngineers
 {
@@ -19,6 +20,9 @@ namespace Oxide.Game.SpaceEngineers
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The covalence provider
+        internal static readonly SpaceEngineersCovalenceProvider Covalence = SpaceEngineersCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;

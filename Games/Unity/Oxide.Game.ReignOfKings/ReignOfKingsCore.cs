@@ -37,8 +37,8 @@ namespace Oxide.Game.ReignOfKings
         // The command library
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
-        // The Reign of Kings covalence provider
-        private readonly ReignOfKingsCovalenceProvider covalence = ReignOfKingsCovalenceProvider.Instance;
+        // The covalence provider
+        internal static readonly ReignOfKingsCovalenceProvider Covalence = ReignOfKingsCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;
@@ -272,7 +272,7 @@ namespace Oxide.Game.ReignOfKings
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
             // Call covalence hook
-            return Interface.Call("OnUserChat", covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString()), evt.Message);
+            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -304,8 +304,8 @@ namespace Oxide.Game.ReignOfKings
             Interface.Call("OnPlayerConnected", player);
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()));
+            Covalence.PlayerManager.NotifyPlayerConnect(player);
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.Id.ToString()));
         }
 
         /// <summary>
@@ -321,8 +321,8 @@ namespace Oxide.Game.ReignOfKings
             Interface.Call("OnPlayerDisconnected", player);
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(player.Id.ToString()), "Unknown");
-            covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.Id.ToString()), "Unknown");
+            Covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
         }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerRespawn(PlayerRespawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawn", covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserRespawn", Covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
         }
 
         #endregion
@@ -842,8 +842,8 @@ namespace Oxide.Game.ReignOfKings
             if (str[0] != '/') return null;
 
             // Is this a covalence command?
-            var livePlayer = covalence.PlayerManager.GetConnectedPlayer(e.PlayerId.ToString());
-            if (covalence.CommandSystem.HandleChatMessage(livePlayer, str)) return true;
+            var iplayer = Covalence.PlayerManager.GetConnectedPlayer(e.PlayerId.ToString());
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
             // Get the command string
             var command = str.Substring(1);

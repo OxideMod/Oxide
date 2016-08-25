@@ -5,6 +5,7 @@ using Terraria;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.Terraria.Libraries.Covalence;
 
 namespace Oxide.Game.Terraria
 {
@@ -18,6 +19,9 @@ namespace Oxide.Game.Terraria
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The covalence provider
+        internal static readonly TerrariaCovalenceProvider Covalence = TerrariaCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;
