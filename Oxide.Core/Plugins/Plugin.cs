@@ -379,7 +379,7 @@ namespace Oxide.Core.Plugins
         {
             var covalence = Interface.Oxide.GetLibrary<Covalence>();
             foreach (var pair in commandInfos)
-                covalence.RegisterCommand(pair.Key, CovalenceCommandCallback);
+                covalence.RegisterCommand(pair.Key, this, CovalenceCommandCallback);
         }
 
         private bool CovalenceCommandCallback(IPlayer caller, string cmd, string[] args)
@@ -399,7 +399,7 @@ namespace Oxide.Core.Plugins
                 foreach (var perm in cmdInfo.PermissionsRequired)
                 {
                     if (caller.HasPermission(perm)) continue;
-                    caller.Message($"Missing permission '{perm}' to run command '{cmd}'!");
+                    caller.Message($"You don\'t have permission to use the command '{cmd}'!"); // TODO: Use Lang API for this message
                     return true;
                 }
             }
@@ -414,7 +414,7 @@ namespace Oxide.Core.Plugins
         private void UnregisterWithCovalence()
         {
             var covalence = Interface.Oxide.GetLibrary<Covalence>();
-            foreach (var pair in commandInfos) covalence.UnregisterCommand(pair.Key);
+            foreach (var pair in commandInfos) covalence.UnregisterCommand(pair.Key, this);
         }
 
         #endregion

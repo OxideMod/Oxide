@@ -37,40 +37,6 @@ namespace Oxide.Core.Libraries.Covalence
         // The command system provider
         private ICommandSystem cmdSystem;
 
-        // Registered commands
-        private class RegisteredCommand
-        {
-            /// <summary>
-            /// The plugin that handles the command
-            /// </summary>
-            public readonly Plugin Source;
-
-            /// <summary>
-            /// The name of the command
-            /// </summary>
-            public readonly string Command;
-
-            /// <summary>
-            /// The name of the callback
-            /// </summary>
-            public readonly string Callback;
-
-            /// <summary>
-            /// Initializes a new instance of the RegisteredCommand class
-            /// </summary>
-            /// <param name="source"></param>
-            /// <param name="command"></param>
-            /// <param name="callback"></param>
-            public RegisteredCommand(Plugin source, string command, string callback)
-            {
-                // Store fields
-                Source = source;
-                Command = command;
-                Callback = callback;
-            }
-        }
-        private IDictionary<string, RegisteredCommand> commands;
-
         /// <summary>
         /// Gets the name of the current game
         /// </summary>
@@ -162,9 +128,6 @@ namespace Oxide.Core.Libraries.Covalence
             Players = provider.CreatePlayerManager();
             cmdSystem = provider.CreateCommandSystemProvider();
 
-            // Initialize other things
-            commands = new Dictionary<string, RegisteredCommand>();
-
             // Log
             logger.Write(LogType.Info, "Using Covalence provider for game '{0}'", provider.GameName);
         }
@@ -174,17 +137,18 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string command, CommandCallback callback)
+        public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
             if (cmdSystem == null) return;
 
             try
             {
-                cmdSystem.RegisterCommand(command, callback);
+                cmdSystem.RegisterCommand(command, plugin, callback);
             }
             catch (CommandAlreadyExistsException)
             {
-                logger.Write(LogType.Error, "Tried to register command '{0}', already exists!", command);
+                var pluginName = plugin?.Name ?? "An unknown plugin";
+                logger.Write(LogType.Error, "{0} tried to register command '{1}', this command already exists and cannot be overridden!", pluginName, command);
             }
         }
 
@@ -192,6 +156,6 @@ namespace Oxide.Core.Libraries.Covalence
         /// Unregisters a command (chat + console)
         /// </summary>
         /// <param name="command"></param>
-        public void UnregisterCommand(string command) => cmdSystem?.UnregisterCommand(command);
+        public void UnregisterCommand(string command, Plugin plugin) => cmdSystem?.UnregisterCommand(command, plugin);
     }
 }

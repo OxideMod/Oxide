@@ -36,7 +36,7 @@ namespace Oxide.Game.Rust
         private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // The covalence provider
-        private readonly RustCovalenceProvider covalence = RustCovalenceProvider.Instance;
+        internal static readonly RustCovalenceProvider covalence = RustCovalenceProvider.Instance;
 
         #region Localization
 
@@ -90,6 +90,11 @@ namespace Oxide.Game.Rust
 
         // Track if a BasePlayer.OnAttacked call is in progress
         private bool isPlayerTakingDamage;
+        
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[] {
+            "ownerid", "moderatorid"
+        };
 
         /// <summary>
         /// Initializes a new instance of the RustCore class

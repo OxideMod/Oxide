@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Game.RustLegacy.Libraries.Covalence
 {
@@ -48,7 +49,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="callback"></param>
-        public void RegisterCommand(string command, CommandCallback callback)
+        public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
             // Initialize if needed
             if (registeredCommands == null) Initialize();
@@ -58,8 +59,8 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
 
             // Setup console command name
             var split = commandName.Split('.');
-            var parent = split.Length >= 2 ? split[0] : "global";
-            var name = split.Length >= 2 ? split[1] : split[0];
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? split[1].Trim() : split[0].Trim();
             var fullname = $"{parent}.{name}";
             
             // Check if it already exists
@@ -73,8 +74,8 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
-        /// <param name="cmd"></param>
-        public void UnregisterCommand(string cmd) => registeredCommands.Remove(cmd);
+        /// <param name="command"></param>
+        public void UnregisterCommand(string command, Plugin plugin) => registeredCommands.Remove(command);
 
         /// <summary>
         /// Handles a chat message
