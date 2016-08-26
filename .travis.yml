@@ -1,7 +1,7 @@
 sudo: required
 dist: trusty
 language: csharp
-mono: beta
+mono: 4.4.2
 
 # Install .NET v3.5 profile
 before_install:
