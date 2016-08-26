@@ -293,7 +293,8 @@ namespace Oxide.Game.Rust
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
             // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()), arg.Args[0]);
+            var iplayer = Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
+            return string.IsNullOrEmpty(arg.ArgsStr) ? null : Interface.Call("OnUserChat", iplayer, arg.ArgsStr);
         }
 
         /// <summary>
@@ -402,7 +403,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBasePlayerAttacked")]
         private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
-            if (!serverInitialized || isPlayerTakingDamage) return null;
+            if (!serverInitialized || player == null || isPlayerTakingDamage) return null;
             if (Interface.Call("OnEntityTakeDamage", player, info) != null) return true;
 
             isPlayerTakingDamage = true;
@@ -1105,8 +1106,8 @@ namespace Oxide.Game.Rust
             if (arg.cmd.namefull != "chat.say") return null;
 
             // Get the args
-            var str = arg.GetString(0, "text");
-            if (str.Length == 0) return null;
+            var str = arg.ArgsStr;
+            if (string.IsNullOrEmpty(str)) return null;
 
             // Is it a chat command?
             if (str[0] != '/') return null;
