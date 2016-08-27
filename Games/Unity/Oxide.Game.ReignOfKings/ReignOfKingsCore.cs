@@ -151,7 +151,7 @@ namespace Oxide.Game.ReignOfKings
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", DedicatedServerBypass.Settings.ServerName);
 
             // Setup the default permission groups

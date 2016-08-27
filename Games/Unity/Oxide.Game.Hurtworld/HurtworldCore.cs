@@ -215,7 +215,7 @@ namespace Oxide.Game.Hurtworld
             // Add 'oxide' and 'modded' tags
             SteamGameServer.SetGameTags("oxide,modded");
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
 
             // Update server console window and status bars

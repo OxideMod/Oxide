@@ -12,7 +12,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class NomadPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class NomadPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly TcpPlayer player;
@@ -30,27 +30,16 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         internal NomadPlayer(TcpPlayer player)
         {
             this.player = player;
+            Name = player.name;
             Id = player.id.ToString();
-            Character = this;
-            Object = null; // TODO
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs the character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => player;
 
         /// <summary>
         /// Gets the user's last command type
@@ -186,7 +175,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -199,7 +188,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

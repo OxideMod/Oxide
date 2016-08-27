@@ -217,7 +217,7 @@ namespace Oxide.Game.Rust
             // Migrate default player groups
             permission.MigrateGroup("player", "default");
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
             // Destroy default server console
@@ -342,8 +342,8 @@ namespace Oxide.Game.Rust
 
             // Call covalence hooks
             var iplayer = Covalence.PlayerManager.GetPlayer(player.UserIDString);
-            Interface.Call("OnUserConnected", iplayer);
-            Interface.Call("OnUserInit", iplayer);
+            Interface.Call("OnUserConnected", iplayer); // TODO: Move to OnPlayerConnected
+            Interface.Call("OnUserInit", iplayer); // TODO: Move and change to OnUserSpawn?
         }
 
         /// <summary>
@@ -388,11 +388,7 @@ namespace Oxide.Game.Rust
         /// <param name="info"></param>
         /// <returns></returns>
         [HookMethod("IOnPlayerAttack")]
-        private object IOnPlayerAttack(BaseMelee melee, HitInfo info)
-        {
-            var player = melee.GetOwnerPlayer();
-            return Interface.Call("OnPlayerAttack", player, info);
-        }
+        private object IOnPlayerAttack(BaseMelee melee, HitInfo info) => Interface.Call("OnPlayerAttack", melee.GetOwnerPlayer(), info);
 
         /// <summary>
         /// Called when a BasePlayer is attacked

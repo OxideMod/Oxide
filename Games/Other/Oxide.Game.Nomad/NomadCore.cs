@@ -3,6 +3,7 @@
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.Nomad.Libraries.Covalence;
 
 namespace Oxide.Game.Nomad
 {
@@ -16,6 +17,9 @@ namespace Oxide.Game.Nomad
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The covalence provider
+        internal static readonly NomadCovalenceProvider Covalence = NomadCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;
@@ -103,7 +107,7 @@ namespace Oxide.Game.Nomad
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", CommandLine.GetVariable("name"));
 
             // Update server console window and status bars

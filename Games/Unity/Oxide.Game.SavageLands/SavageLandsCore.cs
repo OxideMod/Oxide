@@ -103,7 +103,7 @@ namespace Oxide.Game.SavageLands
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             //RemoteLogger.SetTag("hostname", );
 
             // Update server console window and status bars

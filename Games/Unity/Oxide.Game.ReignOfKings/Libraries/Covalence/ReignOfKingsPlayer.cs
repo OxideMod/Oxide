@@ -19,7 +19,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class ReignOfKingsPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class ReignOfKingsPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly Player player;
@@ -42,26 +42,14 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             steamId = player.Id;
             Name = player.Name;
             Id = steamId.ToString();
-            Character = this;
-            Object = player.CurrentCharacter.Prefab;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs this character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => player; // player.CurrentCharacter.Prefab
 
         /// <summary>
         /// Gets the user's last command type
@@ -199,7 +187,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -213,7 +201,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

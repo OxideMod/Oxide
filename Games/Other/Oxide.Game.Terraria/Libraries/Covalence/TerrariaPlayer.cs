@@ -13,7 +13,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class TerrariaPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class TerrariaPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly Player player;
@@ -34,26 +34,14 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             this.player = player;
             Name = player.name;
             Id = player.whoAmI.ToString();
-            Character = this;
-            Object = player; // TODO
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs the character, if available
-        /// </summary>
-        public object Object { get; }
+        public object Object => player;
 
         /// <summary>
         /// Gets the user's last command type
@@ -188,7 +176,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -201,7 +189,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position() => new GenericPosition(player.position.X, player.position.Y, 0);

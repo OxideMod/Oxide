@@ -13,14 +13,9 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         #region Objects
 
         /// <summary>
-        /// Gets the live player if the user is connected
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayer ConnectedPlayer => this;
-
-        /// <summary>
-        /// Gets the user's in-game character, if available
-        /// </summary>
-        public IPlayerCharacter Character => null;
+        public object Object => null;
 
         /// <summary>
         /// Gets the user's last command type
@@ -74,7 +69,6 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         #endregion
 
         #region Administration
-
 
         /// <summary>
         /// Bans the user for the specified reason and duration
@@ -137,6 +131,29 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public void Unban()
         {
         }
+
+        #endregion
+
+        #region Location
+
+        /// <summary>
+        /// Gets the position of the user
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        public void Position(out float x, out float y, out float z)
+        {
+            x = 0;
+            y = 0;
+            z = 0;
+        }
+
+        /// <summary>
+        /// Gets the position of the user
+        /// </summary>
+        /// <returns></returns>
+        public GenericPosition Position() => new GenericPosition(0, 0, 0);
 
         #endregion
 

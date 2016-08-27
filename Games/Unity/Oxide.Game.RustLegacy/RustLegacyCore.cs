@@ -160,7 +160,7 @@ namespace Oxide.Game.RustLegacy
 
             permission.MigrateGroup("player", "default");
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", server.hostname);
 
             // Update server console window and status bars

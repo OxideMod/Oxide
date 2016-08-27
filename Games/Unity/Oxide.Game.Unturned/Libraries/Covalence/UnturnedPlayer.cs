@@ -14,7 +14,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class UnturnedPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class UnturnedPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly SteamPlayer steamPlayer;
@@ -38,27 +38,14 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             steamId = steamPlayer.playerID.steamID.m_SteamID;
             Name = steamPlayer.player.name;
             Id = steamId.ToString();
-            Character = this;
-            Object = steamPlayer.player.transform.gameObject;
         }
-
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs the character, if available
-        /// </summary>
-        public object Object { get; }
+        public object Object => steamPlayer; // steamPlayer.player.transform.gameObject;
 
         /// <summary>
         /// Gets the user's last command type
@@ -110,7 +97,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             get
             {
                 SteamBlacklistID steamBlacklistId;
-                return SteamBlacklist.checkBanned(new CSteamID(steamId), out steamBlacklistId);
+                return SteamBlacklist.checkBanned(new CSteamID(steamId), Convert.ToUInt32(Address), out steamBlacklistId);
             }
         }
 
@@ -210,7 +197,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -224,7 +211,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

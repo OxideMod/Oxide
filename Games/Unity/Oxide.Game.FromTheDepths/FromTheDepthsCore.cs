@@ -105,7 +105,7 @@ namespace Oxide.Game.FromTheDepths
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", MultiplayerManager.Instance.GameDetails.Name);
 
             // Update server console window and status bars

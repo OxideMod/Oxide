@@ -15,7 +15,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class TheForestPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class TheForestPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly BoltEntity entity;
@@ -39,25 +39,14 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             steamId = entity.source.RemoteEndPoint.SteamId.Id;
             Name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
             Id = steamId.ToString();
-            Character = this;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs the character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => entity;
 
         /// <summary>
         /// Gets the user's last command type
@@ -198,7 +187,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -212,7 +201,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()
