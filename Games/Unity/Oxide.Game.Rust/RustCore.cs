@@ -1102,7 +1102,7 @@ namespace Oxide.Game.Rust
             if (arg.cmd.namefull != "chat.say") return null;
 
             // Get the args
-            var str = arg.ArgsStr;
+            var str = arg.GetString(0);
             if (string.IsNullOrEmpty(str)) return null;
 
             // Is it a chat command?
