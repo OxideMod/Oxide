@@ -154,6 +154,7 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("global.reload", this, "ConsoleReload");
             cmdlib.AddChatCommand("version", this, "ChatVersion");
             cmdlib.AddChatCommand("oxide.version", this, "ChatVersion");
+            cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
             cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddChatCommand("lang", this, "ChatLang");
             cmdlib.AddConsoleCommand("oxide.lang", this, "ConsoleLang");
@@ -703,7 +704,10 @@ namespace Oxide.Game.Rust
         [HookMethod("ConsoleVersion")]
         private void ConsoleVersion(ConsoleSystem.Arg arg)
         {
-            Reply(arg, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
+            if (arg.cmd.namefull == "oxide.version")
+                Reply(arg, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
+            else if (arg.cmd.namefull == "global.version")
+                Reply(arg, $"Protocol: {Protocol.printable}\nBuild Version: {BuildInformation.VersionStampDays}\nBuild Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\nChangeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
         }
 
         #endregion
