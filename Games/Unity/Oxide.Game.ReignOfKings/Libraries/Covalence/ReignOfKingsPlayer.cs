@@ -83,7 +83,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player.HasPermission("admin");
+        public bool IsAdmin => player?.HasPermission("admin") ?? false;
 
         /// <summary>
         /// Gets if the user is banned
@@ -93,7 +93,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => player.Connection.IsConnected;
+        public bool IsConnected => player?.Connection?.IsConnected ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -102,7 +102,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         {
             get
             {
-                var sleeper = player.Entity.Get<ISleeper>();
+                var sleeper = player?.Entity.Get<ISleeper>();
                 return sleeper != null && sleeper.IsSleeping;
             }
         }
