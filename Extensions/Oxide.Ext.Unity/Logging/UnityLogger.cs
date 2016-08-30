@@ -18,8 +18,7 @@ namespace Oxide.Ext.Unity.Logging
         /// <summary>
         /// Initializes a new instance of the UnityLogger class
         /// </summary>
-        public UnityLogger()
-            : base(true)
+        public UnityLogger() : base(true)
         {
         }
 

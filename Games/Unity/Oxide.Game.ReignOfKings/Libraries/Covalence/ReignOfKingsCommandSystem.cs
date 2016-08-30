@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using CodeHatch.Engine.Core.Commands;
-using Oxide.Core;
+
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 
@@ -11,7 +11,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// Represents a binding to a generic command system
     /// </summary>
     public class ReignOfKingsCommandSystem : ICommandSystem
-    { 
+    {
         // Default constructor
         public ReignOfKingsCommandSystem()
         {

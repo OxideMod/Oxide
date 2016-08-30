@@ -100,12 +100,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            ConsoleManager.SendLog(string.Concat("[Broadcast] ", message));
+            ConsoleManager.SendLog($"[Broadcast] {message}");
             ChatManagerServer.Instance.RPC("RelayChat", uLink.RPCMode.Others, message);
         }
 

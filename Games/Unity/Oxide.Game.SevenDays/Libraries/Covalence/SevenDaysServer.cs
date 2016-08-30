@@ -99,13 +99,10 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message)
-        {
-            GameManager.Instance.GameMessageServer(null, EnumGameMessages.Chat, message, null, false, null, false);
-        }
+        public void Broadcast(string message) => GameManager.Instance.GameMessageServer(null, EnumGameMessages.Chat, message, null, false, null, false);
 
         /// <summary>
         /// Runs the specified server command

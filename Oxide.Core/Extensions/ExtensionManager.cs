@@ -137,7 +137,8 @@ namespace Oxide.Core.Extensions
 
                 // Create and register the extension
                 var extension = Activator.CreateInstance(extensiontype, this) as Extension;
-                if (extension != null) {
+                if (extension != null)
+                {
                     extension.Load();
                     extensions.Add(extension);
 

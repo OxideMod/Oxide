@@ -20,19 +20,20 @@ namespace Oxide.Core.Logging
         }
 
         // The message queue
-        protected Queue<LogMessage> messagequeue;
+        protected Queue<LogMessage> MessageQueue;
 
         // Should messages be processed immediately and on the same thread?
-        private bool processmessagesimmediately;
+        private bool processImediately;
 
         /// <summary>
         /// Initializes a new instance of the Logger class
         /// </summary>
-        public Logger(bool processmessagesimmediately)
+        /// <param name="processImediately"></param>
+        protected Logger(bool processImediately)
         {
             // Initialize
-            this.processmessagesimmediately = processmessagesimmediately;
-            if (!processmessagesimmediately) messagequeue = new Queue<LogMessage>();
+            this.processImediately = processImediately;
+            if (!processImediately) MessageQueue = new Queue<LogMessage>();
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace Oxide.Core.Logging
         public virtual void Write(LogType type, string format, params object[] args)
         {
             // Create the structure
-            LogMessage msg = CreateLogMessage(type, format, args);
+            var msg = CreateLogMessage(type, format, args);
 
             // Pass to overload
             Write(msg);
@@ -73,10 +74,10 @@ namespace Oxide.Core.Logging
         internal virtual void Write(LogMessage msg)
         {
             // If we're set to process immediately, do so, otherwise enqueue
-            if (processmessagesimmediately)
+            if (processImediately)
                 ProcessMessage(msg);
             else
-                messagequeue.Enqueue(msg);
+                MessageQueue.Enqueue(msg);
         }
 
         /// <summary>
@@ -100,9 +101,9 @@ namespace Oxide.Core.Logging
                 Write(LogType.Error, $"{message}{Environment.NewLine}{formatted}");
                 return;
             }
-            var outer_ex = ex;
+            var outerEx = ex;
             while (ex.InnerException != null) ex = ex.InnerException;
-            if (outer_ex.GetType() != ex.GetType()) Write(LogType.Debug, "ExType: {0}", outer_ex.GetType().Name);
+            if (outerEx.GetType() != ex.GetType()) Write(LogType.Debug, "ExType: {0}", outerEx.GetType().Name);
             Write(LogType.Error, $"{message} ({ex.GetType().Name}: {ex.Message})");
             Write(LogType.Debug, "{0}", ex.StackTrace);
         }

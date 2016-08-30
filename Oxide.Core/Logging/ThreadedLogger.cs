@@ -77,14 +77,14 @@ namespace Oxide.Core.Logging
                 // Iterate each item in the queue
                 lock (syncroot)
                 {
-                    if (messagequeue.Count <= 0) continue;
+                    if (MessageQueue.Count <= 0) continue;
                     BeginBatchProcess();
                     try
                     {
-                        while (messagequeue.Count > 0)
+                        while (MessageQueue.Count > 0)
                         {
                             // Dequeue
-                            var message = messagequeue.Dequeue();
+                            var message = MessageQueue.Dequeue();
 
                             // Process
                             ProcessMessage(message);

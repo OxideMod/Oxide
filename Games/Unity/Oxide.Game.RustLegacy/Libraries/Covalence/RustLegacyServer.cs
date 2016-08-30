@@ -82,7 +82,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message) => ConsoleNetworker.Broadcast($"chat.add \"Server\" {message.Quote()}");
