@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 using Oxide.Core;
@@ -75,7 +76,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player?.IsAdmin() ?? ServerUsers.Get(steamId).@group == ServerUsers.UserGroup.Moderator || ServerUsers.Get(steamId).@group == ServerUsers.UserGroup.Owner;
+        public bool IsAdmin => player?.IsAdmin() ?? ServerUsers.Is(steamId, ServerUsers.UserGroup.Moderator) || ServerUsers.Is(steamId, ServerUsers.UserGroup.Owner);
 
         /// <summary>
         /// Gets if the user is banned
@@ -138,6 +139,17 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Causes the user's character to die
         /// </summary>
         public void Kill() => player.Die();
+
+        readonly FieldInfo maxHealth = typeof(BasePlayer).GetField("_maxHealth", BindingFlags.NonPublic);
+
+        /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get { return player.MaxHealth(); }
+            set { maxHealth?.SetValue(player, value); } // TODO: Test
+        }
 
         /// <summary>
         /// Teleports the user's character to the specified position

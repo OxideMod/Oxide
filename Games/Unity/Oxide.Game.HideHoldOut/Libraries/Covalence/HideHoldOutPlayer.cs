@@ -1,10 +1,10 @@
 ﻿using System;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
-
-using UnityEngine;
 
 namespace Oxide.Game.HideHoldOut.Libraries.Covalence
 {
@@ -75,7 +75,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player.isADMIN;
+        public bool IsAdmin => player?.isADMIN ?? false;
 
         /// <summary>
         /// Gets if the user is banned
@@ -85,7 +85,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => player.isDefined;
+        public bool IsConnected => player?.isDefined ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -113,7 +113,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets the amount of time remaining on the user's ban
         /// </summary>
-        public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement somehow?
+        public TimeSpan BanTimeRemaining => TimeSpan.MaxValue;
 
         /// <summary>
         /// Heals the user's character by specified amount
@@ -141,6 +141,21 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Causes the user's character to die
         /// </summary>
         public void Kill() => Hurt(100f);
+
+        /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                return 0f; // TODO
+            }
+            set
+            {
+                // TODO
+            }
+        }
 
         /// <summary>
         /// Teleports the user's character to the specified position

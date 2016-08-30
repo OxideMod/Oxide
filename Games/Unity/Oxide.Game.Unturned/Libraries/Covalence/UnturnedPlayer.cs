@@ -18,6 +18,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
     {
         private static Permission libPerms;
         private readonly SteamPlayer steamPlayer;
+        private readonly CSteamID cSteamId;
         private readonly ulong steamId;
 
         internal UnturnedPlayer(ulong id, string name)
@@ -35,7 +36,8 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         {
             // Store user details
             this.steamPlayer = steamPlayer;
-            steamId = steamPlayer.playerID.steamID.m_SteamID;
+            cSteamId = steamPlayer.playerID.steamID;
+            steamId = cSteamId.m_SteamID;
             Name = steamPlayer.player.name;
             Id = steamId.ToString();
         }
@@ -74,7 +76,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             get
             {
                 P2PSessionState_t sessionState;
-                SteamGameServerNetworking.GetP2PSessionState(steamPlayer.playerID.steamID, out sessionState);
+                SteamGameServerNetworking.GetP2PSessionState(cSteamId, out sessionState);
                 return Parser.getIPFromUInt32(sessionState.m_nRemoteIP);
             }
         }
@@ -87,7 +89,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => steamPlayer.isAdmin;
+        public bool IsAdmin => steamPlayer?.isAdmin ?? false;
 
         /// <summary>
         /// Gets if the user is banned
@@ -97,7 +99,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             get
             {
                 SteamBlacklistID steamBlacklistId;
-                return SteamBlacklist.checkBanned(new CSteamID(steamId), Convert.ToUInt32(Address), out steamBlacklistId);
+                return SteamBlacklist.checkBanned(cSteamId, Convert.ToUInt32(Address), out steamBlacklistId);
             }
         }
 
@@ -126,7 +128,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             if (IsBanned) return;
 
             // Set to banned
-            Provider.ban(new CSteamID(steamId), reason, (uint)duration.TotalSeconds);
+            Provider.ban(cSteamId, reason, (uint)duration.TotalSeconds);
         }
 
         /// <summary>
@@ -161,12 +163,27 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => Provider.kick(steamPlayer.playerID.steamID, reason);
+        public void Kick(string reason) => Provider.kick(cSteamId, reason);
 
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
         public void Kill() => Hurt(101f);
+
+        /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                return 100f; // TODO
+            }
+            set
+            {
+                // TODO
+            }
+        }
 
         /// <summary>
         /// Teleports the user's character to the specified position
@@ -189,7 +206,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             if (!IsBanned) return;
 
             // Set to unbanned
-            SteamBlacklist.unban(new CSteamID(steamId));
+            SteamBlacklist.unban(cSteamId);
         }
 
         #endregion
@@ -229,10 +246,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args)
-        {
-            ChatManager.say(steamPlayer.playerID.steamID, string.Format(message, args), Color.white, EChatMode.LOCAL);
-        }
+        public void Message(string message, params object[] args) => ChatManager.say(cSteamId, string.Format(message, args), Color.white, EChatMode.LOCAL);
 
         /// <summary>
         /// Replies to the user with the specified message
@@ -246,10 +260,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args)
-        {
-            Commander.execute(steamPlayer.playerID.steamID, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
-        }
+        public void Command(string command, params object[] args) => Commander.execute(cSteamId, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
 
         #endregion
 

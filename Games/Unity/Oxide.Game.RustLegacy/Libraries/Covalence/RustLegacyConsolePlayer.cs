@@ -116,6 +116,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth { get; set; }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>

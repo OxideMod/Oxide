@@ -103,6 +103,11 @@ namespace Oxide.Core.Libraries.Covalence
         void Kill();
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        float MaxHealth { get; set; }
+
+        /// <summary>
         /// Teleports the player's character to the specified position
         /// </summary>
         /// <param name="x"></param>

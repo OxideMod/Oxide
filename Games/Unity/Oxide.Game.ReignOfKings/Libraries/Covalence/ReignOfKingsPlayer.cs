@@ -163,6 +163,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public void Kill() => player.Kill();
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get { return player.GetHealth().MaxHealth; }
+            set { player.GetHealth().MaxHealth = value; }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>

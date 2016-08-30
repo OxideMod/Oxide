@@ -140,6 +140,21 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         public void Kill() => NetMessage.SendData(21, -1, -1, "", player.whoAmI);
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                return 0f; // TODO
+            }
+            set
+            {
+                // TODO
+            }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>

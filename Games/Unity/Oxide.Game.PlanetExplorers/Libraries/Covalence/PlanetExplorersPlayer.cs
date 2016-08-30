@@ -84,7 +84,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <summary>
         /// Returns if the user is connected
         /// </summary>
-        public bool IsConnected => player.networkView.owner.isConnected;
+        public bool IsConnected => player?.networkView?.owner.isConnected ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -141,6 +141,15 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// Causes the user's character to die
         /// </summary>
         public void Kill() => player._skEntity.SetAttribute(AttribType.Hp, 0f);
+
+        /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get { return player._skEntity.GetAttribute(AttribType.HpMax); }
+            set { player._skEntity.SetAttribute(AttribType.HpMax, value); }
+        }
 
         /// <summary>
         /// Teleports the user's character to the specified position

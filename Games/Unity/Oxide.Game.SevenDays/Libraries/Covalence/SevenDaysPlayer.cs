@@ -151,6 +151,23 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                return entity?.Stats.Health.Entity.GetMaxHealth() ?? 0f;
+            }
+            set
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                if (entity != null) entity.Stats.Health.BaseMax = value;
+            }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>

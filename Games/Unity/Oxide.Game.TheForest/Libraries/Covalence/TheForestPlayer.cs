@@ -163,6 +163,21 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         public void Kill() => Hurt(1000f);
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                return 1000f; // TODO
+            }
+            set
+            {
+                // TODO
+            }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>

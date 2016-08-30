@@ -140,7 +140,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => removePlayer.Invoke(player, null); // TODO: Reflection
+        public void Kick(string reason) => removePlayer?.Invoke(player, null); // TODO: Reflection
 
         /// <summary>
         /// Causes the user's character to die
@@ -148,6 +148,21 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public void Kill()
         {
             // TODO
+        }
+
+        /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                return 0; // TODO
+            }
+            set
+            {
+                // TODO
+            }
         }
 
         /// <summary>
