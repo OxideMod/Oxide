@@ -292,7 +292,7 @@ namespace Oxide.Game.Rust
         {
             // Call covalence hook
             var iplayer = Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
-            return string.IsNullOrEmpty(arg.ArgsStr) ? null : Interface.Call("OnUserChat", iplayer, arg.ArgsStr);
+            return string.IsNullOrEmpty(arg.GetString(0)) ? null : Interface.Call("OnUserChat", iplayer, arg.GetString(0));
         }
 
         /// <summary>
