@@ -64,7 +64,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return Convert.ToDateTime(TimeSpan.FromHours(EnvironmentControlCenter.Singleton.GetTime())); }
+            get { return DateTime.Today.Add(TimeSpan.FromHours(EnvironmentControlCenter.Singleton.GetTime())); }
             set { EnvironmentControlCenter.Singleton.SetTime(value.Hour); }
         }
 
@@ -85,7 +85,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => ConsoleNetworker.Broadcast($"chat.add \"Server\" {message.Quote()}");
+        public void Broadcast(string message)
+        {
+            UnityEngine.Debug.Log($"[Broadcast] {message}");
+            ConsoleNetworker.Broadcast($"chat.add Server {message.Quote()}");
+            ConsoleNetworker.Broadcast($"notice.popup 10f \"\" {message.Quote()}");
+        }
 
         /// <summary>
         /// Runs the specified server command

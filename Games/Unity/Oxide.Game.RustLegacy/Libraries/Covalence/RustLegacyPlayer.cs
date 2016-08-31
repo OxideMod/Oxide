@@ -75,9 +75,9 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public int Ping => netUser.networkPlayer.averagePing;
 
         /// <summary>
-        /// Returns if the user is admin
+        /// Returns if the user is admin;
         /// </summary>
-        public bool IsAdmin => netUser.CanAdmin();
+        public bool IsAdmin => netUser?.admin ?? false;
 
         /// <summary>
         /// Gets if the user is banned
@@ -87,7 +87,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Returns if the user is connected
         /// </summary>
-        public bool IsConnected => netUser.connected;
+        public bool IsConnected => netUser?.connected ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
