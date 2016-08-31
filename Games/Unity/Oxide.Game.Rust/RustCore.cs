@@ -215,9 +215,6 @@ namespace Oxide.Game.Rust
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Migrate default player groups
-            permission.MigrateGroup("player", "default");
-
             // Configure remote logging
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
@@ -295,7 +292,7 @@ namespace Oxide.Game.Rust
         {
             // Call covalence hook
             var iplayer = Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
-            return string.IsNullOrEmpty(arg.ArgsStr) ? null : Interface.Call("OnUserChat", iplayer, arg.ArgsStr);
+            return string.IsNullOrEmpty(arg.GetString(0)) ? null : Interface.Call("OnUserChat", iplayer, arg.GetString(0));
         }
 
         /// <summary>
@@ -426,21 +423,6 @@ namespace Oxide.Game.Rust
         private object IOnBasePlayerHurt(BasePlayer entity, HitInfo info)
         {
             return isPlayerTakingDamage ? null : Interface.Call("OnEntityTakeDamage", entity, info);
-        }
-
-        /// <summary>
-        /// Called when a player finishes researching an item, before the result is available (success/failure)
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="chance"></param>
-        /// <returns></returns>
-        [HookMethod("IOnItemResearchEnd")]
-        private float IOnItemResearchEnd(ResearchTable table, float chance)
-        {
-            var returnvar = Interface.Call("OnItemResearchEnd", table, chance);
-            if (returnvar is float) return (float)returnvar;
-            if (returnvar is double) return (float)(double)returnvar;
-            return chance;
         }
 
         /// <summary>
