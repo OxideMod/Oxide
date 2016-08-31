@@ -73,12 +73,12 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return new DateTime(LightingManager.time); }
-            set { LightingManager.time = (uint)value.Second; }
+            get { return DateTime.Today.Add(TimeSpan.FromSeconds(LightingManager.time * 120)); }
+            set { LightingManager.time = (uint)(value.Second / 120); }
         }
 
         #endregion
-
+        
         #region Administration
 
         /// <summary>
