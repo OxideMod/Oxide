@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 using Oxide.Core;
@@ -10,7 +11,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class RustPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class RustPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly BasePlayer player;
@@ -34,26 +35,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             steamId = player.userID;
             Name = player.displayName;
             Id = player.UserIDString;
-            Character = this;
-            Object = player.transform.gameObject;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs this character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => player; // player.transform.gameObject
 
         /// <summary>
         /// Gets the user's last command type
@@ -87,7 +76,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player?.IsAdmin() ?? ServerUsers.Get(steamId).@group == ServerUsers.UserGroup.Moderator || ServerUsers.Get(steamId).@group == ServerUsers.UserGroup.Owner;
+        public bool IsAdmin => player?.IsAdmin() ?? ServerUsers.Is(steamId, ServerUsers.UserGroup.Moderator) || ServerUsers.Is(steamId, ServerUsers.UserGroup.Owner);
 
         /// <summary>
         /// Gets if the user is banned
@@ -151,6 +140,17 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Kill() => player.Die();
 
+        readonly FieldInfo maxHealth = typeof(BasePlayer).GetField("_maxHealth", BindingFlags.NonPublic);
+
+        /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get { return player.MaxHealth(); }
+            set { maxHealth?.SetValue(player, value); } // TODO: Test
+        }
+
         /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
@@ -184,7 +184,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -198,7 +198,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

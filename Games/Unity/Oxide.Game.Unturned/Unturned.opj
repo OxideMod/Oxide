@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DusGk5XGeq/Q6Kj+0AVPx02WRV14BheyyDSW9jAojnY=",
+            "MSILHash": "dd6ql5fjRqP1x4YNgYZTU88J7IULrAvVuvA/mvMCYdo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DusGk5XGeq/Q6Kj+0AVPx02WRV14BheyyDSW9jAojnY=",
+            "MSILHash": "dd6ql5fjRqP1x4YNgYZTU88J7IULrAvVuvA/mvMCYdo=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -117,7 +117,7 @@
             "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",
@@ -161,7 +161,7 @@
             "HookName": "ModifyTags(Clone)",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",

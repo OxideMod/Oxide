@@ -10,9 +10,9 @@ namespace Oxide.Core.Libraries.Covalence
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        IPlayerCharacter Character { get; }
+        object Object { get; }
 
         /// <summary>
         /// Gets the player's last used command type
@@ -103,6 +103,11 @@ namespace Oxide.Core.Libraries.Covalence
         void Kill();
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        float MaxHealth { get; set; }
+
+        /// <summary>
         /// Teleports the player's character to the specified position
         /// </summary>
         /// <param name="x"></param>
@@ -114,6 +119,24 @@ namespace Oxide.Core.Libraries.Covalence
         /// Unbans the user
         /// </summary>
         void Unban();
+
+        #endregion
+
+        #region Location
+
+        /// <summary>
+        /// Gets the position of this character
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        void Position(out float x, out float y, out float z);
+
+        /// <summary>
+        /// Gets the position of this character
+        /// </summary>
+        /// <returns></returns>
+        GenericPosition Position();
 
         #endregion
 
@@ -183,5 +206,24 @@ namespace Oxide.Core.Libraries.Covalence
         void RemoveFromGroup(string group);
 
         #endregion
+    }
+
+    /// <summary>
+    /// Represents a position of a point in 3D space
+    /// </summary>
+    public class GenericPosition
+    {
+        public readonly float X, Y, Z;
+
+        public GenericPosition()
+        {
+        }
+
+        public GenericPosition(float x, float y, float z)
+        {
+            X = x; Y = y; Z = z;
+        }
+
+        public override string ToString() => $"({X}, {Y}, {Z})";
     }
 }

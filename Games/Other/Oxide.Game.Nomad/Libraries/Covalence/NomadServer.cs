@@ -66,7 +66,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public DateTime Time
         {
             get { return new DateTime(DateTime.UtcNow.Ticks / 10000); } // TODO
-            set { throw new NotFiniteNumberException(); } // TODO
+            set { throw new NotImplementedException(); } // TODO
         }
 
         #endregion
@@ -83,7 +83,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message)

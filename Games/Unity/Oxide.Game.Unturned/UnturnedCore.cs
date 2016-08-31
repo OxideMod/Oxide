@@ -108,7 +108,7 @@ namespace Oxide.Game.Unturned
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname and version after they have been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", Provider.serverName);
             RemoteLogger.SetTag("version", Provider.APP_VERSION);
 

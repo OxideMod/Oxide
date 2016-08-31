@@ -63,10 +63,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get
-            {
-                return new DateTime(GameTime.Timer.Tick);
-            }
+            get { return new DateTime(GameTime.Timer.Tick); }
             set
             {
                 GameTime.Timer.Update(value.Second);
@@ -88,7 +85,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message)

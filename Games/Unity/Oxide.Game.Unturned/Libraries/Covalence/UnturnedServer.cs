@@ -73,12 +73,12 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return new DateTime(LightingManager.time); }
-            set { LightingManager.time = (uint)value.Second; }
+            get { return DateTime.Today.Add(TimeSpan.FromSeconds(LightingManager.time * 120)); }
+            set { LightingManager.time = (uint)(value.Second / 120); }
         }
 
         #endregion
-
+        
         #region Administration
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message) => ChatManager.sendChat(EChatMode.GLOBAL, message);

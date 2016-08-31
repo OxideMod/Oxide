@@ -154,6 +154,7 @@ namespace Oxide.Game.Rust
             cmdlib.AddConsoleCommand("global.reload", this, "ConsoleReload");
             cmdlib.AddChatCommand("version", this, "ChatVersion");
             cmdlib.AddChatCommand("oxide.version", this, "ChatVersion");
+            cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
             cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddChatCommand("lang", this, "ChatLang");
             cmdlib.AddConsoleCommand("oxide.lang", this, "ConsoleLang");
@@ -217,7 +218,7 @@ namespace Oxide.Game.Rust
             // Migrate default player groups
             permission.MigrateGroup("player", "default");
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
             // Destroy default server console
@@ -293,7 +294,8 @@ namespace Oxide.Game.Rust
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
             // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()), arg.Args[0]);
+            var iplayer = Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
+            return string.IsNullOrEmpty(arg.ArgsStr) ? null : Interface.Call("OnUserChat", iplayer, arg.ArgsStr);
         }
 
         /// <summary>
@@ -341,8 +343,8 @@ namespace Oxide.Game.Rust
 
             // Call covalence hooks
             var iplayer = Covalence.PlayerManager.GetPlayer(player.UserIDString);
-            Interface.Call("OnUserConnected", iplayer);
-            Interface.Call("OnUserInit", iplayer);
+            Interface.Call("OnUserConnected", iplayer); // TODO: Move to OnPlayerConnected
+            Interface.Call("OnUserInit", iplayer); // TODO: Move and change to OnUserSpawn?
         }
 
         /// <summary>
@@ -387,11 +389,7 @@ namespace Oxide.Game.Rust
         /// <param name="info"></param>
         /// <returns></returns>
         [HookMethod("IOnPlayerAttack")]
-        private object IOnPlayerAttack(BaseMelee melee, HitInfo info)
-        {
-            var player = melee.GetOwnerPlayer();
-            return Interface.Call("OnPlayerAttack", player, info);
-        }
+        private object IOnPlayerAttack(BaseMelee melee, HitInfo info) => Interface.Call("OnPlayerAttack", melee.GetOwnerPlayer(), info);
 
         /// <summary>
         /// Called when a BasePlayer is attacked
@@ -402,7 +400,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBasePlayerAttacked")]
         private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
-            if (!serverInitialized || isPlayerTakingDamage) return null;
+            if (!serverInitialized || player == null || isPlayerTakingDamage) return null;
             if (Interface.Call("OnEntityTakeDamage", player, info) != null) return true;
 
             isPlayerTakingDamage = true;
@@ -706,7 +704,10 @@ namespace Oxide.Game.Rust
         [HookMethod("ConsoleVersion")]
         private void ConsoleVersion(ConsoleSystem.Arg arg)
         {
-            Reply(arg, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
+            if (arg.cmd.namefull == "oxide.version")
+                Reply(arg, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
+            else if (arg.cmd.namefull == "global.version")
+                Reply(arg, $"Protocol: {Protocol.printable}\nBuild Version: {BuildInformation.VersionStampDays}\nBuild Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\nChangeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
         }
 
         #endregion
@@ -1105,8 +1106,8 @@ namespace Oxide.Game.Rust
             if (arg.cmd.namefull != "chat.say") return null;
 
             // Get the args
-            var str = arg.GetString(0, "text");
-            if (str.Length == 0) return null;
+            var str = arg.GetString(0);
+            if (string.IsNullOrEmpty(str)) return null;
 
             // Is it a chat command?
             if (str[0] != '/') return null;

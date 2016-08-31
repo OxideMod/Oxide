@@ -107,7 +107,7 @@ namespace Oxide.Game.SpaceEngineers
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", MySandboxGame.ConfigDedicated.ServerName);
 
             // Update server console window and status bars

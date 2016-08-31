@@ -52,6 +52,7 @@ namespace Oxide.Plugins
                 return number;
             }).ToList();
             while (version_parts.Count < 3) version_parts.Add(0);
+            if (version_parts.Count > 3) Interface.Oxide.LogWarning($"Version `{version}` is invalid for {Title}, should be `major.minor.patch`");
             Version = new VersionNumber(version_parts[0], version_parts[1], version_parts[2]);
         }
     }

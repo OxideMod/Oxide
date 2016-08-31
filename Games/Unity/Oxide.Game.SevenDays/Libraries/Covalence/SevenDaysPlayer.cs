@@ -11,7 +11,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class SevenDaysPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class SevenDaysPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly ClientInfo client;
@@ -34,26 +34,14 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             steamId = Convert.ToUInt64(client.playerId);
             Name = client.playerName;
             Id = client.playerId;
-            Character = this;
-            Object = GameManager.Instance.World.Players.dict[client.entityId].transform.gameObject;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs the character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => GameManager.Instance.World.Players.dict[client.entityId]; // GameManager.Instance.World.Players.dict[client.entityId].transform.gameObject
 
         /// <summary>
         /// Gets the user's last command type
@@ -163,6 +151,23 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                return entity?.Stats.Health.Entity.GetMaxHealth() ?? 0f;
+            }
+            set
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                if (entity != null) entity.Stats.Health.BaseMax = value;
+            }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
@@ -191,7 +196,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -206,7 +211,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

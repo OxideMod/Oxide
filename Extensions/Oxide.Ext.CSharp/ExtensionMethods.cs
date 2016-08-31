@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-
-using Random = Oxide.Core.Random;
-
-namespace Oxide.Plugins
+﻿namespace Oxide.Plugins
 {
     /// <summary>
     /// Useful extension methods which are added to base types

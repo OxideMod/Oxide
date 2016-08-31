@@ -10,7 +10,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "Hide & Hold Out";
+        public string GameName => "HideHoldOut";
 
         /// <summary>
         /// Gets the singleton instance of this provider

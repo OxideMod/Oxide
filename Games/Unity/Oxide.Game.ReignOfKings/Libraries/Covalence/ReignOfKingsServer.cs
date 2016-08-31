@@ -93,10 +93,10 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => Server.BroadcastMessage($"Server: {message}");
+        public void Broadcast(string message) => Server.BroadcastMessage(message);
 
         /// <summary>
         /// Runs the specified server command

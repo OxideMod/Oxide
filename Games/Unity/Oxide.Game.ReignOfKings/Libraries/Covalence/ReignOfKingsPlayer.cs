@@ -19,7 +19,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class ReignOfKingsPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class ReignOfKingsPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly Player player;
@@ -42,26 +42,14 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             steamId = player.Id;
             Name = player.Name;
             Id = steamId.ToString();
-            Character = this;
-            Object = player.CurrentCharacter.Prefab;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs this character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => player; // player.CurrentCharacter.Prefab
 
         /// <summary>
         /// Gets the user's last command type
@@ -95,7 +83,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player.HasPermission("admin");
+        public bool IsAdmin => player?.HasPermission("admin") ?? false;
 
         /// <summary>
         /// Gets if the user is banned
@@ -105,7 +93,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => player.Connection.IsConnected;
+        public bool IsConnected => player?.Connection?.IsConnected ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -114,7 +102,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         {
             get
             {
-                var sleeper = player.Entity.Get<ISleeper>();
+                var sleeper = player?.Entity.Get<ISleeper>();
                 return sleeper != null && sleeper.IsSleeping;
             }
         }
@@ -175,6 +163,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public void Kill() => player.Kill();
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get { return player.GetHealth().MaxHealth; }
+            set { player.GetHealth().MaxHealth = value; }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
@@ -199,7 +196,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -213,7 +210,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

@@ -102,7 +102,7 @@ namespace Oxide.Game.InterstellarRift
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", global::Game.Configuration.Config.Singleton.ServerName);
 
             // Update server console window and status bars

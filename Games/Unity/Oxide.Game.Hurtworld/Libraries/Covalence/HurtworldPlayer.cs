@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Steamworks;
 using UnityEngine;
 
 using Oxide.Core;
@@ -11,10 +12,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class HurtworldPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class HurtworldPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly PlayerSession session;
+        private readonly CSteamID cSteamId;
         private readonly ulong steamId;
 
         internal HurtworldPlayer(ulong id, string name)
@@ -31,28 +33,18 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         internal HurtworldPlayer(PlayerSession session)
         {
             this.session = session;
-            steamId = (ulong)session.SteamId;
+            cSteamId = session.SteamId;
+            steamId = cSteamId.m_SteamID;
             Name = session.Name;
             Id = steamId.ToString();
-            Character = this;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs this character, if available
-        /// </summary>
-        public object Object => session.WorldPlayerEntity?.gameObject;
+        public object Object => session; // session.WorldPlayerEntity.gameObject
 
         /// <summary>
         /// Gets the user's last command type
@@ -86,7 +78,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => session.IsAdmin;
+        public bool IsAdmin => session?.IsAdmin ?? GameManager.Instance.IsAdmin(cSteamId);
 
         /// <summary>
         /// Gets if the user is banned
@@ -96,7 +88,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => session.IsLoaded;
+        public bool IsConnected => session?.IsLoaded ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -124,7 +116,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the amount of time remaining on the user's ban
         /// </summary>
-        public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement once supported
+        public TimeSpan BanTimeRemaining => TimeSpan.MaxValue;
 
         /// <summary>
         /// Heals the user's character by specified amount
@@ -165,6 +157,24 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+                return stats.GetFluidEffect(EEntityFluidEffectType.Health).GetMaxValue();
+            }
+            set
+            {
+                var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+                var effect = stats.GetFluidEffect(EEntityFluidEffectType.Health) as StandardEntityFluidEffect;
+                effect?.MaxValue(value);
+            }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
@@ -189,7 +199,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -203,7 +213,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

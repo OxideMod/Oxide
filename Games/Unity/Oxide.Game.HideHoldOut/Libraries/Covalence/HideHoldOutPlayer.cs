@@ -1,17 +1,17 @@
 ﻿using System;
 
+using UnityEngine;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
-
-using UnityEngine;
 
 namespace Oxide.Game.HideHoldOut.Libraries.Covalence
 {
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class HideHoldOutPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class HideHoldOutPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly PlayerInfos player;
@@ -34,26 +34,14 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             steamId = Convert.ToUInt64(player.account_id);
             Name = player.Nickname;
             Id = player.account_id;
-            Character = this;
-            Object = player.Transfo.gameObject;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs the character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => player; // player.Transfo.gameObject
 
         /// <summary>
         /// Gets the user's last command type
@@ -87,7 +75,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player.isADMIN;
+        public bool IsAdmin => player?.isADMIN ?? false;
 
         /// <summary>
         /// Gets if the user is banned
@@ -97,7 +85,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => player.isDefined;
+        public bool IsConnected => player?.isDefined ?? false;
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -125,7 +113,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets the amount of time remaining on the user's ban
         /// </summary>
-        public TimeSpan BanTimeRemaining => new DateTime(0, 0, 0) - DateTime.Now; // TODO: Implement somehow?
+        public TimeSpan BanTimeRemaining => TimeSpan.MaxValue;
 
         /// <summary>
         /// Heals the user's character by specified amount
@@ -155,6 +143,21 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public void Kill() => Hurt(100f);
 
         /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get
+            {
+                return 0f; // TODO
+            }
+            set
+            {
+                // TODO
+            }
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
@@ -179,7 +182,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -193,7 +196,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()

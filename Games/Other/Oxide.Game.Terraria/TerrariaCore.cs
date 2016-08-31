@@ -106,7 +106,7 @@ namespace Oxide.Game.Terraria
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", Main.worldName);
 
             // Update server console window and status bars

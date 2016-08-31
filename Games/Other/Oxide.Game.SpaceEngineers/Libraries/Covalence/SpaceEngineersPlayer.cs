@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Reflection;
 
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
-using Sandbox.Game.Entities;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
@@ -11,13 +11,14 @@ using VRageMath;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Sandbox.Game.Entities;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
     /// <summary>
     /// Represents a player, either connected or not
     /// </summary>
-    public class SpaceEngineersPlayer : IPlayer, IEquatable<IPlayer>, IPlayerCharacter
+    public class SpaceEngineersPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
         private readonly MyPlayer player;
@@ -40,26 +41,14 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             steamId = player.Id.SteamId;
             Name = player.DisplayName;
             Id = steamId.ToString();
-            Character = this;
-            Object = player.Character.Entity;
         }
 
         #region Objects
 
         /// <summary>
-        /// Gets the user's in-game character, if available
+        /// Gets the object that backs the user
         /// </summary>
-        public IPlayerCharacter Character { get; private set; }
-
-        /// <summary>
-        /// Gets the owner of the character
-        /// </summary>
-        public IPlayer Owner => this;
-
-        /// <summary>
-        /// Gets the object that backs the character, if available
-        /// </summary>
-        public object Object { get; private set; }
+        public object Object => player; // player.Character.Entity
 
         /// <summary>
         /// Gets the user's last command type
@@ -149,12 +138,23 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => MyMultiplayer.Static.KickClient(player.Id.SteamId);
+        public void Kick(string reason) => MyMultiplayer.Static.KickClient(steamId);
 
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
         public void Kill() => Sync.Players.KillPlayer(player); // TODO: player.Character.Kill(??) ?
+
+        readonly FieldInfo maxHealth = typeof(MyEntityStat).GetField("m_maxValue", BindingFlags.NonPublic);
+
+        /// <summary>
+        /// Gets/sets the user's maximum health
+        /// </summary>
+        public float MaxHealth
+        {
+            get { return player.Character.StatComp.Health.MaxValue; }
+            set { maxHealth?.SetValue(player, value); } // TODO: Test
+        }
 
         /// <summary>
         /// Teleports the user's character to the specified position
@@ -181,7 +181,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -195,7 +195,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the character
+        /// Gets the position of the user
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()
@@ -215,8 +215,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="args"></param>
         public void Message(string message, params object[] args)
         {
-            // TODO
-            //MyCharacter.SendNewPlayerMessage(MySession.Static.LocalHumanPlayer.Id, player.Id, string.Format(message, args), TimeSpan.FromMilliseconds(DateTime.Now.Ticks));
+            player.Character.SendNewPlayerMessage(MySession.Static.LocalHumanPlayer.Id, player.Id, string.Format(message, args), TimeSpan.FromMilliseconds(DateTime.Now.Ticks));
         }
 
         /// <summary>
@@ -234,6 +233,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public void Command(string command, params object[] args)
         {
             // TODO
+            //player.Character.AddCommand();
         }
 
         #endregion

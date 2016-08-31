@@ -75,7 +75,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             get
             {
                 var time = TimeManager.Instance.GetCurrentGameTime();
-                var date = DateTime.Now.AddDays(time.Day);
+                var date = DateTime.Today.AddDays(time.Day);
                 return Convert.ToDateTime($"{date} {time.Hour}:{time.Minute}:{Math.Floor(time.Second)}");
             }
             set
@@ -100,12 +100,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            ConsoleManager.SendLog(string.Concat("[Broadcast] ", message));
+            ConsoleManager.SendLog($"[Broadcast] {message}");
             ChatManagerServer.Instance.RPC("RelayChat", uLink.RPCMode.Others, message);
         }
 

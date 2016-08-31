@@ -87,7 +87,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message) => NetMessage.SendData(25, -1, -1, message, 255, 255, 0, 160);

@@ -90,7 +90,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all player clients
+        /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
         public void Broadcast(string message) => NetworkController.NetManager_.chatManager.Send_msg(message);

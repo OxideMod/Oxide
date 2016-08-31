@@ -128,7 +128,7 @@ namespace Oxide.Game.TheForest
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
             // Add 'oxide' and 'modded' tags

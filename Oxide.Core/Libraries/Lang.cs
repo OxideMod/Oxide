@@ -42,7 +42,7 @@ namespace Oxide.Core.Libraries
             if (messages == null || string.IsNullOrEmpty(lang) || plugin == null) return;
             var file = $"{plugin.Name}.{lang}.json";
             bool changed;
-            var existingMessages = GetMessagesIntern(file);
+            var existingMessages = GetMessagesIntern(plugin.Name, lang);
             if (existingMessages == null)
             {
                 langFiles.Remove(file);
@@ -67,7 +67,7 @@ namespace Oxide.Core.Libraries
             Dictionary<string, string> langFile;
             if (!langFiles.TryGetValue(file, out langFile))
             {
-                langFile = GetMessagesIntern(file);
+                langFile = GetMessagesIntern(plugin.Name, lang);
                 if (langFile == null)
                 {
                     if (userId != null && !lang.Equals(langData.Lang)) return GetMessage(key, plugin);
@@ -89,7 +89,7 @@ namespace Oxide.Core.Libraries
             Dictionary<string, string> langFile;
             if (!langFiles.TryGetValue(file, out langFile))
             {
-                langFile = GetMessagesIntern(file);
+                langFile = GetMessagesIntern(plugin.Name, lang);
                 if (langFile == null) return null;
                 AddLangFile(file, langFile, plugin);
             }
@@ -172,11 +172,12 @@ namespace Oxide.Core.Libraries
             return changed;
         }
 
-        private Dictionary<string, string> GetMessagesIntern(string file)
+        private Dictionary<string, string> GetMessagesIntern(string plugin, string lang = "en")
         {
+            var file = $"{plugin}.{lang}.json";
             if (string.IsNullOrEmpty(file)) return null;
             var filename = Path.Combine(Interface.Oxide.LangDirectory, file);
-            return !File.Exists(filename) ? null : JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));
+            return !File.Exists(filename) ? (lang != "en") ? GetMessagesIntern(plugin): null : JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));
         }
 
         /// <summary>

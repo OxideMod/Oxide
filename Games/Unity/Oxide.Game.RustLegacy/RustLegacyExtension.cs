@@ -118,7 +118,7 @@ namespace Oxide.Game.RustLegacy
                 return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {NetCull.connections.Length}/{NetCull.maxConnections} players";
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{NetCull.connections.Length}/{NetCull.maxConnections} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (!NetCull.isServerRunning || NetCull.isNotRunning) return "not connected";
@@ -136,7 +136,11 @@ namespace Oxide.Game.RustLegacy
                 return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
 
-            Interface.Oxide.ServerConsole.Status3Left = () => $"{EnvironmentControlCenter.Singleton.GetTime()}, {(server.pvp ? "PvP" : "PvE")}";
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                var gameTime = DateTime.Today.Add(TimeSpan.FromHours(EnvironmentControlCenter.Singleton.GetTime())).ToString("hh:mm tt");
+                return $"{gameTime.ToLower()}, {(server.pvp ? "PvP" : "PvE")}";
+            };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }

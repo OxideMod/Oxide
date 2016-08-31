@@ -11,7 +11,6 @@ namespace Oxide
     /// </summary>
     public static class ExtensionMethods
     {
-
         /// <summary>
         /// Returns the last portion of a path separated by slashes
         /// </summary>

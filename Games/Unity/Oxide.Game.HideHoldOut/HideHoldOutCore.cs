@@ -224,7 +224,7 @@ namespace Oxide.Game.HideHoldOut
             // Add 'oxide' and 'modded' tags
             //SteamGameServer.SetGameTags("oxide,modded");
 
-            // Configure the hostname after it has been set
+            // Configure remote logging
             RemoteLogger.SetTag("hostname", NetworkController.NetManager_.ServManager.Server_NAME);
 
             // Update server console window and status bars
