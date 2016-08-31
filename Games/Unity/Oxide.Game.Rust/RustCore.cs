@@ -215,9 +215,6 @@ namespace Oxide.Game.Rust
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Migrate default player groups
-            permission.MigrateGroup("player", "default");
-
             // Configure remote logging
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
