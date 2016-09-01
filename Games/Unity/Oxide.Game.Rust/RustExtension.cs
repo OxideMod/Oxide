@@ -107,7 +107,7 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
 
             Interface.Oxide.ServerConsole.Status1Left = () => ConVar.Server.hostname;
-            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.frameRate}fps, {((ulong)Time.realtimeSinceStartup).FormatSeconds()}";
+            Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.current.frameRate}fps, {((ulong)Time.realtimeSinceStartup).FormatSeconds()}";
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
