@@ -113,8 +113,8 @@
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
     <ItemGroup>
-      <DeployFiles Include="$(BundleDir)\$(GameName)\$(ManagedDir)\**\*.*" />
+      <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
     </ItemGroup>
-    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>
