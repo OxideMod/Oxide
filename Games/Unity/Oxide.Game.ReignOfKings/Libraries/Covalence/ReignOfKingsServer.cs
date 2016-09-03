@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 
 using CodeHatch.Build;
@@ -7,9 +6,7 @@ using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using Steamworks;
 
-using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
@@ -109,19 +106,19 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         }
 
         #endregion
+    }
 
-        #region Logging
-
+    public static class ExtensionMethods
+    {
         /// <summary>
-        /// Logs a string of text to a file
+        /// Adds compatible style formatting to text
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="owner"></param>
-        public void Log(string text, Plugin owner)
+        /// <returns></returns>
+        public static string Stylize(this string text)
         {
-            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
-                writer.WriteLine(text);
+            // [FFFFFF]
+            return text;
         }
-        #endregion
     }
 }
