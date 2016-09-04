@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -389,6 +390,17 @@ namespace Oxide.Plugins
         protected void PrintError(string format, params object[] args)
         {
             Interface.Oxide.LogError("[{0}] {1}", Title, args.Length > 0 ? string.Format(format, args) : format);
+        }
+
+        /// <summary>
+        /// Logs a string of text to a named file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="plugin"></param>
+        public void Log(string text, Plugin plugin)
+        {
+            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(plugin.Filename + ".txt")), true))
+                writer.WriteLine(text);
         }
 
         /// <summary>

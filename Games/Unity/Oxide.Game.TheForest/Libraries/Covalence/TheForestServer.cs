@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 
 using Bolt;
@@ -8,9 +7,7 @@ using TheForest.UI.Multiplayer;
 using TheForest.Utils;
 using UnityEngine;
 
-using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -138,20 +135,19 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         }
 
         #endregion
+    }
 
-        #region Logging
-
+    public static class ExtensionMethods
+    {
         /// <summary>
-        /// Logs a string of text to a file
+        /// Adds compatible style formatting to text
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="owner"></param>
-        public void Log(string text, Plugin owner)
+        /// <returns></returns>
+        public static string Stylize(this string text)
         {
-            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
-                writer.WriteLine(text);
+            // TODO: Strip styling, the game doesn't support it
+            return text;
         }
-
-        #endregion
     }
 }

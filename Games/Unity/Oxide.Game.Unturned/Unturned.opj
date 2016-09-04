@@ -117,14 +117,14 @@
             "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "3VrWvAPYKI5fO063MWod8uz2QJkcoYyir0JrAgG/QPI=",
+            "MSILHash": "dowaUC75mU/7s2yoogn/tIdLuI/q5ppEFFiBOS+wYQg=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -161,14 +161,14 @@
             "HookName": "ModifyTags(Clone)",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "3VrWvAPYKI5fO063MWod8uz2QJkcoYyir0JrAgG/QPI=",
+            "MSILHash": "dowaUC75mU/7s2yoogn/tIdLuI/q5ppEFFiBOS+wYQg=",
             "BaseHookName": "ModifyTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }

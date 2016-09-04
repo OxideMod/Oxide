@@ -58,7 +58,8 @@ namespace Oxide.Game.HideHoldOut
             "b - ServerManager - DataBase_Storing",
             "k_EBeginAuthSessionResultOK",
             "k_EUserHasLicenseResultHasLicense",
-            "tmp_pos modified by raycast"
+            "tmp_pos modified by raycast",
+            "unloading unused assets..."
         };
 
         /// <summary>
@@ -137,8 +138,8 @@ namespace Oxide.Game.HideHoldOut
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(netManager.TimeManager.TIME_display)).ToString("h:mm tt").ToLower();
-                return $"{time}, Unknown map";
+                var gameTime = DateTime.Today.AddMinutes(netManager.TimeManager.TIME_display).ToString("h:mm tt");
+                return $"{gameTime.ToLower()}, Unknown map";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {netManager.get_GAME_VERSION}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
 
-using Oxide.Core.Plugins;
-
 namespace Oxide.Core.Libraries.Covalence
 {
     /// <summary>
@@ -77,17 +75,6 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="command"></param>
         /// <param name="args"></param>
         void Command(string command, params object[] args);
-
-        #endregion
-
-        #region Logging
-
-        /// <summary>
-        /// Logs a string of text to a file
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="owner"></param>
-        void Log(string text, Plugin owner);
 
         #endregion
     }

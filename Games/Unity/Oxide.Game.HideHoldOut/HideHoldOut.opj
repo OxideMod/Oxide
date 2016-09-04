@@ -161,7 +161,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 16,
-            "ReturnBehavior": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
             "HookTypeName": "Simple",
@@ -218,25 +218,9 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 52,
-            "RemoveCount": 14,
-            "Instructions": [
-              {
-                "OpCode": "ldarg_0",
-                "OpType": "None",
-                "Operand": null
-              },
-              {
-                "OpCode": "ldc_i4_1",
-                "OpType": "None",
-                "Operand": null
-              },
-              {
-                "OpCode": "stfld",
-                "OpType": "Field",
-                "Operand": "Assembly-CSharp|NetworkController|CONNECTED"
-              }
-            ],
+            "InjectionIndex": 59,
+            "RemoveCount": 6,
+            "Instructions": [],
             "HookTypeName": "Modify",
             "Name": "UnlockMouse [patch]",
             "HookName": "UnlockMouse",
@@ -249,7 +233,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "MHxlxAKOt2hSGAI1ZQP4/2ERrDcs6E1QntKHWFDIY54=",
+            "MSILHash": "gDCZuYbqwULTJuK7DvJs3KtoTpkWUYKzbxXMrJqSlUM=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -257,7 +241,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 307,
+            "InjectionIndex": 300,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -276,7 +260,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "enufKM0o8H3X4OT5lmnykRPvq8Uw7nWf+UK7Uwcjk/E=",
+            "MSILHash": "LiF9OldpCBRh+CZE/HUcnRb7gMiCRBxzfv1AejNNx5Y=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -311,15 +295,15 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 677,
-            "ReturnBehavior": 0,
+            "InjectionIndex": 180,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.<tmp_playerInfos>__3",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator8C",
+            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator91",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
@@ -327,7 +311,7 @@
               "ReturnType": "System.Boolean",
               "Parameters": []
             },
-            "MSILHash": "+m7rn32XH2kYXdIayKCqMvp/LMhQTsdHIOXZh4YnvOI=",
+            "MSILHash": "vC05oeyhfikY9+dLICTgJWHkVt6QmCM2rvi2S6IZdDQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -351,35 +335,9 @@
               "ReturnType": "System.Collections.IEnumerator",
               "Parameters": []
             },
-            "MSILHash": "X4Rgf0rHfaozRhOyZpWr0H7L4pTkCEEEUl52wdCxwsM=",
+            "MSILHash": "rzMFRThqBuMKguW8uY88vQEjFfSxicwp/2UXsqwMBIE=",
             "BaseHookName": null,
             "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 137,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0, l4",
-            "HookTypeName": "Simple",
-            "Name": "IOnUserApprove [internal]",
-            "HookName": "IOnUserApprove",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "PlayerApproval",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayerApproval"
-              ]
-            },
-            "MSILHash": "4yRMlP1wDzO5kkXOAIQuBKNgASefONCARFSXE8Ro6yY=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
           }
         },
         {
@@ -403,9 +361,33 @@
                 "uLink.MasterServerEvent"
               ]
             },
-            "MSILHash": "C5vRltdZlkAI65brq8QAVeT0FL/RlM1rLOWjM0xZzlQ=",
+            "MSILHash": "bEL8aLYw6ZCAkze2eEro9PuQi+nFWZWO0zVu05/FxiU=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 689,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.<tmp_playerInfos>__3",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator91",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "MoveNext",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "vC05oeyhfikY9+dLICTgJWHkVt6QmCM2rvi2S6IZdDQ=",
+            "BaseHookName": "IOnUserApprove [internal]",
+            "HookCategory": "Player"
           }
         }
       ]

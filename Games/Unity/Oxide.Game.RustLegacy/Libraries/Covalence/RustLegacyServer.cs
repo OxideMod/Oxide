@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 
-using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
-using Oxide.Core.Plugins;
 using Oxide.Plugins;
 
 namespace Oxide.Game.RustLegacy.Libraries.Covalence
@@ -100,20 +97,19 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public void Command(string command, params object[] args) => ConsoleSystem.Run($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
 
         #endregion
+    }
 
-        #region Logging
-
+    public static class ExtensionMethods
+    {
         /// <summary>
-        /// Logs a string of text to a file
+        /// Adds compatible style formatting to text
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="owner"></param>
-        public void Log(string text, Plugin owner)
+        /// <returns></returns>
+        public static string Stylize(this string text)
         {
-            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(owner.Filename + ".txt")), true))
-                writer.WriteLine(text);
+            // [color #0000FF]
+            return text;
         }
-
-        #endregion
     }
 }
