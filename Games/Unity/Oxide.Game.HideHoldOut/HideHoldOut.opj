@@ -161,7 +161,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 16,
-            "ReturnBehavior": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
             "HookTypeName": "Simple",
@@ -241,7 +241,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 307,
+            "InjectionIndex": 300,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -295,13 +295,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 670,
-            "ReturnBehavior": 0,
+            "InjectionIndex": 180,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.<tmp_playerInfos>__3",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator91",
             "Flagged": false,
@@ -343,32 +343,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 137,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0, l4",
-            "HookTypeName": "Simple",
-            "Name": "IOnUserApprove [internal]",
-            "HookName": "IOnUserApprove",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "NetworkController",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "PlayerApproval",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayerApproval"
-              ]
-            },
-            "MSILHash": "4yRMlP1wDzO5kkXOAIQuBKNgASefONCARFSXE8Ro6yY=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 6,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -390,6 +364,30 @@
             "MSILHash": "bEL8aLYw6ZCAkze2eEro9PuQi+nFWZWO0zVu05/FxiU=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 689,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.<tmp_playerInfos>__3",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController/<PlayerConnection_Routine>c__Iterator91",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "MoveNext",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "vC05oeyhfikY9+dLICTgJWHkVt6QmCM2rvi2S6IZdDQ=",
+            "BaseHookName": "IOnUserApprove [internal]",
+            "HookCategory": "Player"
           }
         }
       ]

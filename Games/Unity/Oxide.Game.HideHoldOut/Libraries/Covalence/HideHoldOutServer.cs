@@ -69,7 +69,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return new DateTime(NetworkController.NetManager_.TimeManager.TIME_display); }
+            get { return DateTime.Today.AddMinutes(NetworkController.NetManager_.TimeManager.TIME_display); }
             set { NetworkController.NetManager_.TimeManager.SetTime(value.Minute); }
         }
 
