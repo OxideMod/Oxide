@@ -389,6 +389,118 @@
             "BaseHookName": "IOnUserApprove [internal]",
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "UnlockMouse [patch]",
+            "HookName": "UnlockMouse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnApplicationFocus",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "Jv6d8LwQ9pYy93Wd+37JbFPfW/X9mNiuwAWAd8ktoSg=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 25,
+            "RemoveCount": 4,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "UnlockMouse [patch]",
+            "HookName": "UnlockMouse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnConnectedToServer",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "009Z7q5zG+S/tS+QfiLcOLTpHxODGPw2P9dJ4nN28Ag=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "UnlockMouse [patch]",
+            "HookName": "UnlockMouse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Open_MainMenu",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "+ZO0ccPXDtZrhkBmmlH+uET35McAwwzIxgJD4D3NoXs=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "UnlockMouse [patch]",
+            "HookName": "UnlockMouse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkController",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Close_MainMenu",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "nOGOtF3QVcAGjWVCIftZNuK+t4ecwdg3i7igNn0BxDk=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
         }
       ]
     }
