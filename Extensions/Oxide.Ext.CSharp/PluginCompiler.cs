@@ -134,7 +134,7 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.NextTick(() =>
                 {
-                    OnCompilerFailed("Compiler disconnected."); // TODO: Expand, warn about possible missing depdencies?
+                    OnCompilerFailed("Compiler disconnected."); // TODO: Expand, warn about possible missing depdencies
                     Shutdown();
                 });
                 return;
@@ -145,7 +145,7 @@ namespace Oxide.Plugins
                     var compilation = compilations[message.Id];
                     if (compilation == null)
                     {
-                        Interface.Oxide.LogWarning("CSharp compiler compiled an unknown assembly!"); // TODO: Clarify?
+                        Interface.Oxide.LogWarning("CSharp compiler compiled an unknown assembly!"); // TODO: Clarify which assembly
                         return;
                     }
                     compilation.endedAt = Interface.Oxide.Now;
@@ -264,7 +264,7 @@ namespace Oxide.Plugins
             {
                 process?.Dispose();
                 process = null;
-                Interface.Oxide.LogException("Exception while starting compiler: ", ex); // TODO: Expand, warn that it may not be executable?
+                Interface.Oxide.LogException("Exception while starting compiler: ", ex); // TODO: Expand, warn that it may not be executable
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
             }
             if (process == null) return false;

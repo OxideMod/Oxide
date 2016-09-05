@@ -69,7 +69,7 @@ namespace ObjectStream.IO
             if (bytesRead == 0) return 0;
             if (bytesRead != lensize)
             {
-                //TODO hack to ignore BOM
+                // TODO: Hack to ignore BOM
                 Array.Resize(ref lenbuf, Encoding.UTF8.GetPreamble().Length);
                 if (Encoding.UTF8.GetPreamble().SequenceEqual(lenbuf)) return ReadLength();
                 throw new IOException(string.Format("Expected {0} bytes but read {1}", lensize, bytesRead));

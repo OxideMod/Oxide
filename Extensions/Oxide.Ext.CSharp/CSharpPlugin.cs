@@ -300,7 +300,7 @@ namespace Oxide.Plugins
 
         protected override object InvokeMethod(HookMethod method, object[] args)
         {
-            //TODO ignore base_ methods for now
+            // TODO: Ignore base_ methods for now
             if (!hookDispatchFallback && !method.IsBaseHook)
             {
                 if (args != null && args.Length > 0)
