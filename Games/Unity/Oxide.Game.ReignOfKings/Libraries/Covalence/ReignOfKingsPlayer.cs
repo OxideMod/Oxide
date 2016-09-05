@@ -49,7 +49,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => player; // player.CurrentCharacter.Prefab
+        public object Object => player;
 
         /// <summary>
         /// Gets the user's last command type
@@ -118,11 +118,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
-            Server.Ban(steamId, (int) duration.TotalSeconds, reason);
+            // Ban and kick user
+            Server.Ban(steamId, (int)duration.TotalSeconds, reason);
         }
 
         /// <summary>

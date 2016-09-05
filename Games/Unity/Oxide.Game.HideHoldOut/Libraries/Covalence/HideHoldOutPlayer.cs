@@ -41,7 +41,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => player; // player.Transfo.gameObject
+        public object Object => player;
 
         /// <summary>
         /// Gets the user's last command type
@@ -103,11 +103,12 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             NetworkController.NetManager_.DBManager.DB_AddBan(Id);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>
@@ -149,11 +150,11 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         {
             get
             {
-                return 0f; // TODO
+                return 0f; // TODO: Implement when possible
             }
             set
             {
-                // TODO
+                // TODO: Implement when possible
             }
         }
 
@@ -233,7 +234,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO: Is this even possible?
+            // TODO: Implement when possible
         }
 
         #endregion

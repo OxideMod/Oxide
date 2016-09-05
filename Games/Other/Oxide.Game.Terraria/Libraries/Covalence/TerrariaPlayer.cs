@@ -70,12 +70,12 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <summary>
         /// Gets the user's average network ping
         /// </summary>
-        public int Ping => 0; // TODO
+        public int Ping => 0; // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => false; // TODO
+        public bool IsAdmin => false; // TODO: Implement when possible
 
         /// <summary>
         /// Gets if the user is banned
@@ -103,12 +103,12 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             Netplay.AddBan(player.whoAmI);
-            NetMessage.SendData(2, player.whoAmI, -1, reason);
+            if (IsConnected) NetMessage.SendData(2, player.whoAmI, -1, reason);
         }
 
         /// <summary>
@@ -146,11 +146,11 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         {
             get
             {
-                return 0f; // TODO
+                return 0f; // TODO: Implement when possible
             }
             set
             {
-                // TODO
+                // TODO: Implement when possible
             }
         }
 
@@ -237,7 +237,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         #endregion

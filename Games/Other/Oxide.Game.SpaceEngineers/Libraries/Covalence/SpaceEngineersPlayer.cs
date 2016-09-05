@@ -48,7 +48,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => player; // player.Character.Entity
+        public object Object => player;
 
         /// <summary>
         /// Gets the user's last command type
@@ -72,12 +72,12 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => string.Empty; // TODO
+        public string Address => string.Empty; // TODO: Implement when possible
 
         /// <summary>
         /// Gets the user's average network ping
         /// </summary>
-        public int Ping => 0; // TODO
+        public int Ping => 0; // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is admin
@@ -110,11 +110,12 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             MyMultiplayer.Static.BanClient(steamId, true);
+            if (IsConnected) Kick(reason); // TODO: Needed?
         }
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public float MaxHealth
         {
             get { return player.Character.StatComp.Health.MaxValue; }
-            set { maxHealth?.SetValue(player, value); } // TODO: Test
+            set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
         }
 
         /// <summary>
@@ -232,8 +233,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO
-            //player.Character.AddCommand();
+            // TODO: Implement when possible
         }
 
         #endregion

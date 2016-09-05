@@ -42,7 +42,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => player; // player.transform.gameObject
+        public object Object => player;
 
         /// <summary>
         /// Gets the user's last command type
@@ -104,12 +104,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             ServerUsers.Set(steamId, ServerUsers.UserGroup.Banned, Name, reason);
             ServerUsers.Save();
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>
@@ -148,7 +149,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public float MaxHealth
         {
             get { return player.MaxHealth(); }
-            set { maxHealth?.SetValue(player, value); } // TODO: Test
+            set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
         }
 
         /// <summary>

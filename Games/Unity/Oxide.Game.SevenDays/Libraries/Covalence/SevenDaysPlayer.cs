@@ -41,7 +41,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => GameManager.Instance.World.Players.dict[client.entityId]; // GameManager.Instance.World.Players.dict[client.entityId].transform.gameObject
+        public object Object => GameManager.Instance.World.Players.dict[client.entityId];
 
         /// <summary>
         /// Gets the user's last command type
@@ -85,7 +85,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => false; // TODO
+        public bool IsConnected => false; // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -103,11 +103,12 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             GameManager.Instance.adminTools.AddBan(Id, null, new DateTime(duration.Ticks), reason);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>

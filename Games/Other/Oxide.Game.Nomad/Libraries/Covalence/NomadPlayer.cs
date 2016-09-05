@@ -68,7 +68,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Gets the user's average network ping
         /// </summary>
-        public int Ping => 0; // TODO
+        public int Ping => 0; // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is admin
@@ -78,7 +78,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => false; // TODO
+        public bool IsBanned => false; // TODO: Implement when possible
 
         /// <summary>
         /// Gets if the user is connected
@@ -88,7 +88,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Returns if the user is sleeping
         /// </summary>
-        public bool IsSleeping => false; // TODO
+        public bool IsSleeping => false; // TODO: Implement when possible
 
         #endregion
 
@@ -104,17 +104,17 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
-            // TODO
+            // Ban and kick user
+            // TODO: Implement when possible
         }
 
         /// <summary>
         /// Gets the amount of time remaining on the user's ban
         /// </summary>
-        public TimeSpan BanTimeRemaining => TimeSpan.Zero; // TODO
+        public TimeSpan BanTimeRemaining => TimeSpan.Zero; // TODO: Implement when possible
 
         /// <summary>
         /// Heals the user's character by specified amount
@@ -122,7 +122,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="amount"></param>
         public void Heal(float amount)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="amount"></param>
         public void Hurt(float amount)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         private readonly MethodInfo removePlayer = typeof(GameServer).GetMethod("RemovePlayer", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -147,7 +147,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// </summary>
         public void Kill()
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         /// <summary>
@@ -157,11 +157,11 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         {
             get
             {
-                return 0; // TODO
+                return 0; // TODO: Implement when possible
             }
             set
             {
-                // TODO
+                // TODO: Implement when possible
             }
         }
 
@@ -171,7 +171,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => new Vector3(x, y, z); // TODO
+        public void Teleport(float x, float y, float z) => new Vector3(x, y, z); // TODO: Implement when possible
 
         /// <summary>
         /// Unbans the user
@@ -182,7 +182,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             if (!IsBanned) return;
 
             // Set to unbanned
-            // TODO
+            // TODO: Implement when possible
         }
 
         #endregion
@@ -197,7 +197,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            x = 0; // TODO
+            x = 0; // TODO: Implement when possible
             y = 0;
             z = 0;
         }
@@ -208,7 +208,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            return new GenericPosition(0, 0, 0); // TODO
+            return new GenericPosition(0, 0, 0); // TODO: Implement when possible
         }
 
         #endregion

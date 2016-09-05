@@ -40,7 +40,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => player; // player.transform.gameObject
+        public object Object => player;
 
         /// <summary>
         /// Gets the user's last command type
@@ -102,12 +102,17 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             ServerAdministrator.AddBlacklist(player.Id);
-            // TODO: PT_InGame_LoginBan?
+            if (IsConnected)
+            {
+                player.RPCOthers(EPacketType.PT_InGame_LoginBan); // TODO: Needed?
+                player.RPCOthers(EPacketType.PT_InGame_AddBlackList); // TODO: Needed?
+                Kick(reason); // TODO: Needed?
+            }
         }
 
         /// <summary>
@@ -133,7 +138,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <param name="reason"></param>
         public void Kick(string reason)
         {
-            // TODO: Show reason if possible ?
+            player.RPCOthers(EPacketType.PT_InGame_Kick, reason); // TODO: Needed?
             NetInterface.CloseConnection(player.networkView.owner);
         }
 
@@ -160,7 +165,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         public void Teleport(float x, float y, float z)
         {
             player.SetPosition(new Vector3(x, y, z));
-            //player.RPCOthers(EPacketType.PT_InGame_FastTransfer, player.transform.position); // TODO: Test if not needed
+            player.RPCOthers(EPacketType.PT_InGame_FastTransfer, player.transform.position); // TODO: Needed?
         }
 
         /// <summary>
@@ -173,6 +178,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 
             // Set to unbanned
             ServerAdministrator.DeleteBlacklist(player.Id);
+            player.RPCOthers(EPacketType.PT_InGame_DelBlackList); // TODO: Needed?
         }
 
         #endregion
@@ -214,7 +220,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <param name="args"></param>
         public void Message(string message, params object[] args)
         {
-            //NetInterface.RPCOthers(EPacketType.PT_InGame_SendMsg, CustomData.EMsgType.ToOne, string.Format(message, args)); // TODO
+            player.RPCOthers(EPacketType.PT_InGame_SendMsg, CustomData.EMsgType.ToOne, string.Format(message, args));
         }
 
         /// <summary>

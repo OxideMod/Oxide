@@ -43,7 +43,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => netUser; // netUser.playerClient.controllable.gameObject
+        public object Object => netUser;
 
         /// <summary>
         /// Gets the user's last command type
@@ -105,11 +105,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             BanList.Add(steamId);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>
