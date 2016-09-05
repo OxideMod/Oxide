@@ -228,12 +228,7 @@ namespace Oxide.Game.ReignOfKings
                 return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
 
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                var gameTime = GameClock.Instance != null ? GameClock.Instance.TimeOfDayAsClockString() : "Unknown";
-                var weather = Weather.Instance != null ? Weather.Instance.CurrentWeather.ToString() : "Unknown";
-                return $" {gameTime}, Weather: {weather}";
-            };
+            Interface.Oxide.ServerConsole.Status3Left = () => $"{GameClock.Instance.TimeOfDayAsClockString()}, Weather: {Weather.Instance.CurrentWeather}";
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameInfo.VersionString} ({GameInfo.VersionName})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }

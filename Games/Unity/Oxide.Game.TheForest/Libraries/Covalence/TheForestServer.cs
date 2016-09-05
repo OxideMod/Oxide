@@ -83,7 +83,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return DateTime.Today.Add(TimeSpan.FromMinutes(TheForestAtmosphere.Instance.TimeOfDay)); }
+            get { return DateTime.Today.AddMinutes(TheForestAtmosphere.Instance.TimeOfDay); }
             set { TheForestAtmosphere.Instance.TimeOfDay = value.Minute; }
         }
 

@@ -254,7 +254,7 @@ namespace Oxide.Game.HideHoldOut
             {
                 // Reject the user with the message
                 NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canLogin);
-                Interface.Oxide.NextTick(() => { Network.CloseConnection(player.NetPlayer, true); });
+                Interface.Oxide.NextTick(() => Network.CloseConnection(player.NetPlayer, true));
                 return true;
             }
 

@@ -72,7 +72,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             get
             {
                 var time = GameManager.Instance.World.worldTime;
-                var date = DateTime.Now.AddDays(GameUtils.WorldTimeToDays(time));
+                var date = DateTime.Today.AddDays(GameUtils.WorldTimeToDays(time));
                 return Convert.ToDateTime($"{date} {GameUtils.WorldTimeToHours(time)}:{GameUtils.WorldTimeToMinutes(time)}");
             }
             set { GameUtils.DayTimeToWorldTime(value.Day, value.Hour, value.Minute); }

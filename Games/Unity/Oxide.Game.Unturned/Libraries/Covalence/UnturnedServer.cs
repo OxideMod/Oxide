@@ -70,7 +70,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return DateTime.Today.Add(TimeSpan.FromSeconds(LightingManager.time * 120)); }
+            get { return DateTime.Today.AddSeconds(LightingManager.time * 120); }
             set { LightingManager.time = (uint)(value.Second / 120); }
         }
 

@@ -106,7 +106,7 @@ namespace Oxide.Game.InterstellarRift
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(0)).ToString("h:mm tt").ToLower(); // TODO
+                var time = DateTime.Today.AddSeconds(0).ToString("h:mm tt").ToLower(); // TODO
                 return string.Concat(" ", time); // TODO: More info
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Globals.Version}";

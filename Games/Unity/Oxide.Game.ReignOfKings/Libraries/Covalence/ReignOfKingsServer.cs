@@ -4,6 +4,8 @@ using System.Net;
 using CodeHatch.Build;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
+using CodeHatch.Networking.Events;
+using CodeHatch.Networking.Events.WorldEvents.TimeEvents;
 using Steamworks;
 
 using Oxide.Core.Libraries.Covalence;
@@ -72,8 +74,8 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return TOD_Sky.Instance.Cycle.DateTime; } // TODO: Fix NRE (OnServerInitialized test)
-            set { TOD_Sky.Instance.Cycle.DateTime = value; }
+            get { return DateTime.Today.AddHours(GameClock.Instance.TimeOfDay); }
+            set { EventManager.CallEvent(new TimeSetEvent(value.Hour, GameClock.Instance.DaySpeed)); }
         }
 
         #endregion
