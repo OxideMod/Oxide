@@ -13,6 +13,11 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         public string GameName => "7DaysToDie";
 
         /// <summary>
+        /// Gets the Steam app ID of the game, if available
+        /// </summary>
+        public uint AppId => 294420;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static SevenDaysCovalenceProvider Instance { get; private set; }

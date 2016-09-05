@@ -13,6 +13,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         public string GameName => "TheForest";
 
         /// <summary>
+        /// Gets the Steam app ID of the game, if available
+        /// </summary>
+        public uint AppId => 242760;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static TheForestCovalenceProvider Instance { get; private set; }

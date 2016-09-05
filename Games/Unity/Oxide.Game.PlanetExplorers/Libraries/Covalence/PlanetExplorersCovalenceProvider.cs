@@ -13,6 +13,11 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         public string GameName => "PlanetExplorers";
 
         /// <summary>
+        /// Gets the Steam app ID of the game, if available
+        /// </summary>
+        public uint AppId => 237870;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static PlanetExplorersCovalenceProvider Instance { get; private set; }

@@ -13,6 +13,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public string GameName => "ReignOfKings";
 
         /// <summary>
+        /// Gets the Steam app ID of the game, if available
+        /// </summary>
+        public uint AppId => 381690;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static ReignOfKingsCovalenceProvider Instance { get; private set; }

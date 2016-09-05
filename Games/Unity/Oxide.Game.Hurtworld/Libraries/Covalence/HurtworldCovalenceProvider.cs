@@ -13,6 +13,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public string GameName => "Hurtworld";
 
         /// <summary>
+        /// Gets the Steam app ID of the game, if available
+        /// </summary>
+        public uint AppId => 405100;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static HurtworldCovalenceProvider Instance { get; private set; }
