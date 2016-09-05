@@ -13,9 +13,14 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public string GameName => "HideHoldOut";
 
         /// <summary>
-        /// Gets the Steam app ID of the game, if available
+        /// Gets the Steam app ID of the game's client, if available
         /// </summary>
-        public uint AppId => 377610;
+        public uint ClientAppId => 377140;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 377610;
 
         /// <summary>
         /// Gets the singleton instance of this provider

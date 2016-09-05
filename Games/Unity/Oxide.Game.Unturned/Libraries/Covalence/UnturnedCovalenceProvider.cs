@@ -13,9 +13,14 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         public string GameName => "Unturned";
 
         /// <summary>
-        /// Gets the Steam app ID of the game, if available
+        /// Gets the Steam app ID of the game's client, if available
         /// </summary>
-        public uint AppId => 304930;
+        public uint ClientAppId => 304930;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 304930;
 
         /// <summary>
         /// Gets the singleton instance of this provider
