@@ -138,7 +138,7 @@ namespace Oxide.Game.RustLegacy
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var gameTime = DateTime.Today.Add(TimeSpan.FromHours(EnvironmentControlCenter.Singleton.GetTime())).ToString("hh:mm tt");
+                var gameTime = DateTime.Today.AddHours(EnvironmentControlCenter.Singleton.GetTime()).ToString("hh:mm tt");
                 return $"{gameTime.ToLower()}, {(server.pvp ? "PvP" : "PvE")}";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Rust.Defines.Connection.protocol}";

@@ -127,7 +127,7 @@ namespace Oxide.Game.FromTheDepths
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 if (GameTimer.Instance == null) return string.Empty;
-                var time = DateTime.Today.Add(TimeSpan.FromSeconds(GameTimer.Instance.GameTime)).ToString("h:mm tt").ToLower();
+                var time = DateTime.Today.AddSeconds(GameTimer.Instance.GameTime).ToString("h:mm tt").ToLower();
                 var map = string.Empty; // TODO: MPGameData.MapName
                 return string.Concat(" ", time, ", ", map);
             };

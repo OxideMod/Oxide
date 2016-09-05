@@ -99,7 +99,7 @@ namespace Oxide.Game.Terraria
                 return Main.time <= 0 ? "not connected" : $"{bytesReceived}/s in, {bytesSent}/s out";
             };
 
-            Interface.Oxide.ServerConsole.Status3Left = () => DateTime.Today.Add(TimeSpan.FromSeconds(Main.mapTime)).ToString("h:mm tt").ToLower();
+            Interface.Oxide.ServerConsole.Status3Left = () => DateTime.Today.AddSeconds(Main.mapTime).ToString("h:mm tt").ToLower();
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Main.versionNumber}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }

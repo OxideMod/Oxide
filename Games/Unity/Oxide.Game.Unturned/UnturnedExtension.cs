@@ -108,7 +108,7 @@ namespace Oxide.Game.Unturned
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var gameTime = DateTime.Today.Add(TimeSpan.FromSeconds(LightingManager.time * 120)).ToString("h:mm tt");
+                var gameTime = DateTime.Today.AddSeconds(LightingManager.time * 120).ToString("h:mm tt");
                 return $" {gameTime.ToLower()}, {Provider.map ?? "Unknown"}";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Provider.APP_VERSION}";

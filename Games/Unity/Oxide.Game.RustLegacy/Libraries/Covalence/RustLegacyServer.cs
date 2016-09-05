@@ -61,7 +61,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return DateTime.Today.Add(TimeSpan.FromHours(EnvironmentControlCenter.Singleton.GetTime())); }
+            get { return DateTime.Today.AddHours(EnvironmentControlCenter.Singleton.GetTime()); }
             set { EnvironmentControlCenter.Singleton.SetTime(value.Hour); }
         }
 
