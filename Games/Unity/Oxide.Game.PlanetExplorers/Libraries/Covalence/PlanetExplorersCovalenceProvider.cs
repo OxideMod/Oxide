@@ -13,9 +13,14 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         public string GameName => "PlanetExplorers";
 
         /// <summary>
-        /// Gets the Steam app ID of the game, if available
+        /// Gets the Steam app ID of the game's client, if available
         /// </summary>
-        public uint AppId => 237870;
+        public uint ClientAppId => 237870;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 237870;
 
         /// <summary>
         /// Gets the singleton instance of this provider

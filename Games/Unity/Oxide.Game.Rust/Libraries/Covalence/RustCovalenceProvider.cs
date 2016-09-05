@@ -13,9 +13,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public string GameName => "Rust";
 
         /// <summary>
-        /// Gets the Steam app ID of the game, if available
+        /// Gets the Steam app ID of the game's client, if available
         /// </summary>
-        public uint AppId => 258550;
+        public uint ClientAppId => 252490;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 258550;
 
         /// <summary>
         /// Gets the singleton instance of this provider
