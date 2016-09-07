@@ -103,7 +103,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO
+            // TODO: Not possible yet?
         }
 
         #endregion

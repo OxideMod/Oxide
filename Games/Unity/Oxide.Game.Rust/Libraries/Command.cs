@@ -207,7 +207,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="callback"></param>
         public void AddConsoleCommand(string command, Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
         {
-            // Hack us the dictionary
             if (rustcommands == null) rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
 
             // Hook the unload event

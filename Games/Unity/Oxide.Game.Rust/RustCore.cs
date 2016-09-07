@@ -219,7 +219,7 @@ namespace Oxide.Game.Rust
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
             // Destroy default server console
-            if (ServerConsole.Instance != null)
+            if (Interface.Oxide.CheckConsole() && ServerConsole.Instance != null)
             {
                 ServerConsole.Instance.enabled = false;
                 UnityEngine.Object.Destroy(ServerConsole.Instance);

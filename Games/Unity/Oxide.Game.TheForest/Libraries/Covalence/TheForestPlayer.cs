@@ -99,7 +99,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Returns if the user is connected
         /// </summary>
-        public bool IsConnected => false; // TODO
+        public bool IsConnected => false; // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is sleeping
@@ -117,14 +117,13 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
             // Set to banned
             Scene.HudGui.MpPlayerList.Ban(steamId);
             CoopKick.SaveList();
-
-            if (entity != null) CoopKick.KickPlayer(entity, (int)duration.TotalMinutes, reason);
+            if (IsConnected) CoopKick.KickPlayer(entity, (int)duration.TotalMinutes, reason);
         }
 
         /// <summary>
@@ -169,11 +168,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             get
             {
-                return 1000f; // TODO
+                return 1000f; // TODO: Implement when possible
             }
             set
             {
-                // TODO
+                // TODO: Implement when possible
             }
         }
 
@@ -253,7 +252,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO: Not possible yet?
+            // TODO: Implement when possible
         }
 
         #endregion

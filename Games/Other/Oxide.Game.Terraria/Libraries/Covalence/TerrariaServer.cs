@@ -96,7 +96,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         #endregion

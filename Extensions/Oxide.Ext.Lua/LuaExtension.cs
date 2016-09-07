@@ -356,7 +356,7 @@ end
         /// <returns></returns>
         private static MethodBase FindOverload(LuaTable tbl, object key)
         {
-            // TODO: This
+            // TODO: Complete this
             // tbl.methodarray has an array of methods to search though
             // key should be a table of types defining the signature of the method to find
             return null;

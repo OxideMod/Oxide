@@ -149,8 +149,8 @@ namespace Oxide.Game.Hurtworld
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var time = TimeManager.Instance.GetCurrentGameTime();
-                var gameTime = $"{(time.Hour > 12 ? (time.Hour - 12) : time.Hour)}:{time.Minute:D2} {(time.Hour >= 12 ? "pm" : "am")}";
-                return $"{gameTime}, {GameManager.Instance?.ServerConfig?.Map ?? "Unknown"}";
+                var gameTime = Convert.ToDateTime($"{time.Hour}:{time.Minute}:{Math.Floor(time.Second)}").ToString("h:mm tt");
+                return $"{gameTime.ToLower()}, {GameManager.Instance?.ServerConfig?.Map ?? "Unknown"}";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameManager.Instance?.Version} ({GameManager.PROTOCOL_VERSION})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

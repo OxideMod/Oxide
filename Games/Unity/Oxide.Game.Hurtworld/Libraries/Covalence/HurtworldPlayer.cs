@@ -44,7 +44,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => session; // session.WorldPlayerEntity.gameObject
+        public object Object => session;
 
         /// <summary>
         /// Gets the user's last command type
@@ -106,11 +106,13 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
-            ConsoleManager.Instance?.ExecuteCommand(string.Concat("ban ", Id));
+            // Ban and kick user
+            ConsoleManager.Instance?.ExecuteCommand(string.Concat("ban ", Id)); // TODO: Call methods directly when public
+            //BanManager.Instance.AddBan(steamId);
+            //if (IsConnected) Kick(reason);
         }
 
         /// <summary>

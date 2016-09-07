@@ -13,6 +13,16 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public string GameName => "SpaceEngineers";
 
         /// <summary>
+        /// Gets the Steam app ID of the game's client, if available
+        /// </summary>
+        public uint ClientAppId => 244850;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 298740;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static SpaceEngineersCovalenceProvider Instance { get; private set; }

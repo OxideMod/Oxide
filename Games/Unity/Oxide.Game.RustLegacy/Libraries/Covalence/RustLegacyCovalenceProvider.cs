@@ -13,6 +13,16 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public string GameName => "RustLegacy";
 
         /// <summary>
+        /// Gets the Steam app ID of the game's client, if available
+        /// </summary>
+        public uint ClientAppId => 252490;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 258550;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static RustLegacyCovalenceProvider Instance { get; private set; }

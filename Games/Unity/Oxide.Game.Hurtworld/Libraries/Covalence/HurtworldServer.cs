@@ -72,8 +72,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             get
             {
                 var time = TimeManager.Instance.GetCurrentGameTime();
-                var date = DateTime.Today.AddDays(time.Day);
-                return Convert.ToDateTime($"{date} {time.Hour}:{time.Minute}:{Math.Floor(time.Second)}");
+                return Convert.ToDateTime($"{time.Hour}:{time.Minute}:{Math.Floor(time.Second)}");
             }
             set
             {

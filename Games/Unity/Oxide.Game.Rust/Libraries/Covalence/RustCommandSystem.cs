@@ -98,7 +98,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="callback"></param>
         public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
-            // Hack us the dictionary
             if (rustCommands == null) rustCommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
 
             // Convert to lowercase

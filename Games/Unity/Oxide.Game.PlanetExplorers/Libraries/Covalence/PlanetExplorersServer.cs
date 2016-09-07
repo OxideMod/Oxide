@@ -87,7 +87,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         #endregion

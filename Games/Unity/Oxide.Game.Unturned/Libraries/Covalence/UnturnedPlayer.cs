@@ -47,7 +47,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <summary>
         /// Gets the object that backs the user
         /// </summary>
-        public object Object => steamPlayer; // steamPlayer.player.transform.gameObject;
+        public object Object => steamPlayer;
 
         /// <summary>
         /// Gets the user's last command type
@@ -124,10 +124,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check already banned
+            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
+            // Ban and kick user
             Provider.ban(cSteamId, reason, (uint)duration.TotalSeconds);
         }
 
@@ -177,11 +177,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         {
             get
             {
-                return 100f; // TODO
+                return 100f; // TODO: Implement when possible
             }
             set
             {
-                // TODO
+                // TODO: Implement when possible
             }
         }
 

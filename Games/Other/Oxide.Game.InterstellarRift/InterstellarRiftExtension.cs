@@ -86,28 +86,28 @@ namespace Oxide.Game.InterstellarRift
             Interface.Oxide.ServerConsole.Status1Left = () => Config.Singleton.ServerName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
-                var fps = string.Empty; // TODO
-                var time = TimeSpan.FromSeconds(0); // TODO
+                var fps = string.Empty; // TODO: Implement when possible
+                var time = TimeSpan.FromSeconds(0); // TODO: Implement when possible
                 var uptime = $"{time.TotalHours:00}h{time.Minutes:00}m{time.Seconds:00}s".TrimStart(' ', 'd', 'h', 'm', 's', '0');
                 return string.Concat(fps, "fps, ", uptime);
             };
             /*Interface.Oxide.ServerConsole.Status2Left = () =>
             {
-                var players = string.Empty; // TODO
-                var playerLimit = string.Empty; // TODO
+                var players = string.Empty; // TODO: Implement when possible
+                var playerLimit = string.Empty; // TODO: Implement when possible
                 return string.Concat(" ", players, "/", playerLimit, " players");
             };*/
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                var bytesReceived = Utility.FormatBytes(0); // TODO
-                var bytesSent = Utility.FormatBytes(0); // TODO
-                return null <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out"); // TODO
+                var bytesReceived = Utility.FormatBytes(0); // TODO: Implement when possible
+                var bytesSent = Utility.FormatBytes(0); // TODO: Implement when possible
+                return null <= 0 ? "0b/s in, 0b/s out" : string.Concat(bytesReceived, "/s in, ", bytesSent, "/s out"); // TODO: Implement when possible
             };*/
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                var time = DateTime.Today.AddSeconds(0).ToString("h:mm tt").ToLower(); // TODO
-                return string.Concat(" ", time); // TODO: More info
+                var time = DateTime.Today.AddSeconds(0).ToString("h:mm tt").ToLower(); // TODO: Implement when possible
+                return string.Concat(" ", time); // TODO: Add more info
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Globals.Version}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

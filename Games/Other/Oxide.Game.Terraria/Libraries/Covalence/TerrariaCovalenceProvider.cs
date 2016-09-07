@@ -13,6 +13,16 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         public string GameName => "Terraria";
 
         /// <summary>
+        /// Gets the Steam app ID of the game's client, if available
+        /// </summary>
+        public uint ClientAppId => 105600;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 105600;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static TerrariaCovalenceProvider Instance { get; private set; }

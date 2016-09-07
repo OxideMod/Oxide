@@ -13,6 +13,16 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public string GameName => "Nomad";
 
         /// <summary>
+        /// Gets the Steam app ID of the game's client, if available
+        /// </summary>
+        public uint ClientAppId => 378370;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        public uint ServerAppId => 378370;
+
+        /// <summary>
         /// Gets the singleton instance of this provider
         /// </summary>
         internal static NomadCovalenceProvider Instance { get; private set; }

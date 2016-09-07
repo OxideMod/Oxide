@@ -283,7 +283,7 @@ namespace Oxide.Ext.CSharp
                 }
                 else
                 {
-                    //TODO handle params array?
+                    // TODO: Handle params array?
                     AddInstruction(OpCodes.Ldarg_3);    // object[] params
                     AddInstruction(Ldc_I4_n(i));        // param_number
                     AddInstruction(OpCodes.Ldelem_Ref);

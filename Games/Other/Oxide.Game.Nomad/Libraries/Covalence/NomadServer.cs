@@ -62,8 +62,8 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return new DateTime(DateTime.UtcNow.Ticks / 10000); } // TODO
-            set { throw new NotImplementedException(); } // TODO
+            get { return new DateTime(DateTime.UtcNow.Ticks / 10000); } // TODO: Implement when possible
+            set { throw new NotImplementedException(); } // TODO: Implement when possible
         }
 
         #endregion
@@ -85,7 +85,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO
+            // TODO: Implement when possible
         }
 
         #endregion
