@@ -419,6 +419,9 @@ namespace Oxide.Core
                 }
                 plugin.IsLoaded = true;
                 CallHook("OnPluginLoaded", plugin);
+                if(plugin.HasConfig) {
+                    plugin.Config.Load();
+                }
                 return true;
             }
             catch (Exception ex)
