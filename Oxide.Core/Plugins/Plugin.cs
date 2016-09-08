@@ -311,21 +311,17 @@ namespace Oxide.Core.Plugins
         protected virtual void LoadConfig()
         {
             Config = new DynamicConfigFile(Path.Combine(Manager.ConfigPath, $"{Name}.json"));
-            if (Config.Exists())
-            {
-                try
-                {
-                    Config.Load();
-                }
-                catch (Exception ex)
-                {
-                    RaiseError($"Failed to load config file (is the config file corrupt?) ({ex.Message})");
-                }
-            }
-            else
+            if (!Config.Exists())
             {
                 LoadDefaultConfig();
                 SaveConfig();
+            }
+            try { 
+                Config.Load();
+            }
+            catch (Exception ex)
+            {
+                RaiseError($"Failed to load config file (is the config file corrupt?) ({ex.Message})");
             }
         }
 
