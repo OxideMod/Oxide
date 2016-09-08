@@ -28,13 +28,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal RustPlayer(BasePlayer player)
+        internal RustPlayer(BasePlayer player) : this(player.userID, player.displayName)
         {
-            // Store user details
+            // Store player object
             this.player = player;
-            steamId = player.userID;
-            Name = player.displayName;
-            Id = player.UserIDString;
         }
 
         #region Objects
