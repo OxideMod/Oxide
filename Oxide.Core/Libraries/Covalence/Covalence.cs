@@ -43,6 +43,18 @@ namespace Oxide.Core.Libraries.Covalence
         [LibraryProperty("Game")]
         public string Game => provider == null ? string.Empty : provider.GameName;
 
+        /// <summary>
+        /// Gets the Steam app ID of the game's client, if available
+        /// </summary>
+        [LibraryProperty("ClientAppId")]
+        public uint ClientAppId => provider == null ? 0 : provider.ClientAppId;
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server, if available
+        /// </summary>
+        [LibraryProperty("ServerAppId")]
+        public uint ServerAppId => provider == null ? 0 : provider.ServerAppId;
+
         // The logger
         private Logger logger;
 

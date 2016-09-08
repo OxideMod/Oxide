@@ -11,6 +11,16 @@
         string GameName { get; }
 
         /// <summary>
+        /// Gets the Steam app ID of the game's client for which this provider provides
+        /// </summary>
+        uint ClientAppId { get; }
+
+        /// <summary>
+        /// Gets the Steam app ID of the game's server for which this provider provides
+        /// </summary>
+        uint ServerAppId { get; }
+
+        /// <summary>
         /// Creates the game-specific server object
         /// </summary>
         /// <returns></returns>
