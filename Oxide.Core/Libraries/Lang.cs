@@ -42,7 +42,7 @@ namespace Oxide.Core.Libraries
             if (messages == null || string.IsNullOrEmpty(lang) || plugin == null) return;
             var file = $"{plugin.Name}.{lang}.json";
             bool changed;
-            var existingMessages = GetMessagesIntern(plugin.Name, lang);
+            var existingMessages = GetMessagesIntern(plugin.Name, lang, true);
             if (existingMessages == null)
             {
                 langFiles.Remove(file);
@@ -172,12 +172,12 @@ namespace Oxide.Core.Libraries
             return changed;
         }
 
-        private Dictionary<string, string> GetMessagesIntern(string plugin, string lang = "en")
+        private Dictionary<string, string> GetMessagesIntern(string plugin, string lang = "en", bool registerMessages = false)
         {
             var file = $"{plugin}.{lang}.json";
             if (string.IsNullOrEmpty(file)) return null;
             var filename = Path.Combine(Interface.Oxide.LangDirectory, file);
-            return !File.Exists(filename) ? (lang != "en") ? GetMessagesIntern(plugin): null : JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));
+            return !File.Exists(filename) ? (lang != "en" && !registerMessages) ? GetMessagesIntern(plugin) : null : JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename));
         }
 
         /// <summary>
