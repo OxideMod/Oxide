@@ -23,7 +23,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "oJK0GgoZu43NRKTwblVzU/y7hwF1APzkvLsWQzkaGfw=",
+            "MSILHash": "RSxmP67DBT2WN7m/6uIJmxQ3zyX3u53mIpNc/Sb7pY4=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dd6ql5fjRqP1x4YNgYZTU88J7IULrAvVuvA/mvMCYdo=",
+            "MSILHash": "9t4qsK68eVM6g/jVH+o4Ke4QpBA1UeaHAY9HHgt6xkA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dd6ql5fjRqP1x4YNgYZTU88J7IULrAvVuvA/mvMCYdo=",
+            "MSILHash": "9t4qsK68eVM6g/jVH+o4Ke4QpBA1UeaHAY9HHgt6xkA=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -103,7 +103,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 113,
+            "InjectionIndex": 166,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -117,14 +117,14 @@
             "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dowaUC75mU/7s2yoogn/tIdLuI/q5ppEFFiBOS+wYQg=",
+            "MSILHash": "IfqnHbuUxyCc1S5GuyCBzJCdwG3UBDsl/ReRr5kdGCc=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -132,7 +132,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 199,
+            "InjectionIndex": 236,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -158,17 +158,17 @@
             ],
             "HookTypeName": "Modify",
             "Name": "ModifyTags [patch] [part 2]",
-            "HookName": "ModifyTags(Clone)",
+            "HookName": "ModifyTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "openGameServer",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "dowaUC75mU/7s2yoogn/tIdLuI/q5ppEFFiBOS+wYQg=",
+            "MSILHash": "IfqnHbuUxyCc1S5GuyCBzJCdwG3UBDsl/ReRr5kdGCc=",
             "BaseHookName": "ModifyTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }

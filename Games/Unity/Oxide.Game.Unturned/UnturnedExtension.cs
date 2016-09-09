@@ -90,7 +90,7 @@ namespace Oxide.Game.Unturned
 
             Interface.Oxide.ServerConsole.Title = () => $"{Provider.clients.Count} | {Provider.serverName}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {Provider.serverName}";
+            Interface.Oxide.ServerConsole.Status1Left = () => Provider.serverName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
@@ -98,7 +98,7 @@ namespace Oxide.Game.Unturned
                 return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $" {Provider.clients.Count}/{Provider.maxPlayers} players";
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{Provider.clients.Count}/{Provider.maxPlayers} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Provider.bytesReceived);
@@ -109,7 +109,7 @@ namespace Oxide.Game.Unturned
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
                 var gameTime = DateTime.Today.AddSeconds(LightingManager.time * 120).ToString("h:mm tt");
-                return $" {gameTime.ToLower()}, {Provider.map ?? "Unknown"}";
+                return $"{gameTime.ToLower()}, {Provider.map ?? "Unknown"}";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Provider.APP_VERSION}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
