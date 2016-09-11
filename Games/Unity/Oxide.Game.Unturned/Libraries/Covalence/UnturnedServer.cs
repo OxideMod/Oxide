@@ -105,21 +105,4 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
 
         #endregion
     }
-
-    public static class ExtensionMethods
-    {
-        /// <summary>
-        /// Adds compatible style formatting to text
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static string Stylize(this string text)
-        {
-            // <color=#00ffffff></color>
-            // <size=50></size>
-            // <b></b>
-            // <i></i>
-            return text;
-        }
-    }
 }

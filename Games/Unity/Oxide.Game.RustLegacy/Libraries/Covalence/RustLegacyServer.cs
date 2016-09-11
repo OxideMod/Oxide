@@ -98,18 +98,4 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
 
         #endregion
     }
-
-    public static class ExtensionMethods
-    {
-        /// <summary>
-        /// Adds compatible style formatting to text
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static string Stylize(this string text)
-        {
-            // [color #0000FF]
-            return text;
-        }
-    }
 }
