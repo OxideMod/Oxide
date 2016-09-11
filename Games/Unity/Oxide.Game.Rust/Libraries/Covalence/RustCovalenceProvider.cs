@@ -64,5 +64,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <returns></returns>
         public ICommandSystem CreateCommandSystemProvider() => CommandSystem = new RustCommandSystem();
+
+        /// <summary>
+        /// Formats the text with markup as specified in Oxide.Core.Libraries.Covalence.Formatter
+        /// into the game-specific markup language
+        /// </summary>
+        /// <param name="text">text to format</param>
+        /// <returns>formatted text</returns>
+        public string FormatText(string text) => Formatter.ToUnity(text);
     }
 }

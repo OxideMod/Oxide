@@ -37,5 +37,13 @@
         /// </summary>
         /// <returns></returns>
         ICommandSystem CreateCommandSystemProvider();
+
+        /// <summary>
+        /// Formats the text with markup as specified in Oxide.Core.Libraries.Covalence.Formatter
+        /// into the game-specific markup language
+        /// </summary>
+        /// <param name="text">text to format</param>
+        /// <returns>formatted text</returns>
+        string FormatText(string text);
     }
 }
