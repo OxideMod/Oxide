@@ -1,9 +1,9 @@
-﻿// a custom markup language for oxide.
-// spec:
+// A custom markup language for Oxide
+//
 // Text 		::= {Element}
 // Element 		::= Italic | Bold | Color | Size | String
-// Italic		::= "[b]" Text "[/b]"
-// Bold			::= "[i]" Text "[/i]"
+// Italic		::= "[i]" Text "[/i]"
+// Bold			::= "[b]" Text "[/b]"
 // Color		::= "[#" ColorValue "]" Text "[/#]"
 // ColorValue	::=	RGB | RGBA | Name
 // RGB			::= 6 * HexDigit
