@@ -136,18 +136,4 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         #endregion
     }
-
-    public static class ExtensionMethods
-    {
-        /// <summary>
-        /// Adds compatible style formatting to text
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public static string Stylize(this string text)
-        {
-            // TODO: Strip styling, the game doesn't support it
-            return text;
-        }
-    }
 }
