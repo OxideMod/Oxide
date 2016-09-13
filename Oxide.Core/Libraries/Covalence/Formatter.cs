@@ -413,12 +413,12 @@ namespace Oxide.Core.Libraries.Covalence
 
         public static string ToRustLegacy(string text) => ToTreeFormat(text, new Dictionary<ElementType, Func<object, Tag>>
         {
-            [ElementType.Color] = c => new Tag($"[color #{RGBAtoRGB(c)}]", "")
+            [ElementType.Color] = c => new Tag($"[color #{RGBAtoRGB(c)}]", "[color #ffffff]")
         });
 
         public static string ToRoKAnd7DTD(string text) => ToTreeFormat(text, new Dictionary<ElementType, Func<object, Tag>>
         {
-            [ElementType.Color] = c => new Tag($"[{RGBAtoRGB(c)}]", "")
+            [ElementType.Color] = c => new Tag($"[{RGBAtoRGB(c)}]", "[e7e7e7]")
         });
 
         public static string ToTerraria(string text) => ToTreeFormat(text, new Dictionary<ElementType, Func<object, Tag>>
