@@ -1,5 +1,5 @@
 ﻿// A custom markup language for Oxide
-//
+// Spec:
 // Text 		::= {Element}
 // Element 		::= String | Bold | Italic | Color | Size
 // String		::= {? any character ?}
