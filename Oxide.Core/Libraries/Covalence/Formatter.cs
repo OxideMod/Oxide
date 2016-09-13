@@ -30,20 +30,19 @@ namespace Oxide.Core.Libraries.Covalence
     {
         public ElementType Type;
         public object Val;
-        public List<Element> Body;
+        public List<Element> Body = new List<Element>();
 
-        Element(ElementType type, object val, List<Element> body)
+        Element(ElementType type, object val)
         {
             Type = type;
             Val = val;
-            Body = body;
         }
 
-        public static Element String(object s) => new Element(ElementType.String, s, new List<Element>());
+        public static Element String(object s) => new Element(ElementType.String, s);
 
-        public static Element Tag(ElementType type, List<Element> body) => new Element(type, null, body);
+        public static Element Tag(ElementType type) => new Element(type, null);
 
-        public static Element ParamTag(ElementType type, object val, List<Element> body) => new Element(type, val, body);
+        public static Element ParamTag(ElementType type, object val) => new Element(type, val);
     }
 
     public enum ElementType { String, Bold, Italic, Color, Size }
@@ -80,20 +79,14 @@ namespace Oxide.Core.Libraries.Covalence
 
         enum TokenType { String, Bold, Italic, Color, Size, CloseBold, CloseItalic, CloseColor, CloseSize }
 
-        static readonly Dictionary<TokenType, TokenType> closeTags = new Dictionary<TokenType, TokenType>
+        static readonly Dictionary<ElementType, TokenType?> closeTags = new Dictionary<ElementType, TokenType?>
         {
-            [TokenType.Bold] = TokenType.CloseBold,
-            [TokenType.Italic] = TokenType.CloseItalic,
-            [TokenType.Color] = TokenType.CloseColor,
-            [TokenType.Size] = TokenType.CloseSize
+            [ElementType.String] = null,
+            [ElementType.Bold] = TokenType.CloseBold,
+            [ElementType.Italic] = TokenType.CloseItalic,
+            [ElementType.Color] = TokenType.CloseColor,
+            [ElementType.Size] = TokenType.CloseSize
         };
-
-        static TokenType? GetCloseTag(Token tag)
-        {
-            TokenType closeTag;
-            if (closeTags.TryGetValue(tag.Type, out closeTag)) { return closeTag; }
-            return null;
-        }
 
         class Lexer
         {
@@ -293,114 +286,75 @@ namespace Oxide.Core.Libraries.Covalence
             }
         }
 
-        class Parser
+        class Entry
         {
-            List<Token> tokens;
-            int position = 0;
-            int recursionLayer = 0;
+            public string Pattern;
+            public Element Element;
 
-            bool EOF() => position >= tokens.Count;
-
-            Token Current() => tokens[position];
-
-            void Next() => position++;
-
-            void PushLevel() => recursionLayer++;
-
-            void PopLevel() => recursionLayer--;
-
-            bool MaxLevel() => recursionLayer >= 100;
-
-            void AddElement(List<Element> body, Element e)
+            public Entry(string pattern, Element e)
             {
-                if (EOF())
-                {
-                    body.AddRange(e.Body);
-                    return;
-                }
-                body.Add(e);
-                Next();
-            }
-
-            void AddString(List<Element> body, object s) => body.Add(Element.String(s));
-
-            void AddTag(List<Element> body, ElementType type, Token tag)
-                => AddElement(body, Element.Tag(type, Tag(tag)));
-
-            void AddParamTag(List<Element> body, ElementType type, Token tag)
-                => AddElement(body, Element.ParamTag(type, tag.Val, Tag(tag)));
-
-            List<Element> Tag(Token tag)
-            {
-                // protect against stack overflow attacks.
-                // remove body if max recursion layer is
-                // exceeded.
-                if (MaxLevel())
-                {
-                    return new List<Element>();
-                }
-                PushLevel();
-                // go through all children.
-                // if eof is reached, prepend string of tag to body,
-                // since no end tag could be found.
-                // if close tag for this tag is found, return children.
-                // open new tags for bold/italic/color/size, add strings
-                // and invalid tokens as strings.
-                // advance token position when writing any token and when
-                // leaving a tag.
-                // tag == null is only true for the the root tag.
-                var body = new List<Element>();
-                while (true)
-                {
-                    if (EOF())
-                    {
-                        if (tag != null)
-                        {
-                            body.Insert(0, Element.String(tag.Pattern));
-                        }
-                        PopLevel();
-                        return body;
-                    }
-                    var t = Current();
-                    if (tag != null && t.Type == GetCloseTag(tag))
-                    {
-                        PopLevel();
-                        return body;
-                    }
-                    Next();
-                    switch (t.Type)
-                    {
-                        case TokenType.String:
-                            AddString(body, t.Val);
-                            break;
-                        case TokenType.Bold:
-                            AddTag(body, ElementType.Bold, t);
-                            break;
-                        case TokenType.Italic:
-                            AddTag(body, ElementType.Italic, t);
-                            break;
-                        case TokenType.Color:
-                            AddParamTag(body, ElementType.Color, t);
-                            break;
-                        case TokenType.Size:
-                            AddParamTag(body, ElementType.Size, t);
-                            break;
-                        default:
-                            AddString(body, t.Pattern);
-                            break;
-                    }
-                }
-            }
-
-            public static List<Element> Parse(List<Token> tokens)
-            {
-                var p = new Parser();
-                p.tokens = tokens;
-                return p.Tag(null);
+                Pattern = pattern;
+                Element = e;
             }
         }
 
-        public static List<Element> Parse(string text) => Parser.Parse(Lexer.Lex(text));
+        static List<Element> Parse(List<Token> tokens)
+        {
+            int i = 0;
+            var s = new Stack<Entry>();
+            // dummy element node for root.
+            // we don't want the api to expose an ElementType.Root
+            // (as that type would imply that a Root can occur anywhere in the tree),
+            // so we just use ElementType.S
+            s.Push(new Entry(null, Element.Tag(ElementType.String)));
+            while (i < tokens.Count)
+            {
+                var t = tokens[i++];
+                Action<Element> push = el => s.Push(new Entry(t.Pattern, el));
+                var e = s.Peek().Element;
+                if (t.Type == closeTags[e.Type])
+                {
+                    // last tag was closed, pop tag and add to parent
+                    s.Pop();
+                    s.Peek().Element.Body.Add(e);
+                    continue;
+                }
+                // open new tags on bold, italic, color & size.
+                // add strings and invalid tags as strings to body of current tag.
+                switch (t.Type)
+                {
+                    case TokenType.String:
+                        e.Body.Add(Element.String(t.Val));
+                        break;
+                    case TokenType.Bold:
+                        push(Element.Tag(ElementType.Bold));
+                        break;
+                    case TokenType.Italic:
+                        push(Element.Tag(ElementType.Italic));
+                        break;
+                    case TokenType.Color:
+                        push(Element.ParamTag(ElementType.Color, t.Val));
+                        break;
+                    case TokenType.Size:
+                        push(Element.ParamTag(ElementType.Size, t.Val));
+                        break;
+                    default:
+                        e.Body.Add(Element.String(t.Pattern));
+                        break;
+                }
+            }
+            // stringify all tags that weren't closed at eof
+            while (s.Count > 1)
+            {
+                var e = s.Pop();
+                var body = s.Peek().Element.Body;
+                body.Add(Element.String(e.Pattern));
+                body.AddRange(e.Element.Body);
+            }
+            return s.Pop().Element.Body;
+        }
+
+        public static List<Element> Parse(string text) => Parse(Lexer.Lex(text));
 
         class Tag
         {
