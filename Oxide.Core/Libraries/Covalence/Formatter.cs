@@ -161,7 +161,7 @@ namespace Oxide.Core.Libraries.Covalence
                 return null;
             }
 
-            // end of tag (]), transition back to Str
+            // end of tag (]), transition back to Str.
             State EndTag(TokenType t)
             {
                 Next();
@@ -280,7 +280,7 @@ namespace Oxide.Core.Libraries.Covalence
                     // each state returns a new state.
                     state = state();
                 }
-                // flush leftover pattern
+                // flush leftover pattern.
                 l.WritePatternString();
                 return l.tokens;
             }
@@ -302,10 +302,6 @@ namespace Oxide.Core.Libraries.Covalence
         {
             int i = 0;
             var s = new Stack<Entry>();
-            // dummy element node for root.
-            // we don't want the api to expose an ElementType.Root
-            // (as that type would imply that a Root can occur anywhere in the tree),
-            // so we just use ElementType.S
             s.Push(new Entry(null, Element.Tag(ElementType.String)));
             while (i < tokens.Count)
             {
@@ -314,7 +310,7 @@ namespace Oxide.Core.Libraries.Covalence
                 var e = s.Peek().Element;
                 if (t.Type == closeTags[e.Type])
                 {
-                    // last tag was closed, pop tag and add to parent
+                    // last tag was closed, pop tag and add to parent.
                     s.Pop();
                     s.Peek().Element.Body.Add(e);
                     continue;
@@ -343,7 +339,7 @@ namespace Oxide.Core.Libraries.Covalence
                         break;
                 }
             }
-            // stringify all tags that weren't closed at eof
+            // stringify all tags that weren't closed at eof.
             while (s.Count > 1)
             {
                 var e = s.Pop();
