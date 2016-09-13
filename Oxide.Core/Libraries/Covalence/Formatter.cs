@@ -1,9 +1,10 @@
 // A custom markup language for Oxide
 //
 // Text 		::= {Element}
-// Element 		::= Italic | Bold | Color | Size | String
-// Italic		::= "[i]" Text "[/i]"
+// Element 		::= String | Bold | Italic | Color | Size
+// String		::= {? any character ?}
 // Bold			::= "[b]" Text "[/b]"
+// Italic		::= "[i]" Text "[/i]"
 // Color		::= "[#" ColorValue "]" Text "[/#]"
 // ColorValue	::=	RGB | RGBA | Name
 // RGB			::= 6 * HexDigit
@@ -17,7 +18,6 @@
 // Size			::= "[+" Integer "]" Text "[/#]"
 // Integer		::= Digit {Digit}
 // Digit 		::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-// String		::= {? any character ?}
 
 using System;
 using System.Linq;
