@@ -123,6 +123,21 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         public void Heal(float amount) => NetMessage.SendData(35, -1, -1, "", player.whoAmI, amount);
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get
+            {
+                return 0f; // TODO: Implement when possible
+            }
+            set
+            {
+                // TODO: Implement when possible
+            }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

@@ -86,6 +86,11 @@ namespace Oxide.Core.Libraries.Covalence
         void Heal(float amount);
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        float Health { get; set; }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

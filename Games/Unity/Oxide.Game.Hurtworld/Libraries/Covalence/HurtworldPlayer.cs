@@ -132,6 +132,24 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get
+            {
+                var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+                return stats.GetFluidEffect(EEntityFluidEffectType.Health).GetValue();
+            }
+            set
+            {
+                var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+                var effect = stats.GetFluidEffect(EEntityFluidEffectType.Health) as StandardEntityFluidEffect;
+                effect?.SetValue(value);
+            }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

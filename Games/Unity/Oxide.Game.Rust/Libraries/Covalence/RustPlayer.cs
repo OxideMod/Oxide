@@ -122,6 +122,15 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public void Heal(float amount) => player.Heal(amount);
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return player.health; }
+            set {player.health = value; }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

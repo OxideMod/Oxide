@@ -123,6 +123,15 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         public void Heal(float amount) => NetworkController.Player_ctrl_.Health += (int)amount;
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return NetworkController.Player_ctrl_.Health; }
+            set { NetworkController.Player_ctrl_.Health = (int)value; }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

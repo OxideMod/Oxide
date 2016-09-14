@@ -125,6 +125,15 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public void Heal(float amount) => netUser.playerClient.controllable.takeDamage.health += amount;
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return netUser.playerClient.controllable.takeDamage.health; }
+            set { netUser.playerClient.controllable.takeDamage.health = value; }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

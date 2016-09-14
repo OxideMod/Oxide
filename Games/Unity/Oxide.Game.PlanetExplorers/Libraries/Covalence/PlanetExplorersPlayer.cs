@@ -127,6 +127,15 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         public void Heal(float amount) => player._skEntity.SetAttribute(AttribType.Hp, player.GetHP() + amount);
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return player._skEntity.GetAttribute(AttribType.Hp); }
+            set { player._skEntity.SetAttribute(AttribType.Hp, value); }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

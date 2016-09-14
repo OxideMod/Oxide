@@ -137,6 +137,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         public void Heal(float amount) => player.Heal(amount);
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return player.GetHealth().CurrentHealth; }
+            set { player.GetHealth().CurrentHealth = value; }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

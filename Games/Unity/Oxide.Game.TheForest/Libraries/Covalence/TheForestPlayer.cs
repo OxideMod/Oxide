@@ -145,6 +145,15 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         public void Heal(float amount) => entity.GetComponentInChildren<PlayerStats>().Health += amount;
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return entity.GetComponentInChildren<PlayerStats>().Health; }
+            set { entity.GetComponentInChildren<PlayerStats>().Health = value; }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>

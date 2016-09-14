@@ -127,6 +127,23 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                return entity?.Health ?? 0f;
+            }
+            set
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                if (entity!= null) entity.Stats.Health.Value = value;
+            }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
@@ -159,7 +176,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             get
             {
                 var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
-                return entity?.Stats.Health.Entity.GetMaxHealth() ?? 0f;
+                return entity?.GetMaxHealth() ?? 0f;
             }
             set
             {

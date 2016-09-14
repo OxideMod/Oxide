@@ -93,6 +93,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health { get; set; }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
