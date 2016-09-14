@@ -487,10 +487,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 50,
+            "InjectionIndex": 61,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0, a1",
+            "ArgumentString": "l0, a1, a5",
             "HookTypeName": "Simple",
             "Name": "OnItemCraft",
             "HookName": "OnItemCraft",
