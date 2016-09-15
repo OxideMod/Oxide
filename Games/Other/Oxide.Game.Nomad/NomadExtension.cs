@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 
 using TNet;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.Logging;
 
 namespace Oxide.Game.Nomad
 {
@@ -40,6 +43,9 @@ namespace Oxide.Game.Nomad
         {
         };
 
+        private const string logFileName = "output_log.txt"; // TODO: Add -logFile support
+        private TextWriter logWriter;
+
         /// <summary>
         /// Initializes a new instance of the NomadExtension class
         /// </summary>
@@ -73,6 +79,11 @@ namespace Oxide.Game.Nomad
             if (!Interface.Oxide.EnableConsole()) return;
 
             // TODO: Add console log handling
+            if (File.Exists(logFileName)) File.Delete(logFileName);
+            var logStream = File.AppendText(logFileName);
+            logStream.AutoFlush = true;
+            logWriter = TextWriter.Synchronized(logStream);
+            Console.SetOut(logWriter);
 
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
@@ -109,9 +120,25 @@ namespace Oxide.Game.Nomad
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
+        public override void OnShutdown() => logWriter?.Close();
+
         private static void ServerConsoleOnInput(string input)
         {
             // TODO: Handle console input
+        }
+
+        private void HandleLog(string message, string stackTrace, LogType type)
+        {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
+            logWriter.WriteLine(message);
+            if (!string.IsNullOrEmpty(stackTrace)) logWriter.WriteLine(stackTrace);
+
+            var color = ConsoleColor.Gray;
+            if (type == LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (type == LogType.Error)
+                color = ConsoleColor.Red;
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }
 }
