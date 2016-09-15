@@ -93,9 +93,9 @@ namespace Oxide.Core.Libraries.Covalence
             delegate State State();
 
             string text;
-            int patternStart = 0;
-            int tokenStart = 0;
-            int position = 0;
+            int patternStart;
+            int tokenStart;
+            int position;
             List<Token> tokens = new List<Token>();
 
             char Current() => text[position];
@@ -116,28 +116,26 @@ namespace Oxide.Core.Libraries.Covalence
 
             void Add(TokenType type, object val = null)
             {
-                var t = new Token();
-                t.Type = type;
-                t.Val = val;
-                t.Pattern = text.Substring(patternStart, position - patternStart);
+                var t = new Token
+                {
+                    Type = type,
+                    Val = val,
+                    Pattern = text.Substring(patternStart, position - patternStart)
+                };
                 tokens.Add(t);
             }
 
             void WritePatternString()
             {
-                if (patternStart >= position)
-                {
-                    return;
-                }
-                int ts = tokenStart;
+                if (patternStart >= position) return;
+                var ts = tokenStart;
                 tokenStart = patternStart;
                 Add(TokenType.String, Token());
                 tokenStart = ts;
             }
 
-            static bool IsValidColorCode(string val)
-                => (val.Length == 6 || val.Length == 8)
-                    && val.All(c => c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F');
+            static bool IsValidColorCode(string val) => (val.Length == 6 || val.Length == 8)
+                && val.All(c => c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F');
 
             static object ParseColor(string val)
             {
@@ -157,11 +155,11 @@ namespace Oxide.Core.Libraries.Covalence
             static object ParseSize(string val)
             {
                 int size;
-                if (Int32.TryParse(val, out size)) { return size; }
+                if (int.TryParse(val, out size)) { return size; }
                 return null;
             }
 
-            // end of tag (]), transition back to Str.
+            // End of tag (]), transition back to Str
             State EndTag(TokenType t)
             {
                 Next();
@@ -180,7 +178,7 @@ namespace Oxide.Core.Libraries.Covalence
                 };
             }
 
-            // start of param tag ([# or [+), read and parse param.
+            // Start of param tag ([# or [+), read and parse param
             State ParamTag(TokenType t, Func<string, object> parse)
             {
                 Next();
@@ -207,7 +205,7 @@ namespace Oxide.Core.Libraries.Covalence
                 return s;
             }
 
-            // start of close tag ([/), trying to identify close tag.
+            // Start of close tag ([/), trying to identify close tag
             State CloseTag()
             {
                 switch (Current())
@@ -226,7 +224,7 @@ namespace Oxide.Core.Libraries.Covalence
                 }
             }
 
-            // start of tag ([), trying to identify tag.
+            // Start of tag ([), trying to identify tag
             State Tag()
             {
                 switch (Current())
@@ -248,7 +246,7 @@ namespace Oxide.Core.Libraries.Covalence
                 }
             }
 
-            // any string, trying to find a tag with ([).
+            // Any string, trying to find a tag with ([)
             State Str()
             {
                 if (Current() == '[')
@@ -264,23 +262,19 @@ namespace Oxide.Core.Libraries.Covalence
 
             public static List<Token> Lex(string text)
             {
-                // a pattern is the full pattern of a token, 
-                // e.g. [#foo] instead of just foo as token.
-                // when we reach eof or an error we want to
-                // default to using a string as token.
-                // to accomplish this, we need the full pattern
-                // instead of just the token.
-                var l = new Lexer();
-                l.text = text;
-                // run the state machine until eof
+                // A pattern is the full pattern of a token, e.g. [#foo] instead of just foo as token
+                // When we reach eof or an error we want to default to using a string as token
+                // To accomplish this, we need the full pattern instead of just the token
+                var l = new Lexer { text = text };
+
+                // Run the state machine until EOF
                 State state = l.Str;
                 while (l.position < l.text.Length)
                 {
-                    // each function represents a state.
-                    // each state returns a new state.
+                    // Each function represents a state. Each state returns a new state
                     state = state();
                 }
-                // flush leftover pattern.
+                // Flush leftover pattern
                 l.WritePatternString();
                 return l.tokens;
             }
@@ -300,7 +294,7 @@ namespace Oxide.Core.Libraries.Covalence
 
         static List<Element> Parse(List<Token> tokens)
         {
-            int i = 0;
+            var i = 0;
             var s = new Stack<Entry>();
             s.Push(new Entry(null, Element.Tag(ElementType.String)));
             while (i < tokens.Count)
@@ -310,13 +304,13 @@ namespace Oxide.Core.Libraries.Covalence
                 var e = s.Peek().Element;
                 if (t.Type == closeTags[e.Type])
                 {
-                    // last tag was closed, pop tag and add to parent.
+                    // Last tag was closed, pop tag and add to parent
                     s.Pop();
                     s.Peek().Element.Body.Add(e);
                     continue;
                 }
                 // open new tags on bold, italic, color & size.
-                // add strings and invalid tags as strings to body of current tag.
+                // Add strings and invalid tags as strings to body of current tag
                 switch (t.Type)
                 {
                     case TokenType.String:
@@ -339,7 +333,7 @@ namespace Oxide.Core.Libraries.Covalence
                         break;
                 }
             }
-            // stringify all tags that weren't closed at eof.
+            // Stringify all tags that weren't closed at EOF
             while (s.Count > 1)
             {
                 var e = s.Pop();
@@ -367,18 +361,14 @@ namespace Oxide.Core.Libraries.Covalence
         static Tag Translation(Element e, Dictionary<ElementType, Func<object, Tag>> translations)
         {
             Func<object, Tag> parse;
-            if (translations.TryGetValue(e.Type, out parse))
-            {
-                return parse(e.Val);
-            }
-            return new Tag("", "");
+            return translations.TryGetValue(e.Type, out parse) ? parse(e.Val) : new Tag("", "");
         }
 
         static string ToTreeFormat(List<Element> tree, Dictionary<ElementType, Func<object, Tag>> translations)
         {
             // translation(string) 	= string_value
-            // translation(tree) 	= open_tag_translation 
-            //                      + translation(child_1) + translation(child_2) + ... + translation(child_n) 
+            // translation(tree) 	= open_tag_translation
+            //                      + translation(child_1) + translation(child_2) + ... + translation(child_n)
             //                      + close_tag_translation
             var sb = new StringBuilder();
             foreach (var e in tree)
@@ -396,8 +386,7 @@ namespace Oxide.Core.Libraries.Covalence
             return sb.ToString();
         }
 
-        static string ToTreeFormat(string text, Dictionary<ElementType, Func<object, Tag>> translations)
-            => ToTreeFormat(Parse(text), translations);
+        static string ToTreeFormat(string text, Dictionary<ElementType, Func<object, Tag>> translations) => ToTreeFormat(Parse(text), translations);
 
         static string RGBAtoRGB(object rgba) => rgba.ToString().Substring(0, 6);
 
@@ -407,7 +396,7 @@ namespace Oxide.Core.Libraries.Covalence
         {
             [ElementType.Bold] = _ => new Tag("<b>", "</b>"),
             [ElementType.Italic] = _ => new Tag("<i>", "</i>"),
-            [ElementType.Color] = c => new Tag($"<color={c}>", "</color>"),
+            [ElementType.Color] = c => new Tag($"<color=#{c}>", "</color>"),
             [ElementType.Size] = s => new Tag($"<size={s}>", "</size>")
         });
 
