@@ -63,7 +63,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", "");
+        public string Address => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
 
         /// <summary>
         /// Gets the user's average network ping

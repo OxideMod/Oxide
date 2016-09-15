@@ -222,7 +222,7 @@
             "HookName": "OnVehicleInput",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VehiclePassenger",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "SendInput",
@@ -233,7 +233,7 @@
             },
             "MSILHash": "f3iTGt9YGC9CVMvoRKQnxA9WZdXWz221Ezq/FmZypKc=",
             "BaseHookName": null,
-            "HookCategory": "_WIP"
+            "HookCategory": "Vehicle"
           }
         },
         {

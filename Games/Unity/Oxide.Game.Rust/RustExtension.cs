@@ -58,6 +58,7 @@ namespace Oxide.Game.Rust
             "The image effect effect -",
             "Unable to find shaders",
             "Unsupported encoding: 'utf8'",
+            "Warning, null renderer for ScaleRenderer!",
             "[AmplifyColor]",
             "[AmplifyOcclusion]",
             "[SpawnHandler] populationCounts"
