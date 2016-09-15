@@ -221,7 +221,7 @@ namespace Oxide.Game.HideHoldOut
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Add 'oxide' and 'modded' tags
+            // Add some Steam tags
             //SteamGameServer.SetGameTags("oxide,modded");
 
             // Configure remote logging

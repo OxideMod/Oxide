@@ -27,11 +27,10 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             Id = id;
         }
 
-        internal NomadPlayer(TcpPlayer player)
+        internal NomadPlayer(TcpPlayer player) : this(player.id.ToString(), player.name)
         {
+            // Store user object
             this.player = player;
-            Name = player.name;
-            Id = player.id.ToString();
         }
 
         #region Objects

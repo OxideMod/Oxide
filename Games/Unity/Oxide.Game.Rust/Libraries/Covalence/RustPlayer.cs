@@ -30,7 +30,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         internal RustPlayer(BasePlayer player) : this(player.userID, player.displayName)
         {
-            // Store player object
+            // Store user object
             this.player = player;
         }
 

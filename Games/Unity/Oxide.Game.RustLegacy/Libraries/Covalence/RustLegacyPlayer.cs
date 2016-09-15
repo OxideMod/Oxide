@@ -29,13 +29,10 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal RustLegacyPlayer(NetUser netUser)
+        internal RustLegacyPlayer(NetUser netUser) : this(netUser.userID, netUser.displayName)
         {
-            // Store user details
+            // Store user object
             this.netUser = netUser;
-            steamId = netUser.userID;
-            Name = netUser.displayName;
-            Id = steamId.ToString();
         }
 
         #region Objects

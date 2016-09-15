@@ -15,7 +15,6 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
     {
         private static Permission libPerms;
         private readonly ClientInfo client;
-        private readonly ulong steamId;
 
         internal SevenDaysPlayer(ulong id, string name)
         {
@@ -23,17 +22,14 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            steamId = id;
             Name = name;
             Id = id.ToString();
         }
 
-        internal SevenDaysPlayer(ClientInfo client)
+        internal SevenDaysPlayer(ClientInfo client) : this(client.steamId.m_SteamID, client.playerName)
         {
+            // Store user object
             this.client = client;
-            steamId = Convert.ToUInt64(client.playerId);
-            Name = client.playerName;
-            Id = client.playerId;
         }
 
         #region Objects

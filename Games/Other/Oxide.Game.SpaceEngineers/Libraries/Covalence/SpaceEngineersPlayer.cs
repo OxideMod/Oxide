@@ -35,12 +35,10 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal SpaceEngineersPlayer(MyPlayer player)
+        internal SpaceEngineersPlayer(MyPlayer player) : this(player.Id.SteamId, player.DisplayName)
         {
+            // Store user object
             this.player = player;
-            steamId = player.Id.SteamId;
-            Name = player.DisplayName;
-            Id = steamId.ToString();
         }
 
         #region Objects

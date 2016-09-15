@@ -28,12 +28,10 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             Id = id;
         }
 
-        internal TerrariaPlayer(Player player)
+        internal TerrariaPlayer(Player player) : this(player.whoAmI.ToString(), player.name)
         {
-            // Store user details
+            // Store user object
             this.player = player;
-            Name = player.name;
-            Id = player.whoAmI.ToString();
         }
 
         #region Objects

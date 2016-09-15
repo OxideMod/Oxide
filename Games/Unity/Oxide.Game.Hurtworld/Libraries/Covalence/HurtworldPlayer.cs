@@ -30,13 +30,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal HurtworldPlayer(PlayerSession session)
+        internal HurtworldPlayer(PlayerSession session) : this(session.SteamId.m_SteamID, session.Name)
         {
+            // Store user object
             this.session = session;
             cSteamId = session.SteamId;
-            steamId = cSteamId.m_SteamID;
-            Name = session.Name;
-            Id = steamId.ToString();
         }
 
         #region Objects

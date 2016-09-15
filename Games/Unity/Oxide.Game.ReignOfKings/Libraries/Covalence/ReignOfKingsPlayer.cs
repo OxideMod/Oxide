@@ -36,12 +36,10 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal ReignOfKingsPlayer(Player player)
+        internal ReignOfKingsPlayer(Player player) : this(player.Id, player.Name)
         {
+            // Store user object
             this.player = player;
-            steamId = player.Id;
-            Name = player.Name;
-            Id = steamId.ToString();
         }
 
         #region Objects

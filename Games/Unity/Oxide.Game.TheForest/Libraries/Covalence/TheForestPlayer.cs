@@ -19,6 +19,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
     {
         private static Permission libPerms;
         private readonly BoltEntity entity;
+        private readonly CSteamID cSteamId;
         private readonly ulong steamId;
 
         internal TheForestPlayer(ulong id, string name)
@@ -33,12 +34,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         }
 
         internal TheForestPlayer(BoltEntity entity)
+            : this(entity.controller.RemoteEndPoint.SteamId.Id, SteamFriends.GetFriendPersonaName(new CSteamID(entity.controller.RemoteEndPoint.SteamId.Id)))
         {
-            // Store user details
+            // Store user object
             this.entity = entity;
-            steamId = entity.source.RemoteEndPoint.SteamId.Id;
-            Name = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
-            Id = steamId.ToString();
+            cSteamId = new CSteamID(entity.controller.RemoteEndPoint.SteamId.Id);
         }
 
         #region Objects
@@ -75,7 +75,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             get
             {
                 P2PSessionState_t sessionState;
-                SteamGameServerNetworking.GetP2PSessionState(new CSteamID(steamId), out sessionState);
+                SteamGameServerNetworking.GetP2PSessionState(cSteamId, out sessionState);
                 var ip = sessionState.m_nRemoteIP;
                 return string.Concat(ip >> 24 & 255, ".", ip >> 16 & 255, ".", ip >> 8 & 255, ".", ip & 255);
             }
@@ -133,7 +133,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             get
             {
-                var kickedPlayer = CoopKick.Instance.KickedPlayers.First(k => k.SteamId == steamId);
+                var kickedPlayer = CoopKick.Instance.KickedPlayers.First(p => p.SteamId == steamId);
                 return kickedPlayer != null ? TimeSpan.FromTicks(kickedPlayer.BanEndTime) : TimeSpan.Zero;
             }
         }
