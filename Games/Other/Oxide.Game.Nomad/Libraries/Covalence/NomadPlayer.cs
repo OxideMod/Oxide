@@ -27,11 +27,10 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             Id = id;
         }
 
-        internal NomadPlayer(TcpPlayer player)
+        internal NomadPlayer(TcpPlayer player) : this(player.id.ToString(), player.name)
         {
+            // Store user object
             this.player = player;
-            Name = player.name;
-            Id = player.id.ToString();
         }
 
         #region Objects
@@ -123,6 +122,15 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public void Heal(float amount)
         {
             // TODO: Implement when possible
+        }
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return 0f; } // TODO: Implement when possible
+            set { } // TODO: Implement when possible
         }
 
         /// <summary>

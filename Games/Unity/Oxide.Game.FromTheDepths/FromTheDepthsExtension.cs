@@ -109,7 +109,7 @@ namespace Oxide.Game.FromTheDepths
                 return $"{MultiplayerManager.Instance.Players.PlayerCount} | {MultiplayerManager.Instance.GameDetails.Name}";
             };
 
-            Interface.Oxide.ServerConsole.Status1Left = () => $" {MultiplayerManager.Instance?.GameDetails.Name ?? "Unnamed"}";
+            Interface.Oxide.ServerConsole.Status1Left = () => $"{MultiplayerManager.Instance?.GameDetails.Name ?? "Unnamed"}";
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
@@ -120,7 +120,7 @@ namespace Oxide.Game.FromTheDepths
             Interface.Oxide.ServerConsole.Status2Left = () =>
             {
                 if (MultiplayerManager.Instance == null) return string.Empty;
-                return $" {MultiplayerManager.Instance.Players.PlayerCount}/{MultiplayerManager.Instance.GameDetails.PlayerLimit}";
+                return $"{MultiplayerManager.Instance.Players.PlayerCount}/{MultiplayerManager.Instance.GameDetails.PlayerLimit}";
             };
             Interface.Oxide.ServerConsole.Status2Right = () => string.Empty; // TODO: Network in/out
 
@@ -129,7 +129,7 @@ namespace Oxide.Game.FromTheDepths
                 if (GameTimer.Instance == null) return string.Empty;
                 var time = DateTime.Today.AddSeconds(GameTimer.Instance.GameTime).ToString("h:mm tt").ToLower();
                 var map = string.Empty; // TODO: MPGameData.MapName
-                return string.Concat(" ", time, ", ", map);
+                return string.Concat(time, ", ", map);
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {StaticOptionsManager.version}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;

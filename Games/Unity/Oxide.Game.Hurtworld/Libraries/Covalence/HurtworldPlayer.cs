@@ -30,13 +30,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal HurtworldPlayer(PlayerSession session)
+        internal HurtworldPlayer(PlayerSession session) : this(session.SteamId.m_SteamID, session.Name)
         {
+            // Store user object
             this.session = session;
             cSteamId = session.SteamId;
-            steamId = cSteamId.m_SteamID;
-            Name = session.Name;
-            Id = steamId.ToString();
         }
 
         #region Objects
@@ -129,6 +127,24 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             var effect = new EntityEffectFluid(EEntityFluidEffectType.Health, EEntityEffectFluidModifierType.AddValuePure, amount);
             var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
             effect.Apply(stats);
+        }
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get
+            {
+                var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+                return stats.GetFluidEffect(EEntityFluidEffectType.Health).GetValue();
+            }
+            set
+            {
+                var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+                var effect = stats.GetFluidEffect(EEntityFluidEffectType.Health) as StandardEntityFluidEffect;
+                effect?.SetValue(value);
+            }
         }
 
         /// <summary>

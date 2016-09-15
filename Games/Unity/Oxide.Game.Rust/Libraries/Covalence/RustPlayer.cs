@@ -30,7 +30,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         internal RustPlayer(BasePlayer player) : this(player.userID, player.displayName)
         {
-            // Store player object
+            // Store user object
             this.player = player;
         }
 
@@ -63,7 +63,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", "");
+        public string Address => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
 
         /// <summary>
         /// Gets the user's average network ping
@@ -120,6 +120,15 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => player.Heal(amount);
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return player.health; }
+            set {player.health = value; }
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount

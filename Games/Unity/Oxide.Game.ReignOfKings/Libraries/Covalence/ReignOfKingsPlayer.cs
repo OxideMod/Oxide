@@ -36,12 +36,10 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal ReignOfKingsPlayer(Player player)
+        internal ReignOfKingsPlayer(Player player) : this(player.Id, player.Name)
         {
+            // Store user object
             this.player = player;
-            steamId = player.Id;
-            Name = player.Name;
-            Id = steamId.ToString();
         }
 
         #region Objects
@@ -135,6 +133,15 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => player.Heal(amount);
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return player.GetHealth().CurrentHealth; }
+            set { player.GetHealth().CurrentHealth = value; }
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount

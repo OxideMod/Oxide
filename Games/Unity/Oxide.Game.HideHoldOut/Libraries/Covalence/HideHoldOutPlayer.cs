@@ -15,7 +15,6 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
     {
         private static Permission libPerms;
         private readonly PlayerInfos player;
-        private readonly ulong steamId;
 
         internal HideHoldOutPlayer(ulong id, string name)
         {
@@ -23,17 +22,14 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            steamId = id;
             Name = name;
             Id = id.ToString();
         }
 
-        internal HideHoldOutPlayer(PlayerInfos player)
+        internal HideHoldOutPlayer(PlayerInfos player) : this(Convert.ToUInt64(player.account_id), player.Nickname)
         {
+            // Store user object
             this.player = player;
-            steamId = Convert.ToUInt64(player.account_id);
-            Name = player.Nickname;
-            Id = player.account_id;
         }
 
         #region Objects
@@ -121,6 +117,15 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => NetworkController.Player_ctrl_.Health += (int)amount;
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return NetworkController.Player_ctrl_.Health; }
+            set { NetworkController.Player_ctrl_.Health = (int)value; }
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount

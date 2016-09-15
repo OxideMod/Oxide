@@ -28,12 +28,10 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             Id = id;
         }
 
-        internal TerrariaPlayer(Player player)
+        internal TerrariaPlayer(Player player) : this(player.whoAmI.ToString(), player.name)
         {
-            // Store user details
+            // Store user object
             this.player = player;
-            Name = player.name;
-            Id = player.whoAmI.ToString();
         }
 
         #region Objects
@@ -121,6 +119,21 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => NetMessage.SendData(35, -1, -1, "", player.whoAmI, amount);
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get
+            {
+                return 0f; // TODO: Implement when possible
+            }
+            set
+            {
+                // TODO: Implement when possible
+            }
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount

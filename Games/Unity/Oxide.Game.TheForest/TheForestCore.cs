@@ -131,7 +131,7 @@ namespace Oxide.Game.TheForest
             // Configure remote logging
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
-            // Add 'oxide' and 'modded' tags
+            // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");
 
             // Update server console window and status bars

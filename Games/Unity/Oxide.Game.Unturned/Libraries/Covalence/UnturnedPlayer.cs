@@ -19,7 +19,6 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         private static Permission libPerms;
         private readonly SteamPlayer steamPlayer;
         private readonly CSteamID cSteamId;
-        private readonly ulong steamId;
 
         internal UnturnedPlayer(ulong id, string name)
         {
@@ -28,18 +27,14 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
 
             // Store user details
             Name = name;
-            steamId = id;
             Id = id.ToString();
         }
 
-        internal UnturnedPlayer(SteamPlayer steamPlayer)
+        internal UnturnedPlayer(SteamPlayer steamPlayer) : this(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.player.name)
         {
-            // Store user details
+            // Store user object
             this.steamPlayer = steamPlayer;
             cSteamId = steamPlayer.playerID.steamID;
-            steamId = cSteamId.m_SteamID;
-            Name = steamPlayer.player.name;
-            Id = steamId.ToString();
         }
 
         #region Objects
@@ -148,6 +143,15 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => steamPlayer.player.life.askHeal((byte)amount, true, true);
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return steamPlayer.player.life.health; }
+            set { steamPlayer.player.life.tellHealth(cSteamId, (byte)value); }
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount

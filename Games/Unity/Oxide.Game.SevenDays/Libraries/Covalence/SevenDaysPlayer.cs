@@ -15,7 +15,6 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
     {
         private static Permission libPerms;
         private readonly ClientInfo client;
-        private readonly ulong steamId;
 
         internal SevenDaysPlayer(ulong id, string name)
         {
@@ -23,17 +22,14 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            steamId = id;
             Name = name;
             Id = id.ToString();
         }
 
-        internal SevenDaysPlayer(ClientInfo client)
+        internal SevenDaysPlayer(ClientInfo client) : this(client.steamId.m_SteamID, client.playerName)
         {
+            // Store user object
             this.client = client;
-            steamId = Convert.ToUInt64(client.playerId);
-            Name = client.playerName;
-            Id = client.playerId;
         }
 
         #region Objects
@@ -127,6 +123,23 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         }
 
         /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                return entity?.Health ?? 0f;
+            }
+            set
+            {
+                var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
+                if (entity!= null) entity.Stats.Health.Value = value;
+            }
+        }
+
+        /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
@@ -159,7 +172,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             get
             {
                 var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
-                return entity?.Stats.Health.Entity.GetMaxHealth() ?? 0f;
+                return entity?.GetMaxHealth() ?? 0f;
             }
             set
             {

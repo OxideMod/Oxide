@@ -35,12 +35,10 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal SpaceEngineersPlayer(MyPlayer player)
+        internal SpaceEngineersPlayer(MyPlayer player) : this(player.Id.SteamId, player.DisplayName)
         {
+            // Store user object
             this.player = player;
-            steamId = player.Id.SteamId;
-            Name = player.DisplayName;
-            Id = steamId.ToString();
         }
 
         #region Objects
@@ -128,6 +126,15 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => player.Character.StatComp.Health.Increase(amount, null);
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return player.Character.StatComp.Health.Value; }
+            set { player.Character.StatComp.Health.Value = value; }
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount

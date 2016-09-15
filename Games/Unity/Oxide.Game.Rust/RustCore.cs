@@ -268,7 +268,7 @@ namespace Oxide.Game.Rust
         private object IOnUserApprove(Connection connection)
         {
             var id = connection.userid.ToString();
-            var ip = Regex.Replace(connection.ipaddress, @":{1}[0-9]{1}\d*", "");
+            var ip = Regex.Replace(connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.username, id, ip);

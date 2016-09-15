@@ -487,10 +487,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 50,
+            "InjectionIndex": 61,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0, a1",
+            "ArgumentString": "l0, a1, a5",
             "HookTypeName": "Simple",
             "Name": "OnItemCraft",
             "HookName": "OnItemCraft",
@@ -881,7 +881,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "yddHX5xHa1X+brxVddwazpFOQir0pehCjLL3IHIuuck=",
+            "MSILHash": "12wLcA3YIEWKyry0xcR/Q9Emu+AASUPSYP9I0JQ7kLE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -960,7 +960,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "N+4exfPfA7R8MOSyMj77DK025VM3zF6u4Nd8g3MhZN8=",
+            "MSILHash": "jyTGnLKbWvTIOIp9H13qujhHerh7379qCPMJsS8xomA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2540,7 +2540,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "tLOTql+BrExCFe80fEs6oGXdL2eRVlaUlIakcBLmek0=",
+            "MSILHash": "szBraFeto/gB2rtqiswT94NLgaT+HFpdWsxszfeVZG8=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2778,7 +2778,7 @@
                 "BaseNetworkable/DestroyMode"
               ]
             },
-            "MSILHash": "ZRLv9T8N1dg9+apAlTC1sx6URKeKys9eHXdxiZjRBQM=",
+            "MSILHash": "mZUCoTG4f8lBhM7JS0f7ONS56o6eX4tlQwJKnMUIKs4=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -3022,7 +3022,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "hitCx7ahinU0Cf9EYOCvcM0H6B2Bv2OPiWc3K67/ghE=",
+            "MSILHash": "5KB2vToywvMvr73qUq/ocuV/cHeM66FuZ4uPEvFJdDw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

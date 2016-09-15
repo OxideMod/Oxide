@@ -29,13 +29,10 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal RustLegacyPlayer(NetUser netUser)
+        internal RustLegacyPlayer(NetUser netUser) : this(netUser.userID, netUser.displayName)
         {
-            // Store user details
+            // Store user object
             this.netUser = netUser;
-            steamId = netUser.userID;
-            Name = netUser.displayName;
-            Id = steamId.ToString();
         }
 
         #region Objects
@@ -123,6 +120,15 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => netUser.playerClient.controllable.takeDamage.health += amount;
+
+        /// <summary>
+        /// Gets/sets the user's health
+        /// </summary>
+        public float Health
+        {
+            get { return netUser.playerClient.controllable.takeDamage.health; }
+            set { netUser.playerClient.controllable.takeDamage.health = value; }
+        }
 
         /// <summary>
         /// Damages the user's character by specified amount

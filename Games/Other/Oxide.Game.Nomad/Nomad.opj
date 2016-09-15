@@ -8,7 +8,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 9,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -17,14 +17,14 @@
             "HookName": "OnServerShutdown",
             "AssemblyName": "NomadServer.exe",
             "TypeName": "TNet.GameServer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "Stop",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2+SIJM2HpQ6iZE9n93HDzmpF22rIjO9gcfOllOktZH4=",
+            "MSILHash": "jPDB+I//ewsn0QSkZmT2a09JGKOdloekgvPugdxv49g=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -74,7 +74,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "tAySjGqXMHz4cdJVSQBkpsxBi9scf+99r7w3mpgobO8=",
+            "MSILHash": "DbPdLr2ea9LV+ZNJZxuaBKqddVO1TKxjt2EmBWqoqJc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -100,7 +100,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "tAySjGqXMHz4cdJVSQBkpsxBi9scf+99r7w3mpgobO8=",
+            "MSILHash": "DbPdLr2ea9LV+ZNJZxuaBKqddVO1TKxjt2EmBWqoqJc=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -176,30 +176,6 @@
             },
             "MSILHash": "f4cDToOAEwGwE3Rvc5ZqXr6WR8rX0FXfbx0Aaz4qhEE=",
             "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 35,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "NomadServer.exe",
-            "TypeName": "TNet.TcpLobbyServerLink",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "ThreadFunction",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "f4cDToOAEwGwE3Rvc5ZqXr6WR8rX0FXfbx0Aaz4qhEE=",
-            "BaseHookName": "OnServerInitialized",
             "HookCategory": "Server"
           }
         }
