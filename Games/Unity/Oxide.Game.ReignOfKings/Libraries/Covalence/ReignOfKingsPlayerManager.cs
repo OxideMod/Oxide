@@ -77,7 +77,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         internal void NotifyPlayerDisconnect(Player player) => connectedPlayers.Remove(player.Id.ToString());
 
-        #region All Players
+        #region Player Finding
 
         /// <summary>
         /// Gets a player using their unique ID
@@ -108,34 +108,35 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Gets all players
         /// </summary>
         /// <returns></returns>
+        public IEnumerable<IPlayer> All => allPlayers.Values.Cast<IPlayer>();
         public IEnumerable<IPlayer> GetAllPlayers() => allPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
-        /// Gets all players
+        /// Gets all connected players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> All => allPlayers.Values.Cast<IPlayer>();
+        public IEnumerable<IPlayer> Connected => connectedPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
-        /// Finds a player matching a partial name (case insensitive, null if multiple matches unless exact)
+        /// Finds a single player given a partial name (case-insensitive, wildcards accepted, multiple matches returns null)
         /// </summary>
-        /// <param name="partialName"></param>
+        /// <param name="partialNameOrId"></param>
         /// <returns></returns>
-        public IPlayer FindPlayer(string partialName) => FindPlayers(partialName).SingleOrDefault();
-
-        /// <summary>
-        /// Finds any number of players given a partial name (case insensitive)
-        /// </summary>
-        /// <param name="partialName"></param>
-        /// <returns></returns>
-        public IEnumerable<IPlayer> FindPlayers(string partialName)
+        public IPlayer FindPlayer(string partialNameOrId)
         {
-            return allPlayers.Values.Where(p => p.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
+            var players = FindPlayers(partialNameOrId).ToList();
+            return players.Count == 1 ? players.Single() : null;
         }
 
-        #endregion
-
-        #region Connected Players
+        /// <summary>
+        /// Finds any number of players given a partial name (case-insensitive, wildcards accepted)
+        /// </summary>
+        /// <param name="partialNameOrId"></param>
+        /// <returns></returns>
+        public IEnumerable<IPlayer> FindPlayers(string partialNameOrId)
+        {
+            return allPlayers.Values.Where(p => p.Name.ToLower().Contains(partialNameOrId.ToLower()) || p.Id == partialNameOrId).Cast<IPlayer>();
+        }
 
         /// <summary>
         /// Gets a connected player given their unique ID
@@ -149,32 +150,20 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets all connected players
+        /// Finds a single connected player given a partial name (case-insensitive, wildcards accepted, multiple matches returns null)
         /// </summary>
+        /// <param name="partialNameOrId"></param>
         /// <returns></returns>
-        public IEnumerable<IPlayer> GetAllConnectedPlayers() => connectedPlayers.Values.Cast<IPlayer>();
+        public IPlayer FindConnectedPlayer(string partialNameOrId) => FindConnectedPlayers(partialNameOrId).FirstOrDefault();
 
         /// <summary>
-        /// Gets all connected players
+        /// Finds any number of connected players given a partial name (case-insensitive, wildcards accepted)
         /// </summary>
+        /// <param name="partialNameOrId"></param>
         /// <returns></returns>
-        public IEnumerable<IPlayer> Connected => connectedPlayers.Values.Cast<IPlayer>();
-
-        /// <summary>
-        /// Finds a single connected player matching a partial name (case insensitive, null if multiple matches unless exact)
-        /// </summary>
-        /// <param name="partialName"></param>
-        /// <returns></returns>
-        public IPlayer FindConnectedPlayer(string partialName) => FindConnectedPlayers(partialName).SingleOrDefault();
-
-        /// <summary>
-        /// Finds any number of connected players given a partial name (case insensitive)
-        /// </summary>
-        /// <param name="partialName"></param>
-        /// <returns></returns>
-        public IEnumerable<IPlayer> FindConnectedPlayers(string partialName)
+        public IEnumerable<IPlayer> FindConnectedPlayers(string partialNameOrId)
         {
-            return connectedPlayers.Values.Where(p => p.Name.IndexOf(partialName, StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
+            return connectedPlayers.Values.Where(p => p.Name.IndexOf(partialNameOrId,  StringComparison.OrdinalIgnoreCase) >= 0).Cast<IPlayer>();
         }
 
         #endregion

@@ -7,14 +7,7 @@ namespace Oxide.Core.Libraries.Covalence
     /// </summary>
     public interface IPlayerManager
     {
-        #region All Players
-
-        /// <summary>
-        /// Gets a player given their unique ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        IPlayer GetPlayer(string id);
+        #region Player Finding
 
         /// <summary>
         /// Gets a player given their unique ID
@@ -24,34 +17,38 @@ namespace Oxide.Core.Libraries.Covalence
         IPlayer this[int id] { get; }
 
         /// <summary>
+        /// Gets a player given their unique ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        IPlayer GetPlayer(string id);
+
+        /// <summary>
         /// Gets all players
         /// </summary>
         /// <returns></returns>
         IEnumerable<IPlayer> All { get; }
-
-        /// <summary>
-        /// Gets all players
-        /// </summary>
-        /// <returns></returns>
         IEnumerable<IPlayer> GetAllPlayers();
 
         /// <summary>
-        /// Finds a single player given a partial name (wildcards accepted, multiple matches returns null)
+        /// Gets all connected players
         /// </summary>
-        /// <param name="partialName"></param>
         /// <returns></returns>
-        IPlayer FindPlayer(string partialName);
+        IEnumerable<IPlayer> Connected { get; }
 
         /// <summary>
-        /// Finds any number of players given a partial name (wildcards accepted)
+        /// Finds a single player given a partial name or unique ID (case-insensitive, wildcards accepted, multiple matches returns null)
         /// </summary>
-        /// <param name="partialName"></param>
+        /// <param name="partialNameOrId"></param>
         /// <returns></returns>
-        IEnumerable<IPlayer> FindPlayers(string partialName);
+        IPlayer FindPlayer(string partialNameOrId);
 
-        #endregion
-
-        #region Connected Players
+        /// <summary>
+        /// Finds any number of players given a partial name or unique ID (case-insensitive, wildcards accepted)
+        /// </summary>
+        /// <param name="partialNameOrId"></param>
+        /// <returns></returns>
+        IEnumerable<IPlayer> FindPlayers(string partialNameOrId);
 
         /// <summary>
         /// Gets a connected player given their unique ID
@@ -61,24 +58,18 @@ namespace Oxide.Core.Libraries.Covalence
         IPlayer GetConnectedPlayer(string id);
 
         /// <summary>
-        /// Gets all connected players
+        /// Finds a single connected player given a partial name (case-insensitive, wildcards accepted, multiple matches returns null)
         /// </summary>
+        /// <param name="partialNameOrId"></param>
         /// <returns></returns>
-        IEnumerable<IPlayer> Connected { get; }
+        IPlayer FindConnectedPlayer(string partialNameOrId);
 
         /// <summary>
-        /// Finds a single connected player given a partial name (wildcards accepted, multiple matches returns null)
+        /// Finds any number of connected players given a partial name (case-insensitive, wildcards accepted)
         /// </summary>
-        /// <param name="partialName"></param>
+        /// <param name="partialNameOrId"></param>
         /// <returns></returns>
-        IPlayer FindConnectedPlayer(string partialName);
-
-        /// <summary>
-        /// Finds any number of connected players given a partial name (wildcards accepted)
-        /// </summary>
-        /// <param name="partialName"></param>
-        /// <returns></returns>
-        IEnumerable<IPlayer> FindConnectedPlayers(string partialName);
+        IEnumerable<IPlayer> FindConnectedPlayers(string partialNameOrId);
 
         #endregion
     }
