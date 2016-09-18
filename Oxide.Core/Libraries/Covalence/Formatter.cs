@@ -15,7 +15,7 @@
 //					| "magenta" | "maroon" | "navy" | "olive" | "orange"
 //					| "purple" | "red" | "silver" | "teal" | "white" | "yellow"
 //					? any casing allowed ?
-// Size			::= "[+" Integer "]" Text "[/#]"
+// Size			::= "[+" Integer "]" Text "[/+]"
 // Integer		::= Digit {Digit}
 // Digit 		::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
