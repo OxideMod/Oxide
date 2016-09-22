@@ -126,7 +126,7 @@
                 "ChatEvent"
               ]
             },
-            "MSILHash": "/17eiRCh9A7LHh6Plv25btOCuwRRw/56ZU1RqAkCDGk=",
+            "MSILHash": "ICTuyKc0JqvJUXYByflBDUVcLCev5yteAN2x9Do+l0E=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -594,7 +594,7 @@
                 "DestroyBuilding"
               ]
             },
-            "MSILHash": "Rdp/1gb/knuHo6zm/1gKcn4W4W7vz7cUQO8Ga1Iy9eo=",
+            "MSILHash": "V85nRlRfQXAJ9jOMRSZx45XPNIUe/h++t8iiTJvFVN0=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -750,7 +750,7 @@
                 "ResetTrap"
               ]
             },
-            "MSILHash": "mtsyXflbA/q8xoV5xf94J48pd10aTUaScBpCBan2Tmo=",
+            "MSILHash": "m1neLS+BNRnh9n0upv2n/HS20Dhlx4FBo38QvjW21E0=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -958,7 +958,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "wrihRWg+iS3XsA59nhQwAa4isZ6PTYumtQch/6/luq0=",
+            "MSILHash": "8cDZSq3iEtxQiTbuvYtqkJ+dijNFlvtBtmXXlYyJaX4=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -984,7 +984,7 @@
                 "SetCorpsePosition"
               ]
             },
-            "MSILHash": "6PvrKV3ozrIDXHG+wyizaBNkYm1TpuEvureeFcols4c=",
+            "MSILHash": "D0h55ADatRFV+zVNl4ZHcNP6mk2SnPM2wNM2dMhcRp4=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1088,7 +1088,7 @@
                 "DestroyWithTag"
               ]
             },
-            "MSILHash": "0vIIS34lJdX8wDlouSuNCBp8zxJtjroZ6vp5PIdP/MI=",
+            "MSILHash": "tgMG1x+snXNc4Fz6dQej+RM1cYsNb0sy2Ynao4XnWXw=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -1372,7 +1372,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "ttFumcsrdwGqQYJT0Lnh/lIvOPzDZOSeCtlCudgegkw=",
+            "MSILHash": "HqC4hMnTt7YvCrFp+udW4JtBfmfHil3xtO+b+SFPhwc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
