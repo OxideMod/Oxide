@@ -1530,54 +1530,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "HutongGames.PlayMaker.Actions.ApplicationQuit",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnEnter",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "iRQMDsmAB4RYNhlasFjVznDrOg6zc2ko/gjnR3eSL8g=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerInitialized",
-            "HookName": "OnServerInitialized",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TheForest.Save.PlayerSpawn",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "SnWOkx7J2QLSz4Owl0RYj9HoZ9lD15yhMdkBpRZLq8M=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 2,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
@@ -1656,6 +1608,30 @@
             "MSILHash": "zsRIWND6tx1+udUXnwygjQj+0zFMctA6etDVbhlzcdE=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 18,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Clock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "QMLZbJ/XJy8dHTpGHTfT+P90UIOjYFKlMZwzzzMQeVs=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]

@@ -310,10 +310,7 @@ namespace Oxide.Game.TheForest
                 return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
             };
 
-            Interface.Oxide.ServerConsole.Status3Left = () =>
-            {
-                return DateTime.Today.AddMinutes(TheForestAtmosphere.Instance.TimeOfDay).ToString("h:mm tt").ToLower();
-            };
+            Interface.Oxide.ServerConsole.Status3Left = () => DateTime.Today.AddMinutes(TheForestAtmosphere.Instance.TimeOfDay).ToString("h:mm tt").ToLower();
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {GameVersion}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
