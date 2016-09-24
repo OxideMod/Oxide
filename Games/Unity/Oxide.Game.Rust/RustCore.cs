@@ -380,15 +380,6 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a player attacks something
-        /// </summary>
-        /// <param name="melee"></param>
-        /// <param name="info"></param>
-        /// <returns></returns>
-        [HookMethod("IOnPlayerAttack")]
-        private object IOnPlayerAttack(BaseMelee melee, HitInfo info) => Interface.Call("OnPlayerAttack", melee.GetOwnerPlayer(), info);
-
-        /// <summary>
         /// Called when a BasePlayer is attacked
         /// This is used to call OnEntityTakeDamage for a BasePlayer when attacked
         /// </summary>
@@ -397,7 +388,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBasePlayerAttacked")]
         private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
-            if (!serverInitialized || player == null || isPlayerTakingDamage) return null;
+            if (!serverInitialized || player == null || info == null || player.IsDead() || isPlayerTakingDamage) return null;
             if (Interface.Call("OnEntityTakeDamage", player, info) != null) return true;
 
             isPlayerTakingDamage = true;
@@ -416,13 +407,13 @@ namespace Oxide.Game.Rust
         /// Called when a BasePlayer is hurt
         /// This is used to call OnEntityTakeDamage when a player was hurt without being attacked
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="player"></param>
         /// <param name="info"></param>
         /// <returns></returns>
         [HookMethod("IOnBasePlayerHurt")]
-        private object IOnBasePlayerHurt(BasePlayer entity, HitInfo info)
+        private object IOnBasePlayerHurt(BasePlayer player, HitInfo info)
         {
-            return isPlayerTakingDamage ? null : Interface.Call("OnEntityTakeDamage", entity, info);
+            return isPlayerTakingDamage ? null : Interface.Call("OnEntityTakeDamage", player, info);
         }
 
         /// <summary>
@@ -448,6 +439,24 @@ namespace Oxide.Game.Rust
         /// <param name="target"></param>
         [HookMethod("IOnLootPlayer")]
         private void IOnLootPlayer(PlayerLoot source, BasePlayer target) => Interface.Call("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
+
+        /// <summary>
+        /// Called when a player attacks something
+        /// </summary>
+        /// <param name="melee"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        [HookMethod("IOnPlayerAttack")]
+        private object IOnPlayerAttack(BaseMelee melee, HitInfo info) => Interface.Call("OnPlayerAttack", melee.GetOwnerPlayer(), info);
+
+        /// <summary>
+        /// Called when a player revives another player
+        /// </summary>
+        /// <param name="tool"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        [HookMethod("IOnPlayerRevive")]
+        private object IOnPlayerRevive(MedicalTool tool, BasePlayer target) => Interface.Call("OnPlayerRevive", tool.GetOwnerPlayer(), target);
 
         #endregion
 
