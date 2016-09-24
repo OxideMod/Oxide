@@ -23,7 +23,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's last command type
         /// </summary>
-        public CommandType LastCommand { get; set; }
+        public CommandType LastCommand { get { return CommandType.Console; } set {} }
 
         #endregion
 
