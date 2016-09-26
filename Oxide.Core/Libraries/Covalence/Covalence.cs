@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Reflection;
@@ -65,6 +66,18 @@ namespace Oxide.Core.Libraries.Covalence
 
         // The logger
         private Logger logger;
+
+        // Used to measure time spent in the command
+        private Stopwatch trackStopwatch = new Stopwatch();
+        private Stopwatch stopwatch = new Stopwatch();
+        private float trackStartAt;
+        private float averageAt;
+        private double sum;
+        private int preHookGcCount;
+        public double totalCommandTime { get; internal set; }
+
+        // The depth of hook call nesting
+        private int nestcount;
 
         /// <summary>
         /// Initializes a new instance of the Covalence class
@@ -163,7 +176,7 @@ namespace Oxide.Core.Libraries.Covalence
 
             try
             {
-                cmdSystem.RegisterCommand(command, plugin, callback);
+                cmdSystem.RegisterCommand(command, plugin, WrapCallback(callback, plugin));
             }
             catch (CommandAlreadyExistsException)
             {
@@ -177,5 +190,82 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         public void UnregisterCommand(string command, Plugin plugin) => cmdSystem?.UnregisterCommand(command, plugin);
+
+        public CommandCallback WrapCallback(CommandCallback callback, Plugin plugin)
+        {
+            return (player, cmd, args) =>
+            {
+                var started_at = 0f;
+                if (nestcount == 0)
+                {
+                    preHookGcCount = GC.CollectionCount(0);
+                    started_at = Interface.Oxide.Now;
+                    stopwatch.Start();
+                    if (averageAt < 1) averageAt = started_at;
+                }
+                TrackStart();
+                nestcount++;
+                try
+                {
+                    return callback(player, cmd, args);
+                }
+                catch (Exception ex)
+                {
+                    Interface.Oxide.LogException($"Failed to run command '{cmd}' on plugin '{plugin.Name} v{plugin.Version}'", ex);
+                    return false;
+                }
+                finally
+                {
+                    nestcount--;
+                    TrackEnd();
+                    if (started_at > 0)
+                    {
+                        stopwatch.Stop();
+                        var duration = stopwatch.Elapsed.TotalSeconds;
+                        if (duration > 0.2)
+                        {
+                            var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
+                            Interface.Oxide.LogWarning($"Calling command '{cmd}' on '{plugin.Name} v{plugin.Version}' took {duration * 1000:0}ms{suffix}");
+                        }
+                        stopwatch.Reset();
+                        var total = sum + duration;
+                        var ended_at = started_at + duration;
+                        if (ended_at - averageAt > 10)
+                        {
+                            total /= ended_at - averageAt;
+                            if (total > 0.2)
+                            {
+                                var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
+                                Interface.Oxide.LogWarning($"Calling command '{cmd}' on '{plugin.Name} v{plugin.Version}' took average {sum * 1000:0}ms{suffix}");
+                            }
+                            sum = 0;
+                            averageAt = 0;
+                        }
+                        else
+                        {
+                            sum = total;
+                        }
+                    }
+                }
+            };
+        }
+
+        public void TrackStart()
+        {
+            if (nestcount > 0) return;
+            var stopwatch = trackStopwatch;
+            if (stopwatch.IsRunning) return;
+            stopwatch.Start();
+        }
+
+        public void TrackEnd()
+        {
+            if (nestcount > 0) return;
+            var stopwatch = trackStopwatch;
+            if (!stopwatch.IsRunning) return;
+            stopwatch.Stop();
+            totalCommandTime += stopwatch.Elapsed.TotalSeconds;
+            stopwatch.Reset();
+        }
     }
 }

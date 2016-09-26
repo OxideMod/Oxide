@@ -33,7 +33,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="str"></param>
         public bool HandleChatMessage(IPlayer player, string str)
         {
-            // Get the args
+            // Make sure the message is not empty
             if (str.Length == 0) return false;
 
             // Is it a chat command?
@@ -45,27 +45,13 @@ namespace Oxide.Core.Libraries.Covalence
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(message, out cmd, out args);
+            ParseCommand(message, out cmd, out args);
 
-            // Handle it
-            return cmd != null && HandleChatCommand(player, cmd, args);
-        }
-
-        /// <summary>
-        /// Handles a chat command
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="cmd"></param>
-        /// <param name="args"></param>
-        private bool HandleChatCommand(IPlayer player, string cmd, string[] args)
-        {
-            // Check things
-            if (commandFilter != null && !commandFilter(cmd)) return false;
-            if (callback == null) return false;
+            // Set command type for the player
             player.LastCommand = CommandType.Chat;
 
             // Handle it
-            return callback(player, cmd, args);
+            return cmd != null && HandleCommand(player, cmd, args);
         }
 
         /// <summary>
@@ -75,32 +61,33 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="str"></param>
         public bool HandleConsoleMessage(IPlayer player, string str)
         {
-            // Handle global classname for console commands
-            if (str.StartsWith("global."))
-                str = str.Substring(7);
+            // Handle global parent for console commands
+            if (str.StartsWith("global.")) str = str.Substring(7);
 
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(str, out cmd, out args);
+            ParseCommand(str, out cmd, out args);
+
+            // Set command type for the player
+            player.LastCommand = CommandType.Console;
 
             // Handle it
-            return cmd != null && HandleConsoleCommand(player, cmd, args);
+            return cmd != null && HandleCommand(player, cmd, args);
         }
 
         /// <summary>
-        /// Handles a console command
+        /// Handles a chat command
         /// </summary>
         /// <param name="player"></param>
         /// <param name="cmd"></param>
         /// <param name="args"></param>
-        private bool HandleConsoleCommand(IPlayer player, string cmd, string[] args)
+        private bool HandleCommand(IPlayer player, string cmd, string[] args)
         {
             // Check things
             if (commandFilter != null && !commandFilter(cmd)) return false;
             if (callback == null) return false;
-            player.LastCommand = CommandType.Console;
-
+            
             // Handle it
             return callback(player, cmd, args);
         }
@@ -111,7 +98,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="argstr"></param>
         /// <param name="cmd"></param>
         /// <param name="args"></param>
-        private void ParseChatCommand(string argstr, out string cmd, out string[] args)
+        private void ParseCommand(string argstr, out string cmd, out string[] args)
         {
             var arglist = new List<string>();
             var sb = new StringBuilder();
