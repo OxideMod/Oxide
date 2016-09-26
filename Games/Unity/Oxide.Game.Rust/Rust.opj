@@ -960,7 +960,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "NmpmpPQ6kv2SnBeH5q2z0Uc1Opw4ecsukpuVXOmh+wM=",
+            "MSILHash": "MWUPB3NSKqE9c//LkyiQlmspYBBw5HOSzjLQKyBov+Q=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2540,7 +2540,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "CxyFKChdGsRIi5cdilHlDaTtkCo8cRvyZ+b28dXge1M=",
+            "MSILHash": "cd2DdSqAGyfvpTkggutLtM6Nssf1SUQ6bETSFaQ90Fk=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -3022,7 +3022,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "1kdettOoVf4i80zBiwYnuysEzKC6sY6ulf2Y8L33Yhc=",
+            "MSILHash": "OMRMVixMKwAxcc3rqOwApSU3+7hZ0b5XsQmmG2Hb2vs=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3398,6 +3398,32 @@
             },
             "MSILHash": "IZI2a9veYQepVY+RR8a4EviL/gW1oVmh2rXt2wVVrW0=",
             "BaseHookName": "OnHealingItemUse [medical]",
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 26,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l2",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpawn",
+            "HookName": "OnPlayerSpawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerMgr",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SpawnNewPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Network.Connection"
+              ]
+            },
+            "MSILHash": "pn//psZ+rFGh/zhuPaclvlHBUbWbUjU0K7mWuQ2oMgo=",
+            "BaseHookName": null,
             "HookCategory": "Player"
           }
         }
