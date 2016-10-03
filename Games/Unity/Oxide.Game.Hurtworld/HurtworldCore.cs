@@ -295,17 +295,13 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when the player has connected
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="player"></param>
-        [HookMethod("IOnPlayerConnected")]
-        private void IOnPlayerConnected(string name, uLink.NetworkPlayer player)
+        /// <param name="session"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(PlayerSession session)
         {
-            // Set the session name and strip HTML tags
-            var session = FindSessionByNetPlayer(player);
-            session.Name = Regex.Replace(name, "<.*?>", string.Empty); // TODO: Make sure the name is not blank
-
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(session);
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
 
             // Do permission stuff
             if (permission.IsLoaded)
@@ -319,11 +315,6 @@ namespace Oxide.Game.Hurtworld
                 // Add player to admin group if admin
                 if (session.IsAdmin && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
-
-            Interface.Call("OnPlayerConnected", session);
-
-            // Call covalence hook
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
         }
 
         /// <summary>
@@ -419,14 +410,6 @@ namespace Oxide.Game.Hurtworld
         #endregion
 
         #region Vehicle Hooks
-
-        /// <summary>
-        /// Called when a player tries to enter a vehicle
-        /// </summary>
-        /// <param name="passenger"></param>
-        /// <returns></returns>
-        [HookMethod("ICanEnterVehicle")]
-        private object ICanEnterVehicle(CharacterMotorSimple passenger) => Interface.Call("CanEnterVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
 
         /// <summary>
         /// Called when a player tries to exit a vehicle
