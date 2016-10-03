@@ -113,8 +113,8 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "ModifyTags [patch] [part 1]",
-            "HookName": "ModifyTags",
+            "Name": "AddGameTags [patch] [part 1]",
+            "HookName": "AddGameTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
@@ -157,8 +157,8 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "ModifyTags [patch] [part 2]",
-            "HookName": "ModifyTags",
+            "Name": "AddGameTags [patch] [part 2]",
+            "HookName": "AddGameTags",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
@@ -169,7 +169,7 @@
               "Parameters": []
             },
             "MSILHash": "1A1CQ7SiDg0ZS3/cJHPIj+wmjxP1yvdXLrSAym/1Y/k=",
-            "BaseHookName": "ModifyTags [patch] [part 1]",
+            "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
         },

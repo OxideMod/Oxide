@@ -1010,6 +1010,33 @@
             "BaseHookName": null,
             "HookCategory": "Item"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 28,
+            "RemoveCount": 6,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "FixDupeConsoleLog [patch]",
+            "HookName": "FixDupeConsoleLog",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Console",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "AddMessageFinal",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "UnityEngine.Color",
+                "CodeHatch.Engine.Networking.Player"
+              ]
+            },
+            "MSILHash": "jMm8VQrm/MVH5Uw1yb3rzmlvA80KjNbmFPina4uo02o=",
+            "BaseHookName": null,
+            "HookCategory": "_Patch"
+          }
         }
       ]
     }

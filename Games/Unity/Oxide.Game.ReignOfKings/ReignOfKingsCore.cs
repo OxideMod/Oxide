@@ -8,6 +8,7 @@ using CodeHatch.Build;
 using CodeHatch.Common;
 using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
+using CodeHatch.Networking.Events;
 using CodeHatch.Networking.Events.Players;
 
 using Oxide.Core;
@@ -926,7 +927,11 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         /// <param name="player"></param>
         /// <param name="message"></param>
-        private static void ReplyWith(Player player, string message) => player.SendMessage($"[950415]Server[FFFFFF]: {message}");
+        private static void ReplyWith(Player player, string message)
+        {
+            if (player.IsServer) Console.AddMessage(message);
+            else EventManager.CallEvent(new PlayerErrorEvent(player.Id, message));
+        }
 
         /// <summary>
         /// Lookup the player using name, Steam ID, or IP address
