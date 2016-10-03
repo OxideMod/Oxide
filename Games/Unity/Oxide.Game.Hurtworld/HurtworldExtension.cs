@@ -65,6 +65,8 @@ namespace Oxide.Game.Hurtworld
             "PointOnEdgeException, perturbating vertices slightly",
             "Riped",
             "Sending structures to client",
+            "Setting view NetworkView",
+            "Setting view uLinkNetworkView",
             "Source was empty",
             "Syncing tree deltas",
             "System.TypeInitializationException: An exception was thrown by the type initializer for Mono.CSharp.CSharpCodeCompiler",
