@@ -58,9 +58,9 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets/sets the name for the player
+        /// Gets the name for the player
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
@@ -162,6 +162,15 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         {
             get { return player.Character.StatComp.Health.MaxValue; }
             set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
+        }
+
+        /// <summary>
+        /// Renames the user to specified name
+        /// <param name="name"></param>
+        /// </summary>
+        public void Rename(string name)
+        {
+            // TODO: Implement when possible
         }
 
         /// <summary>

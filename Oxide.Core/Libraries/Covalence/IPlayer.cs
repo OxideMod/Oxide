@@ -113,6 +113,12 @@ namespace Oxide.Core.Libraries.Covalence
         float MaxHealth { get; set; }
 
         /// <summary>
+        /// Renames the user to specified name
+        /// <param name="name"></param>
+        /// </summary>
+        void Rename(string name);
+
+        /// <summary>
         /// Teleports the player's character to the specified position
         /// </summary>
         /// <param name="x"></param>

@@ -41,7 +41,7 @@ namespace Oxide.Ext.Lua.Libraries
             else
             {
                 var message = string.Empty;
-                for (var i = 0; i <= args.Length; ++i)
+                for (var i = 0; i < args.Length; ++i)
                 {
                     if (i > 0) message += "\t";
                     message += args[i]?.ToString() ?? "null";

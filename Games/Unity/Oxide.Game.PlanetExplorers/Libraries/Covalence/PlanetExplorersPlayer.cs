@@ -50,9 +50,9 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets/sets the name for the player
+        /// Gets the name for the player
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
@@ -161,6 +161,15 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         {
             get { return player._skEntity.GetAttribute(AttribType.HpMax); }
             set { player._skEntity.SetAttribute(AttribType.HpMax, value); }
+        }
+
+        /// <summary>
+        /// Renames the user to specified name
+        /// <param name="name"></param>
+        /// </summary>
+        public void Rename(string name)
+        {
+            // TODO: Implement when possible
         }
 
         /// <summary>
