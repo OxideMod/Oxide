@@ -49,9 +49,9 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets/sets the name for the player
+        /// Gets the name for the player
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
@@ -179,6 +179,15 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
                 var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
                 if (entity != null) entity.Stats.Health.BaseMax = value;
             }
+        }
+
+        /// <summary>
+        /// Renames the user to specified name
+        /// <param name="name"></param>
+        /// </summary>
+        public void Rename(string name)
+        {
+            // TODO: Implement when possible
         }
 
         /// <summary>

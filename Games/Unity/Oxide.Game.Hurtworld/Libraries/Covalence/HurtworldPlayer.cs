@@ -54,9 +54,9 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets/sets the name for the player
+        /// Gets the name for the player
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
@@ -190,6 +190,26 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
                 var effect = stats.GetFluidEffect(EEntityFluidEffectType.Health) as StandardEntityFluidEffect;
                 effect?.MaxValue(value);
             }
+        }
+
+        /// <summary>
+        /// Renames the user to specified name
+        /// <param name="name"></param>
+        /// </summary>
+        public void Rename(string name)
+        {
+            //name = name.Substring(0, 32);
+            name = ChatManagerServer.CleanupGeneral(name);
+            if (string.IsNullOrEmpty(name.Trim())) name = "Unnamed";
+
+            // Chat/display name
+            //session.Name = name;
+            session.Identity.Name = name;
+            session.WorldPlayerEntity.GetComponent<HurtMonoBehavior>().RPC("UpdateName", uLink.RPCMode.All, name);
+
+            // Overhead name
+            //var displayProxyName = session.WorldPlayerEntity.GetComponent<DisplayProxyName>();
+            //displayProxyName.UpdateName(name);
         }
 
         /// <summary>

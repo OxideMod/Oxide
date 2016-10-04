@@ -51,9 +51,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets/sets the name for the player
+        /// Gets the name for the player
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
@@ -127,7 +127,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public float Health
         {
             get { return player.health; }
-            set {player.health = value; }
+            set { player.health = value; }
         }
 
         /// <summary>
@@ -158,6 +158,20 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
         }
 
+        readonly FieldInfo displayName = typeof(BasePlayer).GetField("_displayName", (BindingFlags.Instance | BindingFlags.NonPublic));
+
+        /// <summary>
+        /// Renames the user to specified name
+        /// <param name="name"></param>
+        /// </summary>
+        public void Rename(string name)
+        {
+            displayName?.SetValue(player, string.IsNullOrEmpty(name.Trim()) ? "Blaster :D" : name);
+            player.net.connection.username = name; // TODO: Fix
+            //player.name = name;
+            Teleport(Position().X + 1, Position().Y + 1, Position().Z + 1);
+        }
+
         /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
@@ -168,9 +182,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             if (player.IsSpectating()) return;
 
-            var dest = new UnityEngine.Vector3(x, y, z);
-            player.transform.position = dest;
-            player.ClientRPCPlayer(null, player, "ForcePositionTo", dest);
+            var postion = new UnityEngine.Vector3(x, y, z);
+            player.MovePosition(postion);
+            player.ClientRPCPlayer(null, player, "ForcePositionTo", postion);
         }
 
         /// <summary>

@@ -136,6 +136,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public float MaxHealth { get; set; }
 
         /// <summary>
+        /// Renames the user to specified name
+        /// <param name="name"></param>
+        /// </summary>
+        public void Rename(string name)
+        {
+        }
+
+        /// <summary>
         /// Teleports the user's character to the specified position
         /// </summary>
         /// <param name="x"></param>
