@@ -272,10 +272,10 @@ namespace Oxide.Game.Rust
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.username, id, ip);
-            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                ConnectionAuth.Reject(connection, canLogin.ToString());
+                ConnectionAuth.Reject(connection, canLogin is string ? canLogin.ToString() : "Connection was rejected");
                 return true;
             }
 

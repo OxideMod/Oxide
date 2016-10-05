@@ -174,9 +174,9 @@ namespace Oxide.Game.TheForest
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", name, id, ip);
-            if (canLogin is string)
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
-                var coopKickToken = new CoopKickToken { KickMessage = canLogin.ToString(), Banned = false };
+                var coopKickToken = new CoopKickToken { KickMessage = canLogin is string ? canLogin.ToString() : "Connection was rejected", Banned = false };
                 connection.Disconnect(coopKickToken);
                 return true;
             }

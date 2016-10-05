@@ -239,10 +239,10 @@ namespace Oxide.Game.Hurtworld
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", session) ?? Interface.Call("CanUserLogin", session.Name, id, ip);
-            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                GameManager.Instance.KickPlayer(id, canLogin.ToString());
+                GameManager.Instance.KickPlayer(id, canLogin is string ? canLogin.ToString() : "Connection was rejected");
                 return true;
             }
 

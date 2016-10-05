@@ -197,11 +197,11 @@ namespace Oxide.Game.RustLegacy
             var ip = approval.ipAddress;
 
             // Call out and see if we should reject
-            var canLogin = (string)Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
-            if (canLogin is string)
+            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                Notice.Popup(connection.netUser.networkPlayer, "", canLogin.ToString(), 10f);
+                Notice.Popup(connection.netUser.networkPlayer, "", canLogin is string ? canLogin.ToString() : "Connection was rejected", 10f);
                 approval.Deny(uLink.NetworkConnectionError.NoError);
                 return true;
             }

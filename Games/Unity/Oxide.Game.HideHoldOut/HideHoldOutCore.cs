@@ -250,10 +250,10 @@ namespace Oxide.Game.HideHoldOut
         {
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", player) ?? Interface.Call("CanUserLogin", player.Nickname, player.account_id, player.NetPlayer.ipAddress);
-            if (canLogin is string)
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canLogin);
+                NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canLogin is string ? canLogin.ToString() : "Connection was rejected");
                 Interface.Oxide.NextTick(() => Network.CloseConnection(player.NetPlayer, true));
                 return true;
             }

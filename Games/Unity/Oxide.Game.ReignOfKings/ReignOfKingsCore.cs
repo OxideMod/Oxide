@@ -253,10 +253,10 @@ namespace Oxide.Game.ReignOfKings
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", player) ?? Interface.Call("CanUserLogin", player.Name, id, ip);
-            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                player.ShowPopup("Disconnected", canLogin.ToString());
+                player.ShowPopup("Disconnected", canLogin is string ? canLogin.ToString() : "Connection was rejected");
                 player.Connection.Close();
                 return ConnectionError.NoError;
             }
