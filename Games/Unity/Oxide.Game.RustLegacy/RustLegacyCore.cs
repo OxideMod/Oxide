@@ -197,21 +197,13 @@ namespace Oxide.Game.RustLegacy
             var ip = approval.ipAddress;
 
             // Call out and see if we should reject
-            var canLogin = (string)Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
-            if (canLogin is string)
+            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                Notice.Popup(connection.netUser.networkPlayer, "", canLogin.ToString(), 10f);
+                Notice.Popup(connection.netUser.networkPlayer, "", canLogin is string ? canLogin.ToString() : "Connection was rejected", 10f); // TODO: Localization
                 approval.Deny(uLink.NetworkConnectionError.NoError);
                 return true;
-            }
-
-            // Migrate user from 'player' group to 'default'
-            if (permission.UserHasGroup(id, "player"))
-            {
-                permission.AddUserGroup(id, "default");
-                permission.RemoveUserGroup(id, "player");
-                Interface.Oxide.LogWarning($"Migrated '{id}' to the new 'default' group");
             }
 
             return Interface.Call("OnUserApprove", connection, approval, acceptor) ?? Interface.Call("OnUserApproved", connection.UserName, id, ip);
@@ -224,13 +216,12 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(NetUser netUser)
         {
-            // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(netUser);
-
             // Do permission stuff
             if (permission.IsLoaded)
             {
                 var id = netUser.userID.ToString();
+
+                // Update stored name
                 permission.UpdateNickname(id, netUser.displayName);
 
                 // Add player to default group
@@ -240,7 +231,8 @@ namespace Oxide.Game.RustLegacy
                 if (netUser.CanAdmin() && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
-            // Call covalence hook
+            // Let covalence know
+            covalence.PlayerManager.NotifyPlayerConnect(netUser);
             Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
         }
 
@@ -254,10 +246,8 @@ namespace Oxide.Game.RustLegacy
             var netUser = netPlayer.GetLocalData() as NetUser;
             if (netUser == null) return;
 
-            // Call covalence hook
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
-
             // Let covalence know
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
             covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
 
             // Delay removing player until OnPlayerDisconnect has fired in plugins

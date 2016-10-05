@@ -369,7 +369,7 @@
             },
             "MSILHash": "2R68DppiPNEOmPULPavdPC/RGdlQIcMvN5wKArivubI=",
             "BaseHookName": null,
-            "HookCategory": "Server"
+            "HookCategory": "Player"
           }
         },
         {
@@ -922,26 +922,25 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 21,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0",
             "HookTypeName": "Simple",
-            "Name": "IOnPlayerDisconnected [internal]",
-            "HookName": "IOnPlayerDisconnected",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameManager",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "DisconnectPlayerSync",
-              "ReturnType": "System.Collections.IEnumerator",
+              "Name": "uLink_OnPlayerDisconnected",
+              "ReturnType": "System.Void",
               "Parameters": [
-                "uLink.NetworkPlayer",
-                "System.String"
+                "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "vbsAwrPjb7bDDWA6KDTgq5Bk7RaPZRIToII/goo/es4=",
+            "MSILHash": "5+dXqYsIJeeuRpMkahmWXqp+iiLqQb7agDLdIx20uVI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

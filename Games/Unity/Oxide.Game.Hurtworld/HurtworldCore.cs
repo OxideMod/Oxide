@@ -239,10 +239,10 @@ namespace Oxide.Game.Hurtworld
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", session) ?? Interface.Call("CanUserLogin", session.Name, id, ip);
-            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                GameManager.Instance.KickPlayer(id, canLogin.ToString());
+                GameManager.Instance.KickPlayer(id, canLogin is string ? canLogin.ToString() : "Connection was rejected"); // TODO: Localization
                 return true;
             }
 
@@ -307,6 +307,8 @@ namespace Oxide.Game.Hurtworld
             if (permission.IsLoaded)
             {
                 var id = session.SteamId.ToString();
+
+                // Update stored name
                 permission.UpdateNickname(id, session.Name);
 
                 // Add player to default group
@@ -324,19 +326,12 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when the player has disconnected
         /// </summary>
-        /// <param name="player"></param>
-        /// <param name="reason"></param>
-        [HookMethod("IOnPlayerDisconnected")]
-        private void IOnPlayerDisconnected(uLink.NetworkPlayer player, string reason)
+        /// <param name="session"></param>
+        [HookMethod("OnPlayerDisconnected")]
+        private void OnPlayerDisconnected(PlayerSession session)
         {
-            // Get player's session
-            var session = FindSessionByNetPlayer(player);
-
-            // Call the game hook
-            Interface.Call("OnPlayerDisconnected", session, reason);
-
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), reason);
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(session);
         }
 

@@ -253,10 +253,10 @@ namespace Oxide.Game.ReignOfKings
 
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", player) ?? Interface.Call("CanUserLogin", player.Name, id, ip);
-            if (canLogin != null && (!(canLogin is bool) || !(bool)canLogin))
+            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                player.ShowPopup("Disconnected", canLogin.ToString());
+                player.ShowPopup("Disconnected", canLogin is string ? canLogin.ToString() : "Connection was rejected"); // TODO: Localization
                 player.Connection.Close();
                 return ConnectionError.NoError;
             }
@@ -291,6 +291,8 @@ namespace Oxide.Game.ReignOfKings
             if (permission.IsLoaded)
             {
                 var id = player.Id.ToString();
+
+                // Update stored name
                 permission.UpdateNickname(id, player.Name);
 
                 // Add player to default group
@@ -302,6 +304,7 @@ namespace Oxide.Game.ReignOfKings
                     permission.AddUserGroup(id, "admin");
             }
 
+            // Call game hook
             Interface.Call("OnPlayerConnected", player);
 
             // Let covalence know
@@ -319,6 +322,7 @@ namespace Oxide.Game.ReignOfKings
             // Ignore the server player
             if (player.Id == 9999999999) return;
 
+            // Call game hook
             Interface.Call("OnPlayerDisconnected", player);
 
             // Let covalence know

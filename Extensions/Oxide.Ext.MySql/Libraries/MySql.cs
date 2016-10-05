@@ -83,6 +83,7 @@ namespace Oxide.Ext.MySql.Libraries
                         if (_connection.State == ConnectionState.Closed)
                             _connection.Open();
                         _cmd = _connection.CreateCommand();
+                        _cmd.CommandTimeout = 120;
                         _cmd.CommandText = Sql.SQL;
                         Sql.AddParams(_cmd, Sql.Arguments, "@");
                         _result = NonQuery ? _cmd.BeginExecuteNonQuery() : _cmd.BeginExecuteReader();
@@ -98,6 +99,10 @@ namespace Oxide.Ext.MySql.Libraries
                             list = new List<Dictionary<string, object>>();
                             while (reader.Read())
                             {
+                                if (Connection.ConnectionPersistent && (Connection.Con.State == ConnectionState.Closed || Connection.Con.State == ConnectionState.Broken))
+                                {
+									break;
+								}
                                 var dict = new Dictionary<string, object>();
                                 for (var i = 0; i < reader.FieldCount; i++)
                                 {
@@ -181,7 +186,7 @@ namespace Oxide.Ext.MySql.Libraries
         [LibraryFunction("OpenDb")]
         public Connection OpenDb(string host, int port, string database, string user, string password, Plugin plugin, bool persistent = false)
         {
-            return OpenDb($"Server={host};Port={port};Database={database};User={user};Password={password};Pooling=false;CharSet=utf8;", plugin, persistent);
+            return OpenDb($"Server={host};Port={port};Database={database};User={user};Password={password};Pooling=false;CharSet=utf8;default command timeout=120;", plugin, persistent);
         }
 
         public Connection OpenDb(string conStr, Plugin plugin, bool persistent = false)
