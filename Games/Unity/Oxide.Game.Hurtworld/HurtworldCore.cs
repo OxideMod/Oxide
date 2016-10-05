@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 using Steamworks;
 using UnityEngine;
@@ -297,10 +296,13 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when the player has connected
         /// </summary>
-        /// <param name="session"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(PlayerSession session)
+        /// <param name="name"></param>
+        [HookMethod("IOnPlayerConnected")]
+        private void IOnPlayerConnected(string name)
         {
+            // Get player's session
+            var session = FindSession(name);
+
             // Do permission stuff
             if (permission.IsLoaded)
             {
@@ -331,7 +333,7 @@ namespace Oxide.Game.Hurtworld
             var session = FindSessionByNetPlayer(player);
 
             // Call the game hook
-            Interface.Call("OnPlayerConnected", session, reason);
+            Interface.Call("OnPlayerDisconnected", session, reason);
 
             // Let covalence know
             Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), reason);

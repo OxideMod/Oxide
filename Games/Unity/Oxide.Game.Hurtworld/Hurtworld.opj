@@ -354,8 +354,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnConnectionNotice",
-            "HookName": "OnConnectionNotice",
+            "Name": "IOnPlayerConnected [internal]",
+            "HookName": "IOnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ChatManagerServer",
             "Flagged": false,
@@ -368,59 +368,6 @@
               ]
             },
             "MSILHash": "2R68DppiPNEOmPULPavdPC/RGdlQIcMvN5wKArivubI=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnDeathNotice",
-            "HookName": "OnDeathNotice",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ChatManagerServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "AppendDeathNoticeAll",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String",
-                "EntityEffectSourceData"
-              ]
-            },
-            "MSILHash": "xU/31tXnHRKfnmDBsJ8s3KlullTZ6WHHRFA+ZQfnbsQ=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 3,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnDisconnectionNotice",
-            "HookName": "OnDisconnectionNotice",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ChatManagerServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "AppendDisconnectionNoticeAll",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.String"
-              ]
-            },
-            "MSILHash": "Tgu0NU0C4JBGCacw7t0MFnk2zciaK3a1NOxAqqjxGew=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -532,38 +479,6 @@
             "MSILHash": "7kaBcqOqC5LT/0b8vFpaa5AvgpPIh0EbuJ8j/6yQ8/8=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 69,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a4.ConnectedSession",
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManagerUtilities",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SyncPlayerEntity",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.BitStream",
-                "UnityEngine.GameObject",
-                "UnityEngine.Vector3",
-                "UnityEngine.Quaternion",
-                "PlayerIdentity",
-                "System.Int32",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "awncnXM0S6Cmvv7FUcBRqF3+IG05ykD7jpq1hsbYYy8=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
           }
         },
         {
@@ -1001,38 +916,6 @@
             },
             "MSILHash": "8Nb8ySV1g4lUJa069tQI0hbN8mBXSvivMBH6TkzBPmM=",
             "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 81,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a4.ConnectedSession",
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerInit",
-            "HookName": "OnPlayerInit",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManagerUtilities",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "SyncPlayerEntity",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.BitStream",
-                "UnityEngine.GameObject",
-                "UnityEngine.Vector3",
-                "UnityEngine.Quaternion",
-                "PlayerIdentity",
-                "System.Int32",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "awncnXM0S6Cmvv7FUcBRqF3+IG05ykD7jpq1hsbYYy8=",
-            "BaseHookName": "OnPlayerConnected",
             "HookCategory": "Player"
           }
         },
