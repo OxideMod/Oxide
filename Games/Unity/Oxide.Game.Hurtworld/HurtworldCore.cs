@@ -242,7 +242,7 @@ namespace Oxide.Game.Hurtworld
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                GameManager.Instance.KickPlayer(id, canLogin is string ? canLogin.ToString() : "Connection was rejected");
+                GameManager.Instance.KickPlayer(id, canLogin is string ? canLogin.ToString() : "Connection was rejected"); // TODO: Localization
                 return true;
             }
 
@@ -307,6 +307,8 @@ namespace Oxide.Game.Hurtworld
             if (permission.IsLoaded)
             {
                 var id = session.SteamId.ToString();
+
+                // Update stored name
                 permission.UpdateNickname(id, session.Name);
 
                 // Add player to default group

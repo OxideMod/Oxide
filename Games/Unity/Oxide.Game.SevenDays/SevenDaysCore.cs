@@ -125,6 +125,19 @@ namespace Oxide.Game.SevenDays
         #region Player Hooks
 
         /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="message"></param>
+        [HookMethod("IOnPlayerChat")]
+        private object IOnPlayerChat(ClientInfo client, string message)
+        {
+            if (client == null || string.IsNullOrEmpty(message)) return null;
+
+            return Interface.Call("OnPlayerChat", client, message) ?? Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(client.playerId), message);
+        }
+
+        /// <summary>
         /// Called when the player has connected
         /// </summary>
         /// <param name="client"></param>
@@ -134,6 +147,7 @@ namespace Oxide.Game.SevenDays
             // Do permission stuff
             if (permission.IsLoaded)
             {
+                // Update stored name
                 permission.UpdateNickname(client.playerId, client.playerName);
 
                 // Add player to default group
@@ -153,22 +167,8 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerDisconnected(ClientInfo client)
         {
             // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerDisconnect(client);
             Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(client.playerId), "Unknown");
-        }
-
-        /// <summary>
-        /// Called when the player sends a message
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="message"></param>
-        [HookMethod("IOnPlayerChat")]
-        private object IOnPlayerChat(ClientInfo client, string message)
-        {
-            if (client == null || string.IsNullOrEmpty(message)) return null;
-
-            return Interface.Call("OnPlayerChat", client, message)
-                ??  Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(client.playerId), message);
+            Covalence.PlayerManager.NotifyPlayerDisconnect(client);
         }
 
         /// <summary>

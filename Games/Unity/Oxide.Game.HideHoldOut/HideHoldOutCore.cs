@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using uLink;
 using UnityEngine;
 using Network = uLink.Network;
 using NetworkPlayer = uLink.NetworkPlayer;
@@ -253,7 +252,7 @@ namespace Oxide.Game.HideHoldOut
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canLogin is string ? canLogin.ToString() : "Connection was rejected");
+                NetworkController.NetManager_.NetView.RPC("NET_FATAL_ERROR", player.NetPlayer, canLogin is string ? canLogin.ToString() : "Connection was rejected"); // TODO: Localization
                 Interface.Oxide.NextTick(() => Network.CloseConnection(player.NetPlayer, true));
                 return true;
             }
@@ -312,13 +311,12 @@ namespace Oxide.Game.HideHoldOut
         {
             Debug.Log($"{player.account_id}/{player.Nickname} joined");
 
-            // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(player);
-
             // Do permission stuff
             if (permission.IsLoaded)
             {
                 var id = player.account_id;
+
+                // Update stored name
                 permission.UpdateNickname(id, player.Nickname);
 
                 // Add player to default group
@@ -328,7 +326,8 @@ namespace Oxide.Game.HideHoldOut
                 if (player.isADMIN && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
-            // Call covalence hook
+            // Let covalence know
+            Covalence.PlayerManager.NotifyPlayerConnect(player);
             Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.account_id));
         }
 
@@ -341,10 +340,8 @@ namespace Oxide.Game.HideHoldOut
         {
             Debug.Log($"{player.account_id}/{player.Nickname} quit");
 
-            // Call covalence hook
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
-
             // Let covalence know
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 

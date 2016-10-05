@@ -167,6 +167,8 @@ namespace Oxide.Game.TheForest
             var id = connection.RemoteEndPoint.SteamId.Id.ToString();
             var cSteamId = new CSteamID(connection.RemoteEndPoint.SteamId.Id);
             var name = SteamFriends.GetFriendPersonaName(cSteamId);
+
+            // Get IP address from Steam
             P2PSessionState_t sessionState;
             SteamGameServerNetworking.GetP2PSessionState(cSteamId, out sessionState);
             var remoteIp = sessionState.m_nRemoteIP;
@@ -176,12 +178,35 @@ namespace Oxide.Game.TheForest
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", name, id, ip);
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
-                var coopKickToken = new CoopKickToken { KickMessage = canLogin is string ? canLogin.ToString() : "Connection was rejected", Banned = false };
+                var coopKickToken = new CoopKickToken
+                {
+                    KickMessage = canLogin is string ? canLogin.ToString() : "Connection was rejected", // TODO: Localization
+                    Banned = false
+                };
                 connection.Disconnect(coopKickToken);
                 return true;
             }
 
             return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", name, id, ip);
+        }
+
+        /// <summary>
+        /// Called when the player sends a message
+        /// </summary>
+        /// <param name="evt"></param>
+        [HookMethod("OnPlayerChat")]
+        private object OnPlayerChat(ChatEvent evt)
+        {
+            var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
+            if (entity == null) return null;
+
+            var id = entity.source.RemoteEndPoint.SteamId.Id;
+            var name = entity.GetState<IPlayerState>().name;
+
+            Debug.Log($"[Chat] {name}: {evt.Message}");
+
+            // Call covalence hook
+            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -199,6 +224,7 @@ namespace Oxide.Game.TheForest
             // Do permission stuff
             if (permission.IsLoaded)
             {
+                // Update stored name
                 permission.UpdateNickname(id, name);
 
                 // Add player to default group
@@ -225,31 +251,12 @@ namespace Oxide.Game.TheForest
 
             Debug.Log($"{id}/{name} quit");
 
-            // Call hook for plugins
+            // Call game hook
             Interface.Call("OnPlayerDisconnected", entity);
 
             // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerDisconnect(entity);
             Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
-        }
-
-        /// <summary>
-        /// Called when the player sends a message
-        /// </summary>
-        /// <param name="evt"></param>
-        [HookMethod("OnPlayerChat")]
-        private object OnPlayerChat(ChatEvent evt)
-        {
-            var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
-            if (entity == null) return null;
-
-            var id = entity.source.RemoteEndPoint.SteamId.Id;
-            var name = entity.GetState<IPlayerState>().name;
-
-            Debug.Log($"[Chat] {name}: {evt.Message}");
-
-            // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
+            Covalence.PlayerManager.NotifyPlayerDisconnect(entity);
         }
 
         /// <summary>

@@ -275,7 +275,7 @@ namespace Oxide.Game.Rust
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                ConnectionAuth.Reject(connection, canLogin is string ? canLogin.ToString() : "Connection was rejected");
+                ConnectionAuth.Reject(connection, canLogin is string ? canLogin.ToString() : "Connection was rejected"); // TODO: Localization
                 return true;
             }
 
@@ -296,6 +296,37 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when the player has connected
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("OnPlayerConnected")]
+        private void OnPlayerConnected(BasePlayer player)
+        {
+            // Do permission stuff
+            var authLevel = player.net.connection.authLevel;
+            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
+            {
+                var id = player.UserIDString;
+
+                // Update stored name
+                permission.UpdateNickname(id, player.displayName);
+
+                // Add player to default group
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+
+                // Add player to group based on auth level
+                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
+            }
+
+            // Cache serverInput for player so that reflection only needs to be used once
+            playerInputState[player] = (InputState)serverInputField.GetValue(player);
+
+            // Let covalence know
+            Covalence.PlayerManager.NotifyPlayerConnect(player);
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.UserIDString));
+        }
+
+        /// <summary>
         /// Called when the player has disconnected
         /// </summary>
         /// <param name="player"></param>
@@ -308,40 +339,6 @@ namespace Oxide.Game.Rust
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
-        }
-
-        /// <summary>
-        /// Called when the player has been initialized
-        /// </summary>
-        /// <param name="player"></param>
-        [HookMethod("OnPlayerInit")]
-        private void OnPlayerInit(BasePlayer player)
-        {
-            // Do permission stuff
-            var authLevel = player.net.connection.authLevel;
-            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
-            {
-                var id = player.UserIDString;
-
-                // Add player to default group
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-
-                // Add player to group based on auth level
-                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
-
-                permission.UpdateNickname(id, player.displayName);
-            }
-
-            // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(player);
-
-            // Cache serverInput for player so that reflection only needs to be used once
-            playerInputState[player] = (InputState)serverInputField.GetValue(player);
-
-            // Call covalence hooks
-            var iplayer = Covalence.PlayerManager.GetPlayer(player.UserIDString);
-            Interface.Call("OnUserConnected", iplayer); // TODO: Move to OnPlayerConnected
-            Interface.Call("OnUserInit", iplayer); // TODO: Move and change to OnUserSpawn?
         }
 
         /// <summary>
