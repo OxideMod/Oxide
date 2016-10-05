@@ -203,9 +203,10 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             if (string.IsNullOrEmpty(name.Trim())) name = "Unnamed";
 
             // Chat/display name
-            //session.Name = name;
+            session.Name = name;
             session.Identity.Name = name;
             session.WorldPlayerEntity.GetComponent<HurtMonoBehavior>().RPC("UpdateName", uLink.RPCMode.All, name);
+            SteamGameServer.BUpdateUserData(cSteamId, name, 0);
 
             // Overhead name
             //var displayProxyName = session.WorldPlayerEntity.GetComponent<DisplayProxyName>();
