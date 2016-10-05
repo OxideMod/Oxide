@@ -247,6 +247,7 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
+            // Call the game hook
             return Interface.Call("OnUserApprove", session) ?? Interface.Call("OnUserApproved", session.Name, id, ip);
         }
 
@@ -287,6 +288,7 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
+            // Call the game hook
             Interface.Call("OnChatCommand", session, command);
 
             return true;
@@ -299,10 +301,6 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(PlayerSession session)
         {
-            // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(session);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
-
             // Do permission stuff
             if (permission.IsLoaded)
             {
@@ -315,19 +313,28 @@ namespace Oxide.Game.Hurtworld
                 // Add player to admin group if admin
                 if (session.IsAdmin && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
+
+            // Let covalence know
+            Covalence.PlayerManager.NotifyPlayerConnect(session);
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
         }
 
         /// <summary>
         /// Called when the player has disconnected
         /// </summary>
-        /// <param name="session"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(PlayerSession session)
+        /// <param name="player"></param>
+        /// <param name="reason"></param>
+        [HookMethod("IOnPlayerDisconnected")]
+        private void IOnPlayerDisconnected(uLink.NetworkPlayer player, string reason)
         {
-            // Call covalence hook
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), "Unknown");
+            // Get player's session
+            var session = FindSessionByNetPlayer(player);
+
+            // Call the game hook
+            Interface.Call("OnPlayerConnected", session, reason);
 
             // Let covalence know
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), reason);
             Covalence.PlayerManager.NotifyPlayerDisconnect(session);
         }
 
@@ -340,8 +347,6 @@ namespace Oxide.Game.Hurtworld
         {
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(session);
-
-            // Call covalence hook
             Interface.Call("OnUserInit", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
         }
 

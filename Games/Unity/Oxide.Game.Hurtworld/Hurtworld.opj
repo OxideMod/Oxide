@@ -53,32 +53,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 21,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerDisconnected",
-            "HookName": "OnPlayerDisconnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "uLink_OnPlayerDisconnected",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayer"
-              ]
-            },
-            "MSILHash": "5+dXqYsIJeeuRpMkahmWXqp+iiLqQb7agDLdIx20uVI=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 24,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
@@ -214,9 +188,9 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 1,
+            "ReturnBehavior": 3,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0",
+            "ArgumentString": "this, a0 => a0",
             "HookTypeName": "Simple",
             "Name": "OnVehicleInput",
             "HookName": "OnVehicleInput",
@@ -1059,6 +1033,33 @@
             },
             "MSILHash": "awncnXM0S6Cmvv7FUcBRqF3+IG05ykD7jpq1hsbYYy8=",
             "BaseHookName": "OnPlayerConnected",
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerDisconnected [internal]",
+            "HookName": "IOnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DisconnectPlayerSync",
+              "ReturnType": "System.Collections.IEnumerator",
+              "Parameters": [
+                "uLink.NetworkPlayer",
+                "System.String"
+              ]
+            },
+            "MSILHash": "vbsAwrPjb7bDDWA6KDTgq5Bk7RaPZRIToII/goo/es4=",
+            "BaseHookName": null,
             "HookCategory": "Player"
           }
         }
