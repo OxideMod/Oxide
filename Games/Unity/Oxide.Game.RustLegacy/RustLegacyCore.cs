@@ -206,14 +206,6 @@ namespace Oxide.Game.RustLegacy
                 return true;
             }
 
-            // Migrate user from 'player' group to 'default'
-            if (permission.UserHasGroup(id, "player"))
-            {
-                permission.AddUserGroup(id, "default");
-                permission.RemoveUserGroup(id, "player");
-                Interface.Oxide.LogWarning($"Migrated '{id}' to the new 'default' group");
-            }
-
             return Interface.Call("OnUserApprove", connection, approval, acceptor) ?? Interface.Call("OnUserApproved", connection.UserName, id, ip);
         }
 
