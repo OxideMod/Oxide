@@ -3226,6 +3226,86 @@
             },
             "MSILHash": "hT9xqK4g6htlFE5IHPcW1zl2fBqGv73aDnkz2ecyQAA=",
             "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerInsideBuilding",
+            "HookName": "OnPlayerInsideBuilding",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SetInsideBuildingPrivilege",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BuildingPrivlidge",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "jPgmGRhd70cF3sQJ4lzQRyQH5XODBsr6hX1T/6q7iJ0=",
+            "BaseHookName": null,
+            "HookCategory": "_UNTESTED"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0, a1",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerHealthChange",
+            "HookName": "OnPlayerHealthChange",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnHealthChanged",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Single",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "vvRLOfSM4Qdwk/3b6UKaaCjp+XgMZXo4w5IrKPrxozU=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerKill",
+            "HookName": "OnPlayerKill",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnKilled",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "7Sw/befRrjJJw1gEtbThHU1LX5dDiaETLG8Z8+e8Q/U=",
+            "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
         },
@@ -3349,6 +3429,56 @@
             "MSILHash": "qNGq2aQmUDAsYmlE0gDvlNzFR7rNphzm+0CP6oxeCkg=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 380,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerKilled",
+            "HookName": "OnPlayerKilled",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnKilled",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "HitInfo"
+              ]
+            },
+            "MSILHash": "7Sw/befRrjJJw1gEtbThHU1LX5dDiaETLG8Z8+e8Q/U=",
+            "BaseHookName": "OnPlayerKill",
+            "HookCategory": "_UNTESTED"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerToggleLight",
+            "HookName": "OnPlayerToggleLight",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "LightToggle",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "tstOc+IgilCsLAdonySEB0lr+9uBhDeRkNHbrgDJQ0o=",
+            "BaseHookName": null,
+            "HookCategory": "_UNTESTED"
           }
         },
         {

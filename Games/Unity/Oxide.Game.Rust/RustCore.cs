@@ -321,9 +321,6 @@ namespace Oxide.Game.Rust
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
 
-            // Call game hook
-            Interface.Call("OnPlayerConnected", player);
-
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
             Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.UserIDString));
