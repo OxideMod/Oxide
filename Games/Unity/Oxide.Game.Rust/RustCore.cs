@@ -299,8 +299,8 @@ namespace Oxide.Game.Rust
         /// Called when the player has connected
         /// </summary>
         /// <param name="player"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(BasePlayer player)
+        [HookMethod("OnPlayerInit")]
+        private void OnPlayerInit(BasePlayer player)
         {
             // Do permission stuff
             var authLevel = player.net.connection.authLevel;
@@ -320,6 +320,9 @@ namespace Oxide.Game.Rust
 
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
+
+            // Call game hook
+            Interface.Call("OnPlayerConnected", player);
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
