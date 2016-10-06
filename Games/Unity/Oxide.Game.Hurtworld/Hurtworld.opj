@@ -151,7 +151,7 @@
                 "CharacterMotorSimple"
               ]
             },
-            "MSILHash": "ZH5Z7klc5jSt7P7CbDsgAdFVrjM37AlYM7k38S78Nt0=",
+            "MSILHash": "Tc1f8I85gIFKgil/eF1wo/6QtbCaPOnnV4yawIXRVjI=",
             "BaseHookName": null,
             "HookCategory": "Vehicle"
           }
@@ -279,7 +279,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ZIckSNQGCSrNxZ93nqyGoeOlARrtjCEkv0LglQ2oytY=",
+            "MSILHash": "F0kjU0sJ3OjMKMsZTkzz4OjaBcnyGEYrUxGtxDFWUhU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -393,7 +393,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "TixASvl71wEkQucJiNEHOsW0Gacw/Th32lmiMpbdhT0=",
+            "MSILHash": "xNdnduMzFyXGiponQZ1JfY8vSBWLvoeJ2K6KLwghvr0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -631,32 +631,6 @@
             "MSILHash": "bbSnLsk07Pd2tKkUPXEhOjpHCQ53zgLLacP9jh7VHBM=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 91,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "ICanExitVehicle [internal]",
-            "HookName": "ICanExitVehicle",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CharacterMotorSimple",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "SimulateVehicle",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.Single"
-              ]
-            },
-            "MSILHash": "JwF+RH9/DZWygOakeV2f7FXxQPp8hsBE3OnFwFL+0vE=",
-            "BaseHookName": null,
-            "HookCategory": "Vehicle"
           }
         },
         {
@@ -943,6 +917,33 @@
             "MSILHash": "5+dXqYsIJeeuRpMkahmWXqp+iiLqQb7agDLdIx20uVI=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "ICanExitVehicle [internal]",
+            "HookName": "ICanExitVehicle",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VehiclePassenger",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanExit",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "UnityEngine.Vector3&",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "Q3786WuC7rTbuLQ+07Ngf4+vlt/PoBtu064BZ+/mNKA=",
+            "BaseHookName": null,
+            "HookCategory": null
           }
         }
       ]
