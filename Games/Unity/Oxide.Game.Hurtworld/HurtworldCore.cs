@@ -318,6 +318,9 @@ namespace Oxide.Game.Hurtworld
                 if (session.IsAdmin && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
+            // Call game hook
+            Interface.Call("OnPlayerConnected", session);
+
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(session);
             Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
