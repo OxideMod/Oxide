@@ -182,6 +182,24 @@ namespace Oxide.Game.SevenDays
             Interface.Call("OnUserSpawn", Covalence.PlayerManager.GetPlayer(client.playerId));
         }
 
+        /// <summary>
+        /// Called when the player attempts to use a door
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entity"></param>
+        [HookMethod("ICanUseDoor")]
+        private void ICanUseDoor(string id, TileEntitySecure entity)
+        {
+            // Get ClientInfo from ID
+            var client = ConsoleHelper.ParseParamIdOrName(id);
+
+            // Call game hook
+            Interface.Call("CanUseDoor", client, entity);
+
+            // Call deprecated hook
+            Interface.CallDeprecatedHook("OnDoorUse", "CanUseDoor", new DateTime(2016, 12, 5), entity, id);
+        }
+
         #endregion
     }
 }
