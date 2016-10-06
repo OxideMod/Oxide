@@ -59,6 +59,7 @@ namespace Oxide.Game.Rust.Cui
             {
                 Name = name,
                 Parent = parent,
+                FadeOut = button.FadeOut,
                 Components =
                 {
                     button.Button,
@@ -70,6 +71,7 @@ namespace Oxide.Game.Rust.Cui
                 Add(new CuiElement
                 {
                     Parent = name,
+                    FadeOut = button.FadeOut,
                     Components =
                     {
                         button.Text,
@@ -87,6 +89,7 @@ namespace Oxide.Game.Rust.Cui
             {
                 Name = name,
                 Parent = parent,
+                FadeOut = label.FadeOut,
                 Components =
                 {
                     label.Text,
@@ -102,7 +105,8 @@ namespace Oxide.Game.Rust.Cui
             var element = new CuiElement
             {
                 Name = name,
-                Parent = parent
+                Parent = parent,
+                FadeOut = panel.FadeOut
             };
             if (panel.Image != null) element.Components.Add(panel.Image);
             if (panel.RawImage != null) element.Components.Add(panel.RawImage);
@@ -122,6 +126,7 @@ namespace Oxide.Game.Rust.Cui
         public CuiButtonComponent Button { get; } = new CuiButtonComponent();
         public CuiRectTransformComponent RectTransform { get; } = new CuiRectTransformComponent();
         public CuiTextComponent Text { get; } = new CuiTextComponent();
+        public float FadeOut { get; set; }
     }
 
     public class CuiPanel
@@ -130,12 +135,14 @@ namespace Oxide.Game.Rust.Cui
         public CuiRawImageComponent RawImage { get; set; }
         public CuiRectTransformComponent RectTransform { get; } = new CuiRectTransformComponent();
         public bool CursorEnabled { get; set; }
+        public float FadeOut { get; set; }
     }
 
     public class CuiLabel
     {
         public CuiTextComponent Text { get; } = new CuiTextComponent();
         public CuiRectTransformComponent RectTransform { get; } = new CuiRectTransformComponent();
+        public float FadeOut { get; set; }
     }
 
     public class CuiElement

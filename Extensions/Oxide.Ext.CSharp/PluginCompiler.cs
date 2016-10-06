@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -219,7 +220,7 @@ namespace Oxide.Plugins
             CheckCompilerBinary();
             idleTimer?.Destroy();
             if (BinaryPath == null) return false;
-            if (process != null && !process.HasExited) return true;
+            if (process != null && process.Handle != IntPtr.Zero && !process.HasExited) return true;
             PurgeOldLogs();
             Shutdown();
             var args = new[] {"/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory)};
@@ -266,6 +267,9 @@ namespace Oxide.Plugins
                 process = null;
                 Interface.Oxide.LogException("Exception while starting compiler: ", ex); // TODO: Expand, warn that it may not be executable
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
+                var win32 = ex as Win32Exception;
+                if (win32 != null)
+                    Interface.Oxide.LogError("Win32 NativeErrorCode: {0} ErrorCode: {1} HelpLink: {2}", win32.NativeErrorCode, win32.ErrorCode, win32.HelpLink);
             }
             if (process == null) return false;
             client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
