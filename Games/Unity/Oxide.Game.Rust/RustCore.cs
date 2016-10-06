@@ -1114,6 +1114,7 @@ namespace Oxide.Game.Rust
 
             // Get the covalence player
             var iplayer = Covalence.PlayerManager.GetConnectedPlayer(arg.connection.userid.ToString());
+            if (iplayer == null) return null;
 
             // Is the command blocked?
             var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
