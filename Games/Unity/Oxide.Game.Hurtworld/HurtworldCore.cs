@@ -353,7 +353,10 @@ namespace Oxide.Game.Hurtworld
         /// <param name="player"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
-        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.Call("OnPlayerInput", FindSessionByNetPlayer(player), input);
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input)
+        {
+            if (!input.IsNullOrDestroyed()) Interface.Call("OnPlayerInput", FindSessionByNetPlayer(player), input);
+        }
 
         /// <summary>
         /// Called when the player attempts to suicide
@@ -419,7 +422,7 @@ namespace Oxide.Game.Hurtworld
         /// <param name="passenger"></param>
         /// <returns></returns>
         [HookMethod("ICanExitVehicle")]
-        private object ICanExitVehicle(CharacterMotorSimple passenger) => Interface.Call("CanExitVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
+        private object ICanExitVehicle(VehiclePassenger passenger) => Interface.Call("CanExitVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
 
         /// <summary>
         /// Called when a player enters a vehicle
