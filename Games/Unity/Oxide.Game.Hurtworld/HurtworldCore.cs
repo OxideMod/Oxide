@@ -339,18 +339,6 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when the player has been initialized
-        /// </summary>
-        /// <param name="session"></param>
-        [HookMethod("OnPlayerInit")]
-        private void OnPlayerInit(PlayerSession session)
-        {
-            // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(session);
-            Interface.Call("OnUserInit", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
-        }
-
-        /// <summary>
         /// Called when the server receives input from a player
         /// </summary>
         /// <param name="player"></param>
