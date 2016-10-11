@@ -368,9 +368,8 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnSingleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
+            Interface.Call("OnSingleDoorUsed", door, FindSessionByNetPlayer((uLink.NetworkPlayer)player));
         }
-
 
         /// <summary>
         /// Called when a double door is used
@@ -383,7 +382,7 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnDoubleDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
+            Interface.Call("OnDoubleDoorUsed", door, FindSessionByNetPlayer((uLink.NetworkPlayer)player));
         }
 
         /// <summary>
@@ -397,7 +396,7 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnGarageDoorUsed", door, GameManager.Instance.GetSession((uLink.NetworkPlayer)player));
+            Interface.Call("OnGarageDoorUsed", door, FindSessionByNetPlayer((uLink.NetworkPlayer)player));
         }
 
         #endregion
@@ -405,28 +404,39 @@ namespace Oxide.Game.Hurtworld
         #region Vehicle Hooks
 
         /// <summary>
+        /// Called when a player tries to enter a vehicle
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="go"></param>
+        /// <returns></returns>
+        [HookMethod("ICanEnterVehicle")]
+        private object ICanEnterVehicle(PlayerSession session, GameObject go) => Interface.Call("CanExitVehicle", session, go.GetComponent<VehiclePassenger>());
+
+        /// <summary>
         /// Called when a player tries to exit a vehicle
         /// </summary>
-        /// <param name="passenger"></param>
+        /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("ICanExitVehicle")]
-        private object ICanExitVehicle(VehiclePassenger passenger) => Interface.Call("CanExitVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
+        private object ICanExitVehicle(VehiclePassenger vehicle) => Interface.Call("CanExitVehicle", FindSessionByNetPlayer(vehicle.networkView.owner), vehicle);
 
         /// <summary>
         /// Called when a player enters a vehicle
         /// </summary>
-        /// <param name="passenger"></param>
+        /// <param name="netPlayer"></param>
+        /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnEnterVehicle")]
-        private object IOnEnterVehicle(CharacterMotorSimple passenger) => Interface.Call("OnEnterVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
+        private object IOnEnterVehicle(uLink.NetworkPlayer netPlayer, VehiclePassenger vehicle) => Interface.Call("OnEnterVehicle", FindSessionByNetPlayer(netPlayer), vehicle);
 
         /// <summary>
         /// Called when a player exits a vehicle
         /// </summary>
-        /// <param name="passenger"></param>
+        /// <param name="netPlayer"></param>
+        /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnExitVehicle")]
-        private object IOnExitVehicle(CharacterMotorSimple passenger) => Interface.Call("OnExitVehicle", FindSessionByNetPlayer(passenger.networkView.owner), passenger);
+        private object IOnExitVehicle(uLink.NetworkPlayer netPlayer, VehiclePassenger vehicle) => Interface.Call("OnExitVehicle", FindSessionByNetPlayer(netPlayer), vehicle);
 
         #endregion
 
