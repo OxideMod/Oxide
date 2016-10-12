@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "SFp8GUHNbvW1XD5tRJ/46AKjHsazVW1fHAvT6hjvTDg=",
+            "MSILHash": "A3sg/l1v2TW17A8hOt4AAnLJCh/YScakcc94mwuFRLs=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -467,8 +467,8 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 2,
-            "ArgumentString": "",
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
             "HookTypeName": "Simple",
             "Name": "IGetTypeFromName [internal]",
             "HookName": "IGetTypeFromName",
@@ -480,10 +480,11 @@
               "Name": "GetTypeFromName",
               "ReturnType": "System.Type",
               "Parameters": [
-                "System.String"
+                "System.String",
+                "System.Boolean"
               ]
             },
-            "MSILHash": "6Dq3y3v6TTGtxR7aUP98lcOfaQfrSci7bJAw/pDySWM=",
+            "MSILHash": "ALgxPziGJLCHtSVmm3eQc+qx4cNGLTSBdrhPUOaoSdA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -902,7 +903,7 @@
                 "CodeHatch.Networking.Events.Entities.Objects.Gadgets.GadgetCollectEvent"
               ]
             },
-            "MSILHash": "LozVQDvSekZlYSnMB8H0EXdJ2ztUFFic50wub1/3mFY=",
+            "MSILHash": "vMo7NasVE85cjZbCNbFTdR5useTgKYntNnR2QaO3pMw=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
