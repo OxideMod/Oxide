@@ -135,7 +135,7 @@
           "Hook": {
             "InjectionIndex": 29,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
+            "ArgumentBehavior": 4,
             "ArgumentString": "a0.networkView.owner, this",
             "HookTypeName": "Simple",
             "Name": "IOnEnterVehicle [internal]",
