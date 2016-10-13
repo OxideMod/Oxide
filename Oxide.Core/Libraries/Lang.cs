@@ -273,11 +273,10 @@ namespace Oxide.Core.Libraries
             var files = Directory.GetFiles(Interface.Oxide.LangDirectory, "*.json");
             foreach (var file in files)
             {
-                var split = file.Split('.');
-                var language = split[1];
-                var plugin = split[0].Substring(Interface.Oxide.LangDirectory.Length + 1);
-                Directory.CreateDirectory(Path.Combine(Interface.Oxide.LangDirectory, language));
-                File.Move(file, Path.Combine(Interface.Oxide.LangDirectory, Path.Combine(language, $"{plugin}.json")));
+                var filename = file.Substring(Interface.Oxide.LangDirectory.Length + 1);
+                var split = filename.Split('.');
+                Directory.CreateDirectory(Path.Combine(Interface.Oxide.LangDirectory, split[1]));
+                File.Move(file, Path.Combine(Interface.Oxide.LangDirectory, Path.Combine(split[1], $"{split[0]}.json")));
             }
         }
     }
