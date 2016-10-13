@@ -72,8 +72,9 @@ namespace Oxide.Core.Libraries
                 changed = MergeMessages(existingMessages, messages);
                 messages = existingMessages;
             }
-            if (changed)
-                File.WriteAllText(Path.Combine(Interface.Oxide.LangDirectory, file), JsonConvert.SerializeObject(messages, Formatting.Indented));
+            if (!changed) return;
+            if (!Directory.Exists(Path.Combine(Interface.Oxide.LangDirectory, lang))) Directory.CreateDirectory(Path.Combine(Interface.Oxide.LangDirectory, lang));
+            File.WriteAllText(Path.Combine(Interface.Oxide.LangDirectory, file), JsonConvert.SerializeObject(messages, Formatting.Indented));
         }
 
         /// <summary>
