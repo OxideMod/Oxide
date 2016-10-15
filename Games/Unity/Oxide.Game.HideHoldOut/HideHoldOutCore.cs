@@ -248,7 +248,11 @@ namespace Oxide.Game.HideHoldOut
         private object IOnUserApprove(PlayerInfos player)
         {
             // Call out and see if we should reject
-            var canLogin = Interface.Call("CanClientLogin", player) ?? Interface.Call("CanUserLogin", player.Nickname, player.account_id, player.NetPlayer.ipAddress);
+            var loginSpecific = Interface.Call("CanClientLogin", player);
+            var loginCovalence = Interface.Call("CanUserLogin", player.Nickname, player.account_id, player.NetPlayer.ipAddress);
+            var canLogin = loginSpecific ?? loginCovalence;
+
+            // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
@@ -257,7 +261,10 @@ namespace Oxide.Game.HideHoldOut
                 return true;
             }
 
-            return Interface.Call("OnUserApprove", player) ?? Interface.Call("OnUserApproved", player.Nickname, player.account_id, player.NetPlayer.ipAddress);
+            // Call the approval hooks
+            var approvedSpecific = Interface.Call("OnUserApprove", player);
+            var approvedCovalence = Interface.Call("OnUserApproved", player.Nickname, player.account_id, player.NetPlayer.ipAddress);
+            return approvedSpecific ?? approvedCovalence;
         }
 
         /// <summary>
@@ -276,7 +283,12 @@ namespace Oxide.Game.HideHoldOut
             var iplayer = Covalence.PlayerManager.GetPlayer(player.account_id);
 
             // Is it a chat command?
-            if (!str.Equals("/")) return Interface.Call("OnPlayerChat", player, message) ?? Interface.Call("OnUserChat", iplayer, message);
+            if (!str.Equals("/"))
+            {
+                var chatSpecific = Interface.Call("OnPlayerChat", player, message);
+                var chatCovalence = Interface.Call("OnUserChat", iplayer, message);
+                return chatSpecific ?? chatCovalence;
+            }
 
             // Is this a covalence command?
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;

@@ -238,7 +238,11 @@ namespace Oxide.Game.Hurtworld
             var ip = session.Player.ipAddress;
 
             // Call out and see if we should reject
-            var canLogin = Interface.Call("CanClientLogin", session) ?? Interface.Call("CanUserLogin", session.Name, id, ip);
+            var loginSpecific = Interface.Call("CanClientLogin", session);
+            var loginCovalence = Interface.Call("CanUserLogin", session.Name, id, ip);
+            var canLogin = loginSpecific ?? loginCovalence;
+
+            // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
@@ -246,8 +250,10 @@ namespace Oxide.Game.Hurtworld
                 return true;
             }
 
-            // Call the game hook
-            return Interface.Call("OnUserApprove", session) ?? Interface.Call("OnUserApproved", session.Name, id, ip);
+            // Call the approval hooks
+            var approvedSpecific = Interface.Call("OnUserApprove", session);
+            var approvedCovalence = Interface.Call("OnUserApproved", session.Name, id, ip);
+            return approvedSpecific ?? approvedCovalence;
         }
 
         /// <summary>
@@ -266,7 +272,11 @@ namespace Oxide.Game.Hurtworld
 
             // Is it a chat command?
             if (!str.Equals("/"))
-                return Interface.Call("OnPlayerChat", session, message) ?? Interface.Call("OnUserChat", iplayer, message);
+            {
+                var chatSpecific = Interface.Call("OnPlayerChat", session, message);
+                var chatCovalence = Interface.Call("OnUserChat", iplayer, message);
+                return chatSpecific ?? chatCovalence;
+            }
 
             // Is this a covalence command?
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
