@@ -252,7 +252,11 @@ namespace Oxide.Game.ReignOfKings
             var ip = player.Connection.IpAddress;
 
             // Call out and see if we should reject
-            var canLogin = Interface.Call("CanClientLogin", player) ?? Interface.Call("CanUserLogin", player.Name, id, ip);
+            var loginSpecific = Interface.Call("CanClientLogin", player);
+            var loginCovalence = Interface.Call("CanUserLogin", player.Name, id, ip);
+            var canLogin = loginSpecific ?? loginCovalence;
+
+            // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
@@ -261,7 +265,10 @@ namespace Oxide.Game.ReignOfKings
                 return ConnectionError.NoError;
             }
 
-            return Interface.Call("OnUserApprove", player) ?? Interface.Call("OnUserApproved", player.Name, id, ip);
+            // Call the approval hooks
+            var approvedSpecific = Interface.Call("OnUserApprove", player);
+            var approvedCovalence = Interface.Call("OnUserApproved", player.Name, id, ip);
+            return approvedSpecific ?? approvedCovalence;
         }
 
         /// <summary>

@@ -271,7 +271,11 @@ namespace Oxide.Game.Rust
             var ip = Regex.Replace(connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
 
             // Call out and see if we should reject
-            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.username, id, ip);
+            var loginSpecific = Interface.Call("CanClientLogin", connection);
+            var loginCovalence = Interface.Call("CanUserLogin", connection.username, id, ip);
+            var canLogin = loginSpecific ?? loginCovalence;
+
+            // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
@@ -279,7 +283,10 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", connection.username, id, ip);
+            // Call the approval hooks
+            var approvedSpecific = Interface.Call("OnUserApprove", connection);
+            var approvedCovalence = Interface.Call("OnUserApproved", connection.username, id, ip);
+            return approvedSpecific ?? approvedCovalence;
         }
 
         /// <summary>

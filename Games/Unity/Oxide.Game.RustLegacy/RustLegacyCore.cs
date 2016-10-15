@@ -197,7 +197,11 @@ namespace Oxide.Game.RustLegacy
             var ip = approval.ipAddress;
 
             // Call out and see if we should reject
-            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", connection.UserName, id, ip);
+            var loginSpecific = Interface.Call("CanClientLogin", connection);
+            var loginCovalence = Interface.Call("CanUserLogin", connection.UserName, id, ip);
+            var canLogin = loginSpecific ?? loginCovalence;
+
+            // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
@@ -206,7 +210,10 @@ namespace Oxide.Game.RustLegacy
                 return true;
             }
 
-            return Interface.Call("OnUserApprove", connection, approval, acceptor) ?? Interface.Call("OnUserApproved", connection.UserName, id, ip);
+            // Call the approval hooks
+            var approvedSpecific = Interface.Call("OnUserApprove", connection, approval, acceptor);
+            var approvedCovalence = Interface.Call("OnUserApproved", connection.UserName, id, ip);
+            return approvedSpecific ?? approvedCovalence;
         }
 
         /// <summary>
@@ -728,7 +735,8 @@ namespace Oxide.Game.RustLegacy
             var iplayer = arg.argUser != null ? covalence.PlayerManager.GetConnectedPlayer(arg.argUser.userID.ToString()) : null;
 
             // Is it a console command?
-            if (cmdnamefull != "chat.say") {
+            if (cmdnamefull != "chat.say")
+            {
                 if (covalence.CommandSystem.HandleConsoleMessage(iplayer, $"{cmdnamefull} {str}") || cmdlib.HandleConsoleCommand(arg, wantreply)) return true;
                 return null;
             }
@@ -740,23 +748,22 @@ namespace Oxide.Game.RustLegacy
             {
                 var chatSpecific = Interface.Call("OnPlayerChat", arg.argUser, str);
                 var chatCovalence = Interface.Call("OnUserChat", iplayer, str);
-                if (chatSpecific != null || chatCovalence != null) return true;
-                return null;
+                return chatSpecific ?? chatCovalence;
             }
 
             // Get the full command
-            var message = str.Substring(1);
+            var command = str.Substring(1);
 
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(message, out cmd, out args);
+            ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return true;
 
             // Is the command blocked?
-            var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
-            var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
-            if (blockedSpecific != null || blockedCovalence != null) return true;
+            var commandSpecific = Interface.Call("OnPlayerCommand", arg);
+            var commandCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
+            if (commandSpecific != null || commandCovalence != null) return true;
 
             // Is this a Covalence command?
             if (covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;

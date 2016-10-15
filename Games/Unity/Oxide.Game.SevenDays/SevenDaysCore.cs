@@ -134,7 +134,9 @@ namespace Oxide.Game.SevenDays
         {
             if (client == null || string.IsNullOrEmpty(message)) return null;
 
-            return Interface.Call("OnPlayerChat", client, message) ?? Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(client.playerId), message);
+            var chatSpecific = Interface.Call("OnPlayerChat", client, message);
+            var chatCovalence = Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(client.playerId), message);
+            return chatSpecific ?? chatCovalence;
         }
 
         /// <summary>
