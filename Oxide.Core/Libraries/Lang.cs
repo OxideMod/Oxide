@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -296,15 +297,20 @@ namespace Oxide.Core.Libraries
 
             foreach (var file in files)
             {
-                var oldName = file.Substring(Interface.Oxide.LangDirectory.Length + 1);
-                var split = oldName.Split('.');
-                var newName = $"{split[0]}.json";
-                var path = Path.Combine(Interface.Oxide.LangDirectory, split[1]);
+                var split = file.Substring(Interface.Oxide.LangDirectory.Length + 1).Split('.');
+                var newPath = Path.Combine(Interface.Oxide.LangDirectory, split[1]);
+                var newFile = Path.Combine(newPath, $"{split[0]}.json");
 
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-
-                if (!File.Exists(Path.Combine(path, newName))) File.Move(file, Path.Combine(path, newName));
-                else File.Delete(file);
+                try
+                {
+                    Directory.CreateDirectory(newPath);
+                    if (!File.Exists(newFile)) File.Move(file, newFile);
+                    else File.Delete(file);
+                }
+                catch (Exception ex)
+                {
+                    Interface.Oxide.LogException("Migrating language files to the new structure failed", ex);
+                }
             }
         }
     }
