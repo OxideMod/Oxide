@@ -311,11 +311,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Operator Overloads
 
         /// <summary>
-        /// Returns if player's ID is equal to another player's ID
+        /// Returns if player's unique ID is equal to another player's unique ID
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IPlayer other) => Id == other.Id;
+        public bool Equals(IPlayer other) => Id == other?.Id;
 
         /// <summary>
         /// Returns if player's object is equal to another player's object
@@ -325,21 +325,16 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public override bool Equals(object obj) => obj is IPlayer && Id == ((IPlayer)obj).Id;
 
         /// <summary>
-        /// Gets the hash code of the player's ID
+        /// Gets the hash code of the player's unique ID
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() => Id.GetHashCode();
 
+        /// <summary>
+        /// Returns a human readable string representation of this IPlayer
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => $"Covalence.RustPlayer[{Id}, {Name}]";
-
-        public static bool operator ==(RustPlayer left, RustPlayer right)
-        {
-            if (ReferenceEquals(left, right)) return true;
-            if (ReferenceEquals(left, null) || ReferenceEquals(right, null)) return false;
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RustPlayer left, RustPlayer right) => !(left == right);
 
         #endregion
     }

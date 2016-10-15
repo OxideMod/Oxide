@@ -322,17 +322,30 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         #region Operator Overloads
 
         /// <summary>
-        /// Returns if player's ID is equal to another player's ID
+        /// Returns if player's unique ID is equal to another player's unique ID
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool Equals(IPlayer other) => Id == other.Id;
+        public bool Equals(IPlayer other) => Id == other?.Id;
 
         /// <summary>
-        /// Gets the hash code of the player's ID
+        /// Returns if player's object is equal to another player's object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) => obj is IPlayer && Id == ((IPlayer)obj).Id;
+
+        /// <summary>
+        /// Gets the hash code of the player's unique ID
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() => Id.GetHashCode();
+
+        /// <summary>
+        /// Returns a human readable string representation of this IPlayer
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => $"Covalence.SevenDaysPlayer[{Id}, {Name}]";
 
         #endregion
     }
