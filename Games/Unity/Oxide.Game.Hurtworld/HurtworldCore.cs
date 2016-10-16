@@ -83,7 +83,7 @@ namespace Oxide.Game.Hurtworld
         private bool loggingInitialized;
 
         // Track 'load' chat commands
-        private readonly Dictionary<string, PlayerSession> loadingPlugins = new Dictionary<string, PlayerSession>();
+        private readonly List<string> loadingPlugins = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
@@ -142,14 +142,24 @@ namespace Oxide.Game.Hurtworld
             //cmdlib.AddChatCommand("plugins", this, "ChatPlugins");
             cmdlib.AddChatCommand("oxide.load", this, "ChatLoad");
             cmdlib.AddChatCommand("load", this, "ChatLoad");
+            cmdlib.AddConsoleCommand("oxide.load", this, "ConsoleLoad");
+            cmdlib.AddConsoleCommand("load", this, "ConsoleLoad");
             cmdlib.AddChatCommand("oxide.unload", this, "ChatUnload");
             cmdlib.AddChatCommand("unload", this, "ChatUnload");
+            cmdlib.AddConsoleCommand("oxide.unload", this, "ConsoleUnload");
+            cmdlib.AddConsoleCommand("unload", this, "ConsoleUnload");
             cmdlib.AddChatCommand("oxide.reload", this, "ChatReload");
             cmdlib.AddChatCommand("reload", this, "ChatReload");
+            cmdlib.AddConsoleCommand("oxide.reload", this, "ConsoleReload");
+            cmdlib.AddConsoleCommand("reload", this, "ConsoleReload");
             cmdlib.AddChatCommand("oxide.version", this, "ChatChatVersion");
-            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddChatCommand("version", this, "ChatVersion");
+            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
+            cmdlib.AddChatCommand("oxide.lang", this, "ChatLang");
+            cmdlib.AddChatCommand("lang", this, "ChatLang");
+            cmdlib.AddConsoleCommand("oxide.lang", this, "ConsoleLang");
+            cmdlib.AddConsoleCommand("lang", this, "ConsoleLang");
 
             // Add permission commands
             cmdlib.AddChatCommand("oxide.group", this, "ChatGroup");
@@ -158,8 +168,12 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddChatCommand("usergroup", this, "ChatUserGroup");
             cmdlib.AddChatCommand("oxide.grant", this, "ChatGrant");
             cmdlib.AddChatCommand("grant", this, "ChatGrant");
+            cmdlib.AddConsoleCommand("oxide.grant", this, "ConsoleGrant");
+            cmdlib.AddConsoleCommand("grant", this, "ConsoleGrant");
             cmdlib.AddChatCommand("oxide.revoke", this, "ChatRevoke");
             cmdlib.AddChatCommand("revoke", this, "ChatRevoke");
+            cmdlib.AddConsoleCommand("oxide.revoke", this, "ConsoleRevoke");
+            cmdlib.AddConsoleCommand("revoke", this, "ConsoleRevoke");
             cmdlib.AddChatCommand("oxide.show", this, "ChatShow");
             cmdlib.AddChatCommand("show", this, "ChatShow");
 
@@ -193,7 +207,7 @@ namespace Oxide.Game.Hurtworld
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
             if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
 
-            if (!loadingPlugins.ContainsKey(plugin.Name)) return;
+            if (!loadingPlugins.Contains(plugin.Name)) return;
             Reply($"Loaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
             loadingPlugins.Remove(plugin.Name);
         }
@@ -463,8 +477,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatPlugins")]
         private void ChatPlugins(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
 
             var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
@@ -499,7 +512,7 @@ namespace Oxide.Game.Hurtworld
         #region Load Command
 
         /// <summary>
-        /// Called when the "load" command has been executed
+        /// Called when the "load" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -507,8 +520,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatLoad")]
         private void ChatLoad(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 1)
             {
                 Reply(Lang("CommandUsageLoad", session.SteamId.ToString()), session);
@@ -523,9 +535,33 @@ namespace Oxide.Game.Hurtworld
 
             foreach (var name in args)
             {
-                if (string.IsNullOrEmpty(name) || !Interface.Oxide.LoadPlugin(name)) continue;
-                if (!loadingPlugins.ContainsKey(name)) loadingPlugins.Add(name, session);
+                if (!string.IsNullOrEmpty(name) || !Interface.Oxide.LoadPlugin(name)) continue;
+                if (!loadingPlugins.Contains(name)) loadingPlugins.Add(name);
             }
+        }
+
+        /// <summary>
+        /// Called when the "load" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleLoad")]
+        private void ConsoleLoad(string command, string[] args)
+        {
+            if (args.Length < 1)
+            {
+                Reply(Lang("CommandUsageLoad"));
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.LoadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+                if (!string.IsNullOrEmpty(name)) Interface.Oxide.LoadPlugin(name);
         }
 
         #endregion
@@ -533,7 +569,7 @@ namespace Oxide.Game.Hurtworld
         #region Reload Command
 
         /// <summary>
-        /// Called when the "reload" command has been executed
+        /// Called when the "reload" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -541,8 +577,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatReload")]
         private void ChatReload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 1)
             {
                 Reply(Lang("CommandUsageReload", session.SteamId.ToString()), session);
@@ -565,8 +600,44 @@ namespace Oxide.Game.Hurtworld
                     Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
                     continue;
                 }
+
                 Interface.Oxide.ReloadPlugin(name);
                 Reply(Lang("PluginReloaded", session.SteamId.ToString(), plugin.Title, plugin.Version, plugin.Author), session);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "reload" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleReload")]
+        private void ConsoleReload(string command, string[] args)
+        {
+            if (args.Length == 0)
+            {
+                Reply(Lang("CommandUsageReload"));
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.ReloadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+
+                var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    Reply(Lang("PluginNotLoaded", null, name));
+                    continue;
+                }
+
+                Interface.Oxide.ReloadPlugin(name);
             }
         }
 
@@ -583,8 +654,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatUnload")]
         private void ChatUnload(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 1)
             {
                 Reply(Lang("CommandUsageUnload", session.SteamId.ToString()), session);
@@ -607,8 +677,44 @@ namespace Oxide.Game.Hurtworld
                     Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
                     continue;
                 }
+
                 Interface.Oxide.UnloadPlugin(name);
                 Reply(Lang("PluginUnloaded", session.SteamId.ToString(), plugin.Title, plugin.Version, plugin.Author), session);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "unload" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleUnload")]
+        private void ConsoleUnload(string command, string[] args)
+        {
+            if (args.Length < 1)
+            {
+                Reply(Lang("CommandUsageUnload"));
+                return;
+            }
+
+            if (args[0].Equals("*"))
+            {
+                Interface.Oxide.UnloadAllPlugins();
+                return;
+            }
+
+            foreach (var name in args)
+            {
+                if (string.IsNullOrEmpty(name)) continue;
+
+                var plugin = pluginmanager.GetPlugin(name);
+                if (plugin == null)
+                {
+                    Reply(Lang("PluginNotLoaded", null, name));
+                    continue;
+                }
+
+                Interface.Oxide.UnloadPlugin(name);
             }
         }
 
@@ -634,6 +740,36 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
+        #region Lang Command
+
+        /// <summary>
+        /// Called when the "lang" chat command has been executed
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatLang")]
+        private void ChatLang(PlayerSession session, string command, string[] args)
+        {
+            var id = session.SteamId.ToString();
+            if (args != null && args.Length > 0) lang.SetLanguage(args[0], id);
+            Reply(Lang("PlayerLanguage", id, lang.GetLanguage(id), session));
+        }
+
+        /// <summary>
+        /// Called when the "lang" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleLang")]
+        private void ConsoleLang(string command, string[] args)
+        {
+            if (args.Length > 0) lang.SetServerLanguage(args[0]);
+            Reply(Lang("ServerLanguage", null, lang.GetServerLanguage()));
+        }
+
+        #endregion
+
         #region Group Command
 
         /// <summary>
@@ -645,8 +781,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatGroup")]
         private void ChatGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 2)
             {
                 Reply(Lang("CommandUsageGroup", session.SteamId.ToString()), session);
@@ -724,8 +859,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatUserGroup")]
         private void ChatUserGroup(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 3)
             {
                 Reply(Lang("CommandUsageUserGroup", session.SteamId.ToString()), session);
@@ -773,7 +907,7 @@ namespace Oxide.Game.Hurtworld
         #region Grant Command
 
         /// <summary>
-        /// Called when the "grant" command has been executed
+        /// Called when the "grant" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -781,8 +915,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatGrant")]
         private void ChatGrant(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 3)
             {
                 Reply(Lang("CommandUsageGrant", session.SteamId.ToString()), session);
@@ -829,12 +962,66 @@ namespace Oxide.Game.Hurtworld
             }
         }
 
+        /// <summary>
+        /// Called when the "grant" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleGrant")]
+        private void ConsoleGrant(string command, string[] args)
+        {
+            if (args.Length < 3)
+            {
+                Reply(Lang("CommandUsageGrant"));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
+
+            if (!permission.PermissionExists(perm))
+            {
+                Reply(Lang("PermissionNotFound", null, perm));
+                return;
+            }
+
+            if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(Lang("GroupNotFound", null, name));
+                    return;
+                }
+                permission.GrantGroupPermission(name, perm, null);
+                Reply(Lang("GroupPermissionGranted", null, name, perm));
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindSession(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(Lang("UserNotFound", null, name));
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.SteamId.ToString();
+                    name = target.Name;
+                    permission.UpdateNickname(userId, name);
+                }
+                permission.GrantUserPermission(userId, perm, null);
+                Reply(Lang("UserPermissionGranted", null, $"{name} ({userId})", perm));
+            }
+        }
+
         #endregion
 
         #region Revoke Command
 
         /// <summary>
-        /// Called when the "revoke" command has been executed
+        /// Called when the "revoke" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -842,8 +1029,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatRevoke")]
         private void ChatRevoke(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 3)
             {
                 Reply(Lang("CommandUsageRevoke", session.SteamId.ToString()), session);
@@ -890,6 +1076,60 @@ namespace Oxide.Game.Hurtworld
             }
         }
 
+        /// <summary>
+        /// Called when the "revoke" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleRevoke")]
+        private void ConsoleRevoke(string command, string[] args)
+        {
+            if (args.Length < 3)
+            {
+                Reply(Lang("CommandUsageRevoke"));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
+
+            if (!permission.PermissionExists(perm))
+            {
+                Reply(Lang("PermissionNotFound", null, perm));
+                return;
+            }
+
+            if (mode.Equals("group"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(Lang("GroupNotFound", null, name));
+                    return;
+                }
+                permission.RevokeGroupPermission(name, perm);
+                Reply(Lang("GroupPermissionRevoked", null, name, perm));
+            }
+            else if (mode.Equals("user"))
+            {
+                var target = FindSession(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(Lang("UserNotFound", null, name));
+                    return;
+                }
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.SteamId.ToString();
+                    name = target.Name;
+                    permission.UpdateNickname(userId, name);
+                }
+                permission.RevokeUserPermission(userId, perm);
+                Reply(Lang("UserPermissionRevoked", null, $"{name} ({userId})", perm));
+            }
+        }
+
         #endregion
 
         #region Show Command
@@ -903,8 +1143,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ChatShow")]
         private void ChatShow(PlayerSession session, string command, string[] args)
         {
-            if (!PermissionsLoaded(session)) return;
-            if (!IsAdmin(session)) return;
+            if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
             if (args.Length < 1)
             {
                 Reply(Lang("CommandUsageShow", session.SteamId.ToString()), session);
@@ -998,10 +1237,13 @@ namespace Oxide.Game.Hurtworld
         {
             if (arg == null || arg.Trim().Length == 0) return null;
 
-            // Is this a covalence command?
-            if (Covalence.CommandSystem.HandleConsoleMessage(Covalence.CommandSystem.consolePlayer, arg)) return true;
+            var command = $"{arg.Split(' ')[0]}";
+            var args = arg.Split(' ').Skip(1).ToArray();
 
-            return cmdlib.HandleConsoleCommand(arg);
+            // Is this a covalence command?
+            if (Covalence.CommandSystem.HandleConsoleMessage(Covalence.CommandSystem.consolePlayer, command)) return true;
+
+            return cmdlib.HandleConsoleCommand(command, args);
         }
 
         /// <summary>

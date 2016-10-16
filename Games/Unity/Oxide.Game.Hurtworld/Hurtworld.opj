@@ -55,8 +55,8 @@
           "Hook": {
             "InjectionIndex": 24,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "OnServerCommand",
             "HookName": "OnServerCommand",
