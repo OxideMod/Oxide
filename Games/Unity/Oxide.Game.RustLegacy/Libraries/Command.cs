@@ -38,6 +38,7 @@ namespace Oxide.Game.RustLegacy.Libraries
             {
                 Name = name;
             }
+
             public void AddCallback(Plugin plugin, string name)
             {
                 PluginCallbacks.Add(new PluginCallback(plugin, name));
@@ -49,8 +50,7 @@ namespace Oxide.Game.RustLegacy.Libraries
                 foreach (var callback in PluginCallbacks)
                 {
                     var callbackResult = callback.Plugin.CallHook(callback.Name, arg);
-                    if (callbackResult != null && !(bool)callbackResult)
-                        result = (bool)callbackResult;
+                    if (callbackResult != null && !(bool)callbackResult) result = (bool)callbackResult;
                 }
                 return result;
             }
@@ -62,11 +62,11 @@ namespace Oxide.Game.RustLegacy.Libraries
             public readonly Plugin Plugin;
             public readonly string CallbackName;
 
-            public ChatCommand(string name, Plugin plugin, string callbackName)
+            public ChatCommand(string name, Plugin plugin, string callback)
             {
                 Name = name;
                 Plugin = plugin;
-                CallbackName = callbackName;
+                CallbackName = callback;
             }
         }
 
@@ -183,14 +183,14 @@ namespace Oxide.Game.RustLegacy.Libraries
         /// <summary>
         /// Handles the specified chat command
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="name"></param>
+        /// <param name="netUser"></param>
+        /// <param name="command"></param>
         /// <param name="args"></param>
-        internal bool HandleChatCommand(NetUser sender, string name, string[] args)
+        internal bool HandleChatCommand(NetUser netUser, string command, string[] args)
         {
-            ChatCommand command;
-            if (!ChatCommands.TryGetValue(name.ToLowerInvariant(), out command)) return false;
-            command.Plugin.CallHook(command.CallbackName, sender, name, args);
+            ChatCommand cmd;
+            if (!ChatCommands.TryGetValue(command.ToLowerInvariant(), out cmd)) return false;
+            cmd.Plugin.CallHook(cmd.CallbackName, netUser, command, args);
 
             return true;
         }

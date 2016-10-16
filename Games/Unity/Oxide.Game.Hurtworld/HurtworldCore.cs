@@ -998,10 +998,13 @@ namespace Oxide.Game.Hurtworld
         {
             if (arg == null || arg.Trim().Length == 0) return null;
 
-            // Is this a covalence command?
-            if (Covalence.CommandSystem.HandleConsoleMessage(Covalence.CommandSystem.consolePlayer, arg)) return true;
+            var command = $"{arg.Split(' ')[0]}";
+            var args = arg.Split(' ').Skip(1).ToArray();
 
-            return cmdlib.HandleConsoleCommand(arg);
+            // Is this a covalence command?
+            if (Covalence.CommandSystem.HandleConsoleMessage(Covalence.CommandSystem.consolePlayer, command)) return true;
+
+            return cmdlib.HandleConsoleCommand(command, args);
         }
 
         /// <summary>
