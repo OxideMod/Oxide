@@ -153,9 +153,13 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddConsoleCommand("oxide.reload", this, "ConsoleReload");
             cmdlib.AddConsoleCommand("reload", this, "ConsoleReload");
             cmdlib.AddChatCommand("oxide.version", this, "ChatChatVersion");
-            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddChatCommand("version", this, "ChatVersion");
+            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
             cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
+            cmdlib.AddChatCommand("oxide.lang", this, "ChatLang");
+            cmdlib.AddChatCommand("lang", this, "ChatLang");
+            cmdlib.AddConsoleCommand("oxide.lang", this, "ConsoleLang");
+            cmdlib.AddConsoleCommand("lang", this, "ConsoleLang");
 
             // Add permission commands
             cmdlib.AddChatCommand("oxide.group", this, "ChatGroup");
@@ -733,6 +737,36 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         [HookMethod("ConsoleVersion")]
         private void ConsoleVersion() => ChatVersion(null);
+
+        #endregion
+
+        #region Lang Command
+
+        /// <summary>
+        /// Called when the "lang" chat command has been executed
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ChatLang")]
+        private void ChatLang(PlayerSession session, string command, string[] args)
+        {
+            var id = session.SteamId.ToString();
+            if (args != null && args.Length > 0) lang.SetLanguage(args[0], id);
+            Reply(Lang("PlayerLanguage", id, lang.GetLanguage(id), session));
+        }
+
+        /// <summary>
+        /// Called when the "lang" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleLang")]
+        private void ConsoleLang(string command, string[] args)
+        {
+            if (args.Length > 0) lang.SetServerLanguage(args[0]);
+            Reply(Lang("ServerLanguage", null, lang.GetServerLanguage()));
+        }
 
         #endregion
 
