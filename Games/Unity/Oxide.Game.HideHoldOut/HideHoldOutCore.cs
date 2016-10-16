@@ -280,7 +280,7 @@ namespace Oxide.Game.HideHoldOut
             var player = FindPlayerByNetPlayer(netPlayer);
 
             // Get covalence player
-            var iplayer = Covalence.PlayerManager.GetPlayer(player.account_id);
+            var iplayer = Covalence.PlayerManager.FindPlayer(player.account_id);
 
             // Is it a chat command?
             if (!str.Equals("/"))
@@ -321,8 +321,6 @@ namespace Oxide.Game.HideHoldOut
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(PlayerInfos player)
         {
-            Debug.Log($"{player.account_id}/{player.Nickname} joined");
-
             // Do permission stuff
             if (permission.IsLoaded)
             {
@@ -338,9 +336,11 @@ namespace Oxide.Game.HideHoldOut
                 if (player.isADMIN && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
             }
 
+            Debug.Log($"{player.account_id}/{player.Nickname} joined");
+
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(player.account_id));
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace Oxide.Game.HideHoldOut
             Debug.Log($"{player.account_id}/{player.Nickname} quit");
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.account_id), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(player.account_id), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
@@ -365,7 +365,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawn(PlayerInfos player)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawn", Covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayer(player.account_id));
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace Oxide.Game.HideHoldOut
         private void OnPlayerRespawned(PlayerInfos player)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawned", Covalence.PlayerManager.GetPlayer(player.account_id));
+            Interface.Call("OnUserRespawned", Covalence.PlayerManager.FindPlayer(player.account_id));
         }
 
         #endregion
@@ -1043,6 +1043,7 @@ namespace Oxide.Game.HideHoldOut
         {
             var server = NetworkController.NetManager_.ServManager;
             var player = server.GetPlayerInfos_nickname(nameOrIdOrIp);
+
             if (player == null)
             {
                 ulong id;
@@ -1055,20 +1056,6 @@ namespace Oxide.Game.HideHoldOut
             }
             return player;
         }
-
-        /// <summary>
-        /// Returns the PlayerInfos for the specified ID ulong
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public PlayerInfos FindPlayerById(ulong id) => FindPlayer(id.ToString());
-
-        /// <summary>
-        /// Returns the PlayerInfos for the specified ID string
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public PlayerInfos FindPlayerByIdString(string id) => FindPlayer(id);
 
         /// <summary>
         /// Returns the PlayerInfos for the specified uLink.NetworkPlayer

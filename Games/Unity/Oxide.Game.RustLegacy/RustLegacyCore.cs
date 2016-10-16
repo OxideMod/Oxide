@@ -240,7 +240,7 @@ namespace Oxide.Game.RustLegacy
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(netUser);
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserConnected", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()), "Unknown");
             covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
 
             // Delay removing player until OnPlayerDisconnect has fired in plugins
@@ -272,7 +272,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
             // Call covalence hook
-            Interface.Call("OnUserSpawned", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserSpawned", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>

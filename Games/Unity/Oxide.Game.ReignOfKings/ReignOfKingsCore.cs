@@ -280,7 +280,7 @@ namespace Oxide.Game.ReignOfKings
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
             // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(evt.PlayerId.ToString()), evt.Message);
+            return Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayer(evt.PlayerId.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace Oxide.Game.ReignOfKings
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.Id.ToString()));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(player.Id.ToString()));
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace Oxide.Game.ReignOfKings
             Interface.Call("OnPlayerDisconnected", player);
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.Id.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(player.Id.ToString()), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
@@ -345,7 +345,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", Covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayer(evt.Player.Id.ToString()));
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerRespawn(PlayerRespawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawn", Covalence.PlayerManager.GetPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayer(evt.Player.Id.ToString()));
         }
 
         #endregion
@@ -842,23 +842,23 @@ namespace Oxide.Game.ReignOfKings
         /// <summary>
         /// Called when a chat command was run
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="evt"></param>
         /// <returns></returns>
         [HookMethod("IOnChatCommand")]
-        private object IOnChatCommand(PlayerCommandEvent e)
+        private object IOnChatCommand(PlayerCommandEvent evt)
         {
-            if (e?.Player == null || e.Command == null) return null;
+            if (evt?.Player == null || evt.Command == null) return null;
 
-            var str = e.Command;
-            if (str.Length == 0) return null;
-            if (str[0] != '/') return null;
+            var message = evt.Command;
+            if (message.Length == 0) return null;
+            if (message[0] != '/') return null;
 
             // Is this a covalence command?
-            var iplayer = Covalence.PlayerManager.GetConnectedPlayer(e.PlayerId.ToString());
-            if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
+            var iplayer = Covalence.PlayerManager.GetConnectedPlayer(evt.PlayerId.ToString());
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
 
             // Get the command string
-            var command = str.Substring(1);
+            var command = message.Substring(1);
 
             // Parse it
             string cmd;
@@ -866,13 +866,10 @@ namespace Oxide.Game.ReignOfKings
             ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
-            Interface.Call("OnChatCommand", e.Player, cmd, args);
+            Interface.Call("OnChatCommand", evt.Player, cmd, args);
 
             // Handle it
-            if (!cmdlib.HandleChatCommand(e.Player, cmd, args)) return null;
-
-            // Handled
-            return true;
+            return cmdlib.HandleChatCommand(evt.Player, cmd, args) ? true : (object)null;
         }
 
         /// <summary>

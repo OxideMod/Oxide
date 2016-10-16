@@ -92,7 +92,8 @@ namespace Oxide.Game.Rust
         private bool isPlayerTakingDamage;
 
         // Commands that a plugin can't override
-        internal static IEnumerable<string> RestrictedCommands => new[] {
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
             "ownerid", "moderatorid"
         };
 
@@ -298,7 +299,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
             // Call covalence hook
-            var iplayer = Covalence.PlayerManager.GetPlayer(arg.connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayer(arg.connection.userid.ToString());
             return string.IsNullOrEmpty(arg.GetString(0)) ? null : Interface.Call("OnUserChat", iplayer, arg.GetString(0));
         }
 
@@ -330,7 +331,7 @@ namespace Oxide.Game.Rust
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(player.UserIDString));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -342,7 +343,7 @@ namespace Oxide.Game.Rust
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(player.UserIDString), reason);
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(player.UserIDString), reason);
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
@@ -357,7 +358,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerRespawn(BasePlayer player)
         {
             // Call covalence hook
-            return Interface.Call("OnUserRespawn", Covalence.PlayerManager.GetPlayer(player.UserIDString));
+            return Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -368,7 +369,7 @@ namespace Oxide.Game.Rust
         private void OnPlayerRespawned(BasePlayer player)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawned", Covalence.PlayerManager.GetPlayer(player.UserIDString));
+            Interface.Call("OnUserRespawned", Covalence.PlayerManager.FindPlayer(player.UserIDString));
         }
 
         /// <summary>
@@ -1117,7 +1118,7 @@ namespace Oxide.Game.Rust
             if (cmd == null) return null;
 
             // Get the covalence player
-            var iplayer = Covalence.PlayerManager.GetConnectedPlayer(arg.connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayer(arg.connection.userid.ToString());
             if (iplayer == null) return null;
 
             // Is the command blocked?
