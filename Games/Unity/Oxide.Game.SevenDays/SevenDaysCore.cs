@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -24,6 +25,12 @@ namespace Oxide.Game.SevenDays
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
+
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
 
         /// <summary>
         /// Initializes a new instance of the SevenDaysCore class

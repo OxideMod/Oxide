@@ -92,6 +92,12 @@ namespace Oxide.Game.HideHoldOut
         private static readonly FieldInfo ChatNetViewField = typeof(ChatManager).GetField("Chat_NetView", BindingFlags.NonPublic | BindingFlags.Instance);
         public static NetworkView ChatNetView = ChatNetViewField.GetValue(NetworkController.NetManager_.chatManager) as NetworkView;
 
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         /// <summary>
         /// Initializes a new instance of the HideHoldOutCore class
         /// </summary>

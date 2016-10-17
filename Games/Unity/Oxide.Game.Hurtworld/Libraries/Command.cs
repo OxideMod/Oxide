@@ -4,6 +4,7 @@ using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.Hurtworld.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries
 {
@@ -180,5 +181,41 @@ namespace Oxide.Game.Hurtworld.Libraries
                 pluginRemovedFromManager.Remove(sender);
             }
         }
+
+        /*/// <summary>
+        /// Checks if a command can be overridden
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private bool CanOverrideCommand(string command, string type)
+        {
+            var split = command.Split('.');
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
+            var fullname = $"{parent}.{name}";
+
+            HurtworldCommandSystem.RegisteredCommand cmd;
+            if (HurtworldCore.Covalence.CommandSystem.registeredCommands.TryGetValue(command, out cmd))
+                if (cmd.Source.IsCorePlugin)
+                    return false;
+
+            if (type == "chat")
+            {
+                ChatCommand chatCommand;
+                if (chatCommands.TryGetValue(command, out chatCommand))
+                    if (chatCommand.Plugin.IsCorePlugin)
+                        return false;
+            }
+            else if (type == "console")
+            {
+                ConsoleCommand consoleCommand;
+                if (consoleCommands.TryGetValue(parent == "global" ? name : fullname, out consoleCommand))
+                    if (consoleCommand.PluginCallbacks[0].Plugin.IsCorePlugin)
+                        return false;
+            }
+
+            return !HurtworldCore.RestrictedCommands.Contains(command) && !HurtworldCore.RestrictedCommands.Contains(fullname);
+        }*/
     }
 }

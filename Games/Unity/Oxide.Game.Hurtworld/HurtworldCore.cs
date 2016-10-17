@@ -85,6 +85,12 @@ namespace Oxide.Game.Hurtworld
         // Track 'load' chat commands
         private readonly List<string> loadingPlugins = new List<string>();
 
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
         /// </summary>

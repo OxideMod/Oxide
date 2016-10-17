@@ -272,7 +272,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.FindPlayer(client.userID.ToString()));
         }
 
         /// <summary>

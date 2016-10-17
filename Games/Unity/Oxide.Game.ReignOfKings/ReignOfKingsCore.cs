@@ -50,6 +50,12 @@ namespace Oxide.Game.ReignOfKings
 
         private static readonly FieldInfo FoldersField = typeof (FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class
         /// </summary>

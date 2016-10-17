@@ -104,5 +104,39 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player, message);
 
         #endregion
+
+        #region Command Overriding
+
+        /*/// <summary>
+        /// Checks if a command can be overridden
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        private bool CanOverrideCommand(string command)
+        {
+            var split = command.Split('.');
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
+            var fullname = $"{parent}.{name}";
+
+            RegisteredCommand cmd;
+            if (registeredCommands.TryGetValue(command, out cmd))
+                if (cmd.Source.IsCorePlugin)
+                    return false;
+
+            Command.ChatCommand chatCommand;
+            if (cmdlib.chatCommands.TryGetValue(command, out chatCommand))
+                if (chatCommand.Plugin.IsCorePlugin)
+                    return false;
+
+            Command.ConsoleCommand consoleCommand;
+            if (cmdlib.consoleCommands.TryGetValue(fullname, out consoleCommand))
+                if (consoleCommand.PluginCallbacks[0].Plugin.IsCorePlugin)
+                    return false;
+
+            return !HurtworldCore.RestrictedCommands.Contains(command) && !HurtworldCore.RestrictedCommands.Contains(fullname);
+        }*/
+
+        #endregion
     }
 }

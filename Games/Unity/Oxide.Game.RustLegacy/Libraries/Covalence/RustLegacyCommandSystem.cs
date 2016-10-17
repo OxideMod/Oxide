@@ -66,10 +66,14 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0];
             var fullname = $"{parent}.{name}";
 
+            // Check if the command can be overridden
+            //if (!CanOverrideCommand(command))
+            //    throw new CommandAlreadyExistsException(command);
 
             // Check if command already exists
             if (registeredCommands.ContainsKey(command) || Command.ChatCommands.ContainsKey(command) || Command.ConsoleCommands.ContainsKey(fullname))
                 throw new CommandAlreadyExistsException(command);
+
             // Register command
             registeredCommands.Add(command, callback);
         }
@@ -104,6 +108,40 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="message"></param>
         /// <returns></returns>
         public bool HandleConsoleMessage(IPlayer player, string message)=> commandHandler.HandleConsoleMessage(player ?? consolePlayer, message);
+
+        #endregion
+
+        #region Command Overriding
+
+        /*/// <summary>
+        /// Checks if a command can be overridden
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        private bool CanOverrideCommand(string command)
+        {
+            var split = command.Split('.');
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
+            var fullname = $"{parent}.{name}";
+
+            RegisteredCommand cmd;
+            if (registeredCommands.TryGetValue(command, out cmd))
+                if (cmd.Source.IsCorePlugin)
+                    return false;
+
+            Command.ChatCommand chatCommand;
+            if (cmdlib.chatCommands.TryGetValue(command, out chatCommand))
+                if (chatCommand.Plugin.IsCorePlugin)
+                    return false;
+
+            Command.ConsoleCommand consoleCommand;
+            if (cmdlib.consoleCommands.TryGetValue(fullname, out consoleCommand))
+                if (consoleCommand.PluginCallbacks[0].Plugin.IsCorePlugin)
+                    return false;
+
+            return !RustLegacyCore.RestrictedCommands.Contains(command) && !RustLegacyCore.RestrictedCommands.Contains(fullname);
+        }*/
 
         #endregion
     }
