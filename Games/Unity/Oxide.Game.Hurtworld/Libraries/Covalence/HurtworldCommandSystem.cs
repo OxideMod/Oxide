@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 
@@ -10,28 +12,30 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// </summary>
     public class HurtworldCommandSystem : ICommandSystem
     {
-        // The console player
-        public HurtworldConsolePlayer consolePlayer;
+        #region Initialization
 
-        // Chat command handler
-        private ChatCommandHandler commandHandler;
+        // The covalence provider
+        private readonly HurtworldCovalenceProvider hurtworldCovalence = HurtworldCovalenceProvider.Instance;
+
+        // The command library
+        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The console player
+        internal HurtworldConsolePlayer consolePlayer;
+
+        // Command handler
+        private readonly CommandHandler commandHandler;
 
         // All registered commands
-        private IDictionary<string, CommandCallback> registeredCommands;
-
-        // Default constructor
-        public HurtworldCommandSystem()
-        {
-            Initialize();
-        }
+        internal IDictionary<string, CommandCallback> registeredCommands;
 
         /// <summary>
-        /// Initializes the command system provider
+        /// Initializes the command system
         /// </summary>
-        private void Initialize()
+        public HurtworldCommandSystem()
         {
             registeredCommands = new Dictionary<string, CommandCallback>();
-            commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            commandHandler = new CommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
             consolePlayer = new HurtworldConsolePlayer();
         }
 
@@ -41,28 +45,47 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             return registeredCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
 
+        #endregion
+
+        #region Command Registration
+
         /// <summary>
         /// Registers the specified command
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="plugin"></param>
         /// <param name="callback"></param>
         public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
-            // Convert to lowercase
-            var commandName = command.ToLowerInvariant();
+            // Convert command to lowercase and remove whitespace
+            command = command.ToLowerInvariant().Trim();
 
-            // Check if it already exists
-            if (registeredCommands.ContainsKey(commandName))
-                throw new CommandAlreadyExistsException(commandName);
+            // Check if the command can be overridden
+            //if (!CanOverrideCommand(command))
+            //    throw new CommandAlreadyExistsException(command);
 
-            registeredCommands.Add(commandName, callback);
+            // Check if command already exists
+            if (registeredCommands.ContainsKey(command))
+                throw new CommandAlreadyExistsException(command);
+
+            // Register command
+            registeredCommands.Add(command, callback);
         }
+
+        #endregion
+
+        #region Command Unregistration
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="plugin"></param>
         public void UnregisterCommand(string command, Plugin plugin) => registeredCommands.Remove(command);
+
+        #endregion
+
+        #region Message Handling
 
         /// <summary>
         /// Handles a chat message
@@ -79,5 +102,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="message"></param>
         /// <returns></returns>
         public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player, message);
+
+        #endregion
     }
 }

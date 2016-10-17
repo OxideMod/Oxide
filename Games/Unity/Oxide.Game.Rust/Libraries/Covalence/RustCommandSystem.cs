@@ -16,8 +16,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustCommandSystem : ICommandSystem
     {
+        #region Initialization
+
         // The covalence provider
         private readonly RustCovalenceProvider rustCovalence = RustCovalenceProvider.Instance;
+
+        // The command library
+        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
 
         // The console player
         private readonly RustConsolePlayer consolePlayer;
@@ -25,8 +30,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         // A reference to Rust's internal command dictionary
         private IDictionary<string, ConsoleSystem.Command> rustCommands;
 
-        // Chat command handler
-        private readonly ChatCommandHandler chatCommandHandler;
+        // Command handler
+        private readonly CommandHandler commandHandler;
 
         // All registered commands
         internal IDictionary<string, RegisteredCommand> registeredCommands;
@@ -73,22 +78,25 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             }
         }
 
-        // Rust command library
-        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
-
-        // Default constructor
+        /// <summary>
+        /// Initializes the command system
+        /// </summary>
         public RustCommandSystem()
         {
             registeredCommands = new Dictionary<string, RegisteredCommand>();
-            chatCommandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            commandHandler = new CommandHandler(CommandCallback, registeredCommands.ContainsKey);
             consolePlayer = new RustConsolePlayer();
         }
 
-        private bool ChatCommandCallback(IPlayer caller, string cmd, string[] args)
+        private bool CommandCallback(IPlayer caller, string cmd, string[] args)
         {
             RegisteredCommand command;
             return registeredCommands.TryGetValue(cmd, out command) && command.Callback(caller, cmd, args);
         }
+
+        #endregion
+
+        #region Command Registration
 
         /// <summary>
         /// Registers the specified command
@@ -100,58 +108,56 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             if (rustCommands == null) rustCommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
 
-            // Convert to lowercase
-            var commandName = command.ToLowerInvariant().Trim();
+            // Convert command to lowercase and remove whitespace
+            command = command.ToLowerInvariant().Trim();
 
             // Setup console command name
-            var split = commandName.Split('.');
-            var parent = split.Length >= 2 ? split[0].Trim() : "global";
-            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
+            var split = command.Split('.');
+            var parent = split.Length >= 2 ? split[0] : "global";
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0];
             var fullname = $"{parent}.{name}";
 
-            if (parent == "global") commandName = name;
+            if (parent == "global") command = name;
 
             // Setup a new Covalence command
-            var newCommand = new RegisteredCommand(plugin, commandName, callback);
+            var newCommand = new RegisteredCommand(plugin, command, callback);
 
             // Check if the command can be overridden
-            if (!CanOverrideCommand(commandName))
-                throw new CommandAlreadyExistsException(commandName);
+            if (!CanOverrideCommand(command))
+                throw new CommandAlreadyExistsException(command);
 
-            // Check if it already exists in another Covalence plugin
+            // Check if command already exists in another Covalence plugin
             RegisteredCommand cmd;
-            if (registeredCommands.TryGetValue(commandName, out cmd))
+            if (registeredCommands.TryGetValue(command, out cmd))
             {
-                if (cmd.OriginalCallback != null)
-                    newCommand.OriginalCallback = cmd.OriginalCallback;
+                if (cmd.OriginalCallback != null) newCommand.OriginalCallback = cmd.OriginalCallback;
 
                 var previousPluginName = cmd.Source?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
-                var message = $"{newPluginName} has replaced the '{commandName}' command previously registered by {previousPluginName}";
+                var message = $"{newPluginName} has replaced the '{command}' command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
 
                 rustCommands.Remove(fullname);
                 ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
             }
 
-            // Check if it already exists in a Rust plugin as a chat command
+            // Check if command already exists in a Rust plugin as a chat command
             Command.ChatCommand chatCommand;
-            if (cmdlib.chatCommands.TryGetValue(commandName, out chatCommand))
+            if (cmdlib.chatCommands.TryGetValue(command, out chatCommand))
             {
                 var previousPluginName = chatCommand.Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
-                var message = $"{newPluginName} has replaced the '{commandName}' chat command previously registered by {previousPluginName}";
+                var message = $"{newPluginName} has replaced the '{command}' chat command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
 
-                cmdlib.chatCommands.Remove(commandName);
+                cmdlib.chatCommands.Remove(command);
             }
 
-            // Check if it already exists in a Rust plugin as a console command
+            // Check if command already exists in a Rust plugin as a console command
             Command.ConsoleCommand consoleCommand;
             if (cmdlib.consoleCommands.TryGetValue(fullname, out consoleCommand))
             {
-                if (consoleCommand.OriginalCallback != null)
-                    newCommand.OriginalCallback = consoleCommand.OriginalCallback;
+                if (consoleCommand.OriginalCallback != null) newCommand.OriginalCallback = consoleCommand.OriginalCallback;
 
                 var previousPluginName = consoleCommand.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
@@ -163,7 +169,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                 cmdlib.consoleCommands.Remove(consoleCommand.RustCommand.namefull);
             }
 
-            // Check if this is a vanilla rust command
+            // Check if command is a vanilla Rust command
             ConsoleSystem.Command rustCommand;
             if (rustCommands.TryGetValue(fullname, out rustCommand))
             {
@@ -181,7 +187,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             {
                 name = name,
                 parent = parent,
-                namefull = commandName,
+                namefull = command,
                 isCommand = true,
                 isUser = true,
                 isAdmin = true,
@@ -196,14 +202,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     {
                         if (arg.Player())
                         {
-                            var iplayer = rustCovalence.PlayerManager.GetPlayer(arg.connection.userid.ToString()) as RustPlayer;
+                            var iplayer = rustCovalence.PlayerManager.FindPlayer(arg.connection.userid.ToString()) as RustPlayer;
                             if (iplayer == null) return;
                             iplayer.LastCommand = CommandType.Console;
-                            callback(iplayer, commandName, ExtractArgs(arg));
+                            callback(iplayer, command, ExtractArgs(arg));
                             return;
                         }
                     }
-                    callback(consolePlayer, commandName, ExtractArgs(arg));
+                    callback(consolePlayer, command, ExtractArgs(arg));
                 }
             };
 
@@ -212,13 +218,18 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             ConsoleSystem.Index.GetAll().Add(newCommand.RustCommand);
 
             // Register the command as a chat command
-            registeredCommands[commandName] = newCommand;
+            registeredCommands[command] = newCommand;
         }
+
+        #endregion
+
+        #region Command Unregistration
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="plugin"></param>
         public void UnregisterCommand(string command, Plugin plugin)
         {
             // Initialize if needed
@@ -239,7 +250,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             // Remove the chat command
             registeredCommands.Remove(command);
 
-            // If this was originally a vanilla rust command then restore it, otherwise remove it
+            // If this was originally a vanilla Rust command then restore it, otherwise remove it
             if (cmd.OriginalCallback != null)
             {
                 rustCommands[fullname].Call = cmd.OriginalCallback;
@@ -251,27 +262,21 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             }
         }
 
+        #endregion
+
+        #region Message Handling
+
         /// <summary>
         /// Handles a chat message
         /// </summary>
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public bool HandleChatMessage(IPlayer player, string message) => chatCommandHandler.HandleChatMessage(player, message);
+        public bool HandleChatMessage(IPlayer player, string message) => commandHandler.HandleChatMessage(player, message);
 
-        /// <summary>
-        /// Extract the arguments from a ConsoleSystem.Arg object
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <returns></returns>
-        private static string[] ExtractArgs(ConsoleSystem.Arg arg)
-        {
-            if (arg == null) return new string[0];
-            var argsList = new List<string>();
-            var i = 0;
-            while (arg.HasArgs(++i)) argsList.Add(arg.GetString(i - 1));
-            return argsList.ToArray();
-        }
+        #endregion
+
+        #region Command Overriding
 
         /// <summary>
         /// Checks if a command can be overridden
@@ -302,5 +307,26 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
             return !RustCore.RestrictedCommands.Contains(command) && !RustCore.RestrictedCommands.Contains(fullname);
         }
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Extract the arguments from a ConsoleSystem.Arg object
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private static string[] ExtractArgs(ConsoleSystem.Arg arg)
+        {
+            if (arg == null) return new string[0];
+
+            var argsList = new List<string>();
+            var i = 0;
+            while (arg.HasArgs(++i)) argsList.Add(arg.GetString(i - 1));
+            return argsList.ToArray();
+        }
+
+        #endregion
     }
 }
