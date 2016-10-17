@@ -732,7 +732,7 @@ namespace Oxide.Game.RustLegacy
             var str = arg.GetString(0);
 
             // Get the covalence player
-            var iplayer = arg.argUser != null ? covalence.PlayerManager.GetConnectedPlayer(arg.argUser.userID.ToString()) : null;
+            var iplayer = arg.argUser != null ? covalence.PlayerManager.FindPlayer(arg.argUser.userID.ToString()) : null;
 
             // Is it a console command?
             if (cmdnamefull != "chat.say")

@@ -854,7 +854,7 @@ namespace Oxide.Game.ReignOfKings
             if (message[0] != '/') return null;
 
             // Is this a covalence command?
-            var iplayer = Covalence.PlayerManager.GetConnectedPlayer(evt.PlayerId.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayer(evt.PlayerId.ToString());
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
 
             // Get the command string
