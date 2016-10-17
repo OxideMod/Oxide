@@ -54,6 +54,13 @@ namespace Oxide.Game.RustLegacy
         // Last Metabolism hacker notification time
         float lastWarningAt;
 
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            "rcon.login",
+            "rcon.password"
+        };
+
         /// <summary>
         /// Initializes a new instance of the RustCore class
         /// </summary>
