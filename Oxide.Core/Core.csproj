@@ -77,7 +77,7 @@
     <Compile Include="Extensions\Extension.cs" />
     <Compile Include="Extensions\ExtensionManager.cs" />
     <Compile Include="Interface.cs" />
-    <Compile Include="Libraries\Covalence\ChatCommandHandler.cs" />
+    <Compile Include="Libraries\Covalence\CommandHandler.cs" />
     <Compile Include="Libraries\Covalence\Formatter.cs" />
     <Compile Include="Libraries\Covalence\Covalence.cs" />
     <Compile Include="Libraries\Covalence\Exceptions.cs" />

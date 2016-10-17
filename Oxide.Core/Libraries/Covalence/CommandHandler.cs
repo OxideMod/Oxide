@@ -7,7 +7,7 @@ namespace Oxide.Core.Libraries.Covalence
     /// <summary>
     /// Represents a generic chat command handler
     /// </summary>
-    public sealed class ChatCommandHandler
+    public sealed class CommandHandler
     {
         // The Covalence command callback
         private CommandCallback callback;
@@ -16,11 +16,11 @@ namespace Oxide.Core.Libraries.Covalence
         private Func<string, bool> commandFilter;
 
         /// <summary>
-        /// Initializes a new instance of the ChatCommandHandler class
+        /// Initializes a new instance of the commandHandler class
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="commandFilter"></param>
-        public ChatCommandHandler(CommandCallback callback, Func<string, bool> commandFilter)
+        public CommandHandler(CommandCallback callback, Func<string, bool> commandFilter)
         {
             this.callback = callback;
             this.commandFilter = commandFilter;
@@ -30,66 +30,62 @@ namespace Oxide.Core.Libraries.Covalence
         /// Handles a chat message from the specified player, returns true if handled
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="str"></param>
-        public bool HandleChatMessage(IPlayer player, string str)
+        /// <param name="message"></param>
+        public bool HandleChatMessage(IPlayer player, string message)
         {
             // Make sure the message is not empty
-            if (str.Length == 0) return false;
+            if (message.Length == 0) return false;
 
             // Is it a chat command?
-            if (str[0] != '/') return false;
+            if (message[0] != '/') return false;
 
             // Get the message
-            var message = str.Substring(1);
+            message = message.Substring(1);
 
-            // Parse it
-            string cmd;
+            // Parse the command
+            string command;
             string[] args;
-            ParseCommand(message, out cmd, out args);
+            ParseCommand(message, out command, out args);
 
             // Set command type for the player
             player.LastCommand = CommandType.Chat;
 
-            // Handle it
-            return cmd != null && HandleCommand(player, cmd, args);
+            // Handle the command
+            return command != null && HandleCommand(player, command, args);
         }
 
         /// <summary>
         /// Handle console input from the specified player, returns true if handled
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="str"></param>
-        public bool HandleConsoleMessage(IPlayer player, string str)
+        /// <param name="message"></param>
+        public bool HandleConsoleMessage(IPlayer player, string message)
         {
             // Handle global parent for console commands
-            if (str.StartsWith("global.")) str = str.Substring(7);
+            if (message.StartsWith("global.")) message = message.Substring(7);
 
-            // Parse it
-            string cmd;
+            // Parse the command
+            string command;
             string[] args;
-            ParseCommand(str, out cmd, out args);
+            ParseCommand(message, out command, out args);
 
             // Set command type for the player
             player.LastCommand = CommandType.Console;
 
-            // Handle it
-            return cmd != null && HandleCommand(player, cmd, args);
+            // Handle the command
+            return command != null && HandleCommand(player, command, args);
         }
 
         /// <summary>
         /// Handles a chat command
         /// </summary>
         /// <param name="player"></param>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="args"></param>
-        private bool HandleCommand(IPlayer player, string cmd, string[] args)
+        private bool HandleCommand(IPlayer player, string command, string[] args)
         {
-            // Check things
-            if (commandFilter != null && !commandFilter(cmd)) return false;
-            if (callback == null) return false;
-            
-            // Handle it
-            return callback(player, cmd, args);
+            // Handle the command
+            return (commandFilter == null || commandFilter(command)) && callback != null && callback(player, command, args);
         }
 
         /// <summary>
