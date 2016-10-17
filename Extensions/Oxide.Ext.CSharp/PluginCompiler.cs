@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+using Mono.Unix.Native;
 using ObjectStream;
 using ObjectStream.Data;
 
@@ -50,6 +51,7 @@ namespace Oxide.Plugins
                         Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler!");
                         return;
                     }
+                    Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRWXG | FilePermissions.S_IRWXO);
                     break;
             }
             BinaryPath = binaryPath;
