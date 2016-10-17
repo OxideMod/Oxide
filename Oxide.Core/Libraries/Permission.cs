@@ -18,7 +18,7 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Gets or sets the last seen nickname for this user
         /// </summary>
-        public string LastSeenNickname { get; set; } = string.Empty;
+        public string LastSeenNickname { get; set; } = "Unnamed";
 
         /// <summary>
         /// Gets or sets the individual permissions for this user
