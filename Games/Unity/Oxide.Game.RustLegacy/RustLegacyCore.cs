@@ -54,6 +54,13 @@ namespace Oxide.Game.RustLegacy
         // Last Metabolism hacker notification time
         float lastWarningAt;
 
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            "rcon.login",
+            "rcon.password"
+        };
+
         /// <summary>
         /// Initializes a new instance of the RustCore class
         /// </summary>
@@ -240,7 +247,7 @@ namespace Oxide.Game.RustLegacy
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(netUser);
-            Interface.Call("OnUserConnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserConnected", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -254,7 +261,7 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()), "Unknown");
             covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
 
             // Delay removing player until OnPlayerDisconnect has fired in plugins
@@ -272,7 +279,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.GetPlayer(client.netUser.userID.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.FindPlayer(client.userID.ToString()));
         }
 
         /// <summary>
@@ -288,7 +295,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
             // Call covalence hook
-            Interface.Call("OnUserSpawned", covalence.PlayerManager.GetPlayer(netUser.userID.ToString()));
+            Interface.Call("OnUserSpawned", covalence.PlayerManager.FindPlayer(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -732,7 +739,7 @@ namespace Oxide.Game.RustLegacy
             var str = arg.GetString(0);
 
             // Get the covalence player
-            var iplayer = arg.argUser != null ? covalence.PlayerManager.GetConnectedPlayer(arg.argUser.userID.ToString()) : null;
+            var iplayer = arg.argUser != null ? covalence.PlayerManager.FindPlayer(arg.argUser.userID.ToString()) : null;
 
             // Is it a console command?
             if (cmdnamefull != "chat.say")

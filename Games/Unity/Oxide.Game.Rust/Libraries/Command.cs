@@ -65,15 +65,9 @@ namespace Oxide.Game.Rust.Libraries
                 };
             }
 
-            public void AddCallback(Plugin plugin, string name)
-            {
-                PluginCallbacks.Add(new PluginCallback(plugin, name));
-            }
+            public void AddCallback(Plugin plugin, string name) => PluginCallbacks.Add(new PluginCallback(plugin, name));
 
-            public void AddCallback(Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
-            {
-                PluginCallbacks.Add(new PluginCallback(plugin, callback));
-            }
+            public void AddCallback(Plugin plugin, Func<ConsoleSystem.Arg, bool> callback) => PluginCallbacks.Add(new PluginCallback(plugin, callback));
 
             public void HandleCommand(ConsoleSystem.Arg arg)
             {
@@ -145,14 +139,14 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Adds a chat command
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="command"></param>
         /// <param name="plugin"></param>
         /// <param name="callback"></param>
-        public void AddChatCommand(string name, Plugin plugin, Action<BasePlayer, string, string[]> callback)
+        public void AddChatCommand(string command, Plugin plugin, Action<BasePlayer, string, string[]> callback)
         {
-            var commandName = name.ToLowerInvariant();
+            var commandName = command.ToLowerInvariant();
 
-            if (!CanOverrideCommand(name, "chat"))
+            if (!CanOverrideCommand(command, "chat"))
             {
                 var pluginName = plugin?.Name ?? "An unknown plugin";
                 Interface.Oxide.LogError("{0} tried to register command '{1}', this command already exists and cannot be overridden!", pluginName, commandName);
@@ -191,13 +185,11 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Adds a console command
         /// </summary>
+        /// <param name="command"></param>
         /// <param name="plugin"></param>
         /// <param name="callback"></param>
         [LibraryFunction("AddConsoleCommand")]
-        public void AddConsoleCommand(string name, Plugin plugin, string callback)
-        {
-            AddConsoleCommand(name, plugin, arg => plugin.CallHook(callback, arg) != null);
-        }
+        public void AddConsoleCommand(string command, Plugin plugin, string callback) => AddConsoleCommand(command, plugin, arg => plugin.CallHook(callback, arg) != null);
 
         /// <summary>
         /// Adds a console command with a delegate callback
@@ -207,7 +199,8 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="callback"></param>
         public void AddConsoleCommand(string command, Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
         {
-            if (rustcommands == null) rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
+            if (rustcommands == null)
+                rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
 
             // Hook the unload event
             if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
@@ -330,10 +323,10 @@ namespace Oxide.Game.Rust.Libraries
                 chatCommands.Remove(cmd.Name);
 
             // Unhook the event
-            Event.Callback<Plugin, PluginManager> event_callback;
-            if (pluginRemovedFromManager.TryGetValue(sender, out event_callback))
+            Event.Callback<Plugin, PluginManager> callback;
+            if (pluginRemovedFromManager.TryGetValue(sender, out callback))
             {
-                event_callback.Remove();
+                callback.Remove();
                 pluginRemovedFromManager.Remove(sender);
             }
         }

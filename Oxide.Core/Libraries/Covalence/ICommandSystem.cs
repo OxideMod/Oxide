@@ -10,11 +10,11 @@ namespace Oxide.Core.Libraries.Covalence
     /// <summary>
     /// Represents the callback of a chat or console command
     /// </summary>
-    /// <param name="cmd"></param>
+    /// <param name="command"></param>
     /// <param name="caller"></param>
     /// <param name="args"></param>
     /// <returns></returns>
-    public delegate bool CommandCallback(IPlayer caller, string cmd, string[] args);
+    public delegate bool CommandCallback(IPlayer caller, string command, string[] args);
 
     /// <summary>
     /// Represents a binding to a generic command system
@@ -24,15 +24,15 @@ namespace Oxide.Core.Libraries.Covalence
         /// <summary>
         /// Registers the specified command
         /// </summary>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="plugin"></param>
         /// <param name="callback"></param>
-        void RegisterCommand(string cmd, Plugin plugin, CommandCallback callback);
+        void RegisterCommand(string command, Plugin plugin, CommandCallback callback);
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
-        /// <param name="cmd"></param>
-        void UnregisterCommand(string cmd, Plugin plugin);
+        /// <param name="command"></param>
+        void UnregisterCommand(string command, Plugin plugin);
     }
 }

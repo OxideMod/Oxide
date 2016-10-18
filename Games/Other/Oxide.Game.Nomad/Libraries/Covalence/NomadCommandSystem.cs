@@ -16,8 +16,8 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             Initialize();
         }
 
-        // Chat command handler
-        private ChatCommandHandler commandHandler;
+        // Command handler
+        private CommandHandler commandHandler;
 
         // All registered commands
         private IDictionary<string, CommandCallback> registeredCommands;
@@ -28,7 +28,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         private void Initialize()
         {
             registeredCommands = new Dictionary<string, CommandCallback>();
-            commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            commandHandler = new CommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
         }
 
         private bool ChatCommandCallback(IPlayer caller, string command, string[] args)

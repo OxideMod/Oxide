@@ -206,7 +206,7 @@ namespace Oxide.Game.TheForest
             Debug.Log($"[Chat] {name}: {evt.Message}");
 
             // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(id.ToString()), evt.Message);
+            return Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayer(id.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Oxide.Game.TheForest
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(entity);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(id));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(id));
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Oxide.Game.TheForest
             Interface.Call("OnPlayerDisconnected", entity);
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(id.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(id.ToString()), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(entity);
         }
 
@@ -267,7 +267,7 @@ namespace Oxide.Game.TheForest
         private void OnPlayerSpawn(BoltEntity entity)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", Covalence.PlayerManager.GetPlayer(entity.source.RemoteEndPoint.SteamId.Id.ToString()));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayer(entity.source.RemoteEndPoint.SteamId.Id.ToString()));
         }
 
         #endregion

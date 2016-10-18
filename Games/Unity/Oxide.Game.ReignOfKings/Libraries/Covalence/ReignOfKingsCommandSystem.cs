@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using CodeHatch.Engine.Core.Commands;
 
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 
@@ -12,25 +14,31 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
     /// </summary>
     public class ReignOfKingsCommandSystem : ICommandSystem
     {
-        // Default constructor
-        public ReignOfKingsCommandSystem()
-        {
-            Initialize();
-        }
+        #region Initialization
 
-        // Chat command handler
-        private ChatCommandHandler commandHandler;
+        // The covalence provider
+        private readonly ReignOfKingsCovalenceProvider reignOfKingsCovalence = ReignOfKingsCovalenceProvider.Instance;
+
+        // The command library
+        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The console player
+        //private readonly ReignOfKingsConsolePlayer consolePlayer;
+
+        // Command handler
+        private readonly CommandHandler commandHandler;
 
         // All registered commands
-        private IDictionary<string, CommandCallback> registeredCommands;
+        internal IDictionary<string, CommandCallback> registeredCommands;
 
         /// <summary>
-        /// Initializes the command system provider
+        /// Initializes the command system
         /// </summary>
-        private void Initialize()
+        public ReignOfKingsCommandSystem()
         {
             registeredCommands = new Dictionary<string, CommandCallback>();
-            commandHandler = new ChatCommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            commandHandler = new CommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            //consolePlayer = new ReignOfKingsConsolePlayer();
         }
 
         private bool ChatCommandCallback(IPlayer caller, string command, string[] args)
@@ -39,30 +47,47 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             return registeredCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
 
+        #endregion
+
+        #region Command Registration
+
         /// <summary>
         /// Registers the specified command
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="plugin"></param>
         /// <param name="callback"></param>
         public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
-            // No console command support so no need to register the command as console command
-            // Register the command as a chat command
-            // Convert to lowercase
-            var commandName = command.ToLowerInvariant();
+            // Convert command to lowercase and remove whitespace
+            command = command.ToLowerInvariant().Trim();
 
-            // Check if it already exists
-            if (CommandManager.RegisteredCommands.ContainsKey(commandName) || registeredCommands.ContainsKey(commandName))
-                throw new CommandAlreadyExistsException(commandName);
+            // Check if the command can be overridden
+            //if (!CanOverrideCommand(command))
+            //    throw new CommandAlreadyExistsException(command);
 
-            registeredCommands.Add(commandName, callback);
+            // Check if command already exists
+            if (CommandManager.RegisteredCommands.ContainsKey(command) || registeredCommands.ContainsKey(command))
+                throw new CommandAlreadyExistsException(command);
+
+            // Register command
+            registeredCommands.Add(command, callback);
         }
+
+        #endregion
+
+        #region Command Unregistration
 
         /// <summary>
         /// Unregisters the specified command
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="plugin"></param>
         public void UnregisterCommand(string command, Plugin plugin) => CommandManager.RegisteredCommands.Remove(command);
+
+        #endregion
+
+        #region Message Handling
 
         /// <summary>
         /// Handles a chat message
@@ -71,5 +96,49 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="message"></param>
         /// <returns></returns>
         public bool HandleChatMessage(IPlayer player, string message) => commandHandler.HandleChatMessage(player, message);
+
+        /*/// <summary>
+        /// Handles a console message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player ?? consolePlayer, message);*/
+
+        #endregion
+
+        #region Command Overriding
+
+        /*/// <summary>
+        /// Checks if a command can be overridden
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        private bool CanOverrideCommand(string command)
+        {
+            var split = command.Split('.');
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
+            var fullname = $"{parent}.{name}";
+
+            RegisteredCommand cmd;
+            if (registeredCommands.TryGetValue(command, out cmd))
+                if (cmd.Source.IsCorePlugin)
+                    return false;
+
+            Command.ChatCommand chatCommand;
+            if (cmdlib.chatCommands.TryGetValue(command, out chatCommand))
+                if (chatCommand.Plugin.IsCorePlugin)
+                    return false;
+
+            Command.ConsoleCommand consoleCommand;
+            if (cmdlib.consoleCommands.TryGetValue(fullname, out consoleCommand))
+                if (consoleCommand.PluginCallbacks[0].Plugin.IsCorePlugin)
+                    return false;
+
+            return !ReignOfKingsCore.RestrictedCommands.Contains(command) && !ReignOfKingsCore.RestrictedCommands.Contains(fullname);
+        }*/
+
+        #endregion
     }
 }

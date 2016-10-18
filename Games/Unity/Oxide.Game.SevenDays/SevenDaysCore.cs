@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -24,6 +25,12 @@ namespace Oxide.Game.SevenDays
         // Track when the server has been initialized
         private bool serverInitialized;
         private bool loggingInitialized;
+
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
 
         /// <summary>
         /// Initializes a new instance of the SevenDaysCore class
@@ -123,7 +130,7 @@ namespace Oxide.Game.SevenDays
         #endregion
 
         #region Player Hooks
-
+        
         /// <summary>
         /// Called when the player sends a message
         /// </summary>
@@ -135,7 +142,7 @@ namespace Oxide.Game.SevenDays
             if (client == null || string.IsNullOrEmpty(message)) return null;
 
             var chatSpecific = Interface.Call("OnPlayerChat", client, message);
-            var chatCovalence = Interface.Call("OnUserChat", Covalence.PlayerManager.GetPlayer(client.playerId), message);
+            var chatCovalence = Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayer(client.playerId), message);
             return chatSpecific ?? chatCovalence;
         }
 
@@ -158,7 +165,7 @@ namespace Oxide.Game.SevenDays
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(client);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(client.playerId));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(client.playerId));
         }
 
         /// <summary>
@@ -169,7 +176,7 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerDisconnected(ClientInfo client)
         {
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(client.playerId), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(client.playerId), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(client);
         }
 
@@ -181,7 +188,7 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerSpawn(ClientInfo client)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", Covalence.PlayerManager.GetPlayer(client.playerId));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayer(client.playerId));
         }
 
         /// <summary>

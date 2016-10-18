@@ -78,7 +78,7 @@ namespace Oxide.Plugins
         }
 
         [HookMethod("OnPlayerConnected")]
-        private void base_OnPlayerInit(NetUser player) => AddOnlinePlayer(player);
+        private void base_OnPlayerInit(NetUser netUser) => AddOnlinePlayer(netUser);
 
         [HookMethod("OnPlayerDisconnected")]
         private void base_OnPlayerDisconnected(uLink.NetworkPlayer player)

@@ -85,6 +85,12 @@ namespace Oxide.Game.Hurtworld
         // Track 'load' chat commands
         private readonly List<string> loadingPlugins = new List<string>();
 
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
         /// </summary>
@@ -140,6 +146,8 @@ namespace Oxide.Game.Hurtworld
             // Add general commands
             //cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
             //cmdlib.AddChatCommand("plugins", this, "ChatPlugins");
+            cmdlib.AddConsoleCommand("oxide.plugins", this, "ConsolePlugins");
+            cmdlib.AddConsoleCommand("plugins", this, "ConsolePlugins");
             cmdlib.AddChatCommand("oxide.load", this, "ChatLoad");
             cmdlib.AddChatCommand("load", this, "ChatLoad");
             cmdlib.AddConsoleCommand("oxide.load", this, "ConsoleLoad");
@@ -164,8 +172,12 @@ namespace Oxide.Game.Hurtworld
             // Add permission commands
             cmdlib.AddChatCommand("oxide.group", this, "ChatGroup");
             cmdlib.AddChatCommand("group", this, "ChatGroup");
+            cmdlib.AddConsoleCommand("oxide.group", this, "ConsoleGroup");
+            cmdlib.AddConsoleCommand("group", this, "ConsoleGroup");
             cmdlib.AddChatCommand("oxide.usergroup", this, "ChatUserGroup");
             cmdlib.AddChatCommand("usergroup", this, "ChatUserGroup");
+            cmdlib.AddConsoleCommand("oxide.usergroup", this, "ConsoleUserGroup");
+            cmdlib.AddConsoleCommand("usergroup", this, "ConsoleUserGroup");
             cmdlib.AddChatCommand("oxide.grant", this, "ChatGrant");
             cmdlib.AddChatCommand("grant", this, "ChatGrant");
             cmdlib.AddConsoleCommand("oxide.grant", this, "ConsoleGrant");
@@ -176,6 +188,8 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddConsoleCommand("revoke", this, "ConsoleRevoke");
             cmdlib.AddChatCommand("oxide.show", this, "ChatShow");
             cmdlib.AddChatCommand("show", this, "ChatShow");
+            cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
+            cmdlib.AddConsoleCommand("show", this, "ConsoleShow");
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -282,7 +296,7 @@ namespace Oxide.Game.Hurtworld
             var str = message.Substring(0, 1);
 
             // Get covalence player
-            var iplayer = Covalence.PlayerManager.GetPlayer(session.SteamId.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayer(session.SteamId.ToString());
 
             // Is it a chat command?
             if (!str.Equals("/"))
@@ -347,7 +361,7 @@ namespace Oxide.Game.Hurtworld
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(session);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(session.SteamId.ToString()));
         }
 
         /// <summary>
@@ -358,7 +372,7 @@ namespace Oxide.Game.Hurtworld
         private void OnPlayerDisconnected(PlayerSession session)
         {
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.GetPlayer(session.SteamId.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(session.SteamId.ToString()), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(session);
         }
 
@@ -505,6 +519,42 @@ namespace Oxide.Game.Hurtworld
             foreach (var pluginName in unloadedPluginErrors.Keys)
                 output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
             Reply(output, session);
+        }
+
+        /// <summary>
+        /// Called when the "plugins" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsolePlugins")]
+        private void ConsolePlugins(string command, string[] args)
+        {
+            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
+            var unloadedPluginErrors = new Dictionary<string, string>();
+            foreach (var loader in Interface.Oxide.GetPluginLoaders())
+            {
+                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
+                {
+                    string msg;
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                }
+            }
+
+            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
+            if (totalPluginCount < 1)
+            {
+                Reply(Lang("NoPluginsFound"));
+                return;
+            }
+
+            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
+            var number = 1;
+            foreach (var plugin in loadedPlugins)
+                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
+            foreach (var pluginName in unloadedPluginErrors.Keys)
+                output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
+            Reply(output);
         }
 
         #endregion
@@ -736,7 +786,7 @@ namespace Oxide.Game.Hurtworld
         /// Called when the "version" console command has been executed
         /// </summary>
         [HookMethod("ConsoleVersion")]
-        private void ConsoleVersion() => ChatVersion(null);
+        private void ConsoleVersion(string command, string[] args) => ChatVersion(null);
 
         #endregion
 
@@ -773,7 +823,7 @@ namespace Oxide.Game.Hurtworld
         #region Group Command
 
         /// <summary>
-        /// Called when the "group" command has been executed
+        /// Called when the "group" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -846,12 +896,84 @@ namespace Oxide.Game.Hurtworld
             }
         }
 
+        /// <summary>
+        /// Called when the "group" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleGroup")]
+        private void ConsoleGroup(string command, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                Reply(Lang("CommandUsageGroup"));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var title = args.Length > 2 ? args[2] : string.Empty;
+            int rank;
+            if (args.Length < 4 || !int.TryParse(args[3], out rank))
+                rank = 0;
+
+            if (mode.Equals("add"))
+            {
+                if (permission.GroupExists(name))
+                {
+                    Reply(Lang("GroupAlreadyExists", null, name));
+                    return;
+                }
+                permission.CreateGroup(name, title, rank);
+                Reply(Lang("GroupCreated", null, name));
+            }
+            else if (mode.Equals("remove"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(Lang("GroupNotFound", null, name));
+                    return;
+                }
+                permission.RemoveGroup(name);
+                Reply(Lang("GroupDeleted", null, name));
+            }
+            else if (mode.Equals("set"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(Lang("GroupNotFound", null, name));
+                    return;
+                }
+                permission.SetGroupTitle(name, title);
+                permission.SetGroupRank(name, rank);
+                Reply(Lang("GroupChanged", null, name));
+            }
+            else if (mode.Equals("parent"))
+            {
+                if (!permission.GroupExists(name))
+                {
+                    Reply(Lang("GroupNotFound", null, name));
+                    return;
+                }
+                var parent = args[2];
+                if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
+                {
+                    Reply(Lang("GroupParentNotFound", null, parent));
+                    return;
+                }
+                if (permission.SetGroupParent(name, parent))
+                    Reply(Lang("GroupParentChanged", null, name, parent));
+                else
+                    Reply(Lang("GroupParentNotChanged", null, name));
+            }
+        }
+
         #endregion
 
         #region Usergroup Command
 
         /// <summary>
-        /// Called when the "usergroup" command has been executed
+        /// Called when the "usergroup" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -899,6 +1021,56 @@ namespace Oxide.Game.Hurtworld
             {
                 permission.RemoveUserGroup(userId, group);
                 Reply(Lang("UserRemovedFromGroup", session.SteamId.ToString(), name, group), session);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "usergroup" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleUserGroup")]
+        private void ConsoleUserGroup(string command, string[] args)
+        {
+            if (args.Length < 3)
+            {
+                Reply(Lang("CommandUsageUserGroup"));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var group = args[2];
+
+            var target = FindSession(name);
+            if (target == null && !permission.UserIdValid(name))
+            {
+                Reply(Lang("UserNotFound", null, name));
+                return;
+            }
+            var userId = name;
+            if (target != null)
+            {
+                userId = target.SteamId.ToString();
+                name = target.Name;
+                permission.UpdateNickname(userId, name);
+            }
+
+            if (!permission.GroupExists(group))
+            {
+                Reply(Lang("GroupNotFound", null, name));
+                return;
+            }
+
+            if (mode.Equals("add"))
+            {
+                permission.AddUserGroup(userId, group);
+                Reply(Lang("UserAddedToGroup", null, name, group));
+            }
+            else if (mode.Equals("remove"))
+            {
+                permission.RemoveUserGroup(userId, group);
+                Reply(Lang("UserRemovedFromGroup", null, name, group));
             }
         }
 
@@ -1135,7 +1307,7 @@ namespace Oxide.Game.Hurtworld
         #region Show Command
 
         /// <summary>
-        /// Called when the "show" command has been executed
+        /// Called when the "show" chat command has been executed
         /// </summary>
         /// <param name="session"></param>
         /// <param name="command"></param>
@@ -1218,6 +1390,91 @@ namespace Oxide.Game.Hurtworld
             else if (mode.Equals("groups"))
             {
                 Reply(Lang("ShowGroups", session.SteamId.ToString(), "\n" + string.Join(", ", permission.GetGroups())), session);
+            }
+        }
+
+        /// <summary>
+        /// Called when the "show" console command has been executed
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ConsoleShow")]
+        private void ConsoleShow(string command, string[] args)
+        {
+            if (args.Length < 1)
+            {
+                Reply(Lang("CommandUsageShow"));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args.Length > 1 ? args[1] : string.Empty;
+
+            if (mode.Equals("perms"))
+            {
+                var result = "Permissions:\n";
+                result += string.Join(", ", permission.GetPermissions());
+                Reply(result);
+            }
+            else if (mode.Equals("user"))
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(Lang("CommandUsageShow"));
+                    return;
+                }
+
+                var target = FindSession(name);
+                if (target == null && !permission.UserIdValid(name))
+                {
+                    Reply(Lang("UserNotFound"));
+                    return;
+                }
+
+                var userId = name;
+                if (target != null)
+                {
+                    userId = target.SteamId.ToString();
+                    name = target.Name;
+                    permission.UpdateNickname(userId, name);
+                    name += $" ({userId})";
+                }
+                var result = $"User '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetUserPermissions(userId));
+                result += $"\nUser '{name}' groups:\n";
+                result += string.Join(", ", permission.GetUserGroups(userId));
+                Reply(result);
+            }
+            else if (mode.Equals("group"))
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    Reply(Lang("CommandUsageShow"));
+                    return;
+                }
+
+                if (!permission.GroupExists(name) && !string.IsNullOrEmpty(name))
+                {
+                    Reply(Lang("GroupNotFound", null, name));
+                    return;
+                }
+
+                var result = $"Group '{name}' users:\n";
+                result += string.Join(", ", permission.GetUsersInGroup(name));
+                result += $"\nGroup '{name}' permissions:\n";
+                result += string.Join(", ", permission.GetGroupPermissions(name));
+                var parent = permission.GetGroupParent(name);
+                while (permission.GroupExists(parent))
+                {
+                    result += $"\nParent group '{parent}' permissions:\n";
+                    result += string.Join(", ", permission.GetGroupPermissions(parent));
+                    parent = permission.GetGroupParent(parent);
+                }
+                Reply(result);
+            }
+            else if (mode.Equals("groups"))
+            {
+                Reply(Lang("ShowGroups", null, "\n" + string.Join(", ", permission.GetGroups())));
             }
         }
 

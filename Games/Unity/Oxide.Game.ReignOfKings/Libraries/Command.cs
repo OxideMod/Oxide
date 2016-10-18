@@ -21,8 +21,8 @@ namespace Oxide.Game.ReignOfKings.Libraries
 
         private struct PluginCallback
         {
-            public Plugin Plugin;
-            public string Name;
+            public readonly Plugin Plugin;
+            public readonly string Name;
 
             public PluginCallback(Plugin plugin, string name)
             {
@@ -33,8 +33,8 @@ namespace Oxide.Game.ReignOfKings.Libraries
 
         private class ChatCommand
         {
-            public string Name;
-            public Plugin Plugin;
+            public readonly string Name;
+            public readonly Plugin Plugin;
             public string CallbackName;
 
             public ChatCommand(string name, Plugin plugin, string callback_name)

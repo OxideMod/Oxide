@@ -93,7 +93,9 @@ namespace Oxide.Core.Libraries
         {
             functions = new Dictionary<string, MethodInfo>();
             properties = new Dictionary<string, PropertyInfo>();
+
             var type = GetType();
+
             foreach (var method in type.GetMethods())
             {
                 LibraryFunction attribute;
@@ -112,6 +114,7 @@ namespace Oxide.Core.Libraries
                 else
                     functions[name] = method;
             }
+
             foreach (var property in type.GetProperties())
             {
                 LibraryProperty attribute;
