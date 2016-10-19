@@ -113,8 +113,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
             // Setup console command name
             var split = command.Split('.');
-            var parent = split.Length >= 2 ? split[0] : "global";
-            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0];
+            var parent = split.Length >= 2 ? split[0].Trim() : "global";
+            var name = split.Length >= 2 ? string.Join(".", split.Skip(1).ToArray()) : split[0].Trim();
             var fullname = $"{parent}.{name}";
 
             if (parent == "global") command = name;
