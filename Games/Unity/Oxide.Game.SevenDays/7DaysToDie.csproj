@@ -78,7 +78,7 @@
   <Target Name="AfterBuild">
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.config.json" />
-      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so.1" />
+      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so*" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.so" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.so" />
       <LinuxGameFiles Include="$(ProjectDir)\Files\Linux\**\*.*; $(ProjectDir)\Files\*.*" />
