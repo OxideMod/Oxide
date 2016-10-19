@@ -51,7 +51,7 @@ namespace Oxide.Plugins
                         Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler!");
                         return;
                     }
-                    Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRWXG | FilePermissions.S_IRWXO);
+                    Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRGRP | FilePermissions.S_IXGRP | FilePermissions.S_IROTH| FilePermissions.S_IXOTH);
                     break;
             }
             BinaryPath = binaryPath;
