@@ -244,6 +244,7 @@ namespace Oxide.Game.Rust
         private object IOnEnableServerConsole(ServerConsole serverConsole)
         {
             if (!Interface.Oxide.CheckConsole(true)) return null;
+            Interface.Oxide.LogWarning("SOMEHOW WE GOT HERE AFTER CONSOLE CHECK, WHY?!?");
             serverConsole.enabled = false;
             UnityEngine.Object.Destroy(serverConsole);
             typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);

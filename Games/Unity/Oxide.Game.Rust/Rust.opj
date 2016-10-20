@@ -8,7 +8,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 17,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
