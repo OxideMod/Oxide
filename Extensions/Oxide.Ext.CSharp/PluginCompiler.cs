@@ -38,7 +38,7 @@ namespace Oxide.Plugins
                     binaryPath = rootDirectory + @"\CSharpCompiler.exe";
                     if (!File.Exists(binaryPath))
                     {
-                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler.exe!");
+                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins. Unable to find CSharpCompiler.exe!");
                         return;
                     }
                     break;
@@ -48,7 +48,7 @@ namespace Oxide.Plugins
                     if (IntPtr.Size != 8) binaryPath += ".x86";
                     if (!File.Exists(binaryPath))
                     {
-                        Interface.Oxide.LogError("Cannot compile C# plugins. Unable to find CSharpCompiler!");
+                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins. Unable to find CSharpCompiler!");
                         return;
                     }
                     Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRGRP | FilePermissions.S_IXGRP | FilePermissions.S_IROTH| FilePermissions.S_IXOTH);
