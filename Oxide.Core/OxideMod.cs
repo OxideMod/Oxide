@@ -645,8 +645,7 @@ namespace Oxide.Core
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
                     var currentLdLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH") ?? string.Empty;
-                    path = "." + Path.PathSeparator + path;
-                    var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : currentLdLibraryPath + Path.PathSeparator + path;
+                    var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : currentLdLibraryPath + Path.VolumeSeparatorChar + path;
                     Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", newLdLibraryPath);
                     break;
             }
