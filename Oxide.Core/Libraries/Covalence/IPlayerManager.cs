@@ -22,6 +22,13 @@ namespace Oxide.Core.Libraries.Covalence
         IEnumerable<IPlayer> Connected { get; }
 
         /// <summary>
+        /// Finds a single player given unique ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        IPlayer FindPlayerById(string id);
+
+        /// <summary>
         /// Finds a single player given a partial name or unique ID (case-insensitive, wildcards accepted, multiple matches returns null)
         /// </summary>
         /// <param name="partialNameOrId"></param>
