@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using ProtoBuf;
@@ -76,13 +77,24 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Gets all players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> All => allPlayers.Values.Cast<IPlayer>();
+        public IEnumerable<IPlayer> All => (IEnumerable<IPlayer>)allPlayers.Values;
 
         /// <summary>
         /// Gets all connected players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> Connected => connectedPlayers.Values.Cast<IPlayer>();
+        public IEnumerable<IPlayer> Connected => (IEnumerable<IPlayer>)connectedPlayers.Values;
+
+        /// <summary>
+        /// Finds a single player given unique ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IPlayer FindPlayerById(string id)
+        {
+            RustPlayer player;
+            return allPlayers.TryGetValue(id, out player) ? player : null;
+        }
 
         /// <summary>
         /// Finds a single player given a partial name or unique ID (case-insensitive, wildcards accepted, multiple matches returns null)
@@ -91,8 +103,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public IPlayer FindPlayer(string partialNameOrId)
         {
-            var players = FindPlayers(partialNameOrId).ToList();
-            return players.Count == 1 ? players.Single() : null;
+            var players = FindPlayers(partialNameOrId).ToArray();
+            return players.Length == 1 ? players[0] : null;
         }
 
         /// <summary>
@@ -102,7 +114,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public IEnumerable<IPlayer> FindPlayers(string partialNameOrId)
         {
-            return allPlayers.Values.Where(p => (p.Name != null && p.Name.ToLower().Contains(partialNameOrId.ToLower())) || p.Id == partialNameOrId).Cast<IPlayer>();
+            foreach (var player in allPlayers.Values)
+            {
+                if (player.Name != null && player.Name.IndexOf(partialNameOrId, StringComparison.OrdinalIgnoreCase) >= 0 || player.Id == partialNameOrId)
+                    yield return player;
+            }
         }
 
         #endregion

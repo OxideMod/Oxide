@@ -23,9 +23,8 @@ namespace Oxide.Plugins
             get
             {
                 TValue value;
-                if (key != null)
-                    if (TryGetValue(key, out value))
-                        return value;
+                if (TryGetValue(key, out value))
+                    return value;
                 if (typeof(TValue).IsValueType)
                     return (TValue)Activator.CreateInstance(typeof(TValue));
                 return default(TValue);

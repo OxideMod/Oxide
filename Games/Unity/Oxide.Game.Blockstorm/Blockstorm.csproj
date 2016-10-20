@@ -70,12 +70,11 @@
   <Target Name="AfterBuild">
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.config.json" />
-      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so.1" />
+      <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so*" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.so" />
       <LinuxFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.so" />
       <LinuxGameFiles Include="$(ProjectDir)\Files\Linux\**\*.*; $(ProjectDir)\Files\*.*" />
       <LinuxNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\CSharpCompiler; $(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\CSharpCompiler.x86;" />
-      <LinuxNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\x64\libMonoPosixHelper.so;" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />

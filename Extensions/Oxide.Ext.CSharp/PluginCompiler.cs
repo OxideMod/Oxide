@@ -225,7 +225,7 @@ namespace Oxide.Plugins
             if (process != null && process.Handle != IntPtr.Zero && !process.HasExited) return true;
             PurgeOldLogs();
             Shutdown();
-            var args = new[] {"/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory)};
+            var args = new[] { "/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory) };
             try
             {
                 process = new Process
@@ -241,22 +241,15 @@ namespace Oxide.Plugins
                     },
                     EnableRaisingEvents = true
                 };
-                //string path;
                 switch (Environment.OSVersion.Platform)
                 {
                     case PlatformID.Win32S:
                     case PlatformID.Win32Windows:
                     case PlatformID.Win32NT:
-                        //var currentPath = process.StartInfo.EnvironmentVariables["PATH"] ?? Environment.GetEnvironmentVariable("PATH");
-                        //path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, "x86")}";
-                        //var newPath = string.IsNullOrEmpty(currentPath) ? path : $"{currentPath}{Path.PathSeparator}{path}";
                         process.StartInfo.EnvironmentVariables["PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, "x86")}";
                         break;
                     case PlatformID.Unix:
                     case PlatformID.MacOSX:
-                        //var currentLdLibraryPath = process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] ?? Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
-                        //path = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
-                        //var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : $"{currentLdLibraryPath}{Path.PathSeparator}{path}";
                         process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
                         break;
                 }
@@ -270,8 +263,7 @@ namespace Oxide.Plugins
                 Interface.Oxide.LogException("Exception while starting compiler: ", ex); // TODO: Expand, warn that it may not be executable
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
                 var win32 = ex as Win32Exception;
-                if (win32 != null)
-                    Interface.Oxide.LogError("Win32 NativeErrorCode: {0} ErrorCode: {1} HelpLink: {2}", win32.NativeErrorCode, win32.ErrorCode, win32.HelpLink);
+                if (win32 != null) Interface.Oxide.LogError("Win32 NativeErrorCode: {0} ErrorCode: {1} HelpLink: {2}", win32.NativeErrorCode, win32.ErrorCode, win32.HelpLink);
             }
             if (process == null) return false;
             client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
@@ -309,8 +301,7 @@ namespace Oxide.Plugins
                     var fileName = Path.GetFileName(f);
                     return fileName != null && fileName.StartsWith("compiler_");
                 });
-                foreach (var filePath in filePaths)
-                    File.Delete(filePath);
+                foreach (var filePath in filePaths) File.Delete(filePath);
             }
             catch (Exception)
             {

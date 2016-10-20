@@ -21,7 +21,7 @@ namespace Oxide.Core.Logging
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        private string GetLogFilename(DateTime date) => Path.Combine(Directory, $"oxide_{date:dd-MM-yyyy}.txt");
+        private string GetLogFilename(DateTime date) => Path.Combine(Directory, $"oxide_{date:yyyy-MM-dd}.txt");
 
         /// <summary>
         /// Begins a batch process operation
