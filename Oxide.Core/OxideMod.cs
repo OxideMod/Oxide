@@ -642,12 +642,6 @@ namespace Oxide.Core
                     Environment.SetEnvironmentVariable("PATH", newPath);
                     SetDllDirectory(path);
                     break;
-                case PlatformID.Unix:
-                case PlatformID.MacOSX:
-                    var currentLdLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH") ?? string.Empty;
-                    var newLdLibraryPath = string.IsNullOrEmpty(currentLdLibraryPath) ? path : currentLdLibraryPath + Path.PathSeparator + path;
-                    Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", newLdLibraryPath);
-                    break;
             }
         }
 

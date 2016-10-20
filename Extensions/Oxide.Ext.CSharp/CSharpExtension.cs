@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 using Oxide.Core;
 using Oxide.Core.Extensions;
@@ -37,6 +38,10 @@ namespace Oxide.Plugins
         /// <param name="manager"></param>
         public CSharpExtension(ExtensionManager manager) : base(manager)
         {
+            if (Environment.OSVersion.Platform != PlatformID.Unix) return;
+            var extDir = Interface.Oxide.ExtensionDirectory;
+            File.WriteAllText(Path.Combine(extDir, "Mono.Posix.dll.config"),
+                $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x86/libMonoPosixHelper.so\" os=\"!windows,osx\" cpu=\"x86\" />\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x64/libMonoPosixHelper.so\" os=\"!windows,osx\" cpu=\"x86-64\" />\n</configuration>");
         }
 
         /// <summary>
@@ -53,6 +58,7 @@ namespace Oxide.Plugins
 
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "mono-2.0.dll"));
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "msvcr120.dll"));
+            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "libMonoPosixHelper.so"));
         }
 
         /// <summary>
