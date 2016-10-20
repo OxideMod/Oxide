@@ -13,6 +13,7 @@ using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
 
@@ -243,8 +244,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnEnableServerConsole")]
         private object IOnEnableServerConsole(ServerConsole serverConsole)
         {
-            if (!Interface.Oxide.CheckConsole(true)) return null;
-            Interface.Oxide.LogWarning("SOMEHOW WE GOT HERE AFTER CONSOLE CHECK, WHY?!?");
+            if (ConsoleWindow.Check(true) && !Interface.Oxide.CheckConsole(true)) return null;
             serverConsole.enabled = false;
             UnityEngine.Object.Destroy(serverConsole);
             typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
@@ -255,7 +255,7 @@ namespace Oxide.Game.Rust
         /// Called when ServerConsole is disabled
         /// </summary>
         [HookMethod("IOnDisableServerConsole")]
-        private object IOnDisableServerConsole() => !Interface.Oxide.CheckConsole(true) ? (object)null : false;
+        private object IOnDisableServerConsole() => ConsoleWindow.Check(true) && !Interface.Oxide.CheckConsole(true) ? (object)null : false;
 
         #endregion
 

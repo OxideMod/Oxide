@@ -118,9 +118,9 @@ namespace Oxide.Core.ServerConsole
             for (var i = 0; i < objects.Length; i++)
             {
                 if (i%2 != 0)
-                    Console.Write((string) objects[i]);
+                    Console.Write((string)objects[i]);
                 else
-                    Console.ForegroundColor = (ConsoleColor) ((int) objects[i]);
+                    Console.ForegroundColor = (ConsoleColor)((int)objects[i]);
             }
             if (Console.CursorLeft != 0) Console.CursorTop = Console.CursorTop + 1;
             Interface.Oxide.ServerConsole.input.RedrawInputLine();
