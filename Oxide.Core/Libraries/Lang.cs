@@ -284,7 +284,7 @@ namespace Oxide.Core.Libraries
 
             var langs = GetLanguages(sender);
 
-            foreach (var lang in langs) langFiles.Remove($"{sender.Name}{Path.DirectorySeparatorChar}{lang}.json");
+            foreach (var lang in langs) langFiles.Remove($"{lang}{Path.DirectorySeparatorChar}{sender.Name}.json");
         }
 
         /// <summary>
