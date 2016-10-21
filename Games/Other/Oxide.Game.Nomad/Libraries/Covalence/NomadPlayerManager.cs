@@ -80,13 +80,13 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// Gets all players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> All => (IEnumerable<IPlayer>)allPlayers.Values;
+        public IEnumerable<IPlayer> All => allPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
         /// Gets all connected players
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IPlayer> Connected => (IEnumerable<IPlayer>)connectedPlayers.Values;
+        public IEnumerable<IPlayer> Connected => connectedPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
         /// Finds a single player given unique ID
