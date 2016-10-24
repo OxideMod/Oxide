@@ -23,6 +23,7 @@ Support for each game and plugin language is added via extensions. When loading,
 ## Supported Game Extensions
  * Oxide.Game.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
  * Oxide.Game.HideHoldOut - _Provides support for the [Hide & Hold Out](http://h2o-game.net/) server_
+ * Oxide.Game.Hurtworld - _Provides support for the [Hurtworld](http://hurtworld.com/) server_
  * Oxide.Game.Nomad - _Provides support for the [Nomad](http://playnomad.net) server_
  * Oxide.Game.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
  * Oxide.Game.Rust - _Provides support for the new [Rust](http://playrust.com/) server_
