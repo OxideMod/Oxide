@@ -12,6 +12,7 @@ before_install:
 before_script: 
   - sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" Oxide.Core/OxideMod.cs
   - find . -name "*Extension.cs" -exec sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" {} \;
+  - find . -name "*Core.cs" -exec sed -ri "s/VersionNumber\((.*), 0\)/VersionNumber(\1, $TRAVIS_BUILD_NUMBER)/g" {} \;
 
 # Build the project
 solution: Oxide.sln
