@@ -1118,6 +1118,9 @@ namespace Oxide.Game.Rust
             ParseChatCommand(message, out cmd, out args);
             if (cmd == null) return null;
 
+            // Check if command is from a player
+            if (arg.connection == null) return null;
+
             // Get the covalence player
             var iplayer = Covalence.PlayerManager.FindPlayer(arg.connection.userid.ToString());
             if (iplayer == null) return null;
