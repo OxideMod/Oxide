@@ -86,7 +86,6 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         {
             UnityEngine.Debug.Log($"[Broadcast] {message}");
             ConsoleNetworker.Broadcast($"chat.add Server {message.Quote()}");
-            ConsoleNetworker.Broadcast($"notice.popup 10f \"\" {message.Quote()}");
         }
 
         /// <summary>
