@@ -71,7 +71,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "7kaBcqOqC5LT/0b8vFpaa5AvgpPIh0EbuJ8j/6yQ8/8=",
+            "MSILHash": "PB0JXCfHgP+CdqKq/0lJUxrF45BifsxbhfPVqHewUt4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -125,7 +125,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "+YVm+DJvjmjD2yJ1MFc6ry5lkQ7EyicpamrAiEeSJ58=",
+            "MSILHash": "D8hrWfLw89wdYcoJhfuGaB23sj4+d1+XToqiU8B1e4U=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -151,7 +151,7 @@
                 "CharacterMotorSimple"
               ]
             },
-            "MSILHash": "Tc1f8I85gIFKgil/eF1wo/6QtbCaPOnnV4yawIXRVjI=",
+            "MSILHash": "ldzDuhRv96+XCVj0IbLFTDUSodeljP+p2q1fsZ/mpjo=",
             "BaseHookName": null,
             "HookCategory": "Vehicle"
           }
@@ -419,7 +419,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "7kaBcqOqC5LT/0b8vFpaa5AvgpPIh0EbuJ8j/6yQ8/8=",
+            "MSILHash": "PB0JXCfHgP+CdqKq/0lJUxrF45BifsxbhfPVqHewUt4=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -450,7 +450,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "7kaBcqOqC5LT/0b8vFpaa5AvgpPIh0EbuJ8j/6yQ8/8=",
+            "MSILHash": "PB0JXCfHgP+CdqKq/0lJUxrF45BifsxbhfPVqHewUt4=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
