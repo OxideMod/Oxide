@@ -960,7 +960,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "COKa2rjL5O2JdOp5sTD3zx+MiCA6++m9zvz/Z0zeYFM=",
+            "MSILHash": "yOKxiCSYyAShAfyYJHBX36Hv1UjgS3AJbu4h1UaHfag=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2383,7 +2383,7 @@
                 "ProtoBuf.CreateBuilding"
               ]
             },
-            "MSILHash": "M9z7LVIOWrINilC3RLRoobzsYuCxr0cRt7xi+CAE9yY=",
+            "MSILHash": "tocga9Obz8qDOJEXhlIFTnEnjGsOP4oJRwCXHSJTv5o=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2540,7 +2540,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "qnkx1XlohWrRFs62Ab9qGpLoVwp3s308P5e3y1qqVvQ=",
+            "MSILHash": "dr/nwIynFINd7JL1ZWdVa52AwW/Sz6d9RvkiUCqjCI0=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -3022,7 +3022,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "6jGJdyKQxP8i356nvEx/t22ofhOP9w/gV8l6TfWa/ho=",
+            "MSILHash": "f0I9DYsXUVB+/RuBANb0bRIuiOuXvH5+fMtlZ7lLous=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
