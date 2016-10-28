@@ -76,9 +76,10 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             }
             set
             {
-                var dayPercentage = TimeManager.Instance.GetCurrentGameTime().DayPercentage;
-                var newTime = (value.Second - dayPercentage) * 86400 + TimeManager.Instance.InitialTimeOffset;
-                TimeManager.Instance.InitialTimeOffset = newTime;
+                var currentOffset = TimeManager.Instance.GetCurrentGameTime().offset;
+                var daysPassed = TimeManager.Instance.GetCurrentGameTime().Day + 1;
+                var newOffset = 86400 * daysPassed - currentOffset + value.TimeOfDay.TotalSeconds;
+                TimeManager.Instance.InitialTimeOffset += (float)newOffset;
             }
         }
 
