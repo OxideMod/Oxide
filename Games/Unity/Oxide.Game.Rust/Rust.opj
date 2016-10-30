@@ -1,6 +1,6 @@
 {
   "Name": "Rust",
-  "TargetDirectory": "D:\\Servers\\Game\\Rust\\RustDedicated_Data\\Managed",
+  "TargetDirectory": "C:\\Rust server\\Server\\rustds\\RustDedicated_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -3241,7 +3241,7 @@
             "HookName": "OnPlayerInsideBuilding",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "SetInsideBuildingPrivilege",
@@ -3295,7 +3295,7 @@
             "HookName": "OnPlayerKill",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "OnKilled",
@@ -3443,7 +3443,7 @@
             "HookName": "OnPlayerKilled",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "OnKilled",
@@ -3469,7 +3469,7 @@
             "HookName": "OnPlayerToggleLight",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BasePlayer",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "LightToggle",
@@ -3582,6 +3582,32 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 5,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0,a0.player",
+            "HookTypeName": "Simple",
+            "Name": "OnFurnaceSwitch",
+            "HookName": "OnFurnaceSwitch",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseOven",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SVSwitch",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "7ZDvGZMcDhVbIFBKOVdE8Sq1ar5NdUwgFz8+K/BbpZU=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
         }
       ]
     },
@@ -3612,7 +3638,7 @@
                 "System.UInt64"
               ]
             },
-            "MSILHash": "l623oGbrycp4jwJ3aXA6Q5qkL7vschHLVaqaiNLyJbw=",
+            "MSILHash": "PPn+bLSqhW+GlHvl9B/1lGxoGbpN82Y7NK/x4aDtdr4=",
             "BaseHookName": null,
             "HookCategory": "XP"
           }
@@ -3636,7 +3662,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "jVo+6wrdDNal5pFhGKssHAPABLf+TyOUhW7kHvF7OTw=",
+            "MSILHash": "21MxPrl5G2T/nFQqMa9IacaD282M+OWKTb8XMUMkPYA=",
             "BaseHookName": null,
             "HookCategory": "XP"
           }
@@ -3663,7 +3689,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "erid6BPBWuFg7/dl6CUijnHSJ2r0SIOmHtzMlv9yxwc=",
+            "MSILHash": "ZCR5gafZ+rbzGffvFemQOHkUDFl4nVt5pIBtJ0R05e4=",
             "BaseHookName": null,
             "HookCategory": "XP"
           }
@@ -3690,7 +3716,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "XVG8mHrvnYJDGPdJgUqUqC1eGSGtvS/IyX4ZXihTvhw=",
+            "MSILHash": "QaNJnUhy/YAoGbC/LEL15VCAAemWAfIVe59rysR4TWk=",
             "BaseHookName": null,
             "HookCategory": "XP"
           }
@@ -3717,7 +3743,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "XVG8mHrvnYJDGPdJgUqUqC1eGSGtvS/IyX4ZXihTvhw=",
+            "MSILHash": "QaNJnUhy/YAoGbC/LEL15VCAAemWAfIVe59rysR4TWk=",
             "BaseHookName": "CanSpendXp",
             "HookCategory": "XP"
           }
@@ -3746,7 +3772,7 @@
                 "System.UInt64"
               ]
             },
-            "MSILHash": "l623oGbrycp4jwJ3aXA6Q5qkL7vschHLVaqaiNLyJbw=",
+            "MSILHash": "PPn+bLSqhW+GlHvl9B/1lGxoGbpN82Y7NK/x4aDtdr4=",
             "BaseHookName": "OnXpEarn",
             "HookCategory": "XP"
           }
@@ -3778,7 +3804,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "dewXLrZsm8Ut3ObwSV+wOR2lKQEUyNA7MngaO6KU7GE=",
+            "MSILHash": "3YPsi93oRro8m7IdTO9BIGmAWerjCcZ9bvjKADh+3tQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -3835,7 +3861,7 @@
             "HookName": "HideRconPassword",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem/Run",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 2,
               "Name": "Internal",
@@ -3845,12 +3871,32 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "dewXLrZsm8Ut3ObwSV+wOR2lKQEUyNA7MngaO6KU7GE=",
+            "MSILHash": "3YPsi93oRro8m7IdTO9BIGmAWerjCcZ9bvjKADh+3tQ=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
         }
       ]
+    },
+    {
+      "AssemblyName": "UnityEngine.UI.dll",
+      "Hooks": []
+    },
+    {
+      "AssemblyName": "UnityEngine.dll",
+      "Hooks": []
+    },
+    {
+      "AssemblyName": "UnityEngine.Networking.dll",
+      "Hooks": []
+    },
+    {
+      "AssemblyName": "Facepunch.Raknet.dll",
+      "Hooks": []
+    },
+    {
+      "AssemblyName": "Facepunch.UnityEngine.dll",
+      "Hooks": []
     }
   ]
 }
