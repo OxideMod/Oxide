@@ -1,0 +1,136 @@
+{
+  "Name": "MedievalEngineers",
+  "TargetDirectory": "D:\\Servers\\Game\\MedievalEngineers\\DedicatedServer64",
+  "Manifests": [
+    {
+      "AssemblyName": "Sandbox.Game.dll",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.MyInitializer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InvokeBeforeRun",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt32",
+                "System.String",
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "LOL8HZ+YI4Gb/C384cHY+MduJTowuGM12ZsNBY0FNQ8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 265,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyDedicatedServerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Net.IPEndPoint"
+              ]
+            },
+            "MSILHash": "YnWxvH8IAgJFxNlgjovBfuwyqagekU+9OnVYOLrPLa8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        }
+      ]
+    },
+    {
+      "AssemblyName": "VRage.Dedicated.dll",
+      "Hooks": [
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "VRage.Dedicated.dll",
+            "TypeName": "VRage.Dedicated.DedicatedServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "RunMain",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.Boolean",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "rhsFqrxQzSOIHAiiXdEoPXYwHyYU3ss8NPKAV6Ev3TY=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 1,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "starg_s",
+                "OpType": "Parameter",
+                "Operand": 3
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
+            "AssemblyName": "VRage.Dedicated.dll",
+            "TypeName": "VRage.Dedicated.DedicatedServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "RunMain",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String",
+                "System.String",
+                "System.Boolean",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "rhsFqrxQzSOIHAiiXdEoPXYwHyYU3ss8NPKAV6Ev3TY=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "_Patches"
+          }
+        }
+      ]
+    }
+  ]
+}

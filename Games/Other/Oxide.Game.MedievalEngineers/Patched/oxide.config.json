@@ -1,0 +1,10 @@
+{
+    "CustomConsole": true,
+    "InstanceCommandLines":
+    [
+        "{oxide.directory}",
+        "oxide"
+    ],
+    "ConfigDirectory": "config",
+    "ExtensionDirectory": "DedicatedServer64"
+}
