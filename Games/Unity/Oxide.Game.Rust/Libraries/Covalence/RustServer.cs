@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Reflection;
 
-using ConVar;
-using Steamworks;
+using Global = Rust.Global;
+using Facepunch.Steamworks;
 
 using Oxide.Core.Libraries.Covalence;
 
@@ -13,6 +14,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustServer : IServer
     {
+        private static readonly Type NativeInterface = Assembly.Load("Facepunch.Steamworks").GetType("Facepunch.Steamworks.Interop.NativeInterface");
+        private static readonly FieldInfo Native = typeof(BaseSteamworks).GetField("native", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo GameServer = NativeInterface.GetField("gameServer", BindingFlags.NonPublic | BindingFlags.Instance);
+        private object steamServer;
+        private MethodInfo getPublicIP;
+
         #region Information
 
         /// <summary>
@@ -20,8 +27,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return Server.hostname; }
-            set { Server.hostname = value; }
+            get { return ConVar.Server.hostname; }
+            set { ConVar.Server.hostname = value; }
         }
 
         /// <summary>
@@ -31,15 +38,22 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             get
             {
-                var ip = SteamGameServer.GetPublicIP();
-                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24));
+                if (Global.SteamServer == null) return null;
+                if (steamServer == null) steamServer = GameServer.GetValue(Native.GetValue(Global.SteamServer));
+                if (getPublicIP == null) getPublicIP = steamServer.GetType().GetMethod("GetPublicIP", BindingFlags.Public | BindingFlags.Instance);
+
+                var ip = getPublicIP.Invoke(steamServer, null);
+
+                uint pip;
+                if (!uint.TryParse(ip.ToString(), out pip)) return null;
+                return pip == 0 ? null : new IPAddress(pip >> 24 | ((pip & 0xff0000) >> 8) | ((pip & 0xff00) << 8) | ((pip & 0xff) << 24));
             }
         }
 
         /// <summary>
         /// Gets the public-facing network port of the server, if known
         /// </summary>
-        public ushort Port => (ushort)Server.port;
+        public ushort Port => (ushort)ConVar.Server.port;
 
         /// <summary>
         /// Gets the version or build number of the server
@@ -61,8 +75,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public int MaxPlayers
         {
-            get { return Server.maxplayers; }
-            set { Server.maxplayers = value; }
+            get { return ConVar.Server.maxplayers; }
+            set { ConVar.Server.maxplayers = value; }
         }
 
         /// <summary>
@@ -83,8 +97,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Save()
         {
-            Server.save(null);
-            Server.writecfg(null);
+            ConVar.Server.save(null);
+            ConVar.Server.writecfg(null);
         }
 
         #endregion
