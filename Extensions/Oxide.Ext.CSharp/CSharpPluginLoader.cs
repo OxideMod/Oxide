@@ -219,7 +219,7 @@ namespace Oxide.Plugins
                         PluginErrors[plugin.Name] = $"Failed to compile: {plugin.CompilerErrors}";
                         Interface.Oxide.LogError("{0} plugin failed to compile!", plugin.ScriptName);
                         Interface.Oxide.LogError(plugin.CompilerErrors);
-                        RemoteLogger.Warning($"{plugin.ScriptName} plugin failed to compile!\n{plugin.CompilerErrors}");
+                        //RemoteLogger.Warning($"{plugin.ScriptName} plugin failed to compile!\n{plugin.CompilerErrors}");
                     }
                 }
                 else

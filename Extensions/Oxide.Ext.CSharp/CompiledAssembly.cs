@@ -91,7 +91,7 @@ namespace Oxide.Plugins
             if (isPatching)
             {
                 Interface.Oxide.LogWarning("Already patching plugin assembly: {0} (ignoring)", PluginNames.ToSentence());
-                RemoteLogger.Warning($"Already patching plugin assembly: {PluginNames.ToSentence()}");
+                //RemoteLogger.Warning($"Already patching plugin assembly: {PluginNames.ToSentence()}");
                 return;
             }
 
@@ -236,10 +236,8 @@ namespace Oxide.Plugins
                             }
                             else
                             {
-                                Interface.Oxide.LogWarning(
-                                    $"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
-                                RemoteLogger.Info(
-                                    $"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
+                                Interface.Oxide.LogWarning($"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
+                                //RemoteLogger.Info($"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
                             }
                         }
                     }
@@ -279,7 +277,7 @@ namespace Oxide.Plugins
                     {
                         isPatching = false;
                         Interface.Oxide.LogException($"Exception while patching: {PluginNames.ToSentence()}", ex);
-                        RemoteLogger.Exception($"Exception while patching: {PluginNames.ToSentence()}", ex);
+                        //RemoteLogger.Exception($"Exception while patching: {PluginNames.ToSentence()}", ex);
                         callback(null);
                     });
                 }
