@@ -103,7 +103,7 @@ namespace Oxide.Game.ReignOfKings
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", GameInfo.VersionString);
+            RemoteLogger.SetTag("game version", GameInfo.VersionString);
 
             // Add general commands
             cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
@@ -159,9 +159,6 @@ namespace Oxide.Game.ReignOfKings
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", DedicatedServerBypass.Settings.ServerName);
 
             // Setup the default permission groups
             rokPerms = Server.Permissions;

@@ -138,7 +138,7 @@ namespace Oxide.Game.Hurtworld
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", GameManager.Instance.Version.ToString());
+            RemoteLogger.SetTag("game version", GameManager.Instance.Version.ToString());
 
             // Register messages for localization
             lang.RegisterMessages(messages, this);
@@ -240,9 +240,6 @@ namespace Oxide.Game.Hurtworld
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
 
             // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");

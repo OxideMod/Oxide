@@ -57,7 +57,7 @@ namespace Oxide.Game.SavageLands
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            //RemoteLogger.SetTag("version", ); // TODO
+            //RemoteLogger.SetTag("game version", ); // TODO
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -102,9 +102,6 @@ namespace Oxide.Game.SavageLands
         {
             if (serverInitialized) return;
             serverInitialized = true;
-
-            // Configure remote logging
-            //RemoteLogger.SetTag("hostname", );
 
             // Update server console window and status bars
             SavageLandsExtension.ServerConsole();

@@ -45,10 +45,6 @@ namespace Oxide.Ext.Unity
             // Register engine clock
             Interface.Oxide.RegisterEngineClock(() => Time.realtimeSinceStartup);
 
-            // Configure remote logging
-            RemoteLogger.SetTag("os", SystemInfo.operatingSystem);
-            RemoteLogger.SetTag("cpu", SystemInfo.processorType);
-
             // Register our MonoBehaviour
             UnityScript.Create();
         }

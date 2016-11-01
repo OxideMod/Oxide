@@ -57,7 +57,7 @@ namespace Oxide.Game.FortressCraft
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            //RemoteLogger.SetTag("version", ); // TODO
+            //RemoteLogger.SetTag("game version", ); // TODO
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -104,9 +104,6 @@ namespace Oxide.Game.FortressCraft
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            //RemoteLogger.SetTag("hostname", ); // TODO
 
             // Update server console window and status bars
             FortressCraftExtension.ServerConsole();

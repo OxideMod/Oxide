@@ -96,7 +96,7 @@ namespace Oxide.Game.RustLegacy
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", Rust.Defines.Connection.protocol.ToString());
+            RemoteLogger.SetTag("game version", Rust.Defines.Connection.protocol.ToString());
 
             // Add general commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "ConsolePlugins");
@@ -166,9 +166,6 @@ namespace Oxide.Game.RustLegacy
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", server.hostname);
 
             // Update server console window and status bars
             RustLegacyExtension.ServerConsole();

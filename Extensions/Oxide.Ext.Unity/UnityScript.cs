@@ -70,7 +70,7 @@ namespace Oxide.Ext.Unity
 
         void LogMessageReceived(string message, string stackTrace, LogType type)
         {
-            if (type == LogType.Exception && stackTrace.Contains("Oxide")) RemoteLogger.Exception(message, stackTrace);
+            if (type == LogType.Exception) RemoteLogger.Exception(message, stackTrace);
         }
     }
 }

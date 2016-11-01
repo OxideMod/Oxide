@@ -145,7 +145,7 @@ namespace Oxide.Game.HideHoldOut
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", NetworkController.NetManager_.get_GAME_VERSION);
+            RemoteLogger.SetTag("game version", NetworkController.NetManager_.get_GAME_VERSION);
 
             // Register messages for localization
             lang.RegisterMessages(messages, this);
@@ -227,9 +227,6 @@ namespace Oxide.Game.HideHoldOut
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", NetworkController.NetManager_.ServManager.Server_NAME);
 
             // Add some Steam tags
             //SteamGameServer.SetGameTags("oxide,modded");

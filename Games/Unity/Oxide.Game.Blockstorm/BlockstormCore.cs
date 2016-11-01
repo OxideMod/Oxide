@@ -57,7 +57,7 @@ namespace Oxide.Game.Blockstorm
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", Constants.smethod_0());
+            RemoteLogger.SetTag("game version", Constants.smethod_0());
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -104,9 +104,6 @@ namespace Oxide.Game.Blockstorm
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", BlockstormExtension.DedicatedServerConfiguration.string_12);
 
             // Update server console window and status bars
             BlockstormExtension.ServerConsole();

@@ -56,7 +56,7 @@ namespace Oxide.Game.InterstellarRift
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", Globals.Version);
+            RemoteLogger.SetTag("game version", Globals.Version);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -103,9 +103,6 @@ namespace Oxide.Game.InterstellarRift
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", global::Game.Configuration.Config.Singleton.ServerName);
 
             // Update server console window and status bars
             InterstellarRiftExtension.ServerConsole();
