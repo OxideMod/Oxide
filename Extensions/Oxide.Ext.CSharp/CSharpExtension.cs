@@ -41,7 +41,8 @@ namespace Oxide.Plugins
             if (Environment.OSVersion.Platform != PlatformID.Unix) return;
             var extDir = Interface.Oxide.ExtensionDirectory;
             File.WriteAllText(Path.Combine(extDir, "Mono.Posix.dll.config"),
-                $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x86/libMonoPosixHelper.so\" os=\"!windows,osx\" cpu=\"x86\" />\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x64/libMonoPosixHelper.so\" os=\"!windows,osx\" cpu=\"x86-64\" />\n</configuration>");
+                $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x86/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
+                $"<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x64/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
         }
 
         /// <summary>
