@@ -148,11 +148,13 @@ namespace Oxide.Core
             EnqueueReport("fatal", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
         }
 
-        public static void Exception(string message, string raw_stack_trace)
+        public static void Exception(string message, string rawStackTrace)
         {
-            var stack_trace = raw_stack_trace.Split('\r', '\n');
-            var culprit = stack_trace[0].Split('(')[0].Trim();
-            EnqueueReport("exception", stack_trace, culprit, message, raw_stack_trace);
+            if (!rawStackTrace.Contains("Oxide.Core") && !rawStackTrace.Contains("Oxide.Ext")) return;
+
+            var stackTrace = rawStackTrace.Split('\r', '\n');
+            var culprit = stackTrace[0].Split('(')[0].Trim();
+            EnqueueReport("fatal", stackTrace, culprit, message, rawStackTrace);
         }
 
         private static void EnqueueReport(string level, Assembly assembly, string culprit, string message, string exception = null)
@@ -162,10 +164,10 @@ namespace Oxide.Core
             EnqueueReport(report);
         }
 
-        private static void EnqueueReport(string level, string[] stack_trace, string culprit, string message, string exception = null)
+        private static void EnqueueReport(string level, string[] stackTrace, string culprit, string message, string exception = null)
         {
             var report = new Report(level, culprit, message, exception);
-            report.DetectModules(stack_trace);
+            report.DetectModules(stackTrace);
             EnqueueReport(report);
         }
 
