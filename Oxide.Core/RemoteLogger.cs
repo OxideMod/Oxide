@@ -56,7 +56,6 @@ namespace Oxide.Core
 
         public class Report
         {
-            public string event_id;
             public string message;
             public string level;
             public string platform = "csharp";
@@ -73,7 +72,6 @@ namespace Oxide.Core
                 this.headers = BuildHeaders();
                 this.level = level;
                 this.message = message.Length > 1000 ? message.Substring(0, 1000) : message;
-                this.event_id = this.message.GetHashCode().ToString();
                 this.culprit = culprit;
                 this.modules = new Dictionary<string, string>();
                 foreach (var extension in Interface.Oxide.GetAllExtensions())
@@ -92,7 +90,6 @@ namespace Oxide.Core
 
             public void DetectModules(Assembly assembly)
             {
-                var assemblyName = assembly.GetName().Name;
                 var extensionType = assembly.GetTypes().FirstOrDefault(t => t.BaseType == typeof(Extension));
                 if (extensionType == null)
                 {
@@ -148,7 +145,7 @@ namespace Oxide.Core
 
         public static void Exception(string message, Exception exception)
         {
-            EnqueueReport("exception", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
+            EnqueueReport("fatal", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
         }
 
         public static void Exception(string message, string raw_stack_trace)
