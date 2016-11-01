@@ -217,6 +217,8 @@ namespace Oxide.Game.Rust
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
@@ -231,6 +233,12 @@ namespace Oxide.Game.Rust
             // Update server console window and status bars
             RustExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

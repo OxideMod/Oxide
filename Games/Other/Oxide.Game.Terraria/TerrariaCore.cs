@@ -106,12 +106,20 @@ namespace Oxide.Game.Terraria
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", Main.worldName);
 
             // Update server console window and status bars
             TerrariaExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

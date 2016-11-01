@@ -165,7 +165,7 @@ namespace Oxide.Game.RustLegacy
             if (serverInitialized) return;
             serverInitialized = true;
 
-            permission.MigrateGroup("player", "default");
+            Analytics.Collect();
 
             // Configure remote logging
             RemoteLogger.SetTag("hostname", server.hostname);
@@ -173,6 +173,12 @@ namespace Oxide.Game.RustLegacy
             // Update server console window and status bars
             RustLegacyExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

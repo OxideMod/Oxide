@@ -103,12 +103,20 @@ namespace Oxide.Game.Blockstorm
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", BlockstormExtension.DedicatedServerConfiguration.string_12);
 
             // Update server console window and status bars
             BlockstormExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

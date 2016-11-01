@@ -107,12 +107,20 @@ namespace Oxide.Game.PlanetExplorers
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", ServerConfig.ServerName);
 
             // Update server console window and status bars
             PlanetExplorersExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

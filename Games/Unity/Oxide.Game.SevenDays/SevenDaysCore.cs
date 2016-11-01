@@ -114,12 +114,20 @@ namespace Oxide.Game.SevenDays
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
 
             // Update server console window and status bars
             SevenDaysExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down
@@ -130,7 +138,7 @@ namespace Oxide.Game.SevenDays
         #endregion
 
         #region Player Hooks
-        
+
         /// <summary>
         /// Called when the player sends a message
         /// </summary>

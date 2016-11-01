@@ -108,6 +108,8 @@ namespace Oxide.Game.Unturned
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", Provider.serverName);
             RemoteLogger.SetTag("version", Provider.APP_VERSION);
@@ -115,6 +117,12 @@ namespace Oxide.Game.Unturned
             // Update server console window and status bars
             UnturnedExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

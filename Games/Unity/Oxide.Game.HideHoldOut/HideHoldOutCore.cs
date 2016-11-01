@@ -226,15 +226,23 @@ namespace Oxide.Game.HideHoldOut
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Add some Steam tags
-            //SteamGameServer.SetGameTags("oxide,modded");
+            Analytics.Collect();
 
             // Configure remote logging
             RemoteLogger.SetTag("hostname", NetworkController.NetManager_.ServManager.Server_NAME);
 
+            // Add some Steam tags
+            //SteamGameServer.SetGameTags("oxide,modded");
+
             // Update server console window and status bars
             HideHoldOutExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

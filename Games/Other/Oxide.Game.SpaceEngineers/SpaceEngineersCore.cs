@@ -107,12 +107,20 @@ namespace Oxide.Game.SpaceEngineers
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", MySandboxGame.ConfigDedicated.ServerName);
 
             // Update server console window and status bars
             SpaceEngineersExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

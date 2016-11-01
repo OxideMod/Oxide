@@ -128,6 +128,8 @@ namespace Oxide.Game.TheForest
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
@@ -145,6 +147,12 @@ namespace Oxide.Game.TheForest
                 Interface.Oxide.LogInfo("Server has been saved!");
             });
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down
