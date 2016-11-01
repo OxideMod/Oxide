@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Net;
-
-using Steamworks;
 
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
@@ -42,14 +39,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address
-        {
-            get
-            {
-                var ip = SteamGameServer.GetPublicIP();
-                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24)).ToString();
-            }
-        }
+        public string Address => "127.0.0.1";
 
         /// <summary>
         /// Gets the user's average network ping

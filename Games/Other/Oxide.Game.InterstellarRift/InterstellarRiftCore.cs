@@ -102,12 +102,20 @@ namespace Oxide.Game.InterstellarRift
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", global::Game.Configuration.Config.Singleton.ServerName);
 
             // Update server console window and status bars
             InterstellarRiftExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

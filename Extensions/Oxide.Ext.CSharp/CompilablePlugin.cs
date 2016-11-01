@@ -25,7 +25,7 @@ namespace Oxide.Plugins
             if (CompiledAssembly == null)
             {
                 Interface.Oxide.LogError("Load called before a compiled assembly exists: {0}", Name);
-                RemoteLogger.Error($"Load called before a compiled assembly exists: {Name}");
+                //RemoteLogger.Error($"Load called before a compiled assembly exists: {Name}");
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace Oxide.Plugins
 
                 if (plugin == null)
                 {
-                    RemoteLogger.Error($"Plugin assembly failed to load: {ScriptName}");
+                    //RemoteLogger.Error($"Plugin assembly failed to load: {ScriptName}");
                     InitFailed($"Plugin assembly failed to load: {ScriptName}");
                     return;
                 }

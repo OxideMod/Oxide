@@ -158,6 +158,8 @@ namespace Oxide.Game.ReignOfKings
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             RemoteLogger.SetTag("hostname", DedicatedServerBypass.Settings.ServerName);
 
@@ -185,6 +187,12 @@ namespace Oxide.Game.ReignOfKings
             // Update server console window and status bars
             ReignOfKingsExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies

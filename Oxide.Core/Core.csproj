@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analytics.cs" />
     <Compile Include="Cleanup.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Configuration\ConfigFile.cs" />

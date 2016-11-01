@@ -239,15 +239,23 @@ namespace Oxide.Game.Hurtworld
             if (serverInitialized) return;
             serverInitialized = true;
 
-            // Add some Steam tags
-            SteamGameServer.SetGameTags("oxide,modded");
+            Analytics.Collect();
 
             // Configure remote logging
             RemoteLogger.SetTag("hostname", GameManager.Instance.ServerConfig.GameName);
 
+            // Add some Steam tags
+            SteamGameServer.SetGameTags("oxide,modded");
+
             // Update server console window and status bars
             HurtworldExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         #endregion
 
@@ -1496,7 +1504,7 @@ namespace Oxide.Game.Hurtworld
 
             var command = $"{arg.Split(' ')[0]}";
             var args = arg.Split(' ').Skip(1).ToArray();
-            
+
             // Is this a covalence command?
             if (Covalence.CommandSystem.HandleConsoleMessage(Covalence.CommandSystem.consolePlayer, arg)) return true;
 

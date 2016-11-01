@@ -103,12 +103,20 @@ namespace Oxide.Game.FortressCraft
             if (serverInitialized) return;
             serverInitialized = true;
 
+            Analytics.Collect();
+
             // Configure remote logging
             //RemoteLogger.SetTag("hostname", ); // TODO
 
             // Update server console window and status bars
             FortressCraftExtension.ServerConsole();
         }
+
+        /// <summary>
+        /// Called when the server is saving
+        /// </summary>
+        [HookMethod("OnServerSave")]
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

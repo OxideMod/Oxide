@@ -15,15 +15,15 @@ namespace Oxide.Core
 {
     public static class RemoteLogger
     {
-        private const int projectId = 3;
-        private const string host = "logg.re";
-        private const string publicKey = "5bd22fdca1ad47eeb8bf81b82f1d05f8";
-        private const string secretKey = "90925e2f297944db853a6c872d2b6c60";
+        private const int projectId = 110864;
+        private const string host = "sentry.io";
+        private const string publicKey = "1ad29eb81a0b4615a9b443cb9a361f0a";
+        private const string secretKey = "0794c2940fc340a39aee545383f3033d";
         private static readonly string Url = "https://" + host + "/api/" + projectId + "/store/";
 
         private static readonly string[][] sentryAuth =
         {
-            new[] { "sentry_version", "5" },
+            new[] { "sentry_version", "7" },
             new[] { "sentry_client", "MiniRaven/1.0" },
             new[] { "sentry_key", publicKey },
             new[] { "sentry_secret", secretKey }
@@ -33,7 +33,7 @@ namespace Oxide.Core
         {
             var authString = string.Join(", ", sentryAuth.Select(x => string.Join("=", x)).ToArray());
             authString += ", sentry_timestamp=" + (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            return new Dictionary<string, string> { { "X-Sentry-Auth", "Sentry " + authString } };
+            return new Dictionary<string, string> {{ "X-Sentry-Auth", "Sentry " + authString }};
         }
 
         private static readonly Dictionary<string, string> Tags = new Dictionary<string, string>
@@ -110,6 +110,7 @@ namespace Oxide.Core
                 foreach (var line in stackTrace)
                 {
                     if (!line.StartsWith("Oxide.Plugins.") || !line.Contains("+")) continue;
+
                     var pluginName = line.Split('+')[0];
                     var plugin = Interface.Oxide.RootPluginManager.GetPlugin(pluginName);
                     if (plugin != null) modules["Plugins." + plugin.Name] = plugin.Version.ToString();
