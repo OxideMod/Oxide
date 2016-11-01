@@ -195,6 +195,8 @@ namespace Oxide.Core
             covalence.Initialize();
 
             // Remove old files
+            foreach (var file in Directory.GetFiles(Interface.Oxide.RootDirectory))
+                if (file.Contains("uma") && file.EndsWith(".ini")) Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, file));
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "oxide.root.json"));
             Cleanup.Run();
 
