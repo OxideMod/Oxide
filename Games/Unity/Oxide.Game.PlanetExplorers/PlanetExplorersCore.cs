@@ -61,7 +61,7 @@ namespace Oxide.Game.PlanetExplorers
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", ServerConfig.ServerVersion.ToLower());
+            RemoteLogger.SetTag("game version", ServerConfig.ServerVersion.ToLower());
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -108,9 +108,6 @@ namespace Oxide.Game.PlanetExplorers
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", ServerConfig.ServerName);
 
             // Update server console window and status bars
             PlanetExplorersExtension.ServerConsole();

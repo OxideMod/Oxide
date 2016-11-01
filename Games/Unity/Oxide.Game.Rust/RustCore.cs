@@ -139,7 +139,7 @@ namespace Oxide.Game.Rust
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", BuildInformation.VersionStampDays.ToString());
+            RemoteLogger.SetTag("game version", BuildInformation.VersionStampDays.ToString());
 
             // Register messages for localization
             lang.RegisterMessages(messages, this);
@@ -218,9 +218,6 @@ namespace Oxide.Game.Rust
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", ConVar.Server.hostname);
 
             // Destroy default server console
             if (Interface.Oxide.CheckConsole() && ServerConsole.Instance != null)

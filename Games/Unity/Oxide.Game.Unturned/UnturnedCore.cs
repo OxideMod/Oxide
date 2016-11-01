@@ -111,8 +111,7 @@ namespace Oxide.Game.Unturned
             Analytics.Collect();
 
             // Configure remote logging
-            RemoteLogger.SetTag("hostname", Provider.serverName);
-            RemoteLogger.SetTag("version", Provider.APP_VERSION);
+            RemoteLogger.SetTag("game version", Provider.APP_VERSION);
 
             // Update server console window and status bars
             UnturnedExtension.ServerConsole();

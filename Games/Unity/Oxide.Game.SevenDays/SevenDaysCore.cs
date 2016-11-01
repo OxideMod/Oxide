@@ -68,7 +68,7 @@ namespace Oxide.Game.SevenDays
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", GamePrefs.GetString(EnumGamePrefs.GameVersion));
+            RemoteLogger.SetTag("game version", GamePrefs.GetString(EnumGamePrefs.GameVersion));
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -115,9 +115,6 @@ namespace Oxide.Game.SevenDays
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", GamePrefs.GetString(EnumGamePrefs.ServerName));
 
             // Update server console window and status bars
             SevenDaysExtension.ServerConsole();

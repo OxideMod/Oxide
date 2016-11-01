@@ -82,7 +82,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", TheForestExtension.GameVersion);
+            RemoteLogger.SetTag("game version", TheForestExtension.GameVersion);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -129,9 +129,6 @@ namespace Oxide.Game.TheForest
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", PlayerPrefs.GetString("MpGameName"));
 
             // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");

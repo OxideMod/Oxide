@@ -61,7 +61,7 @@ namespace Oxide.Game.SpaceEngineers
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", MyPerGameSettings.BasicGameInfo.GameVersion.ToString());
+            RemoteLogger.SetTag("game version", MyPerGameSettings.BasicGameInfo.GameVersion.ToString());
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -108,9 +108,6 @@ namespace Oxide.Game.SpaceEngineers
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", MySandboxGame.ConfigDedicated.ServerName);
 
             // Update server console window and status bars
             SpaceEngineersExtension.ServerConsole();

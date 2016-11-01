@@ -59,7 +59,7 @@ namespace Oxide.Game.FromTheDepths
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", StaticOptionsManager.version);
+            RemoteLogger.SetTag("game version", StaticOptionsManager.version);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -106,9 +106,6 @@ namespace Oxide.Game.FromTheDepths
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", MultiplayerManager.Instance.GameDetails.Name);
 
             // Update server console window and status bars
             FromTheDepthsExtension.ServerConsole();

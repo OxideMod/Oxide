@@ -61,7 +61,7 @@ namespace Oxide.Game.Nomad
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", CommandLine.GetVariable("clientVersion"));
+            RemoteLogger.SetTag("game version", CommandLine.GetVariable("clientVersion"));
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -108,9 +108,6 @@ namespace Oxide.Game.Nomad
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", CommandLine.GetVariable("name"));
 
             // Update server console window and status bars
             NomadExtension.ServerConsole();

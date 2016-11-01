@@ -60,7 +60,7 @@ namespace Oxide.Game.Terraria
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("version", Main.versionNumber);
+            RemoteLogger.SetTag("game version", Main.versionNumber);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -107,9 +107,6 @@ namespace Oxide.Game.Terraria
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("hostname", Main.worldName);
 
             // Update server console window and status bars
             TerrariaExtension.ServerConsole();

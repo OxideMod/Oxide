@@ -38,7 +38,9 @@ namespace Oxide.Core
 
         private static readonly Dictionary<string, string> Tags = new Dictionary<string, string>
         {
-            { "arch", IntPtr.Size == 4 ? "x86" : "x64" },
+            { "arch", IntPtr.Size == 8 ? "x64" : "x86" },
+            { "platform", Environment.OSVersion.Platform.ToString().ToLower() },
+            { "os version", Environment.OSVersion.Version.ToString().ToLower() },
             { "game", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName).ToLower() }
         };
 
