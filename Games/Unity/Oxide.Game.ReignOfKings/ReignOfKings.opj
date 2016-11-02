@@ -171,7 +171,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "1MY7LmDIMTVe3+REtOct4P2YeJ51PEfB2pUaic3T5Mw=",
+            "MSILHash": "DcX/Tq+mwBvxhs44hlMeE0H5J3oDfC8a6LXPTCJRWvs=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -257,7 +257,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 185,
+            "InjectionIndex": 153,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
@@ -275,7 +275,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerFirstSpawnEvent"
               ]
             },
-            "MSILHash": "j8PvmHygg1iUMNIWbjm8KtNiTjrzTvJCkXjnjKdXutY=",
+            "MSILHash": "PkqJo3AUOuqFrY5QzylqcJPCZrMAcO1Z/ckGJsKVhX8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -614,7 +614,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "1MY7LmDIMTVe3+REtOct4P2YeJ51PEfB2pUaic3T5Mw=",
+            "MSILHash": "DcX/Tq+mwBvxhs44hlMeE0H5J3oDfC8a6LXPTCJRWvs=",
             "BaseHookName": "OnPlayerChat [guild]",
             "HookCategory": "Player"
           }
