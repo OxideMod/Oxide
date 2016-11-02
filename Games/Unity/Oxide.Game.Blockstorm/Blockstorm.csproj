@@ -73,7 +73,7 @@
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\$(OutputPath)\*.dll*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.dll; $(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.dll; $(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.so*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll*" />
