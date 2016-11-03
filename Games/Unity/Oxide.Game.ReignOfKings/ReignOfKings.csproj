@@ -108,6 +108,8 @@
     <CallTarget Targets="Deploy" Condition="Exists('$(SolutionDir).deploy')" />
   </Target>
   <Target Name="Deploy">
+    <Exec Command="taskkill /f /im ROK.exe" />
+    <Exec Command="taskkill /f /im CSharpCompiler.exe" />
     <ReadLinesFromFile File="$(SolutionDir).deploy">
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
