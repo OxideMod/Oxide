@@ -36,12 +36,14 @@ namespace Oxide.Core
             return new Dictionary<string, string> {{ "X-Sentry-Auth", "Sentry " + authString }};
         }
 
+        public static string Filename = Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+
         private static readonly Dictionary<string, string> Tags = new Dictionary<string, string>
         {
             { "arch", IntPtr.Size == 8 ? "x64" : "x86" },
             { "platform", Environment.OSVersion.Platform.ToString().ToLower() },
             { "os version", Environment.OSVersion.Version.ToString().ToLower() },
-            { "game", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName).ToLower() }
+            { "game", Filename.ToLower().Replace("dedicated", "").Replace("server", "").Replace("-", "") }
         };
 
         private class QueuedReport
