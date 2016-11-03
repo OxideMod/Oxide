@@ -107,7 +107,7 @@ namespace Oxide.Game.PlanetExplorers
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Collect();
+            Analytics.Payload("start");
 
             // Update server console window and status bars
             PlanetExplorersExtension.ServerConsole();
@@ -117,13 +117,17 @@ namespace Oxide.Game.PlanetExplorers
         /// Called when the server is saving
         /// </summary>
         [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+        private void OnServerSave() => Analytics.Payload("start");
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        private void OnServerShutdown()
+        {
+            Analytics.Payload("end");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
     }

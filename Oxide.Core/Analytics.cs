@@ -14,21 +14,6 @@ namespace Oxide.Core
         private const string trackingId = "UA-48448359-3";
         private const string url = "https://www.google-analytics.com/collect";
 
-        public class Payload
-        {
-            public int v = 1;
-            public string tid = trackingId;
-            public string an = "Oxide/" + Environment.OSVersion;
-            public string ul = Lang.GetServerLanguage();
-            public string t = "screenview";
-            public string cid = Environment.MachineName + Environment.ProcessorCount + Environment.GetLogicalDrives();
-            public VersionNumber av = OxideMod.Version;
-
-            public override string ToString()
-            {
-                return string.Format($"v={v}&tid={tid}&an={an}&cd={an}&ul={ul}&t={t}&cid={cid}&av={av}");
-            }
-        }
 
         private static readonly Dictionary<string, string> Tags = new Dictionary<string, string>
         {
@@ -36,16 +21,20 @@ namespace Oxide.Core
             { "game", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName).ToLower() }
         };
 
-        // TODO: Collect arch and game
-        // TODO: Collect plugin total and count by type
+        public static void Payload(string state)
+        {
+            var core = $"v=1&tid={trackingId}&sc={state}&t=screenview";
+            var oxide = $"an=Oxide/{Environment.OSVersion}&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}";
+            var identifier = $"uid={Environment.MachineName}-{Environment.ProcessorCount}-{string.Join("-", Environment.GetLogicalDrives())}";
 
-        public static void Collect()
+            Collect($"{core}&{oxide}&{identifier}");
+        }
+
+        public static void Collect(string payload)
         {
             var headers = new Dictionary<string, string> {{ "User-Agent", $"Oxide/{OxideMod.Version}" }};
-            Webrequests.EnqueuePost(url, Uri.EscapeUriString(new Payload().ToString()), (code, response) =>
-            {
-                if (code != 200) Interface.Oxide.LogWarning($"Analytics collection was not successful: {code}");
-            }, null, headers);
+
+            Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) => { }, null, headers);
         }
     }
 }

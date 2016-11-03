@@ -128,7 +128,7 @@ namespace Oxide.Game.TheForest
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Collect();
+            Analytics.Payload("start");
 
             // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");
@@ -149,13 +149,17 @@ namespace Oxide.Game.TheForest
         /// Called when the server is saving
         /// </summary>
         [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+        private void OnServerSave() => Analytics.Payload("start");
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        private void OnServerShutdown()
+        {
+            Analytics.Payload("end");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
 
