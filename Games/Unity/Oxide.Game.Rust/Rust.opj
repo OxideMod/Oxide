@@ -117,7 +117,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "M2EOm/uqcLPh0I5jn4wTNyEcZtcsndc1/3ZQ83YMuTw=",
+            "MSILHash": "Ds7AOE7IzWWH75avr3GpYDCOUjuKT1boE1kn4vpU2rE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -989,7 +989,7 @@
             },
             "MSILHash": "LqQVNxwtNRnl8aNPaoT4yeXCHE634TZi9hjh80qsgLE=",
             "BaseHookName": null,
-            "HookCategory": "Sign"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -1015,13 +1015,13 @@
             },
             "MSILHash": "ewMgSvEhjdUkVUSi8amrnf+DXoDtDKAnYFzANyNe7Yo=",
             "BaseHookName": null,
-            "HookCategory": "Sign"
+            "HookCategory": "Structure"
           }
         },
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 38,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0.player",
@@ -1041,7 +1041,7 @@
             },
             "MSILHash": "Dk3Zl+u5jXIpYjHlb68KBvrLSMlps3deTi92/u876mY=",
             "BaseHookName": null,
-            "HookCategory": "Sign"
+            "HookCategory": "Structure"
           }
         },
         {
@@ -2017,7 +2017,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "7nK5QDJaz02LxN3Y40YBhZoaGK1CDCZ03N3YMYj2GD0=",
+            "MSILHash": "fSqBSAplNJ5sfiNMTR7T6wV/g8V0o4rWotNqUaRnC4A=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2764,84 +2764,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0, this",
-            "HookTypeName": "Simple",
-            "Name": "CanUnlockSign",
-            "HookName": "CanUnlockSign",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Signage",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "CanUnlockSign",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "BasePlayer"
-              ]
-            },
-            "MSILHash": "9Mvgt+f6G31atzi04rKw4qArA86gzTEafbOTD4arCYM=",
-            "BaseHookName": null,
-            "HookCategory": "Sign"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0, this",
-            "HookTypeName": "Simple",
-            "Name": "CanLockSign",
-            "HookName": "CanLockSign",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Signage",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "CanLockSign",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "BasePlayer"
-              ]
-            },
-            "MSILHash": "5T1Kf1uoZ+N39AEM8DRNfmhV03TlCNJOeZmIifCjAHM=",
-            "BaseHookName": null,
-            "HookCategory": "Sign"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 56,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0.player",
-            "HookTypeName": "Simple",
-            "Name": "OnSignUpdated",
-            "HookName": "OnSignUpdated",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Signage",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "UpdateSign",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "BaseEntity/RPCMessage"
-              ]
-            },
-            "MSILHash": "Dk3Zl+u5jXIpYjHlb68KBvrLSMlps3deTi92/u876mY=",
-            "BaseHookName": "OnSignUpdate",
-            "HookCategory": "Sign"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 16,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
@@ -2945,7 +2867,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "M7c3GoKfcbtDaNoajMpSQoiULNQ3pMBAqdPSjIgI3dM=",
+            "MSILHash": "rTplxS/ZJB6ZB/g8LD5x4yw5EVIAf2E6kXlsaDfMIwM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -3022,7 +2944,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "M7c3GoKfcbtDaNoajMpSQoiULNQ3pMBAqdPSjIgI3dM=",
+            "MSILHash": "rTplxS/ZJB6ZB/g8LD5x4yw5EVIAf2E6kXlsaDfMIwM=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
