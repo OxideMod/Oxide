@@ -35,8 +35,8 @@ namespace Oxide.Game.Rust
 
         public override string[] WhitelistAssemblies => new[]
         {
-            "Assembly-CSharp", "Assembly-CSharp-firstpass", "DestMath", "Facepunch.Network", "Facepunch.System", "Facepunch.UnityEngine",
-            "mscorlib", "Oxide.Core", "Oxide.Game.Rust", "protobuf-net", "RustBuild", "Rust.Data", "System", "System.Core", "UnityEngine"
+            "Assembly-CSharp", "Assembly-CSharp-firstpass", "DestMath", "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine",
+            "mscorlib", "Oxide.Core", "Oxide.Game.Rust", "protobuf-net", "RustBuild", "Rust.Data", "Rust.Global", "System", "System.Core", "UnityEngine"
         };
         public override string[] WhitelistNamespaces => new[]
         {

@@ -108,12 +108,6 @@ namespace Oxide.Game.Rust
             Title = "Rust";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
-
-            // Cheat references in the default plugin reference list
-            var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
-            var fpSystem = Facepunch.Math.Epoch.Current; // Facepunch.System
-            var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
-            var rustXp = global::Rust.Xp.Config.LevelToXp(1); // Rust.Xp
         }
 
         /// <summary>
@@ -489,6 +483,31 @@ namespace Oxide.Game.Rust
         #endregion
 
         #region Structure Hooks
+
+        /// <summary>
+        /// Called when the player attempts to use a update a sign
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="sign"></param>
+        [HookMethod("CanUpdateSign")]
+        private void CanUpdateSign(BasePlayer player, Signage sign)
+        {
+            // Call deprecated hooks
+            Interface.CallDeprecatedHook("CanLockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
+            Interface.CallDeprecatedHook("CanUnlockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
+        }
+
+        /// <summary>
+        /// Called when the player attempts to use a lock
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="lock"></param>
+        [HookMethod("CanUseLock")]
+        private void CanUseLock(BasePlayer player, BaseLock @lock)
+        {
+            // Call deprecated hook
+            Interface.CallDeprecatedHook("CanUseDoor", "CanUseLock", new DateTime(2017, 1, 3), player, @lock);
+        }
 
         /// <summary>
         /// Called when a player selects Demolish from the BuildingBlock menu

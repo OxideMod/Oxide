@@ -18,7 +18,7 @@ do
     -server.saveinterval 300 \
     -server.globalchat true \
     -server.description "Powered by Oxide" \
-    -server.headerimage "http://oxidemod.org/styles/oxide/logo.png" \
+    -server.headerimage "http://i.imgur.com/xNyLhMt.jpg" \
     -server.url "http://oxidemod.org"
     echo "\nRestarting server...\n"
     sleep 10

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net;
 
-using ConVar;
-using Steamworks;
+using Global = Rust.Global;
 
 using Oxide.Core.Libraries.Covalence;
 
@@ -20,26 +19,19 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return Server.hostname; }
-            set { Server.hostname = value; }
+            get { return ConVar.Server.hostname; }
+            set { ConVar.Server.hostname = value; }
         }
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
         /// </summary>
-        public IPAddress Address
-        {
-            get
-            {
-                var ip = SteamGameServer.GetPublicIP();
-                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24));
-            }
-        }
+        public IPAddress Address => Global.SteamServer.PublicIp;
 
         /// <summary>
         /// Gets the public-facing network port of the server, if known
         /// </summary>
-        public ushort Port => (ushort)Server.port;
+        public ushort Port => (ushort)ConVar.Server.port;
 
         /// <summary>
         /// Gets the version or build number of the server
@@ -61,8 +53,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public int MaxPlayers
         {
-            get { return Server.maxplayers; }
-            set { Server.maxplayers = value; }
+            get { return ConVar.Server.maxplayers; }
+            set { ConVar.Server.maxplayers = value; }
         }
 
         /// <summary>
@@ -83,8 +75,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Save()
         {
-            Server.save(null);
-            Server.writecfg(null);
+            ConVar.Server.save(null);
+            ConVar.Server.writecfg(null);
         }
 
         #endregion

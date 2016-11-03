@@ -35,7 +35,7 @@ namespace Oxide.Core
 
         public static void Collect()
         {
-            var payload = $"v=1&tid={trackingId}&t=screenview&cd=Oxide/{Environment.OSVersion.ToString().Replace("Microsoft", "")}";
+            var payload = $"v=1&tid={trackingId}&t=screenview&cd={Environment.OSVersion.ToString().Replace("Microsoft ", "")}";
             payload += $"&cid={Environment.MachineName}{Environment.ProcessorCount}";
             payload += string.Join("", Environment.GetLogicalDrives()).Replace(":", "").Replace("\\", "").Replace("/", "");
             payload += $"&an=Oxide&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}&";

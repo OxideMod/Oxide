@@ -110,7 +110,7 @@ namespace Oxide.Core
             {
                 foreach (var line in stackTrace)
                 {
-                    if (!line.StartsWith("Oxide.Plugins.") || !line.Contains("+")) continue;
+                    if (!line.StartsWith("Oxide.Plugins.PluginCompiler") || !line.Contains("+")) continue;
 
                     var pluginName = line.Split('+')[0];
                     var plugin = Interface.Oxide.RootPluginManager.GetPlugin(pluginName);
