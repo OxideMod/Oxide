@@ -51,13 +51,9 @@ namespace Oxide.Core
 
         public static void SendPayload(string payload)
         {
-            Interface.Oxide.LogWarning(Uri.EscapeUriString(payload));
             var headers = new Dictionary<string, string> {{ "User-Agent", $"Oxide/{OxideMod.Version}" }};
 
-            Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) =>
-            {
-                Interface.Oxide.LogWarning(response);
-            }, null, headers);
+            Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) => { }, null, headers);
         }
     }
 }
