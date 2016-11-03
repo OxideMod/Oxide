@@ -2333,7 +2333,7 @@
             },
             "MSILHash": "so57srGKDG/0Ji42krZuLnMUDyk7+nc9WBteLXe4TCw=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Item"
           }
         },
         {
@@ -2359,7 +2359,7 @@
             },
             "MSILHash": "duetA9/RIysH2nNjEyIFNnGMlGsDxwovT3ZCX45WzGs=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Item"
           }
         },
         {
@@ -2385,7 +2385,7 @@
             },
             "MSILHash": "aRNy3SHsN6k4Skf0+kRRh3TAwMgcx39jkKHL6Ptz5+g=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Item"
           }
         },
         {
@@ -3374,84 +3374,6 @@
             "MSILHash": "7ZDvGZMcDhVbIFBKOVdE8Sq1ar5NdUwgFz8+K/BbpZU=",
             "BaseHookName": null,
             "HookCategory": "Entity"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "CanStackItem",
-            "HookName": "CanStackItem",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Item",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "CanStack",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "Item"
-              ]
-            },
-            "MSILHash": "ivTTnEP21F7/+OH+aBv2QZh0cecpN4VG5s+wgf+17To=",
-            "BaseHookName": null,
-            "HookCategory": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "CanMoveItem",
-            "HookName": "CanMoveItem",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Item",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "CanMoveTo",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "ItemContainer",
-                "System.Int32",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "iJ63+GDIvMGmx0nAUJVFp7Yhm+3BNzhjiNJjlpTSbrs=",
-            "BaseHookName": null,
-            "HookCategory": null
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "CanHoldItem",
-            "HookName": "CanHoldItem",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Item",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "CanBeHeld",
-              "ReturnType": "System.Boolean",
-              "Parameters": []
-            },
-            "MSILHash": "6RJqbPbCEBb/LBWKvx2k8dDaRPNB1LfaCP0EivweIW8=",
-            "BaseHookName": null,
-            "HookCategory": null
           }
         }
       ]
