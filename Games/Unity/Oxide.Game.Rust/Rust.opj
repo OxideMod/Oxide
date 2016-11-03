@@ -3582,6 +3582,32 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+		{
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0, a0.player",
+            "HookTypeName": "Simple",
+            "Name": "OnFurnaceSwitch",
+            "HookName": "OnFurnaceSwitch",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseOven",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "SVSwitch",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "7ZDvGZMcDhVbIFBKOVdE8Sq1ar5NdUwgFz8+K/BbpZU=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
         }
       ]
     },
