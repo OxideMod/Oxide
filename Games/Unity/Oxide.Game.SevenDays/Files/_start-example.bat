@@ -7,5 +7,5 @@ echo Starting server...
 
 echo.
 echo Restarting server...
-echo.
+timeout /t 10echo.
 goto start

@@ -37,14 +37,14 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 
         private void NotifyPlayerJoin(Player player)
         {
-            var id = player.SteamId.ToString();
+            var id = player.steamId.ToString();
 
             // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
                 // Update
-                record.Name = player.RoleName;
+                record.Name = player.roleName;
                 playerData[id] = record;
 
                 // Swap out Rust player
@@ -54,7 +54,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             else
             {
                 // Insert
-                record = new PlayerRecord {Id = player.SteamId, Name = player.RoleName};
+                record = new PlayerRecord {Id = player.steamId, Name = player.roleName };
                 playerData.Add(id, record);
 
                 // Create Rust player
@@ -65,9 +65,9 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(Player player) => connectedPlayers[player.SteamId.ToString()] = new PlanetExplorersPlayer(player);
+        internal void NotifyPlayerConnect(Player player) => connectedPlayers[player.steamId.ToString()] = new PlanetExplorersPlayer(player);
 
-        internal void NotifyPlayerDisconnect(Player player) => connectedPlayers.Remove(player.SteamId.ToString());
+        internal void NotifyPlayerDisconnect(Player player) => connectedPlayers.Remove(player.steamId.ToString());
 
         #region Player Finding
 

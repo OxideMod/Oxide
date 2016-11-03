@@ -27,7 +27,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal PlanetExplorersPlayer(Player player) : this(player.SteamId, player.name)
+        internal PlanetExplorersPlayer(Player player) : this(player.steamId, player.roleName)
         {
             // Store user object
             this.player = player;

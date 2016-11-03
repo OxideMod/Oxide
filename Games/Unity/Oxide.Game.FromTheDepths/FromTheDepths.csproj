@@ -97,6 +97,8 @@
     <CallTarget Targets="Deploy" Condition="Exists('$(SolutionDir).deploy')" />
   </Target>
   <Target Name="Deploy">
+    <Exec Command='start /b /wait taskkill /f /im From_The_Depths.exe /fi "memusage gt 2"' />
+    <Exec Command='start /b /wait taskkill /f /im CSharpCompiler.exe /fi "memusage gt 2"' />
     <ReadLinesFromFile File="$(SolutionDir).deploy">
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>

@@ -7,5 +7,5 @@ Blockstorm.exe -batchmode -nographics -config blockstorm.cfg
 
 echo.
 echo Restarting server...
-echo.
+timeout /t 10echo.
 goto start

@@ -7,5 +7,5 @@ TerrariaServer.exe -config serverconfig.txt
 
 echo.
 echo Restarting server...
-echo.
+timeout /t 10echo.
 goto start

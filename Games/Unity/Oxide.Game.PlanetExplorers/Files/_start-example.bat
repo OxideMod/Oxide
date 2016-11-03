@@ -7,5 +7,5 @@ Server\PE_Server.exe -batchmode
 
 echo.
 echo Restarting server...
-echo.
+timeout /t 10echo.
 goto start

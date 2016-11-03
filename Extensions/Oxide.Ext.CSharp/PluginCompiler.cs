@@ -19,6 +19,7 @@ namespace Oxide.Plugins
     {
         public static bool AutoShutdown = true;
         public static string BinaryPath;
+        public static string CompilerVersion;
 
         public static void CheckCompilerBinary()
         {
@@ -54,7 +55,11 @@ namespace Oxide.Plugins
                     Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRGRP | FilePermissions.S_IXGRP | FilePermissions.S_IROTH| FilePermissions.S_IXOTH);
                     break;
             }
-            BinaryPath = binaryPath;
+            BinaryPath = EscapePath(binaryPath);
+
+            var versionInfo = FileVersionInfo.GetVersionInfo(binaryPath);
+            CompilerVersion = $"{versionInfo.FileMajorPart}.{versionInfo.FileMinorPart}.{versionInfo.FileBuildPart}.{versionInfo.FilePrivatePart}";
+            RemoteLogger.SetTag("compiler version", CompilerVersion);
         }
 
         private Process process;
@@ -110,7 +115,7 @@ namespace Oxide.Plugins
             }
             if (!CheckCompiler())
             {
-                OnCompilerFailed("Compiler couldn't be started.");
+                OnCompilerFailed($"Compiler v{CompilerVersion} couldn't be started.");
                 return;
             }
             compilation.Started();
@@ -137,7 +142,7 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.NextTick(() =>
                 {
-                    OnCompilerFailed("Compiler disconnected."); // TODO: Expand, warn about possible missing depdencies
+                    OnCompilerFailed($"Compiler v{CompilerVersion} disconnected."); // TODO: Expand, warn about possible missing depdencies
                     Shutdown();
                 });
                 return;
@@ -148,7 +153,7 @@ namespace Oxide.Plugins
                     var compilation = compilations[message.Id];
                     if (compilation == null)
                     {
-                        Interface.Oxide.LogWarning("CSharp compiler compiled an unknown assembly!"); // TODO: Clarify which assembly
+                        Interface.Oxide.LogWarning("Compiler compiled an unknown assembly!"); // TODO: Clarify which assembly
                         return;
                     }
                     compilation.endedAt = Interface.Oxide.Now;
@@ -225,7 +230,7 @@ namespace Oxide.Plugins
             if (process != null && process.Handle != IntPtr.Zero && !process.HasExited) return true;
             PurgeOldLogs();
             Shutdown();
-            var args = new[] { "/service", "/logPath:" + EscapeArgument(Interface.Oxide.LogDirectory) };
+            var args = new[] { "/service", "/logPath:" + EscapePath(Interface.Oxide.LogDirectory) };
             try
             {
                 process = new Process
@@ -260,7 +265,7 @@ namespace Oxide.Plugins
             {
                 process?.Dispose();
                 process = null;
-                Interface.Oxide.LogException("Exception while starting compiler: ", ex); // TODO: Expand, warn that it may not be executable
+                Interface.Oxide.LogException($"Exception while starting compiler v{CompilerVersion}: ", ex); // TODO: Expand, warn that it may not be executable
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
                 var win32 = ex as Win32Exception;
                 if (win32 != null) Interface.Oxide.LogError("Win32 NativeErrorCode: {0} ErrorCode: {1} HelpLink: {2}", win32.NativeErrorCode, win32.ErrorCode, win32.HelpLink);
@@ -277,7 +282,7 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.NextTick(() =>
             {
-                OnCompilerFailed("Compiler closed."); // TODO: Expand, warn about possible security software?
+                OnCompilerFailed($"Compiler v{CompilerVersion} closed."); // TODO: Expand, warn about possible security software?
                 Shutdown();
             });
         }
@@ -309,12 +314,12 @@ namespace Oxide.Plugins
             }
         }
 
-        private static string EscapeArgument(string arg)
+        private static string EscapePath(string path)
         {
-            if (string.IsNullOrEmpty(arg)) return "\"\"";
-            arg = Regex.Replace(arg, @"(\\*)" + "\"", @"$1\$0");
-            arg = Regex.Replace(arg, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"");
-            return arg;
+            if (string.IsNullOrEmpty(path)) return "\"\"";
+            path = Regex.Replace(path, @"(\\*)" + "\"", @"$1\$0");
+            path = Regex.Replace(path, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"");
+            return path;
         }
     }
 }
