@@ -1307,7 +1307,7 @@
             "InjectionIndex": 214,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0, l0",
+            "ArgumentString": "a0, l2",
             "HookTypeName": "Simple",
             "Name": "OnItemCraftFinished",
             "HookName": "OnItemCraftFinished",
