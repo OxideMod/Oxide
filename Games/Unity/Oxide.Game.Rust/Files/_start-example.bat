@@ -7,5 +7,6 @@ RustDedicated.exe -batchmode -nographics +server.ip 0.0.0.0 +rcon.ip 0.0.0.0 +se
 
 echo.
 echo Restarting server...
+timeout /t 10
 echo.
 goto start

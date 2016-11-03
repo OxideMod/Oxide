@@ -7,5 +7,5 @@ ROK.exe -batchmode -nographics -silentcrash
 
 echo.
 echo Restarting server...
-echo.
+timeout /t 10echo.
 goto start

@@ -21,4 +21,5 @@ do
     -server.headerimage "http://oxidemod.org/styles/oxide/logo.png" \
     -server.url "http://oxidemod.org"
     echo "\nRestarting server...\n"
+    sleep 10
 done
