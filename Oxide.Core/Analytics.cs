@@ -17,6 +17,8 @@ namespace Oxide.Core
         private const string trackingId = "UA-48448359-3";
         private const string url = "https://www.google-analytics.com/collect";
 
+        public static string Filename = Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+
         private static Plugin[] Plugins() => PluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
 
         private static IEnumerable<string> PluginNames() => new HashSet<string>(Plugins().Select(pl => pl.Name));
@@ -26,28 +28,36 @@ namespace Oxide.Core
             { "dimension1", IntPtr.Size == 8 ? "x64" : "x86" }, // CPU architecture
             { "dimension2", Environment.OSVersion.Platform.ToString().ToLower() }, // OS platform
             { "dimension3", Environment.OSVersion.Version.ToString().ToLower() }, // OS version
-            { "dimension4", Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName).ToLower() }, // Game name
+            { "dimension4", Filename.ToLower().Replace("dedicated", "").Replace("server", "").Replace("-", "") }, // Game name
             { "dimension5", Plugins().Length.ToString() }, // Plugin count
             { "dimension6", string.Join(", ", PluginNames().ToArray()) } // Plugin names
         };
 
-        public static void Payload(string state)
+        public static void Collect()
         {
-            var payload = $"v=1&tid={trackingId}&t=screenview";
-            payload += $"&an=Oxide/{Environment.OSVersion}&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}";
+            var payload = $"v=1&tid={trackingId}&t=screenview&cd=Oxide/{Environment.OSVersion.ToString().Replace("Microsoft", "")}";
             payload += $"&cid={Environment.MachineName}{Environment.ProcessorCount}";
-            payload += string.Join("", Environment.GetLogicalDrives()).Replace(":", "").Replace("\\", "").Replace("/", "")/* + "&"*/;
-            //payload += string.Join("&", Tags.Select(kv => kv.Key + "=" + kv.Value).ToArray());
-            Interface.Oxide.LogWarning(payload);
+            payload += string.Join("", Environment.GetLogicalDrives()).Replace(":", "").Replace("\\", "").Replace("/", "");
+            payload += $"&an=Oxide&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}&";
+            payload += string.Join("&", Tags.Select(kv => kv.Key + "=" + kv.Value).ToArray());
 
-            Collect(payload);
+            SendPayload(payload);
         }
 
-        public static void Collect(string payload)
+        public static void Event()
         {
+            // TODO: Complete event sending
+        }
+
+        public static void SendPayload(string payload)
+        {
+            Interface.Oxide.LogWarning(Uri.EscapeUriString(payload));
             var headers = new Dictionary<string, string> {{ "User-Agent", $"Oxide/{OxideMod.Version}" }};
 
-            Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) => { }, null, headers);
+            Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) =>
+            {
+                Interface.Oxide.LogWarning(response);
+            }, null, headers);
         }
     }
 }

@@ -239,7 +239,7 @@ namespace Oxide.Game.Hurtworld
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Payload("start");
+            Analytics.Collect();
 
             // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");
@@ -252,7 +252,7 @@ namespace Oxide.Game.Hurtworld
         /// Called when the server is saving
         /// </summary>
         [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Payload("start");
+        private void OnServerSave() => Analytics.Collect();
 
         #endregion
 

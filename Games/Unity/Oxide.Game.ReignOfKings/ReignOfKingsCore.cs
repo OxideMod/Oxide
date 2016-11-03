@@ -158,7 +158,7 @@ namespace Oxide.Game.ReignOfKings
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Payload("start");
+            Analytics.Collect();
 
             // Setup the default permission groups
             rokPerms = Server.Permissions;
@@ -189,7 +189,7 @@ namespace Oxide.Game.ReignOfKings
         /// Called when the server is saving
         /// </summary>
         [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Payload("start");
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies

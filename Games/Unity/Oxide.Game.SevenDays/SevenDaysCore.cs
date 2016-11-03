@@ -114,7 +114,7 @@ namespace Oxide.Game.SevenDays
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Payload("start");
+            Analytics.Collect();
 
             // Update server console window and status bars
             SevenDaysExtension.ServerConsole();
@@ -124,17 +124,13 @@ namespace Oxide.Game.SevenDays
         /// Called when the server is saving
         /// </summary>
         [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Payload("start");
+        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown()
-        {
-            Analytics.Payload("end");
-            Interface.Oxide.OnShutdown();
-        }
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
 
