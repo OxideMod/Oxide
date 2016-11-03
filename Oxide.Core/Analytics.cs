@@ -23,11 +23,12 @@ namespace Oxide.Core
 
         public static void Payload(string state)
         {
-            var core = $"v=1&tid={trackingId}&sc={state}&t=screenview";
-            var oxide = $"an=Oxide/{Environment.OSVersion}&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}";
-            var identifier = $"uid={Environment.MachineName}-{Environment.ProcessorCount}-{string.Join("-", Environment.GetLogicalDrives())}";
+            var payload = $"v=1&tid={trackingId}&sc={state}&t=screenview";
+            payload += $"an=Oxide/{Environment.OSVersion}&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}";
+            payload += $"uid={Environment.MachineName}{Environment.ProcessorCount}";
+            payload += string.Join("", Environment.GetLogicalDrives()).Replace(":", "").Replace("\\", "").Replace("/", "");
 
-            Collect($"{core}&{oxide}&{identifier}");
+            Collect(payload);
         }
 
         public static void Collect(string payload)
