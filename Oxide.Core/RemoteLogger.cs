@@ -152,7 +152,7 @@ namespace Oxide.Core
 
         public static void Exception(string message, string rawStackTrace)
         {
-            if (!rawStackTrace.Contains("Oxide.Core") && !rawStackTrace.Contains("Oxide.Ext")) return;
+            if (!rawStackTrace.Contains("Oxide.Core") && !rawStackTrace.Contains("Oxide.Ext") && !rawStackTrace.Contains("Oxide.Game")) return;
 
             var stackTrace = rawStackTrace.Split('\r', '\n');
             var culprit = stackTrace[0].Split('(')[0].Trim();
