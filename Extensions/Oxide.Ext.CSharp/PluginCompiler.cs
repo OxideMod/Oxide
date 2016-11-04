@@ -63,7 +63,7 @@ namespace Oxide.Plugins
         }
 
         private Process process;
-        private readonly Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+,\d+\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
+        private readonly Regex fileErrorRegex = new Regex(@"([\w\.]+)\(\d+\,\d+\+?\): error|error \w+: Source file `[\\\./]*([\w\.]+)", RegexOptions.Compiled);
         private ObjectStreamClient<CompilerMessage> client;
         private Hash<int, Compilation> compilations;
         private Queue<CompilerMessage> messageQueue;
