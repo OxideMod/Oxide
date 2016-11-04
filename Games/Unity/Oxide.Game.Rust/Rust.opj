@@ -336,7 +336,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "CanUseLock [open]",
+            "Name": "CanUseLock [base, open]",
             "HookName": "CanUseLock",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseLock",
@@ -362,7 +362,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "CanUseLock [close]",
+            "Name": "CanUseLock [base, close]",
             "HookName": "CanUseLock",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "BaseLock",
@@ -376,6 +376,110 @@
               ]
             },
             "MSILHash": "P3Mx+v3adUs95vU27ANKY5mvZxgLUs14zJrrTfI5vlw=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseLock [code, open]",
+            "HookName": "CanUseLock",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeLock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnTryToOpen",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "RUYckXw/VpLmkhtoMidoJSiniTSuhHWSO/pmtRX+Czg=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseLock [code, close]",
+            "HookName": "CanUseLock",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeLock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnTryToClose",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "RUYckXw/VpLmkhtoMidoJSiniTSuhHWSO/pmtRX+Czg=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseLock [key, close]",
+            "HookName": "CanUseLock",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "KeyLock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnTryToClose",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "KP8odDkmowXYTWwekNrw7ntBJ1y8wRTE2kf3drU7sMA=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseLock [key, open]",
+            "HookName": "CanUseLock",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "KeyLock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnTryToOpen",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "KP8odDkmowXYTWwekNrw7ntBJ1y8wRTE2kf3drU7sMA=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
