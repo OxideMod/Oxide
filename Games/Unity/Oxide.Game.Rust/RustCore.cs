@@ -490,11 +490,11 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <param name="sign"></param>
         [HookMethod("CanUpdateSign")]
-        private void CanUpdateSign(BasePlayer player, Signage sign)
+        private bool CanUpdateSign(BasePlayer player, Signage sign)
         {
             // Call deprecated hooks
-            Interface.CallDeprecatedHook("CanLockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
-            Interface.CallDeprecatedHook("CanUnlockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
+            if (!sign.IsLocked()) return (bool)Interface.CallDeprecatedHook("CanLockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
+            return (bool)Interface.CallDeprecatedHook("CanUnlockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
         }
 
         /// <summary>
@@ -503,10 +503,10 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <param name="lock"></param>
         [HookMethod("CanUseLock")]
-        private void CanUseLock(BasePlayer player, BaseLock @lock)
+        private bool CanUseLock(BasePlayer player, BaseLock @lock)
         {
             // Call deprecated hook
-            Interface.CallDeprecatedHook("CanUseDoor", "CanUseLock", new DateTime(2017, 1, 3), player, @lock);
+            return (bool)Interface.CallDeprecatedHook("CanUseDoor", "CanUseLock", new DateTime(2017, 1, 3), player, @lock);
         }
 
         /// <summary>

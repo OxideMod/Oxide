@@ -217,8 +217,7 @@ namespace Oxide.Plugins
                     {
                         plugin.OnCompilationFailed();
                         PluginErrors[plugin.Name] = $"Failed to compile: {plugin.CompilerErrors}";
-                        Interface.Oxide.LogError("{0} plugin failed to compile!", plugin.ScriptName);
-                        Interface.Oxide.LogError(plugin.CompilerErrors);
+                        Interface.Oxide.LogError($"Error while compiling {plugin.CompilerErrors}");
                         //RemoteLogger.Warning($"{plugin.ScriptName} plugin failed to compile!\n{plugin.CompilerErrors}");
                     }
                 }
@@ -226,21 +225,16 @@ namespace Oxide.Plugins
                 {
                     if (compilation.plugins.Count > 0)
                     {
-                        var compiledNames = compilation.plugins.Select(pl => pl.Name).ToArray();
-                        var verb = compilation.plugins.Count > 1 ? "were" : "was";
+                        var compiledNames = compilation.plugins.Where(pl => string.IsNullOrEmpty(pl.CompilerErrors)).Select(pl => pl.Name).ToArray();
+                        var verb = compiledNames.Length > 1 ? "were" : "was";
                         Interface.Oxide.LogInfo($"{compiledNames.ToSentence()} {verb} compiled successfully in {Math.Round(compilation.duration * 1000f)}ms");
                     }
+
                     foreach (var plugin in compilation.plugins)
                     {
                         if (plugin.CompilerErrors == null)
                         {
                             Interface.Oxide.UnloadPlugin(plugin.Name);
-                        }
-                    }
-                    foreach (var plugin in compilation.plugins)
-                    {
-                        if (plugin.CompilerErrors == null)
-                        {
                             plugin.OnCompilationSucceeded(compilation.compiledAssembly);
                         }
                         else
