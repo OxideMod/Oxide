@@ -18,8 +18,8 @@
             "TypeName": "SDG.Unturned.Dedicator",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
+              "Exposure": 2,
+              "Name": "awake",
               "ReturnType": "System.Void",
               "Parameters": []
             },
@@ -31,7 +31,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 42,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -39,12 +39,12 @@
             "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
+              "Exposure": 2,
+              "Name": "awake",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "jZTShW2+Oy7QrHojgh5lR0PhGkYV631nN3PAllLrUqQ=",
+            "MSILHash": "GmePCSQknd17TvcuY1cW59KMXXIUsToc5GLAE7ITSQQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -52,7 +52,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 1,
+            "InjectionIndex": 43,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -63,12 +63,12 @@
             "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
+              "Exposure": 2,
+              "Name": "awake",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "jZTShW2+Oy7QrHojgh5lR0PhGkYV631nN3PAllLrUqQ=",
+            "MSILHash": "GmePCSQknd17TvcuY1cW59KMXXIUsToc5GLAE7ITSQQ=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -176,7 +176,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 356,
+            "InjectionIndex": 409,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -194,7 +194,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "SPWmE4ZNjo+RrZ7se8yZFU8E7Rix5Om9xj8YLvOTz7s=",
+            "MSILHash": "cYfUt4N1897+C/xFiPmNttqcSMcPnh11dOTdqF8Xe+Y=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -221,6 +221,177 @@
             "MSILHash": "Dy5h0seHx42qDZDbc2dnTINSRfxu76/pLdA6elEGkzo=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "receiveServer",
+            "HookName": "OnreceiveServer",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "receiveServer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Steamworks.CSteamID",
+                "System.Byte[]",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "gHYJP2UX99x2RnwiENlS8aFSFJItxNuxPXouudAdIZ0=",
+            "BaseHookName": null,
+            "HookCategory": "_WIP"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "accept",
+            "HookName": "Onaccept",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "accept",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "SDG.Unturned.SteamPlayerID",
+                "System.Boolean",
+                "System.Boolean",
+                "System.Byte",
+                "System.Byte",
+                "System.Byte",
+                "UnityEngine.Color",
+                "UnityEngine.Color",
+                "System.Boolean",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32[]",
+                "SDG.Unturned.EPlayerSkillset"
+              ]
+            },
+            "MSILHash": "ibxvZhAxPT8RW9s2uYPDlTm0QFaj57WqGY0+xWvWItE=",
+            "BaseHookName": null,
+            "HookCategory": "_WIP"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 256,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerInit",
+            "HookName": "OnPlayerInit",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "addPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "SDG.Unturned.SteamPlayerID",
+                "UnityEngine.Vector3",
+                "System.Byte",
+                "System.Boolean",
+                "System.Boolean",
+                "System.Int32",
+                "System.Byte",
+                "System.Byte",
+                "System.Byte",
+                "UnityEngine.Color",
+                "UnityEngine.Color",
+                "System.Boolean",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32[]",
+                "SDG.Unturned.EPlayerSkillset"
+              ]
+            },
+            "MSILHash": "6KbeF5nXVsI0IwObu2Bzzv8fQfFMUvVSENLG1kUN5WQ=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "dismiss",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Steamworks.CSteamID"
+              ]
+            },
+            "MSILHash": "0on8/MW6ql43Ij0uoUB8Q1IlwiQ6HAcDL3llJgRPcvc=",
+            "BaseHookName": null,
+            "HookCategory": "_WIP"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "handleValidateAuthTicketResponse",
+            "HookName": "OnhandleValidateAuthTicketResponse",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "handleValidateAuthTicketResponse",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "Steamworks.ValidateAuthTicketResponse_t"
+              ]
+            },
+            "MSILHash": "GTPaFJOdGglP1MGTnWKvCbLvNE/OO5om8wKZr4TMDc0=",
+            "BaseHookName": null,
+            "HookCategory": "_WIP"
           }
         }
       ]
