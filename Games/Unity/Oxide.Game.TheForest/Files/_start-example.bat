@@ -7,5 +7,6 @@ TheForest.exe -batchmode -nographics -ip 0.0.0.0 -port 27016 -maxplayers 10 -hos
 
 echo.
 echo Restarting server...
-timeout /t 10echo.
+timeout /t 10
+echo.
 goto start

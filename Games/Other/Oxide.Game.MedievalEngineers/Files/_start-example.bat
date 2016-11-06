@@ -7,5 +7,6 @@ DedicatedServer64\MedievalEngineersDedicated.exe -console -ip 0.0.0.0 -port 2701
 
 echo.
 echo Restarting server...
-timeout /t 10echo.
+timeout /t 10
+echo.
 goto start

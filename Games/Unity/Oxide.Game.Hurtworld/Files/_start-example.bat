@@ -7,5 +7,6 @@ Hurtworld.exe -batchmode -nographics -exec "host 12871;queryport 12881;maxplayer
 
 echo.
 echo Restarting server...
-timeout /t 10echo.
+timeout /t 10
+echo.
 goto start

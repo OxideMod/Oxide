@@ -7,5 +7,6 @@ H2o.exe -batchmode -nographics
 
 echo.
 echo Restarting server...
-timeout /t 10echo.
+timeout /t 10
+echo.
 goto start
