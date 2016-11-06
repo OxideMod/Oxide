@@ -63,6 +63,7 @@ namespace Oxide.Game.Unturned
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
+            RemoteLogger.SetTag("game version", Provider.APP_VERSION);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -109,9 +110,6 @@ namespace Oxide.Game.Unturned
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Configure remote logging
-            RemoteLogger.SetTag("game version", Provider.APP_VERSION);
 
             // Update server console window and status bars
             UnturnedExtension.ServerConsole();
