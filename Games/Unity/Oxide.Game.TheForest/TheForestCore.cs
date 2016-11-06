@@ -3,9 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
+using Bolt;
 using Steamworks;
 using TheForest.UI;
 using TheForest.Utils;
+using UdpKit;
 using UnityEngine;
 
 using Oxide.Core;
@@ -28,6 +30,15 @@ namespace Oxide.Game.TheForest
 
         // The covalence provider
         internal static readonly TheForestCovalenceProvider Covalence = TheForestCovalenceProvider.Instance;
+
+        // Avoid CoopKickToken reflection
+        internal class CoopKickToken : IProtocolToken
+        {
+            public bool Banned;
+            public string KickMessage;
+            public void Read(UdpPacket packet) => KickMessage = packet.ReadString();
+            public void Write(UdpPacket packet) => packet.WriteString(KickMessage);
+        }
 
         // TODO: Localization of core
 
@@ -297,11 +308,11 @@ namespace Oxide.Game.TheForest
                 if (LevelSerializer.SavedGames.Count > 0)
                 {
                     coop.OnLoad();
-                    coop.OnSlotSelection((int)TitleScreen.StartGameSetup.Slot);
+                    coop.OnSlotSelection((int)GameSetup.Slot);
                 }
                 else
                 {
-                    coop.OnNewGame();
+                    coop.OnNewGame(GameSetup.DifficultyModes.Normal); // TODO: Difficulty mode command-line option
                 }
             });
         }
@@ -334,6 +345,21 @@ namespace Oxide.Game.TheForest
                 var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
                 coop.OnHostStartGame();
             });
+        }
+
+        /// <summary>
+        /// Skips the plane cut scene
+        /// </summary>
+        [HookMethod("ICutScene")]
+        private void ICutScene(TriggerCutScene scene)
+        {
+            Scene.TriggerCutScene.SpaceTut.SetActive(false);
+            Scene.TriggerCutScene.LightsFlight.SetActive(false);
+            //Scene.TriggerCutScene.pmTrigger.SendEvent("toSkipOpening");
+            //Scene.TriggerCutScene.skipOpening = true;
+            scene.planeController.setPlanePosition();
+            //scene.FinalizePlanePosition();
+            UnityEngine.Object.Destroy(scene);
         }
 
         /// <summary>

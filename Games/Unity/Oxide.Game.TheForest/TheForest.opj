@@ -152,7 +152,7 @@
                 "Steamworks.LobbyCreated_t"
               ]
             },
-            "MSILHash": "rCFFUa9qOGISlaAmD4WtZLprMFr4BrsgZKcEYvSweGE=",
+            "MSILHash": "7vyKVmtw2/k7LP1Gabd09aui5nnvhX33S1EJwngfLPI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -958,7 +958,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "bacCqmVF4Uhk8swvw+HTBUoPPNPNHrMh+tnCC7EMsk8=",
+            "MSILHash": "h9L74e0YnOSkBH8+5B7y2LHuXyjs9JqiCdcR3y4z15Y=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1270,7 +1270,7 @@
                 "AddItemToDoor"
               ]
             },
-            "MSILHash": "lePMTt3Uyc/yw9MVL8nwcc/sdqj3WiG36f/53tq3xUQ=",
+            "MSILHash": "BkXnFKeg1YqwliVjfyGpXTDXO8C+2IpJZ/uF4scWu7c=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -1359,8 +1359,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnPlayerRespawn",
-            "HookName": "OnPlayerRespawn",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopPlayerCallbacks",
             "Flagged": false,
@@ -1372,7 +1372,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "SZe2w8cRD77ker7Kx4zBJRBqVsUOoRL9sK+WMSkSrJk=",
+            "MSILHash": "K6e9hjTdK442gI7kEmSpSvOwR6fZ0lBiUMT8O4JhDuw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1598,7 +1598,7 @@
             "HookName": "SkipPlaneScene",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerCutScene",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "Update",
@@ -1630,6 +1630,30 @@
               "Parameters": []
             },
             "MSILHash": "QMLZbJ/XJy8dHTpGHTfT+P90UIOjYFKlMZwzzzMQeVs=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "ICutScene [internal]",
+            "HookName": "ICutScene",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TriggerCutScene",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "RmWieJzzpKpKRdglrPk9CnzMl7HAjy1ijkpbS0EAX/M=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
