@@ -1598,7 +1598,7 @@
             "HookName": "SkipPlaneScene",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerCutScene",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "Update",
@@ -1630,6 +1630,30 @@
               "Parameters": []
             },
             "MSILHash": "QMLZbJ/XJy8dHTpGHTfT+P90UIOjYFKlMZwzzzMQeVs=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "ICutScene [internal]",
+            "HookName": "ICutScene",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TriggerCutScene",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "RmWieJzzpKpKRdglrPk9CnzMl7HAjy1ijkpbS0EAX/M=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

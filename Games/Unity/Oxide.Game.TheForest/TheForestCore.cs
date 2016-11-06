@@ -348,6 +348,21 @@ namespace Oxide.Game.TheForest
         }
 
         /// <summary>
+        /// Skips the plane cut scene
+        /// </summary>
+        [HookMethod("ICutScene")]
+        private void ICutScene(TriggerCutScene scene)
+        {
+            Scene.TriggerCutScene.SpaceTut.SetActive(false);
+            Scene.TriggerCutScene.LightsFlight.SetActive(false);
+            //Scene.TriggerCutScene.pmTrigger.SendEvent("toSkipOpening");
+            //Scene.TriggerCutScene.skipOpening = true;
+            scene.planeController.setPlanePosition();
+            //scene.FinalizePlanePosition();
+            UnityEngine.Object.Destroy(scene);
+        }
+
+        /// <summary>
         /// Overrides the default save path
         /// </summary>
         /// <returns></returns>

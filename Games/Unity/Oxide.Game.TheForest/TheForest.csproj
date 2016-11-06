@@ -47,6 +47,9 @@
     <Reference Include="bolt.user">
       <HintPath>Dependencies\bolt.user.dll</HintPath>
     </Reference>
+    <Reference Include="PlayMaker">
+      <HintPath>Dependencies\PlayMaker.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
@@ -117,8 +120,8 @@
     <CallTarget Targets="Deploy" Condition="Exists('$(SolutionDir).deploy')" />
   </Target>
   <Target Name="Deploy">
-    <Exec Command='start /b /wait taskkill /f /im TheForest.exe /fi "memusage gt 2"' />
-    <Exec Command='start /b /wait taskkill /f /im CSharpCompiler.exe /fi "memusage gt 2"' />
+    <Exec Command="start /b /wait taskkill /f /im TheForest.exe /fi &quot;memusage gt 2&quot;" />
+    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" />
     <ReadLinesFromFile File="$(SolutionDir).deploy">
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
