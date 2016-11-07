@@ -22,19 +22,19 @@ namespace Oxide.Game.Rust.Libraries
         {
             public readonly Plugin Plugin;
             public readonly string Name;
-            public Func<ConsoleSystem.Arg, bool> Callback;
+            public Func<ConsoleSystem.Arg, bool> Call;
 
             public PluginCallback(Plugin plugin, string name)
             {
                 Plugin = plugin;
                 Name = name;
-                Callback = null;
+                Call = null;
             }
 
             public PluginCallback(Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
             {
                 Plugin = plugin;
-                Callback = callback;
+                Call = callback;
                 Name = null;
             }
         }
@@ -42,7 +42,7 @@ namespace Oxide.Game.Rust.Libraries
         internal class ConsoleCommand
         {
             public readonly string Name;
-            public readonly List<PluginCallback> PluginCallbacks = new List<PluginCallback>();
+            public PluginCallback Callback;
             public readonly ConsoleSystem.Command RustCommand;
             public Action<ConsoleSystem.Arg> OriginalCallback;
 
@@ -65,19 +65,15 @@ namespace Oxide.Game.Rust.Libraries
                 };
             }
 
-            public void AddCallback(Plugin plugin, string name) => PluginCallbacks.Add(new PluginCallback(plugin, name));
+            public void AddCallback(Plugin plugin, string name) => Callback = new PluginCallback(plugin, name);
 
-            public void AddCallback(Plugin plugin, Func<ConsoleSystem.Arg, bool> callback) => PluginCallbacks.Add(new PluginCallback(plugin, callback));
+            public void AddCallback(Plugin plugin, Func<ConsoleSystem.Arg, bool> callback) => Callback = new PluginCallback(plugin, callback);
 
             public void HandleCommand(ConsoleSystem.Arg arg)
             {
-                foreach (var pluginCallback in PluginCallbacks)
-                {
-                    pluginCallback.Plugin?.TrackStart();
-                    var result = pluginCallback.Callback(arg);
-                    pluginCallback.Plugin?.TrackEnd();
-                    if (result) return;
-                }
+                Callback.Plugin?.TrackStart();
+                Callback.Call(arg);
+                Callback.Plugin?.TrackEnd();
             }
         }
 
@@ -131,10 +127,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="plugin"></param>
         /// <param name="callback"></param>
         [LibraryFunction("AddChatCommand")]
-        public void AddChatCommand(string name, Plugin plugin, string callback)
-        {
-            AddChatCommand(name, plugin, (player, command, args) => plugin.CallHook(callback, player, command, args));
-        }
+        public void AddChatCommand(string name, Plugin plugin, string callback) => AddChatCommand(name, plugin, (player, command, args) => plugin.CallHook(callback, player, command, args));
 
         /// <summary>
         /// Adds a chat command
@@ -230,7 +223,7 @@ namespace Oxide.Game.Rust.Libraries
                 if (consoleCommand.OriginalCallback != null)
                     cmd.OriginalCallback = consoleCommand.OriginalCallback;
 
-                var previousPluginName = consoleCommand.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
+                var previousPluginName = consoleCommand.Callback.Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var message = $"{newPluginName} has replaced the '{command}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
@@ -272,7 +265,7 @@ namespace Oxide.Game.Rust.Libraries
             // Register the console command
             rustcommands[fullName] = cmd.RustCommand;
             ConsoleSystem.Index.GetAll().Add(cmd.RustCommand);
-            consoleCommands[fullName] = cmd;
+            consoleCommands[parent == "global" ? name : fullName] = cmd;
         }
 
         /// <summary>
@@ -297,12 +290,9 @@ namespace Oxide.Game.Rust.Libraries
         private void plugin_OnRemovedFromManager(Plugin sender, PluginManager manager)
         {
             // Find all console commands which were registered by the plugin
-            var commands = consoleCommands.Values.Where(c => c.PluginCallbacks.Any(cb => cb.Plugin == sender)).ToArray();
+            var commands = consoleCommands.Values.Where(c => c.Callback.Plugin == sender).ToArray();
             foreach (var cmd in commands)
             {
-                cmd.PluginCallbacks.RemoveAll(cb => cb.Plugin == sender);
-                if (cmd.PluginCallbacks.Count > 0) continue;
-
                 // This command is no longer registered by any plugins
                 consoleCommands.Remove(cmd.Name);
 
@@ -360,7 +350,7 @@ namespace Oxide.Game.Rust.Libraries
             {
                 ConsoleCommand consoleCommand;
                 if (consoleCommands.TryGetValue(parent == "global" ? name : fullname, out consoleCommand))
-                    if (consoleCommand.PluginCallbacks[0].Plugin.IsCorePlugin)
+                    if (consoleCommand.Callback.Plugin.IsCorePlugin)
                         return false;
             }
 

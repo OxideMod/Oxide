@@ -159,7 +159,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             {
                 if (consoleCommand.OriginalCallback != null) newCommand.OriginalCallback = consoleCommand.OriginalCallback;
 
-                var previousPluginName = consoleCommand.PluginCallbacks[0].Plugin?.Name ?? "an unknown plugin";
+                var previousPluginName = consoleCommand.Callback.Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var message = $"{newPluginName} has replaced the '{fullname}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
@@ -302,7 +302,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
             Command.ConsoleCommand consoleCommand;
             if (cmdlib.consoleCommands.TryGetValue(fullname, out consoleCommand))
-                if (consoleCommand.PluginCallbacks[0].Plugin.IsCorePlugin)
+                if (consoleCommand.Callback.Plugin.IsCorePlugin)
                     return false;
 
             return !RustCore.RestrictedCommands.Contains(command) && !RustCore.RestrictedCommands.Contains(fullname);
