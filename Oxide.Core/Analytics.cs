@@ -17,7 +17,7 @@ namespace Oxide.Core
         private const string trackingId = "UA-48448359-3";
         private const string url = "https://www.google-analytics.com/collect";
 
-        public static string Filename = Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+        /*public static string Filename = Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
 
         private static Plugin[] Plugins() => PluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
 
@@ -31,15 +31,15 @@ namespace Oxide.Core
             { "dimension4", Filename.ToLower().Replace("dedicated", "").Replace("server", "").Replace("-", "") }, // Game name
             { "dimension5", Plugins().Length.ToString() }, // Plugin count
             { "dimension6", string.Join(", ", PluginNames().ToArray()) } // Plugin names
-        };
+        };*/
 
         public static void Collect()
         {
             var payload = $"v=1&tid={trackingId}&t=screenview&cd={Environment.OSVersion.ToString().Replace("Microsoft ", "")}";
             payload += $"&cid={Environment.MachineName}{Environment.ProcessorCount}";
             payload += string.Join("", Environment.GetLogicalDrives()).Replace(":", "").Replace("\\", "").Replace("/", "");
-            payload += $"&an=Oxide&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}&";
-            payload += string.Join("&", Tags.Select(kv => kv.Key + "=" + kv.Value).ToArray());
+            payload += $"&an=Oxide&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}";
+            //payload += string.Join("&", Tags.Select(kv => kv.Key + "=" + kv.Value).ToArray());
 
             SendPayload(payload);
         }
@@ -52,7 +52,6 @@ namespace Oxide.Core
         public static void SendPayload(string payload)
         {
             var headers = new Dictionary<string, string> {{ "User-Agent", $"Oxide/{OxideMod.Version}" }};
-
             Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) => { }, null, headers);
         }
     }

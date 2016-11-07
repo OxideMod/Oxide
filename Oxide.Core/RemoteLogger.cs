@@ -151,12 +151,28 @@ namespace Oxide.Core
         {
             EnqueueReport("fatal", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
         }
+        
+        public static string[] ExceptionFilter =
+        {
+            "BadImageFormatException",
+            "DllNotFoundException: lua52",
+            "IOException",
+            "Oxide.Core.Configuration",
+            "Oxide.Ext.CMS",
+            "Oxide.Ext.Hive",
+            "Oxide.Ext.LivemapIO",
+            "Oxide.Ext.Rcon2Hurt",
+            "Oxide.Ext.RustIO",
+            "ReflectionTypeLoadException",
+            "Sharing violation",
+            "UnauthorizedAccessException",
+            "WebException"
+        };
 
         public static void Exception(string message, string rawStackTrace)
         {
             if (!rawStackTrace.Contains("Oxide.Core") && !rawStackTrace.Contains("Oxide.Ext") && !rawStackTrace.Contains("Oxide.Game")) return;
-            if (rawStackTrace.Contains("Oxide.Core.Configuration") || rawStackTrace.Contains("Oxide.Ext.LivemapIO") || rawStackTrace.Contains("Oxide.Ext.RustIO")) return;
-            if (rawStackTrace.Contains("IOException") || rawStackTrace.Contains("Sharing violation") || rawStackTrace.Contains("UnauthorizedAccessException")) return;
+            foreach (var filter in ExceptionFilter) if (rawStackTrace.Contains(filter)) return;
 
             var stackTrace = rawStackTrace.Split('\r', '\n');
             var culprit = stackTrace[0].Split('(')[0].Trim();
