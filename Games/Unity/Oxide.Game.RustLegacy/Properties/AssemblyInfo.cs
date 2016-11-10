@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Oxide.Ext.RustLegacy")]
+[assembly: AssemblyTitle("Oxide.Game.RustLegacy")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Oxide")]
-[assembly: AssemblyProduct("Oxide.Ext.RustLegacy")]
+[assembly: AssemblyProduct("Oxide.Game.RustLegacy")]
 [assembly: AssemblyCopyright("Copyright (c) 2015 Oxide")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

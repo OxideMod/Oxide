@@ -1,6 +1,6 @@
 {
   "Name": "SpaceEngineers",
-  "TargetDirectory": "D:\\Servers\\Game\\SpaceEngineers\\DedicatedServer64",
+  "TargetDirectory": "D:\\Servers\\Game\\Other\\SpaceEngineers\\DedicatedServer64",
   "Manifests": [
     {
       "AssemblyName": "Sandbox.Game.dll",

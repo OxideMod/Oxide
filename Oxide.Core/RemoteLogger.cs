@@ -4,9 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-
 using Newtonsoft.Json;
-
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
@@ -33,7 +31,7 @@ namespace Oxide.Core
         {
             var authString = string.Join(", ", sentryAuth.Select(x => string.Join("=", x)).ToArray());
             authString += ", sentry_timestamp=" + (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-            return new Dictionary<string, string> {{ "X-Sentry-Auth", "Sentry " + authString }};
+            return new Dictionary<string, string> { { "X-Sentry-Auth", "Sentry " + authString } };
         }
 
         public static string Filename = Utility.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
@@ -71,7 +69,7 @@ namespace Oxide.Core
 
             private Dictionary<string, string> headers;
 
-            public Report(string level, string culprit, string message, string exception=null)
+            public Report(string level, string culprit, string message, string exception = null)
             {
                 this.headers = BuildHeaders();
                 this.level = level;
@@ -151,14 +149,16 @@ namespace Oxide.Core
         {
             EnqueueReport("fatal", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
         }
-        
+
         public static string[] ExceptionFilter =
         {
             "BadImageFormatException",
             "DllNotFoundException: lua52",
             "IOException",
+            "KeyNotFoundException",
             "Oxide.Core.Configuration",
             "Oxide.Ext.CMS",
+            "Oxide.Ext.Community",
             "Oxide.Ext.Hive",
             "Oxide.Ext.LivemapIO",
             "Oxide.Ext.Rcon2Hurt",
@@ -171,7 +171,7 @@ namespace Oxide.Core
 
         public static void Exception(string message, string rawStackTrace)
         {
-            if (!rawStackTrace.Contains("Oxide.Core") && !rawStackTrace.Contains("Oxide.Ext") && !rawStackTrace.Contains("Oxide.Game")) return;
+            if (!rawStackTrace.Contains("Oxide.Core") && !rawStackTrace.Contains("Oxide.Game") && !rawStackTrace.Contains("Oxide.Plugins.Compiler")) return;
             foreach (var filter in ExceptionFilter) if (rawStackTrace.Contains(filter)) return;
 
             var stackTrace = rawStackTrace.Split('\r', '\n');

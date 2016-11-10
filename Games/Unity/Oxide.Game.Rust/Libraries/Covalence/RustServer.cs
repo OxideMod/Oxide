@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
-
 using Global = Rust.Global;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence

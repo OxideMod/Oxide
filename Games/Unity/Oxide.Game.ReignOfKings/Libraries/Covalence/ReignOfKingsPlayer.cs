@@ -1,5 +1,4 @@
 ﻿using System;
-
 using CodeHatch.Common;
 using CodeHatch.Damaging;
 using CodeHatch.Engine.Behaviours;
@@ -9,7 +8,6 @@ using CodeHatch.Networking.Events;
 using CodeHatch.Networking.Events.Entities;
 using CodeHatch.StarForge.Sleeping;
 using UnityEngine;
-
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;

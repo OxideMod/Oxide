@@ -1,6 +1,6 @@
 {
   "Name": "Hide & Hold Out",
-  "TargetDirectory": "D:\\Servers\\Game\\HideHoldout\\H2o_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\HideHoldout\\H2o_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

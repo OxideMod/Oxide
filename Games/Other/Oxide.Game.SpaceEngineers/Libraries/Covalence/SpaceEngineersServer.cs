@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Net;
-
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game;
 using Sandbox.Game.World;
 using SteamSDK;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence

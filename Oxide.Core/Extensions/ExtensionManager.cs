@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-
 using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
@@ -19,9 +18,19 @@ namespace Oxide.Core.Extensions
         // All loaded extensions
         private IList<Extension> extensions;
 
-        // The search pattern for extensions
-        private const string ExtFileSearchPattern = "Oxide.Ext.*.dll";
-        private const string GameFileSearchPattern = "Oxide.Game.*.dll";
+        // The core list and search patterns for extensions
+        private readonly string[] coreExtensions =
+        {
+            "Oxide.Core.CSharp.dll",
+            "Oxide.Core.JavaScript.dll",
+            "Oxide.Core.Lua.dll",
+            "Oxide.Core.MySql.dll",
+            "Oxide.Core.Python.dll",
+            "Oxide.Core.SQLite.dll",
+            "Oxide.Core.Unity.dll"
+        };
+        private const string communitySearchPattern = "Oxide.Ext.*.dll";
+        private const string gameExtSearchPattern = "Oxide.Game.*.dll";
 
         /// <summary>
         /// Gets the logger to which this extension manager writes
@@ -148,7 +157,6 @@ namespace Oxide.Core.Extensions
             }
             catch (Exception ex)
             {
-                //Logger.Write(LogType.Error, "Failed to load extension {0} ({1})", name, ex.Message);
                 Logger.WriteException($"Failed to load extension {name}", ex);
                 RemoteLogger.Exception($"Failed to load extension {name}", ex);
             }
@@ -160,19 +168,22 @@ namespace Oxide.Core.Extensions
         /// <param name="directory"></param>
         public void LoadAllExtensions(string directory)
         {
-            var gameFiles = Directory.GetFiles(directory, GameFileSearchPattern);
-            var files = Directory.GetFiles(directory, ExtFileSearchPattern).Concat(gameFiles);
-            foreach (var file in files)
+            for (var i = 0; i < coreExtensions.Length; i++)
+                if (File.Exists(Path.Combine(directory, coreExtensions[i]))) coreExtensions[i] = Path.Combine(directory, coreExtensions[i]);
+            var gameExtensions = Directory.GetFiles(directory, gameExtSearchPattern);
+            var allExtensions = Directory.GetFiles(directory, communitySearchPattern).Concat(gameExtensions).Concat(coreExtensions);
+
+            foreach (var ext in allExtensions)
             {
-                if (file.Contains(".Ext.Lum") || file.Contains(".Ext.NoSte") || file.Contains(".Ext.Thie")) continue;
-                if (file.Contains(".Ext.") && Array.IndexOf(gameFiles, file.Replace(".Ext.", ".Game.")) != -1)
+                if (ext.Contains("Luma") || ext.Contains("Steam") || ext.Contains("Thief")) continue;
+                if (ext.Contains(".Ext.") && Array.IndexOf(coreExtensions, ext.Replace(".Ext.", ".Core.")) != -1)
                 {
-                    //Logger.Write(LogType.Warning, "Found old game extension '{0}'. Please remove it!", Path.GetFileName(file));
-                    Cleanup.Add(file);
+                    Cleanup.Add(ext);
                     continue;
                 }
-                LoadExtension(Path.Combine(directory, file));
+                LoadExtension(Path.Combine(directory, ext));
             }
+
             foreach (var ext in extensions.ToArray())
             {
                 try

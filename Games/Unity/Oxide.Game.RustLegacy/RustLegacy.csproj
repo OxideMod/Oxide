@@ -73,11 +73,11 @@
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Extensions\Oxide.Ext.CSharp\CSharp.csproj">
+    <ProjectReference Include="..\..\..\Extensions\Oxide.Core.CSharp\CSharp.csproj">
       <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
       <Name>CSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Extensions\Oxide.Ext.Unity\Unity.csproj">
+    <ProjectReference Include="..\..\..\Extensions\Oxide.Core.Unity\Unity.csproj">
       <Project>{52c26c5b-23e5-48a2-b403-5ff5c898e91a}</Project>
       <Name>Unity</Name>
     </ProjectReference>
@@ -88,23 +88,23 @@
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.config.json" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.JavaScript\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.MySql\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Python\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.Unity\$(OutputPath)\UnityEngine*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.JavaScript\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.JavaScript\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Lua\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Python\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Python\Dependencies\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\UnityEngine*.dll" />
       <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-CSharp*.dll; $(TargetDir)\Facepunch*.dll; $(TargetDir)\uLink*.dll; $(TargetDir)\UnityEngine*.dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\**\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.Lua\Dependencies\**\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.SQLite\Dependencies\**\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Lua\Dependencies\**\*.dll" />
+      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.dll" />
       <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
-      <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Ext.CSharp\Dependencies\Mono.*.dll" />
+      <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
@@ -112,17 +112,17 @@
     <Copy SourceFiles="@(WinFiles)" DestinationFiles="@(WinFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinGameFiles)" DestinationFiles="@(WinGameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(WinNativeFiles)" DestinationFiles="@(WinNativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
-    <CallTarget Targets="Deploy" Condition="Exists('$(SolutionDir).deploy')" />
+    <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
-    <Exec Command='start /b /wait taskkill /f /im rust_server.exe /fi "memusage gt 2"' />
-    <Exec Command='start /b /wait taskkill /f /im CSharpCompiler.exe /fi "memusage gt 2"' />
-    <ReadLinesFromFile File="$(SolutionDir).deploy">
+    <Exec Command="start /b /wait taskkill /f /im rust_server.exe /fi &quot;memusage gt 2&quot;" />
+    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" />
+    <ReadLinesFromFile File="$(ProjectDir).deploy">
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
     <ItemGroup>
       <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
     </ItemGroup>
-    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>

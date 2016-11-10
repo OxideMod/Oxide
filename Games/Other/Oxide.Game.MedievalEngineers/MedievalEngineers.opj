@@ -1,6 +1,6 @@
 {
   "Name": "MedievalEngineers",
-  "TargetDirectory": "D:\\Servers\\Game\\MedievalEngineers\\DedicatedServer64",
+  "TargetDirectory": "D:\\Servers\\Game\\Other\\MedievalEngineers\\DedicatedServer64",
   "Manifests": [
     {
       "AssemblyName": "Sandbox.Game.dll",
@@ -86,7 +86,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rhsFqrxQzSOIHAiiXdEoPXYwHyYU3ss8NPKAV6Ev3TY=",
+            "MSILHash": "GHNPFp+Xjdv7xZBFYGcEfvtT8C/Nebf991z0LecMFUI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -125,7 +125,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rhsFqrxQzSOIHAiiXdEoPXYwHyYU3ss8NPKAV6Ev3TY=",
+            "MSILHash": "GHNPFp+Xjdv7xZBFYGcEfvtT8C/Nebf991z0LecMFUI=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "_Patches"
           }

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Newtonsoft.Json;
 using ProtoBuf;
-
 using Oxide.Core.Plugins;
 
 namespace Oxide.Core.Libraries

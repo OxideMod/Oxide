@@ -1,7 +1,5 @@
 ﻿using System;
-
 using Game.Configuration;
-
 using Oxide.Core;
 using Oxide.Core.Extensions;
 

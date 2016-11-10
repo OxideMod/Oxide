@@ -8,17 +8,17 @@
 
 A complete rewrite of the popular, original Oxide API and Lua plugin framework. Previously only available for the legacy Rust game, Oxide now supports numerous games. Oxide's focus is on modularity and extensibility. The core is highly abstracted and loosely coupled, and could be used to mod any game that uses the .NET Framework.
 
-Support for each game and plugin language is added via extensions. When loading, Oxide scans the binary folder for DLL extensions. Extension filenames are formatted as `Oxide.Ext.Name.dll` or `Oxide.Game.Name.dll`.
+Support for each game and plugin language is added via extensions. When loading, Oxide scans the binary folder for DLL extensions. Core extension filenames are formatted as `Oxide.Core.Name.dll` or `Oxide.Game.Name.dll`, with community extensions formatted as `Oxide.Ext.Name.dll`.
 
 ## Official Core Extensions
 
- * Oxide.Ext.CSharp - _Allows plugins written in [CSharp](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
- * Oxide.Ext.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) to be loaded_
- * Oxide.Ext.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
- * Oxide.Ext.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
- * Oxide.Ext.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
- * Oxide.Ext.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
- * Oxide.Ext.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
+ * Oxide.Core.CSharp - _Allows plugins written in [CSharp](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
+ * Oxide.Core.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) to be loaded_
+ * Oxide.Core.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
+ * Oxide.Core.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
+ * Oxide.Core.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
+ * Oxide.Core.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
+ * Oxide.Core.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
 
 ## Supported Game Extensions
  * Oxide.Game.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
@@ -45,7 +45,7 @@ While we recommend using one of the [official release builds][downloads], you ca
 
  2. Clone the repo `https://github.com/OxideMod/Oxide.git` _(recommended)_ or download and extract the [latest zip](https://github.com/OxideMod/Oxide/archive/master.zip) archive.
 
- 3. Download and install [Visual Studio 2015](https://www.visualstudio.com/en-us/downloads/visual-studio-2015-downloads-vs.aspx) _(community is free, but any edition will work)_ if you do not have it installed already.
+ 3. Download and install [Visual Studio 2015](https://www.visualstudio.com/downloads/) _(community is free, but any edition will work)_ if you do not have it installed already.
 
  3. Open the `Oxide.sln` solution file in Visual Studio 2015.
 

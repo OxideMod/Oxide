@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 using Oxide.Core;
 
 namespace Oxide.Game.RustLegacy

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-
 using Microsoft.Xna.Framework;
 using Terraria;
-
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;

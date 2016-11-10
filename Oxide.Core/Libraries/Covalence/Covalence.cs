@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Reflection;
-
+using System.Text;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 
@@ -70,7 +69,7 @@ namespace Oxide.Core.Libraries.Covalence
         // Used to measure time spent in the command
         private Stopwatch trackStopwatch = new Stopwatch();
         private Stopwatch stopwatch = new Stopwatch();
-        private float trackStartAt;
+        //private float trackStartAt;
         private float averageAt;
         private double sum;
         private int preHookGcCount;
@@ -147,7 +146,7 @@ namespace Oxide.Core.Libraries.Covalence
             // Create it
             try
             {
-                provider = (ICovalenceProvider) Activator.CreateInstance(selectedCandidate);
+                provider = (ICovalenceProvider)Activator.CreateInstance(selectedCandidate);
             }
             catch (Exception ex)
             {

@@ -6,9 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Diagnostics;
 using System.Globalization;
-
 using Newtonsoft.Json;
-
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
@@ -16,7 +14,6 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
-
 using Timer = Oxide.Core.Libraries.Timer;
 
 namespace Oxide.Core
@@ -373,11 +370,7 @@ namespace Oxide.Core
 
             // Find all plugin loaders that lay claim to the name
             var loaders = new HashSet<PluginLoader>(extensionManager.GetPluginLoaders().Where(l => l.ScanDirectory(PluginDirectory).Contains(name)));
-            if (loaders.Count == 0)
-            {
-                LogError("Failed to load plugin '{0}' (no source found)", name);
-                return false;
-            }
+            if (loaders.Count == 0) return false;
             if (loaders.Count > 1)
             {
                 LogError("Failed to load plugin '{0}' (multiple sources found)", name);

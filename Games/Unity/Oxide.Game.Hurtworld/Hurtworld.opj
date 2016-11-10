@@ -1,6 +1,6 @@
 {
   "Name": "Hurtworld",
-  "TargetDirectory": "D:\\Servers\\Game\\Hurtworld\\Hurtworld_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\Hurtworld\\Hurtworld_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

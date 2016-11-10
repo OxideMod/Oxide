@@ -5,17 +5,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-
 using Network;
-using Rust;
-using UnityEngine;
-
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
+using Rust;
+using UnityEngine;
 
 namespace Oxide.Game.Rust
 {
@@ -234,8 +232,12 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         /// <summary>
         /// Called when ServerConsole is enabled
@@ -751,6 +753,8 @@ namespace Oxide.Game.Rust
         {
             if (args != null && args.Length > 0) lang.SetLanguage(args[0], player.UserIDString);
             Reply(player, "PlayerLanguage", lang.GetLanguage(player.UserIDString));
+
+            Analytics.Event("Commands", "Lang command use via chat");
         }
 
         /// <summary>
@@ -764,6 +768,8 @@ namespace Oxide.Game.Rust
 
             if (arg.HasArgs()) lang.SetServerLanguage(arg.GetString(0));
             Reply(arg, "ServerLanguage", lang.GetServerLanguage());
+
+            Analytics.Event("Commands", "Lang command use via console");
         }
 
         #endregion
