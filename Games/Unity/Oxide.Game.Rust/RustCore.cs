@@ -6,14 +6,14 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Network;
-using Rust;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
+using Rust;
+using UnityEngine;
 
 namespace Oxide.Game.Rust
 {
@@ -237,7 +237,7 @@ namespace Oxide.Game.Rust
         {
             Interface.Call("OnServerShutdown");
             Interface.Oxide.OnShutdown();
-        } 
+        }
 
         /// <summary>
         /// Called when ServerConsole is enabled
