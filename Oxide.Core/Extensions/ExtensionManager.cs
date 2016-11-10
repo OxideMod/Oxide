@@ -18,19 +18,10 @@ namespace Oxide.Core.Extensions
         // All loaded extensions
         private IList<Extension> extensions;
 
-        // The core list and search patterns for extensions
-        private readonly string[] coreExtensions =
-        {
-            "Oxide.Core.CSharp.dll",
-            "Oxide.Core.JavaScript.dll",
-            "Oxide.Core.Lua.dll",
-            "Oxide.Core.MySql.dll",
-            "Oxide.Core.Python.dll",
-            "Oxide.Core.SQLite.dll",
-            "Oxide.Core.Unity.dll"
-        };
-        private const string communitySearchPattern = "Oxide.Ext.*.dll";
+        // The search patterns for extensions
+        private const string coreExtSearchPattern = "Oxide.Core.*.dll";
         private const string gameExtSearchPattern = "Oxide.Game.*.dll";
+        private const string communitySearchPattern = "Oxide.Ext.*.dll";
 
         /// <summary>
         /// Gets the logger to which this extension manager writes
@@ -168,14 +159,13 @@ namespace Oxide.Core.Extensions
         /// <param name="directory"></param>
         public void LoadAllExtensions(string directory)
         {
-            for (var i = 0; i < coreExtensions.Length; i++)
-                if (File.Exists(Path.Combine(directory, coreExtensions[i]))) coreExtensions[i] = Path.Combine(directory, coreExtensions[i]);
+            var coreExtensions = Directory.GetFiles(directory, coreExtSearchPattern);
             var gameExtensions = Directory.GetFiles(directory, gameExtSearchPattern);
-            var allExtensions = Directory.GetFiles(directory, communitySearchPattern).Concat(gameExtensions).Concat(coreExtensions);
+            var communityExtensions = Directory.GetFiles(directory, communitySearchPattern);
+            var allExtensions = coreExtensions.Concat(gameExtensions).Concat(communityExtensions);
 
             foreach (var ext in allExtensions)
             {
-                if (ext.Contains("Luma") || ext.Contains("Steam") || ext.Contains("Thief")) continue;
                 if (ext.Contains(".Ext.") && Array.IndexOf(coreExtensions, ext.Replace(".Ext.", ".Core.")) != -1)
                 {
                     Cleanup.Add(ext);
