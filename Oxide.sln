@@ -4,19 +4,19 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Oxide.Core\Core.csproj", "{67F65F5D-A62A-4752-849D-BFF30D828107}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp", "Extensions\Oxide.Ext.CSharp\CSharp.csproj", "{9103D682-D1AA-4A95-A499-896F551AAA62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp", "Extensions\Oxide.Core.CSharp\CSharp.csproj", "{9103D682-D1AA-4A95-A499-896F551AAA62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScript", "Extensions\Oxide.Ext.JavaScript\JavaScript.csproj", "{3A9897BD-2022-4621-BC2C-F05EA39FA4EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScript", "Extensions\Oxide.Core.JavaScript\JavaScript.csproj", "{3A9897BD-2022-4621-BC2C-F05EA39FA4EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lua", "Extensions\Oxide.Ext.Lua\Lua.csproj", "{18D00F0B-8CF3-4002-940A-4A8CA449A352}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lua", "Extensions\Oxide.Core.Lua\Lua.csproj", "{18D00F0B-8CF3-4002-940A-4A8CA449A352}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "Extensions\Oxide.Ext.MySql\MySql.csproj", "{D138493B-6F2E-4B9F-8F79-17B73422D87F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "Extensions\Oxide.Core.MySql\MySql.csproj", "{D138493B-6F2E-4B9F-8F79-17B73422D87F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python", "Extensions\Oxide.Ext.Python\Python.csproj", "{B05D4995-6E61-4E82-AC91-5A7B46EC9781}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python", "Extensions\Oxide.Core.Python\Python.csproj", "{B05D4995-6E61-4E82-AC91-5A7B46EC9781}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite", "Extensions\Oxide.Ext.SQLite\SQLite.csproj", "{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite", "Extensions\Oxide.Core.SQLite\SQLite.csproj", "{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity", "Extensions\Oxide.Ext.Unity\Unity.csproj", "{52C26C5B-23E5-48A2-B403-5FF5C898E91A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity", "Extensions\Oxide.Core.Unity\Unity.csproj", "{52C26C5B-23E5-48A2-B403-5FF5C898E91A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockstorm", "Games\Unity\Oxide.Game.Blockstorm\Blockstorm.csproj", "{0D3AF12E-CDD8-4691-ADE4-364D5D5A5D32}"
 	ProjectSection(ProjectDependencies) = postProject

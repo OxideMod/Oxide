@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Net;
-
 using SDG.Unturned;
 using Steamworks;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Unturned.Libraries.Covalence

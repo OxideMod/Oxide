@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.SavageLands

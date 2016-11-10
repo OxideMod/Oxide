@@ -1,6 +1,6 @@
 {
   "Name": "Rust Legacy",
-  "TargetDirectory": "D:\\Servers\\Game\\RustLegacy\\rust_server_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\RustLegacy\\rust_server_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

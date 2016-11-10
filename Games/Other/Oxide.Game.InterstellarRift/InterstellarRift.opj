@@ -1,6 +1,6 @@
 {
   "Name": "Interstellar Rift",
-  "TargetDirectory": "D:\\Servers\\Game\\InterstellarRift\\Build",
+  "TargetDirectory": "D:\\Servers\\Game\\Other\\InterstellarRift\\Build",
   "Manifests": [
     {
       "AssemblyName": "IR.exe",

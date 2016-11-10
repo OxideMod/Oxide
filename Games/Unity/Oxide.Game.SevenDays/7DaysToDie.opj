@@ -1,6 +1,6 @@
 {
   "Name": "7 Days to Die",
-  "TargetDirectory": "D:\\Servers\\Game\\7DaysToDie\\7DaysToDieServer_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\7DaysToDie\\7DaysToDieServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

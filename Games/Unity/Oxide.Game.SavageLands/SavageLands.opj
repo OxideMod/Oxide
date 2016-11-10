@@ -1,6 +1,6 @@
 {
   "Name": "Savage Lands",
-  "TargetDirectory": "D:\\Servers\\Game\\SavageLands\\Latest\\SavageLands_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\SavageLands\\Latest\\SavageLands_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp",

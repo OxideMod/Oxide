@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using System.Reflection;
-
 using CodeHatch.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events;
-
 using Oxide.Core.Libraries;
 using Oxide.Plugins;
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
-
 using TNet;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Nomad.Libraries.Covalence

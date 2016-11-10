@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.PlanetExplorers.Libraries.Covalence

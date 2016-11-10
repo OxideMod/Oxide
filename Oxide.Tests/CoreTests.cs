@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Oxide.Core;
 using Oxide.Core.Configuration;
 

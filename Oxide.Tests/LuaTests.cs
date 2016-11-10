@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using NLua;
-
 using Oxide.Core.Configuration;
-using Oxide.Ext.Lua;
+using Oxide.Core.Lua;
 
 struct TestStruct {}
 

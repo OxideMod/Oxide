@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-
 using Oxide.Core;
 using Oxide.Core.Extensions;
-
 using UnityEngine;
 
 namespace Oxide.Game.SavageLands

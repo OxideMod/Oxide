@@ -5,7 +5,6 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-
 using Oxide.Core.Plugins;
 
 namespace Oxide.Core.Libraries

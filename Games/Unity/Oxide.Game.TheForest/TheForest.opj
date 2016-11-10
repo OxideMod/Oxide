@@ -1,6 +1,6 @@
 {
   "Name": "The Forest",
-  "TargetDirectory": "D:\\Servers\\Game\\TheForest\\TheForest_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\TheForest\\TheForest_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp-firstpass.dll",

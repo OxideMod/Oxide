@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Net;
-
 using Bolt;
 using Steamworks;
 using TheForest.UI.Multiplayer;
 using TheForest.Utils;
 using UnityEngine;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence

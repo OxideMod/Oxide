@@ -1,6 +1,6 @@
 {
   "Name": "Terraria",
-  "TargetDirectory": "D:\\Servers\\Game\\Terraria",
+  "TargetDirectory": "D:\\Servers\\Game\\Other\\Terraria",
   "Manifests": [
     {
       "AssemblyName": "TerrariaServer.exe",

@@ -6,9 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Diagnostics;
 using System.Globalization;
-
 using Newtonsoft.Json;
-
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
@@ -16,7 +14,6 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
-
 using Timer = Oxide.Core.Libraries.Timer;
 
 namespace Oxide.Core

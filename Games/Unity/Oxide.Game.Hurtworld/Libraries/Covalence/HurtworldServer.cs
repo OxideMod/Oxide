@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
-
 using Steamworks;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
-
 using Terraria;
-
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Terraria.Libraries.Covalence

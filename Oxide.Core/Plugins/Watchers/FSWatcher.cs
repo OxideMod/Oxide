@@ -2,7 +2,6 @@
 using System.IO;
 using System.Security.Permissions;
 using System.Text.RegularExpressions;
-
 using Oxide.Core.Libraries;
 
 namespace Oxide.Core.Plugins.Watchers
