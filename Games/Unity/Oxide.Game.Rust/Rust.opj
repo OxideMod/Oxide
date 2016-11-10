@@ -3010,18 +3010,18 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
+            "Name": "IOnServerShutdown [internal]",
+            "HookName": "IOnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "OnDisable",
+              "Exposure": 3,
+              "Name": "Shutdown",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "NSBGVeTIcyEGxQsXyX59qEy7Xheb0UlBP2hYJelec/o=",
+            "MSILHash": "rUL0ZicR68N8eXfwqP8lXrC1JO5mtf1kmvQ4DZL7JJM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
