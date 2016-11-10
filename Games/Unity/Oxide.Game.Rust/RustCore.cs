@@ -753,6 +753,8 @@ namespace Oxide.Game.Rust
         {
             if (args != null && args.Length > 0) lang.SetLanguage(args[0], player.UserIDString);
             Reply(player, "PlayerLanguage", lang.GetLanguage(player.UserIDString));
+
+            Analytics.Event("Commands", "Lang command use via chat");
         }
 
         /// <summary>
@@ -766,6 +768,8 @@ namespace Oxide.Game.Rust
 
             if (arg.HasArgs()) lang.SetServerLanguage(arg.GetString(0));
             Reply(arg, "ServerLanguage", lang.GetServerLanguage());
+
+            Analytics.Event("Commands", "Lang command use via console");
         }
 
         #endregion
