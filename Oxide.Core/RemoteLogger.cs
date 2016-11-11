@@ -41,7 +41,7 @@ namespace Oxide.Core
             { "arch", IntPtr.Size == 8 ? "x64" : "x86" },
             { "platform", Environment.OSVersion.Platform.ToString().ToLower() },
             { "os version", Environment.OSVersion.Version.ToString().ToLower() },
-            { "game", Filename.ToLower().Replace("dedicated", "").Replace("server", "").Replace("-", "") }
+            { "game", Filename.ToLower().Replace("dedicated", "").Replace("server", "").Replace("-", "").Replace("_", "") }
         };
 
         private class QueuedReport
