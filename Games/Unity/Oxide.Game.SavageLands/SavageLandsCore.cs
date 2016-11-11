@@ -105,12 +105,15 @@ namespace Oxide.Game.SavageLands
             // Update server console window and status bars
             SavageLandsExtension.ServerConsole();
         }
-
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
     }

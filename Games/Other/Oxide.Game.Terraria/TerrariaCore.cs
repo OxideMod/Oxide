@@ -1,9 +1,9 @@
 ﻿using System;
-using Terraria;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.Terraria.Libraries.Covalence;
+using Terraria;
 
 namespace Oxide.Game.Terraria
 {
@@ -119,8 +119,12 @@ namespace Oxide.Game.Terraria
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
     }

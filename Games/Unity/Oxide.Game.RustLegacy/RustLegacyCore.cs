@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Rust;
-using uLink;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.RustLegacy.Libraries;
 using Oxide.Game.RustLegacy.Libraries.Covalence;
+using Rust;
+using uLink;
+using UnityEngine;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -178,8 +178,12 @@ namespace Oxide.Game.RustLegacy
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
 

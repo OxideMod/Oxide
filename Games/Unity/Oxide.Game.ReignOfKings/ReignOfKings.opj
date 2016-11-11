@@ -1038,6 +1038,69 @@
             "BaseHookName": null,
             "HookCategory": "_Patch"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnServerShutdown [internal]",
+            "HookName": "IOnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Networking.Server",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Shutdown",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "tfpp056f5eZhAKp+fn/LlD9j0kV6SsYU102cFX0tntQ=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|CodeHatch.Engine.Networking.Server|get_Instance"
+              },
+              {
+                "OpCode": "brtrue_s",
+                "OpType": "Instruction",
+                "Operand": 0
+              },
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "FixShutdownNRE [patch]",
+            "HookName": "FixShutdownNRE",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Thrones.Networking.SpawnProtection",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Update",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "pdV5S6r8vu8X8S+r9JI/uIBZKSA9VUbpAtbsappD0k0=",
+            "BaseHookName": null,
+            "HookCategory": "_Patch"
+          }
         }
       ]
     }
