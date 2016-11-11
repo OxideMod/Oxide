@@ -3,15 +3,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Bolt;
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
+using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
 using TheForest.UI;
 using TheForest.Utils;
 using UdpKit;
 using UnityEngine;
-using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Plugins;
-using Oxide.Game.TheForest.Libraries.Covalence;
 
 namespace Oxide.Game.TheForest
 {
@@ -163,8 +163,12 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
 

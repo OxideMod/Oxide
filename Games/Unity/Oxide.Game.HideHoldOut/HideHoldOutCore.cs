@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
+using Oxide.Game.HideHoldOut.Libraries;
+using Oxide.Game.HideHoldOut.Libraries.Covalence;
 using UnityEngine;
 using Network = uLink.Network;
 using NetworkPlayer = uLink.NetworkPlayer;
 using NetworkView = uLink.NetworkView;
-using Oxide.Core;
-using Oxide.Core.Plugins;
-using Oxide.Core.Libraries;
-using Oxide.Game.HideHoldOut.Libraries;
-using Oxide.Game.HideHoldOut.Libraries.Covalence;
 
 namespace Oxide.Game.HideHoldOut
 {
@@ -242,8 +242,12 @@ namespace Oxide.Game.HideHoldOut
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
 

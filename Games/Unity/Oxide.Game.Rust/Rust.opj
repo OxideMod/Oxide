@@ -2971,7 +2971,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rTplxS/ZJB6ZB/g8LD5x4yw5EVIAf2E6kXlsaDfMIwM=",
+            "MSILHash": "e5fRuvX+F8Xj7/RuUhebYgub5sfbrs1xYqWwMhMan/k=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -3029,7 +3029,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 268,
+            "InjectionIndex": 269,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -3048,7 +3048,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rTplxS/ZJB6ZB/g8LD5x4yw5EVIAf2E6kXlsaDfMIwM=",
+            "MSILHash": "e5fRuvX+F8Xj7/RuUhebYgub5sfbrs1xYqWwMhMan/k=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }

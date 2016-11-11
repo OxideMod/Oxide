@@ -3,7 +3,6 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "Servers/{secureserver}/oxide",
         "oxide"
     ],
     "ConfigDirectory": "config",

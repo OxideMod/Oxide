@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using Global = Rust.Global;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
@@ -11,6 +10,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     public class RustServer : IServer
     {
         #region Information
+
+        private static IPAddress address;
 
         /// <summary>
         /// Gets/sets the public-facing name of the server
@@ -24,7 +25,26 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
         /// </summary>
-        public IPAddress Address => Global.SteamServer.PublicIp;
+        public IPAddress Address
+        {
+            get
+            {
+                try
+                {
+                    if (address == null)
+                    {
+                        var webClient = new WebClient();
+                        address = IPAddress.Parse(webClient.DownloadString("https://api.ipify.org"));
+                        return address;
+                    }
+                    return address;
+                }
+                catch
+                {
+                    return new IPAddress(0);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the public-facing network port of the server, if known

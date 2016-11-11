@@ -46,7 +46,7 @@ namespace Oxide.Game.ReignOfKings
         // Track 'load' chat commands
         private readonly Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
 
-        private static readonly FieldInfo FoldersField = typeof (FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly FieldInfo FoldersField = typeof(FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
 
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]

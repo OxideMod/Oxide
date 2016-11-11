@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using UnityEngine;
 
 namespace Oxide.Game.SevenDays
 {
@@ -81,6 +81,7 @@ namespace Oxide.Game.SevenDays
             "StartAsServer",
             "StartGame",
             "Started thread",
+            "WRN ApplyAllowControllerOption",
             "Weather Packages Created",
             "World.Cleanup",
             "World.Load:",

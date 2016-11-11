@@ -1,9 +1,9 @@
 ﻿using System;
-using Sandbox.Game;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.MedievalEngineers.Libraries.Covalence;
+using Sandbox.Game;
 
 namespace Oxide.Game.MedievalEngineers
 {
@@ -119,8 +119,12 @@ namespace Oxide.Game.MedievalEngineers
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
     }

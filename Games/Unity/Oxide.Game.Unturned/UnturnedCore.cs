@@ -1,9 +1,9 @@
 ﻿using System;
-using SDG.Unturned;
 using Oxide.Core;
-using Oxide.Core.Plugins;
 using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
 using Oxide.Game.Unturned.Libraries.Covalence;
+using SDG.Unturned;
 
 namespace Oxide.Game.Unturned
 {
@@ -122,8 +122,12 @@ namespace Oxide.Game.Unturned
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerShutdown")]
-        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("IOnServerShutdown")]
+        private void IOnServerShutdown()
+        {
+            Interface.Call("OnServerShutdown");
+            Interface.Oxide.OnShutdown();
+        }
 
         #endregion
     }
