@@ -1335,8 +1335,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
+            "Name": "IOnServerShutdown [internal]",
+            "HookName": "IOnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamServer",
             "Flagged": false,
@@ -1588,29 +1588,6 @@
           }
         },
         {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 0,
-            "RemoveCount": 8,
-            "Instructions": [],
-            "HookTypeName": "Modify",
-            "Name": "SkipPlaneScene [patch]",
-            "HookName": "SkipPlaneScene",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TriggerCutScene",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "Update",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "zsRIWND6tx1+udUXnwygjQj+0zFMctA6etDVbhlzcdE=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
-          }
-        },
-        {
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 18,
@@ -1656,6 +1633,29 @@
             "MSILHash": "RmWieJzzpKpKRdglrPk9CnzMl7HAjy1ijkpbS0EAX/M=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 3,
+            "RemoveCount": 43,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "DummyLocalPlayer [patch]",
+            "HookName": "DummyLocalPlayer",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheForest.Save.PlayerSpawn",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "SnWOkx7J2QLSz4Owl0RYj9HoZ9lD15yhMdkBpRZLq8M=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
           }
         }
       ]
