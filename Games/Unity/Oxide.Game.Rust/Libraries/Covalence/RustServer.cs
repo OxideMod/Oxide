@@ -29,10 +29,20 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             get
             {
-                if (address != null) return address;
-                var webClient = new WebClient();
-                address = IPAddress.Parse(webClient.DownloadString("https://api.ipify.org"));
-                return address;
+                try
+                {
+                    if (address == null)
+                    {
+                        var webClient = new WebClient();
+                        address = IPAddress.Parse(webClient.DownloadString("https://api.ipify.org"));
+                        return address;
+                    }
+                    return address;
+                }
+                catch
+                {
+                    return new IPAddress(0);
+                }
             }
         }
 
