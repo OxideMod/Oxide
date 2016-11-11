@@ -91,32 +91,33 @@
   <Target Name="AfterBuild">
     <ItemGroup>
       <ConfigFiles Include="$(ProjectDir)\Patched\oxide.config.json" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
+      <GameFiles Include="$(ProjectDir)\Files\**\*.*; $(ProjectDir)\Files\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.JavaScript\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.JavaScript\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Lua\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Lua\Dependencies\**\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Python\$(OutputPath)\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Python\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\$(OutputPath)\*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\*.dll" Exclude="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\UnityEngine*.dll" />
-      <ManagedFiles Include="$(TargetDir)\*.dll" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\bolt*.dll; $(TargetDir)\udpkit*.dll; $(TargetDir)\UnityEngine*.dll" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
+      <ManagedFiles Include="$(TargetDir)\*.dll*" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\bolt*.dll; $(TargetDir)\udpkit*.dll; $(TargetDir)\UnityEngine*.dll" />
+      <NativeFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\CSharpCompiler*.*" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Lua\Dependencies\**\*.dll" />
-      <WinFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.dll" />
-      <WinGameFiles Include="$(ProjectDir)\Files\Windows\**\*.*; $(ProjectDir)\Files\*.*" />
-      <WinNativeFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\*.exe" Exclude="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\Mono.*.dll" />
     </ItemGroup>
+    <RemoveDir Directories="$(BundleDir)\$(GameName)" />
+    <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(WinFiles)" DestinationFiles="@(WinFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(WinGameFiles)" DestinationFiles="@(WinGameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(WinNativeFiles)" DestinationFiles="@(WinNativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
