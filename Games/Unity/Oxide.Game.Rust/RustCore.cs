@@ -106,6 +106,12 @@ namespace Oxide.Game.Rust
             Title = "Rust";
             Author = "Oxide Team";
             Version = new VersionNumber(1, 0, 0);
+
+            // Cheat references in the default plugin reference list
+            var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
+            var fpSystem = Facepunch.Math.Epoch.Current; // Facepunch.System
+            var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
+            var rustGlobal = global::Rust.Global.SteamServer.PublicIp; // Rust.Global
         }
 
         /// <summary>
