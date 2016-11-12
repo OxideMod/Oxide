@@ -111,7 +111,7 @@ namespace Oxide.Game.Rust
             var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
             var fpSystem = Facepunch.Math.Epoch.Current; // Facepunch.System
             var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
-            var rustGlobal = global::Rust.Global.SteamServer.PublicIp; // Rust.Global
+            var rustGlobal = global::Rust.Global.SteamServer; // Rust.Global
         }
 
         /// <summary>

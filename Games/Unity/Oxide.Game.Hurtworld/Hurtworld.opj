@@ -919,6 +919,30 @@
             "BaseHookName": null,
             "HookCategory": "Vehicle"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnServerShutdown [internal]",
+            "HookName": "IOnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GameManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "uLink_OnServerUninitialized",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "SjFa+AFDDr1n2D0sYjVXUUeD+Yyte0l25wSo4yNvp7Y=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
         }
       ]
     }
