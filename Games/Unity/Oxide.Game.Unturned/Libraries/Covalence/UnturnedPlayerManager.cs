@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
-using SDG.Unturned;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using ProtoBuf;
+using SDG.Unturned;
 
 namespace Oxide.Game.Unturned.Libraries.Covalence
 {
@@ -53,7 +53,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             else
             {
                 // Insert
-                record = new PlayerRecord {Id = steamPlayer.playerID.steamID.m_SteamID, Name = steamPlayer.player.name};
+                record = new PlayerRecord { Id = steamPlayer.playerID.steamID.m_SteamID, Name = steamPlayer.player.name };
                 playerData.Add(id, record);
 
                 // Create Rust player
