@@ -23,7 +23,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "RSxmP67DBT2WN7m/6uIJmxQ3zyX3u53mIpNc/Sb7pY4=",
+            "MSILHash": "wHltvm6rIPU4E4HMgRsjB30pc756bkihe6F4qMvShi0=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "GmePCSQknd17TvcuY1cW59KMXXIUsToc5GLAE7ITSQQ=",
+            "MSILHash": "tCfI564k5cRuaD1kWxTTEknMdTYuzbINN/5VK6GedmQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "GmePCSQknd17TvcuY1cW59KMXXIUsToc5GLAE7ITSQQ=",
+            "MSILHash": "tCfI564k5cRuaD1kWxTTEknMdTYuzbINN/5VK6GedmQ=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -103,13 +103,13 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 166,
+            "InjectionIndex": 294,
             "RemoveCount": 1,
             "Instructions": [
               {
                 "OpCode": "ldc_i4",
                 "OpType": "Int32",
-                "Operand": "12"
+                "Operand": "14"
               }
             ],
             "HookTypeName": "Modify",
@@ -124,7 +124,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1A1CQ7SiDg0ZS3/cJHPIj+wmjxP1yvdXLrSAym/1Y/k=",
+            "MSILHash": "iSCNsDw+Sri0WF/ganM/S5/8AciIOdvbMNRNsDGvPUI=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -132,7 +132,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 236,
+            "InjectionIndex": 378,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -143,7 +143,7 @@
               {
                 "OpCode": "ldc_i4",
                 "OpType": "Int32",
-                "Operand": "11"
+                "Operand": "13"
               },
               {
                 "OpCode": "ldstr",
@@ -168,7 +168,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1A1CQ7SiDg0ZS3/cJHPIj+wmjxP1yvdXLrSAym/1Y/k=",
+            "MSILHash": "iSCNsDw+Sri0WF/ganM/S5/8AciIOdvbMNRNsDGvPUI=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
@@ -248,7 +248,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "gHYJP2UX99x2RnwiENlS8aFSFJItxNuxPXouudAdIZ0=",
+            "MSILHash": "DwUmLD9TClEdA75CxetSELtuW9ccP8XTGI9LqBgg6YM=",
             "BaseHookName": null,
             "HookCategory": "_WIP"
           }
@@ -291,7 +291,7 @@
                 "SDG.Unturned.EPlayerSkillset"
               ]
             },
-            "MSILHash": "ibxvZhAxPT8RW9s2uYPDlTm0QFaj57WqGY0+xWvWItE=",
+            "MSILHash": "nWXUTsOFbIMm+LdahEt1MQpVEX6HMzKVdLV4EJeDdBI=",
             "BaseHookName": null,
             "HookCategory": "_WIP"
           }
@@ -389,7 +389,7 @@
                 "Steamworks.ValidateAuthTicketResponse_t"
               ]
             },
-            "MSILHash": "GTPaFJOdGglP1MGTnWKvCbLvNE/OO5om8wKZr4TMDc0=",
+            "MSILHash": "iAjXR9D0B1q5sP6JngEVxZOuFmjRxaK2hbjACXVvtak=",
             "BaseHookName": null,
             "HookCategory": "_WIP"
           }
