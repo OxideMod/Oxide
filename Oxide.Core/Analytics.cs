@@ -36,7 +36,7 @@ namespace Oxide.Core
 
         public static void Collect()
         {
-            var payload = $"v=1&tid={trackingId}&cid={Identifier}&t=screenview&cd=Oxide+for+{Covalence.Game}+{Covalence.Server.Version}";
+            var payload = $"v=1&tid={trackingId}&cid={Identifier}&t=screenview&cd={Covalence.Game}+{Covalence.Server.Version}";
             payload += $"&an=Oxide&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}";
             //payload += string.Join("&", Tags.Select(kv => kv.Key + "=" + kv.Value).ToArray());
             SendPayload(payload);
@@ -50,14 +50,8 @@ namespace Oxide.Core
 
         public static void SendPayload(string payload)
         {
-            var headers = new Dictionary<string, string>
-            {
-                { "User-Agent", $"Oxide/{OxideMod.Version} ({Environment.OSVersion.ToString().Replace("Microsoft ", "")})" }
-            };
-            Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) =>
-            {
-                //Interface.Oxide.LogWarning(response);
-            }, null, headers);
+            var headers = new Dictionary<string, string> { { "User-Agent", $"Oxide/{OxideMod.Version} ({Environment.OSVersion}; {Environment.OSVersion.Platform})" } };
+            Webrequests.EnqueuePost(url, Uri.EscapeUriString(payload), (code, response) => { }, null, headers);
         }
     }
 }
