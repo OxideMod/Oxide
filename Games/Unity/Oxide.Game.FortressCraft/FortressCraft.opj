@@ -1,6 +1,6 @@
 {
   "Name": "FortressCraft",
-  "TargetDirectory": "D:\\Steam\\steamapps\\common\\FortressCraft Evolved - Dedicated Server\\64\\FC_64_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\FortressCraft\\Latest\\FC_64_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
