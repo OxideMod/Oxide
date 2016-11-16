@@ -3,9 +3,8 @@
     "InstanceCommandLines":
     [
         "{oxide.directory}",
-        "default\\oxide",
         "oxide"
     ],
     "ConfigDirectory": "config",
-    "ExtensionDirectory": "FC_Oculus_Data\\Managed"
+    "ExtensionDirectory": "FC_64_Data\\Managed"
 }

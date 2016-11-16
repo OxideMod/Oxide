@@ -2,6 +2,7 @@
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.FortressCraft.Libraries.Covalence;
 
 namespace Oxide.Game.FortressCraft
 {
@@ -15,6 +16,9 @@ namespace Oxide.Game.FortressCraft
         // The permission library
         private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        // The covalence provider
+        internal static readonly FortressCraftCovalenceProvider Covalence = FortressCraftCovalenceProvider.Instance;
 
         // Track when the server has been initialized
         private bool serverInitialized;
@@ -56,7 +60,7 @@ namespace Oxide.Game.FortressCraft
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            //RemoteLogger.SetTag("game version", ); // TODO
+            RemoteLogger.SetTag("game version", HUDManager.Version);
 
             // Setup the default permission groups
             if (permission.IsLoaded)

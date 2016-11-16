@@ -1,5 +1,262 @@
 {
   "Name": "FortressCraft",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\FortressCraft\\Latest\\FC_64_Data\\Managed",
-  "Manifests": []
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\FortressCraft\\64\\FC_64_Data\\Managed",
+  "Manifests": [
+    {
+      "AssemblyName": "Assembly-CSharp.dll",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanModify",
+            "HookName": "CanModify",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkServerPermissions",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanIModify",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "eBuildPermission"
+              ]
+            },
+            "MSILHash": "suNzPVxu3qBFdHgO5DmyW1Y0E7da/GFSeBrW+fPT/Zg=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "CanDelete",
+            "HookName": "CanDelete",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkServerPermissions",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanIDelete",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt16",
+                "System.UInt16",
+                "eBuildPermission"
+              ]
+            },
+            "MSILHash": "NFS902z68h8yHlPH+3o9QMOn82kTSFwVHR/pgq/CIvo=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanBuild",
+            "HookName": "CanBuild",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkServerPermissions",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanIBuild",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt16",
+                "System.UInt16",
+                "eBuildPermission"
+              ]
+            },
+            "MSILHash": "NFS902z68h8yHlPH+3o9QMOn82kTSFwVHR/pgq/CIvo=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 61,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnServerShutdown [internal]",
+            "HookName": "IOnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkServerThread",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CloseServer",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "O8hNnAcijBJUZO3XNsbIgLIaGimwIm7jT0WgtGjh0SE=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnServerCommand",
+            "HookName": "OnServerCommand",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerConsole",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoServerString",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "hoVkJq1PIDmcsYGD9kA86eyAhZNXs3pg2x6W3sVu6ik=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "InitOxide",
+          "Hook": {
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkServerThread",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": ".cctor",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "lm+jssts6hRguy3LfHhmWm0pVAfJ2qulTxxIzlS2Q7w=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerConsole",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DoChat",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ChatLine",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "rbsvEpEBWOAubp3icgw/0E1oNpB4XWCAF2BHSsDigkI=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkServerThread",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": ".cctor",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "lm+jssts6hRguy3LfHhmWm0pVAfJ2qulTxxIzlS2Q7w=",
+            "BaseHookName": "InitOxide [internal]",
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 43,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "DisableConsole [patch]",
+            "HookName": "DisableConsole",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Windows.ConsoleWindow",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "BA/WY1mypwcSd3RCOiGnt7GqajP6fnqHCoAVz/iq8pE=",
+            "BaseHookName": null,
+            "HookCategory": "Patch"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 208,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "NetworkServerThread",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "InitServer",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "ElfK3xWIs9szxF3O6hTkGCmEVnso/9ysrJ6cAhYl22o=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        }
+      ]
+    }
+  ]
 }
