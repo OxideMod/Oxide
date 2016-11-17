@@ -54,7 +54,14 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <summary>
         /// Gets the version or build number of the server
         /// </summary>
-        public string Version => HUDManager.Version;
+        public string Version
+        {
+            get
+            {
+                var index = HUDManager.Version.IndexOf(" -", StringComparison.Ordinal);
+                return index > 0 ? HUDManager.Version.Substring(0, index) : "Unknown";
+            }
+        }
 
         /// <summary>
         /// Gets the network protocol version of the server
@@ -64,7 +71,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <summary>
         /// Gets the total of players currently on the server
         /// </summary>
-        public int Players => NetworkServerThread.mnPublicPlayerCount;
+        public int Players => NetworkManager.instance.mServerThread.GetNumPlayers();
 
         /// <summary>
         /// Gets/sets the maximum players allowed on the server
@@ -91,11 +98,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <summary>
         /// Saves the server and any related information
         /// </summary>
-        public void Save()
-        {
-            // TODO: Find Save
-
-        }
+        public void Save() => WorldScript.instance.SaveWorldSettings();
 
         #endregion
 
@@ -107,9 +110,15 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            ServerConsole.DebugLog($"[Broadcast] {message}");
-            ServerConsole.SendGlobalMessage(message);
-
+            var chatLine = new ChatLine
+            {
+                mPlayer = -1,
+                mPlayerName = "", // TODO: Test if prefix can be left out
+                mText = message,
+                mType = ChatLine.Type.Normal
+            };
+            NetworkManager.instance.QueueChatMessage(chatLine);
+            ServerConsole.DebugLog($"[SERVER] {message}");
         }
 
         /// <summary>
@@ -117,11 +126,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args)
-        {
-            ServerConsole.DoServerString(command);
-            ServerConsole.DebugLog($"[Broadcast] {command}");
-        }
+        public void Command(string command, params object[] args) => ServerConsole.DoServerString($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
 
         #endregion
     }

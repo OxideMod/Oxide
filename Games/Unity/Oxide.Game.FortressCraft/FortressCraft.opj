@@ -99,7 +99,7 @@
             "HookName": "IOnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkServerThread",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "CloseServer",
@@ -252,6 +252,30 @@
               "Parameters": []
             },
             "MSILHash": "ElfK3xWIs9szxF3O6hTkGCmEVnso/9ysrJ6cAhYl22o=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnServerShutdown [internal]",
+            "HookName": "IOnServerShutdown",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "WorldScript",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ShutDown",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "y8kqTWv6+8JQnAA8rcWvEcKfmdpWnK2IaQWwR9TD0w0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

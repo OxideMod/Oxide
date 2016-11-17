@@ -60,7 +60,7 @@ namespace Oxide.Game.FortressCraft
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", HUDManager.Version);
+            RemoteLogger.SetTag("game version", Covalence.CreateServer().Version);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
