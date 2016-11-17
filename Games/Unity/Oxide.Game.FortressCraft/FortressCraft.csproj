@@ -11,7 +11,7 @@
     <AssemblyName>Oxide.Game.FortressCraft</AssemblyName>
     <GameName>$(MSBuildProjectName)</GameName>
     <BundleDir>$(SolutionDir)Bundles</BundleDir>
-    <ManagedDir>FC_64_Data\Managed</ManagedDir>
+    <ManagedDir>64\FC_64_Data\Managed</ManagedDir>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -38,6 +38,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
@@ -48,6 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libraries\Covalence\FortressCraftCommandSystem.cs" />
+    <Compile Include="Libraries\Covalence\FortressCraftCovalenceProvider.cs" />
+    <Compile Include="Libraries\Covalence\FortressCraftPlayer.cs" />
+    <Compile Include="Libraries\Covalence\FortressCraftPlayerManager.cs" />
+    <Compile Include="Libraries\Covalence\FortressCraftServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FortressCraftCore.cs" />
     <Compile Include="FortressCraftExtension.cs" />
@@ -90,10 +98,10 @@
     </ItemGroup>
     <RemoveDir Directories="$(BundleDir)\$(GameName)" />
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
-    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\64\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\64\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
