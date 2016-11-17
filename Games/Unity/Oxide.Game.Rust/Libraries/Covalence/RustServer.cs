@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
@@ -39,8 +40,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     }
                     return address;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    RemoteLogger.Exception("Couldn't get server IP address", ex);
                     return new IPAddress(0);
                 }
             }
