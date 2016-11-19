@@ -12,8 +12,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     {
         #region Information
 
-        private static IPAddress address;
-
         /// <summary>
         /// Gets/sets the public-facing name of the server
         /// </summary>
@@ -22,6 +20,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             get { return ConVar.Server.hostname; }
             set { ConVar.Server.hostname = value; }
         }
+
+        private static IPAddress address;
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -35,7 +35,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                     if (address == null)
                     {
                         var webClient = new WebClient();
-                        address = IPAddress.Parse(webClient.DownloadString("https://api.ipify.org"));
+                        address = IPAddress.Parse(webClient.DownloadString("http://api.ipify.org"));
                         return address;
                     }
                     return address;

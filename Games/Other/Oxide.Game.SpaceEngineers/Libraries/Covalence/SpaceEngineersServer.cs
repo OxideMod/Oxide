@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
+using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game;
 using Sandbox.Game.World;
-using SteamSDK;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
@@ -25,6 +25,8 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             set { MySandboxGame.ConfigDedicated.ServerName = value; }
         }
 
+        private static IPAddress address;
+
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
         /// </summary>
@@ -32,8 +34,21 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         {
             get
             {
-                var ip = SteamServerAPI.Instance.GameServer.GetPublicIP();
-                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24));
+                try
+                {
+                    if (address == null)
+                    {
+                        var webClient = new WebClient();
+                        address = IPAddress.Parse(webClient.DownloadString("http://api.ipify.org"));
+                        return address;
+                    }
+                    return address;
+                }
+                catch (Exception ex)
+                {
+                    RemoteLogger.Exception("Couldn't get server IP address", ex);
+                    return new IPAddress(0);
+                }
             }
         }
 
