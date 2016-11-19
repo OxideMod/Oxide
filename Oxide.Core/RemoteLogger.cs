@@ -78,6 +78,7 @@ namespace Oxide.Core
                 this.modules = new Dictionary<string, string>();
                 foreach (var extension in Interface.Oxide.GetAllExtensions())
                     modules[extension.GetType().Assembly.GetName().Name] = extension.Version.ToString();
+
                 if (exception != null)
                 {
                     extra = new Dictionary<string, string>();
@@ -145,11 +146,6 @@ namespace Oxide.Core
 
         public static void Error(string message) => EnqueueReport("error", Assembly.GetCallingAssembly(), GetCurrentMethod(), message);
 
-        public static void Exception(string message, Exception exception)
-        {
-            EnqueueReport("fatal", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
-        }
-
         public static string[] ExceptionFilter =
         {
             "BadImageFormatException",
@@ -164,10 +160,18 @@ namespace Oxide.Core
             "WebException"
         };
 
+        public static void Exception(string message, Exception exception)
+        {
+            if (!exception.StackTrace.Contains("Oxide.Core") && !exception.StackTrace.Contains("Oxide.Game") && !exception.StackTrace.Contains("Oxide.Plugins.Compiler")) return;
+            foreach (var filter in ExceptionFilter) if (exception.StackTrace.Contains(filter) || message.Contains(filter)) return;
+
+            EnqueueReport("fatal", Assembly.GetCallingAssembly(), GetCurrentMethod(), message, exception.ToString());
+        }
+
         public static void Exception(string message, string rawStackTrace)
         {
             if (!rawStackTrace.Contains("Oxide.Core") && !rawStackTrace.Contains("Oxide.Game") && !rawStackTrace.Contains("Oxide.Plugins.Compiler")) return;
-            foreach (var filter in ExceptionFilter) if (rawStackTrace.Contains(filter)) return;
+            foreach (var filter in ExceptionFilter) if (rawStackTrace.Contains(filter) || message.Contains(filter)) return;
 
             var stackTrace = rawStackTrace.Split('\r', '\n');
             var culprit = stackTrace[0].Split('(')[0].Trim();
@@ -197,6 +201,7 @@ namespace Oxide.Core
         private static void SubmitNextReport()
         {
             if (QueuedReports.Count < 1) return;
+
             var queuedReport = QueuedReports[0];
             submittingReports = true;
             Webrequests.EnqueuePost(Url, queuedReport.Body, (code, response) =>
