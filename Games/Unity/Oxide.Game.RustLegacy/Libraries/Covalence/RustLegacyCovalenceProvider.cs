@@ -10,7 +10,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "RustLegacy";
+        public string GameName => "Rust Legacy";
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available

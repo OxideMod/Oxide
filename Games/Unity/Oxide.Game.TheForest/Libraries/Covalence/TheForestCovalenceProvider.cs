@@ -10,7 +10,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "TheForest";
+        public string GameName => "The Forest";
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available
