@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using UnityEngine;
 
 namespace Oxide.Game.TheForest
 {
@@ -140,6 +140,7 @@ namespace Oxide.Game.TheForest
 
         public static string GameVersion = "Unknown";
         private const string logFileName = "logs/output_log.txt"; // TODO: Add -logfile support
+        private StreamWriter logStream;
         private TextWriter logWriter;
 
         /// <summary>
@@ -250,7 +251,7 @@ namespace Oxide.Game.TheForest
 
             if (!Directory.Exists("logs")) Directory.CreateDirectory("logs");
             if (File.Exists(logFileName)) File.Delete(logFileName);
-            var logStream = File.AppendText(logFileName);
+            logStream = File.AppendText(logFileName);
             logStream.AutoFlush = true;
             logWriter = TextWriter.Synchronized(logStream);
             Application.logMessageReceivedThreaded += HandleLog;
@@ -270,7 +271,6 @@ namespace Oxide.Game.TheForest
             // Check if client should be disabled
             if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics"))
             {
-                // Disable audio and client-side elements if not dedicated
                 DisableAudio();
                 DisableClient();
             }
@@ -313,7 +313,7 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        public override void OnShutdown() => logWriter?.Close();
+        public override void OnShutdown() => logStream?.Close();
 
         private static void ServerConsoleOnInput(string input)
         {
