@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using SDG.Unturned;
 using Steamworks;
@@ -22,6 +23,8 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             set { Provider.serverName = value; }
         }
 
+        private static IPAddress address;
+
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
         /// </summary>
@@ -29,8 +32,21 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         {
             get
             {
-                var ip = SteamGameServer.GetPublicIP();
-                return ip == 0 ? null : new IPAddress(ip >> 24 | ((ip & 0xff0000) >> 8) | ((ip & 0xff00) << 8) | ((ip & 0xff) << 24));
+                try
+                {
+                    if (address == null)
+                    {
+                        var webClient = new WebClient();
+                        address = IPAddress.Parse(webClient.DownloadString("http://api.ipify.org"));
+                        return address;
+                    }
+                    return address;
+                }
+                catch (Exception ex)
+                {
+                    RemoteLogger.Exception("Couldn't get server IP address", ex);
+                    return new IPAddress(0);
+                }
             }
         }
 

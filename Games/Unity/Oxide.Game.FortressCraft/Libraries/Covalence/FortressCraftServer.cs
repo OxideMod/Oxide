@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.FortressCraft.Libraries.Covalence
@@ -11,8 +12,6 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
     {
         #region Information
 
-        private static IPAddress address;
-
         /// <summary>
         /// Gets/sets the public-facing name of the server
         /// </summary>
@@ -21,6 +20,8 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
             get { return ServerConsole.WorldName; }
             set { ServerConsole.WorldName = value; }
         }
+
+        private static IPAddress address;
 
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
@@ -34,13 +35,14 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
                     if (address == null)
                     {
                         var webClient = new WebClient();
-                        address = IPAddress.Parse(webClient.DownloadString("https://api.ipify.org"));
+                        address = IPAddress.Parse(webClient.DownloadString("http://api.ipify.org"));
                         return address;
                     }
                     return address;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    RemoteLogger.Exception("Couldn't get server IP address", ex);
                     return new IPAddress(0);
                 }
             }

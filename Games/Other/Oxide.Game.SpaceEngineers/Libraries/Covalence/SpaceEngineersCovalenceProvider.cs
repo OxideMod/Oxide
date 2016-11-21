@@ -10,7 +10,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "SpaceEngineers";
+        public string GameName => "Space Engineers";
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available

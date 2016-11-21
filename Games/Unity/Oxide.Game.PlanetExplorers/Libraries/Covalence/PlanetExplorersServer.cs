@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
@@ -20,10 +21,32 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             set { ServerConfig.ServerName = value; }
         }
 
+        private static IPAddress address;
+
         /// <summary>
         /// Gets the public-facing IP address of the server, if known
         /// </summary>
-        public IPAddress Address => new IPAddress(Convert.ToInt64(uLink.MasterServer.ipAddress));
+        public IPAddress Address
+        {
+            get
+            {
+                try
+                {
+                    if (address == null)
+                    {
+                        var webClient = new WebClient();
+                        address = IPAddress.Parse(webClient.DownloadString("http://api.ipify.org"));
+                        return address;
+                    }
+                    return address;
+                }
+                catch (Exception ex)
+                {
+                    RemoteLogger.Exception("Couldn't get server IP address", ex);
+                    return new IPAddress(0);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the public-facing network port of the server, if known

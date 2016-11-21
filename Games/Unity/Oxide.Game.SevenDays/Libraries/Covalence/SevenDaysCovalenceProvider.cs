@@ -10,7 +10,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "7DaysToDie";
+        public string GameName => "7 Days to Die";
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available

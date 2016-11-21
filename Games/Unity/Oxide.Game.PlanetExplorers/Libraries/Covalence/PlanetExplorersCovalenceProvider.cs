@@ -10,7 +10,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "PlanetExplorers";
+        public string GameName => "Planet Explorers";
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available

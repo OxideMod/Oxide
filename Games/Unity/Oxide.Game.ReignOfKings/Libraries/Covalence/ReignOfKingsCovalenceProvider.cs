@@ -10,7 +10,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "ReignOfKings";
+        public string GameName => "Reign of Kings";
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available

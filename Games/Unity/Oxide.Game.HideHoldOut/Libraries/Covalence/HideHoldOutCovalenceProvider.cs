@@ -10,7 +10,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// <summary>
         /// Gets the name of the game for which this provider provides
         /// </summary>
-        public string GameName => "HideHoldOut";
+        public string GameName => "Hide & Hold Out";
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available
