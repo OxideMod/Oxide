@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "tCfI564k5cRuaD1kWxTTEknMdTYuzbINN/5VK6GedmQ=",
+            "MSILHash": "ioLaIPJ08k6LVxNTxj5aZSUlEyKhFQKAavwZncvO2tQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "tCfI564k5cRuaD1kWxTTEknMdTYuzbINN/5VK6GedmQ=",
+            "MSILHash": "ioLaIPJ08k6LVxNTxj5aZSUlEyKhFQKAavwZncvO2tQ=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -103,7 +103,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 294,
+            "InjectionIndex": 296,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -124,7 +124,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iSCNsDw+Sri0WF/ganM/S5/8AciIOdvbMNRNsDGvPUI=",
+            "MSILHash": "SjKVz7FTbN4nL1Nf3Xp273Zzt252in5bVY6rertcMhc=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -132,7 +132,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 378,
+            "InjectionIndex": 380,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -168,7 +168,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iSCNsDw+Sri0WF/ganM/S5/8AciIOdvbMNRNsDGvPUI=",
+            "MSILHash": "SjKVz7FTbN4nL1Nf3Xp273Zzt252in5bVY6rertcMhc=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
@@ -389,7 +389,7 @@
                 "Steamworks.ValidateAuthTicketResponse_t"
               ]
             },
-            "MSILHash": "iAjXR9D0B1q5sP6JngEVxZOuFmjRxaK2hbjACXVvtak=",
+            "MSILHash": "0OJU1TV+ML5Ih+w5EHnYSTlmamptfM+QlrtstXwFfDQ=",
             "BaseHookName": null,
             "HookCategory": "_WIP"
           }
