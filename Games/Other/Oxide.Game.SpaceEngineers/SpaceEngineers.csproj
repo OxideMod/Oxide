@@ -44,9 +44,6 @@
     <Reference Include="Sandbox.Game">
       <HintPath>Dependencies\Sandbox.Game.dll</HintPath>
     </Reference>
-    <Reference Include="SteamSDK">
-      <HintPath>Dependencies\SteamSDK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="VRage">

@@ -21,7 +21,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return MySandboxGame.ConfigDedicated.ServerName; }
+            get { return MySandboxGame.ConfigDedicated.ServerName; } // TODO: Empty?!
             set { MySandboxGame.ConfigDedicated.ServerName = value; }
         }
 
@@ -86,8 +86,8 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return MySession.Static.InGameTime; }
-            set { MySession.Static.InGameTime = value; }
+            get { return MySession.Static.GameDateTime; }
+            set { MySession.Static.GameDateTime = value; }
         }
 
         #endregion
