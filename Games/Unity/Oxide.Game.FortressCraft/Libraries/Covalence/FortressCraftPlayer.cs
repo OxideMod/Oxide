@@ -114,13 +114,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <summary>
         /// Gets the amount of time remaining on the user's ban
         /// </summary>
-        public TimeSpan BanTimeRemaining
-        {
-            get
-            {
-                return TimeSpan.FromSeconds(0); // TODO: Implement when possible
-            }
-        }
+        public TimeSpan BanTimeRemaining => TimeSpan.MaxValue;
 
         /// <summary>
         /// Heals the user's character by specified amount
@@ -136,8 +130,14 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// </summary>
         public float Health
         {
-            get { return 0; } // TODO: Implement when possible
-            set { } // TODO: Implement when possible
+            get
+            {
+                return 0; // TODO: Implement when possible
+            }
+            set
+            {
+                // TODO: Implement once possible
+            }
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => Hurt(101f);
+        public void Kill() => player.mGameObject.GetComponent<SurvivalPlayerScript>().Die("");
 
         /// <summary>
         /// Gets/sets the user's maximum health
