@@ -32,11 +32,13 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         }
 
         internal TheForestPlayer(BoltEntity entity)
-            : this(entity.controller.RemoteEndPoint.SteamId.Id, SteamFriends.GetFriendPersonaName(new CSteamID(entity.controller.RemoteEndPoint.SteamId.Id)))
         {
             // Store user object
+            Name = SteamFriends.GetFriendPersonaName(new CSteamID(entity.controller.RemoteEndPoint.SteamId.Id));
+            steamId = entity.controller.RemoteEndPoint.SteamId.Id;
+            Id = steamId.ToString();
+            cSteamId = new CSteamID(steamId);
             this.entity = entity;
-            cSteamId = new CSteamID(entity.controller.RemoteEndPoint.SteamId.Id);
         }
 
         #region Objects

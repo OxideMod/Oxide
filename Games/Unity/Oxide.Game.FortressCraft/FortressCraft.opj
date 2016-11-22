@@ -13,8 +13,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "CanModify",
-            "HookName": "CanModify",
+            "Name": "ICanModify [internal]",
+            "HookName": "ICanModify",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkServerPermissions",
             "Flagged": true,
@@ -39,8 +39,8 @@
             "ArgumentBehavior": 3,
             "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "CanDelete",
-            "HookName": "CanDelete",
+            "Name": "ICanDelete [internal]",
+            "HookName": "ICanDelete",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkServerPermissions",
             "Flagged": true,
@@ -67,8 +67,8 @@
             "ArgumentBehavior": 3,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "CanBuild",
-            "HookName": "CanBuild",
+            "Name": "ICanBuild [internal]",
+            "HookName": "ICanBuild",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkServerPermissions",
             "Flagged": true,
@@ -229,7 +229,7 @@
             },
             "MSILHash": "BA/WY1mypwcSd3RCOiGnt7GqajP6fnqHCoAVz/iq8pE=",
             "BaseHookName": null,
-            "HookCategory": "Patch"
+            "HookCategory": "_Patches"
           }
         },
         {

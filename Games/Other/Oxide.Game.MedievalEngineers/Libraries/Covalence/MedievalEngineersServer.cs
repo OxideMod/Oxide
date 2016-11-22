@@ -4,8 +4,8 @@ using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
-using Sandbox.Game;
 using Sandbox.Game.World;
+using VRage.Game;
 
 namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
 {
@@ -21,7 +21,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return MySandboxGame.ConfigDedicated.ServerName; }
+            get { return MySandboxGame.ConfigDedicated.ServerName; } // TODO: Empty?!
             set { MySandboxGame.ConfigDedicated.ServerName = value; }
         }
 
@@ -60,7 +60,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// <summary>
         /// Gets the version or build number of the server
         /// </summary>
-        public string Version => MyPerGameSettings.BasicGameInfo.GameVersion.ToString();
+        public string Version => MyFinalBuildConstants.GAME_VERSION.ToString();
 
         /// <summary>
         /// Gets the network protocol version of the server
@@ -86,8 +86,8 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return MySession.Static.InGameTime; }
-            set { MySession.Static.InGameTime = value; }
+            get { return MySession.Static.GameDateTime; }
+            set { MySession.Static.GameDateTime = value; }
         }
 
         #endregion

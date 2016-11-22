@@ -152,6 +152,13 @@ namespace Oxide.Game.TheForest
                 LevelSerializer.Checkpoint();
                 Interface.Oxide.LogInfo("Server has been saved!");
             });
+
+            // Check if client should be disabled
+            //if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics"))
+            //{
+            TheForestExtension.DisableAudio();
+            TheForestExtension.DisableClient();
+            //}
         }
 
         /// <summary>
@@ -355,13 +362,26 @@ namespace Oxide.Game.TheForest
         [HookMethod("ICutScene")]
         private void ICutScene(TriggerCutScene scene)
         {
-            Scene.TriggerCutScene.SpaceTut.SetActive(false);
+            CoopPeerStarter.Dedicated = true;
+            CoopPeerStarter.DedicatedHost = true;
+
+            /*Scene.TriggerCutScene.SpaceTut.SetActive(false);
             Scene.TriggerCutScene.LightsFlight.SetActive(false);
-            //Scene.TriggerCutScene.pmTrigger.SendEvent("toSkipOpening");
+            Scene.TriggerCutScene.pmTrigger.SendEvent("toSkipOpening");
             //Scene.TriggerCutScene.skipOpening = true;
             scene.planeController.setPlanePosition();
-            //scene.FinalizePlanePosition();
-            UnityEngine.Object.Destroy(scene);
+
+            if (Scene.TriggerCutScene && Scene.TriggerCutScene.planeController) Scene.TriggerCutScene.planeController.enabled = false;
+            var transform = PlaneCrashLocations.finalPositions[PlaneCrashLocations.crashSite].transform;
+            scene.planeController.transform.position = transform.position;
+            scene.planeController.transform.rotation = transform.rotation;
+            var gameObjectArray = scene.enableAfterCrash;
+            foreach (var gameObject in gameObjectArray) if (gameObject) gameObject.SetActive(true);
+            Scene.PlaneGreebles.transform.position = scene.planeController.transform.position;
+            Scene.PlaneGreebles.transform.rotation = scene.planeController.transform.rotation;
+            Scene.PlaneGreebles.SetActive(true);
+
+            UnityEngine.Object.Destroy(scene);*/
         }
 
         /// <summary>

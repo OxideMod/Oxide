@@ -146,7 +146,7 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Disables the audio output
         /// </summary>
-        public static void DisableAudio()
+        internal static void DisableAudio()
         {
             MainMenuAudio.FadeOut();
             AudioListener.pause = true;
@@ -188,16 +188,26 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Disables client-side elements
         /// </summary>
-        private static void DisableClient()
+        internal static void DisableClient()
         {
-            //var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
-            //foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
-            //var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
-            //foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
-            //var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
-            //foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
+            var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
+            foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
+            var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
+            foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
+            var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
+            foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
             //var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
             //foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);*/
+            //var hudGuis = Resources.FindObjectsOfTypeAll<HudGui>();
+            //foreach (var hudGui in hudGuis) UnityEngine.Object.Destroy(hudGui);
+            var planeControls = Resources.FindObjectsOfTypeAll<playerPlaneControl>();
+            foreach (var planeControl in planeControls) UnityEngine.Object.Destroy(planeControl);
+            //var visRangeSetups = Resources.FindObjectsOfTypeAll<visRangeSetup>();
+            //foreach (var visRangeSetup in visRangeSetups) UnityEngine.Object.Destroy(visRangeSetup);
+            /*var visRangeSetups = LocalPlayer.Transform.GetComponent<visRangeSetup>();
+            visRangeSetups.entity.enabled = false;
+            var targetStat = LocalPlayer.Transform.GetComponent<targetStats>();
+            targetStat.entity.enabled = false;*/
 
             //var amplifyMotionCameras = Resources.FindObjectsOfTypeAll<AmplifyMotionCamera>();
             //foreach (var amplifyMotionCamera in amplifyMotionCameras) UnityEngine.Object.Destroy(amplifyMotionCamera);
@@ -238,7 +248,7 @@ namespace Oxide.Game.TheForest
         {
             // Get the game's version from mainData
             var regex = new Regex(@"Version v(\d+\.\d+[a-z]?)");
-            using (var reader = new StreamReader(Path.Combine(Application.dataPath, "mainData")))
+            using (var reader = new StreamReader(Path.Combine(Application.dataPath, "level0")))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -267,13 +277,6 @@ namespace Oxide.Game.TheForest
             if (commandLine.HasVariable("saveslot")) PlayerPrefs.SetInt("MpGameSaveSlot", int.Parse(commandLine.GetVariable("saveslot")));
             //if (commandLine.HasVariable("saveinterval")) // TODO: Make this work
             //if (commandLine.HasVariable("gamemode")) // TODO: Make this work
-
-            // Check if client should be disabled
-            if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics"))
-            {
-                DisableAudio();
-                DisableClient();
-            }
 
             if (Interface.Oxide.EnableConsole()) Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
