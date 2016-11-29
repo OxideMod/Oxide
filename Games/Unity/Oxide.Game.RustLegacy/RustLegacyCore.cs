@@ -848,7 +848,7 @@ namespace Oxide.Game.RustLegacy
 
         #endregion
 
-        #region Anti-Cheat
+        #region Game Fixes
 
         /// <summary>
         /// Called when the GetClientMove packet is received for a player
@@ -866,6 +866,7 @@ namespace Oxide.Game.RustLegacy
                 netUser.Kick(NetError.ConnectionBanned, true);
                 return false;
             }
+            Interface.Oxide.CallHook("OnPlayerMove", netUser, pos);
             return null;
         }
 
@@ -900,10 +901,6 @@ namespace Oxide.Game.RustLegacy
             Interface.Oxide.LogWarning($"An RPC message from {netuser.displayName} has triggered an exception. Kicking the player...");
             if (netuser.connected) netuser.Kick(NetError.Facepunch_Kick_Violation, true);
         }
-
-        #endregion
-
-        #region Game Fixes
 
         /// <summary>
         /// Called when an AI moves
