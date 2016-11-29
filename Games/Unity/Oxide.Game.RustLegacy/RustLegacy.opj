@@ -577,7 +577,7 @@
             },
             "MSILHash": "DToIg6WBON5urrKVC0qFBtbjkUb6bietRyrycSbRimI=",
             "BaseHookName": null,
-            "HookCategory": "Anti-Cheat"
+            "HookCategory": "Fixes"
           }
         },
         {
@@ -635,7 +635,7 @@
             },
             "MSILHash": "qDCF8ydMGtRraEzpDbOFELKJx5VWgw771Nr2MCQXZc8=",
             "BaseHookName": null,
-            "HookCategory": "Anti-Cheat"
+            "HookCategory": "Fixes"
           }
         },
         {
@@ -825,7 +825,7 @@
             },
             "MSILHash": "eRdK7MTGBpUJ7RwefOdl4tKMLdvBm68Q+3nVglAwDTQ=",
             "BaseHookName": null,
-            "HookCategory": "_Patch"
+            "HookCategory": "_Patches"
           }
         },
         {
@@ -854,7 +854,7 @@
             },
             "MSILHash": "DZ3C4oRDzyU378Vnm2cNAFwRn49bVM3+GWxwIzWr3uU=",
             "BaseHookName": null,
-            "HookCategory": "_Patch"
+            "HookCategory": "_Patches"
           }
         },
         {
@@ -913,7 +913,7 @@
             },
             "MSILHash": "baCskEq+9itsdXL5hxwnkzyGQNvwFWzvBQY/Gcy1Gzg=",
             "BaseHookName": null,
-            "HookCategory": "Anti-Cheat"
+            "HookCategory": "Fixes"
           }
         }
       ]
