@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using ProtoBuf;
 
 namespace Oxide.Game.SevenDays.Libraries.Covalence
 {
@@ -16,7 +16,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         private struct PlayerRecord
         {
             public string Name;
-            public ulong Id;
+            public string Id;
         }
 
         private readonly IDictionary<string, PlayerRecord> playerData;
@@ -52,7 +52,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             else
             {
                 // Insert
-                record = new PlayerRecord { Id = Convert.ToUInt64(id), Name = client.playerName };
+                record = new PlayerRecord { Id = id, Name = client.playerName };
                 playerData.Add(id, record);
 
                 // Create Rust player
