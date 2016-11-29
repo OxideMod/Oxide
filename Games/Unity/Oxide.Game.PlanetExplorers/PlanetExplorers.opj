@@ -8,7 +8,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 111,
+            "InjectionIndex": 116,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -24,7 +24,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "oNQNXPuRj6sKtOF3L3Sj05z7qEeq1KcgcZl/DJP6OHE=",
+            "MSILHash": "tAy+N/b9CeOmumx7fIKPFXPgfOgNOQswCHNZpaQjMTY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -32,16 +32,16 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 3,
+            "InjectionIndex": 66,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": null,
+            "ArgumentString": "l2",
             "HookTypeName": "Simple",
             "Name": "OnPlayerConnected",
             "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "uLinkNetwork",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "uLink_OnPlayerConnected",
@@ -50,7 +50,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "C1K/OA4OqVkBBoBt3hUpjvvyyZ32D5DwkOo4vbiyBVY=",
+            "MSILHash": "MyGoYim8NS2oDnVVQ3XnmRkxgNEdY+GEwJDuNzBGBpg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -58,13 +58,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 23,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l1",
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerDisconnected",
-            "HookName": "OnPlayerDisconnected",
+            "Name": "IOnPlayerDisconnected [internal]",
+            "HookName": "IOnPlayerDisconnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "uLinkNetwork",
             "Flagged": false,
@@ -76,7 +76,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "tG+JZVjaax6o6RVsqN0FPJfOzcITTAZMtOH4ePJNyw4=",
+            "MSILHash": "6NT1IzIVDx382QeG6gsuPtErAqDi2cSYgP47EPWIUUw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -86,14 +86,14 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
+            "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnUserApprove",
-            "HookName": "OnUserApprove",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "uLinkNetwork",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "uLink_OnPlayerApproval",
@@ -102,7 +102,7 @@
                 "uLink.NetworkPlayerApproval"
               ]
             },
-            "MSILHash": "rKEOUPUQzR/f/7drsAABi6h4GK0pIoJYQ9eLPL/ehTE=",
+            "MSILHash": "qGXqSXY8hAo9Sqf9ZNa8s96kYbVWlAtB0hYRDiX+nO4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -126,7 +126,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "BfuCpwtF+C3MDZAcvT5lzuNS4Yy0v1V4ERLVPrDhLaQ=",
+            "MSILHash": "XiyttGH1FIhUommXR11pgvWhmYj5lOx6DisklJ3wxMo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -171,7 +171,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Ub+jiL27tDSoR+7wktYmjlv6WgO4EBTyDq4q7CRFne0=",
+            "MSILHash": "WhH8Zt6V0DgfuHIt6PgCRmVqr02QQWXwhGzhHXiDnDM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -195,7 +195,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Ub+jiL27tDSoR+7wktYmjlv6WgO4EBTyDq4q7CRFne0=",
+            "MSILHash": "WhH8Zt6V0DgfuHIt6PgCRmVqr02QQWXwhGzhHXiDnDM=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }

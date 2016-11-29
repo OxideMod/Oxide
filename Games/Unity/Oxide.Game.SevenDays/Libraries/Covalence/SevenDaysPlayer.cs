@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using UnityEngine;
 
 namespace Oxide.Game.SevenDays.Libraries.Covalence
 {
@@ -14,17 +14,17 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         private static Permission libPerms;
         private readonly ClientInfo client;
 
-        internal SevenDaysPlayer(ulong id, string name)
+        internal SevenDaysPlayer(string id, string name)
         {
             // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
             Name = name;
-            Id = id.ToString();
+            Id = id;
         }
 
-        internal SevenDaysPlayer(ClientInfo client) : this(client.steamId.m_SteamID, client.playerName)
+        internal SevenDaysPlayer(ClientInfo client) : this(client.playerId, client.playerName)
         {
             // Store user object
             this.client = client;
@@ -133,7 +133,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             set
             {
                 var entity = GameManager.Instance.World.GetEntity(client.entityId) as EntityAlive;
-                if (entity!= null) entity.Stats.Health.Value = value;
+                if (entity != null) entity.Stats.Health.Value = value;
             }
         }
 
