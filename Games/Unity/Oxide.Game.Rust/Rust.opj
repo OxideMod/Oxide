@@ -3401,6 +3401,39 @@
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 24,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "FixFileStoragePath [patch]",
+            "HookName": "FixFileStoragePath",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "FileStorage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Get",
+              "ReturnType": "System.Byte[]",
+              "Parameters": [
+                "System.UInt32",
+                "FileStorage/Type",
+                "System.UInt32"
+              ]
+            },
+            "MSILHash": "GogT8N5/tCOsviqBbnF40dMBqxAz8WQYN3O3pRE2N8U=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
         }
       ]
     },
