@@ -798,44 +798,44 @@ namespace Oxide.Game.Rust
             }
 
             var mode = arg.GetString(0);
-            var name = arg.GetString(1);
+            var group = arg.GetString(1);
 
             if (mode.Equals("add"))
             {
-                if (permission.GroupExists(name))
+                if (permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupAlreadyExists", name);
+                    Reply(arg, "GroupAlreadyExists", group);
                     return;
                 }
-                permission.CreateGroup(name, arg.GetString(2), arg.GetInt(3));
-                Reply(arg, "GroupCreated", name);
+                permission.CreateGroup(group, arg.GetString(2), arg.GetInt(3));
+                Reply(arg, "GroupCreated", group);
             }
             else if (mode.Equals("remove"))
             {
-                if (!permission.GroupExists(name))
+                if (!permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupNotFound", name);
+                    Reply(arg, "GroupNotFound", group);
                     return;
                 }
-                permission.RemoveGroup(name);
-                Reply(arg, "GroupDeleted", name);
+                permission.RemoveGroup(group);
+                Reply(arg, "GroupDeleted", group);
             }
             else if (mode.Equals("set"))
             {
-                if (!permission.GroupExists(name))
+                if (!permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupNotFound", name);
+                    Reply(arg, "GroupNotFound", group);
                     return;
                 }
-                permission.SetGroupTitle(name, arg.GetString(2));
-                permission.SetGroupRank(name, arg.GetInt(3));
-                Reply(arg, "GroupChanged", name);
+                permission.SetGroupTitle(group, arg.GetString(2));
+                permission.SetGroupRank(group, arg.GetInt(3));
+                Reply(arg, "GroupChanged", group);
             }
             else if (mode.Equals("parent"))
             {
-                if (!permission.GroupExists(name))
+                if (!permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupNotFound", name);
+                    Reply(arg, "GroupNotFound", group);
                     return;
                 }
                 var parent = arg.GetString(2);
@@ -844,10 +844,10 @@ namespace Oxide.Game.Rust
                     Reply(arg, "GroupParentNotFound", parent);
                     return;
                 }
-                if (permission.SetGroupParent(name, parent))
-                    Reply(arg, "GroupParentChanged", name, parent);
+                if (permission.SetGroupParent(group, parent))
+                    Reply(arg, "GroupParentChanged", group, parent);
                 else
-                    Reply(arg, "GroupParentNotChanged", name);
+                    Reply(arg, "GroupParentNotChanged", group);
             }
         }
 
@@ -891,7 +891,7 @@ namespace Oxide.Game.Rust
 
             if (!permission.GroupExists(group))
             {
-                Reply(arg, "GroupNotFound", name);
+                Reply(arg, "GroupNotFound", group);
                 return;
             }
 
