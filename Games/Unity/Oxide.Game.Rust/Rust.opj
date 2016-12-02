@@ -3401,6 +3401,149 @@
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 234,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l2, l2.authStatus",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerBanned [eac]",
+            "HookName": "OnPlayerBanned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerMgr",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "AntiCheatKickPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EasyAntiCheat.Server.Legacy.ClientStatusUpdate"
+              ]
+            },
+            "MSILHash": "HiAfowtl5e4A5Ucjid+YkxbxeUD82jVz2M4QFjz1xBs=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 30,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, l0.authStatus",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerBanned [server]",
+            "HookName": "OnPlayerBanned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Auth_Steam",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ValidateConnecting",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt64",
+                "System.UInt64",
+                "Facepunch.Steamworks.ServerAuth/Status"
+              ]
+            },
+            "MSILHash": "Qye6JKwWS6rcq4NTj5dBmfekFDUm7LrB9X2zkJA/Sdk=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 24,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "FixFileStoragePath [patch]",
+            "HookName": "FixFileStoragePath",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "FileStorage",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Get",
+              "ReturnType": "System.Byte[]",
+              "Parameters": [
+                "System.UInt32",
+                "FileStorage/Type",
+                "System.UInt32"
+              ]
+            },
+            "MSILHash": "GogT8N5/tCOsviqBbnF40dMBqxAz8WQYN3O3pRE2N8U=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 61,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, l0.authStatus",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerBanned [vac]",
+            "HookName": "OnPlayerBanned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Auth_Steam",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ValidateConnecting",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt64",
+                "System.UInt64",
+                "Facepunch.Steamworks.ServerAuth/Status"
+              ]
+            },
+            "MSILHash": "Qye6JKwWS6rcq4NTj5dBmfekFDUm7LrB9X2zkJA/Sdk=",
+            "BaseHookName": "OnPlayerBanned [server]",
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 85,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, l0.authStatus",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerBanned [facepunch]",
+            "HookName": "OnPlayerBanned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Auth_Steam",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ValidateConnecting",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt64",
+                "System.UInt64",
+                "Facepunch.Steamworks.ServerAuth/Status"
+              ]
+            },
+            "MSILHash": "Qye6JKwWS6rcq4NTj5dBmfekFDUm7LrB9X2zkJA/Sdk=",
+            "BaseHookName": "OnPlayerBanned [vac]",
+            "HookCategory": "Player"
+          }
         }
       ]
     },
