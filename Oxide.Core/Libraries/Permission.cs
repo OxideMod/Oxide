@@ -444,6 +444,9 @@ namespace Oxide.Core.Libraries
             var data = GetUserData(id);
             if (!data.Groups.Add(name.ToLower())) return;
             SaveUsers();
+
+            // Call hook for plugins
+            Interface.Call("OnUserGroupAdded", id, name);
         }
 
         /// <summary>
@@ -467,6 +470,10 @@ namespace Oxide.Core.Libraries
             }
             if (!data.Groups.Remove(name.ToLower())) return;
             SaveUsers();
+
+            // Call hook for plugins
+            Interface.Call("OnUserGroupRemoved", id, name);
+
         }
 
         /// <summary>
