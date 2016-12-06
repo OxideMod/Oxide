@@ -99,8 +99,8 @@
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy') And '$(OS)' != 'Unix'" />
   </Target>
   <Target Name="Deploy">
-    <Exec Command="start /b /wait taskkill /f /im NomadServer.exe" IgnoreExitCode="true" />
-    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe" IgnoreExitCode="true" />
+    <Exec Command="start /b /wait taskkill /f /im NomadServer.exe /fi &quot;memusage gt 2&quot;" />
+    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" />
     <ReadLinesFromFile File="$(ProjectDir).deploy">
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
