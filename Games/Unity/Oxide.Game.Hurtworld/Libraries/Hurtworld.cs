@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
+using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Plugins;
 
 namespace Oxide.Game.Hurtworld.Libraries
 {

@@ -3,8 +3,8 @@ using System.Reflection;
 using CodeHatch.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events;
+using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Plugins;
 
 namespace Oxide.Game.ReignOfKings.Libraries
 {
