@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Plugins;
 
 namespace Oxide.Game.RustLegacy.Libraries
 {

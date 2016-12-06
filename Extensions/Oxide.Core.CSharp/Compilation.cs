@@ -225,7 +225,7 @@ namespace Oxide.Plugins
                 }
 
                 // Include implicit references detected from using statements in script
-                match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Ext|Game)\.(?:[^\.]+))[^;]*;\s*$", RegexOptions.IgnoreCase);
+                match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Core|Ext|Game)\.(?:[^\.]+))[^;]*;\s*$", RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
                     AddReference(plugin, match.Groups[1].Value);
@@ -242,7 +242,7 @@ namespace Oxide.Plugins
         {
             foreach (var reference in plugin.References)
             {
-                var match = Regex.Match(reference, @"^(Oxide\.(?:Ext|Game)\.(.+))$", RegexOptions.IgnoreCase);
+                var match = Regex.Match(reference, @"^(?:Core|Ext|Game)\.(.+)$", RegexOptions.IgnoreCase);
                 if (!match.Success) continue;
                 var fullName = match.Groups[1].Value;
                 var name = match.Groups[2].Value;
@@ -256,7 +256,7 @@ namespace Oxide.Plugins
                         continue;
                     }
                 }
-                var message = $"{fullName} is referenced by {plugin.Name} plugin but is not loaded! An appropriate include file needs to be saved to Plugins\\Include\\Ext.{name}.cs if this extension is not required.";
+                var message = $"{fullName} is referenced by {plugin.Name} plugin but is not loaded! An appropriate include file needs to be saved to plugins\\include\\Ext.{name}.cs if this extension is not required.";
                 Interface.Oxide.LogError(message);
                 plugin.CompilerErrors = message;
                 RemovePlugin(plugin);
@@ -286,7 +286,7 @@ namespace Oxide.Plugins
             var path = Path.Combine(Interface.Oxide.ExtensionDirectory, assemblyName + ".dll");
             if (!File.Exists(path))
             {
-                if (assemblyName.StartsWith("Oxide.Ext."))
+                if (assemblyName.StartsWith("Oxide.Core.") || assemblyName.StartsWith("Oxide.Ext."))
                 {
                     plugin.References.Add(assemblyName);
                     return;

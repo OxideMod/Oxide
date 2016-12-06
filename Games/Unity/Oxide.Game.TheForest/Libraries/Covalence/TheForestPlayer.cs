@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Steamworks;
 using TheForest.Utils;
 using UdpKit;
 using UnityEngine;
-using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -34,10 +34,10 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         internal TheForestPlayer(BoltEntity entity)
         {
             // Store user object
-            Name = SteamFriends.GetFriendPersonaName(new CSteamID(entity.controller.RemoteEndPoint.SteamId.Id));
             steamId = entity.controller.RemoteEndPoint.SteamId.Id;
             Id = steamId.ToString();
             cSteamId = new CSteamID(steamId);
+            Name = SteamFriends.GetFriendPersonaName(cSteamId);
             this.entity = entity;
         }
 

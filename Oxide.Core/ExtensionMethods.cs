@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Oxide
+namespace Oxide.Core
 {
     /// <summary>
     /// Useful extension methods which are added to base types
@@ -56,12 +56,26 @@ namespace Oxide
         public static string Humanize(this string name) => Regex.Replace(name, @"(\B[A-Z])", " $1");
 
         /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Quote(this string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
+
+        /// <summary>
         /// Returns a random value from an array
         /// </summary>
         public static T Sample<T>(this T[] array) => array[Core.Random.Range(0, array.Length)];
 
         /// <summary>
-        /// Converts a string to Title case
+        /// Converts a string into a sanitized string for string.Format
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string Sanitize(this string str) => str.Replace("{", "{{").Replace("}", "}}");
+
+        /// <summary>
+        /// Converts a string to Title Case
         /// </summary>
         public static string Titleize(this string text)
         {
