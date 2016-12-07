@@ -195,7 +195,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             if (!IsBanned) return;
 
             // Set to unbanned
-            ServerUsers.Set(steamId, ServerUsers.UserGroup.None, Name, string.Empty);
+            ServerUsers.Remove(steamId);
             ServerUsers.Save();
         }
 
