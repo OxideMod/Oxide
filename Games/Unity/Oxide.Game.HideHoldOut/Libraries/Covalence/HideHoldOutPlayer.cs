@@ -237,7 +237,7 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(string.Format(message, args));
+        public void Reply(string message, params object[] args) => Message(message, args);
 
         /// <summary>
         /// Runs the specified console command on the user

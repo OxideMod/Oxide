@@ -19,7 +19,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's last command type
         /// </summary>
-        public CommandType LastCommand { get { return CommandType.Console; } set {} }
+        public CommandType LastCommand { get { return CommandType.Console; } set { } }
 
         #endregion
 
@@ -181,14 +181,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Interface.Oxide.LogInfo(string.Format(message, args));
+        public void Message(string message, params object[] args) => Interface.Oxide.LogInfo(Formatter.ToPlaintext(string.Format(message, args)));
 
         /// <summary>
         /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(string.Format(message, args));
+        public void Reply(string message, params object[] args) => Message(message, args);
 
         /// <summary>
         /// Runs the specified console command on the user
