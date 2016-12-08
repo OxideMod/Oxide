@@ -863,7 +863,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 727,
+            "InjectionIndex": 695,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l2",
@@ -881,7 +881,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "5zsfkQxNiz//2Gxb9VTHOmugL7sl36wbu87MsT/c0TM=",
+            "MSILHash": "O5YoTKcWza1isbRJFX5bTD48fRhS7VkRCprf0Crl3xg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -960,7 +960,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "Nq8tuDBHOd0KwduRAO4OFL6YnFj8zNloPnBkEDjIpY4=",
+            "MSILHash": "l7DgRTS6JbeH2XczWWNL4UjAAjEsscCBDM05jAiGm18=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1638,7 +1638,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 133,
+            "InjectionIndex": 166,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0.player, l7",
@@ -1656,7 +1656,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "DdWcT76URqdZyU90SD+3EMd1lsLXM+dS/yPUHFk8KGY=",
+            "MSILHash": "aFw9wRl2RiSWmsd9wt5owmIj9n8lru71WRnkecl3I6A=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -1664,7 +1664,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 73,
+            "InjectionIndex": 91,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0.player, l3, l2",
@@ -1682,7 +1682,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "Ox5Gnab8fjNs7Cm/PebenkJxYTRija1vwpZJzabNmTQ=",
+            "MSILHash": "zB3t7hFJHzHheed9K0ZadeaF3Gy/rAHZF0YxeivlglY=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -1964,7 +1964,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "Wk07QNwaRyYtMnSxqcJe3GCqk+lKQXQSQ9TkZ48ZTE4=",
+            "MSILHash": "zVdK0zW0izzlRlboxJ1xK0pJYwhKTNoaaYtS7MRbx0s=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2540,7 +2540,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "N2mDwTn9r+Iax7yBo2kbr+rLJr5n2clXrfyHaUQmY1g=",
+            "MSILHash": "6/tqk84wl47Q/qS3JTVOgB7bAEnZDmYvH5gQXSSvvcg=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2678,7 +2678,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 24,
+            "InjectionIndex": 21,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, l1",
@@ -2700,7 +2700,7 @@
                 "Item"
               ]
             },
-            "MSILHash": "99wN7HIn2kygyWkDsa3rcg3V57+pkqS31K63/iSIIzU=",
+            "MSILHash": "aRZFXb/c8mthmW+OCyVi0z3nTxo9+oHD7j3RHi+Srts=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -2944,7 +2944,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "J/RpHUMPQLLZaiVf+jXdnJ3Nl0pfSJARMqWWGszMMOU=",
+            "MSILHash": "Ymmqv9fi339MBJ/8Dv6xRzazou0BX2qIr4sxT8oKxC0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3454,39 +3454,6 @@
             "MSILHash": "Qye6JKwWS6rcq4NTj5dBmfekFDUm7LrB9X2zkJA/Sdk=",
             "BaseHookName": null,
             "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 24,
-            "RemoveCount": 1,
-            "Instructions": [
-              {
-                "OpCode": "ldc_i4_0",
-                "OpType": "None",
-                "Operand": null
-              }
-            ],
-            "HookTypeName": "Modify",
-            "Name": "FixFileStoragePath [patch]",
-            "HookName": "FixFileStoragePath",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "FileStorage",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Get",
-              "ReturnType": "System.Byte[]",
-              "Parameters": [
-                "System.UInt32",
-                "FileStorage/Type",
-                "System.UInt32"
-              ]
-            },
-            "MSILHash": "GogT8N5/tCOsviqBbnF40dMBqxAz8WQYN3O3pRE2N8U=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
           }
         },
         {
