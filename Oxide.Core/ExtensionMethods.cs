@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Oxide.Core
+namespace Oxide
 {
     /// <summary>
     /// Useful extension methods which are added to base types
