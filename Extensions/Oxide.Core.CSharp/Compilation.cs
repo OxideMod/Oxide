@@ -242,7 +242,7 @@ namespace Oxide.Plugins
         {
             foreach (var reference in plugin.References)
             {
-                var match = Regex.Match(reference, @"^(?:Core|Ext|Game)\.(.+)$", RegexOptions.IgnoreCase);
+                var match = Regex.Match(reference, @"^(Oxide\.(?:Ext|Game)\.(.+))$", RegexOptions.IgnoreCase);
                 if (!match.Success) continue;
                 var fullName = match.Groups[1].Value;
                 var name = match.Groups[2].Value;
