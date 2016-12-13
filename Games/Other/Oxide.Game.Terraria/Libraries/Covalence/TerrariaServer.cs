@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
-using Terraria;
 using Oxide.Core.Libraries.Covalence;
+using Terraria;
 
 namespace Oxide.Game.Terraria.Libraries.Covalence
 {
@@ -44,7 +44,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <summary>
         /// Gets the total of players currently on the server
         /// </summary>
-        public int Players => Main.numPlayers;
+        public int Players => Main.ActivePlayersCount;
 
         /// <summary>
         /// Gets/sets the maximum players allowed on the server
