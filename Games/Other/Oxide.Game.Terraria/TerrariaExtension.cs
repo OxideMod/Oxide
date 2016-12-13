@@ -1,7 +1,7 @@
 ﻿using System;
-using Terraria;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Terraria;
 
 namespace Oxide.Game.Terraria
 {
@@ -79,7 +79,7 @@ namespace Oxide.Game.Terraria
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{Main.numPlayers} | {Main.worldName}";
+            Interface.Oxide.ServerConsole.Title = () => $"{Main.ActivePlayersCount} | {Main.worldName}";
 
             Interface.Oxide.ServerConsole.Status1Left = () => Main.worldName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
@@ -89,7 +89,7 @@ namespace Oxide.Game.Terraria
                 return $"{Main.fpsCount}fps, {uptime}";
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $"{Main.numPlayers}/{Main.maxNetPlayers}";
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{Main.ActivePlayersCount}/{Main.maxNetPlayers}";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);
