@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Reflection;
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRageMath;
-using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
-using Sandbox.Game.Entities;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
@@ -177,7 +177,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => player.Character.Teleport(new Vector3D(x, y, z));
+        public void Teleport(float x, float y, float z) => player.Controller.ControlledEntity.Entity.PositionComp.SetPosition(new Vector3D(x, y, z));
 
         /// <summary>
         /// Unbans the user
