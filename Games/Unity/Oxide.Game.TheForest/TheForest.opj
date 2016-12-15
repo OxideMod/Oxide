@@ -542,7 +542,7 @@
                 "ItemHolderTakeItem"
               ]
             },
-            "MSILHash": "8N4Ww0smiKgS1m1YgvaLbaTnL/L+G6tIxYt1BjUZxN0=",
+            "MSILHash": "BEaW3cPy8jJc8V3HqmtqvTfmxnpcroDEdevqF/Nbjus=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -958,7 +958,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "ypSKMjWNJtfpQuy8hbW3SPFEZPMKWXEFYDttf1RTc10=",
+            "MSILHash": "cDhmpSnjQa3yQtM9k/rCbuPU1wlT3Epv7omUA3zqelM=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1296,7 +1296,7 @@
                 "PlayerHitEnemy"
               ]
             },
-            "MSILHash": "TE4aZceiOJ/27asj2QTNv+61wrpMLGnfPtw7cXwDY48=",
+            "MSILHash": "G63gz4UZR8FlS9ikj1+eF0hpAK4DntJvKXO10+jMD3U=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1372,7 +1372,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "Dd8nnNBXHUSIIWsZIlt8OyFV0zmPG33eurNR8lAAY8g=",
+            "MSILHash": "ESu0V/PRxBPMsZir+jSfq7/E/8pm0NWbFiie9Cgtb4E=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1522,7 +1522,7 @@
                 "BoltConnection"
               ]
             },
-            "MSILHash": "GP6rY7vzePUodbW27Jo6VEmQ+aYJeG370JDYQbvnE48=",
+            "MSILHash": "3/DIZ9UdopYpJdTvoYahvDW+ZBYP/cyIkMzDHWGuuNo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

@@ -80,10 +80,6 @@
       <GameFiles Include="$(ProjectDir)\Files\**\*.*; $(ProjectDir)\Files\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.dll; $(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.so*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.JavaScript\$(OutputPath)\*.dll*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.JavaScript\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Lua\$(OutputPath)\*.dll*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Lua\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\Dependencies\*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Python\$(OutputPath)\*.dll*" />

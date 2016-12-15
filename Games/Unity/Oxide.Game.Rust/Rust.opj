@@ -305,7 +305,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 105,
+            "InjectionIndex": 106,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -723,7 +723,7 @@
                 "Construction"
               ]
             },
-            "MSILHash": "vaMsptPSb1yMqD6d/6pwe7Dys5K/uVH8rQCdh/5rmGU=",
+            "MSILHash": "EzkTEzhVo5xrIeJorkqY8usouBnQe5Pbb4Z6rp9ZFqo=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -881,7 +881,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "O5YoTKcWza1isbRJFX5bTD48fRhS7VkRCprf0Crl3xg=",
+            "MSILHash": "DwyohEJ1OcR6UE0LPuuYUXY5Mu4PbuLxqlkB0Y4ggO4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -960,7 +960,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "l7DgRTS6JbeH2XczWWNL4UjAAjEsscCBDM05jAiGm18=",
+            "MSILHash": "+fLf7C8nLZF7vS3zWybs2YufnWgLjF2JoBGR0DGWcDU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1359,7 +1359,7 @@
             "InjectionIndex": 85,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0.player, l3",
+            "ArgumentString": "a0.player, l4",
             "HookTypeName": "Simple",
             "Name": "OnExplosiveThrown",
             "HookName": "OnExplosiveThrown",
@@ -1408,7 +1408,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 214,
+            "InjectionIndex": 216,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, l2",
@@ -1638,10 +1638,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 166,
+            "InjectionIndex": 133,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0.player, l7",
+            "ArgumentString": "a0.player, l8",
             "HookTypeName": "Simple",
             "Name": "OnRocketLaunched",
             "HookName": "OnRocketLaunched",
@@ -1664,7 +1664,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 91,
+            "InjectionIndex": 73,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0.player, l3, l2",
@@ -1923,7 +1923,7 @@
             "InjectionIndex": 32,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l1, a0.player",
+            "ArgumentString": "this, l2, a0.player",
             "HookTypeName": "Simple",
             "Name": "OnCropGather",
             "HookName": "OnCropGather",
@@ -2105,7 +2105,7 @@
             "InjectionIndex": 25,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
+            "ArgumentString": "l1",
             "HookTypeName": "Simple",
             "Name": "OnItemCraftCancelled",
             "HookName": "OnItemCraftCancelled",
@@ -2383,7 +2383,7 @@
                 "ProtoBuf.CreateBuilding"
               ]
             },
-            "MSILHash": "usPoEAPCd6UCt6abwL62L4TbEzgxf2erB7SwAPW/Q/Y=",
+            "MSILHash": "/31ZkalqbTD75hqmg3Ol3SZvqDbY2tZrakqsZkMYXp4=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2540,7 +2540,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "6/tqk84wl47Q/qS3JTVOgB7bAEnZDmYvH5gQXSSvvcg=",
+            "MSILHash": "yZqcXVB6Ixo9Etpeei4ezkUELZYnQIYaUv+0A1ISUGs=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2678,7 +2678,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 21,
+            "InjectionIndex": 24,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, l1",
@@ -2871,7 +2871,7 @@
             "InjectionIndex": 16,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0.RemoteEndPoint",
+            "ArgumentString": "l1",
             "HookTypeName": "Simple",
             "Name": "OnRconConnection",
             "HookName": "OnRconConnection",
@@ -2944,7 +2944,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "Ymmqv9fi339MBJ/8Dv6xRzazou0BX2qIr4sxT8oKxC0=",
+            "MSILHash": "K4czkTHPUXr9dI+xIpaVGe5RzT6sgmOctsoD7Zy/KV4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3405,10 +3405,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 234,
+            "InjectionIndex": 236,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l2, l2.authStatus",
+            "ArgumentString": "l5, l5.authStatus",
             "HookTypeName": "Simple",
             "Name": "OnPlayerBanned [eac]",
             "HookName": "OnPlayerBanned",
@@ -3434,7 +3434,7 @@
             "InjectionIndex": 30,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0, l0.authStatus",
+            "ArgumentString": "l1, l1.authStatus",
             "HookTypeName": "Simple",
             "Name": "OnPlayerBanned [server]",
             "HookName": "OnPlayerBanned",
@@ -3462,7 +3462,7 @@
             "InjectionIndex": 61,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0, l0.authStatus",
+            "ArgumentString": "l1, l1.authStatus",
             "HookTypeName": "Simple",
             "Name": "OnPlayerBanned [vac]",
             "HookName": "OnPlayerBanned",
@@ -3490,7 +3490,7 @@
             "InjectionIndex": 85,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0, l0.authStatus",
+            "ArgumentString": "l1, l1.authStatus",
             "HookTypeName": "Simple",
             "Name": "OnPlayerBanned [facepunch]",
             "HookName": "OnPlayerBanned",
