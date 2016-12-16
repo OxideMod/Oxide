@@ -1408,7 +1408,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 216,
+            "InjectionIndex": 214,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, l2",
@@ -2105,7 +2105,7 @@
             "InjectionIndex": 25,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l1",
+            "ArgumentString": "l0",
             "HookTypeName": "Simple",
             "Name": "OnItemCraftCancelled",
             "HookName": "OnItemCraftCancelled",
