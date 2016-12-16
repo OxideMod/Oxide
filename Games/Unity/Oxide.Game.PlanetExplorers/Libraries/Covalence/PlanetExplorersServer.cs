@@ -56,7 +56,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <summary>
         /// Gets the version or build number of the server
         /// </summary>
-        public string Version => ServerConfig.ServerVersion;
+        public string Version => ServerConfig.ServerVersion.Replace("V", "");
 
         /// <summary>
         /// Gets the network protocol version of the server
