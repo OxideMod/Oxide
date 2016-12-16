@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using UnityEngine;
 
 namespace Oxide.Game.PlanetExplorers
 {
@@ -121,7 +121,7 @@ namespace Oxide.Game.PlanetExplorers
                 var map = GameManager.Instance?.ServerConfig?.Map ?? "Unknown";
                 return string.Concat(" ", gameTime, ", ", map);
             };*/
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {ServerConfig.ServerVersion}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {ServerConfig.ServerVersion.Replace("V", "")}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 

@@ -60,7 +60,7 @@ namespace Oxide.Game.PlanetExplorers
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", ServerConfig.ServerVersion.ToLower());
+            RemoteLogger.SetTag("game version", ServerConfig.ServerVersion.Replace("V", "").ToLower());
 
             // Setup the default permission groups
             if (permission.IsLoaded)
