@@ -863,7 +863,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 695,
+            "InjectionIndex": 706,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l2",
@@ -1359,7 +1359,7 @@
             "InjectionIndex": 85,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0.player, l4",
+            "ArgumentString": "a0.player, l3",
             "HookTypeName": "Simple",
             "Name": "OnExplosiveThrown",
             "HookName": "OnExplosiveThrown",
