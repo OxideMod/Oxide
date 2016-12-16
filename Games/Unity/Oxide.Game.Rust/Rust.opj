@@ -2892,7 +2892,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 29,
+            "InjectionIndex": 28,
             "RemoveCount": 0,
             "Instructions": [
               {
