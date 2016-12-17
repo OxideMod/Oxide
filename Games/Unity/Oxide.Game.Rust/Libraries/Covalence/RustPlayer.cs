@@ -50,9 +50,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the name for the player
+        /// Gets/sets the name for the player
         /// </summary>
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
@@ -158,6 +158,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         }
 
         readonly FieldInfo displayName = typeof(BasePlayer).GetField("_displayName", (BindingFlags.Instance | BindingFlags.NonPublic));
+        readonly FieldInfo cachedName = typeof(BasePlayer).GetField("_name", (BindingFlags.Instance | BindingFlags.NonPublic));
 
         /// <summary>
         /// Renames the user to specified name
@@ -165,10 +166,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Rename(string name)
         {
-            displayName?.SetValue(player, string.IsNullOrEmpty(name.Trim()) ? "Blaster :D" : name);
-            player.net.connection.username = name; // TODO: Fix
-            //player.name = name;
-            Teleport(Position().X + 1, Position().Y + 1, Position().Z + 1);
+            name = string.IsNullOrEmpty(name.Trim()) ? player.displayName : name;
+            player.net.connection.username = name;
+            displayName?.SetValue(player, name);
+            cachedName?.SetValue(player, null);
+            Name = name;
+
+            Teleport(Position().X, Position().Y, Position().Z);
         }
 
         /// <summary>
