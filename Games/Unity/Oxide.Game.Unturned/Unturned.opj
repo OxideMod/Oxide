@@ -124,7 +124,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YYlXGSq5HQBPgWFcjaAMK5T3ZjNMg9SbliTs+bEkmig=",
+            "MSILHash": "YikMal4wdjoZKDGPle6VFhwi80gn6fsn5XW+fIHWCnE=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -168,7 +168,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YYlXGSq5HQBPgWFcjaAMK5T3ZjNMg9SbliTs+bEkmig=",
+            "MSILHash": "YikMal4wdjoZKDGPle6VFhwi80gn6fsn5XW+fIHWCnE=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
