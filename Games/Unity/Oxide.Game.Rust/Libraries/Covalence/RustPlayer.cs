@@ -172,7 +172,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             cachedName?.SetValue(player, null);
             Name = name;
 
-            Teleport(Position().X, Position().Y, Position().Z);
+            player.SendNetworkUpdateImmediate();
         }
 
         /// <summary>
