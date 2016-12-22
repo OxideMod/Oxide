@@ -150,12 +150,18 @@ namespace Oxide.Core
         {
             "BadImageFormatException",
             "DllNotFoundException: lua52",
+            "ExtPlugin",
             "IOException",
             "KeyNotFoundException",
             "Oxide.Core.Configuration",
+            "Oxide.Core.JavaScript",
+            "Oxide.Core.Lua",
+            "Oxide.Core.Python",
             "Oxide.Ext.",
+            "Oxide.Plugins.<",
             "ReflectionTypeLoadException",
             "Sharing violation",
+            "UGC",
             "UnauthorizedAccessException",
             "WebException"
         };
