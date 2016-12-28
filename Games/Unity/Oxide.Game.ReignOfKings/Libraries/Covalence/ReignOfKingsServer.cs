@@ -96,9 +96,49 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         #region Administration
 
         /// <summary>
+        /// Bans the user for the specified reason and duration
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        /// <param name="duration"></param>
+        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
+        {
+            // Check if already banned
+            if (IsBanned(id)) return;
+
+            // Ban and kick user
+            Server.Ban(ulong.Parse(id), (int)duration.TotalSeconds, reason);
+        }
+
+        /// <summary>
+        /// Gets the amount of time remaining on the user's ban
+        /// </summary>
+        /// <param name="id"></param>
+        public TimeSpan BanTimeRemaining(string id) => new DateTime(Server.GetBannedPlayerFromPlayerId(ulong.Parse(id)).ExpireDate) - DateTime.Now;
+
+        /// <summary>
+        /// Gets if the user is banned
+        /// </summary>
+        /// <param name="id"></param>
+        public bool IsBanned(string id) => Server.IdIsBanned(ulong.Parse(id));
+
+        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         public void Save() => CodeHatch.Engine.Core.Gaming.Game.Save();
+
+        /// <summary>
+        /// Unbans the user
+        /// </summary>
+        /// <param name="id"></param>
+        public void Unban(string id)
+        {
+            // Check not banned
+            if (!IsBanned(id)) return;
+
+            // Set to unbanned
+            Server.Unban(ulong.Parse(id));
+        }
 
         #endregion
 

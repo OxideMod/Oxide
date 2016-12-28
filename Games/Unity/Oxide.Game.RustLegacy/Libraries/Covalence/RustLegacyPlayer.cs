@@ -1,9 +1,8 @@
 ﻿using System;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
-using Oxide.Plugins;
+using UnityEngine;
 
 namespace Oxide.Game.RustLegacy.Libraries.Covalence
 {

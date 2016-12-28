@@ -1,9 +1,9 @@
 ﻿using System;
-using Pathea;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Pathea;
+using UnityEngine;
 
 namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 {
@@ -107,7 +107,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             {
                 player.RPCOthers(EPacketType.PT_InGame_LoginBan); // TODO: Needed?
                 player.RPCOthers(EPacketType.PT_InGame_AddBlackList); // TODO: Needed?
-                Kick(reason); // TODO: Needed?
+                Kick(reason);
             }
         }
 

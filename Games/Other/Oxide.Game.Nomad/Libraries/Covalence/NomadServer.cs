@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
-using TNet;
 using Oxide.Core.Libraries.Covalence;
+using TNet;
 
 namespace Oxide.Game.Nomad.Libraries.Covalence
 {
@@ -69,9 +69,49 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         #region Administration
 
         /// <summary>
+        /// Bans the user for the specified reason and duration
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        /// <param name="duration"></param>
+        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
+        {
+            // Check if already banned
+            if (IsBanned(id)) return;
+
+            // Ban and kick user
+            // TODO: Implement when possible
+        }
+
+        /// <summary>
+        /// Gets the amount of time remaining on the user's ban
+        /// </summary>
+        /// <param name="id"></param>
+        public TimeSpan BanTimeRemaining(string id) => TimeSpan.Zero; // TODO: Implement when possible
+
+        /// <summary>
+        /// Gets if the user is banned
+        /// </summary>
+        /// <param name="id"></param>
+        public bool IsBanned(string id) => false; // TODO: Implement when possible
+
+        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         public void Save() => LobbyServerLink.mGameServer.SaveTo("server.dat");
+
+        /// <summary>
+        /// Unbans the user
+        /// </summary>
+        /// <param name="id"></param>
+        public void Unban(string id)
+        {
+            // Check not banned
+            if (!IsBanned(id)) return;
+
+            // Set to unbanned
+            // TODO: Implement when possible
+        }
 
         #endregion
 

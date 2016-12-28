@@ -108,7 +108,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
 
             // Ban and kick user
             NetworkManager.instance.mBanListManager.UnbanPlayer(player.mUserID);
-            NetworkManager.instance.mServerThread.KickPlayer(player.mConnection, reason);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>

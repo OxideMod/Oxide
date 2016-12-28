@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Terraria;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Terraria;
 
 namespace Oxide.Game.Terraria.Libraries.Covalence
 {
@@ -104,7 +104,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
 
             // Ban and kick user
             Netplay.AddBan(player.whoAmI);
-            if (IsConnected) NetMessage.SendData(2, player.whoAmI, -1, reason);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>

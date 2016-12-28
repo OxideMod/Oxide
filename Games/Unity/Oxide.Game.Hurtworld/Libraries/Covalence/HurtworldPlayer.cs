@@ -1,9 +1,9 @@
 ﻿using System;
-using Steamworks;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Steamworks;
+using UnityEngine;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -106,9 +106,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             if (IsBanned) return;
 
             // Ban and kick user
-            ConsoleManager.Instance?.ExecuteCommand(string.Concat("ban ", Id)); // TODO: Call methods directly when public
-            //BanManager.Instance.AddBan(steamId);
-            //if (IsConnected) Kick(reason);
+            BanManager.Instance?.AddBan(steamId);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using Oxide.Core.Libraries.Covalence;
 using Terraria;
@@ -69,12 +70,62 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         #region Administration
 
         /// <summary>
+        /// Bans the user for the specified reason and duration
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        /// <param name="duration"></param>
+        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
+        {
+            // Check if already banned
+            if (IsBanned(id)) return;
+
+            // Ban and kick user
+            Netplay.AddBan(int.Parse(id));
+            //if (IsConnected) Kick(reason); // TODO: Implement if possible
+        }
+
+        /// <summary>
+        /// Gets the amount of time remaining on the user's ban
+        /// </summary>
+        /// <param name="id"></param>
+        public TimeSpan BanTimeRemaining(string id) => TimeSpan.MaxValue;
+
+        /// <summary>
+        /// Gets if the user is banned
+        /// </summary>
+        /// <param name="id"></param>
+        public bool IsBanned(string id) => Netplay.IsBanned(Netplay.Clients[int.Parse(id)].Socket.GetRemoteAddress());
+
+        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         public void Save()
         {
             Main.SaveSettings();
             WorldGen.saveAndPlay();
+        }
+
+        /// <summary>
+        /// Unbans the user
+        /// </summary>
+        /// <param name="id"></param>
+        public void Unban(string id)
+        {
+            // Check not banned
+            if (!IsBanned(id)) return;
+
+            // Set to unbanned
+            if (!File.Exists(Netplay.BanFilePath)) return;
+            var whoAmI = int.Parse(id);
+            var name = $"//{Main.player[whoAmI].name}";
+            var identifier = Netplay.Clients[whoAmI].Socket.GetRemoteAddress().GetIdentifier();
+            var lines = File.ReadAllLines(Netplay.BanFilePath);
+            using (var writer = new StreamWriter(Netplay.BanFilePath))
+            {
+                foreach (var line in lines)
+                    if (!line.Contains(name) && !line.Contains(identifier)) writer.WriteLine(line);
+            }
         }
 
         #endregion
