@@ -37,12 +37,10 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             {
                 try
                 {
-                    if (address == null)
-                    {
-                        var webClient = new WebClient();
-                        address = IPAddress.Parse(webClient.DownloadString("http://api.ipify.org"));
-                        return address;
-                    }
+                    if (address != null) return address;
+
+                    var webClient = new WebClient();
+                    IPAddress.TryParse(webClient.DownloadString("http://api.ipify.org"), out address);
                     return address;
                 }
                 catch (Exception ex)
