@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using Oxide.Core.Libraries.Covalence;
@@ -41,6 +42,11 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// Gets the network protocol version of the server
         /// </summary>
         public string Protocol => Main.curRelease.ToString();
+
+        /// <summary>
+        /// Gets the language set by the server
+        /// </summary>
+        public CultureInfo Language => CultureInfo.InstalledUICulture;
 
         /// <summary>
         /// Gets the total of players currently on the server

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -74,6 +75,11 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// Gets the user's average network ping
         /// </summary>
         public int Ping => 0; // TODO: Implement when possible
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is admin

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
@@ -44,6 +46,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// Gets the user's average network ping
         /// </summary>
         public int Ping => 0;
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.InstalledUICulture;
 
         /// <summary>
         /// Returns if the user is admin

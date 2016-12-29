@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRageMath;
-using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
-using Sandbox.Game.Entities;
 
 namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
 {
@@ -64,6 +65,11 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id { get; }
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Gets the user's IP address

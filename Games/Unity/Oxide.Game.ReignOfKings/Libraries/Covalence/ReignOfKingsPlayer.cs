@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using CodeHatch.Common;
 using CodeHatch.Damaging;
 using CodeHatch.Engine.Behaviours;
@@ -7,10 +8,10 @@ using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events;
 using CodeHatch.Networking.Events.Entities;
 using CodeHatch.StarForge.Sleeping;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using UnityEngine;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
@@ -65,6 +66,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id { get; }
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Gets the user's IP address

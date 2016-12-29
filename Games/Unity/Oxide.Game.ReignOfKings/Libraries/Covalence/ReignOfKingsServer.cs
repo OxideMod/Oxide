@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using CodeHatch.Build;
 using CodeHatch.Engine.Core.Commands;
@@ -65,6 +66,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Gets the network protocol version of the server
         /// </summary>
         public string Protocol => GameInfo.VersionName;
+
+        /// <summary>
+        /// Gets the language set by the server
+        /// </summary>
+        public CultureInfo Language => CultureInfo.InstalledUICulture;
 
         /// <summary>
         /// Gets the total of players currently on the server

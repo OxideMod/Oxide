@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using Bolt;
@@ -72,6 +73,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// Gets the network protocol version of the server
         /// </summary>
         public string Protocol => Version;
+
+        /// <summary>
+        /// Gets the language set by the server
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.EnglishName == Localization.language);
 
         /// <summary>
         /// Gets the total of players currently on the server

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 
 namespace Oxide.Core.Libraries.Covalence
@@ -34,6 +35,11 @@ namespace Oxide.Core.Libraries.Covalence
         /// Gets the network protocol version of the server
         /// </summary>
         string Protocol { get; }
+
+        /// <summary>
+        /// Gets the server's language
+        /// </summary>
+        CultureInfo Language { get; }
 
         /// <summary>
         /// Gets the total of players currently on the server

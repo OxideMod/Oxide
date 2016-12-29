@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using Oxide.Core;
@@ -63,6 +64,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Gets the network protocol version of the server
         /// </summary>
         public string Protocol => Version;
+
+        /// <summary>
+        /// Gets the language set by the server
+        /// </summary>
+        public CultureInfo Language => CultureInfo.InstalledUICulture;
 
         /// <summary>
         /// Gets the total of players currently on the server

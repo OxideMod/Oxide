@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
-using TNet;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using TNet;
 
 namespace Oxide.Game.Nomad.Libraries.Covalence
 {
@@ -56,6 +57,11 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id { get; }
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Gets the user's IP address

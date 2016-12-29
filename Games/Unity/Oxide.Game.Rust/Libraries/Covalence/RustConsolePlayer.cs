@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
@@ -34,6 +36,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Gets the ID for the user (unique within the current game)
         /// </summary>
         public string Id => "server_console";
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.InstalledUICulture;
 
         /// <summary>
         /// Gets the user's IP address

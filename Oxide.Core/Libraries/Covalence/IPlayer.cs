@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Oxide.Core.Libraries.Covalence
 {
@@ -42,6 +43,11 @@ namespace Oxide.Core.Libraries.Covalence
         /// Gets the user's average network ping
         /// </summary>
         int Ping { get; }
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        CultureInfo Language { get; }
 
         /// <summary>
         /// Returns if the user is connected
