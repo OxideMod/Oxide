@@ -1,9 +1,11 @@
 ﻿using System;
-using Pathea;
-using UnityEngine;
+using System.Globalization;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Pathea;
+using UnityEngine;
 
 namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 {
@@ -58,6 +60,11 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         public string Id { get; }
 
         /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
+
+        /// <summary>
         /// Gets the user's IP address
         /// </summary>
         public string Address => player.networkView.owner.ipAddress;
@@ -107,7 +114,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             {
                 player.RPCOthers(EPacketType.PT_InGame_LoginBan); // TODO: Needed?
                 player.RPCOthers(EPacketType.PT_InGame_AddBlackList); // TODO: Needed?
-                Kick(reason); // TODO: Needed?
+                Kick(reason);
             }
         }
 
@@ -231,11 +238,20 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message) => player.RPCOthers(EPacketType.PT_InGame_SendMsg, CustomData.EMsgType.ToOne, message);
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args)
-        {
-            player.RPCOthers(EPacketType.PT_InGame_SendMsg, CustomData.EMsgType.ToOne, string.Format(message, args));
-        }
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

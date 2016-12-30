@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
@@ -34,12 +36,10 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             {
                 try
                 {
-                    if (address == null)
-                    {
-                        var webClient = new WebClient();
-                        address = IPAddress.Parse(webClient.DownloadString("http://api.ipify.org"));
-                        return address;
-                    }
+                    if (address != null) return address;
+
+                    var webClient = new WebClient();
+                    IPAddress.TryParse(webClient.DownloadString("http://api.ipify.org"), out address);
                     return address;
                 }
                 catch (Exception ex)
@@ -64,6 +64,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Gets the network protocol version of the server
         /// </summary>
         public string Protocol => Version;
+
+        /// <summary>
+        /// Gets the language set by the server
+        /// </summary>
+        public CultureInfo Language => CultureInfo.InstalledUICulture;
 
         /// <summary>
         /// Gets the total of players currently on the server
@@ -93,9 +98,57 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         #region Administration
 
         /// <summary>
+        /// Bans the user for the specified reason and duration
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        /// <param name="duration"></param>
+        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
+        {
+            // Check if already banned
+            if (IsBanned(id)) return;
+
+            // Ban and kick user
+            Provider.ban(new CSteamID(ulong.Parse(id)), reason, (uint)duration.TotalSeconds);
+        }
+
+        /// <summary>
+        /// Gets the amount of time remaining on the user's ban
+        /// </summary>
+        /// <param name="id"></param>
+        public TimeSpan BanTimeRemaining(string id)
+        {
+            var blacklistId = SteamBlacklist.list.First(e => e.playerID.ToString() == id);
+            return TimeSpan.FromSeconds(blacklistId.duration);
+        }
+
+        /// <summary>
+        /// Gets if the user is banned
+        /// </summary>
+        /// <param name="id"></param>
+        public bool IsBanned(string id)
+        {
+            SteamBlacklistID steamBlacklistId;
+            return SteamBlacklist.checkBanned(new CSteamID(ulong.Parse(id)), 0, out steamBlacklistId); // TODO: Might need actual player IP
+        }
+
+        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         public void Save() => SaveManager.save();
+
+        /// <summary>
+        /// Unbans the user
+        /// </summary>
+        /// <param name="id"></param>
+        public void Unban(string id)
+        {
+            // Check not banned
+            if (!IsBanned(id)) return;
+
+            // Set to unbanned
+            SteamBlacklist.unban(new CSteamID(ulong.Parse(id)));
+        }
 
         #endregion
 

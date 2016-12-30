@@ -1,8 +1,9 @@
 ﻿using System;
-using UnityEngine;
+using System.Globalization;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using UnityEngine;
 
 namespace Oxide.Game.HideHoldOut.Libraries.Covalence
 {
@@ -55,6 +56,11 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id { get; }
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Gets the user's IP address
@@ -226,11 +232,20 @@ namespace Oxide.Game.HideHoldOut.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message) => HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + message, chat_msg_type.standard, Id);
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args)
-        {
-            HideHoldOutCore.ChatNetView.RPC("NET_Receive_msg", player.NetPlayer, "\n" + string.Format(message, args), chat_msg_type.standard, player.account_id);
-        }
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Terraria;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Terraria;
 
 namespace Oxide.Game.Terraria.Libraries.Covalence
 {
@@ -69,6 +70,11 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         public int Ping => 0; // TODO: Implement when possible
 
         /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
+
+        /// <summary>
         /// Returns if the user is admin
         /// </summary>
         public bool IsAdmin => false; // TODO: Implement when possible
@@ -104,7 +110,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
 
             // Ban and kick user
             Netplay.AddBan(player.whoAmI);
-            if (IsConnected) NetMessage.SendData(2, player.whoAmI, -1, reason);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>
@@ -237,11 +243,20 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message) => NetMessage.SendData(25, player.whoAmI, -1, message);
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args)
-        {
-            NetMessage.SendData(25, player.whoAmI, -1, string.Format(message, args));
-        }
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

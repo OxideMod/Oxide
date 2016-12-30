@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -65,6 +67,11 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// Gets the user's average network ping
         /// </summary>
         public int Ping => client.ping;
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is admin
@@ -250,11 +257,20 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message) => client.SendPackage(new NetPackageGameMessage(EnumGameMessages.Chat, message, null, false, null, false));
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args)
-        {
-            client.SendPackage(new NetPackageGameMessage(EnumGameMessages.Chat, string.Format(message, args), null, false, null, false));
-        }
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

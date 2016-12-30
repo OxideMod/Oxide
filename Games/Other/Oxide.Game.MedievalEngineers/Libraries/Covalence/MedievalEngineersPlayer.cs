@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
+using Sandbox.Game.Entities;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRageMath;
-using Oxide.Core;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
-using Sandbox.Game.Entities;
 
 namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
 {
@@ -64,6 +65,11 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id { get; }
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Gets the user's IP address
@@ -227,11 +233,23 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Message(string message, params object[] args)
+        public void Message(string message)
         {
-            player.Character.SendNewPlayerMessage(MySession.Static.LocalHumanPlayer.Id, player.Id, string.Format(message, args), TimeSpan.FromMilliseconds(DateTime.Now.Ticks));
+            player.Character.SendNewPlayerMessage(MySession.Static.LocalHumanPlayer.Id, player.Id, message, TimeSpan.FromMilliseconds(DateTime.Now.Ticks));
         }
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

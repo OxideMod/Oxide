@@ -1,9 +1,10 @@
 ﻿using System;
-using UnityEngine;
+using System.Globalization;
+
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
-using Oxide.Plugins;
+using UnityEngine;
 
 namespace Oxide.Game.RustLegacy.Libraries.Covalence
 {
@@ -68,6 +69,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// Gets the user's average network ping
         /// </summary>
         public int Ping => netUser.networkPlayer.averagePing;
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is admin;
@@ -235,29 +241,38 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Message(string message, params object[] args)
+        public void Message(string message)
         {
-            ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add \"Server\" {string.Format(message, args).Quote()}");
+            switch (LastCommand)
+            {
+                case CommandType.Chat:
+                    ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add \"Server\" {message.Quote()}");
+                    break;
+                case CommandType.Console:
+                    Command($"echo {message}");
+                    break;
+            }
         }
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args)
-        {
-            switch (LastCommand)
-            {
-                case CommandType.Chat:
-                    Message(message, args);
-                    break;
-                case CommandType.Console:
-                    Command(string.Format($"echo {message}", args));
-                    break;
-            }
-        }
+        public void Reply(string message, params object[] args) => Message(message, args);
 
         /// <summary>
         /// Runs the specified console command on the user

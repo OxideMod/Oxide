@@ -1,9 +1,10 @@
 ﻿using System;
-using Steamworks;
-using UnityEngine;
+using System.Globalization;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Steamworks;
+using UnityEngine;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -62,6 +63,11 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         public string Id { get; }
 
         /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
+
+        /// <summary>
         /// Gets the user's IP address
         /// </summary>
         public string Address => session.Player.ipAddress;
@@ -106,9 +112,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             if (IsBanned) return;
 
             // Ban and kick user
-            ConsoleManager.Instance?.ExecuteCommand(string.Concat("ban ", Id)); // TODO: Call methods directly when public
-            //BanManager.Instance.AddBan(steamId);
-            //if (IsConnected) Kick(reason);
+            BanManager.Instance?.AddBan(steamId);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>
@@ -267,8 +272,20 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message) => ChatManagerServer.Instance.RPC("RelayChat", session.Player, message);
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => ChatManagerServer.Instance.RPC("RelayChat", session.Player, string.Format(message, args));
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

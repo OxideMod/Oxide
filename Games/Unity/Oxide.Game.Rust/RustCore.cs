@@ -334,6 +334,9 @@ namespace Oxide.Game.Rust
                 if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
             }
 
+            // Set language for player
+            lang.SetLanguage(player.net.connection.info.GetString("global.language", "en"), player.UserIDString);
+
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
 

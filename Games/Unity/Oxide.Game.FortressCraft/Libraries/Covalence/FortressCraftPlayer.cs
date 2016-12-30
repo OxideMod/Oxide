@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Globalization;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -73,6 +73,11 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         public int Ping => 0; // TODO: Implement once possible
 
         /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
+
+        /// <summary>
         /// Returns if the user is admin
         /// </summary>
         public bool IsAdmin => NetworkManager.instance.mAdminListManager.CheckAdminList(player.mUserID, player.mUserName);
@@ -108,7 +113,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
 
             // Ban and kick user
             NetworkManager.instance.mBanListManager.UnbanPlayer(player.mUserID);
-            NetworkManager.instance.mServerThread.KickPlayer(player.mConnection, reason);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>

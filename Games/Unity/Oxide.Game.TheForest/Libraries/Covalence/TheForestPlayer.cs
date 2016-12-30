@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -85,6 +86,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// Gets the user's average network ping
         /// </summary>
         public int Ping => Convert.ToInt32(entity.source.PingNetwork);
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
         /// <summary>
         /// Returns if the user is admin
@@ -249,11 +255,23 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Message(string message, params object[] args)
+        public void Message(string message)
         {
             // TODO: Not possible yet?
         }
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

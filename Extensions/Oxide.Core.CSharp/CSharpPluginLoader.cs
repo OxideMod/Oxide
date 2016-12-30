@@ -137,6 +137,10 @@ namespace Oxide.Plugins
                     PluginLoadingCompleted(plugin);
                     return;
                 }
+
+                var loadedLoadingRequirements = plugin.Requires.Where(r => LoadedPlugins.ContainsKey(r) && LoadingPlugins.Contains(r));
+                foreach(var loadedPlugin in loadedLoadingRequirements) Interface.Oxide.UnloadPlugin(loadedPlugin);
+
                 var missingRequirements = plugin.Requires.Where(r => !LoadedPlugins.ContainsKey(r));
                 if (missingRequirements.Any())
                 {

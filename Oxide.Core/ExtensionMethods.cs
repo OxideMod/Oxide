@@ -56,11 +56,32 @@ namespace Oxide.Core
         public static string Humanize(this string name) => Regex.Replace(name, @"(\B[A-Z])", " $1");
 
         /// <summary>
+        /// Checks if a string is a valid 64-bit Steam ID
+        /// </summary>
+        public static bool IsSteamId(this string id)
+        {
+            ulong targetId;
+            return ulong.TryParse(id, out targetId) && targetId > 70000000000000000L;
+        }
+
+        /// <summary>
+        /// Checks if a ulong is a valid 64-bit Steam ID
+        /// </summary>
+        public static bool IsSteamId(this ulong id) => id > 70000000000000000L;
+
+        /// <summary>
         /// Converts a string into a quote safe string
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="text"></param>
         /// <returns></returns>
-        public static string Quote(this string str) => "\"" + str.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
+        public static string QuoteSafe(this string text) => "\"" + text.Replace("\"", "\\\"").TrimEnd('\\') + "\"";
+
+        /// <summary>
+        /// Converts a string into a quote safe string
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string Quote(this string text) => QuoteSafe(text);
 
         /// <summary>
         /// Returns a random value from an array
@@ -70,17 +91,31 @@ namespace Oxide.Core
         /// <summary>
         /// Converts a string into a sanitized string for string.Format
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="text"></param>
         /// <returns></returns>
-        public static string Sanitize(this string str) => str.Replace("{", "{{").Replace("}", "}}");
+        public static string Sanitize(this string text) => text.Replace("{", "{{").Replace("}", "}}");
+
+        /// <summary>
+        /// Converts a string to Sentence case
+        /// </summary>
+        public static string SentenceCase(this string text)
+        {
+            var regex = new Regex(@"(^[a-z])|\.\s+(.)", RegexOptions.ExplicitCapture);
+            return regex.Replace(text.ToLower(), s => s.Value.ToUpper());
+        }
 
         /// <summary>
         /// Converts a string to Title Case
         /// </summary>
-        public static string Titleize(this string text)
+        public static string TitleCase(this string text)
         {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text.Contains('_') ? text.Replace('_', ' ') : text);
+            return CultureInfo.InstalledUICulture.TextInfo.ToTitleCase(text.Contains('_') ? text.Replace('_', ' ') : text);
         }
+
+        /// <summary>
+        /// Converts a string to Title Case
+        /// </summary>
+        public static string Titleize(this string text) => TitleCase(text);
 
         /// <summary>
         /// Turns an array of strings into a sentence

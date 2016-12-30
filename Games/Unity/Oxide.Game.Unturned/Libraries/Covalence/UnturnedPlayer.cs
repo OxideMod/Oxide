@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -78,6 +79,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Gets the user's average network ping
         /// </summary>
         public int Ping => Convert.ToInt32(steamPlayer.ping);
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => CultureInfo.GetCultures(CultureTypes.AllCultures).FirstOrDefault(c => c.EnglishName == steamPlayer.language);
 
         /// <summary>
         /// Returns if the user is admin
