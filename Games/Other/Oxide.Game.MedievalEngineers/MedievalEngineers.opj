@@ -110,7 +110,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "GHNPFp+Xjdv7xZBFYGcEfvtT8C/Nebf991z0LecMFUI=",
+            "MSILHash": "EHnIJXeENtCPdSJ+AgJ37G12InPNpshbqxsxjHr1rIE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -149,7 +149,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "GHNPFp+Xjdv7xZBFYGcEfvtT8C/Nebf991z0LecMFUI=",
+            "MSILHash": "EHnIJXeENtCPdSJ+AgJ37G12InPNpshbqxsxjHr1rIE=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "_Patches"
           }
