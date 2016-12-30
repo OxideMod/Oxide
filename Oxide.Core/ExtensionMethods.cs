@@ -56,6 +56,20 @@ namespace Oxide.Core
         public static string Humanize(this string name) => Regex.Replace(name, @"(\B[A-Z])", " $1");
 
         /// <summary>
+        /// Checks if a string is a valid 64-bit Steam ID
+        /// </summary>
+        public static bool IsSteamId(this string id)
+        {
+            ulong targetId;
+            return ulong.TryParse(id, out targetId) && targetId > 70000000000000000L;
+        }
+
+        /// <summary>
+        /// Checks if a ulong is a valid 64-bit Steam ID
+        /// </summary>
+        public static bool IsSteamId(this ulong id) => id > 70000000000000000L;
+
+        /// <summary>
         /// Converts a string into a quote safe string
         /// </summary>
         /// <param name="text"></param>
