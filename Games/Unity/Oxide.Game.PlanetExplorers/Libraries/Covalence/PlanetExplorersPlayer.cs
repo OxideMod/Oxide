@@ -238,11 +238,20 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message) => player.RPCOthers(EPacketType.PT_InGame_SendMsg, CustomData.EMsgType.ToOne, message);
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args)
-        {
-            player.RPCOthers(EPacketType.PT_InGame_SendMsg, CustomData.EMsgType.ToOne, string.Format(message, args));
-        }
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message

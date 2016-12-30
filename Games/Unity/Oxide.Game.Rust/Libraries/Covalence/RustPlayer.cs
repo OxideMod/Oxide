@@ -245,26 +245,38 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message)
+        {
+            switch (LastCommand)
+            {
+                case CommandType.Chat:
+                    player.ChatMessage(message);
+                    break;
+                case CommandType.Console:
+                    Command($"echo {message}");
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => player.ChatMessage(string.Format(message, args));
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args)
-        {
-            switch (LastCommand)
-            {
-                case CommandType.Chat:
-                    Message(message, args);
-                    break;
-                case CommandType.Console:
-                    Command(string.Format($"echo {message}", args));
-                    break;
-            }
-        }
+        public void Reply(string message, params object[] args) => Message(message, args);
 
         /// <summary>
         /// Runs the specified console command on the user

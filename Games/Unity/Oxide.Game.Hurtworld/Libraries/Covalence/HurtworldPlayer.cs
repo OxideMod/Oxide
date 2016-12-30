@@ -272,8 +272,20 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        public void Message(string message) => ChatManagerServer.Instance.RPC("RelayChat", session.Player, message);
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => ChatManagerServer.Instance.RPC("RelayChat", session.Player, string.Format(message, args));
+        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        public void Reply(string message) => Message(message);
 
         /// <summary>
         /// Replies to the user with the specified message
