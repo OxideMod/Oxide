@@ -8,7 +8,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 15,
             "RemoveCount": 4,
             "Instructions": [],
             "HookTypeName": "Modify",
@@ -23,7 +23,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "wHltvm6rIPU4E4HMgRsjB30pc756bkihe6F4qMvShi0=",
+            "MSILHash": "N/5X5CQ9n56N2DITQQs1LK543MQLFhLHxQLdWhSAwCo=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DkPCXV8bCeZsnrPLnwu0YM6ZVSMqeJxi6ehHq5+umtE=",
+            "MSILHash": "0syZFaD3QiiNVpiMskkDi61Y03ZPVnf+siybS+SOFn8=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DkPCXV8bCeZsnrPLnwu0YM6ZVSMqeJxi6ehHq5+umtE=",
+            "MSILHash": "0syZFaD3QiiNVpiMskkDi61Y03ZPVnf+siybS+SOFn8=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
