@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Command.cs" />
+    <Compile Include="Libraries\Covalence\ReignOfKingsConsolePlayer.cs" />
     <Compile Include="Libraries\ReignOfKings.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsCovalenceProvider.cs" />
