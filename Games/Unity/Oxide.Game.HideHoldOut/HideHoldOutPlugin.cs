@@ -7,14 +7,7 @@ namespace Oxide.Plugins
 {
     public abstract class HideHoldOutPlugin : CSharpPlugin
     {
-        protected Command cmd;
-
-        public override void SetPluginInfo(string name, string path)
-        {
-            base.SetPluginInfo(name, path);
-
-            cmd = Interface.Oxide.GetLibrary<Command>();
-        }
+        protected Command cmd = Interface.Oxide.GetLibrary<Command>();
 
         public override void HandleAddedToManager(PluginManager manager)
         {

@@ -11,16 +11,8 @@ namespace Oxide.Plugins
 {
     public abstract class ReignOfKingsPlugin : CSharpPlugin
     {
-        protected Command cmd;
-        protected ReignOfKings rok;
-
-        public override void SetPluginInfo(string name, string path)
-        {
-            base.SetPluginInfo(name, path);
-
-            cmd = Interface.Oxide.GetLibrary<Command>();
-            rok = Interface.Oxide.GetLibrary<ReignOfKings>("RoK");
-        }
+        protected Command cmd = Interface.Oxide.GetLibrary<Command>();
+        protected ReignOfKings rok = Interface.Oxide.GetLibrary<ReignOfKings>("RoK");
 
         public override void HandleAddedToManager(PluginManager manager)
         {

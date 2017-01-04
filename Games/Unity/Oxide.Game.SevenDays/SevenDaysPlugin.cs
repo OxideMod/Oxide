@@ -5,14 +5,7 @@ namespace Oxide.Plugins
 {
     public abstract class SevenDaysPlugin : CSharpPlugin
     {
-        protected SevenDays sdtd;
-
-        public override void SetPluginInfo(string name, string path)
-        {
-            base.SetPluginInfo(name, path);
-
-            sdtd = Interface.Oxide.GetLibrary<SevenDays>("SDTD");
-        }
+        protected SevenDays sdtd = Interface.Oxide.GetLibrary<SevenDays>("SDTD");
 
         protected void PrintToChat(string message) => PrintToChat("", message);
 

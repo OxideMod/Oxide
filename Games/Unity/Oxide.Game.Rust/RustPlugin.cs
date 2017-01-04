@@ -9,16 +9,8 @@ namespace Oxide.Plugins
 {
     public abstract class RustPlugin : CSharpPlugin
     {
-        protected Command cmd;
-        protected Game.Rust.Libraries.Rust rust;
-
-        public override void SetPluginInfo(string name, string path)
-        {
-            base.SetPluginInfo(name, path);
-
-            cmd = Interface.Oxide.GetLibrary<Command>();
-            rust = Interface.Oxide.GetLibrary<Game.Rust.Libraries.Rust>();
-        }
+        protected Command cmd = Interface.Oxide.GetLibrary<Command>();
+        protected Game.Rust.Libraries.Rust rust = Interface.Oxide.GetLibrary<Game.Rust.Libraries.Rust>();
 
         public override void HandleAddedToManager(PluginManager manager)
         {
