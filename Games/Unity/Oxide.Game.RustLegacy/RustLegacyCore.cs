@@ -342,11 +342,11 @@ namespace Oxide.Game.RustLegacy
             var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
             if (totalPluginCount < 1)
             {
-                arg.ReplyWith("[Oxide] No plugins are currently available");
+                arg.ReplyWith("No plugins are currently available");
                 return;
             }
 
-            var output = $"[Oxide] Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
+            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
             var number = 1;
             output = loadedPlugins.Aggregate(output, (current, plugin) => current + $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}");
             output = unloadedPluginErrors.Keys.Aggregate(output, (current, pluginName) => current + $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}");

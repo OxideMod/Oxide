@@ -45,9 +45,7 @@ namespace Oxide.Core.Logging
         /// <returns></returns>
         protected LogMessage CreateLogMessage(LogType type, string format, object[] args)
         {
-            LogMessage msg = new LogMessage { Type = type, Message =
-                $"{DateTime.Now.ToShortTimeString()} [{type}] {format}"
-            };
+            var msg = new LogMessage { Type = type, Message = format };
             if (args.Length != 0) msg.Message = string.Format(msg.Message, args);
             return msg;
         }

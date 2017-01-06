@@ -98,8 +98,8 @@ namespace Oxide.Core.MySql.Libraries
                             {
                                 if (Connection.ConnectionPersistent && (Connection.Con.State == ConnectionState.Closed || Connection.Con.State == ConnectionState.Broken))
                                 {
-									break;
-								}
+                                    break;
+                                }
                                 var dict = new Dictionary<string, object>();
                                 for (var i = 0; i < reader.FieldCount; i++)
                                 {

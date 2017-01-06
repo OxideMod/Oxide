@@ -8,8 +8,7 @@
         /// Initialises a new instance of the CallbackLogger class
         /// </summary>
         /// <param name="callback"></param>
-        public CallbackLogger(NativeDebugCallback callback)
-            : base(true)
+        public CallbackLogger(NativeDebugCallback callback) : base(true)
         {
             this.callback = callback;
         }
