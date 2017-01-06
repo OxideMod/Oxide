@@ -224,7 +224,7 @@ namespace Oxide.Plugins
             }
         }
 
-        public virtual void SetPluginInfo(string name, string path)
+        public virtual bool SetPluginInfo(string name, string path)
         {
             Name = name;
             Filename = path;
@@ -238,6 +238,11 @@ namespace Oxide.Plugins
                 Version = info.Version;
                 ResourceId = info.ResourceId;
             }
+            else
+            {
+                Interface.Oxide.LogWarning($"Failed to load {name}: Info attribute missing");
+                return false;
+            }
 
             var description_attributes = GetType().GetCustomAttributes(typeof(DescriptionAttribute), true);
             if (description_attributes.Length > 0)
@@ -248,6 +253,8 @@ namespace Oxide.Plugins
 
             var method = GetType().GetMethod("LoadDefaultConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             HasConfig = method.DeclaringType != typeof(Plugin);
+
+            return true;
         }
 
         public override void HandleAddedToManager(PluginManager manager)

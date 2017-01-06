@@ -7,6 +7,7 @@ using CodeHatch.Engine.Networking;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using Oxide.Game.ReignOfKings.Libraries.Covalence;
 
 namespace Oxide.Game.ReignOfKings.Libraries
 {
@@ -17,34 +18,30 @@ namespace Oxide.Game.ReignOfKings.Libraries
     {
         public override bool IsGlobal => false;
 
-        private struct PluginCallback
+        internal class ChatCommand
         {
-            public readonly Plugin Plugin;
             public readonly string Name;
+            public readonly Plugin Plugin;
+            public readonly Action<Player, string, string[]> Callback;
+            public CommandAttribute OriginalCallback;
 
-            public PluginCallback(Plugin plugin, string name)
+            public ChatCommand(string name, Plugin plugin, Action<Player, string, string[]> callback)
             {
-                Plugin = plugin;
                 Name = name;
+                Plugin = plugin;
+                Callback = callback;
             }
-        }
 
-        private class ChatCommand
-        {
-            public readonly string Name;
-            public readonly Plugin Plugin;
-            public string CallbackName;
-
-            public ChatCommand(string name, Plugin plugin, string callback_name)
+            public void HandleCommand(Player sender, string name, string[] args)
             {
-                Name = name;
-                Plugin = plugin;
-                CallbackName = callback_name;
+                Plugin?.TrackStart();
+                Callback?.Invoke(sender, name, args);
+                Plugin?.TrackEnd();
             }
         }
 
         // All chat commands that plugins have registered
-        private Dictionary<string, ChatCommand> chatCommands;
+        internal Dictionary<string, ChatCommand> ChatCommands;
 
         // A reference to the plugin removed callbacks
         private readonly Dictionary<Plugin, Event.Callback<Plugin, PluginManager>> pluginRemovedFromManager;
@@ -54,7 +51,7 @@ namespace Oxide.Game.ReignOfKings.Libraries
         /// </summary>
         public Command()
         {
-            chatCommands = new Dictionary<string, ChatCommand>();
+            ChatCommands = new Dictionary<string, ChatCommand>();
             pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
         }
 
@@ -63,36 +60,76 @@ namespace Oxide.Game.ReignOfKings.Libraries
         /// </summary>
         /// <param name="name"></param>
         /// <param name="plugin"></param>
-        /// <param name="callback_name"></param>
+        /// <param name="callback"></param>
         [LibraryFunction("AddChatCommand")]
-        public void AddChatCommand(string name, Plugin plugin, string callback_name)
-        {
-            var command_name = name.ToLowerInvariant();
+        public void AddChatCommand(string name, Plugin plugin, string callback) => AddChatCommand(name, plugin, (player, command, args) => plugin.CallHook(callback, player, command, args));
 
-            ChatCommand cmd;
-            if (chatCommands.TryGetValue(command_name, out cmd))
+        /// <summary>
+        /// Adds a chat command
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="plugin"></param>
+        /// <param name="callback"></param>
+        public void AddChatCommand(string command, Plugin plugin, Action<Player, string, string[]> callback)
+        {
+            // Convert command to lowercase and remove whitespace
+            var commandName = command.ToLowerInvariant().Trim();
+
+            // Setup a new Chat command
+            var newCommand = new ChatCommand(commandName, plugin, callback);
+
+            // Check if the command can be overridden
+            if (!CanOverrideCommand(commandName, "chat"))
             {
-                var previous_plugin_name = cmd.Plugin?.Name ?? "an unknown plugin";
-                var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                var msg = $"{new_plugin_name} has replaced the '{command_name}' chat command previously registered by {previous_plugin_name}";
+                var pluginName = plugin?.Name ?? "An unknown plugin";
+                Interface.Oxide.LogError("{0} tried to register command '{1}', this command already exists and cannot be overridden!", pluginName, commandName);
+                return;
+            }
+
+            // Check if command already exists in another Reign of Kings plugin
+            ChatCommand cmd;
+            if (ChatCommands.TryGetValue(commandName, out cmd))
+            {
+                if (cmd.OriginalCallback != null) newCommand.OriginalCallback = cmd.OriginalCallback;
+
+                var previousPluginName = cmd.Plugin?.Name ?? "an unknown plugin";
+                var newPluginName = plugin?.Name ?? "An unknown plugin";
+                var msg = $"{newPluginName} has replaced the '{commandName}' chat command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(msg);
             }
 
-            cmd = new ChatCommand(command_name, plugin, callback_name);
+            // Check if command already exists in a Covalence plugin
+            ReignOfKingsCommandSystem.RegisteredCommand covalenceCommand;
+            if (ReignOfKingsCore.Covalence.CommandSystem.registeredCommands.TryGetValue(commandName, out covalenceCommand))
+            {
+                if (covalenceCommand.OriginalCallback != null) newCommand.OriginalCallback = covalenceCommand.OriginalCallback;
+                var previousPluginName = covalenceCommand.Source?.Name ?? "an unknown plugin";
+                var newPluginName = plugin?.Name ?? "An unknown plugin";
+                var message = $"{newPluginName} has replaced the '{commandName}' command previously registered by {previousPluginName}";
+                Interface.Oxide.LogWarning(message);
+                ReignOfKingsCore.Covalence.CommandSystem.UnregisterCommand(commandName, covalenceCommand.Source);
+            }
+
+            // Check if command is a vanilla Reign of Kings command
+            if (CommandManager.RegisteredCommands.ContainsKey(commandName))
+            {
+                if (newCommand.OriginalCallback == null) newCommand.OriginalCallback = CommandManager.RegisteredCommands[commandName];
+                CommandManager.RegisteredCommands.Remove(commandName);
+                if (cmd == null && covalenceCommand == null)
+                {
+                    var newPluginName = plugin?.Name ?? "An unknown plugin";
+                    var message =
+                        $"{newPluginName} has replaced the '{commandName}' command previously registered by Reign of Kings";
+                    Interface.Oxide.LogWarning(message);
+                }
+            }
 
             // Add the new command to collections
-            chatCommands[command_name] = cmd;
-
-            var commandAttribute = new CommandAttribute("/" + command_name, string.Empty);
-            var action = (Action<CommandInfo>)Delegate.CreateDelegate(typeof(Action<CommandInfo>), this, GetType().GetMethod("HandleCommand", BindingFlags.NonPublic | BindingFlags.Instance));
-            commandAttribute.Method = action;
-            if (CommandManager.RegisteredCommands.ContainsKey(command_name))
+            ChatCommands[commandName] = newCommand;
+            CommandManager.RegisteredCommands[commandName] = new CommandAttribute("/" + commandName, string.Empty)
             {
-                var new_plugin_name = plugin?.Name ?? "An unknown plugin";
-                var msg = $"{new_plugin_name} has replaced the '{command_name}' chat command";
-                Interface.Oxide.LogWarning(msg);
-            }
-            CommandManager.RegisteredCommands[command_name] = commandAttribute;
+                Method = (Action<CommandInfo>)Delegate.CreateDelegate(typeof(Action<CommandInfo>), this, GetType().GetMethod("HandleCommand", BindingFlags.NonPublic | BindingFlags.Instance))
+            };
 
             // Hook the unload event
             if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
@@ -102,8 +139,8 @@ namespace Oxide.Game.ReignOfKings.Libraries
         private void HandleCommand(CommandInfo cmdInfo)
         {
             ChatCommand cmd;
-            if (!chatCommands.TryGetValue(cmdInfo.Label.ToLowerInvariant(), out cmd)) return;
-            cmd.Plugin.CallHook(cmd.CallbackName, cmdInfo.Player, cmdInfo.Label, cmdInfo.Args);
+            if (!ChatCommands.TryGetValue(cmdInfo.Label.ToLowerInvariant(), out cmd)) return;
+            cmd.HandleCommand(cmdInfo.Player, cmdInfo.Label, cmdInfo.Args);
         }
 
         /// <summary>
@@ -115,10 +152,8 @@ namespace Oxide.Game.ReignOfKings.Libraries
         internal bool HandleChatCommand(Player sender, string name, string[] args)
         {
             ChatCommand cmd;
-            if (!chatCommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
-
-            cmd.Plugin.CallHook(cmd.CallbackName, sender, name, args);
-
+            if (!ChatCommands.TryGetValue(name.ToLowerInvariant(), out cmd)) return false;
+            cmd.HandleCommand(sender, name, args);
             return true;
         }
 
@@ -130,19 +165,49 @@ namespace Oxide.Game.ReignOfKings.Libraries
         private void plugin_OnRemovedFromManager(Plugin sender, PluginManager manager)
         {
             // Remove all chat commands which were registered by the plugin
-            foreach (var cmd in chatCommands.Values.Where(c => c.Plugin == sender).ToArray())
+            foreach (var cmd in ChatCommands.Values.Where(c => c.Plugin == sender).ToArray())
             {
-                chatCommands.Remove(cmd.Name);
-                CommandManager.RegisteredCommands.Remove(cmd.Name);
+                // This command is no longer registered by any plugins
+                ChatCommands.Remove(cmd.Name);
+
+                // If this was originally a vanilla Reign of Kings command then restore it, otherwise remove it
+                if (cmd.OriginalCallback != null)
+                    CommandManager.RegisteredCommands[cmd.Name] = cmd.OriginalCallback;
+                else
+                    CommandManager.RegisteredCommands.Remove(cmd.Name);
             }
 
             // Unhook the event
-            Event.Callback<Plugin, PluginManager> event_callback;
-            if (pluginRemovedFromManager.TryGetValue(sender, out event_callback))
+            Event.Callback<Plugin, PluginManager> callback;
+            if (pluginRemovedFromManager.TryGetValue(sender, out callback))
             {
-                event_callback.Remove();
+                callback.Remove();
                 pluginRemovedFromManager.Remove(sender);
             }
+        }
+
+        /// <summary>
+        /// Checks if a command can be overridden
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private bool CanOverrideCommand(string command, string type)
+        {
+            ReignOfKingsCommandSystem.RegisteredCommand cmd;
+            if (ReignOfKingsCore.Covalence.CommandSystem.registeredCommands.TryGetValue(command, out cmd))
+                if (cmd.Source.IsCorePlugin)
+                    return false;
+
+            if (type == "chat")
+            {
+                ChatCommand chatCommand;
+                if (ChatCommands.TryGetValue(command, out chatCommand))
+                    if (chatCommand.Plugin.IsCorePlugin)
+                        return false;
+            }
+
+            return !ReignOfKingsCore.RestrictedCommands.Contains(command);
         }
     }
 }

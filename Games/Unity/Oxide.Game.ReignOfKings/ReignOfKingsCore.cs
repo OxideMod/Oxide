@@ -6,6 +6,7 @@ using System.Text;
 using CodeHatch.Build;
 using CodeHatch.Common;
 using CodeHatch.Engine.Common;
+using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events;
 using CodeHatch.Networking.Events.Players;
@@ -67,6 +68,26 @@ namespace Oxide.Game.ReignOfKings
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
+
+            CommandManager.OnRegisterCommand += (attribute) =>
+            {
+                foreach (var command in attribute.Aliases.InsertItem(attribute.Name, 0))
+                {
+                    Command.ChatCommand chatCommand;
+                    if (cmdlib.ChatCommands.TryGetValue(command, out chatCommand))
+                    {
+                        cmdlib.ChatCommands.Remove(chatCommand.Name);
+                        cmdlib.AddChatCommand(chatCommand.Name, chatCommand.Plugin, chatCommand.Callback);
+                    }
+
+                    ReignOfKingsCommandSystem.RegisteredCommand covalenceCommand;
+                    if (Covalence.CommandSystem.registeredCommands.TryGetValue(command, out covalenceCommand))
+                    {
+                        Covalence.CommandSystem.registeredCommands.Remove(covalenceCommand.Command);
+                        Covalence.CommandSystem.RegisterCommand(covalenceCommand.Command, covalenceCommand.Source, covalenceCommand.Callback);
+                    }
+                }
+            };
         }
 
         /// <summary>

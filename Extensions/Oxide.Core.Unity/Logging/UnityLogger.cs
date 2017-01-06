@@ -1,6 +1,6 @@
 ﻿using System.Threading;
-using UnityEngine;
 using Oxide.Core.Logging;
+using UnityEngine;
 using LogType = Oxide.Core.Logging.LogType;
 
 namespace Oxide.Core.Unity.Logging
@@ -35,13 +35,13 @@ namespace Oxide.Core.Unity.Logging
             {
                 case LogType.Info:
                 case LogType.Debug:
-                    Debug.Log("[Oxide] " + message.Message);
+                    Debug.Log(message.Message);
                     break;
                 case LogType.Warning:
-                    Debug.LogWarning("[Oxide] " + message.Message);
+                    Debug.LogWarning(message.Message);
                     break;
                 case LogType.Error:
-                    Debug.LogError("[Oxide] " + message.Message);
+                    Debug.LogError(message.Message);
                     break;
             }
         }

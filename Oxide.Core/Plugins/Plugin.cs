@@ -349,6 +349,24 @@ namespace Oxide.Core.Plugins
 
         #region Covalence
 
+        public void AddCovalenceCommand(string command, string callback, string perm = null)
+        {
+            AddCovalenceCommand(new[] { command }, callback, new[] { perm });
+        }
+
+        public void AddCovalenceCommand(string[] commands, string callback, string[] perms = null)
+        {
+            AddCovalenceCommand(commands, perms, (caller, command, args) =>
+            {
+                CallHook(callback, caller, command, args);
+                return true;
+            });
+
+            var covalence = Interface.Oxide.GetLibrary<Covalence>();
+            foreach (var command in commands)
+                covalence.RegisterCommand(command, this, CovalenceCommandCallback);
+        }
+
         protected void AddCovalenceCommand(string[] commands, string[] perms, CommandCallback callback)
         {
             foreach (var cmdName in commands)

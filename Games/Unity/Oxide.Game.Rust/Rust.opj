@@ -704,7 +704,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 65,
+            "InjectionIndex": 80,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l1",
@@ -723,7 +723,7 @@
                 "Construction"
               ]
             },
-            "MSILHash": "EzkTEzhVo5xrIeJorkqY8usouBnQe5Pbb4Z6rp9ZFqo=",
+            "MSILHash": "QXTIULzmSxrSDZyvg4SghTJegPWCZPCLL1TMhYCjn7c=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -960,7 +960,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "xOk4QYkHqjDrzR3M9D3/BqQzDgX3toS3cmdBcUZZMbY=",
+            "MSILHash": "6tFeptTAlH2dQMFAWEuyIFWORG2khJIFAshfR2xjc8I=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2514,7 +2514,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "pHLUa+89+OoRtNgZTb/SErAJ6jolt7lHhlBqytKSMVY=",
+            "MSILHash": "XMfuLaWZOtLjgCWr7hiGFYK+relT/6uCMPKQC20QQw8=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2918,7 +2918,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "qXZBkbODS0houhNVMXTSwA/vG9MDJ8atHMGwg8mcN3c=",
+            "MSILHash": "WwtqGW9PxhErW4nArmq9utiXguVYmM2t3l0TsF7f3Bs=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2945,7 +2945,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "jF2buAf0F7Xdonw7SpLveqRg0owDzzjQM93NbsWsPUs=",
+            "MSILHash": "1trQHZAlRUa2EXH8Tr+66scAX85E2UR8ZulUhYM1NNI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -3022,7 +3022,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "jF2buAf0F7Xdonw7SpLveqRg0owDzzjQM93NbsWsPUs=",
+            "MSILHash": "1trQHZAlRUa2EXH8Tr+66scAX85E2UR8ZulUhYM1NNI=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }

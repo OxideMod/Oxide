@@ -92,25 +92,8 @@ namespace Oxide.Core.Libraries
             if (string.IsNullOrEmpty(key) || plugin == null) return key;
 
             var lang = GetLanguage(userId);
-            var file = $"{lang}{Path.DirectorySeparatorChar}{plugin.Name}.json";
 
-            string message;
-            Dictionary<string, string> langFile;
-            if (!langFiles.TryGetValue(file, out langFile))
-            {
-                langFile = GetMessagesIntern(plugin.Name, lang);
-                if (langFile == null)
-                {
-                    if (!lang.Equals(langData.Lang)) return GetMessage(key, plugin);
-                    langFile = GetMessagesIntern(plugin.Name);
-                    return langFile.TryGetValue(key, out message) ? message : key;
-                }
-                AddLangFile(file, langFile, plugin);
-            }
-
-            if (langFile.TryGetValue(key, out message)) return message;
-
-            return !lang.Equals(langData.Lang) ? GetMessage(key, plugin) : key;
+            return GetMessageIntern(key, plugin, lang);
         }
 
         /// <summary>
@@ -248,6 +231,38 @@ namespace Oxide.Core.Libraries
             }
 
             return changed;
+        }
+
+        /// <summary>
+        /// Loads a specific key from the requested language file for a plugin
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="plugin"></param>
+        /// <param name="lang"></param>
+        /// <returns></returns>
+        private string GetMessageIntern(string key, Plugin plugin, string lang = DefaultLang)
+        {
+            var file = $"{lang}{Path.DirectorySeparatorChar}{plugin.Name}.json";
+
+            string message;
+            Dictionary<string, string> langFile;
+            if (!langFiles.TryGetValue(file, out langFile))
+            {
+                langFile = GetMessagesIntern(plugin.Name, lang);
+                if (langFile == null)
+                {
+                    if (!lang.Equals(langData.Lang)) return GetMessageIntern(key, plugin, langData.Lang);
+                    langFile = GetMessagesIntern(plugin.Name);
+                    return langFile.TryGetValue(key, out message) ? message : key;
+                }
+                AddLangFile(file, langFile, plugin);
+            }
+
+            if (langFile.TryGetValue(key, out message)) return message;
+
+            if (!lang.Equals(langData.Lang)) return GetMessageIntern(key, plugin, langData.Lang);
+
+            return !lang.Equals(DefaultLang) ? GetMessageIntern(key, plugin) : key;
         }
 
         /// <summary>

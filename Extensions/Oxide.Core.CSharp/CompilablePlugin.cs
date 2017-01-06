@@ -80,7 +80,12 @@ namespace Oxide.Plugins
                     return;
                 }
 
-                plugin.SetPluginInfo(ScriptName, ScriptPath);
+                if (!plugin.SetPluginInfo(ScriptName, ScriptPath))
+                {
+                    InitFailed();
+                    return;
+                }
+
                 plugin.Watcher = Extension.Watcher;
                 plugin.Loader = Loader;
 
