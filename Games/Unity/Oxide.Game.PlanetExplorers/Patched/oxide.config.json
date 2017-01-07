@@ -1,11 +1,16 @@
 {
-    "CustomConsole": true,
-    "InstanceCommandLines":
-    [
-        "{oxide.directory}",
-        "Server\\oxide",
-        "oxide"
-    ],
-    "ConfigDirectory": "config",
-    "ExtensionDirectory": "Server\\PE_Server_Data\\Managed"
+  "OxideConsole": {
+    "Enabled": true,
+    "MinimalistMode": true,
+    "ShowStatusBar": true,
+    "ShowStacktraces": false
+  },
+  "InstanceCommandLines":
+  [
+    "{oxide.directory}",
+    "Server\\oxide",
+    "oxide"
+  ],
+  "ConfigDirectory": "config",
+  "ExtensionDirectory": "Server\\PE_Server_Data\\Managed"
 }

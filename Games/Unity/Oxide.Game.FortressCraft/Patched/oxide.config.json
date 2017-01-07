@@ -1,10 +1,15 @@
 {
-    "CustomConsole": true,
-    "InstanceCommandLines":
-    [
-        "{oxide.directory}",
-        "oxide"
-    ],
-    "ConfigDirectory": "config",
-    "ExtensionDirectory": "FC_64_Data\\Managed"
+  "OxideConsole": {
+    "Enabled": true,
+    "MinimalistMode": true,
+    "ShowStatusBar": true,
+    "ShowStacktraces": false
+  },
+  "InstanceCommandLines":
+  [
+    "{oxide.directory}",
+    "oxide"
+  ],
+  "ConfigDirectory": "config",
+  "ExtensionDirectory": "FC_64_Data\\Managed"
 }
