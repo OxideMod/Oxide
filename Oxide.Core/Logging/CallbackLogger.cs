@@ -17,6 +17,6 @@
         /// Processes the specified message
         /// </summary>
         /// <param name="message"></param>
-        protected override void ProcessMessage(LogMessage message) => callback?.Invoke(message.Message);
+        protected override void ProcessMessage(LogMessage message) => callback?.Invoke(message.LogfileMessage);
     }
 }

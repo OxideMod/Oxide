@@ -130,7 +130,9 @@ namespace Oxide.Core.ServerConsole
         {
             if (!init) return;
 
-            UpdateStatus();
+            if (Interface.Oxide.Config.Console.ShowStatusBar)
+                UpdateStatus();
+
             input.Update();
             if (nextTitleUpdate > Interface.Oxide.Now) return;
 
