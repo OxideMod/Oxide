@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Network;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
@@ -62,6 +63,7 @@ namespace Oxide.Game.Rust
             {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
             {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
             {"NoPluginsFound", "No plugins are currently available"},
+            {"NotAllowed", "You are not allowed to use the '{0}' command"},
             {"PermissionNotFound", "Permission '{0}' doesn't exist"},
             {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
             {"PlayerLanguage", "Player language set to {0}"},
@@ -117,11 +119,12 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
+        /// <param name="player"></param>
         /// <returns></returns>
-        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
+        private bool PermissionsLoaded(IPlayer player)
         {
             if (permission.IsLoaded) return true;
-            Reply(arg, "PermissionsNotLoaded", permission.LastException.Message);
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
             return false;
         }
 
@@ -142,35 +145,33 @@ namespace Oxide.Game.Rust
             // Register messages for localization
             lang.RegisterMessages(messages, this);
 
-            // Add general commands
-            cmdlib.AddConsoleCommand("oxide.plugins", this, "ConsolePlugins");
-            cmdlib.AddConsoleCommand("global.plugins", this, "ConsolePlugins");
-            cmdlib.AddConsoleCommand("oxide.load", this, "ConsoleLoad");
-            cmdlib.AddConsoleCommand("global.load", this, "ConsoleLoad");
-            cmdlib.AddConsoleCommand("oxide.unload", this, "ConsoleUnload");
-            cmdlib.AddConsoleCommand("global.unload", this, "ConsoleUnload");
-            cmdlib.AddChatCommand("reload", this, "ChatReload");
-            cmdlib.AddConsoleCommand("oxide.reload", this, "ConsoleReload");
-            cmdlib.AddConsoleCommand("global.reload", this, "ConsoleReload");
-            cmdlib.AddChatCommand("version", this, "ChatVersion");
-            cmdlib.AddChatCommand("oxide.version", this, "ChatVersion");
-            cmdlib.AddConsoleCommand("version", this, "ConsoleVersion");
-            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
-            cmdlib.AddChatCommand("lang", this, "ChatLang");
-            cmdlib.AddConsoleCommand("oxide.lang", this, "ConsoleLang");
-            cmdlib.AddConsoleCommand("global.lang", this, "ConsoleLang");
+            // Add core general commands
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
 
-            // Add permission commands
-            cmdlib.AddConsoleCommand("oxide.group", this, "ConsoleGroup");
-            cmdlib.AddConsoleCommand("global.group", this, "ConsoleGroup");
-            cmdlib.AddConsoleCommand("oxide.usergroup", this, "ConsoleUserGroup");
-            cmdlib.AddConsoleCommand("global.usergroup", this, "ConsoleUserGroup");
-            cmdlib.AddConsoleCommand("oxide.grant", this, "ConsoleGrant");
-            cmdlib.AddConsoleCommand("global.grant", this, "ConsoleGrant");
-            cmdlib.AddConsoleCommand("oxide.revoke", this, "ConsoleRevoke");
-            cmdlib.AddConsoleCommand("global.revoke", this, "ConsoleRevoke");
-            cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
-            cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand");
+
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UsergroupCommand");
+
+            // Register core permissions
+            permission.RegisterPermission("oxide.plugins", this);
+            permission.RegisterPermission("oxide.load", this);
+            permission.RegisterPermission("oxide.reload", this);
+            permission.RegisterPermission("oxide.unload", this);
+            permission.RegisterPermission("oxide.grant", this);
+            permission.RegisterPermission("oxide.group", this);
+            permission.RegisterPermission("oxide.revoke", this);
+            permission.RegisterPermission("oxide.show", this);
+            permission.RegisterPermission("oxide.usergroup", this);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -567,17 +568,24 @@ namespace Oxide.Game.Rust
 
         #endregion
 
-        #region Chat/Console Commands
+        #region Covalence Commands
 
         #region Plugins Command
 
         /// <summary>
         /// Called when the "plugins" command has been executed
         /// </summary>
-        [HookMethod("ConsolePlugins")]
-        private void ConsolePlugins(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("PluginsCommand")]
+        private void PluginsCommand(IPlayer player, string command, string[] args)
         {
-            if (!IsAdmin(arg.Player())) return;
+            if (!player.IsAdmin || player.HasPermission("oxide.plugins"))
+            {
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
+                return;
+            }
 
             var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
@@ -594,7 +602,7 @@ namespace Oxide.Game.Rust
             var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
             if (totalPluginCount < 1)
             {
-                Reply(arg, "NoPluginsFound");
+                player.Reply(lang.GetMessage("NoPluginsFound", this, player.Id));
                 return;
             }
 
@@ -604,7 +612,7 @@ namespace Oxide.Game.Rust
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
             foreach (var pluginName in unloadedPluginErrors.Keys)
                 output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
-            arg.ReplyWith(output);
+            player.Reply(output);
         }
 
         #endregion
@@ -614,24 +622,31 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the "load" command has been executed
         /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleLoad")]
-        private void ConsoleLoad(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("LoadCommand")]
+        private void LoadCommand(IPlayer player, string command, string[] args)
         {
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs())
+            if (!player.IsAdmin || player.HasPermission("oxide.load"))
             {
-                Reply(arg, "CommandUsageLoad");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
             }
 
-            if (arg.GetString(0).Equals("*"))
+            if (args.Length < 1)
+            {
+                player.Reply(lang.GetMessage("CommandUsageLoad", this, player.Id));
+                return;
+            }
+
+            if (args[0].Equals("*") || args[0].Equals("all"))
             {
                 Interface.Oxide.LoadAllPlugins();
                 return;
             }
 
-            foreach (var name in arg.Args)
+            foreach (var name in args)
             {
                 if (string.IsNullOrEmpty(name)) continue;
                 Interface.Oxide.LoadPlugin(name);
@@ -644,52 +659,33 @@ namespace Oxide.Game.Rust
         #region Reload Command
 
         /// <summary>
-        /// Called when the "reload" chat command has been executed
+        /// Called when the "reload" command has been executed
         /// </summary>
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("ChatReload")]
-        private void ChatReload(BasePlayer player, string command, string[] args)
+        [HookMethod("ReloadCommand")]
+        private void ReloadCommand(IPlayer player, string command, string[] args)
         {
-            if (!IsAdmin(player)) return;
-            if (args.Length == 0)
+            if (!player.IsAdmin || player.HasPermission("oxide.reload"))
             {
-                Reply(player, "CommandUsageReload");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
             }
 
-            if (args[0].Equals("*"))
+            if (args.Length < 1)
+            {
+                player.Reply(lang.GetMessage("CommandUsageReload", this, player.Id));
+                return;
+            }
+
+            if (args[0].Equals("*") || args[0].Equals("all"))
             {
                 Interface.Oxide.ReloadAllPlugins();
                 return;
             }
 
             foreach (var name in args)
-                if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
-        }
-
-        /// <summary>
-        /// Called when the "reload" console command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleReload")]
-        private void ConsoleReload(ConsoleSystem.Arg arg)
-        {
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs())
-            {
-                Reply(arg, "CommandUsageReload");
-                return;
-            }
-
-            if (arg.GetString(0).Equals("*"))
-            {
-                Interface.Oxide.ReloadAllPlugins();
-                return;
-            }
-
-            foreach (var name in arg.Args)
                 if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
         }
 
@@ -700,24 +696,31 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the "unload" command has been executed
         /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleUnload")]
-        private void ConsoleUnload(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("UnloadCommand")]
+        private void UnloadCommand(IPlayer player, string command, string[] args)
         {
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs())
+            if (!player.IsAdmin || player.HasPermission("oxide.unload"))
             {
-                Reply(arg, "CommandUsageUnload");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id));
                 return;
             }
 
-            if (arg.GetString(0).Equals("*"))
+            if (args.Length < 1)
+            {
+                player.Reply(lang.GetMessage("CommandUsageUnload", this, player.Id));
+                return;
+            }
+
+            if (args[0].Equals("*") || args[0].Equals("all"))
             {
                 Interface.Oxide.UnloadAllPlugins();
                 return;
             }
 
-            foreach (var name in arg.Args)
+            foreach (var name in args)
                 if (!string.IsNullOrEmpty(name)) Interface.Oxide.UnloadPlugin(name);
         }
 
@@ -726,25 +729,20 @@ namespace Oxide.Game.Rust
         #region Version Command
 
         /// <summary>
-        /// Called when the "oxide.version" chat command has been executed
+        /// Called when the "version" command has been executed
         /// </summary>
         /// <param name="player"></param>
-        [HookMethod("ChatVersion")]
-        private void ChatVersion(BasePlayer player)
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("VersionCommand")]
+        private void VersionCommand(IPlayer player, string command, string[] args)
         {
-            Reply(player, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
-        }
-
-        /// <summary>
-        /// Called when the "oxide.version" console command has been executed
-        /// </summary>
-        [HookMethod("ConsoleVersion")]
-        private void ConsoleVersion(ConsoleSystem.Arg arg)
-        {
-            if (arg.cmd.namefull == "oxide.version")
-                Reply(arg, $"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
-            else if (arg.cmd.namefull == "global.version")
-                Reply(arg, $"Protocol: {Protocol.printable}\nBuild Version: {BuildInformation.VersionStampDays}\nBuild Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\nChangeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
+            if (command == "oxide.version")
+                player.Reply($"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
+            else if (command == "version")
+                player.Reply($"Protocol: {Protocol.printable}\nBuild Version: {BuildInformation.VersionStampDays}\n" +
+                             $"Build Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\n" +
+                             $"Changeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
         }
 
         #endregion
@@ -752,33 +750,30 @@ namespace Oxide.Game.Rust
         #region Lang Command
 
         /// <summary>
-        /// Called when the "lang" chat command has been executed
+        /// Called when the "lang" command has been executed
         /// </summary>
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("ChatLang")]
-        private void ChatLang(BasePlayer player, string command, string[] args)
+        [HookMethod("LangCommand")]
+        private void LangCommand(IPlayer player, string command, string[] args)
         {
-            if (args != null && args.Length > 0) lang.SetLanguage(args[0], player.UserIDString);
-            Reply(player, "PlayerLanguage", lang.GetLanguage(player.UserIDString));
+            if (args.Length < 1)
+            {
+                player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                return;
+            }
 
-            Analytics.Event("Commands", "Lang command use via chat");
-        }
-
-        /// <summary>
-        /// Called when the "lang" console command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleLang")]
-        private void ConsoleLang(ConsoleSystem.Arg arg)
-        {
-            if (!IsAdmin(arg.Player())) return;
-
-            if (arg.HasArgs()) lang.SetServerLanguage(arg.GetString(0));
-            Reply(arg, "ServerLanguage", lang.GetServerLanguage());
-
-            Analytics.Event("Commands", "Lang command use via console");
+            if (player.Id != "server_console")
+            {
+                lang.SetLanguage(args[0], player.Id);
+                player.Reply(lang.GetMessage("PlayerLanguage", this, player.Id), args[0]);
+            }
+            else
+            {
+                lang.SetServerLanguage(args[0]);
+                player.Reply(lang.GetMessage("ServerLanguage", this, player.Id), lang.GetServerLanguage());
+            }
         }
 
         #endregion
@@ -788,125 +783,139 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the "group" command has been executed
         /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleGroup")]
-        private void ConsoleGroup(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("GroupCommand")]
+        private void GroupCommand(IPlayer player, string command, string[] args)
         {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs(2))
+            if (!PermissionsLoaded(player)) return;
+            if (!player.IsAdmin || player.HasPermission("oxide.group"))
             {
-                Reply(arg, "CommandUsageGroup");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
             }
 
-            var mode = arg.GetString(0);
-            var group = arg.GetString(1);
+            if (args.Length != 2)
+            {
+                player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                return;
+            }
+
+            var mode = args[0];
+            var group = args[1];
 
             if (mode.Equals("add"))
             {
                 if (permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupAlreadyExists", group);
+                    player.Reply(lang.GetMessage("GroupAlreadyExists", this, player.Id), group);
                     return;
                 }
-                permission.CreateGroup(group, arg.GetString(2), arg.GetInt(3));
-                Reply(arg, "GroupCreated", group);
+                permission.CreateGroup(group, args[2], int.Parse(args[3]));
+                player.Reply(lang.GetMessage("GroupCreated", this, player.Id), group);
             }
             else if (mode.Equals("remove"))
             {
                 if (!permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupNotFound", group);
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
                 permission.RemoveGroup(group);
-                Reply(arg, "GroupDeleted", group);
+                player.Reply(lang.GetMessage("GroupDeleted", this, player.Id), group);
             }
             else if (mode.Equals("set"))
             {
                 if (!permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupNotFound", group);
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
-                permission.SetGroupTitle(group, arg.GetString(2));
-                permission.SetGroupRank(group, arg.GetInt(3));
-                Reply(arg, "GroupChanged", group);
+                permission.SetGroupTitle(group, args[2]);
+                permission.SetGroupRank(group, int.Parse(args[3]));
+                player.Reply(lang.GetMessage("GroupChanged", this, player.Id), group);
             }
             else if (mode.Equals("parent"))
             {
                 if (!permission.GroupExists(group))
                 {
-                    Reply(arg, "GroupNotFound", group);
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
-                var parent = arg.GetString(2);
+                var parent = args[2];
                 if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
-                    Reply(arg, "GroupParentNotFound", parent);
+                    player.Reply(lang.GetMessage("GroupParentNotFound", this, player.Id), parent);
                     return;
                 }
                 if (permission.SetGroupParent(group, parent))
-                    Reply(arg, "GroupParentChanged", group, parent);
+                    player.Reply(lang.GetMessage("GroupParentChanged", this, player.Id), group, parent);
                 else
-                    Reply(arg, "GroupParentNotChanged", group);
+                    player.Reply(lang.GetMessage("GroupParentNotChanged", this, player.Id), group);
             }
         }
 
         #endregion
 
-        #region User Group Command
+        #region Usergroup Command
 
         /// <summary>
-        /// Called when the "group" command has been executed
+        /// Called when the "usergroup" command has been executed
         /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleUserGroup")]
-        private void ConsoleUserGroup(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("UsergroupCommand")]
+        private void UsergroupCommand(IPlayer player, string command, string[] args)
         {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs(3))
+            if (!PermissionsLoaded(player)) return;
+            if (!player.IsAdmin || player.HasPermission("oxide.usergroup"))
             {
-                Reply(arg, "CommandUsageUserGroup");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
             }
 
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-            var group = arg.GetString(2);
-
-            var player = FindPlayer(name);
-            if (player == null && !permission.UserIdValid(name))
+            if (args.Length != 3)
             {
-                Reply(arg, "UserNotFound", name);
+                player.Reply(lang.GetMessage("CommandUsageUserGroup", this, player.Id));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var group = args[2];
+
+            var target = Covalence.PlayerManager.FindPlayer(name);
+            if (target == null && !permission.UserIdValid(name))
+            {
+                player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                 return;
             }
             var userId = name;
-            if (player != null)
+            if (target != null)
             {
-                userId = player.UserIDString;
-                name = player.displayName;
+                userId = target.Id;
+                name = target.Name;
                 permission.UpdateNickname(userId, name);
                 name += $"({userId})";
             }
 
             if (!permission.GroupExists(group))
             {
-                Reply(arg, "GroupNotFound", group);
+                player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                 return;
             }
 
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                Reply(arg, "UserAddedToGroup", name, group);
+                player.Reply(lang.GetMessage("UserAddedToGroup", this, player.Id), name, group);
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                Reply(arg, "UserRemovedFromGroup", name, group);
+                player.Reply(lang.GetMessage("UserRemovedFromGroup", this, player.Id), name, group);
             }
         }
 
@@ -917,25 +926,32 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the "grant" command has been executed
         /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleGrant")]
-        private void ConsoleGrant(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("GrantCommand")]
+        private void GrantCommand(IPlayer player, string command, string[] args)
         {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs(3))
+            if (!PermissionsLoaded(player)) return;
+            if (!player.IsAdmin || player.HasPermission("oxide.grant"))
             {
-                Reply(arg, "CommandUsageGrant");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
             }
 
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-            var perm = arg.GetString(2);
+            if (args.Length != 3)
+            {
+                player.Reply(lang.GetMessage("CommandUsageGrant", this, player.Id));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
 
             if (!permission.PermissionExists(perm))
             {
-                Reply(arg, "PermissionNotFound", perm);
+                player.Reply(lang.GetMessage("PermissionNotFound", this, player.Id), perm);
                 return;
             }
 
@@ -943,29 +959,29 @@ namespace Oxide.Game.Rust
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(arg, "GroupNotFound", name);
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
                     return;
                 }
                 permission.GrantGroupPermission(name, perm, null);
-                Reply(arg, "GroupPermissionGranted", name, perm);
+                player.Reply(lang.GetMessage("GroupPermissionGranted", this, player.Id), name, perm);
             }
             else if (mode.Equals("user"))
             {
-                var player = FindPlayer(name);
-                if (player == null && !permission.UserIdValid(name))
+                var target = Covalence.PlayerManager.FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(arg, "UserNotFound", name);
+                    player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                     return;
                 }
                 var userId = name;
-                if (player != null)
+                if (target != null)
                 {
-                    userId = player.UserIDString;
-                    name = player.displayName;
+                    userId = target.Id;
+                    name = target.Name;
                     permission.UpdateNickname(userId, name);
                 }
                 permission.GrantUserPermission(userId, perm, null);
-                Reply(arg, "UserPermissionGranted", $"{name} ({userId})", perm);
+                player.Reply(lang.GetMessage("UserPermissionGranted", this, player.Id), $"{name} ({userId})", perm);
             }
         }
 
@@ -976,25 +992,32 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the "revoke" command has been executed
         /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleRevoke")]
-        private void ConsoleRevoke(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("RevokeCommand")]
+        private void RevokeCommand(IPlayer player, string command, string[] args)
         {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs(3))
+            if (!PermissionsLoaded(player)) return;
+            if (!player.IsAdmin || player.HasPermission("oxide.revoke"))
             {
-                Reply(arg, "CommandUsageRevoke");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
             }
 
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-            var perm = arg.GetString(2);
+            if (args.Length != 3)
+            {
+                player.Reply(lang.GetMessage("CommandUsageRevoke", this, player.Id));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
+            var perm = args[2];
 
             if (!permission.PermissionExists(perm))
             {
-                Reply(arg, "PermissionNotFound", perm);
+                player.Reply(lang.GetMessage("PermissionNotFound", this, player.Id), perm);
                 return;
             }
 
@@ -1002,29 +1025,29 @@ namespace Oxide.Game.Rust
             {
                 if (!permission.GroupExists(name))
                 {
-                    Reply(arg, "GroupNotFound", name);
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
                     return;
                 }
                 permission.RevokeGroupPermission(name, perm);
-                Reply(arg, "GroupPermissionRevoked", name, perm);
+                player.Reply(lang.GetMessage("GroupPermissionRevoked", this, player.Id), name, perm);
             }
             else if (mode.Equals("user"))
             {
-                var player = FindPlayer(name);
-                if (player == null && !permission.UserIdValid(name))
+                var target = Covalence.PlayerManager.FindPlayer(name);
+                if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(arg, "UserNotFound", name);
+                    player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                     return;
                 }
                 var userId = name;
-                if (player != null)
+                if (target != null)
                 {
-                    userId = player.UserIDString;
-                    name = player.displayName;
+                    userId = target.Id;
+                    name = target.Name;
                     permission.UpdateNickname(userId, name);
                 }
                 permission.RevokeUserPermission(userId, perm);
-                Reply(arg, "UserPermissionRevoked", $"{name} ({userId})", perm);
+                player.Reply(lang.GetMessage("UserPermissionRevoked", this, player.Id), $"{name} ({userId})", perm);
             }
         }
 
@@ -1035,30 +1058,37 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Called when the "show" command has been executed
         /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleShow")]
-        private void ConsoleShow(ConsoleSystem.Arg arg)
+        /// <param name="player"></param>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        [HookMethod("ShowCommand")]
+        private void ShowCommand(IPlayer player, string command, string[] args)
         {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg.Player())) return;
-            if (!arg.HasArgs())
+            if (!PermissionsLoaded(player)) return;
+            if (!player.IsAdmin || player.HasPermission("oxide.show"))
             {
-                Reply(arg, "CommandUsageShow");
+                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
             }
 
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
+            if (args.Length == 0)
+            {
+                player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                return;
+            }
+
+            var mode = args[0];
+            var name = args[1];
 
             if (mode.Equals("perms"))
             {
-                arg.ReplyWith("Permissions:\n" + string.Join(", ", permission.GetPermissions()));
+                player.Reply("Permissions:\n" + string.Join(", ", permission.GetPermissions())); // TODO: Localization
             }
             else if (mode.Equals("perm"))
             {
                 if (string.IsNullOrEmpty(name))
                 {
-                    Reply(arg, "CommandUsageShow");
+                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
                     return;
                 }
 
@@ -1066,27 +1096,27 @@ namespace Oxide.Game.Rust
                 result += string.Join(", ", permission.GetPermissionUsers(name));
                 result += $"\nPermission '{name}' Groups:\n";
                 result += string.Join(", ", permission.GetPermissionGroups(name));
-                arg.ReplyWith(result);
+                player.Reply(result);
             }
             else if (mode.Equals("user"))
             {
                 if (string.IsNullOrEmpty(name))
                 {
-                    Reply(arg, "CommandUsageShow");
+                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
                     return;
                 }
 
-                var target = FindPlayer(name);
+                var target = Covalence.PlayerManager.FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    Reply(arg, "UserNotFound", name);
+                    player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                     return;
                 }
                 var userId = name;
                 if (target != null)
                 {
-                    userId = target.UserIDString;
-                    name = target.displayName;
+                    userId = target.Id;
+                    name = target.Name;
                     permission.UpdateNickname(userId, name);
                     name += $" ({userId})";
                 }
@@ -1094,19 +1124,19 @@ namespace Oxide.Game.Rust
                 result += string.Join(", ", permission.GetUserPermissions(userId));
                 result += $"\nUser '{name}' groups:\n";
                 result += string.Join(", ", permission.GetUserGroups(userId));
-                arg.ReplyWith(result);
+                player.Reply(result);
             }
             else if (mode.Equals("group"))
             {
                 if (string.IsNullOrEmpty(name))
                 {
-                    Reply(arg, "CommandUsageShow");
+                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
                     return;
                 }
 
                 if (!permission.GroupExists(name))
                 {
-                    Reply(arg, "GroupNotFound", name);
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
                     return;
                 }
 
@@ -1121,11 +1151,11 @@ namespace Oxide.Game.Rust
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
                     parent = permission.GetGroupParent(parent);
                 }
-                arg.ReplyWith(result);
+                player.Reply(result);
             }
             else if (mode.Equals("groups"))
             {
-                arg.ReplyWith("Groups:\n" + string.Join(", ", permission.GetGroups()));
+                player.Reply("Groups:\n" + string.Join(", ", permission.GetGroups())); // TODO: Localization
             }
         }
 
@@ -1182,7 +1212,7 @@ namespace Oxide.Game.Rust
             if (player == null)
                 Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
             else if (!cmdlib.HandleChatCommand(player, cmd, args))
-                Reply(player, "UnknownCommand", cmd);
+                iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
 
             // Handled
             arg.ReplyWith(string.Empty);
@@ -1247,35 +1277,6 @@ namespace Oxide.Game.Rust
         #endregion
 
         #region Helpers
-
-        /// <summary>
-        /// Returns if specified player is admin
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        private static bool IsAdmin(BasePlayer player) => player == null || player.net.connection.authLevel >= 2;
-
-        /// <summary>
-        /// Replies to the player with a specific message
-        /// </summary>
-        /// <param name="arg"></param>
-        /// <param name="key"></param>
-        /// <param name="args"></param>
-        private void Reply(ConsoleSystem.Arg arg, string key, params object[] args)
-        {
-            arg.ReplyWith(string.Format(lang.GetMessage(key, this, arg.connection?.userid.ToString()), args));
-        }
-
-        /// <summary>
-        /// Replies to the player with a specific message
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="key"></param>
-        /// <param name="args"></param>
-        private void Reply(BasePlayer player, string key, params object[] args)
-        {
-            player.ChatMessage(string.Format(lang.GetMessage(key, this, player.UserIDString), args));
-        }
 
         /// <summary>
         /// Returns the BasePlayer for the specified name, ID, or IP address string
