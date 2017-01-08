@@ -581,7 +581,7 @@ namespace Oxide.Game.Rust
         [HookMethod("PluginsCommand")]
         private void PluginsCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin || player.HasPermission("oxide.plugins"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.plugins"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
@@ -628,7 +628,7 @@ namespace Oxide.Game.Rust
         [HookMethod("LoadCommand")]
         private void LoadCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin || player.HasPermission("oxide.load"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.load"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
@@ -667,7 +667,7 @@ namespace Oxide.Game.Rust
         [HookMethod("ReloadCommand")]
         private void ReloadCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin || player.HasPermission("oxide.reload"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.reload"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
@@ -702,7 +702,7 @@ namespace Oxide.Game.Rust
         [HookMethod("UnloadCommand")]
         private void UnloadCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin || player.HasPermission("oxide.unload"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.unload"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id));
                 return;
@@ -790,7 +790,7 @@ namespace Oxide.Game.Rust
         private void GroupCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin || player.HasPermission("oxide.group"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.group"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
@@ -870,7 +870,7 @@ namespace Oxide.Game.Rust
         private void UsergroupCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin || player.HasPermission("oxide.usergroup"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.usergroup"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
@@ -933,7 +933,7 @@ namespace Oxide.Game.Rust
         private void GrantCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin || player.HasPermission("oxide.grant"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.grant"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
@@ -999,7 +999,7 @@ namespace Oxide.Game.Rust
         private void RevokeCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin || player.HasPermission("oxide.revoke"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.revoke"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
@@ -1065,7 +1065,7 @@ namespace Oxide.Game.Rust
         private void ShowCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin || player.HasPermission("oxide.show"))
+            if (!player.IsAdmin || !player.HasPermission("oxide.show"))
             {
                 player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
                 return;
