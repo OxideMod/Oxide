@@ -36,6 +36,8 @@ namespace Oxide.Core
 
         public static void Collect()
         {
+            return;
+
             var payload = $"v=1&tid={trackingId}&cid={Identifier}&t=screenview&cd={Covalence.Game}+{Covalence.Server.Version}";
             payload += $"&an=Oxide&av={OxideMod.Version}&ul={Lang.GetServerLanguage()}";
             //payload += string.Join("&", Tags.Select(kv => kv.Key + "=" + kv.Value).ToArray());
