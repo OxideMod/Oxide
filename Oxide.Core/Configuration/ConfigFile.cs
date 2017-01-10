@@ -9,6 +9,7 @@ namespace Oxide.Core.Configuration
     /// </summary>
     public abstract class ConfigFile
     {
+        [JsonIgnore]
         public string Filename { get; private set; }
 
         protected ConfigFile(string filename)

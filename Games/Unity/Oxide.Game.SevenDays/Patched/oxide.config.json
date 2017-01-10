@@ -1,11 +1,16 @@
 {
-    "CustomConsole": true,
-    "InstanceCommandLines":
-    [
-        "{oxide.directory}",
-        "Data\\oxide",
-        "oxide"
-    ],
-    "ConfigDirectory": "config",
-    "ExtensionDirectory": "7DaysToDieServer_Data\\Managed"
+  "OxideConsole": {
+    "Enabled": true,
+    "MinimalistMode": true,
+    "ShowStatusBar": true,
+    "ShowStacktraces": false
+  },
+  "InstanceCommandLines":
+  [
+    "{oxide.directory}",
+    "Data\\oxide",
+    "oxide"
+  ],
+  "ConfigDirectory": "config",
+  "ExtensionDirectory": "7DaysToDieServer_Data\\Managed"
 }

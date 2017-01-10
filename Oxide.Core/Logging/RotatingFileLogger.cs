@@ -36,7 +36,7 @@ namespace Oxide.Core.Logging
         /// Processes the specified message
         /// </summary>
         /// <param name="message"></param>
-        protected override void ProcessMessage(LogMessage message) => writer.WriteLine(message.Message);
+        protected override void ProcessMessage(LogMessage message) => writer.WriteLine(message.LogfileMessage);
 
         /// <summary>
         /// Finishes a batch process operation

@@ -1,11 +1,16 @@
 {
-    "CustomConsole": false,
-    "InstanceCommandLines":
-    [
-        "{oxide.directory}",
-        "{datadir}\\oxide",
-        "serverdata\\oxide"
-    ],
-    "ConfigDirectory": "config",
-    "ExtensionDirectory": "rust_server_Data\\Managed"
+  "OxideConsole": {
+    "Enabled": true,
+    "MinimalistMode": true,
+    "ShowStatusBar": true,
+    "ShowStacktraces": false
+  },
+  "InstanceCommandLines":
+  [
+    "{oxide.directory}",
+    "{datadir}\\oxide",
+    "serverdata\\oxide"
+  ],
+  "ConfigDirectory": "config",
+  "ExtensionDirectory": "rust_server_Data\\Managed"
 }

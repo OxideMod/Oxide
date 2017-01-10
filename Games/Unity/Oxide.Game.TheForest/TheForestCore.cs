@@ -142,6 +142,9 @@ namespace Oxide.Game.TheForest
             // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");
 
+            CoopPeerStarter.Dedicated = true;
+            CoopPeerStarter.DedicatedHost = true;
+
             // Update server console window and status bars
             TheForestExtension.ServerConsole();
 
@@ -203,12 +206,12 @@ namespace Oxide.Game.TheForest
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", name, id, ip);
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
-                var coopKickToken = new CoopKickToken
+                /*var coopKickToken = new CoopKickToken
                 {
                     KickMessage = canLogin is string ? canLogin.ToString() : "Connection was rejected", // TODO: Localization
                     Banned = false
                 };
-                connection.Disconnect(coopKickToken);
+                connection.Disconnect(coopKickToken);*/
                 return true;
             }
 
@@ -362,10 +365,7 @@ namespace Oxide.Game.TheForest
         [HookMethod("ICutScene")]
         private void ICutScene(TriggerCutScene scene)
         {
-            CoopPeerStarter.Dedicated = true;
-            CoopPeerStarter.DedicatedHost = true;
-
-            /*Scene.TriggerCutScene.SpaceTut.SetActive(false);
+            Scene.TriggerCutScene.SpaceTut.SetActive(false);
             Scene.TriggerCutScene.LightsFlight.SetActive(false);
             Scene.TriggerCutScene.pmTrigger.SendEvent("toSkipOpening");
             //Scene.TriggerCutScene.skipOpening = true;
@@ -381,7 +381,7 @@ namespace Oxide.Game.TheForest
             Scene.PlaneGreebles.transform.rotation = scene.planeController.transform.rotation;
             Scene.PlaneGreebles.SetActive(true);
 
-            UnityEngine.Object.Destroy(scene);*/
+            UnityEngine.Object.Destroy(scene);
         }
 
         /// <summary>

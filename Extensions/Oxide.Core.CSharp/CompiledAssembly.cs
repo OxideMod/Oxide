@@ -216,15 +216,20 @@ namespace Oxide.Plugins
                     {
                         patchModuleType(type);
 
+                        if (IsCompilerGenerated(type)) continue;
+
                         if (type.Namespace == "Oxide.Plugins")
                         {
                             if (PluginNames.Contains(type.Name))
                             {
-                                var constructor = type.Methods.FirstOrDefault(m => !m.IsStatic && m.IsConstructor && !m.HasParameters && !m.IsPublic);
+                                var constructor =
+                                    type.Methods.FirstOrDefault(
+                                        m => !m.IsStatic && m.IsConstructor && !m.HasParameters && !m.IsPublic);
                                 if (constructor != null)
                                 {
                                     var plugin = CompilablePlugins.SingleOrDefault(p => p.Name == type.Name);
-                                    if (plugin != null) plugin.CompilerErrors = "Primary constructor in main class must be public";
+                                    if (plugin != null)
+                                        plugin.CompilerErrors = "Primary constructor in main class must be public";
                                 }
                                 else
                                 {
@@ -233,9 +238,15 @@ namespace Oxide.Plugins
                             }
                             else
                             {
-                                Interface.Oxide.LogWarning($"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
+                                Interface.Oxide.LogWarning(
+                                    $"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
                                 //RemoteLogger.Info($"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
                             }
+                        }
+                        else if (type.FullName != "<Module>")
+                        {
+                            if (!PluginNames.Any(plugin => type.FullName.StartsWith($"Oxide.Plugins.{plugin}")))
+                                Interface.Oxide.LogWarning($"A plugin has polluted the global namespace by defining {type.FullName}: {PluginNames.ToSentence()}");
                         }
                     }
 
@@ -282,6 +293,8 @@ namespace Oxide.Plugins
         }
 
         public bool IsOutdated() => CompilablePlugins.Any(pl => pl.GetLastModificationTime() != CompiledAt);
+
+        private bool IsCompilerGenerated(TypeDefinition type) => type.CustomAttributes.Any(attr => attr.Constructor.DeclaringType.ToString().Contains("CompilerGeneratedAttribute"));
 
         private static bool IsNamespaceBlacklisted(string fullNamespace)
         {

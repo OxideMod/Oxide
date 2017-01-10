@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Oxide.Core.Logging
 {
-    public enum LogType { Info, Debug, Warning, Error }
+    public enum LogType { Info, Debug, Warning, Error, Stacktrace }
 
     /// <summary>
     /// Represents a logger
@@ -16,7 +16,8 @@ namespace Oxide.Core.Logging
         public struct LogMessage
         {
             public LogType Type;
-            public string Message;
+            public string ConsoleMessage;
+            public string LogfileMessage;
         }
 
         // The message queue
@@ -45,8 +46,21 @@ namespace Oxide.Core.Logging
         /// <returns></returns>
         protected LogMessage CreateLogMessage(LogType type, string format, object[] args)
         {
-            var msg = new LogMessage { Type = type, Message = format };
-            if (args.Length != 0) msg.Message = string.Format(msg.Message, args);
+            var msg = new LogMessage
+            {
+                Type = type,
+                ConsoleMessage = $"[Oxide] {DateTime.Now.ToShortTimeString()} [{type}] {format}",
+                LogfileMessage = $"{DateTime.Now.ToShortTimeString()} [{type}] {format}"
+            };
+            if (Interface.Oxide.Config.Console.MinimalistMode)
+            {
+                msg.ConsoleMessage = format;
+            }
+            if (args.Length != 0)
+            {
+                msg.ConsoleMessage = string.Format(msg.ConsoleMessage, args);
+                msg.LogfileMessage = string.Format(msg.LogfileMessage, args);
+            }
             return msg;
         }
 
@@ -101,9 +115,9 @@ namespace Oxide.Core.Logging
             }
             var outerEx = ex;
             while (ex.InnerException != null) ex = ex.InnerException;
-            if (outerEx.GetType() != ex.GetType()) Write(LogType.Debug, "ExType: {0}", outerEx.GetType().Name);
+            if (outerEx.GetType() != ex.GetType()) Write(LogType.Stacktrace, "ExType: {0}", outerEx.GetType().Name);
             Write(LogType.Error, $"{message} ({ex.GetType().Name}: {ex.Message})");
-            Write(LogType.Debug, "{0}", ex.StackTrace);
+            Write(LogType.Stacktrace, "{0}", ex.StackTrace);
         }
 
         /// <summary>

@@ -1,10 +1,15 @@
 {
-    "CustomConsole": true,
-    "InstanceCommandLines":
-    [
-        "{oxide.directory}",
-        "saves\\oxide"
-    ],
-    "ConfigDirectory": "config",
-    "ExtensionDirectory": "ROK_Data\\Managed"
+  "OxideConsole": {
+    "Enabled": true,
+    "MinimalistMode": true,
+    "ShowStatusBar": true,
+    "ShowStacktraces": false
+  },
+  "InstanceCommandLines":
+  [
+    "{oxide.directory}",
+    "saves\\oxide"
+  ],
+  "ConfigDirectory": "config",
+  "ExtensionDirectory": "ROK_Data\\Managed"
 }

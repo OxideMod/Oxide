@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Newtonsoft.Json;
 
 namespace Oxide.Core.Configuration
 {
@@ -8,30 +9,57 @@ namespace Oxide.Core.Configuration
     public class OxideConfig : ConfigFile
     {
         /// <summary>
-        /// Gets or sets the directory to find extensions (relative to the startup path)
+        /// Settings for the custom Oxide console
         /// </summary>
-        public string ExtensionDirectory { get; set; }
+        public class OxideConsole
+        {
+            /// <summary>
+            /// Gets or sets if the Oxide console should be setup
+            /// </summary>
+            public bool Enabled { get; set; }
+
+            /// <summary>
+            /// Gets or sets if the Oxide console should run in minimalist mode (no tags in the console)
+            /// </summary>
+            public bool MinimalistMode { get; set; }
+
+            /// <summary>
+            /// Gets or sets if the Oxide console should show the toolbar on the bottom with server information
+            /// </summary>
+            public bool ShowStatusBar { get; set; }
+
+            /// <summary>
+            /// Gets or sets if the Oxide console should show the stacktrace when an error occurs
+            /// </summary>
+            public bool ShowStacktraces { get; set; }
+        }
 
         /// <summary>
-        /// Gets or sets the directory to find plugin config files (relative to the instance path)
-        /// Gets or sets if the Oxide console should be setup
+        /// Gets or sets information regarding the Oxide Console
         /// </summary>
-        public string ConfigDirectory { get; set; }
+        [JsonProperty(PropertyName = "OxideConsole")]
+        public OxideConsole Console { get; set; }
 
         /// <summary>
         /// Gets or sets the default permissions group for new players
         /// </summary>
+        [JsonIgnore] // Ignored for now until this is implemented
         public string DefaultGroup { get; set; }
-
-        /// <summary>
-        /// Gets or sets if the Oxide console should be setup
-        /// </summary>
-        public bool CustomConsole { get; set; }
 
         /// <summary>
         /// Gets or sets the command line arguments to search for the instance directory
         /// </summary>
         public string[] InstanceCommandLines { get; set; }
+
+        /// <summary>
+        /// Gets or sets the directory to find plugin config files (relative to the instance path)
+        /// </summary>
+        public string ConfigDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the directory to find extensions (relative to the startup path)
+        /// </summary>
+        public string ExtensionDirectory { get; set; }
 
         /// <summary>
         /// Sets defaults for Oxide configuration
@@ -40,7 +68,7 @@ namespace Oxide.Core.Configuration
         {
             ConfigDirectory = "config";
             DefaultGroup = "default";
-            CustomConsole = false;
+            Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true};
         }
 
         /// <summary>

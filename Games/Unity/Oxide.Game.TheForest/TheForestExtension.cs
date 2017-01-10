@@ -261,8 +261,8 @@ namespace Oxide.Game.TheForest
 
             if (!Directory.Exists("logs")) Directory.CreateDirectory("logs");
             if (File.Exists(logFileName)) File.Delete(logFileName);
-            logStream = File.AppendText(logFileName);
             logStream.AutoFlush = true;
+            logStream = File.AppendText(logFileName);
             logWriter = TextWriter.Synchronized(logStream);
             Application.logMessageReceivedThreaded += HandleLog;
 
