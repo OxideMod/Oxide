@@ -216,6 +216,8 @@ namespace Oxide.Plugins
                     {
                         patchModuleType(type);
 
+                        if (IsCompilerGenerated(type)) continue;
+
                         if (type.Namespace == "Oxide.Plugins")
                         {
                             if (PluginNames.Contains(type.Name))
@@ -243,8 +245,8 @@ namespace Oxide.Plugins
                         }
                         else if (type.FullName != "<Module>")
                         {
-                            Interface.Oxide.LogWarning(
-                                $"A plugin has polluted the global namespace by defining {type.FullName}: {PluginNames.ToSentence()}");
+                            if (!PluginNames.Any(plugin => type.FullName.StartsWith($"Oxide.Plugins.{plugin}")))
+                                Interface.Oxide.LogWarning($"A plugin has polluted the global namespace by defining {type.FullName}: {PluginNames.ToSentence()}");
                         }
                     }
 
@@ -291,6 +293,8 @@ namespace Oxide.Plugins
         }
 
         public bool IsOutdated() => CompilablePlugins.Any(pl => pl.GetLastModificationTime() != CompiledAt);
+
+        private bool IsCompilerGenerated(TypeDefinition type) => type.CustomAttributes.Any(attr => attr.Constructor.DeclaringType.ToString().Contains("CompilerGeneratedAttribute"));
 
         private static bool IsNamespaceBlacklisted(string fullNamespace)
         {
