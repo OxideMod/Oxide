@@ -182,10 +182,10 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             LocalPlayer.Entity.GetState<IPlayerState>().name = "Server";
 
             // Create and send the chat event
-            var entity = ChatEvent.Create(GlobalTargets.Others);
-            entity.Message = message;
-            entity.Sender = LocalPlayer.Entity.networkId;
-            entity.Send();
+            var chatEvent = ChatEvent.Create(GlobalTargets.Others);
+            chatEvent.Message = message;
+            chatEvent.Sender = LocalPlayer.Entity.networkId;
+            chatEvent.Send();
 
             Debug.Log($"[Broadcast] {message}");
         }

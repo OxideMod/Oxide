@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
-using Steamworks;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using ProtoBuf;
+using Steamworks;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -68,6 +68,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         internal void NotifyPlayerConnect(BoltEntity entity)
         {
+            NotifyPlayerJoin(entity);
             var id = entity.source.RemoteEndPoint.SteamId.Id;
             connectedPlayers[id.ToString()] = new TheForestPlayer(entity);
         }
