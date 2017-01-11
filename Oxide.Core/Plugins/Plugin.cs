@@ -34,7 +34,7 @@ namespace Oxide.Core.Plugins
         public string Name
         {
             get { return name; }
-            set { if (string.IsNullOrEmpty(Name)) name = value; }
+            set { if (string.IsNullOrEmpty(Name) || name == GetType().Name) name = value; }
         }
 
         /// <summary>
