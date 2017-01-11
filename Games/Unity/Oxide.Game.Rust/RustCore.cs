@@ -804,6 +804,8 @@ namespace Oxide.Game.Rust
 
             var mode = args[0];
             var group = args[1];
+            var title = args.Length >= 3 ? args[2] : "";
+            var rank = args.Length == 4 ? int.Parse(args[3]) : 0;
 
             if (mode.Equals("add"))
             {
