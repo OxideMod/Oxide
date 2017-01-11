@@ -90,7 +90,7 @@ namespace Oxide.Core
         // Allow extensions to register a method to be called every frame
         private Action<float> onFrame;
         private bool isInitialized;
-        private bool hasLoadedCorePlugins;
+        public bool HasLoadedCorePlugins { get; private set; }
 
         public ServerConsole.ServerConsole ServerConsole;
 
@@ -300,9 +300,8 @@ namespace Oxide.Core
             var loaders = extensionManager.GetPluginLoaders();
 
             // Load all core plugins first
-            if (!hasLoadedCorePlugins)
+            if (!HasLoadedCorePlugins)
             {
-                hasLoadedCorePlugins = true;
                 foreach (var loader in loaders)
                 {
                     foreach (var type in loader.CorePlugins)
@@ -319,6 +318,7 @@ namespace Oxide.Core
                         }
                     }
                 }
+                HasLoadedCorePlugins = true;
             }
 
             // Scan the plugin directory and load all reported plugins
