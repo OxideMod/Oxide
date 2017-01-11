@@ -199,7 +199,7 @@ namespace Oxide.Core.Libraries
             set.Add(name);
 
             var prefix = owner.Name.ToLower() + ".";
-            if (!name.StartsWith(prefix))
+            if (!name.StartsWith(prefix) && !owner.IsCorePlugin)
                 Interface.Oxide.LogWarning("Missing plugin name prefix '{0}' for permission '{1}' (by plugin '{2}')", prefix, name, owner.Title);
         }
 
