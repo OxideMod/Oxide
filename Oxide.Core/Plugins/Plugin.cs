@@ -29,7 +29,13 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Gets the internal name of this plugin
         /// </summary>
-        public string Name { get; protected set; }
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { if (string.IsNullOrEmpty(Name)) name = value; }
+        }
 
         /// <summary>
         /// Gets the user-friendly title of this plugin
@@ -69,7 +75,13 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Gets if this plugin should never be unloaded
         /// </summary>
-        public bool IsCorePlugin { get; set; }
+        private bool isCorePlugin;
+
+        public bool IsCorePlugin
+        {
+            get { return isCorePlugin; }
+            set { if (!Interface.Oxide.HasLoadedCorePlugins) isCorePlugin = value; }
+        }
 
         /// <summary>
         /// Gets the PluginLoader which loaded this plugin
@@ -315,7 +327,8 @@ namespace Oxide.Core.Plugins
                 LoadDefaultConfig();
                 SaveConfig();
             }
-            try { 
+            try
+            {
                 Config.Load();
             }
             catch (Exception ex)

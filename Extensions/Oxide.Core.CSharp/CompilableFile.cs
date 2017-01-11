@@ -46,7 +46,7 @@ namespace Oxide.Plugins
             Directory = directory;
             ScriptName = name;
             ScriptPath = Path.Combine(Directory, $"{ScriptName}.cs");
-            Name = Regex.Replace(Regex.Replace(ScriptName, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
+            Name = Regex.Replace(ScriptName, "_", "");
             CheckLastModificationTime();
         }
 

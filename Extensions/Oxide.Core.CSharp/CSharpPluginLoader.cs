@@ -17,7 +17,7 @@ namespace Oxide.Plugins
 
         public static CompilablePlugin GetCompilablePlugin(string directory, string name)
         {
-            var className = Regex.Replace(Regex.Replace(name, @"(?:^|_)([a-z])", m => m.Groups[1].Value.ToUpper()), "_", "");
+            var className = Regex.Replace(name, "_", "");
             CompilablePlugin plugin;
             if (!plugins.TryGetValue(className, out plugin))
             {
