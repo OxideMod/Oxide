@@ -185,8 +185,8 @@ namespace Oxide.Plugins
                     var className = match.Groups[1].Value;
                     if (className != plugin.Name)
                     {
-                        Interface.Oxide.LogError($"Plugin filename is incorrect: {plugin.ScriptName}.cs (should be {className}.cs)");
-                        plugin.CompilerErrors = $"Filename is incorrect: {plugin.ScriptName}.cs (should be {className}.cs)";
+                        Interface.Oxide.LogError($"Plugin filename {plugin.ScriptName}.cs must match the main class {className} (should be {className}.cs)");
+                        plugin.CompilerErrors = $"Plugin filename {plugin.ScriptName}.cs must match the main class {className} (should be {className}.cs)";
                         RemovePlugin(plugin);
                     }
 
