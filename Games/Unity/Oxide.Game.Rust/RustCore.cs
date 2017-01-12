@@ -814,7 +814,7 @@ namespace Oxide.Game.Rust
                     player.Reply(lang.GetMessage("GroupAlreadyExists", this, player.Id), group);
                     return;
                 }
-                permission.CreateGroup(group, args[2], int.Parse(args[3]));
+                permission.CreateGroup(group, title, rank);
                 player.Reply(lang.GetMessage("GroupCreated", this, player.Id), group);
             }
             else if (mode.Equals("remove"))
