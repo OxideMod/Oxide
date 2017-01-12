@@ -744,9 +744,9 @@ namespace Oxide.Game.Rust
             }
             else
             {
-                player.Reply($"Protocol: {Server.Protocol}\nBuild Version: {BuildInformation.VersionStampDays}\n");
-                //$"Build Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\n" +
-                //$"Changeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
+                player.Reply($"Protocol: {Server.Protocol}\nBuild Version: {BuildInformation.VersionStampDays}\n" +
+                $"Build Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\n" +
+                $"Changeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
             }
         }
 
