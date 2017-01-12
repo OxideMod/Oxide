@@ -13,7 +13,6 @@ using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
-using Rust;
 using UnityEngine;
 
 namespace Oxide.Game.Rust
@@ -37,6 +36,7 @@ namespace Oxide.Game.Rust
 
         // The covalence provider
         internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
+        internal static readonly IServer Server = Covalence.CreateServer();
 
         #region Localization
 
