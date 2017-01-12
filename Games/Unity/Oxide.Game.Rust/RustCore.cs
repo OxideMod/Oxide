@@ -737,12 +737,17 @@ namespace Oxide.Game.Rust
         [HookMethod("VersionCommand")]
         private void VersionCommand(IPlayer player, string command, string[] args)
         {
-            if (command == "oxide.version")
-                player.Reply($"Oxide {OxideMod.Version} for {Title} {BuildInformation.VersionStampDays} ({Protocol.network})");
-            else if (command == "version")
-                player.Reply($"Protocol: {Protocol.printable}\nBuild Version: {BuildInformation.VersionStampDays}\n" +
-                             $"Build Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\n" +
-                             $"Changeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
+            if (player.Id != "server_console")
+            {
+                var format = Covalence.FormatText("[+15]Server is running [b][#ffb658]Oxide {0}[/#][/b] and [b][#ee715c]{1} {2}[/#][/b][/+]");
+                player.Reply(format, OxideMod.Version, Covalence.GameName, Server.Version);
+            }
+            else
+            {
+                player.Reply($"Protocol: {Server.Protocol}\nBuild Version: {BuildInformation.VersionStampDays}\n" +
+                $"Build Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\n" +
+                $"Changeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
+            }
         }
 
         #endregion
@@ -814,7 +819,7 @@ namespace Oxide.Game.Rust
                     player.Reply(lang.GetMessage("GroupAlreadyExists", this, player.Id), group);
                     return;
                 }
-                permission.CreateGroup(group, args[2], int.Parse(args[3]));
+                permission.CreateGroup(group, title, rank);
                 player.Reply(lang.GetMessage("GroupCreated", this, player.Id), group);
             }
             else if (mode.Equals("remove"))
