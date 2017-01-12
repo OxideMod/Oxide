@@ -49,7 +49,7 @@ namespace Oxide.Game.Rust
             {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
             {"CommandUsageReload", "Usage: reload *|<pluginname>+"},
             {"CommandUsageRevoke", "Usage: revoke <group|user> <name|id> <permission>"},
-            {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"},
+            {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"}, // TODO: Split this up
             {"CommandUsageUnload", "Usage: unload *|<pluginname>+"},
             {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
             {"GroupAlreadyExists", "Group '{0}' already exists"},
@@ -160,7 +160,7 @@ namespace Oxide.Game.Rust
             AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand");
             AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand");
             AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand");
-            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UsergroupCommand");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand");
 
             // Register core permissions
             permission.RegisterPermission("oxide.plugins", this);
@@ -343,7 +343,8 @@ namespace Oxide.Game.Rust
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(player.UserIDString));
+            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
 
         /// <summary>
@@ -355,7 +356,8 @@ namespace Oxide.Game.Rust
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(player.UserIDString), reason);
+            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, reason);
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
 
             playerInputState.Remove(player);
@@ -370,7 +372,8 @@ namespace Oxide.Game.Rust
         private object OnPlayerRespawn(BasePlayer player)
         {
             // Call covalence hook
-            return Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayer(player.UserIDString));
+            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            return iplayer != null ? Interface.Call("OnUserRespawn", iplayer) : null;
         }
 
         /// <summary>
@@ -381,7 +384,8 @@ namespace Oxide.Game.Rust
         private void OnPlayerRespawned(BasePlayer player)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawned", Covalence.PlayerManager.FindPlayer(player.UserIDString));
+            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            if (iplayer != null) Interface.Call("OnUserRespawned", iplayer);
         }
 
         /// <summary>
@@ -861,11 +865,12 @@ namespace Oxide.Game.Rust
                 else
                     player.Reply(lang.GetMessage("GroupParentNotChanged", this, player.Id), group);
             }
+            else player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
         }
 
         #endregion
 
-        #region Usergroup Command
+        #region User Group Command
 
         /// <summary>
         /// Called when the "usergroup" command has been executed
@@ -873,8 +878,8 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        [HookMethod("UsergroupCommand")]
-        private void UsergroupCommand(IPlayer player, string command, string[] args)
+        [HookMethod("UserGroupCommand")]
+        private void UserGroupCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
             if (!player.IsAdmin && !player.HasPermission("oxide.usergroup"))
@@ -924,6 +929,7 @@ namespace Oxide.Game.Rust
                 permission.RemoveUserGroup(userId, group);
                 player.Reply(lang.GetMessage("UserRemovedFromGroup", this, player.Id), name, group);
             }
+            else player.Reply(lang.GetMessage("CommandUsageUserGroup", this, player.Id));
         }
 
         #endregion
@@ -990,6 +996,7 @@ namespace Oxide.Game.Rust
                 permission.GrantUserPermission(userId, perm, null);
                 player.Reply(lang.GetMessage("UserPermissionGranted", this, player.Id), $"{name} ({userId})", perm);
             }
+            else player.Reply(lang.GetMessage("CommandUsageGrant", this, player.Id));
         }
 
         #endregion
@@ -1056,6 +1063,7 @@ namespace Oxide.Game.Rust
                 permission.RevokeUserPermission(userId, perm);
                 player.Reply(lang.GetMessage("UserPermissionRevoked", this, player.Id), $"{name} ({userId})", perm);
             }
+            else player.Reply(lang.GetMessage("CommandUsageRevoke", this, player.Id));
         }
 
         #endregion
@@ -1085,7 +1093,7 @@ namespace Oxide.Game.Rust
             }
 
             var mode = args[0];
-            var name = args[1];
+            var name = args.Length == 2 ? args[1] : "";
 
             if (mode.Equals("perms"))
             {
@@ -1164,6 +1172,7 @@ namespace Oxide.Game.Rust
             {
                 player.Reply("Groups:\n" + string.Join(", ", permission.GetGroups())); // TODO: Localization
             }
+            else player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
         }
 
         #endregion
