@@ -1,9 +1,9 @@
 ﻿using System;
-using Sandbox;
-using Sandbox.Engine.Multiplayer;
-using Sandbox.Game;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Sandbox;
+using Sandbox.Engine.Multiplayer;
+using VRage.Game;
 
 namespace Oxide.Game.MedievalEngineers
 {
@@ -102,7 +102,7 @@ namespace Oxide.Game.MedievalEngineers
                 var time = DateTime.Today.AddSeconds(Main.mapTime).ToString("h:mm tt").ToLower();
                 return string.Concat(" ", time); // TODO: More info
             };*/
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {MyPerGameSettings.BasicGameInfo.GameVersion}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {MyFinalBuildConstants.GAME_VERSION}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
