@@ -1182,34 +1182,32 @@ namespace Oxide.Game.Rust
         #region Command Handling
 
         /// <summary>
-        /// Called when a console command was run
+        /// Called when a command was run
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        [HookMethod("OnServerCommand")]
-        private object OnServerCommand(ConsoleSystem.Arg arg)
+        [HookMethod("IOnServerCommand")]
+        private object IOnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
-            if (arg.cmd.namefull != "chat.say") return null;
 
-            // Get the args
-            var str = arg.GetString(0);
-            if (string.IsNullOrEmpty(str)) return null;
+            // Is it a server command?
+            var serverCommand = Interface.Call("OnServerCommand", arg);
+            if (serverCommand != null) return true;
 
-            // Is it a chat command?
-            if (str[0] != '/') return null;
+            // Check if from a player
+            var player = arg.connection?.player as BasePlayer;
+            if (player == null) return null;
 
             // Get the full command
-            var message = str.Substring(1);
+            var command = arg.cmd.namefull == "chat.say" ? arg.GetString(0) : $"{arg.cmd.namefull} {arg.ArgsStr}";
+            if (string.IsNullOrEmpty(command)) return null;
 
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(message, out cmd, out args);
+            ParseChatCommand(command, out cmd, out args);
             if (cmd == null) return null;
-
-            // Check if command is from a player
-            if (arg.connection == null) return null;
 
             // Get the covalence player
             var iplayer = Covalence.PlayerManager.FindPlayer(arg.connection.userid.ToString());
@@ -1221,18 +1219,14 @@ namespace Oxide.Game.Rust
             if (blockedSpecific != null || blockedCovalence != null) return true;
 
             // Is it a covalance command?
-            if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, command)) return true;
 
             // Is it a regular chat command?
-            var player = arg.connection.player as BasePlayer;
-            if (player == null)
-                Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
-            else if (!cmdlib.HandleChatCommand(player, cmd, args))
-                iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+            if (arg.cmd.namefull == "chat.say" && !cmdlib.HandleChatCommand(player, cmd, args)) iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
 
             // Handled
             arg.ReplyWith(string.Empty);
-            return true;
+            return null;
         }
 
         /// <summary>
