@@ -5,8 +5,8 @@ using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
-using Sandbox.Game;
 using Sandbox.Game.World;
+using VRage.Game;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
@@ -22,7 +22,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return MySandboxGame.ConfigDedicated.ServerName; } // TODO: Empty?!
+            get { return string.IsNullOrEmpty(MySandboxGame.ConfigDedicated.ServerName) ? "Unnamed server" : MySandboxGame.ConfigDedicated.ServerName; }
             set { MySandboxGame.ConfigDedicated.ServerName = value; }
         }
 
@@ -59,7 +59,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <summary>
         /// Gets the version or build number of the server
         /// </summary>
-        public string Version => MyPerGameSettings.BasicGameInfo.GameVersion.ToString();
+        public string Version => MyFinalBuildConstants.APP_VERSION.FormattedText.ToString().Replace('_', '.');
 
         /// <summary>
         /// Gets the network protocol version of the server

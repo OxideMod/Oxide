@@ -3,7 +3,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.SpaceEngineers.Libraries.Covalence;
-using Sandbox.Game;
+using VRage.Game;
 
 namespace Oxide.Game.SpaceEngineers
 {
@@ -58,7 +58,7 @@ namespace Oxide.Game.SpaceEngineers
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", MyPerGameSettings.BasicGameInfo.GameVersion.ToString());
+            RemoteLogger.SetTag("game version", MyFinalBuildConstants.APP_VERSION.FormattedText.ToString().Replace('_', '.'));
 
             // Setup the default permission groups
             if (permission.IsLoaded)
