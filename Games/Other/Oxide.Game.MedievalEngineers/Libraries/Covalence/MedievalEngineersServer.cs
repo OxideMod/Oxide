@@ -22,7 +22,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return MySandboxGame.ConfigDedicated.ServerName; } // TODO: Empty?!
+            get { return string.IsNullOrEmpty(MySandboxGame.ConfigDedicated.ServerName) ? "Unnamed server" : MySandboxGame.ConfigDedicated.ServerName; }
             set { MySandboxGame.ConfigDedicated.ServerName = value; }
         }
 
