@@ -75,7 +75,7 @@ namespace Oxide.Core.ServerConsole
         public void AddMessage(string message, ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
-            input.ClearLine(input.StatusTextLeft.Length + message.Count(c => c == '\n'));
+            input.ClearLine((Interface.Oxide.Config.Console.ShowStatusBar ? input.StatusTextLeft.Length : 0) + message.Split('\n').Sum(line => (int)Math.Ceiling((double)line.Length / Console.BufferWidth)));
             Console.WriteLine(message);
             input.RedrawInputLine();
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -114,10 +114,10 @@ namespace Oxide.Core.ServerConsole
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.input.ClearLine(Interface.Oxide.ServerConsole.input.StatusTextLeft.Length);
+            Interface.Oxide.ServerConsole.input.ClearLine(Interface.Oxide.Config.Console.ShowStatusBar ? Interface.Oxide.ServerConsole.input.StatusTextLeft.Length : 1);
             for (var i = 0; i < objects.Length; i++)
             {
-                if (i%2 != 0)
+                if (i % 2 != 0)
                     Console.Write((string)objects[i]);
                 else
                     Console.ForegroundColor = (ConsoleColor)((int)objects[i]);

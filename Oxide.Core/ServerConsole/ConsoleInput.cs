@@ -38,13 +38,14 @@ namespace Oxide.Core.ServerConsole
                 Console.CursorTop = Console.CursorTop + 1;
                 for (var i = 0; i < StatusTextLeft.Length; i++)
                 {
+                    if (!Interface.Oxide.Config.Console.ShowStatusBar) break;
                     Console.CursorLeft = 0;
                     Console.ForegroundColor = StatusTextLeftColor[i];
                     Console.Write(StatusTextLeft[i].Substring(0, Math.Min(StatusTextLeft[i].Length, LineWidth - 1)));
                     Console.ForegroundColor = StatusTextRightColor[i];
                     Console.Write(StatusTextRight[i].PadRight(LineWidth));
                 }
-                Console.CursorTop = Console.CursorTop - (StatusTextLeft.Length + 1);
+                Console.CursorTop = Console.CursorTop - (Interface.Oxide.Config.Console.ShowStatusBar ? StatusTextLeft.Length + 1 : 1);
                 Console.CursorLeft = 0;
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -84,7 +85,7 @@ namespace Oxide.Core.ServerConsole
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Enter:
-                    ClearLine(StatusTextLeft.Length);
+                    ClearLine(Interface.Oxide.Config.Console.ShowStatusBar ? StatusTextLeft.Length : 1);
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine(string.Concat("> ", inputString));
                     inputHistory.Insert(0, inputString);
@@ -127,7 +128,7 @@ namespace Oxide.Core.ServerConsole
                     if (results == null || results.Length == 0) return;
                     if (results.Length > 1)
                     {
-                        ClearLine(StatusTextLeft.Length + 1);
+                        ClearLine(Interface.Oxide.Config.Console.ShowStatusBar ? StatusTextLeft.Length + 1 : 1);
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         var lowestDiff = results.Max(r => r.Length);
                         for (var index = 0; index < results.Length; index++)
