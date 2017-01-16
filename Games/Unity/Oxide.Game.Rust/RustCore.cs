@@ -44,6 +44,7 @@ namespace Oxide.Game.Rust
         private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
         private readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
+            {"CommandUsageLang", "Usage: lang <two-digit language code"},
             {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
             {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
             {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
@@ -769,7 +770,7 @@ namespace Oxide.Game.Rust
         {
             if (args.Length < 1)
             {
-                player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageLang", this, player.Id));
                 return;
             }
 
