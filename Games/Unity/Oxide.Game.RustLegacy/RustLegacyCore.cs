@@ -866,8 +866,8 @@ namespace Oxide.Game.RustLegacy
                 netUser.Kick(NetError.ConnectionBanned, true);
                 return false;
             }
-            Interface.Oxide.CallHook("OnPlayerMove", netUser, pos);
-            return null;
+
+            return Interface.Oxide.CallHook("OnPlayerMove", netUser, pos);
         }
 
         /// <summary>

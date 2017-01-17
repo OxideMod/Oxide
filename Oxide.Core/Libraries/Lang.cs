@@ -253,7 +253,9 @@ namespace Oxide.Core.Libraries
                 {
                     if (!lang.Equals(langData.Lang)) return GetMessageIntern(key, plugin, langData.Lang);
                     langFile = GetMessagesIntern(plugin.Name);
-                    return langFile.TryGetValue(key, out message) ? message : key;
+                    if (langFile != null) return langFile.TryGetValue(key, out message) ? message : key;
+                    Interface.Oxide.LogWarning($"Plugin `{plugin.Name}` is using the Lang API but has no messages registered");
+                    return key;
                 }
                 AddLangFile(file, langFile, plugin);
             }

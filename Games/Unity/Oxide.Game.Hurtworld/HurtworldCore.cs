@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Steamworks;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.Hurtworld.Libraries;
 using Oxide.Game.Hurtworld.Libraries.Covalence;
+using Steamworks;
+using UnityEngine;
 
 namespace Oxide.Game.Hurtworld
 {
@@ -451,7 +451,7 @@ namespace Oxide.Game.Hurtworld
         /// <param name="go"></param>
         /// <returns></returns>
         [HookMethod("ICanEnterVehicle")]
-        private object ICanEnterVehicle(PlayerSession session, GameObject go) => Interface.Call("CanExitVehicle", session, go.GetComponent<VehiclePassenger>());
+        private object ICanEnterVehicle(PlayerSession session, GameObject go) => Interface.Call("CanEnterVehicle", session, go.GetComponent<VehiclePassenger>());
 
         /// <summary>
         /// Called when a player tries to exit a vehicle
@@ -1585,7 +1585,7 @@ namespace Oxide.Game.Hurtworld
         /// <param name="args"></param>
         private static void Reply(string message, PlayerSession session = null, params object[] args)
         {
-            if (session == null)
+            if (session == null || !session.Player.isConnected)
             {
                 Interface.Oxide.LogInfo(message, args);
                 return;
