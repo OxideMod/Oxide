@@ -55,7 +55,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(PlayerSession session, string name, string message = null)
         {
-            ChatManagerServer.Instance.RPC("RelayChat", session.Player, message != null ? $"{name} {message}" : name);
+            if (session.Player.isConnected) ChatManagerServer.Instance.RPC("RelayChat", session.Player, message != null ? $"{name} {message}" : name);
         }
 
         #endregion
