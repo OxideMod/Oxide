@@ -451,7 +451,7 @@ namespace Oxide.Game.Hurtworld
         /// <param name="go"></param>
         /// <returns></returns>
         [HookMethod("ICanEnterVehicle")]
-        private object ICanEnterVehicle(PlayerSession session, GameObject go) => Interface.Call("CanExitVehicle", session, go.GetComponent<VehiclePassenger>());
+        private object ICanEnterVehicle(PlayerSession session, GameObject go) => Interface.Call("CanEnterVehicle", session, go.GetComponent<VehiclePassenger>());
 
         /// <summary>
         /// Called when a player tries to exit a vehicle
