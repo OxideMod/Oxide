@@ -1217,6 +1217,9 @@ namespace Oxide.Game.Rust
             var command = arg.cmd.namefull == "chat.say" ? arg.GetString(0) : $"{arg.cmd.namefull} {arg.ArgsStr}";
             if (string.IsNullOrEmpty(command)) return null;
 
+            // Is it a chat command?
+            if (arg.cmd.namefull == "chat.say" && !command.StartsWith("/")) return null;
+
             // Parse it
             string cmd;
             string[] args;
@@ -1235,12 +1238,12 @@ namespace Oxide.Game.Rust
             // Is it a covalance command?
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, command)) return true;
 
-            // Is it a regular chat command?
-            if (arg.cmd.namefull == "chat.say" && !cmdlib.HandleChatCommand(player, cmd, args)) iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+            // Is it a specific chat command?
+            if (!cmdlib.HandleChatCommand(player, cmd, args)) iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
 
             // Handled
             arg.ReplyWith(string.Empty);
-            return null;
+            return true;
         }
 
         /// <summary>
