@@ -149,8 +149,9 @@ namespace Oxide.Core
         public static string[] ExceptionFilter =
         {
             "BadImageFormatException",
-            "DllNotFoundException: lua52",
+            "DllNotFoundException",
             "ExtPlugin",
+            "FileNotFoundException",
             "IOException",
             "KeyNotFoundException",
             "Oxide.Core.Configuration",

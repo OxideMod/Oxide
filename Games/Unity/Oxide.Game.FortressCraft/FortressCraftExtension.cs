@@ -78,6 +78,7 @@ namespace Oxide.Game.FortressCraft
             "Dedicated server port",
             "Deepbury",
             "Deepford",
+            "Disabling HMD support",
             "Disk Thread.Comp:", // Not filtered
             "Djbot",
             "Easy Power : True",
@@ -129,6 +130,7 @@ namespace Oxide.Game.FortressCraft
             "Not skipping spawn search...",
             "OrderBlockManager allocated an estimated",
             "Ore Extracted :", // Not filtered
+            "Persistent Settings",
             "PTG Power :", // Not filtered
             "Player Inventory initialised",
             "Power :", // Not filtered
@@ -228,11 +230,7 @@ namespace Oxide.Game.FortressCraft
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new FortressCraftPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new FortressCraftPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension
