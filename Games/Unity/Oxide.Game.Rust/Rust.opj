@@ -3569,6 +3569,114 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 152,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Facepunch.Console|ConsoleSystem/Arg|cmd"
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Facepunch.Console|ConsoleSystem/Command|namefull"
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": "rcon.password"
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "mscorlib|System.String|op_Equality"
+              },
+              {
+                "OpCode": "stloc_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldloc_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "brfalse_s",
+                "OpType": "Instruction",
+                "Operand": 152
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": "******"
+              },
+              {
+                "OpCode": "stloc_3",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "HideRconPassword [patch]",
+            "HookName": "HideRconPassword",
+            "AssemblyName": "Facepunch.Console.dll",
+            "TypeName": "ConsoleSystem/Run",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Internal",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "ConsoleSystem/Arg",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "dewXLrZsm8Ut3ObwSV+wOR2lKQEUyNA7MngaO6KU7GE=",
+            "BaseHookName": "OnServerCommand",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 56,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "bge_s",
+                "OpType": "Instruction",
+                "Operand": 58
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "SingleCharacterConsoleCommands [patch]",
+            "HookName": "SingleCharacterConsoleCommands",
+            "AssemblyName": "Facepunch.Console.dll",
+            "TypeName": "ConsoleSystem/Arg",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "BuildCommand",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "67md0cgzTJ3Xjo8SNqpObKt76dzgiwuZWY0RFP6BdFI=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
         }
       ]
     }
