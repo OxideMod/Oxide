@@ -163,7 +163,6 @@ namespace Oxide.Game.Rust.Libraries
             player.transform.position = new Vector3(x, y, z);
             player.MovePosition(player.transform.position);
             player.ClientRPCPlayer(null, player, "ForcePositionTo", player.transform.position);
-            player.TransformChanged();
         }
     }
 }
