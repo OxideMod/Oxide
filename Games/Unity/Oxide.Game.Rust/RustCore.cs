@@ -390,19 +390,6 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when the player is spawning
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        [HookMethod("OnPlayerSpawn")]
-        private object OnPlayerSpawn(BasePlayer player)
-        {
-            // Call covalence hook
-            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
-            return iplayer != null ? Interface.Call("OnUserSpawn", iplayer) : null;
-        }
-
-        /// <summary>
         /// Called when a player tick is received from a client
         /// </summary>
         /// <param name="player"></param>
