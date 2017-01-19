@@ -256,7 +256,7 @@
                 "UnityEngine.Collider"
               ]
             },
-            "MSILHash": "iTTFZEopI1nXlk33lIK16Prefb+ZwxZnK5V8fn5F8WA=",
+            "MSILHash": "eWSJ96D/3Y1u8KFYG7sQBhamzQv6eddRbf2bcApthFU=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -464,7 +464,7 @@
                 "AddRepairMaterial"
               ]
             },
-            "MSILHash": "nanswpSG1yz1UlI3+38Y13W4fqV+SBHTjitVu7+Lkx0=",
+            "MSILHash": "1AcPahbNXDOiq/xzC3cCVqpUMn0mbX+YTwa6cdxdfgo=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -594,7 +594,7 @@
                 "DestroyBuilding"
               ]
             },
-            "MSILHash": "V85nRlRfQXAJ9jOMRSZx45XPNIUe/h++t8iiTJvFVN0=",
+            "MSILHash": "axfVjUE9rRPm8exo6d5qGcLc5DovFYJgJBXthu3ni2Y=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -958,7 +958,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "umbJMVgLhwZ1zWcBmgfXC6YF31yanXi7ERjjJMdeJig=",
+            "MSILHash": "VibWZ5CvDuE8S74e4kZZs3gveksjkY6c4/vlAIirIiw=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1088,7 +1088,7 @@
                 "DestroyWithTag"
               ]
             },
-            "MSILHash": "tgMG1x+snXNc4Fz6dQej+RM1cYsNb0sy2Ynao4XnWXw=",
+            "MSILHash": "yOdni7vG4Ar5n1YR2Mwt2T4XCDDQVLe8kpF2LtZaLyQ=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -1372,7 +1372,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "Ucja4BkyQLWCjyUgKYQ3m+OCCTDZk9NrnFmFXMuYn74=",
+            "MSILHash": "UARhzKpmgapLAIyNjoqf2wISBGtcyU7VNm59i2XXmhA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1496,7 +1496,7 @@
               "ReturnType": "System.String",
               "Parameters": []
             },
-            "MSILHash": "WJ+ktIbN1T9hv56SrIhg3vCTZa45nQkAtU0zN2URQug=",
+            "MSILHash": "EZzTxjjOy2sF3+R4Q3zJjwxkedZ8UAeDZo/YRmsZKoM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1582,7 +1582,7 @@
               "ReturnType": "System.Boolean",
               "Parameters": []
             },
-            "MSILHash": "I/YxdwPb/qV8m1j/v3RI1roPs+L/PvRZOqPYZAuO2rE=",
+            "MSILHash": "+1cKOGOX+P+6sot9Xn4XoRqDv1sXLsDSqfnnCS202BY=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
