@@ -238,15 +238,18 @@ namespace Oxide.Plugins
                             }
                             else
                             {
-                                Interface.Oxide.LogWarning(
-                                    $"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
+                                Interface.Oxide.LogWarning(PluginNames.Length == 1
+                                    ? $"{PluginNames[0]} has polluted the global namespace by defining {type.Name}"
+                                    : $"A plugin has polluted the global namespace by defining {type.Name}");
                                 //RemoteLogger.Info($"A plugin has polluted the global namespace by defining {type.Name}: {PluginNames.ToSentence()}");
                             }
                         }
                         else if (type.FullName != "<Module>")
                         {
                             if (!PluginNames.Any(plugin => type.FullName.StartsWith($"Oxide.Plugins.{plugin}")))
-                                Interface.Oxide.LogWarning($"A plugin has polluted the global namespace by defining {type.FullName}: {PluginNames.ToSentence()}");
+                                Interface.Oxide.LogWarning(PluginNames.Length == 1
+                                    ? $"{PluginNames[0]} has polluted the global namespace by defining {type.FullName}"
+                                    : $"A plugin has polluted the global namespace by defining {type.FullName}");
                         }
                     }
 
