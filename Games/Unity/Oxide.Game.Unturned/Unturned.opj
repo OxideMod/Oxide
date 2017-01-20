@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DkPCXV8bCeZsnrPLnwu0YM6ZVSMqeJxi6ehHq5+umtE=",
+            "MSILHash": "O8BOET8B43hs45Uv3k11dHCjz0o8u79hRpGFEaKMTPI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "DkPCXV8bCeZsnrPLnwu0YM6ZVSMqeJxi6ehHq5+umtE=",
+            "MSILHash": "O8BOET8B43hs45Uv3k11dHCjz0o8u79hRpGFEaKMTPI=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -103,7 +103,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 306,
+            "InjectionIndex": 307,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -124,7 +124,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YikMal4wdjoZKDGPle6VFhwi80gn6fsn5XW+fIHWCnE=",
+            "MSILHash": "J/DUzJlZr2LvSeyWp67ug+U3NgGQCMWXYFJTUUlos2s=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -132,7 +132,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 390,
+            "InjectionIndex": 391,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -168,7 +168,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YikMal4wdjoZKDGPle6VFhwi80gn6fsn5XW+fIHWCnE=",
+            "MSILHash": "J/DUzJlZr2LvSeyWp67ug+U3NgGQCMWXYFJTUUlos2s=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
@@ -226,7 +226,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 249,
+            "InjectionIndex": 225,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -265,7 +265,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "ID+PjcKpszom2MhSd8p797DIAiovFhx+91WGaI0ue+c=",
+            "MSILHash": "fivNlPXZO7OOBnkHaMjh4mYzg/TpkR9Glk4G+ZbRYjQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
