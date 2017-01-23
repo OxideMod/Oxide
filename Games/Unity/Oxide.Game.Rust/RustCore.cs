@@ -1125,7 +1125,7 @@ namespace Oxide.Game.Rust
                 var target = Covalence.PlayerManager.FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
+                    player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name.Sanitize());
                     return;
                 }
                 var userId = name;
@@ -1152,7 +1152,7 @@ namespace Oxide.Game.Rust
 
                 if (!permission.GroupExists(name))
                 {
-                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name.Sanitize());
                     return;
                 }
 
