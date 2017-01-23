@@ -1923,7 +1923,7 @@
             "InjectionIndex": 54,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, this.currentStage, a0.player",
+            "ArgumentString": "this, l1, a0.player",
             "HookTypeName": "Simple",
             "Name": "OnCropGather",
             "HookName": "OnCropGather",
