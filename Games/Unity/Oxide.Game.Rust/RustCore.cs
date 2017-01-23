@@ -63,9 +63,22 @@ namespace Oxide.Game.Rust
             {"GroupParentNotFound", "Group parent '{0}' doesn't exist"},
             {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
             {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
+            {"GroupPermissions", "Group '{0}' permissions"},
+            {"GroupUsers", "Group '{0}' users"},
+            {"Groups", "Groups"},
+            {"NoGroupPermissions", "No permissions currently granted"},
+            {"NoPermissionGroups", "No groups with this permission"},
+            {"NoPermissionUsers", "No users with this permission"},
             {"NoPluginsFound", "No plugins are currently available"},
+            {"NoUserGroups", "User is not assigned to any groups"},
+            {"NoUserPermissions", "No permissions currently granted"},
+            {"NoUsersInGroup", "No users currently in group"},
             {"NotAllowed", "You are not allowed to use the '{0}' command"},
+            {"ParentGroupPermissions", "Parent group '{0}' permissions"},
+            {"PermissionGroups", "Permission '{0}' Groups"},
+            {"PermissionUsers", "Permission '{0}' Users"},
             {"PermissionNotFound", "Permission '{0}' doesn't exist"},
+            {"Permissions", "Permissions"},
             {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
             {"PlayerLanguage", "Player language set to {0}"},
             {"PluginNotLoaded", "Plugin '{0}' not loaded."},
@@ -75,6 +88,8 @@ namespace Oxide.Game.Rust
             {"UnknownCommand", "Unknown command: {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
             {"UserNotFound", "User '{0}' not found"},
+            {"UserGroups", "User '{0}' groups"},
+            {"UserPermissions", "User '{0}' permissions"},
             {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
             {"UserPermissionRevoked", "User '{0}' revoked permission '{1}'"},
             {"UserRemovedFromGroup", "User '{0}' removed from group '{1}'"},
@@ -1098,7 +1113,7 @@ namespace Oxide.Game.Rust
 
             if (mode.Equals("perms"))
             {
-                player.Reply("Permissions:\n" + string.Join(", ", permission.GetPermissions())); // TODO: Localization
+                player.Reply(lang.GetMessage("Permissions", this, player.Id) + ":\n" + string.Join(", ", permission.GetPermissions()));
             }
             else if (mode.Equals("perm"))
             {
@@ -1108,10 +1123,12 @@ namespace Oxide.Game.Rust
                     return;
                 }
 
-                var result = $"Permission '{name}' Users:\n";
-                result += string.Join(", ", permission.GetPermissionUsers(name));
-                result += $"\nPermission '{name}' Groups:\n";
-                result += string.Join(", ", permission.GetPermissionGroups(name));
+                var users = permission.GetPermissionUsers(name);
+                var groups = permission.GetPermissionGroups(name);
+                var result = $"{string.Format(lang.GetMessage("PermissionUsers", this, player.Id), name)}:\n";
+                result += users.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoPermissionUsers", this, player.Id);
+                result += $"\n\n{string.Format(lang.GetMessage("PermissionGroups", this, player.Id), name)}:\n";
+                result += groups.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoPermissionGroups", this, player.Id);
                 player.Reply(result);
             }
             else if (mode.Equals("user"))
@@ -1136,10 +1153,13 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                     name += $" ({userId})";
                 }
-                var result = $"User '{name}' permissions:\n";
-                result += string.Join(", ", permission.GetUserPermissions(userId));
-                result += $"\nUser '{name}' groups:\n";
-                result += string.Join(", ", permission.GetUserGroups(userId));
+
+                var perms = permission.GetUserPermissions(userId);
+                var groups = permission.GetUserGroups(userId);
+                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name)}:\n";
+                result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoUserPermissions", this, player.Id);
+                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name)}:\n";
+                result += perms.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoUserGroups", this, player.Id);
                 player.Reply(result);
             }
             else if (mode.Equals("group"))
@@ -1156,14 +1176,16 @@ namespace Oxide.Game.Rust
                     return;
                 }
 
-                var result = $"Group '{name}' users:\n";
-                result += string.Join(", ", permission.GetUsersInGroup(name));
-                result += $"\nGroup '{name}' permissions:\n";
-                result += string.Join(", ", permission.GetGroupPermissions(name));
+                var users = permission.GetUsersInGroup(name);
+                var perms = permission.GetGroupPermissions(name);
+                var result = $"{string.Format(lang.GetMessage("GroupUsers", this, player.Id), name)}:\n";
+                result += perms.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoUsersInGroup", this, player.Id);
+                result += $"\n\n{string.Format(lang.GetMessage("GroupPermissions", this, player.Id), name)}:\n";
+                result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoGroupPermissions", this, player.Id);
                 var parent = permission.GetGroupParent(name);
                 while (permission.GroupExists(parent))
                 {
-                    result += $"\nParent group '{parent}' permissions:\n";
+                    result += $"\n{string.Format(lang.GetMessage("ParentGroupPermissions", this, player.Id), parent)}:\n";
                     result += string.Join(", ", permission.GetGroupPermissions(parent));
                     parent = permission.GetGroupParent(parent);
                 }
@@ -1171,7 +1193,7 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("groups"))
             {
-                player.Reply("Groups:\n" + string.Join(", ", permission.GetGroups())); // TODO: Localization
+                player.Reply(lang.GetMessage("Groups", this, player.Id) + ":\n" + string.Join(", ", permission.GetGroups()));
             }
             else player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
         }
