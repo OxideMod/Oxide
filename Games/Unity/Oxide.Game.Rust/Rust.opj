@@ -960,7 +960,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "K/nf0RILUW3u7r0TyGsa3v86NKmzKCVTDd3WSs17HEA=",
+            "MSILHash": "y/zV5Wcy8kl7WHWTF/Xptn98I+i8Vs9Rx1BuchvAVus=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1426,7 +1426,7 @@
                 "ItemCraftTask"
               ]
             },
-            "MSILHash": "LTR6Sjw6ljLVVaxcXBui1D8nX/BTkWzMr1zVgkceGtc=",
+            "MSILHash": "yeNunVJMMeSLYQ4AtIamfIN75y1W4SY8BwkW3RN9KaE=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -1920,10 +1920,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 54,
+            "InjectionIndex": 59,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, this.currentStage, a0.player",
+            "ArgumentString": "this, l3, a0.player",
             "HookTypeName": "Simple",
             "Name": "OnCropGather",
             "HookName": "OnCropGather",
@@ -1938,7 +1938,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "qEndmc/PwVktq+VFtAvNgXG2VtAnGOOXw4o/fJR44wA=",
+            "MSILHash": "OmcBeKoQ7UUMO0Lp8/X1m/Pv/vzG3R1vboHLLcr9O7M=",
             "BaseHookName": null,
             "HookCategory": "Resource"
           }
@@ -2095,7 +2095,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "Myq5DcRX+VD2DDKhCoh9+vJLL59c5ddkCE3tF/kXJ0g=",
+            "MSILHash": "B9A6spyyNMGbpPx68JQMsRcERtujjVIv6XGZa4QLP3U=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2514,7 +2514,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "kobefyOHt9YU9nPa9av6S/XL++VmLXp9TkGqmj7EPSI=",
+            "MSILHash": "y3LYgSYzAJTN8J+j+mIZJy7ZrSoir5Iqo0qR9elEgrU=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2918,7 +2918,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "CqXNUJCJfeWcu99vt7TUpQBnBfklgU3e96f2t2CrYv8=",
+            "MSILHash": "M3v5zzAofPWeofIVpuSxRRqqMcTkk6snaZ7SYRBaet8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2945,7 +2945,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "sRelHojavxh2eppinF5B5Wjus5C4oADySl9bYrN8ZRw=",
+            "MSILHash": "H3Jymb/gLTNz7dhQER3Xr6gt+wvI//Md6G9S+1nX1ck=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -3022,7 +3022,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "sRelHojavxh2eppinF5B5Wjus5C4oADySl9bYrN8ZRw=",
+            "MSILHash": "H3Jymb/gLTNz7dhQER3Xr6gt+wvI//Md6G9S+1nX1ck=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
@@ -3397,7 +3397,7 @@
                 "EasyAntiCheat.Server.Legacy.ClientStatusUpdate"
               ]
             },
-            "MSILHash": "ObRq2Tuv/bSghtUPZ0yys+SOpg95Fld4+X9r/fROFmg=",
+            "MSILHash": "AiwhTVQj22z3/gAbRFjqFAazjtNOJcmM8yIU/jlyV2M=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3425,7 +3425,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "CKUqYFWziWzCqFu4Tam4j9K/yN1DASbNCRwS2nKB2YM=",
+            "MSILHash": "hKaeTvDf3B86WffFd8SkQRe0yYemZJOx2R1c6p+jHqQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3453,7 +3453,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "CKUqYFWziWzCqFu4Tam4j9K/yN1DASbNCRwS2nKB2YM=",
+            "MSILHash": "hKaeTvDf3B86WffFd8SkQRe0yYemZJOx2R1c6p+jHqQ=",
             "BaseHookName": "OnPlayerBanned [server]",
             "HookCategory": "Player"
           }
@@ -3481,7 +3481,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "CKUqYFWziWzCqFu4Tam4j9K/yN1DASbNCRwS2nKB2YM=",
+            "MSILHash": "hKaeTvDf3B86WffFd8SkQRe0yYemZJOx2R1c6p+jHqQ=",
             "BaseHookName": "OnPlayerBanned [vac]",
             "HookCategory": "Player"
           }
