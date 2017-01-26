@@ -310,9 +310,6 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
-            // Set language for player
-            lang.SetLanguage(connection.info.GetString("global.language", "en"), connection.userid.ToString());
-
             // Call the approval hooks
             var approvedSpecific = Interface.Call("OnUserApprove", connection);
             var approvedCovalence = Interface.Call("OnUserApproved", connection.username, id, ip);
@@ -354,6 +351,9 @@ namespace Oxide.Game.Rust
                 // Add player to group based on auth level
                 if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
             }
+
+            // Set language for player
+            lang.SetLanguage(player.net.connection.info.GetString("global.language", "en"), player.UserIDString);
 
             // Cache serverInput for player so that reflection only needs to be used once
             playerInputState[player] = (InputState)serverInputField.GetValue(player);
