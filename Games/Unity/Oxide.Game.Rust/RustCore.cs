@@ -53,6 +53,7 @@ namespace Oxide.Game.Rust
             {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"}, // TODO: Split this up
             {"CommandUsageUnload", "Usage: unload *|<pluginname>+"},
             {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
+            {"ConnectionRejected", "Connection was rejected"},
             {"GroupAlreadyExists", "Group '{0}' already exists"},
             {"GroupChanged", "Group '{0}' changed"},
             {"GroupCreated", "Group '{0}' created"},
@@ -305,7 +306,7 @@ namespace Oxide.Game.Rust
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 // Reject the user with the message
-                ConnectionAuth.Reject(connection, canLogin is string ? canLogin.ToString() : "Connection was rejected"); // TODO: Localization
+                ConnectionAuth.Reject(connection, canLogin is string ? canLogin.ToString() : lang.GetMessage("ConnectionRejected", this, id));
                 return true;
             }
 
