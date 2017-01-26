@@ -46,11 +46,6 @@ namespace Oxide.Core.Libraries
         public int Rank { get; set; }
 
         /// <summary>
-        /// Gets or sets the color for this group
-        /// </summary>
-        public string Color { get; set; } = string.Empty;
-
-        /// <summary>
         /// Gets or sets the individual permissions for this group
         /// </summary>
         public HashSet<string> Perms { get; set; } = new HashSet<string>();
@@ -528,23 +523,6 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
-        /// Returns the title of the specified group
-        /// </summary>
-        /// <param name="group"></param>
-        [LibraryFunction("GetGroupTitle")]
-        public string GetGroupTitle(string group)
-        {
-            if (!GroupExists(group)) return string.Empty;
-
-            // First, get the group data
-            GroupData data;
-            if (!groupdata.TryGetValue(group.ToLower(), out data)) return string.Empty;
-
-            // Return the group title
-            return data.Title;
-        }
-
-        /// <summary>
         /// Returns the rank of the specified group
         /// </summary>
         /// <param name="group"></param>
@@ -558,26 +536,8 @@ namespace Oxide.Core.Libraries
             GroupData data;
             if (!groupdata.TryGetValue(group.ToLower(), out data)) return 0;
 
-            // Return the group rank
+            // Return the group
             return data.Rank;
-        }
-
-        /// <summary>
-        /// Returns the color for the specified group
-        /// </summary>
-        /// <param name="group"></param>
-        /// <returns></returns>
-        [LibraryFunction("GetGroupColor")]
-        public string GetGroupColor(string group)
-        {
-            if (!GroupExists(group)) return string.Empty;
-
-            // First, get the group data
-            GroupData data;
-            if (!groupdata.TryGetValue(group.ToLower(), out data)) return string.Empty;
-
-            // Return the group color
-            return data.Color;
         }
 
         #endregion
@@ -765,20 +725,20 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Creates the specified group
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="name"></param>
         /// <param name="title"></param>
         /// <param name="rank"></param>
         [LibraryFunction("CreateGroup")]
-        public bool CreateGroup(string group, string title, int rank)
+        public bool CreateGroup(string name, string title, int rank)
         {
             // Check if it already exists
-            if (GroupExists(group) || string.IsNullOrEmpty(group)) return false;
+            if (GroupExists(name) || string.IsNullOrEmpty(name)) return false;
 
             // Create the data
             var data = new GroupData { Title = title, Rank = rank };
 
             // Add it and save
-            groupdata.Add(group.ToLower(), data);
+            groupdata.Add(name.ToLower(), data);
             SaveGroups();
             return true;
         }
@@ -786,19 +746,19 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Removes the specified group
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="name"></param>
         [LibraryFunction("RemoveGroup")]
-        public bool RemoveGroup(string group)
+        public bool RemoveGroup(string name)
         {
             // Check if it even exists
-            if (!GroupExists(group)) return false;
-            group = group.ToLower();
+            if (!GroupExists(name)) return false;
+            name = name.ToLower();
 
             // Remove and save
-            groupdata.Remove(group);
+            groupdata.Remove(name);
 
             // Remove group from users
-            var changed = userdata.Values.Aggregate(false, (current, userData) => current | userData.Groups.Remove(group));
+            var changed = userdata.Values.Aggregate(false, (current, userData) => current | userData.Groups.Remove(name));
 
             if (changed) SaveUsers();
             SaveGroups();
@@ -808,16 +768,16 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Sets the title of the specified group
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="name"></param>
         /// <param name="title"></param>
         [LibraryFunction("SetGroupTitle")]
-        public bool SetGroupTitle(string group, string title)
+        public bool SetGroupTitle(string name, string title)
         {
-            if (!GroupExists(group)) return false;
+            if (!GroupExists(name)) return false;
 
             // First, get the group data
             GroupData data;
-            if (!groupdata.TryGetValue(group.ToLower(), out data)) return false;
+            if (!groupdata.TryGetValue(name.ToLower(), out data)) return false;
 
             // Change and save
             if (data.Title == title) return true;
@@ -829,15 +789,15 @@ namespace Oxide.Core.Libraries
         /// <summary>
         /// Sets the rank of the specified group
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="name"></param>
         /// <param name="rank"></param>
         [LibraryFunction("SetGroupRank")]
-        public bool SetGroupRank(string group, int rank)
+        public bool SetGroupRank(string name, int rank)
         {
-            if (!GroupExists(group)) return false;
+            if (!GroupExists(name)) return false;
             // First, get the group data
             GroupData data;
-            if (!groupdata.TryGetValue(group.ToLower(), out data)) return false;
+            if (!groupdata.TryGetValue(name.ToLower(), out data)) return false;
 
             // Change and save
             if (data.Rank == rank) return true;
@@ -847,53 +807,33 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
-        /// Sets the color for the specified group
-        /// </summary>
-        /// <param name="group"></param>
-        /// <param name="color"></param>
-        [LibraryFunction("SetGroupColor")]
-        public bool SetGroupColor(string group, string color)
-        {
-            if (!GroupExists(group)) return false;
-            // First, get the group data
-            GroupData data;
-            if (!groupdata.TryGetValue(group.ToLower(), out data)) return false;
-
-            // Change and save
-            if (data.Color == color) return true;
-            data.Color = color;
-            SaveGroups();
-            return true;
-        }
-
-        /// <summary>
         /// Gets the parent of the specified group
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="name"></param>
         [LibraryFunction("GetGroupParent")]
-        public string GetGroupParent(string group)
+        public string GetGroupParent(string name)
         {
-            if (!GroupExists(group)) return string.Empty;
-            group = group.ToLower();
+            if (!GroupExists(name)) return string.Empty;
+            name = name.ToLower();
 
             GroupData data;
-            return !groupdata.TryGetValue(group, out data) ? string.Empty : data.ParentGroup;
+            return !groupdata.TryGetValue(name, out data) ? string.Empty : data.ParentGroup;
         }
 
         /// <summary>
         /// Sets the parent of the specified group
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="name"></param>
         /// <param name="parent"></param>
         [LibraryFunction("SetGroupParent")]
-        public bool SetGroupParent(string group, string parent)
+        public bool SetGroupParent(string name, string parent)
         {
-            if (!GroupExists(group)) return false;
-            group = group.ToLower();
+            if (!GroupExists(name)) return false;
+            name = name.ToLower();
 
             // First, get the group data
             GroupData data;
-            if (!groupdata.TryGetValue(group, out data)) return false;
+            if (!groupdata.TryGetValue(name, out data)) return false;
 
             if (string.IsNullOrEmpty(parent))
             {
@@ -902,11 +842,11 @@ namespace Oxide.Core.Libraries
                 return true;
             }
 
-            if (!GroupExists(parent) || group.Equals(parent.ToLower())) return false;
+            if (!GroupExists(parent) || name.Equals(parent.ToLower())) return false;
             parent = parent.ToLower();
 
             if (!string.IsNullOrEmpty(data.ParentGroup) && data.ParentGroup.Equals(parent)) return true;
-            if (HasCircularParent(group, parent)) return false;
+            if (HasCircularParent(name, parent)) return false;
 
             // Change and save
             data.ParentGroup = parent;
@@ -914,7 +854,7 @@ namespace Oxide.Core.Libraries
             return true;
         }
 
-        private bool HasCircularParent(string group, string parent)
+        private bool HasCircularParent(string name, string parent)
         {
             // Get parent data
             GroupData parentData;
@@ -922,7 +862,7 @@ namespace Oxide.Core.Libraries
             if (!groupdata.TryGetValue(parent, out parentData)) return false;
 
             // Check for circular reference
-            var groups = new HashSet<string> { group, parent };
+            var groups = new HashSet<string> { name, parent };
             while (!string.IsNullOrEmpty(parentData.ParentGroup))
             {
                 // Found itself?
