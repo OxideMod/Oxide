@@ -401,12 +401,13 @@ namespace Oxide.Plugins
         /// <summary>
         /// Logs a string of text to a named file
         /// </summary>
+        /// <param name="filename"></param>
         /// <param name="text"></param>
         /// <param name="plugin"></param>
-        public void Log(string text, Plugin plugin)
+        protected void LogToFile(string filename, string text, Plugin plugin)
         {
-            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(plugin.Filename + ".txt")), true))
-                writer.WriteLine(text);
+            filename = Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath($"{plugin.Name.ToLower()}_{filename}-{DateTime.Now:yyyy-MM-dd}.txt"));
+            using (var writer = new StreamWriter((filename), true)) writer.WriteLine(text);
         }
 
         /// <summary>
