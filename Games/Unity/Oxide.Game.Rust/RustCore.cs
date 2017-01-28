@@ -1110,7 +1110,7 @@ namespace Oxide.Game.Rust
             }
 
             var mode = args[0];
-            var name = args.Length == 2 ? args[1] : "";
+            var name = args.Length == 2 ? args[1] : string.Empty;
 
             if (mode.Equals("perms"))
             {

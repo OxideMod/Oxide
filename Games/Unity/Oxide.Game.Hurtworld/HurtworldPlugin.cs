@@ -29,6 +29,7 @@ namespace Oxide.Plugins
                     cmd.AddChatCommand(attribute?.Command, this, method.Name);
                 }
             }
+
             base.HandleAddedToManager(manager);
         }
     }
