@@ -102,6 +102,9 @@ namespace Oxide.Game.Hurtworld
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();
+
+            // Cheat references in the default plugin reference list
+            var unityUi = UnityEngine.UI.Navigation.defaultNavigation; // UnityEngine.UI
         }
 
         /// <summary>
