@@ -86,7 +86,9 @@ namespace Oxide.Game.Hurtworld
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
-            ""
+            "bindip",
+            "host",
+            "queryport"
         };
 
         /// <summary>
