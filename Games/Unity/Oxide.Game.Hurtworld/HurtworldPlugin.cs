@@ -9,6 +9,9 @@ namespace Oxide.Plugins
     {
         protected Command cmd = Interface.Oxide.GetLibrary<Command>();
         protected Hurtworld hurt = Interface.Oxide.GetLibrary<Hurtworld>("Hurt");
+        protected Item Item = Interface.Oxide.GetLibrary<Item>();
+        protected Player Player = Interface.Oxide.GetLibrary<Player>();
+        protected Server Server = Interface.Oxide.GetLibrary<Server>();
 
         public override void HandleAddedToManager(PluginManager manager)
         {
