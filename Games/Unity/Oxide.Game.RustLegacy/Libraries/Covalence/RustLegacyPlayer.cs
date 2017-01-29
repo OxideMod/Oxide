@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -13,6 +12,8 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
     /// </summary>
     public class RustLegacyPlayer : IPlayer, IEquatable<IPlayer>
     {
+        private readonly RustServerManagement management = RustServerManagement.Get();
+
         private static Permission libPerms;
         private readonly NetUser netUser;
         private readonly ulong steamId;
@@ -191,7 +192,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => netUser.playerClient.controllable.transform.position = new Vector3(x, y, z);
+        public void Teleport(float x, float y, float z) => management.TeleportPlayerToWorld(netUser.playerClient.netPlayer, new Vector3(x, y, z));
 
         /// <summary>
         /// Unbans the user
