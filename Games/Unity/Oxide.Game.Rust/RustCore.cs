@@ -1157,9 +1157,9 @@ namespace Oxide.Game.Rust
 
                 var perms = permission.GetUserPermissions(userId);
                 var groups = permission.GetUserGroups(userId);
-                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name)}:\n";
+                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name.Sanitize())}:\n";
                 result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoUserPermissions", this, player.Id);
-                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name)}:\n";
+                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name.Sanitize())}:\n";
                 result += perms.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoUserGroups", this, player.Id);
                 player.Reply(result);
             }
