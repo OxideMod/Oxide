@@ -45,15 +45,15 @@ namespace Oxide.Plugins
 
         private void SetVersion(string version)
         {
-            var version_parts = version.Split('.').Select(part =>
+            var versionParts = version.Split('.').Select(part =>
             {
                 ushort number;
                 if (!ushort.TryParse(part, out number)) number = 0;
                 return number;
             }).ToList();
-            while (version_parts.Count < 3) version_parts.Add(0);
-            if (version_parts.Count > 3) Interface.Oxide.LogWarning($"Version `{version}` is invalid for {Title}, should be `major.minor.patch`");
-            Version = new VersionNumber(version_parts[0], version_parts[1], version_parts[2]);
+            while (versionParts.Count < 3) versionParts.Add(0);
+            if (versionParts.Count > 3) Interface.Oxide.LogWarning($"Version `{version}` is invalid for {Title}, should be `major.minor.patch`");
+            Version = new VersionNumber(versionParts[0], versionParts[1], versionParts[2]);
         }
     }
 
@@ -65,9 +65,9 @@ namespace Oxide.Plugins
     {
         public string Description { get; }
 
-        public DescriptionAttribute(string Description)
+        public DescriptionAttribute(string description)
         {
-            this.Description = Description;
+            Description = description;
         }
     }
 
@@ -123,9 +123,6 @@ namespace Oxide.Plugins
     [AttributeUsage(AttributeTargets.Field)]
     public class OnlinePlayersAttribute : Attribute
     {
-        public OnlinePlayersAttribute()
-        {
-        }
     }
 
     /// <summary>
@@ -210,8 +207,8 @@ namespace Oxide.Plugins
                 var reference_attributes = field.GetCustomAttributes(typeof(PluginReferenceAttribute), true);
                 if (reference_attributes.Length > 0)
                 {
-                    var plugin_reference = reference_attributes[0] as PluginReferenceAttribute;
-                    pluginReferenceFields[plugin_reference.Name ?? field.Name] = field;
+                    var pluginReference = reference_attributes[0] as PluginReferenceAttribute;
+                    pluginReferenceFields[pluginReference.Name ?? field.Name] = field;
                 }
             }
             foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
@@ -244,10 +241,10 @@ namespace Oxide.Plugins
                 return false;
             }
 
-            var description_attributes = GetType().GetCustomAttributes(typeof(DescriptionAttribute), true);
-            if (description_attributes.Length > 0)
+            var descriptionAttributes = GetType().GetCustomAttributes(typeof(DescriptionAttribute), true);
+            if (descriptionAttributes.Length > 0)
             {
-                var info = description_attributes[0] as DescriptionAttribute;
+                var info = descriptionAttributes[0] as DescriptionAttribute;
                 Description = info.Description;
             }
 
@@ -332,10 +329,10 @@ namespace Oxide.Plugins
                 catch (InvalidProgramException ex)
                 {
                     Interface.Oxide.LogError("Hook dispatch failure detected, falling back to reflection based dispatch. " + ex);
-                    var compilable_plugin = CSharpPluginLoader.GetCompilablePlugin(Interface.Oxide.PluginDirectory, Name);
-                    if (compilable_plugin != null && compilable_plugin.CompiledAssembly != null)
+                    var compilablePlugin = CSharpPluginLoader.GetCompilablePlugin(Interface.Oxide.PluginDirectory, Name);
+                    if (compilablePlugin?.CompiledAssembly != null)
                     {
-                        System.IO.File.WriteAllBytes(Interface.Oxide.PluginDirectory + "\\" + Name + ".dump", compilable_plugin.CompiledAssembly.PatchedAssembly);
+                        File.WriteAllBytes(Interface.Oxide.PluginDirectory + "\\" + Name + ".dump", compilablePlugin.CompiledAssembly.PatchedAssembly);
                         Interface.Oxide.LogWarning($"The invalid raw assembly has been dumped to Plugins/{Name}.dump");
                     }
                     hookDispatchFallback = true;
@@ -355,14 +352,14 @@ namespace Oxide.Plugins
         }
 
         [HookMethod("OnPluginLoaded")]
-        void base_OnPluginLoaded(Plugin plugin)
+        private void base_OnPluginLoaded(Plugin plugin)
         {
             FieldInfo field;
             if (pluginReferenceFields.TryGetValue(plugin.Name, out field)) field.SetValue(this, plugin);
         }
 
         [HookMethod("OnPluginUnloaded")]
-        void base_OnPluginUnloaded(Plugin plugin)
+        private void base_OnPluginUnloaded(Plugin plugin)
         {
             FieldInfo field;
             if (pluginReferenceFields.TryGetValue(plugin.Name, out field)) field.SetValue(this, null);
@@ -401,12 +398,13 @@ namespace Oxide.Plugins
         /// <summary>
         /// Logs a string of text to a named file
         /// </summary>
+        /// <param name="filename"></param>
         /// <param name="text"></param>
         /// <param name="plugin"></param>
-        public void Log(string text, Plugin plugin)
+        protected void LogToFile(string filename, string text, Plugin plugin)
         {
-            using (var writer = new StreamWriter(Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath(plugin.Filename + ".txt")), true))
-                writer.WriteLine(text);
+            filename = Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath($"{plugin.Name.ToLower()}_{filename}-{DateTime.Now:yyyy-MM-dd}.txt"));
+            using (var writer = new StreamWriter((filename), true)) writer.WriteLine(text);
         }
 
         /// <summary>

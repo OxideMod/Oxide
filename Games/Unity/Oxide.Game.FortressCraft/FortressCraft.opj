@@ -279,6 +279,35 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "FixOculusErrors [patch]",
+            "HookName": "FixOculusErrors",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "OculusMainMenu",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Update",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "MOOEHTTr3CVoR90nHoZer0KCPwTr9URJi1AmEA/shOc=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
         }
       ]
     }

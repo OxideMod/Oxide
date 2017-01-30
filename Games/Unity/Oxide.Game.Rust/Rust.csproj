@@ -127,7 +127,8 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\*.dll*" Exclude="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\UnityEngine*.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
-      <ManagedFiles Include="$(TargetDir)\*.dll*" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\Facepunch.*.dll; $(TargetDir)\Rust.*.dll; $(TargetDir)\UnityEngine*.dll" />      <NativeFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\CSharpCompiler*.*" />
+      <ManagedFiles Include="$(TargetDir)\*.dll*" Exclude="$(TargetDir)\Assembly-*.dll; $(TargetDir)\Facepunch.*.dll; $(TargetDir)\Rust.*.dll; $(TargetDir)\UnityEngine*.dll" />
+      <NativeFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\CSharpCompiler*.*" />
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
     </ItemGroup>
     <RemoveDir Directories="$(BundleDir)\$(GameName)" />

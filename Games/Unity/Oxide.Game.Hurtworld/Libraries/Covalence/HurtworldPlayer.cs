@@ -211,7 +211,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             session.WorldPlayerEntity.GetComponent<HurtMonoBehavior>().RPC("UpdateName", uLink.RPCMode.All, name);
             SteamGameServer.BUpdateUserData(cSteamId, name, 0);
 
-            // Overhead name
+            // Overhead name // TODO: Implement when possible
             //var displayProxyName = session.WorldPlayerEntity.GetComponent<DisplayProxyName>();
             //displayProxyName.UpdateName(name);
         }

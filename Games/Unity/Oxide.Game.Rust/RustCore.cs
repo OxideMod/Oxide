@@ -44,7 +44,7 @@ namespace Oxide.Game.Rust
         private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
         private readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
-            {"CommandUsageLang", "Usage: lang <two-digit language code"},
+            {"CommandUsageLang", "Usage: lang <two-digit language code>"},
             {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
             {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
             {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
@@ -1110,7 +1110,7 @@ namespace Oxide.Game.Rust
             }
 
             var mode = args[0];
-            var name = args.Length == 2 ? args[1] : "";
+            var name = args.Length == 2 ? args[1] : string.Empty;
 
             if (mode.Equals("perms"))
             {
@@ -1157,9 +1157,9 @@ namespace Oxide.Game.Rust
 
                 var perms = permission.GetUserPermissions(userId);
                 var groups = permission.GetUserGroups(userId);
-                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name)}:\n";
+                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name.Sanitize())}:\n";
                 result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoUserPermissions", this, player.Id);
-                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name)}:\n";
+                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name.Sanitize())}:\n";
                 result += perms.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoUserGroups", this, player.Id);
                 player.Reply(result);
             }

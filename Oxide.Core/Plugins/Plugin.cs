@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -156,7 +156,7 @@ namespace Oxide.Core.Plugins
         {
             Name = GetType().Name;
             Title = Name.Humanize();
-            Author = "System";
+            Author = "Unnamed";
             Version = new VersionNumber(1, 0, 0);
             commandInfos = new Dictionary<string, CommandInfo>();
         }
@@ -164,14 +164,14 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Subscribes this plugin to the specified hook
         /// </summary>
-        /// <param name="hookname"></param>
-        protected void Subscribe(string hookname) => Manager.SubscribeToHook(hookname, this);
+        /// <param name="hook"></param>
+        protected void Subscribe(string hook) => Manager.SubscribeToHook(hook, this);
 
         /// <summary>
         /// Unsubscribes this plugin to the specified hook
         /// </summary>
-        /// <param name="hookname"></param>
-        protected void Unsubscribe(string hookname) => Manager.UnsubscribeToHook(hookname, this);
+        /// <param name="hook"></param>
+        protected void Unsubscribe(string hook) => Manager.UnsubscribeToHook(hook, this);
 
         /// <summary>
         /// Called when this plugin has been added to the specified manager
@@ -206,53 +206,53 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Calls a hook on this plugin
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="hook"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object CallHook(string name, params object[] args)
+        public object CallHook(string hook, params object[] args)
         {
-            var started_at = 0f;
+            var startedAt = 0f;
             if (!IsCorePlugin && nestcount == 0)
             {
                 preHookGcCount = GC.CollectionCount(0);
-                started_at = Interface.Oxide.Now;
+                startedAt = Interface.Oxide.Now;
                 stopwatch.Start();
-                if (averageAt < 1) averageAt = started_at;
+                if (averageAt < 1) averageAt = startedAt;
             }
             TrackStart();
             nestcount++;
             try
             {
-                return OnCallHook(name, args);
+                return OnCallHook(hook, args);
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogException($"Failed to call hook '{name}' on plugin '{Name} v{Version}'", ex);
+                Interface.Oxide.LogException($"Failed to call hook '{hook}' on plugin '{Name} v{Version}'", ex);
                 return null;
             }
             finally
             {
                 nestcount--;
                 TrackEnd();
-                if (started_at > 0)
+                if (startedAt > 0)
                 {
                     stopwatch.Stop();
                     var duration = stopwatch.Elapsed.TotalSeconds;
                     if (duration > 0.2)
                     {
                         var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
-                        Interface.Oxide.LogWarning($"Calling '{name}' on '{Name} v{Version}' took {duration * 1000:0}ms{suffix}");
+                        Interface.Oxide.LogWarning($"Calling '{hook}' on '{Name} v{Version}' took {duration * 1000:0}ms{suffix}");
                     }
                     stopwatch.Reset();
                     var total = sum + duration;
-                    var ended_at = started_at + duration;
-                    if (ended_at - averageAt > 10)
+                    var endedAt = startedAt + duration;
+                    if (endedAt - averageAt > 10)
                     {
-                        total /= ended_at - averageAt;
+                        total /= endedAt - averageAt;
                         if (total > 0.2)
                         {
                             var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
-                            Interface.Oxide.LogWarning($"Calling '{name}' on '{Name} v{Version}' took average {sum * 1000:0}ms{suffix}");
+                            Interface.Oxide.LogWarning($"Calling '{hook}' on '{Name} v{Version}' took average {sum * 1000:0}ms{suffix}");
                         }
                         sum = 0;
                         averageAt = 0;
@@ -268,27 +268,27 @@ namespace Oxide.Core.Plugins
         /// <summary>
         /// Calls a hook on this plugin
         /// </summary>
-        /// <param name="hookname"></param>
+        /// <param name="hook"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public object Call(string hookname, params object[] args) => CallHook(hookname, args);
+        public object Call(string hook, params object[] args) => CallHook(hook, args);
 
         /// <summary>
         /// Calls a hook on this plugin and converts the return value to the specified type
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="hookname"></param>
+        /// <param name="hook"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public T Call<T>(string hookname, params object[] args) => (T)Convert.ChangeType(CallHook(hookname, args), typeof(T));
+        public T Call<T>(string hook, params object[] args) => (T)Convert.ChangeType(CallHook(hook, args), typeof(T));
 
         /// <summary>
         /// Called when it's time to run a hook on this plugin
         /// </summary>
-        /// <param name="hookname"></param>
+        /// <param name="hook"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected abstract object OnCallHook(string hookname, object[] args);
+        protected abstract object OnCallHook(string hook, object[] args);
 
         /// <summary>
         /// Raises an error on this plugin
@@ -362,10 +362,7 @@ namespace Oxide.Core.Plugins
 
         #region Covalence
 
-        public void AddCovalenceCommand(string command, string callback, string perm = null)
-        {
-            AddCovalenceCommand(new[] { command }, callback, new[] { perm });
-        }
+        public void AddCovalenceCommand(string command, string callback, string perm = null) => AddCovalenceCommand(new[] { command }, callback, new[] { perm });
 
         public void AddCovalenceCommand(string[] commands, string callback, string[] perms = null)
         {
@@ -376,8 +373,7 @@ namespace Oxide.Core.Plugins
             });
 
             var covalence = Interface.Oxide.GetLibrary<Covalence>();
-            foreach (var command in commands)
-                covalence.RegisterCommand(command, this, CovalenceCommandCallback);
+            foreach (var command in commands) covalence.RegisterCommand(command, this, CovalenceCommandCallback);
         }
 
         protected void AddCovalenceCommand(string[] commands, string[] perms, CommandCallback callback)
@@ -404,17 +400,14 @@ namespace Oxide.Core.Plugins
         private void RegisterWithCovalence()
         {
             var covalence = Interface.Oxide.GetLibrary<Covalence>();
-            foreach (var pair in commandInfos)
-                covalence.RegisterCommand(pair.Key, this, CovalenceCommandCallback);
+            foreach (var pair in commandInfos) covalence.RegisterCommand(pair.Key, this, CovalenceCommandCallback);
         }
 
         private bool CovalenceCommandCallback(IPlayer caller, string cmd, string[] args)
         {
-            // Get the command
             CommandInfo cmdInfo;
             if (!commandInfos.TryGetValue(cmd, out cmdInfo)) return false;
 
-            // Check for permissions
             if (caller == null)
             {
                 Interface.Oxide.LogWarning("Plugin.CovalenceCommandCallback received null as the caller (bad game Covalence bindings?)");
@@ -430,10 +423,8 @@ namespace Oxide.Core.Plugins
                 }
             }
 
-            // Call it
             cmdInfo.Callback(caller, cmd, args);
 
-            // Handled
             return true;
         }
 
