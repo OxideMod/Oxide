@@ -362,7 +362,10 @@ namespace Oxide.Core.Plugins
 
         #region Covalence
 
-        public void AddCovalenceCommand(string command, string callback, string perm = null) => AddCovalenceCommand(new[] { command }, callback, new[] { perm });
+        public void AddCovalenceCommand(string command, string callback, string perm = null)
+        {
+            AddCovalenceCommand(new[] { command }, callback, string.IsNullOrEmpty(perm) ? null : new[] { perm });
+        }
 
         public void AddCovalenceCommand(string[] commands, string callback, string[] perms = null)
         {
