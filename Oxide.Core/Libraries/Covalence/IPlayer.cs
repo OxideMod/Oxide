@@ -163,8 +163,20 @@ namespace Oxide.Core.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
+        void Message(string message);
+
+        /// <summary>
+        /// Sends the specified message to the user
+        /// </summary>
+        /// <param name="message"></param>
         /// <param name="args"></param>
         void Message(string message, params object[] args);
+
+        /// <summary>
+        /// Replies to the user with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        void Reply(string message);
 
         /// <summary>
         /// Replies to the user with the specified message
