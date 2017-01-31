@@ -8,7 +8,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 35,
+            "InjectionIndex": 36,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Sv/Y+oufWFifX4BvQxocK2vhiMXgId9VwjUXq71bpYY=",
+            "MSILHash": "9FJAD0FBZuJdvkqkVETfI3sdEs5dNLcTMYTuiOc3VfE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -29,7 +29,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 36,
+            "InjectionIndex": 37,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -45,9 +45,32 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "Sv/Y+oufWFifX4BvQxocK2vhiMXgId9VwjUXq71bpYY=",
+            "MSILHash": "9FJAD0FBZuJdvkqkVETfI3sdEs5dNLcTMYTuiOc3VfE=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 10,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "PreventAllocConsole [patch]",
+            "HookName": "PreventAllocConsole",
+            "AssemblyName": "IR.exe",
+            "TypeName": "Game.Program",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Init",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "9FJAD0FBZuJdvkqkVETfI3sdEs5dNLcTMYTuiOc3VfE=",
+            "BaseHookName": "InitLogging [internal]",
+            "HookCategory": "_Patches"
           }
         }
       ]

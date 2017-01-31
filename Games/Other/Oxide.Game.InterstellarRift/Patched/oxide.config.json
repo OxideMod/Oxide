@@ -11,5 +11,5 @@
     "oxide"
   ],
   "ConfigDirectory": "config",
-  "ExtensionDirectory": "."
+  "ExtensionDirectory": "Managed"
 }
