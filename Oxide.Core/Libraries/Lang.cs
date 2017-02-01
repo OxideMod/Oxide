@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using ProtoBuf;
 using Oxide.Core.Plugins;
+using ProtoBuf;
 
 namespace Oxide.Core.Libraries
 {
@@ -39,7 +38,6 @@ namespace Oxide.Core.Libraries
             langFiles = new Dictionary<string, Dictionary<string, string>>();
             langData = ProtoStorage.Load<LangData>("oxide.lang") ?? new LangData();
             pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
-            Migrate(); // This should be deleted in a few weeks. (Added Oct 12, 2016)
         }
 
         /// <summary>
@@ -300,33 +298,6 @@ namespace Oxide.Core.Libraries
             var langs = GetLanguages(sender);
 
             foreach (var lang in langs) langFiles.Remove($"{lang}{Path.DirectorySeparatorChar}{sender.Name}.json");
-        }
-
-        /// <summary>
-        /// Migrates the language files to the new folder structure
-        /// This should be deleted in a few weeks. (Added Oct 12, 2016)
-        /// </summary>
-        public void Migrate()
-        {
-            var files = Directory.GetFiles(Interface.Oxide.LangDirectory, "*.json");
-
-            foreach (var file in files)
-            {
-                var split = file.Substring(Interface.Oxide.LangDirectory.Length + 1).Split('.');
-                var newPath = Path.Combine(Interface.Oxide.LangDirectory, split[1]);
-                var newFile = Path.Combine(newPath, $"{split[0]}.json");
-
-                try
-                {
-                    Directory.CreateDirectory(newPath);
-                    if (!File.Exists(newFile)) File.Move(file, newFile);
-                    else File.Delete(file);
-                }
-                catch (Exception ex)
-                {
-                    Interface.Oxide.LogException("Migrating language files to the new structure failed", ex);
-                }
-            }
         }
     }
 }
