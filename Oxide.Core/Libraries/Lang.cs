@@ -57,7 +57,7 @@ namespace Oxide.Core.Libraries
             if (messages == null || string.IsNullOrEmpty(lang) || plugin == null) return;
 
             var file = $"{lang}{Path.DirectorySeparatorChar}{plugin.Name}.json";
-            var existingMessages = GetMessagesIntern(plugin.Name, lang);
+            var existingMessages = GetMessageFile(plugin.Name, lang);
 
             bool changed;
             if (existingMessages == null)
@@ -91,7 +91,7 @@ namespace Oxide.Core.Libraries
 
             var lang = GetLanguage(userId);
 
-            return GetMessageIntern(key, plugin, lang);
+            return GetMessageKey(key, plugin, lang);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Oxide.Core.Libraries
             Dictionary<string, string> langFile;
             if (!langFiles.TryGetValue(file, out langFile))
             {
-                langFile = GetMessagesIntern(plugin.Name, lang);
+                langFile = GetMessageFile(plugin.Name, lang);
                 if (langFile == null) return null;
                 AddLangFile(file, langFile, plugin);
             }
@@ -238,31 +238,24 @@ namespace Oxide.Core.Libraries
         /// <param name="plugin"></param>
         /// <param name="lang"></param>
         /// <returns></returns>
-        private string GetMessageIntern(string key, Plugin plugin, string lang = DefaultLang)
+        private string GetMessageKey(string key, Plugin plugin, string lang = DefaultLang)
         {
             var file = $"{lang}{Path.DirectorySeparatorChar}{plugin.Name}.json";
 
-            string message;
             Dictionary<string, string> langFile;
             if (!langFiles.TryGetValue(file, out langFile))
             {
-                langFile = GetMessagesIntern(plugin.Name, lang);
+                langFile = GetMessageFile(plugin.Name, lang) ?? (GetMessageFile(plugin.Name, langData.Lang) ?? GetMessageFile(plugin.Name));
                 if (langFile == null)
                 {
-                    if (!lang.Equals(langData.Lang)) return GetMessageIntern(key, plugin, langData.Lang);
-                    langFile = GetMessagesIntern(plugin.Name);
-                    if (langFile != null) return langFile.TryGetValue(key, out message) ? message : key;
                     Interface.Oxide.LogWarning($"Plugin `{plugin.Name}` is using the Lang API but has no messages registered");
                     return key;
                 }
                 AddLangFile(file, langFile, plugin);
             }
 
-            if (langFile.TryGetValue(key, out message)) return message;
-
-            if (!lang.Equals(langData.Lang)) return GetMessageIntern(key, plugin, langData.Lang);
-
-            return !lang.Equals(DefaultLang) ? GetMessageIntern(key, plugin) : key;
+            string message;
+            return langFile.TryGetValue(key, out message) ? message : key;
         }
 
         /// <summary>
@@ -271,7 +264,7 @@ namespace Oxide.Core.Libraries
         /// <param name="plugin"></param>
         /// <param name="lang"></param>
         /// <returns></returns>
-        private Dictionary<string, string> GetMessagesIntern(string plugin, string lang = DefaultLang)
+        private Dictionary<string, string> GetMessageFile(string plugin, string lang = DefaultLang)
         {
             if (string.IsNullOrEmpty(plugin)) return null;
 
