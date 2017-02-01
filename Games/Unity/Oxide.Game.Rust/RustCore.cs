@@ -1143,7 +1143,7 @@ namespace Oxide.Game.Rust
                 var target = Covalence.PlayerManager.FindPlayer(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name.Sanitize());
+                    player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                     return;
                 }
                 var userId = name;
@@ -1157,10 +1157,10 @@ namespace Oxide.Game.Rust
 
                 var perms = permission.GetUserPermissions(userId);
                 var groups = permission.GetUserGroups(userId);
-                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name.Sanitize())}:\n";
+                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name)}:\n";
                 result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoUserPermissions", this, player.Id);
-                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name.Sanitize())}:\n";
-                result += perms.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoUserGroups", this, player.Id);
+                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name)}:\n";
+                result += groups.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoUserGroups", this, player.Id);
                 player.Reply(result);
             }
             else if (mode.Equals("group"))
@@ -1173,14 +1173,14 @@ namespace Oxide.Game.Rust
 
                 if (!permission.GroupExists(name))
                 {
-                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name.Sanitize());
+                    player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
                     return;
                 }
 
                 var users = permission.GetUsersInGroup(name);
                 var perms = permission.GetGroupPermissions(name);
                 var result = $"{string.Format(lang.GetMessage("GroupUsers", this, player.Id), name)}:\n";
-                result += perms.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoUsersInGroup", this, player.Id);
+                result += users.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoUsersInGroup", this, player.Id);
                 result += $"\n\n{string.Format(lang.GetMessage("GroupPermissions", this, player.Id), name)}:\n";
                 result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoGroupPermissions", this, player.Id);
                 var parent = permission.GetGroupParent(name);

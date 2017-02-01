@@ -2,9 +2,9 @@
 using System.Linq;
 using BrilliantSkies.FromTheDepths.Game.UserInterfaces;
 using BrilliantSkies.FromTheDepths.Multiplayer;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using UnityEngine;
 
 namespace Oxide.Game.FromTheDepths
 {
@@ -77,14 +77,14 @@ namespace Oxide.Game.FromTheDepths
             //Application.LoadLevel("Main menu"); // TODO: Hit it with a hammer
 
             // Disable client audio
-            StaticOptionsManager.musicVolume = 0f;
-            StaticOptionsManager.soundVolume = 0f;
+            PlayerProfileOptionsSound.i.MusicVolume = 0f;
+            PlayerProfileOptionsSound.i.SoundVolume = 0f;
 
             // Set server options
-            StaticOptionsManager.gameName = "My Oxide Server"; // TODO: Switch to cmd argument
-            StaticOptionsManager.gameComments = "Powered by Oxide"; // TODO: Switch to cmd argument
-            StaticOptionsManager.gamePassword = "oxide"; // TODO: Switch to cmd argument
-            StaticOptionsManager.playerLimit = 10; // TODO: Switch to cmd argument
+            PlayerProfileOptionsMultiplayer.i.GameName = "My Oxide Server"; // TODO: Switch to cmd argument
+            PlayerProfileOptionsMultiplayer.i.GameComments = "Powered by Oxide"; // TODO: Switch to cmd argument
+            PlayerProfileOptionsMultiplayer.i.GamePassword = "oxide"; // TODO: Switch to cmd argument
+            PlayerProfileOptionsMultiplayer.i.PlayerLimit = 10; // TODO: Switch to cmd argument
 
             // Start server
             HostMenuGUI.Instance.HostGame();

@@ -79,9 +79,9 @@ namespace Oxide.Game.InterstellarRift
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"? | {Config.Singleton.ServerName}";
+            Interface.Oxide.ServerConsole.Title = () => $"? | {ServerConfig.Singleton.ServerName}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => Config.Singleton.ServerName;
+            Interface.Oxide.ServerConsole.Status1Left = () => ServerConfig.Singleton.ServerName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = string.Empty; // TODO: Implement when possible

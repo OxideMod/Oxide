@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using ProtoBuf;
 using Oxide.Core.Plugins;
+using ProtoBuf;
 
 namespace Oxide.Core.Libraries
 {
@@ -39,7 +38,6 @@ namespace Oxide.Core.Libraries
             langFiles = new Dictionary<string, Dictionary<string, string>>();
             langData = ProtoStorage.Load<LangData>("oxide.lang") ?? new LangData();
             pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
-            Migrate(); // This should be deleted in a few weeks. (Added Oct 12, 2016)
         }
 
         /// <summary>
@@ -59,7 +57,7 @@ namespace Oxide.Core.Libraries
             if (messages == null || string.IsNullOrEmpty(lang) || plugin == null) return;
 
             var file = $"{lang}{Path.DirectorySeparatorChar}{plugin.Name}.json";
-            var existingMessages = GetMessagesIntern(plugin.Name, lang);
+            var existingMessages = GetMessageFile(plugin.Name, lang);
 
             bool changed;
             if (existingMessages == null)
@@ -93,7 +91,7 @@ namespace Oxide.Core.Libraries
 
             var lang = GetLanguage(userId);
 
-            return GetMessageIntern(key, plugin, lang);
+            return GetMessageKey(key, plugin, lang);
         }
 
         /// <summary>
@@ -110,7 +108,7 @@ namespace Oxide.Core.Libraries
             Dictionary<string, string> langFile;
             if (!langFiles.TryGetValue(file, out langFile))
             {
-                langFile = GetMessagesIntern(plugin.Name, lang);
+                langFile = GetMessageFile(plugin.Name, lang);
                 if (langFile == null) return null;
                 AddLangFile(file, langFile, plugin);
             }
@@ -240,31 +238,24 @@ namespace Oxide.Core.Libraries
         /// <param name="plugin"></param>
         /// <param name="lang"></param>
         /// <returns></returns>
-        private string GetMessageIntern(string key, Plugin plugin, string lang = DefaultLang)
+        private string GetMessageKey(string key, Plugin plugin, string lang = DefaultLang)
         {
             var file = $"{lang}{Path.DirectorySeparatorChar}{plugin.Name}.json";
 
-            string message;
             Dictionary<string, string> langFile;
             if (!langFiles.TryGetValue(file, out langFile))
             {
-                langFile = GetMessagesIntern(plugin.Name, lang);
+                langFile = GetMessageFile(plugin.Name, lang) ?? (GetMessageFile(plugin.Name, langData.Lang) ?? GetMessageFile(plugin.Name));
                 if (langFile == null)
                 {
-                    if (!lang.Equals(langData.Lang)) return GetMessageIntern(key, plugin, langData.Lang);
-                    langFile = GetMessagesIntern(plugin.Name);
-                    if (langFile != null) return langFile.TryGetValue(key, out message) ? message : key;
                     Interface.Oxide.LogWarning($"Plugin `{plugin.Name}` is using the Lang API but has no messages registered");
                     return key;
                 }
                 AddLangFile(file, langFile, plugin);
             }
 
-            if (langFile.TryGetValue(key, out message)) return message;
-
-            if (!lang.Equals(langData.Lang)) return GetMessageIntern(key, plugin, langData.Lang);
-
-            return !lang.Equals(DefaultLang) ? GetMessageIntern(key, plugin) : key;
+            string message;
+            return langFile.TryGetValue(key, out message) ? message : key;
         }
 
         /// <summary>
@@ -273,7 +264,7 @@ namespace Oxide.Core.Libraries
         /// <param name="plugin"></param>
         /// <param name="lang"></param>
         /// <returns></returns>
-        private Dictionary<string, string> GetMessagesIntern(string plugin, string lang = DefaultLang)
+        private Dictionary<string, string> GetMessageFile(string plugin, string lang = DefaultLang)
         {
             if (string.IsNullOrEmpty(plugin)) return null;
 
@@ -300,33 +291,6 @@ namespace Oxide.Core.Libraries
             var langs = GetLanguages(sender);
 
             foreach (var lang in langs) langFiles.Remove($"{lang}{Path.DirectorySeparatorChar}{sender.Name}.json");
-        }
-
-        /// <summary>
-        /// Migrates the language files to the new folder structure
-        /// This should be deleted in a few weeks. (Added Oct 12, 2016)
-        /// </summary>
-        public void Migrate()
-        {
-            var files = Directory.GetFiles(Interface.Oxide.LangDirectory, "*.json");
-
-            foreach (var file in files)
-            {
-                var split = file.Substring(Interface.Oxide.LangDirectory.Length + 1).Split('.');
-                var newPath = Path.Combine(Interface.Oxide.LangDirectory, split[1]);
-                var newFile = Path.Combine(newPath, $"{split[0]}.json");
-
-                try
-                {
-                    Directory.CreateDirectory(newPath);
-                    if (!File.Exists(newFile)) File.Move(file, newFile);
-                    else File.Delete(file);
-                }
-                catch (Exception ex)
-                {
-                    Interface.Oxide.LogException("Migrating language files to the new structure failed", ex);
-                }
-            }
         }
     }
 }
