@@ -139,15 +139,13 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <returns></returns>
         public PlayerSession Session(string nameOrIdOrIp)
         {
-            PlayerSession session = null;
-            foreach (var s in Sessions)
+            foreach (var session in Sessions)
             {
-                if (!nameOrIdOrIp.Equals(s.Value.Name, StringComparison.OrdinalIgnoreCase) &&
-                    !nameOrIdOrIp.Equals(s.Value.SteamId.ToString()) && !nameOrIdOrIp.Equals(s.Key.ipAddress)) continue;
-                session = s.Value;
-                break;
+                if (!nameOrIdOrIp.Equals(session.Value.Name, StringComparison.OrdinalIgnoreCase) &&
+                    !nameOrIdOrIp.Equals(session.Value.SteamId.ToString()) && !nameOrIdOrIp.Equals(session.Key.ipAddress)) continue;
+                return session.Value;
             }
-            return session;
+            return null;
         }
 
         /// <summary>
@@ -157,14 +155,12 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <returns></returns>
         public PlayerSession SessionById(string id)
         {
-            PlayerSession session = null;
-            foreach (var s in Sessions)
+            foreach (var session in Sessions)
             {
-                if (!id.Equals(s.Value.SteamId.ToString()) && !id.Equals(s.Key.ipAddress)) continue;
-                session = s.Value;
-                break;
+                if (!id.Equals(session.Value.SteamId.ToString())) continue;
+                return session.Value;
             }
-            return session;
+            return null;
         }
 
         /// <summary>
@@ -174,15 +170,13 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <returns></returns>
         public PlayerSession Session(Collider col)
         {
-            PlayerSession session = null;
             var stats = col.gameObject.GetComponent<EntityStatsTriggerProxy>().Stats;
-            foreach (var s in Sessions)
+            foreach (var session in Sessions)
             {
-                if (!s.Value.WorldPlayerEntity.GetComponent<EntityStats>() == stats) continue;
-                session = s.Value;
-                break;
+                if (!session.Value.WorldPlayerEntity.GetComponent<EntityStats>() == stats) continue;
+                return session.Value;
             }
-            return session;
+            return null;
         }
 
         /// <summary>
@@ -203,7 +197,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         }
 
         /// <summary>
-        /// Returns all player sessions
+        /// Returns all connected sessions
         /// </summary>
         public Dictionary<uLink.NetworkPlayer, PlayerSession> Sessions => GameManager.Instance.GetSessions();
 
@@ -234,6 +228,32 @@ namespace Oxide.Game.Hurtworld.Libraries
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
             iplayer?.Message(prefix != null ? $"{prefix} {message}" : message);
         }
+
+        /// <summary>
+        /// Sends a chat message to the player
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(PlayerSession session, string message, string prefix = null, params object[] args) => Message(session, string.Format(message, args), prefix);
+
+        /// <summary>
+        /// Sends a chat message to the player
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        public void Reply(PlayerSession session, string message, string prefix = null) => Message(session, prefix != null ? $"{prefix} {message}" : message);
+
+        /// <summary>
+        /// Sends a chat message to the player
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(PlayerSession session, string message, string prefix = null, params object[] args) => Reply(session, string.Format(message, args), prefix);
 
         #endregion
 

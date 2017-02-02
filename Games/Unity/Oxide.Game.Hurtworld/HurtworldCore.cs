@@ -20,14 +20,17 @@ namespace Oxide.Game.Hurtworld
         #region Initialization
 
         // The pluginmanager
-        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
+        internal readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
 
         // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
         // The command library
-        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+
+        // The player library
+        internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
         // The covalence provider
         internal static readonly HurtworldCovalenceProvider Covalence = HurtworldCovalenceProvider.Instance;
@@ -347,7 +350,7 @@ namespace Oxide.Game.Hurtworld
         private void IOnPlayerConnected(string name)
         {
             // Get player's session
-            var session = FindSession(name);
+            var session = Player.Session(name);
 
             // Do permission stuff
             if (permission.IsLoaded)
@@ -390,14 +393,17 @@ namespace Oxide.Game.Hurtworld
         /// <param name="player"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
-        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.Call("OnPlayerInput", FindSessionByNetPlayer(player), input);
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input)
+        {
+            Interface.Call("OnPlayerInput", (player), input);
+        }
 
         /// <summary>
         /// Called when the player attempts to suicide
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("IOnPlayerSuicide")]
-        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.Call("OnPlayerSuicide", FindSessionByNetPlayer(player));
+        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.Call("OnPlayerSuicide", Player.Session(player));
 
         #endregion
 
@@ -414,7 +420,7 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnSingleDoorUsed", door, FindSessionByNetPlayer((uLink.NetworkPlayer)player));
+            Interface.Call("OnSingleDoorUsed", door, Player.Session((uLink.NetworkPlayer)player));
         }
 
         /// <summary>
@@ -428,7 +434,7 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnDoubleDoorUsed", door, FindSessionByNetPlayer((uLink.NetworkPlayer)player));
+            Interface.Call("OnDoubleDoorUsed", door, Player.Session((uLink.NetworkPlayer)player));
         }
 
         /// <summary>
@@ -442,7 +448,7 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnGarageDoorUsed", door, FindSessionByNetPlayer((uLink.NetworkPlayer)player));
+            Interface.Call("OnGarageDoorUsed", door, Player.Session((uLink.NetworkPlayer)player));
         }
 
         #endregion
@@ -464,25 +470,25 @@ namespace Oxide.Game.Hurtworld
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("ICanExitVehicle")]
-        private object ICanExitVehicle(VehiclePassenger vehicle) => Interface.Call("CanExitVehicle", FindSessionByNetPlayer(vehicle.networkView.owner), vehicle);
+        private object ICanExitVehicle(VehiclePassenger vehicle) => Interface.Call("CanExitVehicle", Player.Session(vehicle.networkView.owner), vehicle);
 
         /// <summary>
         /// Called when a player enters a vehicle
         /// </summary>
-        /// <param name="netPlayer"></param>
+        /// <param name="player"></param>
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnEnterVehicle")]
-        private object IOnEnterVehicle(uLink.NetworkPlayer netPlayer, VehiclePassenger vehicle) => Interface.Call("OnEnterVehicle", FindSessionByNetPlayer(netPlayer), vehicle);
+        private object IOnEnterVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle) => Interface.Call("OnEnterVehicle", Player.Session(player), vehicle);
 
         /// <summary>
         /// Called when a player exits a vehicle
         /// </summary>
-        /// <param name="netPlayer"></param>
+        /// <param name="player"></param>
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnExitVehicle")]
-        private object IOnExitVehicle(uLink.NetworkPlayer netPlayer, VehiclePassenger vehicle) => Interface.Call("OnExitVehicle", FindSessionByNetPlayer(netPlayer), vehicle);
+        private object IOnExitVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle) => Interface.Call("OnExitVehicle", Player.Session(player), vehicle);
 
         #endregion
 
@@ -1000,7 +1006,7 @@ namespace Oxide.Game.Hurtworld
             var name = args[1];
             var group = args[2];
 
-            var target = FindSession(name);
+            var target = Player.Session(name);
             if (target == null && !permission.UserIdValid(name))
             {
                 Reply(Lang("UserNotFound", session.SteamId.ToString(), name), session);
@@ -1050,7 +1056,7 @@ namespace Oxide.Game.Hurtworld
             var name = args[1];
             var group = args[2];
 
-            var target = FindSession(name);
+            var target = Player.Session(name);
             if (target == null && !permission.UserIdValid(name))
             {
                 Reply(Lang("UserNotFound", null, name));
@@ -1124,7 +1130,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = FindSession(name);
+                var target = Player.Session(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound", session.SteamId.ToString(), name), session);
@@ -1178,7 +1184,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = FindSession(name);
+                var target = Player.Session(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound", null, name));
@@ -1238,7 +1244,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = FindSession(name);
+                var target = Player.Session(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound", session.SteamId.ToString(), name), session);
@@ -1292,7 +1298,7 @@ namespace Oxide.Game.Hurtworld
             }
             else if (mode.Equals("user"))
             {
-                var target = FindSession(name);
+                var target = Player.Session(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound", null, name));
@@ -1347,7 +1353,7 @@ namespace Oxide.Game.Hurtworld
                     return;
                 }
 
-                var target = FindSession(name);
+                var target = Player.Session(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound", session.SteamId.ToString()), session);
@@ -1432,7 +1438,7 @@ namespace Oxide.Game.Hurtworld
                     return;
                 }
 
-                var target = FindSession(name);
+                var target = Player.Session(name);
                 if (target == null && !permission.UserIdValid(name))
                 {
                     Reply(Lang("UserNotFound"));

@@ -1214,7 +1214,7 @@ namespace Oxide.Game.Rust
         private object OnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
-            if (arg.cmd.namefull != "chat.say") return null;
+            if (arg.cmd.FullName != "chat.say") return null;
 
             // Get the args
             var str = arg.GetString(0);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
@@ -14,9 +13,6 @@ namespace Oxide.Game.Rust.Libraries
     /// </summary>
     public class Command : Library
     {
-        private static string ReturnEmptyString() => string.Empty;
-        private static void DoNothing(string str) { }
-
         internal struct PluginCallback
         {
             public readonly Plugin Plugin;
@@ -51,15 +47,14 @@ namespace Oxide.Game.Rust.Libraries
                 var splitName = Name.Split('.');
                 RustCommand = new ConsoleSystem.Command
                 {
-                    name = splitName[1],
-                    parent = splitName[0],
-                    namefull = name,
-                    isCommand = true,
-                    isUser = true,
-                    isAdmin = true,
-                    isVariable = false,
-                    GetString = ReturnEmptyString,
-                    SetString = DoNothing,
+                    Name = splitName[1],
+                    Parent = splitName[0],
+                    FullName = name,
+                    User = true,
+                    Admin = true,
+                    Client = true,
+                    ClientInfo = false,
+                    Variable = false,
                     Call = HandleCommand
                 };
             }
@@ -102,9 +97,6 @@ namespace Oxide.Game.Rust.Libraries
 
         // All chat commands that plugins have registered
         internal readonly Dictionary<string, ChatCommand> chatCommands;
-
-        // A reference to Rust's internal command dictionary
-        private IDictionary<string, ConsoleSystem.Command> rustcommands;
 
         // A reference to the plugin removed callbacks
         private readonly Dictionary<Plugin, Event.Callback<Plugin, PluginManager>> pluginRemovedFromManager;
@@ -191,9 +183,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="callback"></param>
         public void AddConsoleCommand(string command, Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
         {
-            if (rustcommands == null)
-                rustcommands = typeof(ConsoleSystem.Index).GetField("dictionary", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as IDictionary<string, ConsoleSystem.Command>;
-
             // Hook the unload event
             if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
                 pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
@@ -219,23 +208,21 @@ namespace Oxide.Game.Rust.Libraries
             ConsoleCommand consoleCommand;
             if (consoleCommands.TryGetValue(fullName, out consoleCommand))
             {
-                if (consoleCommand.OriginalCallback != null)
-                    cmd.OriginalCallback = consoleCommand.OriginalCallback;
+                if (consoleCommand.OriginalCallback != null) cmd.OriginalCallback = consoleCommand.OriginalCallback;
 
                 var previousPluginName = consoleCommand.Callback.Plugin?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
                 var message = $"{newPluginName} has replaced the '{command}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
 
-                rustcommands.Remove(consoleCommand.RustCommand.namefull);
-                ConsoleSystem.Index.GetAll().Remove(consoleCommand.RustCommand);
+                ConsoleSystem.Index.Dict.Remove(consoleCommand.RustCommand.FullName);
+                if (parent == "global") ConsoleSystem.Index.GlobalDict.Remove(consoleCommand.RustCommand.Name);
             }
 
             RustCommandSystem.RegisteredCommand covalenceCommand;
             if (RustCore.Covalence.CommandSystem.registeredCommands.TryGetValue(parent == "global" ? name : fullName, out covalenceCommand))
             {
-                if (covalenceCommand.OriginalCallback != null)
-                    cmd.OriginalCallback = covalenceCommand.OriginalCallback;
+                if (covalenceCommand.OriginalCallback != null) cmd.OriginalCallback = covalenceCommand.OriginalCallback;
 
                 var previousPluginName = covalenceCommand.Source?.Name ?? "an unknown plugin";
                 var newPluginName = plugin?.Name ?? "An unknown plugin";
@@ -249,10 +236,10 @@ namespace Oxide.Game.Rust.Libraries
             cmd.AddCallback(plugin, callback);
 
             ConsoleSystem.Command rustCommand;
-            if (rustcommands.TryGetValue(fullName, out rustCommand))
+            if (ConsoleSystem.Index.Dict.TryGetValue(fullName, out rustCommand))
             {
-                // This is a vanilla rust command which has not yet been hooked by a plugin
-                if (rustCommand.isVariable)
+                // This is a vanilla Rust command which has not yet been hooked by a plugin
+                if (rustCommand.Variable)
                 {
                     var newPluginName = plugin?.Name ?? "An unknown plugin";
                     Interface.Oxide.LogError($"{newPluginName} tried to register the {name} console variable as a command!");
@@ -262,9 +249,9 @@ namespace Oxide.Game.Rust.Libraries
             }
 
             // Register the console command
-            rustcommands[fullName] = cmd.RustCommand;
-            ConsoleSystem.Index.GetAll().Add(cmd.RustCommand);
-            consoleCommands[parent == "global" ? name : fullName] = cmd;
+            ConsoleSystem.Index.Dict[fullName] = cmd.RustCommand;
+            if (parent == "global") ConsoleSystem.Index.GlobalDict[name] = cmd.RustCommand;
+            consoleCommands[fullName] = cmd;
         }
 
         /// <summary>
@@ -298,12 +285,14 @@ namespace Oxide.Game.Rust.Libraries
                 // If this was originally a vanilla rust command then restore it, otherwise remove it
                 if (cmd.OriginalCallback != null)
                 {
-                    rustcommands[cmd.RustCommand.namefull].Call = cmd.OriginalCallback;
+                    ConsoleSystem.Index.Dict[cmd.RustCommand.FullName].Call = cmd.OriginalCallback;
+                    if (cmd.RustCommand.FullName.StartsWith("global."))
+                        ConsoleSystem.Index.GlobalDict[cmd.RustCommand.Name].Call = cmd.OriginalCallback;
                 }
                 else
                 {
-                    rustcommands.Remove(cmd.RustCommand.namefull);
-                    ConsoleSystem.Index.GetAll().Remove(cmd.RustCommand);
+                    ConsoleSystem.Index.Dict.Remove(cmd.RustCommand.FullName);
+                    if (cmd.Name.StartsWith("global.")) ConsoleSystem.Index.GlobalDict.Remove(cmd.RustCommand.Name);
                 }
             }
 
