@@ -56,7 +56,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 24,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -3597,83 +3597,6 @@
             "MSILHash": "K69FBPko5Bu5sQAPktL67YL4V6Z3Awv4Du1BwRJ0PHA=",
             "BaseHookName": null,
             "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 152,
-            "RemoveCount": 0,
-            "Instructions": [
-              {
-                "OpCode": "ldarg_0",
-                "OpType": "None",
-                "Operand": null
-              },
-              {
-                "OpCode": "ldfld",
-                "OpType": "Field",
-                "Operand": "Facepunch.Console|ConsoleSystem/Arg|cmd"
-              },
-              {
-                "OpCode": "ldfld",
-                "OpType": "Field",
-                "Operand": "Facepunch.Console|ConsoleSystem/Command|FullName"
-              },
-              {
-                "OpCode": "ldstr",
-                "OpType": "String",
-                "Operand": "rcon.password"
-              },
-              {
-                "OpCode": "call",
-                "OpType": "Method",
-                "Operand": "mscorlib|System.String|op_Equality"
-              },
-              {
-                "OpCode": "stloc_2",
-                "OpType": "None",
-                "Operand": null
-              },
-              {
-                "OpCode": "ldloc_2",
-                "OpType": "None",
-                "Operand": null
-              },
-              {
-                "OpCode": "brfalse_s",
-                "OpType": "Instruction",
-                "Operand": 152
-              },
-              {
-                "OpCode": "ldstr",
-                "OpType": "String",
-                "Operand": "******"
-              },
-              {
-                "OpCode": "stloc_3",
-                "OpType": "None",
-                "Operand": null
-              }
-            ],
-            "HookTypeName": "Modify",
-            "Name": "HideRconPassword [patch]",
-            "HookName": "HideRconPassword",
-            "AssemblyName": "Facepunch.Console.dll",
-            "TypeName": "ConsoleSystem/Run",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Internal",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "ConsoleSystem/Arg",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "K69FBPko5Bu5sQAPktL67YL4V6Z3Awv4Du1BwRJ0PHA=",
-            "BaseHookName": "OnServerCommand",
-            "HookCategory": "_Patches"
           }
         },
         {

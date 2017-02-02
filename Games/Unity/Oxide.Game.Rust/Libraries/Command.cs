@@ -98,10 +98,6 @@ namespace Oxide.Game.Rust.Libraries
         // All chat commands that plugins have registered
         internal readonly Dictionary<string, ChatCommand> chatCommands;
 
-        // A reference to Rust's internal command dictionaries
-        private IDictionary<string, ConsoleSystem.Command> rustCommands = ConsoleSystem.Index.Dict;
-        private IDictionary<string, ConsoleSystem.Command> rustGlobalCommands = ConsoleSystem.Index.GlobalDict;
-
         // A reference to the plugin removed callbacks
         private readonly Dictionary<Plugin, Event.Callback<Plugin, PluginManager>> pluginRemovedFromManager;
 
@@ -187,9 +183,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="callback"></param>
         public void AddConsoleCommand(string command, Plugin plugin, Func<ConsoleSystem.Arg, bool> callback)
         {
-            if (rustCommands == null) rustCommands = ConsoleSystem.Index.Dict;
-            if (rustGlobalCommands == null) rustGlobalCommands = ConsoleSystem.Index.GlobalDict;
-
             // Hook the unload event
             if (plugin != null && !pluginRemovedFromManager.ContainsKey(plugin))
                 pluginRemovedFromManager[plugin] = plugin.OnRemovedFromManager.Add(plugin_OnRemovedFromManager);
@@ -222,8 +215,8 @@ namespace Oxide.Game.Rust.Libraries
                 var message = $"{newPluginName} has replaced the '{command}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
 
-                rustCommands.Remove(consoleCommand.RustCommand.FullName);
-                if (parent == "global") rustGlobalCommands.Remove(consoleCommand.RustCommand.Name);
+                ConsoleSystem.Index.Dict.Remove(consoleCommand.RustCommand.FullName);
+                if (parent == "global") ConsoleSystem.Index.GlobalDict.Remove(consoleCommand.RustCommand.Name);
             }
 
             RustCommandSystem.RegisteredCommand covalenceCommand;
@@ -243,7 +236,7 @@ namespace Oxide.Game.Rust.Libraries
             cmd.AddCallback(plugin, callback);
 
             ConsoleSystem.Command rustCommand;
-            if (rustCommands.TryGetValue(fullName, out rustCommand))
+            if (ConsoleSystem.Index.Dict.TryGetValue(fullName, out rustCommand))
             {
                 // This is a vanilla Rust command which has not yet been hooked by a plugin
                 if (rustCommand.Variable)
@@ -256,9 +249,9 @@ namespace Oxide.Game.Rust.Libraries
             }
 
             // Register the console command
-            rustCommands[fullName] = cmd.RustCommand;
-            if (parent == "global") rustGlobalCommands[name] = cmd.RustCommand;
-            consoleCommands[parent == "global" ? name : fullName] = cmd;
+            ConsoleSystem.Index.Dict[fullName] = cmd.RustCommand;
+            if (parent == "global") ConsoleSystem.Index.GlobalDict[name] = cmd.RustCommand;
+            consoleCommands[fullName] = cmd;
         }
 
         /// <summary>
@@ -292,14 +285,14 @@ namespace Oxide.Game.Rust.Libraries
                 // If this was originally a vanilla rust command then restore it, otherwise remove it
                 if (cmd.OriginalCallback != null)
                 {
-                    rustCommands[cmd.RustCommand.FullName].Call = cmd.OriginalCallback;
-                    if (cmd.RustCommand.FullName.StartsWith("global"))
-                        rustGlobalCommands[cmd.RustCommand.Name].Call = cmd.OriginalCallback;
+                    ConsoleSystem.Index.Dict[cmd.RustCommand.FullName].Call = cmd.OriginalCallback;
+                    if (cmd.RustCommand.FullName.StartsWith("global."))
+                        ConsoleSystem.Index.GlobalDict[cmd.RustCommand.Name].Call = cmd.OriginalCallback;
                 }
                 else
                 {
-                    rustCommands.Remove(cmd.RustCommand.FullName);
-                    if (cmd.Name.StartsWith("global")) rustGlobalCommands.Remove(cmd.RustCommand.Name);
+                    ConsoleSystem.Index.Dict.Remove(cmd.RustCommand.FullName);
+                    if (cmd.Name.StartsWith("global.")) ConsoleSystem.Index.GlobalDict.Remove(cmd.RustCommand.Name);
                 }
             }
 
