@@ -137,7 +137,7 @@ namespace Oxide.Game.Rust
             {
                 if (string.IsNullOrEmpty(input)) return null;
                 if (!input.Contains(".")) input = string.Concat("global.", input);
-                return ConsoleSystem.Index.GetAll().Where(c => c.namefull.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.namefull).ToArray();
+                return ConsoleSystem.Index.All.Where(c => c.FullName.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.FullName).ToArray();
             };
         }
 
