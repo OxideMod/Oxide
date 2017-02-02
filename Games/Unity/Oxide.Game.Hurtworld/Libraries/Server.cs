@@ -18,7 +18,15 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
-        protected void Broadcast(string message, string prefix = null) => ServerInstance.Broadcast(prefix != null ? $"{prefix} {message}" : message);
+        public void Broadcast(string message, string prefix = null) => ServerInstance.Broadcast(prefix != null ? $"{prefix} {message}" : message);
+
+        /// <summary>
+        /// Broadcasts a chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, string prefix = null, params object[] args) => Broadcast(string.Format(message, args), prefix);
 
         /// <summary>
         /// Runs the specified server command
