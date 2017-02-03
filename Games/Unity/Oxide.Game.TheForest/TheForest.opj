@@ -67,7 +67,7 @@
             "HookName": "InitServer",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamManager",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 2,
               "Name": "Initialize",
@@ -91,7 +91,7 @@
             "HookName": "ILobbySetup",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamNGUI",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "OpenScreen",
@@ -143,7 +143,7 @@
             "HookName": "ILobbyReady",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopLobbyManager",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "LobbyCreated",
@@ -1623,7 +1623,7 @@
             "HookName": "ICutScene",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "TriggerCutScene",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "Awake",

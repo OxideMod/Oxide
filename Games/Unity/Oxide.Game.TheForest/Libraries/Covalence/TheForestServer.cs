@@ -18,6 +18,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
     /// </summary>
     public class TheForestServer : IServer
     {
+        internal NetworkId NetworkId = new NetworkId();
+
         #region Information
 
         /// <summary>
@@ -178,13 +180,13 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             // Set the sender name to "Server"
             var player = new ChatBox.Player { _name = "Server", _color = Color.cyan };
-            ChatBox.Instance.Players[LocalPlayer.Entity.networkId] = player;
-            LocalPlayer.Entity.GetState<IPlayerState>().name = "Server";
+            ChatBox.Instance.Players[NetworkId] = player;
+            //LocalPlayer.Entity.GetState<IPlayerState>().name = "Server";
 
             // Create and send the chat event
             var chatEvent = ChatEvent.Create(GlobalTargets.Others);
             chatEvent.Message = message;
-            chatEvent.Sender = LocalPlayer.Entity.networkId;
+            chatEvent.Sender = NetworkId;
             chatEvent.Send();
 
             Debug.Log($"[Chat] {message}");
