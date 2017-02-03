@@ -16,6 +16,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// Gets item based on item ID
         /// </summary>
         /// <param name="itemId"></param>
+        [LibraryFunction("GetItem")]
         public static IItem GetItem(int itemId) => ItemManager.GetItem(itemId);
     }
 }

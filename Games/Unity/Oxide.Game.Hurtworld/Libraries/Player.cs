@@ -26,6 +26,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="reason"></param>
+        [LibraryFunction("Ban")]
         public void Ban(PlayerSession session, string reason = "")
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -37,6 +38,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="emote"></param>
+        [LibraryFunction("Emote")]
         public void Emote(PlayerSession session, EEmoteType emote)
         {
             var emoteManager = session.WorldPlayerEntity.GetComponent<EmoteManagerServer>();
@@ -48,6 +50,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="amount"></param>
+        [LibraryFunction("Heal")]
         public void Heal(PlayerSession session, float amount)
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -59,6 +62,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="amount"></param>
+        [LibraryFunction("Hurt")]
         public void Hurt(PlayerSession session, float amount)
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -70,6 +74,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="reason"></param>
+        [LibraryFunction("Kick")]
         public void Kick(PlayerSession session, string reason = "")
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -80,6 +85,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// Causes the player to die
         /// </summary>
         /// <param name="session"></param>
+        [LibraryFunction("Kill")]
         public void Kill(PlayerSession session)
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -91,6 +97,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="destination"></param>
+        [LibraryFunction("Teleport")]
         public void Teleport(PlayerSession session, Vector3 destination) => Teleport(session, destination.x, destination.y, destination.z);
 
         /// <summary>
@@ -98,6 +105,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="target"></param>
+        [LibraryFunction("Teleport")]
         public void Teleport(PlayerSession session, PlayerSession target)
         {
             var targetPos = Position(target);
@@ -111,6 +119,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
+        [LibraryFunction("Teleport")]
         public void Teleport(PlayerSession session, float x, float y, float z)
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -126,6 +135,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
+        [LibraryFunction("Position")]
         public Vector3 Position(PlayerSession session) => session.WorldPlayerEntity.transform.position;
 
         #endregion
@@ -137,6 +147,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
+        [LibraryFunction("Session")]
         public PlayerSession Session(string nameOrIdOrIp)
         {
             PlayerSession session = null;
@@ -155,6 +166,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [LibraryFunction("SessionById")]
         public PlayerSession SessionById(string id)
         {
             PlayerSession session = null;
@@ -172,6 +184,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="col"></param>
         /// <returns></returns>
+        [LibraryFunction("Session")]
         public PlayerSession Session(Collider col)
         {
             PlayerSession session = null;
@@ -190,6 +203,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
+        [LibraryFunction("Session")]
         public PlayerSession Session(uLink.NetworkPlayer player) => GameManager.Instance.GetSession(player);
 
         /// <summary>
@@ -197,6 +211,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="go"></param>
         /// <returns></returns>
+        [LibraryFunction("Session")]
         public PlayerSession Session(GameObject go)
         {
             return (from s in Sessions where go.Equals(s.Value.WorldPlayerEntity) select s.Value).FirstOrDefault();
@@ -217,6 +232,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="session"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
+        [LibraryFunction("Command")]
         public void Command(PlayerSession session, string command, params object[] args)
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -229,6 +245,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="session"></param>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
+        [LibraryFunction("Message")]
         public void Message(PlayerSession session, string message, string prefix = null)
         {
             var iplayer = PlayerManager.FindPlayerById(session.SteamId.ToString());
@@ -242,6 +259,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="message"></param>
         /// <param name="prefix"></param>
         /// <param name="args"></param>
+        [LibraryFunction("Message")]
         public void Message(PlayerSession session, string message, string prefix = null, params object[] args) => Message(session, string.Format(message, args), prefix);
 
         /// <summary>
@@ -250,6 +268,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="session"></param>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
+        [LibraryFunction("Reply")]
         public void Reply(PlayerSession session, string message, string prefix = null) => Message(session, prefix != null ? $"{prefix} {message}" : message);
 
         /// <summary>
@@ -259,6 +278,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="message"></param>
         /// <param name="prefix"></param>
         /// <param name="args"></param>
+        [LibraryFunction("Reply")]
         public void Reply(PlayerSession session, string message, string prefix = null, params object[] args) => Reply(session, string.Format(message, args), prefix);
 
         #endregion
@@ -270,6 +290,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="itemId"></param>
+        [LibraryFunction("DropItem")]
         public void DropItem(PlayerSession session, int itemId)
         {
             var position = session.WorldPlayerEntity.transform.position;
@@ -286,6 +307,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="item"></param>
+        [LibraryFunction("DropItem")]
         public void DropItem(PlayerSession session, IItem item)
         {
             var position = session.WorldPlayerEntity.transform.position;
@@ -303,6 +325,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="session"></param>
         /// <param name="itemId"></param>
         /// <param name="quantity"></param>
+        [LibraryFunction("GiveItem")]
         public void GiveItem(PlayerSession session, int itemId, int quantity = 1) => GiveItem(session, Item.GetItem(itemId), quantity);
 
         /// <summary>
@@ -311,6 +334,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="session"></param>
         /// <param name="item"></param>
         /// <param name="quantity"></param>
+        [LibraryFunction("GiveItem")]
         public void GiveItem(PlayerSession session, IItem item, int quantity = 1) => ItemManager.GiveItem(session.Player, item, quantity);
 
         #endregion
@@ -322,12 +346,14 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
+        [LibraryFunction("Inventory")]
         public PlayerInventory Inventory(PlayerSession session) => session.WorldPlayerEntity.GetComponent<PlayerInventory>();
 
         /// <summary>
         /// Clears the inventory of the player
         /// </summary>
         /// <param name="session"></param>
+        [LibraryFunction("ClearInventory")]
         public void ClearInventory(PlayerSession session) => Inventory(session)?.DestroyAll();
 
         #endregion
