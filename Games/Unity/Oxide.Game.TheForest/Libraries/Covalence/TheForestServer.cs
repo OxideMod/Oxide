@@ -187,7 +187,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             chatEvent.Sender = LocalPlayer.Entity.networkId;
             chatEvent.Send();
 
-            Debug.Log($"[Broadcast] {message}");
+            Debug.Log($"[Chat] {message}");
         }
 
         /// <summary>

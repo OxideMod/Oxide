@@ -750,7 +750,7 @@
                 "ResetTrap"
               ]
             },
-            "MSILHash": "m1neLS+BNRnh9n0upv2n/HS20Dhlx4FBo38QvjW21E0=",
+            "MSILHash": "QoyZV3UTHm3DFQZ2FqOC29FaBofUJjCdhnl2+QNCECY=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -958,7 +958,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "VibWZ5CvDuE8S74e4kZZs3gveksjkY6c4/vlAIirIiw=",
+            "MSILHash": "QEXjJKdkdRSnpHBbDKDxc5lBpi1QZ5XfKuLj7CsRFVQ=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1296,7 +1296,7 @@
                 "PlayerHitEnemy"
               ]
             },
-            "MSILHash": "G63gz4UZR8FlS9ikj1+eF0hpAK4DntJvKXO10+jMD3U=",
+            "MSILHash": "jbDyLO+HrZiVpytF9o76l8olrnt6kihQoBpH6PS1DuE=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1372,7 +1372,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "UARhzKpmgapLAIyNjoqf2wISBGtcyU7VNm59i2XXmhA=",
+            "MSILHash": "z9mmHofDgkAMelRDXBkSUBQ0udBP1c2em72dt+0sP24=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

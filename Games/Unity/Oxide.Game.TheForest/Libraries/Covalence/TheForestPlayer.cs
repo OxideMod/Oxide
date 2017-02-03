@@ -36,8 +36,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             // Store user object
             steamId = entity.controller.RemoteEndPoint.SteamId.Id;
-            Id = steamId.ToString();
             cSteamId = new CSteamID(steamId);
+            Id = steamId.ToString();
             Name = SteamFriends.GetFriendPersonaName(cSteamId);
             this.entity = entity;
         }
