@@ -13,7 +13,7 @@ namespace Oxide.Game.Hurtworld.Libraries
     public class Player : Library
     {
         // Covalence references
-        internal static readonly HurtworldCovalenceProvider Covalence = HurtworldCore.Covalence;
+        internal static readonly HurtworldCovalenceProvider Covalence = HurtworldCovalenceProvider.Instance;
         internal static readonly IPlayerManager PlayerManager = Covalence.PlayerManager;
 
         // Game references

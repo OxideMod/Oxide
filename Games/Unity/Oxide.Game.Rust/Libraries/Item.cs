@@ -6,7 +6,7 @@ namespace Oxide.Game.Rust.Libraries
     public class Item : Library
     {
         // Covalence references
-        internal static readonly RustCovalenceProvider Covalence = RustCore.Covalence;
+        internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
 
         /// <summary>
         /// Gets item based on item ID

@@ -8,7 +8,7 @@ namespace Oxide.Game.Hurtworld.Libraries
     public class Server : Library
     {
         // Covalence references
-        internal static readonly HurtworldCovalenceProvider Covalence = HurtworldCore.Covalence;
+        internal static readonly HurtworldCovalenceProvider Covalence = HurtworldCovalenceProvider.Instance;
         internal static readonly IServer ServerInstance = Covalence.CreateServer();
 
         #region Chat and Commands

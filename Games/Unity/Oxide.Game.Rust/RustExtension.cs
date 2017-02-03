@@ -80,9 +80,9 @@ namespace Oxide.Game.Rust
             // Register our libraries
             Manager.RegisterLibrary("Rust", new Libraries.Rust());
             Manager.RegisterLibrary("Command", new Libraries.Command());
-            Manager.RegisterLibrary("Item", new Libraries.Item());
-            Manager.RegisterLibrary("Player", new Libraries.Player());
-            Manager.RegisterLibrary("Server", new Libraries.Server());
+            //Manager.RegisterLibrary("Item", new Libraries.Item()); // TODO: Fix TypeInitializationException
+            //Manager.RegisterLibrary("Player", new Libraries.Player()); // TODO: Fix TypeInitializationException
+            //Manager.RegisterLibrary("Server", new Libraries.Server()); // TODO: Fix TypeInitializationException
         }
 
         /// <summary>

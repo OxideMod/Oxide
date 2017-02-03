@@ -7,7 +7,7 @@ namespace Oxide.Game.Rust.Libraries
     public class Server : Library
     {
         // Covalence references
-        internal static readonly RustCovalenceProvider Covalence = RustCore.Covalence;
+        internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
         internal static readonly IServer ServerInstance = Covalence.CreateServer();
 
         #region Chat and Commands
