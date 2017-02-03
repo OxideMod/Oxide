@@ -396,14 +396,22 @@ namespace Oxide.Game.Hurtworld
         /// <param name="player"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
-        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.Call("OnPlayerInput", Player.Session(player), input);
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input)
+        {
+            var session = Player.Session(player);
+            if (session != null) Interface.Call("OnPlayerInput", session, input);
+        }
 
         /// <summary>
         /// Called when the player attempts to suicide
         /// </summary>
         /// <param name="player"></param>
         [HookMethod("IOnPlayerSuicide")]
-        private object IOnPlayerSuicide(uLink.NetworkPlayer player) => Interface.Call("OnPlayerSuicide", Player.Session(player));
+        private object IOnPlayerSuicide(uLink.NetworkPlayer player)
+        {
+            var session = Player.Session(player);
+            return session != null ? Interface.Call("OnPlayerSuicide", session) : null;
+        }
 
         #endregion
 
@@ -420,7 +428,8 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnSingleDoorUsed", door, Player.Session((uLink.NetworkPlayer)player));
+            var session = Player.Session((uLink.NetworkPlayer)player);
+            if (session != null) Interface.Call("OnSingleDoorUsed", door, session);
         }
 
         /// <summary>
@@ -434,7 +443,8 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnDoubleDoorUsed", door, Player.Session((uLink.NetworkPlayer)player));
+            var session = Player.Session((uLink.NetworkPlayer)player);
+            if (session != null) Interface.Call("OnDoubleDoorUsed", door, session);
         }
 
         /// <summary>
@@ -448,7 +458,8 @@ namespace Oxide.Game.Hurtworld
             var player = door.LastUsedBy;
             if (player == null) return;
 
-            Interface.Call("OnGarageDoorUsed", door, Player.Session((uLink.NetworkPlayer)player));
+            var session = Player.Session((uLink.NetworkPlayer)player);
+            if (session != null) Interface.Call("OnGarageDoorUsed", door, session);
         }
 
         #endregion
@@ -462,7 +473,10 @@ namespace Oxide.Game.Hurtworld
         /// <param name="go"></param>
         /// <returns></returns>
         [HookMethod("ICanEnterVehicle")]
-        private object ICanEnterVehicle(PlayerSession session, GameObject go) => Interface.Call("CanEnterVehicle", session, go.GetComponent<VehiclePassenger>());
+        private object ICanEnterVehicle(PlayerSession session, GameObject go)
+        {
+            return Interface.Call("CanEnterVehicle", session, go.GetComponent<VehiclePassenger>());
+        }
 
         /// <summary>
         /// Called when a player tries to exit a vehicle
@@ -470,7 +484,11 @@ namespace Oxide.Game.Hurtworld
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("ICanExitVehicle")]
-        private object ICanExitVehicle(VehiclePassenger vehicle) => Interface.Call("CanExitVehicle", Player.Session(vehicle.networkView.owner), vehicle);
+        private object ICanExitVehicle(VehiclePassenger vehicle)
+        {
+            var session = Player.Session(vehicle.networkView.owner);
+            return session != null ? Interface.Call("CanExitVehicle", session, vehicle) : null;
+        }
 
         /// <summary>
         /// Called when a player enters a vehicle
@@ -479,7 +497,11 @@ namespace Oxide.Game.Hurtworld
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnEnterVehicle")]
-        private object IOnEnterVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle) => Interface.Call("OnEnterVehicle", Player.Session(player), vehicle);
+        private object IOnEnterVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle)
+        {
+            var session = Player.Session(player);
+            return session != null ? Interface.Call("OnEnterVehicle", session, vehicle) : null;
+        }
 
         /// <summary>
         /// Called when a player exits a vehicle
@@ -488,7 +510,11 @@ namespace Oxide.Game.Hurtworld
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnExitVehicle")]
-        private object IOnExitVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle) => Interface.Call("OnExitVehicle", Player.Session(player), vehicle);
+        private object IOnExitVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle)
+        {
+            var session = Player.Session(player);
+            return session != null ? Interface.Call("OnExitVehicle", session, vehicle) : null;
+        }
 
         #endregion
 
