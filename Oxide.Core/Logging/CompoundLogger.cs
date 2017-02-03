@@ -2,6 +2,8 @@
 
 namespace Oxide.Core.Logging
 {
+    public delegate void CompoundLoggerDelegate(LogMessageEventArgs e);
+
     /// <summary>
     /// Represents a set of loggers that fall under a single logger
     /// </summary>
@@ -13,6 +15,13 @@ namespace Oxide.Core.Logging
         // Any cached messages for new loggers
         private readonly List<LogMessage> messagecache;
         private bool usecache;
+
+        /// <summary>
+        /// Handles Outbound LogMessages
+        /// Proper use is to check if null and if it is create a new Delegate
+        /// else subcribe to it with +=
+        /// </summary>
+        public event CompoundLoggerDelegate LogMessageHandler;
 
         /// <summary>
         /// Initializes a new instance of the CompoundLogger class
@@ -71,6 +80,9 @@ namespace Oxide.Core.Logging
 
             // Cache it for any loggers added late
             if (usecache) messagecache.Add(CreateLogMessage(type, format, args));
+
+            // Sends the LogMessage to Subscribed Log Handlers
+            if (LogMessageHandler != null) LogMessageHandler.Invoke(new LogMessageEventArgs(string.Format(format, args), type));
         }
 
         /// <summary>
