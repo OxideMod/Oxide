@@ -82,6 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Command.cs" />
+    <Compile Include="Libraries\Item.cs" />
+    <Compile Include="Libraries\Player.cs" />
     <Compile Include="Libraries\Rust.cs" />
     <Compile Include="Libraries\Covalence\RustCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\RustConsolePlayer.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Libraries\Covalence\RustPlayer.cs" />
     <Compile Include="Libraries\Covalence\RustPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\RustServer.cs" />
+    <Compile Include="Libraries\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RustCore.cs" />
     <Compile Include="RustCui.cs" />

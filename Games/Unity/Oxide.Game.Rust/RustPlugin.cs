@@ -11,6 +11,9 @@ namespace Oxide.Plugins
     {
         protected Command cmd = Interface.Oxide.GetLibrary<Command>();
         protected Game.Rust.Libraries.Rust rust = Interface.Oxide.GetLibrary<Game.Rust.Libraries.Rust>();
+        protected Game.Rust.Libraries.Item Item = Interface.Oxide.GetLibrary<Game.Rust.Libraries.Item>();
+        protected Player Player = Interface.Oxide.GetLibrary<Player>();
+        protected Server Server = Interface.Oxide.GetLibrary<Server>();
 
         public override void HandleAddedToManager(PluginManager manager)
         {

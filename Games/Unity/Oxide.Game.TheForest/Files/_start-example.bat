@@ -3,7 +3,7 @@ cls
 :start
 echo Starting server...
 
-TheForest.exe -batchmode -nographics -ip 0.0.0.0 -port 27016 -maxplayers 10 -hostname "My Oxide Server" -friendsonly 0
+TheForest.exe -batchmode -nographics -dedicated -servername "My Oxide Server" -serverplayers 16 -serverautosaveinterval 15
 
 echo.
 echo Restarting server...

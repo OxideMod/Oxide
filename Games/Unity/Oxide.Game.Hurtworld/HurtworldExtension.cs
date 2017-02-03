@@ -2,7 +2,6 @@
 using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Extensions;
-using Oxide.Game.Hurtworld.Libraries;
 using UnityEngine;
 
 namespace Oxide.Game.Hurtworld
@@ -90,8 +89,11 @@ namespace Oxide.Game.Hurtworld
             Manager.RegisterPluginLoader(new HurtworldPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("Command", new Command());
             Manager.RegisterLibrary("Hurt", new Libraries.Hurtworld());
+            Manager.RegisterLibrary("Command", new Libraries.Command());
+            //Manager.RegisterLibrary("Item", new Libraries.Item()); // TODO: Fix TypeInitializationException
+            //Manager.RegisterLibrary("Player", new Libraries.Player()); // TODO: Fix TypeInitializationException
+            //Manager.RegisterLibrary("Server", new Libraries.Server()); // TODO: Fix TypeInitializationException
         }
 
         /// <summary>

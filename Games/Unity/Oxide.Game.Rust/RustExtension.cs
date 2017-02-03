@@ -5,7 +5,6 @@ using Facepunch.Extend;
 using Network;
 using Oxide.Core;
 using Oxide.Core.Extensions;
-using Oxide.Game.Rust.Libraries;
 using Rust;
 using UnityEngine;
 
@@ -79,8 +78,11 @@ namespace Oxide.Game.Rust
             Manager.RegisterPluginLoader(new RustPluginLoader());
 
             // Register our libraries
-            Manager.RegisterLibrary("Command", new Command());
             Manager.RegisterLibrary("Rust", new Libraries.Rust());
+            Manager.RegisterLibrary("Command", new Libraries.Command());
+            //Manager.RegisterLibrary("Item", new Libraries.Item()); // TODO: Fix TypeInitializationException
+            //Manager.RegisterLibrary("Player", new Libraries.Player()); // TODO: Fix TypeInitializationException
+            //Manager.RegisterLibrary("Server", new Libraries.Server()); // TODO: Fix TypeInitializationException
         }
 
         /// <summary>
