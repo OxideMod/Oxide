@@ -152,7 +152,7 @@ namespace Oxide.Plugins
         protected void SendReply(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = args.Length > 0 ? string.Format(format, args) : format;
-            var player = arg.connection?.player as BasePlayer;
+            var player = arg.Connection?.player as BasePlayer;
             if (player?.net != null)
             {
                 player.SendConsoleCommand("echo " + message);
@@ -178,7 +178,7 @@ namespace Oxide.Plugins
         protected void SendWarning(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = args.Length > 0 ? string.Format(format, args) : format;
-            var player = arg.connection?.player as BasePlayer;
+            var player = arg.Connection?.player as BasePlayer;
             if (player?.net != null)
             {
                 player.SendConsoleCommand("echo " + message);
@@ -196,7 +196,7 @@ namespace Oxide.Plugins
         protected void SendError(ConsoleSystem.Arg arg, string format, params object[] args)
         {
             var message = args.Length > 0 ? string.Format(format, args) : format;
-            var player = arg.connection?.player as BasePlayer;
+            var player = arg.Connection?.player as BasePlayer;
             if (player?.net != null)
             {
                 player.SendConsoleCommand("echo " + message);

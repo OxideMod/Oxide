@@ -325,7 +325,7 @@ namespace Oxide.Game.Rust
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
             // Call covalence hook
-            var iplayer = Covalence.PlayerManager.FindPlayer(arg.connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayer(arg.Connection.userid.ToString());
             return string.IsNullOrEmpty(arg.GetString(0)) ? null : Interface.Call("OnUserChat", iplayer, arg.GetString(0));
         }
 
@@ -1233,10 +1233,10 @@ namespace Oxide.Game.Rust
             if (cmd == null) return null;
 
             // Check if command is from a player
-            if (arg.connection == null) return null;
+            if (arg.Connection == null) return null;
 
             // Get the covalence player
-            var iplayer = Covalence.PlayerManager.FindPlayer(arg.connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayer(arg.Connection.userid.ToString());
             if (iplayer == null) return null;
 
             // Is the command blocked?
@@ -1248,9 +1248,9 @@ namespace Oxide.Game.Rust
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
             // Is it a regular chat command?
-            var player = arg.connection.player as BasePlayer;
+            var player = arg.Connection.player as BasePlayer;
             if (player == null)
-                Interface.Oxide.LogDebug("Player is actually a {0}!", arg.connection.player.GetType());
+                Interface.Oxide.LogDebug("Player is actually a {0}!", arg.Connection.player.GetType());
             else if (!cmdlib.HandleChatCommand(player, cmd, args))
                 iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
 
