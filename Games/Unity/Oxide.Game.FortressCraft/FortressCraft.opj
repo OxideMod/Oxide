@@ -180,7 +180,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rbsvEpEBWOAubp3icgw/0E1oNpB4XWCAF2BHSsDigkI=",
+            "MSILHash": "O6qzCy8jH4KB+EouVYN/cBJuPjZljbuxUpJVH/drtoI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -304,7 +304,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "MOOEHTTr3CVoR90nHoZer0KCPwTr9URJi1AmEA/shOc=",
+            "MSILHash": "DhDSE8+Bpm7MXb3RiwW1sIF+5bu5+nQWFJV1I3EyRN8=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
