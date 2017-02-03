@@ -313,7 +313,7 @@ namespace Oxide.Game.Hurtworld
             if (!str.Equals("/"))
             {
                 var chatSpecific = Interface.Call("OnPlayerChat", session, message);
-                var chatCovalence = Interface.Call("OnUserChat", iplayer, message);
+                var chatCovalence = iplayer != null ? Interface.Call("OnUserChat", iplayer, message) : null;
                 return chatSpecific ?? chatCovalence;
             }
 
@@ -351,6 +351,7 @@ namespace Oxide.Game.Hurtworld
         {
             // Get player's session
             var session = Player.Session(name);
+            if (session == null) return;
 
             // Do permission stuff
             if (permission.IsLoaded)
@@ -372,7 +373,8 @@ namespace Oxide.Game.Hurtworld
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(session);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(session.SteamId.ToString()));
+            var iplayer = Covalence.PlayerManager.FindPlayer(session.SteamId.ToString());
+            if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
 
         /// <summary>
@@ -383,7 +385,8 @@ namespace Oxide.Game.Hurtworld
         private void OnPlayerDisconnected(PlayerSession session)
         {
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(session.SteamId.ToString()), "Unknown");
+            var iplayer = Covalence.PlayerManager.FindPlayer(session.SteamId.ToString());
+            if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(session);
         }
 
@@ -393,10 +396,7 @@ namespace Oxide.Game.Hurtworld
         /// <param name="player"></param>
         /// <param name="input"></param>
         [HookMethod("IOnPlayerInput")]
-        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input)
-        {
-            Interface.Call("OnPlayerInput", (player), input);
-        }
+        private void IOnPlayerInput(uLink.NetworkPlayer player, InputControls input) => Interface.Call("OnPlayerInput", Player.Session(player), input);
 
         /// <summary>
         /// Called when the player attempts to suicide
