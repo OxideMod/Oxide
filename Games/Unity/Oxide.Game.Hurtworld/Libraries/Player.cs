@@ -139,13 +139,15 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <returns></returns>
         public PlayerSession Session(string nameOrIdOrIp)
         {
-            foreach (var session in Sessions)
+            PlayerSession session = null;
+            foreach (var s in Sessions)
             {
-                if (!nameOrIdOrIp.Equals(session.Value.Name, StringComparison.OrdinalIgnoreCase) &&
-                    !nameOrIdOrIp.Equals(session.Value.SteamId.ToString()) && !nameOrIdOrIp.Equals(session.Key.ipAddress)) continue;
-                return session.Value;
+                if (!nameOrIdOrIp.Equals(s.Value.Name, StringComparison.OrdinalIgnoreCase) &&
+                    !nameOrIdOrIp.Equals(s.Value.SteamId.ToString()) && !nameOrIdOrIp.Equals(s.Key.ipAddress)) continue;
+                session = s.Value;
+                break;
             }
-            return null;
+            return session;
         }
 
         /// <summary>
@@ -155,12 +157,14 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <returns></returns>
         public PlayerSession SessionById(string id)
         {
-            foreach (var session in Sessions)
+            PlayerSession session = null;
+            foreach (var s in Sessions)
             {
-                if (!id.Equals(session.Value.SteamId.ToString())) continue;
-                return session.Value;
+                if (!id.Equals(s.Value.SteamId.ToString())) continue;
+                session = s.Value;
+                break;
             }
-            return null;
+            return session;
         }
 
         /// <summary>
@@ -170,13 +174,15 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <returns></returns>
         public PlayerSession Session(Collider col)
         {
+            PlayerSession session = null;
             var stats = col.gameObject.GetComponent<EntityStatsTriggerProxy>().Stats;
-            foreach (var session in Sessions)
+            foreach (var s in Sessions)
             {
-                if (!session.Value.WorldPlayerEntity.GetComponent<EntityStats>() == stats) continue;
-                return session.Value;
+                if (!s.Value.WorldPlayerEntity.GetComponent<EntityStats>() == stats) continue;
+                session = s.Value;
+                break;
             }
-            return null;
+            return session;
         }
 
         /// <summary>

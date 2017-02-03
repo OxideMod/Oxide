@@ -37,15 +37,16 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         private void NotifyPlayerJoin(BoltEntity entity)
         {
             var steamId = entity.source.RemoteEndPoint.SteamId.Id;
-            var id = entity.source.RemoteEndPoint.SteamId.Id.ToString();
-            var name = SteamFriends.GetFriendPersonaName(new CSteamID(entity.source.RemoteEndPoint.SteamId.Id));
+            var cSteamId = new CSteamID(steamId);
+            var id = steamId.ToString();
+            var name = SteamFriends.GetFriendPersonaName(cSteamId);
 
             // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
                 // Update
-                record.Name = SteamFriends.GetFriendPersonaName(new CSteamID(entity.source.RemoteEndPoint.SteamId.Id));
+                record.Name = SteamFriends.GetFriendPersonaName(cSteamId);
                 playerData[id] = record;
 
                 // Swap out Rust player

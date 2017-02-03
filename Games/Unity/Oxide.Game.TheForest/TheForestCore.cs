@@ -142,9 +142,6 @@ namespace Oxide.Game.TheForest
             // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");
 
-            CoopPeerStarter.Dedicated = true;
-            CoopPeerStarter.DedicatedHost = true;
-
             // Update server console window and status bars
             TheForestExtension.ServerConsole();
 
@@ -234,7 +231,8 @@ namespace Oxide.Game.TheForest
             Debug.Log($"[Chat] {name}: {evt.Message}");
 
             // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayer(id.ToString()), evt.Message);
+            var iplayer = Covalence.PlayerManager.FindPlayer(id.ToString());
+            return iplayer != null ? Interface.Call("OnUserChat", iplayer, evt.Message) : null;
         }
 
         /// <summary>
@@ -261,7 +259,8 @@ namespace Oxide.Game.TheForest
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(entity);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(id));
+            var iplayer = Covalence.PlayerManager.FindPlayer(id);
+            if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
 
         /// <summary>
@@ -283,7 +282,8 @@ namespace Oxide.Game.TheForest
             Interface.Call("OnPlayerDisconnected", entity);
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(id.ToString()), "Unknown");
+            var iplayer = Covalence.PlayerManager.FindPlayer(id.ToString());
+            if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(entity);
         }
 
@@ -295,7 +295,8 @@ namespace Oxide.Game.TheForest
         private void OnPlayerSpawn(BoltEntity entity)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayer(entity.source.RemoteEndPoint.SteamId.Id.ToString()));
+            var iplayer = Covalence.PlayerManager.FindPlayer(entity.source.RemoteEndPoint.SteamId.Id.ToString());
+            if (iplayer != null) Interface.Call("OnUserSpawn", iplayer);
         }
 
         #endregion

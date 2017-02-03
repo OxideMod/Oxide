@@ -53,7 +53,8 @@ namespace Oxide.Game.TheForest
             "CoopSteamServer.P2PSessionRequest",
             "DestroyPickup:",
             "Displacement Rendertex recreated",
-            "FMOD Error (ERR_INVALID_PARAM)",
+            "Error getting event with path",
+            "FMOD Error",
             "Frost Damage",
             "Game Activation Sequence step",
             "HDR RenderTexture format is not supported on this platform",
@@ -70,6 +71,7 @@ namespace Oxide.Game.TheForest
             "OnApplicationFocus:",
             "OnPlaced",
             "PlayerPreferences.Load",
+            "Preload failed for",
             "Refreshing Input Mapping Icons",
             "Reloading Input Mapping",
             "RewiredSpawner",
@@ -140,8 +142,8 @@ namespace Oxide.Game.TheForest
 
         public static string GameVersion = "Unknown";
         private const string logFileName = "logs/output_log.txt"; // TODO: Add -logfile support
-        private StreamWriter logStream;
         private TextWriter logWriter;
+        public static CommandLine CommandLine;
 
         /// <summary>
         /// Disables the audio output
@@ -190,20 +192,20 @@ namespace Oxide.Game.TheForest
         /// </summary>
         internal static void DisableClient()
         {
-            var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
+            /*var firstPersonCharacters = Resources.FindObjectsOfTypeAll<FirstPersonCharacter>();
             foreach (var firstPersonCharacter in firstPersonCharacters) UnityEngine.Object.Destroy(firstPersonCharacter);
             var playerStats = Resources.FindObjectsOfTypeAll<PlayerStats>();
             foreach (var playerStat in playerStats) UnityEngine.Object.Destroy(playerStat);
             var playerTuts = Resources.FindObjectsOfTypeAll<PlayerTuts>();
-            foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);
-            //var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
-            //foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);*/
-            //var hudGuis = Resources.FindObjectsOfTypeAll<HudGui>();
-            //foreach (var hudGui in hudGuis) UnityEngine.Object.Destroy(hudGui);
-            var planeControls = Resources.FindObjectsOfTypeAll<playerPlaneControl>();
-            foreach (var planeControl in planeControls) UnityEngine.Object.Destroy(planeControl);
-            //var visRangeSetups = Resources.FindObjectsOfTypeAll<visRangeSetup>();
-            //foreach (var visRangeSetup in visRangeSetups) UnityEngine.Object.Destroy(visRangeSetup);
+            foreach (var playerTut in playerTuts) UnityEngine.Object.Destroy(playerTut);*/
+            /*var seasonGreebleLayers = Resources.FindObjectsOfTypeAll<SeasonGreebleLayers>();
+            foreach (var seasonGreebleLayer in seasonGreebleLayers) UnityEngine.Object.Destroy(seasonGreebleLayer);
+            var hudGuis = Resources.FindObjectsOfTypeAll<HudGui>();
+            foreach (var hudGui in hudGuis) UnityEngine.Object.Destroy(hudGui);*/
+            /*var planeControls = Resources.FindObjectsOfTypeAll<playerPlaneControl>();
+            foreach (var planeControl in planeControls) UnityEngine.Object.Destroy(planeControl);*/
+            /*var visRangeSetups = Resources.FindObjectsOfTypeAll<visRangeSetup>();
+            foreach (var visRangeSetup in visRangeSetups) UnityEngine.Object.Destroy(visRangeSetup);*/
             /*var visRangeSetups = LocalPlayer.Transform.GetComponent<visRangeSetup>();
             visRangeSetups.entity.enabled = false;
             var targetStat = LocalPlayer.Transform.GetComponent<targetStats>();
@@ -247,7 +249,7 @@ namespace Oxide.Game.TheForest
         public override void OnModLoad()
         {
             // Get the game's version from mainData
-            var regex = new Regex(@"Version v(\d+\.\d+[a-z]?)");
+            var regex = new Regex(@"Version v(\d+\.\d+[a-z]?)"); // TODO: Make global static
             using (var reader = new StreamReader(Path.Combine(Application.dataPath, "level0")))
             {
                 string line;
@@ -261,8 +263,8 @@ namespace Oxide.Game.TheForest
 
             if (!Directory.Exists("logs")) Directory.CreateDirectory("logs");
             if (File.Exists(logFileName)) File.Delete(logFileName);
+            var logStream = File.AppendText(logFileName);
             logStream.AutoFlush = true;
-            logStream = File.AppendText(logFileName);
             logWriter = TextWriter.Synchronized(logStream);
             Application.logMessageReceivedThreaded += HandleLog;
 
@@ -316,7 +318,7 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        public override void OnShutdown() => logStream?.Close();
+        public override void OnShutdown() => logWriter?.Close();
 
         private static void ServerConsoleOnInput(string input)
         {
@@ -326,7 +328,7 @@ namespace Oxide.Game.TheForest
         private void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
-            logWriter.WriteLine(message);
+            logWriter.WriteLine(message); // TODO: Fix access violation
             if (!string.IsNullOrEmpty(stackTrace)) logWriter.WriteLine(stackTrace);
 
             var color = ConsoleColor.Gray;
