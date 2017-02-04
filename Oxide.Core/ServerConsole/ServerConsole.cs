@@ -18,7 +18,7 @@ namespace Oxide.Core.ServerConsole
         /// Proper use is to check if null and if it is create a new Delegate
         /// else subcribe to it with +=
         /// </summary>
-        public event ServerConsoleDelegate ConsoleMessageHandler;
+        public ServerConsoleDelegate ConsoleMessageHandler { get; set; }
 
         public event Action<string> Input;
 

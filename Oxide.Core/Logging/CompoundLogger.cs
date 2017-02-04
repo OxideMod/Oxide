@@ -21,7 +21,7 @@ namespace Oxide.Core.Logging
         /// Proper use is to check if null and if it is create a new Delegate
         /// else subcribe to it with +=
         /// </summary>
-        public event CompoundLoggerDelegate LogMessageHandler;
+        public CompoundLoggerDelegate LogMessageHandler { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the CompoundLogger class
