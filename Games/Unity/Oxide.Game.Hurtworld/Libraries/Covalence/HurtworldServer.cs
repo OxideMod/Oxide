@@ -11,6 +11,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// </summary>
     public class HurtworldServer : IServer
     {
+        internal readonly Server Server = new Server();
+
         #region Information
 
         /// <summary>
@@ -146,7 +148,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             if (!IsBanned(id)) return;
 
             // Set to unbanned
-            ConsoleManager.Instance?.ExecuteCommand($"unban {id}");
+            Command("unban", id);
         }
 
         #endregion
@@ -157,21 +159,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message)
-        {
-            ConsoleManager.SendLog($"[Broadcast] {message}");
-            ChatManagerServer.Instance.RPC("RelayChat", uLink.RPCMode.Others, message);
-        }
+        public void Broadcast(string message) => Server.Broadcast(message);
 
         /// <summary>
         /// Runs the specified server command
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args)
-        {
-            ConsoleManager.Instance.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
-        }
+        public void Command(string command, params object[] args) => Server.Command(command, args);
 
         #endregion
     }
