@@ -1434,33 +1434,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 150,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnTerrainInitialized",
-            "HookName": "OnTerrainInitialized",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TerrainMeta",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Init",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "UnityEngine.Terrain",
-                "TerrainConfig"
-              ]
-            },
-            "MSILHash": "CxyeRybGSaQiky+uO52gDaOHFVIqaaLfeuvZaIAPE1k=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 4,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
@@ -3565,6 +3538,30 @@
             "MSILHash": "OmcBeKoQ7UUMO0Lp8/X1m/Pv/vzG3R1vboHLLcr9O7M=",
             "BaseHookName": "OnCropGather",
             "HookCategory": "Resource"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 21,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnTerrainInitialized",
+            "HookName": "OnTerrainInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TerrainMeta",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PostSetupComponents",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "bXOV4qO2ZZBKstMmmNaFWvtir5YsUl8OYOYb5Yy931o=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ]
