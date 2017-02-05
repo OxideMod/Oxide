@@ -11,15 +11,28 @@ namespace Oxide.Core.Libraries.RemoteConsole
         [JsonIgnore]
         public static readonly string ConfigLoc = Path.Combine(Interface.Oxide.ConfigDirectory, "RemoteConsoleConfiguration.json");
 
+        /// <summary>
+        /// The Name that is shown in game chat when a message command is recieved
+        /// </summary>
         [JsonProperty(PropertyName = "Chat Name", Order = 0)]
         public string ConsoleName = "[ServerConsole]";
 
+        /// <summary>
+        /// Remote Console Port
+        /// </summary>
         [JsonProperty(PropertyName = "RCON Port", Order = 1)]
         public int Port = 25580;
 
+        /// <summary>
+        /// Remote Console Password
+        /// </summary>
         [JsonProperty(PropertyName = "RCON Password", Order = 2)]
         public string Password = string.Empty;
 
+        /// <summary>
+        /// Loads the config file or creates a new one if it doesn't exist
+        /// </summary>
+        /// <returns></returns>
         public static ConfigFile LoadConfig()
         {
             ConfigFile file = null;
@@ -31,6 +44,7 @@ namespace Oxide.Core.Libraries.RemoteConsole
             return file;
         }
 
+        // Creates the Config File if non existant
         private static ConfigFile CreateConfig()
         {
             ConfigFile file = new ConfigFile();
@@ -43,6 +57,7 @@ namespace Oxide.Core.Libraries.RemoteConsole
             return file;
         }
 
+        // Generates a random AlphaNumeric Password
         private static string GeneratePassword(int length)
         {
             string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

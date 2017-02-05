@@ -7,14 +7,25 @@ namespace Oxide.Core.Libraries.RemoteConsole
 {
     public class ServerManager
     {
+        #region Fields
+        // The WebSocket Server Instance
         private WebSocketServer SOCKServer;
 
+        // The Main Library
         private RCON Manager;
 
+        // The Covalence Instance
         public static readonly Covalence.Covalence covalence = Interface.Oxide.GetLibrary<Covalence.Covalence>();
 
+        // WebsocketBehavior
         private OxideBehavior behavior;
+        #endregion
 
+        #region Initalizers
+        /// <summary>
+        /// Initalizes and starts the RCON Server
+        /// </summary>
+        /// <param name="e"></param>
         public ServerManager(RCON e)
         {
             Manager = e;
@@ -34,6 +45,26 @@ namespace Oxide.Core.Libraries.RemoteConsole
                 RCON.LogInfo("Websocket server started successfully on port {0}", SOCKServer.Port.ToString());
         }
 
+        /// <summary>
+        /// Shutsdown the RCON Server
+        /// </summary>
+        /// <param name="reason"></param>
+        /// <param name="e"></param>
+        public void Shutdown(string reason = "Server Shutting Down", CloseStatusCode e = CloseStatusCode.Normal)
+        {
+            if (SOCKServer == null)
+                return;
+            SOCKServer.Stop(e, reason);
+            SOCKServer = null;
+            Interface.Oxide.LogInfo("[RCON] Service has stopped REASON: {0} CODE: {1}", reason, e.ToString());
+        }
+        #endregion
+
+        #region Message Handling
+        /// <summary>
+        /// Handles messages that are sent from the clients
+        /// </summary>
+        /// <param name="e"></param>
         public void OnMessage(MessageEventArgs e)
         {
             RConMessage msg = RConMessage.GetMessage(e.Data) ?? null;
@@ -55,15 +86,10 @@ namespace Oxide.Core.Libraries.RemoteConsole
             }
         }
 
-        public void Shutdown(string reason = "Server Shutting Down", CloseStatusCode e = CloseStatusCode.Normal)
-        {
-            if (SOCKServer == null)
-                return;
-            SOCKServer.Stop(e, reason);
-            SOCKServer = null;
-            Interface.Oxide.LogInfo("[RCON] Service has stopped REASON: {0} CODE: {1}", reason, e.ToString());
-        }
-
+        /// <summary>
+        /// Broadcast a message to all the connected clients
+        /// </summary>
+        /// <param name="message"></param>
         public void SendMessage(RConMessage message)
         {
             if (message == null)
@@ -71,6 +97,7 @@ namespace Oxide.Core.Libraries.RemoteConsole
             if ((SOCKServer != null && SOCKServer.IsListening && behavior != null))
                 behavior.SendMessage(message);
         }
+        #endregion
 
         public class OxideBehavior : WebSocketBehavior
         {

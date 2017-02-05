@@ -4,6 +4,9 @@ using Oxide.Core;
 
 namespace Oxide.Core.Libraries.RemoteConsole
 {
+    /// <summary>
+    /// A Library to manage Oxides Remote Console
+    /// </summary>
     public class RCON : Library
     {
         #region Fields
@@ -38,6 +41,11 @@ namespace Oxide.Core.Libraries.RemoteConsole
                 LogInfo("Unloading Config File");
                 config = null;
             }
+            if (OxideConsole != null)
+            {
+                LogInfo("Unsubscribing from console messages");
+                OxideConsole.OnConsoleMessage -= HandleConsoleMessage;
+            }
         }
 
         /// <summary>
@@ -59,6 +67,12 @@ namespace Oxide.Core.Libraries.RemoteConsole
             }
         }
 
+
+
+        #endregion Library Management
+
+        #region Message Handling
+        // Filters Console Messages and Sends them to the remote clients
         private void HandleConsoleMessage(ConsoleSystemEventArgs e)
         {
             if (e.Color == ConsoleColor.Red)
@@ -75,9 +89,9 @@ namespace Oxide.Core.Libraries.RemoteConsole
         /// </summary>
         /// <param name="Message"></param>
         public void LogChatMessage(string Message) => Server?.SendMessage(RConMessage.CreateMessage(Message, 0, "Chat"));
+        #endregion
 
-        #endregion Library Management
-
+        #region Helpers
         public static void LogInfo(string format, params object[] args) => Interface.Oxide.LogInfo("[RCON]:" + format, args);
 
         public static void LogWarning(string format, params object[] args) => Interface.Oxide.LogWarning("[RCON]:" + format, args);
@@ -87,5 +101,6 @@ namespace Oxide.Core.Libraries.RemoteConsole
         public static void LogDebug(string format, params object[] args) => Interface.Oxide.LogDebug("[RCON]:" + format, args);
 
         public static void LogException(string message, Exception ex) => Interface.Oxide.LogException("[RCON]:" + message, ex);
+        #endregion
     }
 }
