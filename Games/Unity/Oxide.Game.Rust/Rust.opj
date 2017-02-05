@@ -2242,7 +2242,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "CanBeTargeted [auto]",
+            "Name": "CanBeTargeted [autoturret]",
             "HookName": "CanBeTargeted",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "AutoTurret",
@@ -2294,7 +2294,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "CanBeTargeted [heli]",
+            "Name": "CanBeTargeted [helicopter]",
             "HookName": "CanBeTargeted",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HelicopterTurret",
@@ -3562,6 +3562,30 @@
             "MSILHash": "bXOV4qO2ZZBKstMmmNaFWvtir5YsUl8OYOYb5Yy931o=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 51,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l2, this",
+            "HookTypeName": "Simple",
+            "Name": "CanBeTargeted [flameturret]",
+            "HookName": "CanBeTargeted",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "FlameTurret",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CheckTrigger",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "oDjDGFzOtCtS6LoX/3k9un5wxiCHrJpEd1saQMvkmUQ=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ]
