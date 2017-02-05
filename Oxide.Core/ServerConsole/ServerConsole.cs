@@ -18,7 +18,7 @@ namespace Oxide.Core.ServerConsole
         /// Proper use is to check if null and if it is create a new Delegate
         /// else subcribe to it with +=
         /// </summary>
-        public ServerConsoleDelegate ConsoleMessageHandler { get; set; }
+        public event ServerConsoleDelegate OnConsoleMessage;
 
         public event Action<string> Input;
 
@@ -88,7 +88,7 @@ namespace Oxide.Core.ServerConsole
             Console.WriteLine(message);
             input.RedrawInputLine();
             Console.ForegroundColor = ConsoleColor.Gray;
-            if (ConsoleMessageHandler != null) ConsoleMessageHandler.Invoke(new ConsoleSystemEventArgs(message, color));
+            if (OnConsoleMessage != null) OnConsoleMessage.Invoke(new ConsoleSystemEventArgs(message, color));
         }
 
         public void OnDisable()

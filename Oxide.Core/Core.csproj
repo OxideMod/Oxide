@@ -60,6 +60,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="websocket-sharp">
+      <HintPath>Dependencies\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics.cs" />
@@ -92,13 +95,16 @@
     <Compile Include="Libraries\Library.cs" />
     <Compile Include="Libraries\Permission.cs" />
     <Compile Include="Libraries\Plugins.cs" />
+    <Compile Include="Libraries\RemoteConsole\ConfigFile.cs" />
+    <Compile Include="Libraries\RemoteConsole\RCON.cs" />
+    <Compile Include="Libraries\RemoteConsole\RConMessage.cs" />
+    <Compile Include="Libraries\RemoteConsole\ServerManager.cs" />
     <Compile Include="Libraries\Time.cs" />
     <Compile Include="Libraries\Timer.cs" />
     <Compile Include="Libraries\WebRequests.cs" />
     <Compile Include="Logging\CallbackLogger.cs" />
     <Compile Include="Logging\CompoundLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\LogMessageEventArgs.cs" />
     <Compile Include="Logging\RotatingFileLogger.cs" />
     <Compile Include="Logging\ThreadedLogger.cs" />
     <Compile Include="OxideMod.cs" />
