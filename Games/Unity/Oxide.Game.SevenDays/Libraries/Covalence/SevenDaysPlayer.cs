@@ -158,7 +158,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => GameUtils.KickPlayerForClientInfo(client, reason, GameManager.Instance);
+        public void Kick(string reason) => GameUtils.KickPlayerForClientInfo(client, new GameUtils.KickPlayerData(GameUtils.EKickReason.ManualKick, 0, DateTime.Now, reason));
 
         /// <summary>
         /// Causes the user's character to die
