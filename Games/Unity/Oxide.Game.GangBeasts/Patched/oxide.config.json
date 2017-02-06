@@ -1,0 +1,15 @@
+{
+  "OxideConsole": {
+    "Enabled": true,
+    "MinimalistMode": true,
+    "ShowStatusBar": true,
+    "ShowStacktraces": false
+  },
+  "InstanceCommandLines":
+  [
+    "{oxide.directory}",
+    "oxide"
+  ],
+  "ConfigDirectory": "config",
+  "ExtensionDirectory": "game\\GangBeasts_Data\\Managed"
+}
