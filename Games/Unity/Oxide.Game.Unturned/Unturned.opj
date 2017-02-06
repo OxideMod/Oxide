@@ -109,7 +109,7 @@
               {
                 "OpCode": "ldc_i4",
                 "OpType": "Int32",
-                "Operand": "14"
+                "Operand": "16"
               }
             ],
             "HookTypeName": "Modify",
@@ -124,7 +124,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "J/DUzJlZr2LvSeyWp67ug+U3NgGQCMWXYFJTUUlos2s=",
+            "MSILHash": "IWzJER3lnSUVB2fYEHg8PRjOmpBQkVFTKT/UKiF8JKQ=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -132,7 +132,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 391,
+            "InjectionIndex": 401,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -143,7 +143,7 @@
               {
                 "OpCode": "ldc_i4",
                 "OpType": "Int32",
-                "Operand": "13"
+                "Operand": "15"
               },
               {
                 "OpCode": "ldstr",
@@ -168,7 +168,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "J/DUzJlZr2LvSeyWp67ug+U3NgGQCMWXYFJTUUlos2s=",
+            "MSILHash": "IWzJER3lnSUVB2fYEHg8PRjOmpBQkVFTKT/UKiF8JKQ=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
