@@ -74,7 +74,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "fv8dsgIT5a+61ZczbHYKp5Orbhh8qIcKe2M6d6uuq0c=",
+            "MSILHash": "jF8ugYGrMztJACT9jeu9jcYeFv9DC7bfuRLWcqs/dog=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -100,7 +100,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "fv8dsgIT5a+61ZczbHYKp5Orbhh8qIcKe2M6d6uuq0c=",
+            "MSILHash": "jF8ugYGrMztJACT9jeu9jcYeFv9DC7bfuRLWcqs/dog=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
