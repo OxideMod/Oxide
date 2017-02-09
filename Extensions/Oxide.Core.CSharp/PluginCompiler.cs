@@ -37,7 +37,7 @@ namespace Oxide.Plugins
                     binaryPath = rootDirectory + @"\CSharpCompiler.exe";
                     if (!File.Exists(binaryPath))
                     {
-                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins. Unable to find CSharpCompiler.exe!");
+                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins; unable to find CSharpCompiler.exe");
                         return;
                     }
                     break;
@@ -47,10 +47,31 @@ namespace Oxide.Plugins
                     if (IntPtr.Size != 8) binaryPath += ".x86";
                     if (!File.Exists(binaryPath))
                     {
-                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins. Unable to find CSharpCompiler!");
+                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins; unable to find CSharpCompiler");
                         return;
                     }
-                    Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRGRP | FilePermissions.S_IXGRP | FilePermissions.S_IROTH| FilePermissions.S_IXOTH);
+                    try
+                    {
+                        if (Syscall.access(binaryPath, AccessModes.X_OK) == -1)
+                        {
+                            try
+                            {
+                                Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRGRP | FilePermissions.S_IXGRP | FilePermissions.S_IROTH | FilePermissions.S_IXOTH);
+                            }
+                            catch (Exception ex)
+                            {
+                                Interface.Oxide.LogError("Could not set CSharpCompiler as executable; please set manually");
+                                Interface.Oxide.LogError(ex.Message);
+                            }
+                            return;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins; CSharpCompiler is not executable");
+                        Interface.Oxide.LogError(ex.Message);
+                        return;
+                    }
                     break;
             }
             BinaryPath = EscapePath(binaryPath);

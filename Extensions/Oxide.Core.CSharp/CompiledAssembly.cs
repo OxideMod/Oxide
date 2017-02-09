@@ -32,14 +32,14 @@ namespace Oxide.Plugins
         private bool isLoaded;
 
         private static IEnumerable<string> BlacklistedNamespaces => new[] {
-            "System.IO", "System.Net", "System.Xml", "System.Reflection.Assembly", "System.Reflection.Emit", "System.Threading",
+            "Oxide.Core.ServerConsole", "System.IO", "System.Net", "System.Xml", "System.Reflection.Assembly", "System.Reflection.Emit", "System.Threading",
             "System.Runtime.InteropServices", "System.Diagnostics", "System.Security", "System.Timers", "Mono.CSharp", "Mono.Cecil",
             "ServerFileSystem"
         };
 
         private static IEnumerable<string> WhitelistedNamespaces => new[] {
-            "System.IO.MemoryStream", "System.IO.Stream", "System.IO.BinaryReader", "System.IO.BinaryWriter", "System.Net.Dns.GetHostEntry",
-            "System.Net.Sockets.SocketFlags", "System.Net.IPEndPoint", "System.Security.Cryptography"
+            "System.Diagnostics.Stopwatch", "System.IO.MemoryStream", "System.IO.Stream", "System.IO.BinaryReader", "System.IO.BinaryWriter",
+            "System.Net.Dns.GetHostEntry", "System.Net.Sockets.SocketFlags", "System.Net.IPEndPoint", "System.Security.Cryptography", "System.Threading.Interlocked"
         };
 
         public CompiledAssembly(string name, CompilablePlugin[] plugins, byte[] rawAssembly, float duration)
