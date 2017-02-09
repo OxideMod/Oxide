@@ -37,9 +37,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLua">
-      <HintPath>..\Extensions\Oxide.Core.Lua\Dependencies\NLua.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -60,7 +57,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CoreTests.cs" />
-    <Compile Include="LuaTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
