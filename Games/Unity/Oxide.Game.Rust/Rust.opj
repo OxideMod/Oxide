@@ -2071,7 +2071,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "M+rty+IwwSvS9xL/+LifbpTf5ypouExzPfxJ6jAo7H0=",
+            "MSILHash": "tqUjKDCS1+fOll8uQBobxfNsFPMW5ppCiRe0B4EkK/4=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2921,7 +2921,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "SicwHGaWV1vaA4OvnA7VCEJt4KIjbNUQUFEgYr0sTPs=",
+            "MSILHash": "IF8fDq/gC7PAnC/DifDhOeTI407GPY5uGhfjV9RnxTE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -2998,7 +2998,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "SicwHGaWV1vaA4OvnA7VCEJt4KIjbNUQUFEgYr0sTPs=",
+            "MSILHash": "IF8fDq/gC7PAnC/DifDhOeTI407GPY5uGhfjV9RnxTE=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
@@ -3373,7 +3373,7 @@
                 "EasyAntiCheat.Server.Legacy.ClientStatusUpdate"
               ]
             },
-            "MSILHash": "DLfk41nO0kWiAImX917fDNnDd54TDx10+6WbfFSBv6Y=",
+            "MSILHash": "04HxdmG2tnfo/zfEmyVkzH+METt2CEZbCFOy7G3p/5Y=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3401,7 +3401,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "590RneF7vkO8dDPxRPO6D8Wrx9Ahx2B02ifGJaDe484=",
+            "MSILHash": "63P0qeJ+Ll4H17srdTv5f+VdwEnssITzlEtaH12aN4I=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3429,7 +3429,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "590RneF7vkO8dDPxRPO6D8Wrx9Ahx2B02ifGJaDe484=",
+            "MSILHash": "63P0qeJ+Ll4H17srdTv5f+VdwEnssITzlEtaH12aN4I=",
             "BaseHookName": "OnPlayerBanned [server]",
             "HookCategory": "Player"
           }
@@ -3457,7 +3457,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "590RneF7vkO8dDPxRPO6D8Wrx9Ahx2B02ifGJaDe484=",
+            "MSILHash": "63P0qeJ+Ll4H17srdTv5f+VdwEnssITzlEtaH12aN4I=",
             "BaseHookName": "OnPlayerBanned [vac]",
             "HookCategory": "Player"
           }
