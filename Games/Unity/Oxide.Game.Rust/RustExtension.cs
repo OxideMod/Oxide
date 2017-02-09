@@ -145,7 +145,7 @@ namespace Oxide.Game.Rust
 
         private static void ServerConsoleOnInput(string input)
         {
-            if (!string.IsNullOrEmpty(input)) ConsoleSystem.Run.Server.Normal(input);
+            if (!string.IsNullOrEmpty(input)) ConsoleSystem.Run(ConsoleSystem.Option.Server, input);
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)
