@@ -139,13 +139,13 @@ namespace Oxide.Game.Rust
             {
                 if (string.IsNullOrEmpty(input)) return null;
                 if (!input.Contains(".")) input = string.Concat("global.", input);
-                return ConsoleSystem.Index.All.Where(c => c.FullName.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.FullName).ToArray();
+                return ConsoleSystem.Index.Dict.Where(c => c.Value.FullName.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.Value.FullName).ToArray();
             };
         }
 
         private static void ServerConsoleOnInput(string input)
         {
-            if (!string.IsNullOrEmpty(input)) ConsoleSystem.Run.Server.Normal(input);
+            if (!string.IsNullOrEmpty(input)) ConsoleSystem.Run(ConsoleSystem.Option.Server, input);
         }
 
         private static void HandleLog(string message, string stackTrace, LogType type)

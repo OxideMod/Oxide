@@ -63,7 +63,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's language
         /// </summary>
-        public CultureInfo Language => CultureInfo.GetCultureInfo(player.net.connection.info.GetString("global.language", "en"));
+        public CultureInfo Language => CultureInfo.GetCultureInfo(player?.net?.connection?.info?.GetString("global.language") ?? "en");
 
         /// <summary>
         /// Gets the user's IP address
