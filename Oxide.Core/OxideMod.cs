@@ -11,6 +11,7 @@ using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Libraries.RemoteConsole;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
@@ -79,6 +80,9 @@ namespace Oxide.Core
         private Timer libtimer;
         private Covalence covalence;
 
+        // The RCON Console
+        private RCON RemoteConsole { get; set; }
+
         // Extension implemented delegates
         private Func<float> getTimeSinceStartup;
 
@@ -121,7 +125,7 @@ namespace Oxide.Core
             // Load the config
             var oxideConfig = Path.Combine(RootDirectory, "oxide.config.json");
             if (!File.Exists(oxideConfig)) throw new FileNotFoundException("Could not load the Oxide configuration file", oxideConfig);
-            Config = ConfigFile.Load<OxideConfig>(oxideConfig);
+            Config = Configuration.ConfigFile.Load<OxideConfig>(oxideConfig);
             Config.Save();
 
             // Work out the instance directory
@@ -184,6 +188,7 @@ namespace Oxide.Core
             extensionManager.RegisterLibrary("Time", new Time());
             extensionManager.RegisterLibrary("Timer", libtimer = new Timer());
             extensionManager.RegisterLibrary("WebRequests", new WebRequests());
+            extensionManager.RegisterLibrary("RemoteConsole", RemoteConsole = new RCON());
 
             // Load all extensions
             LogInfo("Loading extensions...");
@@ -209,6 +214,9 @@ namespace Oxide.Core
             foreach (var ext in extensionManager.GetAllExtensions()) ext.LoadPluginWatchers(PluginDirectory);
 
             // Load all plugins
+            LogInfo("Loading Remote Console...");
+            RemoteConsole.Initalize();
+
             LogInfo("Loading plugins...");
             LoadAllPlugins(true);
 

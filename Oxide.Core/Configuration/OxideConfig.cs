@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace Oxide.Core.Configuration
 {
@@ -35,10 +35,42 @@ namespace Oxide.Core.Configuration
         }
 
         /// <summary>
+        /// Settings for the custom Oxide Remote Console
+        /// </summary>
+        public class OxideRcon
+        {
+            /// <summary>
+            /// Gets or sets if the Oxide Remote Console should be setup
+            /// </summary>
+            public bool Enabled { get; set; }
+
+            /// <summary>
+            /// Gets or sets the Oxide Remote Console Password
+            /// </summary>
+            public string Password { get; set; }
+
+            /// <summary>
+            /// Gets or sets the Oxide Remote Console Port
+            /// </summary>
+            public int Port { get; set; }
+
+            /// <summary>
+            /// Gets or sets the Oxide Remote Console Chat Prefix
+            /// </summary>
+            public string ChatPrefix { get; set; }
+        }
+
+        /// <summary>
         /// Gets or sets information regarding the Oxide Console
         /// </summary>
         [JsonProperty(PropertyName = "OxideConsole")]
         public OxideConsole Console { get; set; }
+
+        /// <summary>
+        /// Gets or sets information regarding the Oxide Remote Console
+        /// </summary>
+        [JsonProperty(PropertyName = "OxideRcon")]
+        public OxideRcon RCON { get; set; }
 
         /// <summary>
         /// Gets or sets the default permissions group for new players
@@ -68,7 +100,8 @@ namespace Oxide.Core.Configuration
         {
             ConfigDirectory = "config";
             DefaultGroup = "default";
-            Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true};
+            Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true };
+            RCON = new OxideRcon { Enabled = true, ChatPrefix = "[Server Console]", Port = 25580, Password = "ChangeMe" };
         }
 
         /// <summary>
@@ -90,10 +123,12 @@ namespace Oxide.Core.Configuration
                     case '{':
                         invar++;
                         break;
+
                     case '}':
                         invar--;
                         if (invar == 0) formatsb.Append("{0}");
                         break;
+
                     default:
                         if (invar == 0)
                             formatsb.Append(c);

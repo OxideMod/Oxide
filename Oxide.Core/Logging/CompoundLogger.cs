@@ -2,6 +2,7 @@
 
 namespace Oxide.Core.Logging
 {
+
     /// <summary>
     /// Represents a set of loggers that fall under a single logger
     /// </summary>
