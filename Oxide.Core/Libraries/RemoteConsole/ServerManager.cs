@@ -82,7 +82,7 @@ namespace Oxide.Core.Libraries.RemoteConsole
             {
                 if (covalence == null)
                     return;
-                covalence.Server.Broadcast($"{Manager.config.ConsoleName}: {msg.Message}");
+                covalence.Server.Broadcast($"{Manager.config.ChatPrefix}: {msg.Message}");
             }
         }
 

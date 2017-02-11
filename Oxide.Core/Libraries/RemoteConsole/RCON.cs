@@ -1,6 +1,8 @@
 ﻿using System;
 using Oxide.Core.ServerConsole;
 using Oxide.Core;
+using System.Linq;
+using Oxide.Core.Configuration;
 
 namespace Oxide.Core.Libraries.RemoteConsole
 {
@@ -15,7 +17,7 @@ namespace Oxide.Core.Libraries.RemoteConsole
 
         internal static readonly OxideMod Oxide = Interface.Oxide;
 
-        public ConfigFile config { get; private set; }
+        public readonly OxideConfig.OxideRcon config = Interface.Oxide.Config.RCON;
 
         private ServerManager Server { get; set; }
 
@@ -36,11 +38,6 @@ namespace Oxide.Core.Libraries.RemoteConsole
                 Server.Shutdown("Oxide is shutting down");
                 Server = null;
             }
-            if (config != null)
-            {
-                LogInfo("Unloading Config File");
-                config = null;
-            }
             if (OxideConsole != null)
             {
                 LogInfo("Unsubscribing from console messages");
@@ -53,8 +50,21 @@ namespace Oxide.Core.Libraries.RemoteConsole
         /// </summary>
         public void Initalize()
         {
-            LogInfo("Loading Configuration File");
-            config = ConfigFile.LoadConfig();
+            if (config == null)
+            {
+                LogError("oxide.config.json is not loaded unable to continue loading");
+                return;
+            }
+
+            if (!config.Enabled)
+                return;
+
+            if (config.Password == "ChangeMe")
+            {
+                LogWarning("The password for Oxide's Remote console is still default. Please change it for RCON to work");
+                return;
+            }
+
             Server = new ServerManager(this);
             try
             {
@@ -101,6 +111,13 @@ namespace Oxide.Core.Libraries.RemoteConsole
         public static void LogDebug(string format, params object[] args) => Interface.Oxide.LogDebug("[RCON]:" + format, args);
 
         public static void LogException(string message, Exception ex) => Interface.Oxide.LogException("[RCON]:" + message, ex);
+
+        public static string GeneratePassword(int length)
+        {
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var random = new System.Random();
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
         #endregion
     }
 }

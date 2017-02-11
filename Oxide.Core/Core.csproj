@@ -95,7 +95,6 @@
     <Compile Include="Libraries\Library.cs" />
     <Compile Include="Libraries\Permission.cs" />
     <Compile Include="Libraries\Plugins.cs" />
-    <Compile Include="Libraries\RemoteConsole\ConfigFile.cs" />
     <Compile Include="Libraries\RemoteConsole\RCON.cs" />
     <Compile Include="Libraries\RemoteConsole\RConMessage.cs" />
     <Compile Include="Libraries\RemoteConsole\ServerManager.cs" />
