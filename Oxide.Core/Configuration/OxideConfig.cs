@@ -1,5 +1,5 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Text;
 
 namespace Oxide.Core.Configuration
 {
@@ -100,7 +100,7 @@ namespace Oxide.Core.Configuration
         {
             ConfigDirectory = "config";
             DefaultGroup = "default";
-            Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true};
+            Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true };
             RCON = new OxideRcon { Enabled = true, ChatPrefix = "[Server Console]", Port = 25580, Password = "ChangeMe" };
         }
 
@@ -123,10 +123,12 @@ namespace Oxide.Core.Configuration
                     case '{':
                         invar++;
                         break;
+
                     case '}':
                         invar--;
                         if (invar == 0) formatsb.Append("{0}");
                         break;
+
                     default:
                         if (invar == 0)
                             formatsb.Append(c);

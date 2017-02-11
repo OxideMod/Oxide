@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Oxide.Core.Configuration;
 using Oxide.Core.ServerConsole;
-using Oxide.Core;
-using System.Linq;
-using Oxide.Core.Configuration;
+using System;
 
 namespace Oxide.Core.Libraries.RemoteConsole
 {
@@ -17,10 +15,17 @@ namespace Oxide.Core.Libraries.RemoteConsole
 
         internal static readonly OxideMod Oxide = Interface.Oxide;
 
+        /// <summary>
+        /// The Config Instance for Oxide's Rcon Class
+        /// </summary>
         public readonly OxideConfig.OxideRcon config = Interface.Oxide.Config.RCON;
 
+        // Instance of Oxides Websocket Server
         private ServerManager Server { get; set; }
 
+        /// <summary>
+        /// The Current ServerConsole Instance for Oxide
+        /// </summary>
         public static readonly ServerConsole.ServerConsole OxideConsole = Interface.Oxide.ServerConsole;
 
         #endregion Fields
@@ -77,11 +82,10 @@ namespace Oxide.Core.Libraries.RemoteConsole
             }
         }
 
-
-
         #endregion Library Management
 
         #region Message Handling
+
         // Filters Console Messages and Sends them to the remote clients
         private void HandleConsoleMessage(ConsoleSystemEventArgs e)
         {
@@ -99,9 +103,11 @@ namespace Oxide.Core.Libraries.RemoteConsole
         /// </summary>
         /// <param name="Message"></param>
         public void LogChatMessage(string Message) => Server?.SendMessage(RConMessage.CreateMessage(Message, 0, "Chat"));
-        #endregion
+
+        #endregion Message Handling
 
         #region Helpers
+
         public static void LogInfo(string format, params object[] args) => Interface.Oxide.LogInfo("[RCON]:" + format, args);
 
         public static void LogWarning(string format, params object[] args) => Interface.Oxide.LogWarning("[RCON]:" + format, args);
@@ -112,12 +118,6 @@ namespace Oxide.Core.Libraries.RemoteConsole
 
         public static void LogException(string message, Exception ex) => Interface.Oxide.LogException("[RCON]:" + message, ex);
 
-        public static string GeneratePassword(int length)
-        {
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var random = new System.Random();
-            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-        #endregion
+        #endregion Helpers
     }
 }

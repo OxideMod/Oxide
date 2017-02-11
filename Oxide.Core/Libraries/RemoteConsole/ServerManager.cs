@@ -8,6 +8,7 @@ namespace Oxide.Core.Libraries.RemoteConsole
     public class ServerManager
     {
         #region Fields
+
         // The WebSocket Server Instance
         private WebSocketServer SOCKServer;
 
@@ -19,9 +20,11 @@ namespace Oxide.Core.Libraries.RemoteConsole
 
         // WebsocketBehavior
         private OxideBehavior behavior;
-        #endregion
+
+        #endregion Fields
 
         #region Initalizers
+
         /// <summary>
         /// Initalizes and starts the RCON Server
         /// </summary>
@@ -58,9 +61,11 @@ namespace Oxide.Core.Libraries.RemoteConsole
             SOCKServer = null;
             Interface.Oxide.LogInfo("[RCON] Service has stopped REASON: {0} CODE: {1}", reason, e.ToString());
         }
-        #endregion
+
+        #endregion Initalizers
 
         #region Message Handling
+
         /// <summary>
         /// Handles messages that are sent from the clients
         /// </summary>
@@ -97,7 +102,8 @@ namespace Oxide.Core.Libraries.RemoteConsole
             if ((SOCKServer != null && SOCKServer.IsListening && behavior != null))
                 behavior.SendMessage(message);
         }
-        #endregion
+
+        #endregion Message Handling
 
         public class OxideBehavior : WebSocketBehavior
         {
