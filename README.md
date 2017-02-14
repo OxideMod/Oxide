@@ -4,7 +4,7 @@
 [issues]: https://github.com/OxideMod/Oxide/issues
 [downloads]: http://oxidemod.org/downloads/
 
-# Oxide Mod [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)][License] [![Build Status](https://travis-ci.org/OxideMod/Oxide.png)](https://travis-ci.org/OxideMod/Oxide)
+# Oxide Mod [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)][License] [![Build Status](https://ci.appveyor.com/api/projects/status/b7h4nw8t8d05jsnb?svg=true)](https://ci.appveyor.com/project/oxidemod/oxide)
 
 A complete rewrite of the popular, original Oxide API and Lua plugin framework. Previously only available for the legacy Rust game, Oxide now supports numerous games. Oxide's focus is on modularity and extensibility. The core is highly abstracted and loosely coupled, and could be used to mod any game that uses the .NET Framework.
 
@@ -22,7 +22,7 @@ Support for each game and plugin language is added via extensions. When loading,
 
 ## Supported Game Extensions
  * Oxide.Game.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
- * Oxide.Game.HideHoldOut - _Provides support for the [Hide & Hold Out](http://h2o-game.net/) server_
+ * Oxide.Game.GangBeasts - _Provides support for the [Gang Beasts](http://gangbeasts.game/) server_
  * Oxide.Game.Hurtworld - _Provides support for the [Hurtworld](http://hurtworld.com/) server_
  * Oxide.Game.Nomad - _Provides support for the [Nomad](http://playnomad.net) server_
  * Oxide.Game.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
