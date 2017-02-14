@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Newtonsoft.Json;
@@ -25,10 +26,12 @@ namespace Oxide.Core
     /// </summary>
     public sealed class OxideMod
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// The current Oxide version
         /// </summary>
-        public static readonly VersionNumber Version = new VersionNumber(2, 0, 0);
+        public static readonly VersionNumber Version = new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the main logger
