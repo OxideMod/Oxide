@@ -120,11 +120,13 @@ namespace Oxide.Game.Rust
         /// </summary>
         public RustCore()
         {
+            var assemblyVersion = RustExtension.AssemblyVersion;
+
             // Set attributes
             Name = "RustCore";
             Title = "Rust";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             // Cheat references in the default plugin reference list
             var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network

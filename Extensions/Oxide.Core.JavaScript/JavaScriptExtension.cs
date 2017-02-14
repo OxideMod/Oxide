@@ -24,6 +24,8 @@ namespace Oxide.Core.JavaScript
     /// </summary>
     public class JavaScriptExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -32,7 +34,7 @@ namespace Oxide.Core.JavaScript
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension
@@ -59,7 +61,7 @@ namespace Oxide.Core.JavaScript
         {
             ExceptionHandler.RegisterType(typeof(JavaScriptException), ex =>
             {
-                var jintEx = (JavaScriptException) ex;
+                var jintEx = (JavaScriptException)ex;
                 var obj = jintEx.Error.ToObject() as ErrorInstance;
                 if (obj != null) return $"File: {jintEx.Location.Source} Line: {jintEx.LineNumber} Column: {jintEx.Column} {obj.Get("name").AsString()} {obj.Get("message").AsString()}:{Environment.NewLine}{jintEx.StackTrace}";
                 return $"File: {jintEx.Location.Source} Line: {jintEx.LineNumber} Column: {jintEx.Column} {jintEx.Message}:{Environment.NewLine}{jintEx.StackTrace}";

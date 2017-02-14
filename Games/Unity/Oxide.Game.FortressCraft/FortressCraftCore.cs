@@ -29,11 +29,13 @@ namespace Oxide.Game.FortressCraft
         /// </summary>
         public FortressCraftCore()
         {
+            var assemblyVersion = FortressCraftExtension.AssemblyVersion;
+
             // Set attributes
             Name = "FortressCraftCore";
             Title = "FortressCraft";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

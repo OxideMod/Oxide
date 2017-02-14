@@ -30,11 +30,13 @@ namespace Oxide.Game.SpaceEngineers
         /// </summary>
         public SpaceEngineersCore()
         {
+            var assemblyVersion = SpaceEngineersExtension.AssemblyVersion;
+
             // Set attributes
             Name = "SpaceEngineersCore";
             Title = "Space Engineers";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>

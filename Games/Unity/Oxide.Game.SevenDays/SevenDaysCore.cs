@@ -36,11 +36,13 @@ namespace Oxide.Game.SevenDays
         /// </summary>
         public SevenDaysCore()
         {
+            var assemblyVersion = SevenDaysExtension.AssemblyVersion;
+
             // Set attributes
             Name = "SevenDaysCore";
             Title = "7 Days to Die";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

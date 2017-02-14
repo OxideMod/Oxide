@@ -30,11 +30,13 @@ namespace Oxide.Game.Unturned
         /// </summary>
         public UnturnedCore()
         {
+            var assemblyVersion = UnturnedExtension.AssemblyVersion;
+
             // Set attributes
             Name = "UnturnedCore";
             Title = "Unturned";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

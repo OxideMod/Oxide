@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Oxide.Core;
 using Oxide.Core.Extensions;
@@ -13,6 +14,8 @@ namespace Oxide.Game.TheForest
     /// </summary>
     public class TheForestExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -21,7 +24,7 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
@@ -21,16 +20,19 @@ namespace Oxide.Game.GangBeasts
         private bool serverInitialized;
         private bool loggingInitialized;
 
+
         /// <summary>
         /// Initializes a new instance of the GangBeastsCore class
         /// </summary>
         public GangBeastsCore()
         {
+            var assemblyVersion = GangBeastsExtension.AssemblyVersion;
+
             // Set attributes
             Name = "GangBeastsCore";
             Title = "Gang Beasts";
             Author = "Oxide Team";
-            Version = new Core.VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

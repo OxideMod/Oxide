@@ -30,11 +30,13 @@ namespace Oxide.Game.MedievalEngineers
         /// </summary>
         public MedievalEngineersCore()
         {
+            var assemblyVersion = MedievalEngineersExtension.AssemblyVersion;
+
             // Set attributes
             Name = "MedievalEngineersCore";
             Title = "Medieval Engineers";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>

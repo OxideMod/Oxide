@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.Plugins.Watchers;
@@ -11,6 +12,8 @@ namespace Oxide.Plugins
     /// </summary>
     public class CSharpExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -19,7 +22,7 @@ namespace Oxide.Plugins
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

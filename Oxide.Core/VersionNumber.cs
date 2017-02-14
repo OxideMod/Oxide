@@ -6,7 +6,7 @@
     public struct VersionNumber
     {
         // The major, minor and patch version numbers
-        public ushort Major, Minor, Patch;
+        public int Major, Minor, Patch;
 
         /// <summary>
         /// Initializes a new instance of the Version struct with the specified values
@@ -14,7 +14,7 @@
         /// <param name="major"></param>
         /// <param name="minor"></param>
         /// <param name="patch"></param>
-        public VersionNumber(ushort major, ushort minor, ushort patch)
+        public VersionNumber(int major, int minor, int patch)
         {
             Major = major;
             Minor = minor;
@@ -113,7 +113,7 @@
         public override bool Equals(object obj)
         {
             if (!(obj is VersionNumber)) return false;
-            VersionNumber other = (VersionNumber)obj;
+            var other = (VersionNumber)obj;
             return this == other;
         }
 
@@ -125,7 +125,7 @@
         {
             unchecked
             {
-                int hash = 17;
+                var hash = 17;
                 hash = hash * 23 + Major.GetHashCode();
                 hash = hash * 23 + Minor.GetHashCode();
                 hash = hash * 23 + Patch.GetHashCode();

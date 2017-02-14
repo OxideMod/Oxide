@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
+using Version = System.Version;
 
 namespace Oxide.Game.Unturned
 {
@@ -13,6 +15,8 @@ namespace Oxide.Game.Unturned
     /// </summary>
     public class UnturnedExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -21,7 +25,7 @@ namespace Oxide.Game.Unturned
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

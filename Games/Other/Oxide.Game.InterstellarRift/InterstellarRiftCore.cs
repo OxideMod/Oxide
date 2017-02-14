@@ -26,11 +26,13 @@ namespace Oxide.Game.InterstellarRift
         /// </summary>
         public InterstellarRiftCore()
         {
+            var assemblyVersion = InterstellarRiftExtension.AssemblyVersion;
+
             // Set attributes
             Name = "InterstellarRiftCore";
             Title = "Interstellar Rift";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>

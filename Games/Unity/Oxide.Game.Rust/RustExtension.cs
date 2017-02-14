@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Facepunch;
 using Facepunch.Extend;
 using Network;
@@ -15,6 +16,8 @@ namespace Oxide.Game.Rust
     /// </summary>
     public class RustExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -23,7 +26,7 @@ namespace Oxide.Game.Rust
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension
@@ -80,9 +83,6 @@ namespace Oxide.Game.Rust
             // Register our libraries
             Manager.RegisterLibrary("Rust", new Libraries.Rust());
             Manager.RegisterLibrary("Command", new Libraries.Command());
-            //Manager.RegisterLibrary("Item", new Libraries.Item()); // TODO: Fix TypeInitializationException
-            //Manager.RegisterLibrary("Player", new Libraries.Player()); // TODO: Fix TypeInitializationException
-            //Manager.RegisterLibrary("Server", new Libraries.Server()); // TODO: Fix TypeInitializationException
         }
 
         /// <summary>

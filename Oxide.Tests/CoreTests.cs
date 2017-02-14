@@ -12,7 +12,7 @@ namespace Oxide.Tests
         [TestMethod]
         public void TestCommandLine()
         {
-            CommandLine cmdline = new CommandLine(new string[] { "-batchmode", "+server.hostname", "My", "Oxide", "Server", "+server.port", "28015" });
+            var cmdline = new CommandLine(new[] { "-batchmode", "+server.hostname", "My", "Oxide", "Server", "+server.port", "28015" });
 
             Assert.AreEqual(true, cmdline.HasVariable("batchmode"), "Failed cmdline.HasFlag");
             Assert.AreEqual(false, cmdline.HasVariable("random"), "Failed cmdline.HasFlag");
@@ -33,7 +33,7 @@ namespace Oxide.Tests
         public void TestDynamicConfig()
         {
             const string inputfile = "{ \"x\": 10, \"y\": \"hello\", \"z\": [ 10, \"yo\" ], \"w\": { \"a\": 20, \"b\": [ 500, 600 ] } }";
-            string filename = Path.GetTempFileName();
+            var filename = Path.GetTempFileName();
             File.WriteAllText(filename, inputfile);
 
             var cfg = ConfigFile.Load<DynamicConfigFile>(filename);
