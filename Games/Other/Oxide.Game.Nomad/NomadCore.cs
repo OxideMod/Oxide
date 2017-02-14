@@ -32,11 +32,13 @@ namespace Oxide.Game.Nomad
         /// </summary>
         public NomadCore()
         {
+            var assemblyVersion = NomadExtension.AssemblyVersion;
+
             // Set attributes
             Name = "NomadCore";
             Title = "Nomad";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>

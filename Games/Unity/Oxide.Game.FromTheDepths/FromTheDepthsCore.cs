@@ -25,11 +25,13 @@ namespace Oxide.Game.FromTheDepths
         /// </summary>
         public FromTheDepthsCore()
         {
+            var assemblyVersion = FromTheDepthsExtension.AssemblyVersion;
+
             // Set attributes
             Name = "FromTheDepthsCore";
             Title = "From the Depths";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Reflection;
 using Oxide.Core.Extensions;
 using Oxide.Core.Unity.Plugins;
+using UnityEngine;
 
 namespace Oxide.Core.Unity
 {
@@ -9,6 +11,8 @@ namespace Oxide.Core.Unity
     /// </summary>
     public class UnityExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -17,7 +21,7 @@ namespace Oxide.Core.Unity
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

@@ -1,4 +1,6 @@
-﻿using Oxide.Core.Extensions;
+﻿using System;
+using System.Reflection;
+using Oxide.Core.Extensions;
 
 namespace Oxide.Core.MySql
 {
@@ -7,6 +9,8 @@ namespace Oxide.Core.MySql
     /// </summary>
     public class MySqlExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -15,7 +19,7 @@ namespace Oxide.Core.MySql
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

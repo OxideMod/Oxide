@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
-using UnityEngine;
+using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Game.RustLegacy.Libraries;
+using UnityEngine;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -12,6 +13,8 @@ namespace Oxide.Game.RustLegacy
     /// </summary>
     public class RustLegacyExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -20,7 +23,7 @@ namespace Oxide.Game.RustLegacy
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

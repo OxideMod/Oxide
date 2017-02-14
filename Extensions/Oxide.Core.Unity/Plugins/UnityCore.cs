@@ -16,11 +16,13 @@ namespace Oxide.Core.Unity.Plugins
         /// </summary>
         public UnityCore()
         {
+            var assemblyVersion = UnityExtension.AssemblyVersion;
+
             // Set attributes
             Name = "unitycore";
             Title = "Unity Core";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>

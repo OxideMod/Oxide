@@ -30,11 +30,13 @@ namespace Oxide.Game.Terraria
         /// </summary>
         public TerrariaCore()
         {
+            var assemblyVersion = TerrariaExtension.AssemblyVersion;
+
             // Set attributes
             Name = "TerrariaCore";
             Title = "Terraria";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>

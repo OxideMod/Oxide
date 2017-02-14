@@ -7,10 +7,10 @@ using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Engine.Sockets;
-using UnityEngine;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Game.ReignOfKings.Libraries;
+using UnityEngine;
 
 namespace Oxide.Game.ReignOfKings
 {
@@ -19,6 +19,8 @@ namespace Oxide.Game.ReignOfKings
     /// </summary>
     public class ReignOfKingsExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -27,7 +29,7 @@ namespace Oxide.Game.ReignOfKings
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

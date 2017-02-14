@@ -60,11 +60,13 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         public ReignOfKingsCore()
         {
+            var assemblyVersion = ReignOfKingsExtension.AssemblyVersion;
+
             // Set attributes
             Name = "ReignOfKingsCore";
             Title = "Reign of Kings";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

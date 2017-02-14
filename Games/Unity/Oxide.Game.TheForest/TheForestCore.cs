@@ -49,11 +49,13 @@ namespace Oxide.Game.TheForest
         /// </summary>
         public TheForestCore()
         {
+            var assemblyVersion = TheForestExtension.AssemblyVersion;
+
             // Set attributes
             Name = "TheForestCore";
             Title = "The Forest";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

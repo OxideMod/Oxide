@@ -29,11 +29,13 @@ namespace Oxide.Game.PlanetExplorers
         /// </summary>
         public PlanetExplorersCore()
         {
+            var assemblyVersion = PlanetExplorersExtension.AssemblyVersion;
+
             // Set attributes
             Name = "PlanetExplorersCore";
             Title = "Planet Explorers";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

@@ -99,11 +99,13 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         public HurtworldCore()
         {
+            var assemblyVersion = HurtworldExtension.AssemblyVersion;
+
             // Set attributes
             Name = "HurtworldCore";
             Title = "Hurtworld";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
             var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
             if (plugins.Exists("unitycore")) InitializeLogging();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using BrilliantSkies.FromTheDepths.Game.UserInterfaces;
 using BrilliantSkies.FromTheDepths.Multiplayer;
 using Oxide.Core;
@@ -13,6 +14,8 @@ namespace Oxide.Game.FromTheDepths
     /// </summary>
     public class FromTheDepthsExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -21,7 +24,7 @@ namespace Oxide.Game.FromTheDepths
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension

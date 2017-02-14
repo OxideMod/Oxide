@@ -24,6 +24,8 @@ namespace Oxide.Core.Python
     /// </summary>
     public class PythonExtension : Extension
     {
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
@@ -32,7 +34,7 @@ namespace Oxide.Core.Python
         /// <summary>
         /// Gets the version of this extension
         /// </summary>
-        public override VersionNumber Version => new VersionNumber(1, 0, 0);
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         /// <summary>
         /// Gets the author of this extension
@@ -52,7 +54,7 @@ namespace Oxide.Core.Python
 
         // Whitelist
         private static readonly string[] WhitelistModules = { "__future__", "binascii", "hashlib", "math", "random", "re", "time", "types", "warnings" };
-        private static readonly Dictionary<string, string[]> WhitelistParts = new Dictionary<string, string[]> { { "os", new [] { "urandom" } } };
+        private static readonly Dictionary<string, string[]> WhitelistParts = new Dictionary<string, string[]> { { "os", new[] { "urandom" } } };
         private List<string> _allowedTypes;
         private bool _typesInit;
 
@@ -66,7 +68,7 @@ namespace Oxide.Core.Python
             : base(manager)
         {
             var assem = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => assembly.GetName().Name == "IronPython" || assembly.GetName().Name == "Microsoft.Scripting");
-            var types = assem.SelectMany(Utility.GetAllTypesFromAssembly).Where(t => t.IsSubclassOf(typeof (Exception)));
+            var types = assem.SelectMany(Utility.GetAllTypesFromAssembly).Where(t => t.IsSubclassOf(typeof(Exception)));
             foreach (var type in types)
             {
                 ExceptionHandler.RegisterType(type, ex => PythonEngine.GetService<ExceptionOperations>().FormatException(ex));
@@ -213,7 +215,9 @@ namespace Oxide.Core.Python
                 {
                     delegateType = Expression.GetActionType(typeArgs.ToArray());
 
-                } else {
+                }
+                else
+                {
                     typeArgs.Add(method.ReturnType);
                     delegateType = Expression.GetFuncType(typeArgs.ToArray());
                 }

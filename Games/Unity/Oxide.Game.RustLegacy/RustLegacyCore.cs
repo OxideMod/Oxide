@@ -64,11 +64,13 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public RustLegacyCore()
         {
+            var assemblyVersion = RustLegacyExtension.AssemblyVersion;
+
             // Set attributes
             Name = "RustLegacyCore";
             Title = "Rust Legacy";
             Author = "Oxide Team";
-            Version = new VersionNumber(1, 0, 0);
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>
