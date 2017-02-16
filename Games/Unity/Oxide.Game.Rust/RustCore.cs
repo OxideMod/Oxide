@@ -284,6 +284,20 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnDisableServerConsole")]
         private object IOnDisableServerConsole() => ConsoleWindow.Check(true) && !Interface.Oxide.CheckConsole(true) ? (object)null : false;
 
+        [HookMethod("IOnRunCommandLine")]
+        private object IOnRunCommandLine()
+        {
+            foreach (KeyValuePair<string, string> pair in Facepunch.CommandLine.GetSwitches())
+            {
+                var value = pair.Value;
+                if (value == "") value = "1";
+                var str = pair.Key.Substring(1);
+                var options = ConsoleSystem.Option.Unrestricted;
+                options.PrintOutput = false;
+                ConsoleSystem.Run(options, str, value);
+            }
+            return false;
+        }
         #endregion
 
         #region Player Hooks
