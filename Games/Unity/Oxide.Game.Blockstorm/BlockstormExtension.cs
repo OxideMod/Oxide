@@ -40,6 +40,7 @@ namespace Oxide.Game.Blockstorm
 
         public static string[] Filter =
         {
+            "Adding external assets directory:",
             "Buffer size",
             "Clean up after player",
             "Client connected:",
@@ -62,11 +63,7 @@ namespace Oxide.Game.Blockstorm
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new BlockstormPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new BlockstormPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension
@@ -88,15 +85,13 @@ namespace Oxide.Game.Blockstorm
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 
-        internal static DedicatedServerConfiguration DedicatedServerConfiguration { get; } = new DedicatedServerConfiguration();
-
         internal static void ServerConsole()
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{FpsMultiplayerGame.instance.playersList.method_5().Count} | {DedicatedServerConfiguration.string_12}";
+            Interface.Oxide.ServerConsole.Title = () => $"{Network.connections.Length} | {AssetsCollection.instance.instanceName}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => DedicatedServerConfiguration.string_12;
+            Interface.Oxide.ServerConsole.Status1Left = () => AssetsCollection.instance.instanceName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var time = TimeSpan.FromSeconds(Time.realtimeSinceStartup);
@@ -104,7 +99,7 @@ namespace Oxide.Game.Blockstorm
                 return $"{Mathf.RoundToInt(1f / Time.smoothDeltaTime)}fps, {uptime}";
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $"{FpsMultiplayerGame.instance.playersList.method_5().Count}/{DedicatedServerConfiguration.int_1} players";
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{Network.connections.Length}/{Network.maxConnections} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 return string.Empty; // TODO: Network in/out
