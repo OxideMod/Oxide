@@ -102,7 +102,7 @@ namespace Oxide.Game.InterstellarRift
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Collect();
+            //Analytics.Collect(); // TODO: Uncomment once game has Covalence
 
             // Update server console window and status bars
             InterstellarRiftExtension.ServerConsole();
