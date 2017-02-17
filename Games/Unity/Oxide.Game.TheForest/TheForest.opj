@@ -256,7 +256,7 @@
                 "UnityEngine.Collider"
               ]
             },
-            "MSILHash": "eWSJ96D/3Y1u8KFYG7sQBhamzQv6eddRbf2bcApthFU=",
+            "MSILHash": "+GzeFmrEs4oDcN2U9fFEYDWJNhdZ77IHbHS1VW50fLg=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -750,7 +750,7 @@
                 "ResetTrap"
               ]
             },
-            "MSILHash": "QoyZV3UTHm3DFQZ2FqOC29FaBofUJjCdhnl2+QNCECY=",
+            "MSILHash": "1nWfPcE490gtl9/JuJTpVj/RU4tI2EZ4OvUOA76p7kc=",
             "BaseHookName": null,
             "HookCategory": "_UNTESTED"
           }
@@ -958,7 +958,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "QEXjJKdkdRSnpHBbDKDxc5lBpi1QZ5XfKuLj7CsRFVQ=",
+            "MSILHash": "jOQg/pCSSjBJqJonKu+VtGlPz951DSYK8JlP9ZO8y1s=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1296,7 +1296,7 @@
                 "PlayerHitEnemy"
               ]
             },
-            "MSILHash": "jbDyLO+HrZiVpytF9o76l8olrnt6kihQoBpH6PS1DuE=",
+            "MSILHash": "ytf+OGw3cCOFQYDacAXVFd+hv2CVk4v2GIR5kpOEuWU=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1372,7 +1372,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "z9mmHofDgkAMelRDXBkSUBQ0udBP1c2em72dt+0sP24=",
+            "MSILHash": "IfUyR32ovCpBh1jx4R1JbHPefZuWntduAEQRPEDQz/E=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1496,7 +1496,7 @@
               "ReturnType": "System.String",
               "Parameters": []
             },
-            "MSILHash": "EZzTxjjOy2sF3+R4Q3zJjwxkedZ8UAeDZo/YRmsZKoM=",
+            "MSILHash": "fK4Ez0ttbiEUf9HNj0GXFgAneLARBaG+YbzMi5gkrMU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
