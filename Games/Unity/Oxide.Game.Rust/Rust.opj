@@ -3649,6 +3649,30 @@
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnRunCommandLine [internal]",
+            "HookName": "IOnRunCommandLine",
+            "AssemblyName": "Facepunch.Console.dll",
+            "TypeName": "ConsoleSystem",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UpdateValuesFromCommandLine",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "6tnwpqNZCWReCMBF3W+5VhyHXaD55AaqTVukarR1Vb8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
         }
       ]
     }
