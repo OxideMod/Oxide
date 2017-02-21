@@ -39,7 +39,7 @@
       <HintPath>Dependencies\AlunaNetFramework.dll</HintPath>
     </Reference>
     <Reference Include="IR.exe">
-      <HintPath>Dependencies\IR.exe</HintPath>
+      <HintPath>Patched\IR.exe</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>

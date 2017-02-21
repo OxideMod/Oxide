@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
+      <HintPath>Patched\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>

@@ -42,7 +42,7 @@
       <HintPath>Dependencies\Sandbox.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game">
-      <HintPath>Dependencies\Sandbox.Game.dll</HintPath>
+      <HintPath>Patched\Sandbox.Game.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,7 +50,7 @@
       <HintPath>Dependencies\VRage.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Dedicated">
-      <HintPath>Dependencies\VRage.Dedicated.dll</HintPath>
+      <HintPath>Patched\VRage.Dedicated.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Game">
       <HintPath>Dependencies\VRage.Game.dll</HintPath>

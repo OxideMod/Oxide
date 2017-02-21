@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
+      <HintPath>Patched\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.ID">
       <HintPath>Dependencies\Facepunch.ID.dll</HintPath>
@@ -46,7 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="uLink">
-      <HintPath>Dependencies\uLink.dll</HintPath>
+      <HintPath>Patched\uLink.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Dependencies\UnityEngine.dll</HintPath>

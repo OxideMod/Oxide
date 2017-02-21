@@ -36,13 +36,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
+      <HintPath>Patched\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Console">
-      <HintPath>Dependencies\Facepunch.Console.dll</HintPath>
+      <HintPath>Patched\Facepunch.Console.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Network">
       <HintPath>Dependencies\Facepunch.Network.dll</HintPath>

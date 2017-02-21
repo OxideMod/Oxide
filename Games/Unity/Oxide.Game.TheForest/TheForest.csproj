@@ -36,10 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>Dependencies\Assembly-CSharp.dll</HintPath>
+      <HintPath>Patched\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>Patched\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="bolt">
       <HintPath>Dependencies\bolt.dll</HintPath>

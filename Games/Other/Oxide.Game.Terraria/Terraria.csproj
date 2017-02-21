@@ -43,7 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="TerrariaServer">
-      <HintPath>Dependencies\TerrariaServer.exe</HintPath>
+      <HintPath>Patched\TerrariaServer.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
