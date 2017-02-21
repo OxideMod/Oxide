@@ -70,7 +70,7 @@ namespace Oxide.Plugins
                         {
                             try
                             {
-                                Syscall.chmod(binaryPath, FilePermissions.S_IRWXU | FilePermissions.S_IRGRP | FilePermissions.S_IXGRP | FilePermissions.S_IROTH | FilePermissions.S_IXOTH);
+                                Syscall.chmod(binaryPath, FilePermissions.S_IRWXU);
                             }
                             catch (Exception ex)
                             {
@@ -92,6 +92,25 @@ namespace Oxide.Plugins
             BinaryPath = EscapePath(binaryPath);
         }
 
+        private static void DependencyTrace()
+        {
+            if (Environment.OSVersion.Platform != PlatformID.Unix) return;
+
+            var startInfo = new ProcessStartInfo("LD_TRACE_LOADED_OBJECTS=1", BinaryPath)
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+            var process = Process.Start(startInfo);
+            process.OutputDataReceived += (s, e) => Interface.Oxide.LogError(e.Data);
+            process.BeginOutputReadLine();
+            process.Start();
+            process.WaitForExit();
+            //Thread.Sleep(5000);
+        }
+
         private static void UpdateCheck(string filename)
         {
             var filePath = Path.Combine(Interface.Oxide.RootDirectory, filename);
@@ -109,18 +128,18 @@ namespace Oxide.Plugins
         {
             try
             {
-                Interface.Oxide.LogWarning($"Downloading {filename} for .cs (C#) plugin compilation");
+                Interface.Oxide.LogInfo($"Downloading {filename} for .cs (C#) plugin compilation");
 
                 var stream = response.GetResponseStream();
                 var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
-                const int ArrSize = 10000;
-                var barr = new byte[ArrSize];
+                var bufferSize = 10000;
+                var buffer = new byte[bufferSize];
 
                 while (true)
                 {
-                    var result = stream.Read(barr, 0, ArrSize);
+                    var result = stream.Read(buffer, 0, bufferSize);
                     if (result == -1 || result == 0) break;
-                    fs.Write(barr, 0, result);
+                    fs.Write(buffer, 0, result);
                 }
 
                 fs.Flush();
@@ -128,7 +147,7 @@ namespace Oxide.Plugins
                 stream.Close();
                 response.Close();
 
-                Interface.Oxide.LogWarning($"Download of {filename} for completed successfully");
+                Interface.Oxide.LogInfo($"Download of {filename} for completed successfully");
             }
             catch (Exception)
             {
@@ -199,7 +218,7 @@ namespace Oxide.Plugins
 
             if (!CheckCompiler())
             {
-                OnCompilerFailed($"Compiler v{CompilerVersion} couldn't be started");
+                OnCompilerFailed($"compiler v{CompilerVersion} couldn't be started");
                 return;
             }
 
@@ -227,7 +246,8 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.NextTick(() =>
                 {
-                    OnCompilerFailed($"compiler v{CompilerVersion} disconnected"); // TODO: Expand, warn about possible missing dependencies
+                    OnCompilerFailed($"compiler v{CompilerVersion} disconnected");
+                    DependencyTrace();
                     Shutdown();
                 });
                 return;
@@ -355,8 +375,8 @@ namespace Oxide.Plugins
             {
                 process?.Dispose();
                 process = null;
-                Interface.Oxide.LogException($"Exception while starting compiler v{CompilerVersion}: ", ex); // TODO: Expand, warn that it may not be executable
-                Interface.Oxide.LogWarning("Compiler may not be executable (if on Linux) or directory path may contain an apostrophe"); // TODO: Improve on this
+                Interface.Oxide.LogException($"Exception while starting compiler v{CompilerVersion}: ", ex);
+                Interface.Oxide.LogWarning("Compiler may not be executable (if on Linux) or directory path may contain an apostrophe");
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
                 var win32 = ex as Win32Exception;
                 if (win32 != null) Interface.Oxide.LogError("Win32 NativeErrorCode: {0} ErrorCode: {1} HelpLink: {2}", win32.NativeErrorCode, win32.ErrorCode, win32.HelpLink);
@@ -375,8 +395,9 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.NextTick(() =>
             {
-                OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpetantly"); // TODO: Expand, warn about possible security software interferrence
-                Interface.Oxide.LogWarning("Compiler may have been closed by interference from security softare"); // TODO: Improve on this
+                OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpetantly");
+                Interface.Oxide.LogWarning("Compiler may have been closed by interference from security softare");
+                DependencyTrace();
                 Shutdown();
             });
         }
