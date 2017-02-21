@@ -54,11 +54,7 @@ namespace Oxide.Game.MedievalEngineers
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new MedievalEngineersPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new MedievalEngineersPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension
