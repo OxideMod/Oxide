@@ -57,11 +57,7 @@ namespace Oxide.Game.Unturned
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new UnturnedPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new UnturnedPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension
