@@ -179,6 +179,28 @@
             "HookCategory": "Server"
           }
         }
+      ],
+      "Modifiers": [
+        {
+          "Name": "TNet.LobbyServerLink::mGameServer",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "TNet.LobbyServerLink",
+          "Type": 0,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "mGameServer",
+            "FullTypeName": "TNet.GameServer TNet.LobbyServerLink::mGameServer",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        }
       ]
     }
   ]
