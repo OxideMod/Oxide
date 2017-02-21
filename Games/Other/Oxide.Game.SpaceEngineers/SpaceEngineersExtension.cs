@@ -54,11 +54,7 @@ namespace Oxide.Game.SpaceEngineers
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new SpaceEngineersPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new SpaceEngineersPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension

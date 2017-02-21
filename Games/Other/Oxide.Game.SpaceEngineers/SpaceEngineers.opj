@@ -8,35 +8,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "InitLogging [internal]",
-            "HookName": "InitLogging",
-            "AssemblyName": "Sandbox.Game.dll",
-            "TypeName": "Sandbox.MyInitializer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "InvokeBeforeRun",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "System.UInt32",
-                "System.String",
-                "System.String",
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "5kv7e0rA3ldp7Ezabd92Tjxfq6oDzs1F1stt0Nr7rXU=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 266,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -83,6 +54,35 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.MyInitializer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "InvokeBeforeRun",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt32",
+                "System.String",
+                "System.String",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "5kv7e0rA3ldp7Ezabd92Tjxfq6oDzs1F1stt0Nr7rXU=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
         }
       ]
     },
@@ -92,7 +92,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 2,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -111,14 +111,14 @@
               ]
             },
             "MSILHash": "+Q0jiaEAnOmFeimRzFbbxU8RzHh20us+Cxg+uMdiFVg=",
-            "BaseHookName": null,
+            "BaseHookName": "DisableConsole [patch]",
             "HookCategory": "Server"
           }
         },
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 1,
+            "InjectionIndex": 0,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -150,7 +150,7 @@
               ]
             },
             "MSILHash": "+Q0jiaEAnOmFeimRzFbbxU8RzHh20us+Cxg+uMdiFVg=",
-            "BaseHookName": "InitOxide [internal]",
+            "BaseHookName": null,
             "HookCategory": "_Patches"
           }
         }
