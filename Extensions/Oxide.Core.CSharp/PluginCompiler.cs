@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Mono.Unix.Native;
@@ -22,32 +24,44 @@ namespace Oxide.Plugins
         public static void CheckCompilerBinary()
         {
             BinaryPath = null;
+            var filename = "basic.exe";
             var rootDirectory = Interface.Oxide.RootDirectory;
-            var binaryPath = rootDirectory + @"\basic.exe";
+            var binaryPath = Path.Combine(rootDirectory, filename);
             if (File.Exists(binaryPath))
             {
                 BinaryPath = binaryPath;
                 return;
             }
+
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32NT:
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
-                    binaryPath = rootDirectory + @"\CSharpCompiler.exe";
-                    if (!File.Exists(binaryPath))
+                    filename = "CSharpCompiler.exe";
+                    binaryPath = Path.Combine(rootDirectory, filename);
+                    try
                     {
-                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins; unable to find CSharpCompiler.exe");
+                        UpdateCheck(filename);
+                    }
+                    catch (Exception)
+                    {
+                        Interface.Oxide.LogError($"Cannot compile C# (.cs) plugins; unable to find {filename}");
                         return;
                     }
                     break;
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    binaryPath = rootDirectory + @"/CSharpCompiler";
-                    if (IntPtr.Size != 8) binaryPath += ".x86";
-                    if (!File.Exists(binaryPath))
+                    filename = "CSharpCompiler";
+                    if (IntPtr.Size != 8) filename += ".x86";
+                    binaryPath = Path.Combine(rootDirectory, filename);
+                    try
                     {
-                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins; unable to find CSharpCompiler");
+                        UpdateCheck(filename);
+                    }
+                    catch (Exception)
+                    {
+                        Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; unable to find {filename}");
                         return;
                     }
                     try
@@ -60,7 +74,7 @@ namespace Oxide.Plugins
                             }
                             catch (Exception ex)
                             {
-                                Interface.Oxide.LogError("Could not set CSharpCompiler as executable; please set manually");
+                                Interface.Oxide.LogError($"Could not set {filename} as executable; please set manually");
                                 Interface.Oxide.LogError(ex.Message);
                             }
                             return;
@@ -68,16 +82,64 @@ namespace Oxide.Plugins
                     }
                     catch (Exception ex)
                     {
-                        Interface.Oxide.LogError("Cannot compile C# (.cs) plugins; CSharpCompiler is not executable");
+                        Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; {filename} is not executable");
                         Interface.Oxide.LogError(ex.Message);
                         return;
                     }
                     break;
             }
-            BinaryPath = EscapePath(binaryPath);
 
-            var versionInfo = FileVersionInfo.GetVersionInfo(binaryPath);
-            CompilerVersion = $"{versionInfo.FileMajorPart}.{versionInfo.FileMinorPart}.{versionInfo.FileBuildPart}.{versionInfo.FilePrivatePart}";
+            BinaryPath = EscapePath(binaryPath);
+        }
+
+        private static void UpdateCheck(string filename)
+        {
+            var filePath = Path.Combine(Interface.Oxide.RootDirectory, filename);
+            var request = WebRequest.Create($"https://dl.bintray.com/oxidemod/builds/{filename}");
+            var response = request.GetResponse();
+            var etag = response.Headers[HttpResponseHeader.ETag];
+            var remoteChecksum = etag.Substring(0, etag.LastIndexOf(':')).Trim('"').ToLower();
+            var localChecksum = "0";
+
+            if (File.Exists(filePath)) localChecksum = GetChecksum(filePath, Algorithms.MD5);
+            if (remoteChecksum != localChecksum) DownloadCompiler(filename, response);
+        }
+
+        private static void DownloadCompiler(string filename, WebResponse response)
+        {
+            try
+            {
+                Interface.Oxide.LogWarning($"Downloading {filename} for .cs (C#) plugin compilation");
+
+                var stream = response.GetResponseStream();
+                var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+                const int ArrSize = 10000;
+                var barr = new byte[ArrSize];
+
+                while (true)
+                {
+                    var result = stream.Read(barr, 0, ArrSize);
+                    if (result == -1 || result == 0) break;
+                    fs.Write(barr, 0, result);
+                }
+
+                fs.Flush();
+                fs.Close();
+                stream.Close();
+                response.Close();
+
+                Interface.Oxide.LogWarning($"Download of {filename} for completed successfully");
+            }
+            catch (Exception)
+            {
+                Interface.Oxide.LogError($"Couldn't download {filename}, please download manually from:\nhttps://dl.bintray.com/oxidemod/builds/{filename}");
+            }
+        }
+
+        private static void SetCompilerVersion()
+        {
+            var version = FileVersionInfo.GetVersionInfo(BinaryPath);
+            CompilerVersion = $"{version.FileMajorPart}.{version.FileMinorPart}.{version.FileBuildPart}.{version.FilePrivatePart}";
             RemoteLogger.SetTag("compiler version", CompilerVersion);
         }
 
@@ -111,12 +173,14 @@ namespace Oxide.Plugins
             if (endedProcess != null) endedProcess.Exited -= OnProcessExited;
             process = null;
             if (client == null) return;
+
             client.Message -= OnMessage;
             client.Error -= OnError;
             client.PushMessage(new CompilerMessage { Type = CompilerMessageType.Exit });
             client.Stop();
             client = null;
             if (endedProcess == null) return;
+
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 Thread.Sleep(5000);
@@ -132,11 +196,13 @@ namespace Oxide.Plugins
                 //Interface.Oxide.LogDebug("EnqueueCompilation called for an empty compilation");
                 return;
             }
+
             if (!CheckCompiler())
             {
-                OnCompilerFailed($"Compiler v{CompilerVersion} couldn't be started.");
+                OnCompilerFailed($"Compiler v{CompilerVersion} couldn't be started");
                 return;
             }
+
             compilation.Started();
             //Interface.Oxide.LogDebug("Compiling with references: {0}", compilation.references.Keys.ToSentence());
             var sourceFiles = compilation.plugins.SelectMany(plugin => plugin.IncludePaths).Distinct().Select(path => new CompilerFile(path)).ToList();
@@ -161,18 +227,19 @@ namespace Oxide.Plugins
             {
                 Interface.Oxide.NextTick(() =>
                 {
-                    OnCompilerFailed($"Compiler v{CompilerVersion} disconnected."); // TODO: Expand, warn about possible missing depdencies
+                    OnCompilerFailed($"compiler v{CompilerVersion} disconnected"); // TODO: Expand, warn about possible missing dependencies
                     Shutdown();
                 });
                 return;
             }
+
             switch (message.Type)
             {
                 case CompilerMessageType.Assembly:
                     var compilation = compilations[message.Id];
                     if (compilation == null)
                     {
-                        Interface.Oxide.LogWarning("Compiler compiled an unknown assembly!"); // TODO: Clarify which assembly
+                        Interface.Oxide.LogWarning("Compiler compiled an unknown assembly"); // TODO: Any way to clarify this?
                         return;
                     }
                     compilation.endedAt = Interface.Oxide.Now;
@@ -191,7 +258,7 @@ namespace Oxide.Plugins
                                 var compilablePlugin = compilation.plugins.SingleOrDefault(pl => pl.ScriptName == scriptName);
                                 if (compilablePlugin == null)
                                 {
-                                    Interface.Oxide.LogError("Unable to resolve script error to plugin: {0}", line);
+                                    Interface.Oxide.LogError($"Unable to resolve script error to plugin: {line}");
                                     continue;
                                 }
                                 var missingRequirements = compilablePlugin.Requires.Where(name => !compilation.IncludesRequiredPlugin(name));
@@ -245,10 +312,14 @@ namespace Oxide.Plugins
         {
             CheckCompilerBinary();
             idleTimer?.Destroy();
+
             if (BinaryPath == null) return false;
             if (process != null && process.Handle != IntPtr.Zero && !process.HasExited) return true;
+
+            SetCompilerVersion();
             PurgeOldLogs();
             Shutdown();
+
             var args = new[] { "/service", "/logPath:" + EscapePath(Interface.Oxide.LogDirectory) };
             try
             {
@@ -285,11 +356,14 @@ namespace Oxide.Plugins
                 process?.Dispose();
                 process = null;
                 Interface.Oxide.LogException($"Exception while starting compiler v{CompilerVersion}: ", ex); // TODO: Expand, warn that it may not be executable
+                Interface.Oxide.LogWarning("Compiler may not be executable (if on Linux) or directory path may contain an apostrophe"); // TODO: Improve on this
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
                 var win32 = ex as Win32Exception;
                 if (win32 != null) Interface.Oxide.LogError("Win32 NativeErrorCode: {0} ErrorCode: {1} HelpLink: {2}", win32.NativeErrorCode, win32.ErrorCode, win32.HelpLink);
             }
+
             if (process == null) return false;
+
             client = new ObjectStreamClient<CompilerMessage>(process.StandardOutput.BaseStream, process.StandardInput.BaseStream);
             client.Message += OnMessage;
             client.Error += OnError;
@@ -301,7 +375,8 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.NextTick(() =>
             {
-                OnCompilerFailed($"Compiler v{CompilerVersion} closed."); // TODO: Expand, warn about possible security software?
+                OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpetantly"); // TODO: Expand, warn about possible security software interferrence
+                Interface.Oxide.LogWarning("Compiler may have been closed by interference from security softare"); // TODO: Improve on this
                 Shutdown();
             });
         }
@@ -327,18 +402,36 @@ namespace Oxide.Plugins
                 });
                 foreach (var filePath in filePaths) File.Delete(filePath);
             }
-            catch (Exception)
-            {
-                // Ignored
-            }
+            catch (Exception) { }
         }
 
         private static string EscapePath(string path)
         {
             if (string.IsNullOrEmpty(path)) return "\"\"";
+
             path = Regex.Replace(path, @"(\\*)" + "\"", @"$1\$0");
             path = Regex.Replace(path, @"^(.*\s.*?)(\\*)$", "\"$1$2$2\"");
             return path;
         }
+
+        private static class Algorithms
+        {
+            public static readonly HashAlgorithm MD5 = new MD5CryptoServiceProvider();
+            public static readonly HashAlgorithm SHA1 = new SHA1Managed();
+            public static readonly HashAlgorithm SHA256 = new SHA256Managed();
+            public static readonly HashAlgorithm SHA384 = new SHA384Managed();
+            public static readonly HashAlgorithm SHA512 = new SHA512Managed();
+            public static readonly HashAlgorithm RIPEMD160 = new RIPEMD160Managed();
+        }
+
+        private static string GetChecksum(string filePath, HashAlgorithm algorithm)
+        {
+            using (var stream = new BufferedStream(File.OpenRead(filePath), 100000))
+            {
+                var hash = algorithm.ComputeHash(stream);
+                return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
+            }
+        }
+
     }
 }

@@ -220,7 +220,7 @@ namespace Oxide.Plugins
                     {
                         plugin.OnCompilationFailed();
                         PluginErrors[plugin.Name] = $"Failed to compile: {plugin.CompilerErrors}";
-                        Interface.Oxide.LogError($"Error while compiling {plugin.CompilerErrors}");
+                        Interface.Oxide.LogError($"Error while compiling: {plugin.CompilerErrors}");
                         //RemoteLogger.Warning($"{plugin.ScriptName} plugin failed to compile!\n{plugin.CompilerErrors}");
                     }
                 }
@@ -244,7 +244,7 @@ namespace Oxide.Plugins
                         {
                             plugin.OnCompilationFailed();
                             PluginErrors[plugin.Name] = $"Failed to compile: {plugin.CompilerErrors}";
-                            Interface.Oxide.LogError($"Error while compiling {plugin.CompilerErrors}");
+                            Interface.Oxide.LogError($"Error while compiling: {plugin.CompilerErrors}");
                         }
                     }
                 }
