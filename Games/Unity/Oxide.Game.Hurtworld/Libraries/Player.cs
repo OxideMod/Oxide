@@ -201,7 +201,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        public PlayerSession Session(string nameOrIdOrIp)
+        public PlayerSession Find(string nameOrIdOrIp)
         {
             PlayerSession session = null;
             foreach (var s in Sessions)
@@ -219,7 +219,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public PlayerSession SessionById(string id)
+        public PlayerSession FindById(string id)
         {
             PlayerSession session = null;
             foreach (var s in Sessions)
