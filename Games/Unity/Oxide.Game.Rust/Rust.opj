@@ -926,7 +926,7 @@
             "TypeName": "PlayerMetabolism",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "RunMetabolism",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -2639,7 +2639,7 @@
             "TypeName": "BasePlayer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "CreateWorldProjectile",
               "ReturnType": "System.Void",
               "Parameters": [
