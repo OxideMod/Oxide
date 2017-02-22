@@ -18,8 +18,8 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return LobbyServerLink.mGameServer.name; }
-            set { LobbyServerLink.mGameServer.name = value; }
+            get { return Application.mGameServer.name; }
+            set { Application.mGameServer.name = value; }
         }
 
         /// <summary>
@@ -30,12 +30,12 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing network port of the server, if known
         /// </summary>
-        public ushort Port => Convert.ToUInt16(LobbyServerLink.mGameServer.tcpPort);
+        public ushort Port => Convert.ToUInt16(Application.mGameServer.tcpPort);
 
         /// <summary>
         /// Gets the version or build number of the server
         /// </summary>
-        public string Version => LobbyServerLink.mGameServer.clientVersion;
+        public string Version => Application.mGameServer.clientVersion;
 
         /// <summary>
         /// Gets the network protocol version of the server
@@ -50,15 +50,15 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Gets the total of players currently on the server
         /// </summary>
-        public int Players => LobbyServerLink.mGameServer.playerCount;
+        public int Players => Application.mGameServer.playerCount;
 
         /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers
         {
-            get { return LobbyServerLink.mGameServer.playerLimit; }
-            set { LobbyServerLink.mGameServer.playerLimit = (ushort)value; }
+            get { return Application.mGameServer.playerLimit; }
+            set { Application.mGameServer.playerLimit = (ushort)value; }
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Saves the server and any related information
         /// </summary>
-        public void Save() => LobbyServerLink.mGameServer.SaveTo("server.dat");
+        public void Save() => Application.mGameServer.SaveTo("server.dat");
 
         /// <summary>
         /// Unbans the user

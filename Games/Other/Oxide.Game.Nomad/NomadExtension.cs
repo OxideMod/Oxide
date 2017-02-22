@@ -5,7 +5,6 @@ using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.Logging;
-using TNet;
 
 namespace Oxide.Game.Nomad
 {
@@ -93,9 +92,9 @@ namespace Oxide.Game.Nomad
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{LobbyServerLink.mGameServer.playerCount} | {LobbyServerLink.mGameServer.name}";
+            Interface.Oxide.ServerConsole.Title = () => $"{Application.mGameServer.playerCount} | {Application.mGameServer.name}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => LobbyServerLink.mGameServer.name;
+            Interface.Oxide.ServerConsole.Status1Left = () => Application.mGameServer.name;
             /*Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Main.fpsCount;
@@ -104,7 +103,7 @@ namespace Oxide.Game.Nomad
                 return string.Concat(fps, "fps, ", uptime);
             };*/
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $"{LobbyServerLink.mGameServer.playerCount}/{LobbyServerLink.mGameServer.playerLimit} players";
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{Application.mGameServer.playerCount}/{Application.mGameServer.playerLimit} players";
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);

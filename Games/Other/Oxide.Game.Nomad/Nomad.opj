@@ -182,9 +182,9 @@
       ],
       "Modifiers": [
         {
-          "Name": "TNet.LobbyServerLink::mGameServer",
+          "Name": "Application::mGameServer",
           "AssemblyName": "NomadServer.exe",
-          "TypeName": "TNet.LobbyServerLink",
+          "TypeName": "Application",
           "Type": 0,
           "TargetExposure": [
             2,
@@ -193,10 +193,10 @@
           "Flagged": false,
           "Signature": {
             "Exposure": [
-              3
+              0
             ],
             "Name": "mGameServer",
-            "FullTypeName": "TNet.GameServer TNet.LobbyServerLink::mGameServer",
+            "FullTypeName": "TNet.GameServer Application::mGameServer",
             "Parameters": []
           },
           "MSILHash": ""
