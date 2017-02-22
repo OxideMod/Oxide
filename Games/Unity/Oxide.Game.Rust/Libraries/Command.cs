@@ -217,6 +217,7 @@ namespace Oxide.Game.Rust.Libraries
 
                 ConsoleSystem.Index.Dict.Remove(consoleCommand.RustCommand.FullName);
                 if (parent == "global") ConsoleSystem.Index.GlobalDict.Remove(consoleCommand.RustCommand.Name);
+                ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
             }
 
             RustCommandSystem.RegisteredCommand covalenceCommand;
@@ -251,6 +252,7 @@ namespace Oxide.Game.Rust.Libraries
             // Register the console command
             ConsoleSystem.Index.Dict[fullName] = cmd.RustCommand;
             if (parent == "global") ConsoleSystem.Index.GlobalDict[name] = cmd.RustCommand;
+            ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
             consoleCommands[fullName] = cmd;
         }
 
@@ -293,6 +295,7 @@ namespace Oxide.Game.Rust.Libraries
                 {
                     ConsoleSystem.Index.Dict.Remove(cmd.RustCommand.FullName);
                     if (cmd.Name.StartsWith("global.")) ConsoleSystem.Index.GlobalDict.Remove(cmd.RustCommand.Name);
+                    ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
                 }
             }
 

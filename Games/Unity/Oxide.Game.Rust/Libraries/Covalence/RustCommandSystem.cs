@@ -130,6 +130,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
                 ConsoleSystem.Index.Dict.Remove(fullName);
                 if (parent == "global") ConsoleSystem.Index.GlobalDict.Remove(name);
+                ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
             }
 
             // Check if command already exists in a Rust plugin as a chat command
@@ -157,6 +158,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
                 ConsoleSystem.Index.Dict.Remove(consoleCommand.RustCommand.FullName);
                 if (parent == "global") ConsoleSystem.Index.GlobalDict.Remove(consoleCommand.RustCommand.Name);
+                ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
                 cmdlib.consoleCommands.Remove(consoleCommand.RustCommand.FullName);
             }
 
@@ -204,6 +206,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             // Register the command as a console command
             ConsoleSystem.Index.Dict[fullName] = newCommand.RustCommand;
             if (parent == "global") ConsoleSystem.Index.GlobalDict[name] = newCommand.RustCommand;
+            ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
 
             // Register the command as a chat command
             registeredCommands[command] = newCommand;
