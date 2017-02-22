@@ -143,7 +143,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <param name="id"></param>
         public void Unban(string id)
         {
-            // Check not banned
+            // Check if unbanned already
             if (!IsBanned(id)) return;
 
             // Set to unbanned
