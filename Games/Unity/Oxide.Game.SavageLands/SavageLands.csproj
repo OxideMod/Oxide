@@ -11,7 +11,7 @@
     <AssemblyName>Oxide.Game.SavageLands</AssemblyName>
     <GameName>$(MSBuildProjectName)</GameName>
     <BundleDir>$(SolutionDir)Bundles</BundleDir>
-    <ManagedDir>SavageLands_Data\Managed</ManagedDir>
+    <ManagedDir>SavageLandsDedicatedServer_Data\Managed</ManagedDir>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

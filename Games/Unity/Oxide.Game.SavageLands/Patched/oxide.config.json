@@ -11,5 +11,5 @@
     "oxide"
   ],
   "ConfigDirectory": "config",
-  "ExtensionDirectory": "SavageLands_Data\\Managed"
+  "ExtensionDirectory": "SavageLandsDedicatedServer_Data\\Managed"
 }

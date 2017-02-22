@@ -40,6 +40,10 @@ namespace Oxide.Game.SavageLands
 
         public static string[] Filter =
         {
+            "Error: Cannot create FMOD::Sound instance for resource resources.resource",
+            "Excessive Delay Detected:",
+            "Object was expected to have a NetLockableObject Component",
+            "is registered with more than one"
         };
 
         /// <summary>
@@ -53,11 +57,7 @@ namespace Oxide.Game.SavageLands
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new SavageLandsPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new SavageLandsPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension
@@ -93,7 +93,7 @@ namespace Oxide.Game.SavageLands
 
         private static void HandleLog(string message, string stackTrace, LogType type)
         {
-            if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 
             var color = ConsoleColor.Gray;
             if (type == LogType.Warning)
