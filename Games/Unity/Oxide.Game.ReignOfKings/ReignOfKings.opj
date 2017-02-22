@@ -190,7 +190,7 @@
             "TypeName": "CodeHatch.Engine.Entities.Definitions.EntityHealth",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "InvokeDamage",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -216,7 +216,7 @@
             "TypeName": "CodeHatch.Engine.Entities.Definitions.EntityHealth",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "InvokeDeath",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -1102,7 +1102,8 @@
             "HookCategory": "_Patch"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }
