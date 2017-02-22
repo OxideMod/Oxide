@@ -3588,7 +3588,8 @@
             "HookCategory": "Player"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     },
     {
       "AssemblyName": "Facepunch.Console.dll",
@@ -3673,6 +3674,30 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        }
+      ],
+      "Modifiers": [
+        {
+          "Name": "ConsoleSystem/Index::All",
+          "AssemblyName": "Facepunch.Console.dll",
+          "TypeName": "ConsoleSystem/Index",
+          "Type": 2,
+          "TargetExposure": [
+            2,
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              2,
+              0
+            ],
+            "Name": "All",
+            "FullTypeName": "ConsoleSystem/Command[] ConsoleSystem/Index::All()",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
       ]
     }
