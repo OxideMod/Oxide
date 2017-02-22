@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Game.Rust.Libraries.Covalence;
@@ -13,7 +15,46 @@ namespace Oxide.Game.Rust.Libraries
         internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
         internal static readonly IPlayerManager PlayerManager = Covalence.PlayerManager;
 
-        #region Player Administration
+        #region Information
+
+        /// <summary>
+        /// Gets the player's language
+        /// </summary>
+        public CultureInfo Language(BasePlayer player) => CultureInfo.GetCultureInfo(player.net.connection.info.GetString("global.language") ?? "en");
+
+        /// <summary>
+        /// Gets the player's IP address
+        /// </summary>
+        public string Address(BasePlayer player) => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
+
+        /// <summary>
+        /// Gets the player's average network ping
+        /// </summary>
+        public int Ping(BasePlayer player) => Network.Net.sv.GetAveragePing(player.net.connection);
+
+        /// <summary>
+        /// Returns if the player is admin
+        /// </summary>
+        public bool IsAdmin(BasePlayer player) => player.net.connection.authLevel > 0;
+
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
+        public bool IsBanned(BasePlayer player) => ServerUsers.Is(player.userID, ServerUsers.UserGroup.Banned);
+
+        /// <summary>
+        /// Gets if the player is connected
+        /// </summary>
+        public bool IsConnected(BasePlayer player) => BasePlayer.activePlayerList.Contains(player);
+
+        /// <summary>
+        /// Returns if the player is sleeping
+        /// </summary>
+        public bool IsSleeping(BasePlayer player) => BasePlayer.FindSleeping(player.userID);
+
+        #endregion
+
+        #region Administration
 
         /// <summary>
         /// Bans the player from the server
@@ -22,8 +63,13 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="reason"></param>
         public void Ban(BasePlayer player, string reason = "")
         {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Ban(reason);
+            // Check if already banned
+            if (IsBanned(player)) return;
+
+            // Ban and kick user
+            ServerUsers.Set(player.userID, ServerUsers.UserGroup.Banned, player.displayName, reason);
+            ServerUsers.Save();
+            if (IsConnected(player)) Kick(player, reason);
         }
 
         /// <summary>
@@ -31,61 +77,47 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         /// <param name="player"></param>
         /// <param name="amount"></param>
-        public void Heal(BasePlayer player, float amount)
-        {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Heal(amount);
-        }
+        public void Heal(BasePlayer player, float amount) => player.Heal(amount);
 
         /// <summary>
         /// Damages the player by specified amount
         /// </summary>
         /// <param name="player"></param>
         /// <param name="amount"></param>
-        public void Hurt(BasePlayer player, float amount)
-        {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Hurt(amount);
-        }
+        public void Hurt(BasePlayer player, float amount) => player.Hurt(amount);
 
         /// <summary>
         /// Kicks the player from the server
         /// </summary>
         /// <param name="player"></param>
         /// <param name="reason"></param>
-        public void Kick(BasePlayer player, string reason = "")
-        {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Kick(reason);
-        }
+        public void Kick(BasePlayer player, string reason = "") => player.Kick(reason);
 
         /// <summary>
         /// Causes the player to die
         /// </summary>
         /// <param name="player"></param>
-        public void Kill(BasePlayer player)
-        {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Kill();
-        }
+        public void Kill(BasePlayer player) => player.Die();
 
         /// <summary>
         /// Teleports the player to the specified position
         /// </summary>
         /// <param name="player"></param>
         /// <param name="destination"></param>
-        public void Teleport(BasePlayer player, Vector3 destination) => Teleport(player, destination.x, destination.y, destination.z);
+        public void Teleport(BasePlayer player, Vector3 destination)
+        {
+            if (player.IsSpectating()) return;
+
+            player.MovePosition(destination);
+            player.ClientRPCPlayer(null, player, "ForcePositionTo", destination);
+        }
 
         /// <summary>
         /// Teleports the player to the target player
         /// </summary>
         /// <param name="player"></param>
         /// <param name="target"></param>
-        public void Teleport(BasePlayer player, BasePlayer target)
-        {
-            var targetPos = Position(target);
-            Teleport(player, targetPos.x, targetPos.y, targetPos.z);
-        }
+        public void Teleport(BasePlayer player, BasePlayer target) => Teleport(player, Position(target));
 
         /// <summary>
         /// Teleports the player to the specified position
@@ -94,15 +126,24 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(BasePlayer player, float x, float y, float z)
+        public void Teleport(BasePlayer player, float x, float y, float z) => Teleport(player, new Vector3(x, y, z));
+
+        /// <summary>
+        /// Unbans the player
+        /// </summary>
+        public void Unban(BasePlayer player)
         {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Teleport(x, y, z);
+            // Check if unbanned already
+            if (!IsBanned(player)) return;
+
+            // Set to unbanned
+            ServerUsers.Remove(player.userID);
+            ServerUsers.Save();
         }
 
         #endregion
 
-        #region Player Information
+        #region Location
 
         /// <summary>
         /// Returns the position of player as Vector3
@@ -116,11 +157,11 @@ namespace Oxide.Game.Rust.Libraries
         #region Player Finding
 
         /// <summary>
-        /// Gets the player player using a name, Steam ID, or IP address
+        /// Gets the player object using a name, Steam ID, or IP address
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        public BasePlayer Session(string nameOrIdOrIp)
+        public BasePlayer Find(string nameOrIdOrIp)
         {
             foreach (var player in Players)
             {
@@ -132,15 +173,30 @@ namespace Oxide.Game.Rust.Libraries
         }
 
         /// <summary>
-        /// Gets the player player using a Steam ID
+        /// Gets the player object using a Steam ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public BasePlayer SessionById(string id)
+        public BasePlayer FindById(string id)
         {
             foreach (var player in Players)
             {
                 if (!id.Equals(player.UserIDString)) continue;
+                return player;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the player object using a Steam ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public BasePlayer FindById(ulong id)
+        {
+            foreach (var player in Players)
+            {
+                if (!id.Equals(player.userID)) continue;
                 return player;
             }
             return null;
@@ -166,11 +222,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(BasePlayer player, string command, params object[] args)
-        {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Command(command, args);
-        }
+        public void Command(BasePlayer player, string command, params object[] args) => player.SendConsoleCommand(command, args);
 
         /// <summary>
         /// Sends a chat message to the player
@@ -178,11 +230,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
-        public void Message(BasePlayer player, string message, string prefix = null)
-        {
-            var iplayer = PlayerManager.FindPlayerById(player.UserIDString);
-            iplayer?.Message(prefix != null ? $"{prefix} {message}" : message);
-        }
+        public void Message(BasePlayer player, string message, string prefix = null) => player.ChatMessage(prefix != null ? $"{prefix} {message}" : message);
 
         /// <summary>
         /// Sends a chat message to the player
@@ -199,7 +247,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
-        public void Reply(BasePlayer player, string message, string prefix = null) => Message(player, prefix != null ? $"{prefix} {message}" : message);
+        public void Reply(BasePlayer player, string message, string prefix = null) => Message(player, message, prefix);
 
         /// <summary>
         /// Sends a chat message to the player

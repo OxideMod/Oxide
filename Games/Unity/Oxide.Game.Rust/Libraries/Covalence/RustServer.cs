@@ -11,6 +11,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustServer : IServer
     {
+        internal readonly Server Server = new Server();
+
         #region Information
 
         /// <summary>
@@ -138,7 +140,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="id"></param>
         public void Unban(string id)
         {
-            // Check not banned
+            // Check if unbanned already
             if (!IsBanned(id)) return;
 
             // Set to unbanned
@@ -154,14 +156,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => ConsoleNetwork.BroadcastToAllClients("chat.add", 0, message, 1.0);
+        public void Broadcast(string message) => Server.Broadcast(message);
 
         /// <summary>
         /// Runs the specified server command
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => ConsoleSystem.Run(ConsoleSystem.Option.Server, command, args);
+        public void Command(string command, params object[] args) => Server.Command(command, args);
 
         #endregion
     }
