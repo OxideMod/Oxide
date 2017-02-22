@@ -621,7 +621,7 @@
             "TypeName": "DoubleDoorServer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "FinishMove",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -647,7 +647,7 @@
             "TypeName": "GarageDoorServer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "FinishMove",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -751,7 +751,7 @@
             "TypeName": "BaseMachine`1",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "HasAuthority",
               "ReturnType": "System.Boolean",
               "Parameters": [
@@ -829,7 +829,7 @@
             "TypeName": "DoorSingleServer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "FinishMove",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -944,7 +944,8 @@
             "HookCategory": "Server"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }
