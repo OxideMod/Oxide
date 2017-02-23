@@ -280,6 +280,10 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnDisableServerConsole")]
         private object IOnDisableServerConsole() => ConsoleWindow.Check(true) && !Interface.Oxide.CheckConsole(true) ? (object)null : false;
 
+        /// <summary>
+        /// Called when the command-line is ran
+        /// </summary>
+        /// <returns></returns>
         [HookMethod("IOnRunCommandLine")]
         private object IOnRunCommandLine()
         {
@@ -294,6 +298,7 @@ namespace Oxide.Game.Rust
             }
             return false;
         }
+
         #endregion
 
         #region Player Hooks
