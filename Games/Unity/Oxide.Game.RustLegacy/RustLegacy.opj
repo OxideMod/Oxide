@@ -117,7 +117,7 @@
             "TypeName": "StructureMaster",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "DoDecay",
               "ReturnType": "StructureMaster/DecayStatus",
               "Parameters": []
@@ -141,7 +141,7 @@
             "TypeName": "CraftingInventory",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "StartCrafting",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -219,7 +219,7 @@
             "TypeName": "Inventory",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "ItemAdded",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -246,7 +246,7 @@
             "TypeName": "Inventory",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "ItemRemoved",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -652,7 +652,7 @@
             "TypeName": "TakeDamage",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "ProcessDamageEvent",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -705,7 +705,7 @@
             "TypeName": "TakeDamage",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "ProcessDamageEvent",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -731,7 +731,7 @@
             "TypeName": "TakeDamage",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "ProcessDamageEvent",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -883,6 +883,28 @@
             "HookCategory": "Player"
           }
         }
+      ],
+      "Modifiers": [
+        {
+          "Name": "VoiceCom::playerList",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "VoiceCom",
+          "Type": 0,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "playerList",
+            "FullTypeName": "System.Collections.Generic.List`1<uLink.NetworkPlayer> VoiceCom::playerList",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        }
       ]
     },
     {
@@ -916,7 +938,8 @@
             "HookCategory": "Fixes"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }
