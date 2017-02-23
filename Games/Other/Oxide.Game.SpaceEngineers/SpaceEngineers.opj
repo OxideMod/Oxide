@@ -85,7 +85,27 @@
           }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [
+        {
+          "Name": "Sandbox.Game.Entities.MyEntityStat::m_maxValue",
+          "AssemblyName": "Sandbox.Game.dll",
+          "TypeName": "Sandbox.Game.Entities.MyEntityStat",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              1
+            ],
+            "Name": "m_maxValue",
+            "FullTypeName": "System.Single Sandbox.Game.Entities.MyEntityStat::m_maxValue",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        }
+      ]
     },
     {
       "AssemblyName": "VRage.Dedicated.dll",

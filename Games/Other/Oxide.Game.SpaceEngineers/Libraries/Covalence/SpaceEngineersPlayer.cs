@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
-using Sandbox.Game.Entities;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
@@ -157,15 +155,13 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         public void Kill() => Sync.Players.KillPlayer(player); // TODO: player.Character.Kill(??) ?
 
-        readonly FieldInfo maxHealth = typeof(MyEntityStat).GetField("m_maxValue", BindingFlags.NonPublic);
-
         /// <summary>
         /// Gets/sets the user's maximum health
         /// </summary>
         public float MaxHealth
         {
             get { return player.Character.StatComp.Health.MaxValue; }
-            set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
+            set { player.Character.StatComp.Health.m_maxValue = value; } // TODO: Test if this works
         }
 
         /// <summary>
