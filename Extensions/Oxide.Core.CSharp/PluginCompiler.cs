@@ -40,14 +40,17 @@ namespace Oxide.Plugins
                 case PlatformID.Win32Windows:
                     filename = "CSharpCompiler.exe";
                     binaryPath = Path.Combine(rootDirectory, filename);
-                    try
+                    if (!File.Exists(binaryPath))
                     {
-                        UpdateCheck(filename);
-                    }
-                    catch (Exception)
-                    {
-                        Interface.Oxide.LogError($"Cannot compile C# (.cs) plugins; unable to find {filename}");
-                        return;
+                        try
+                        {
+                            UpdateCheck(filename); // TODO: Only check once on server startup
+                        }
+                        catch (Exception)
+                        {
+                            Interface.Oxide.LogError($"Cannot compile C# (.cs) plugins; unable to find {filename}");
+                            return;
+                        }
                     }
                     break;
                 case PlatformID.Unix:
@@ -55,14 +58,17 @@ namespace Oxide.Plugins
                     filename = "CSharpCompiler";
                     if (IntPtr.Size != 8) filename += ".x86";
                     binaryPath = Path.Combine(rootDirectory, filename);
-                    try
+                    if (!File.Exists(binaryPath))
                     {
-                        UpdateCheck(filename);
-                    }
-                    catch (Exception)
-                    {
-                        Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; unable to find {filename}");
-                        return;
+                        try
+                        {
+                            UpdateCheck(filename); // TODO: Only check once on server startup
+                        }
+                        catch (Exception)
+                        {
+                            Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; unable to find {filename}");
+                            return;
+                        }
                     }
                     try
                     {
