@@ -19,7 +19,7 @@
             "TypeName": "Sandbox.Engine.Multiplayer.MyDedicatedServerBase",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "Initialize",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -84,7 +84,8 @@
             "HookCategory": "Server"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     },
     {
       "AssemblyName": "VRage.Dedicated.dll",
@@ -154,7 +155,8 @@
             "HookCategory": "_Patches"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }
