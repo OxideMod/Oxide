@@ -380,7 +380,8 @@ namespace Oxide.Plugins
                 process?.Dispose();
                 process = null;
                 Interface.Oxide.LogException($"Exception while starting compiler v{CompilerVersion}: ", ex);
-                Interface.Oxide.LogWarning("Compiler may not be executable (if on Linux) or directory path may contain an apostrophe");
+                if (BinaryPath.Contains("'")) Interface.Oxide.LogWarning("Server directory path contains an apostrophe, compiler will not work until path is renamed");
+                else if (Environment.OSVersion.Platform == PlatformID.Unix) Interface.Oxide.LogWarning("Compiler may not be set as executabl; chmod +X or 0744/0755 required");
                 if (ex.GetBaseException() != ex) Interface.Oxide.LogException("BaseException: ", ex.GetBaseException());
                 var win32 = ex as Win32Exception;
                 if (win32 != null) Interface.Oxide.LogError("Win32 NativeErrorCode: {0} ErrorCode: {1} HelpLink: {2}", win32.NativeErrorCode, win32.ErrorCode, win32.HelpLink);
