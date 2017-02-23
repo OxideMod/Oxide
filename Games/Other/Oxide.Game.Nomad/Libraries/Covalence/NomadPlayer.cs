@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -81,7 +80,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => false; // TODO: Implement when possible
+        public bool IsBanned => GameServer.mBan.Contains(player.address);
 
         /// <summary>
         /// Gets if the user is connected
@@ -97,9 +96,6 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
 
         #region Administration
 
-        private readonly MemberInfo[] banList = typeof(GameServer).GetMember("mBan", BindingFlags.NonPublic | BindingFlags.Instance);
-        private readonly MethodInfo saveList = typeof(Tools).GetMethod("SaveList", BindingFlags.NonPublic | BindingFlags.Static);
-
         /// <summary>
         /// Bans the user for the specified reason and duration
         /// </summary>
@@ -111,7 +107,10 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             if (IsBanned) return;
 
             // Ban and kick user
-            // TODO: Implement when possible
+            //GameServer.mBan.Add($"// [{player.name}] banned by [Admin] - {reason}");
+            GameServer.mBan.Add(player.address);
+            Tools.SaveList("Config/ban.txt", GameServer.mBan);
+            Kick(reason);
         }
 
         /// <summary>
@@ -146,13 +145,11 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             // TODO: Implement when possible
         }
 
-        private readonly MethodInfo removePlayer = typeof(GameServer).GetMethod("RemovePlayer", BindingFlags.NonPublic | BindingFlags.Instance);
-
         /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => removePlayer?.Invoke(player, null); // TODO: Reflection
+        public void Kick(string reason) => GameServer.RemovePlayer(player);
 
         /// <summary>
         /// Causes the user's character to die
@@ -203,7 +200,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             if (!IsBanned) return;
 
             // Set to unbanned
-            // TODO: Implement when possible
+            GameServer.mBan.Remove(player.address);
         }
 
         #endregion
