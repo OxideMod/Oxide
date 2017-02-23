@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using CodeHatch.Build;
 using CodeHatch.Common;
@@ -46,8 +45,6 @@ namespace Oxide.Game.ReignOfKings
 
         // Track 'load' chat commands
         private readonly Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
-
-        private static readonly FieldInfo FoldersField = typeof(FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
 
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
@@ -256,15 +253,15 @@ namespace Oxide.Game.ReignOfKings
         {
             if (fileCounter.FolderLocationFromDataPath.Equals("/Managed/") && fileCounter.Folders.Length != 39)
             {
-                var folders = (string[])FoldersField.GetValue(fileCounter);
+                var folders = FileCounter._folders;
                 Array.Resize(ref folders, 39);
-                FoldersField.SetValue(fileCounter, folders);
+                folders = fileCounter.Folders;
             }
             else if (fileCounter.FolderLocationFromDataPath.Equals("/../") && fileCounter.Folders.Length != 2)
             {
-                var folders = (string[])FoldersField.GetValue(fileCounter);
+                var folders = FileCounter._folders;
                 Array.Resize(ref folders, 2);
-                FoldersField.SetValue(fileCounter, folders);
+                folders = fileCounter.Folders;
             }
         }
 
