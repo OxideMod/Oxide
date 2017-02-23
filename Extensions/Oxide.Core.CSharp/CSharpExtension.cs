@@ -59,9 +59,10 @@ namespace Oxide.Plugins
             // Register engine frame callback
             Interface.Oxide.OnFrame(OnFrame);
 
+            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "CSharpCompiler"));
+            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "libMonoPosixHelper.so"));
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "mono-2.0.dll"));
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "msvcr120.dll"));
-            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "libMonoPosixHelper.so"));
         }
 
         /// <summary>

@@ -55,8 +55,7 @@ namespace Oxide.Plugins
                     break;
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    filename = "CSharpCompiler";
-                    if (IntPtr.Size != 8) filename += ".x86";
+                    filename = $"CSharpCompiler.{(IntPtr.Size != 8 ? "x86" : "x86_x64")}";
                     binaryPath = Path.Combine(rootDirectory, filename);
                     if (!File.Exists(binaryPath))
                     {
