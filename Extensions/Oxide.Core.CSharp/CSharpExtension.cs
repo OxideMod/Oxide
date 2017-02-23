@@ -59,6 +59,8 @@ namespace Oxide.Plugins
             // Register engine frame callback
             Interface.Oxide.OnFrame(OnFrame);
 
+            // Cleanup old files and/or file locations
+            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, Environment.OSVersion.Platform != PlatformID.Unix ? "CSharpCompiler.exe" : "CSharpCompiler.x86"));
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "CSharpCompiler"));
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "libMonoPosixHelper.so"));
             Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "mono-2.0.dll"));
