@@ -204,7 +204,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public void Unban()
         {
-            // Check not banned
+            // Check if unbanned already
             if (!IsBanned) return;
 
             // Set to unbanned

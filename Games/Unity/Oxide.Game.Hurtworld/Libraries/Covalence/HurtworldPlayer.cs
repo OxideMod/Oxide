@@ -12,6 +12,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// </summary>
     public class HurtworldPlayer : IPlayer, IEquatable<IPlayer>
     {
+        #region Initialization
+
         internal readonly Player Player = new Player();
 
         private static Permission libPerms;
@@ -36,6 +38,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             this.session = session;
             cSteamId = session.SteamId;
         }
+
+        #endregion
 
         #region Objects
 
@@ -66,37 +70,37 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the user's language
         /// </summary>
-        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
+        public CultureInfo Language => Player.Language(session);
 
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => session.Player.ipAddress;
+        public string Address => Player.Address(session);
 
         /// <summary>
         /// Gets the user's average network ping
         /// </summary>
-        public int Ping => session.Player.averagePing;
+        public int Ping => Player.Ping(session);
 
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => session?.IsAdmin ?? GameManager.Instance.IsAdmin(cSteamId);
+        public bool IsAdmin => Player.IsAdmin(session);
 
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => BanManager.Instance.IsBanned(steamId);
+        public bool IsBanned => Player.IsBanned(session);
 
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => session?.IsLoaded ?? false;
+        public bool IsConnected => Player.IsConnected(session);
 
         /// <summary>
         /// Returns if the user is sleeping
         /// </summary>
-        public bool IsSleeping => false;
+        public bool IsSleeping => Player.IsSleeping(session);
 
         #endregion
 

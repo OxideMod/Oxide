@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Assets.Scripts.Core;
 using Emotes;
@@ -19,32 +20,37 @@ namespace Oxide.Game.Hurtworld.Libraries
         #region Information
 
         /// <summary>
-        /// Gets the user's IP address
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language(PlayerSession session) => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
+
+        /// <summary>
+        /// Gets the player's IP address
         /// </summary>
         public string Address(PlayerSession session) => session.Player.ipAddress;
 
         /// <summary>
-        /// Gets the user's average network ping
+        /// Gets the player's average network ping
         /// </summary>
         public int Ping(PlayerSession session) => session.Player.averagePing;
 
         /// <summary>
-        /// Returns if the user is admin
+        /// Returns if the player is admin
         /// </summary>
         public bool IsAdmin(PlayerSession session) => session.IsAdmin;
 
         /// <summary>
-        /// Gets if the user is banned
+        /// Gets if the player is banned
         /// </summary>
         public bool IsBanned(PlayerSession session) => BanManager.Instance.IsBanned(session.SteamId.m_SteamID);
 
         /// <summary>
-        /// Gets if the user is connected
+        /// Gets if the player is connected
         /// </summary>
         public bool IsConnected(PlayerSession session) => session.IsLoaded;
 
         /// <summary>
-        /// Returns if the user is sleeping
+        /// Returns if the player is sleeping
         /// </summary>
         public bool IsSleeping(PlayerSession session) => session.Identity.Sleeper != null;
 
@@ -147,18 +153,14 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="destination"></param>
-        public void Teleport(PlayerSession session, Vector3 destination) => Teleport(session, destination.x, destination.y, destination.z);
+        public void Teleport(PlayerSession session, Vector3 destination) => session.WorldPlayerEntity.transform.position = destination;
 
         /// <summary>
         /// Teleports the player to the target player
         /// </summary>
         /// <param name="session"></param>
         /// <param name="target"></param>
-        public void Teleport(PlayerSession session, PlayerSession target)
-        {
-            var targetPos = Position(target);
-            Teleport(session, targetPos.x, targetPos.y, targetPos.z);
-        }
+        public void Teleport(PlayerSession session, PlayerSession target) => Teleport(session, Position(target));
 
         /// <summary>
         /// Teleports the player to the specified position
@@ -167,14 +169,14 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(PlayerSession session, float x, float y, float z) => session.WorldPlayerEntity.transform.position = new Vector3(x, y, z);
+        public void Teleport(PlayerSession session, float x, float y, float z) => Teleport(session, new Vector3(x, y, z));
 
         /// <summary>
         /// Unbans the player
         /// </summary>
         public void Unban(PlayerSession session)
         {
-            // Check not banned
+            // Check if unbanned already
             if (!IsBanned(session)) return;
 
             // Set to unbanned
@@ -201,7 +203,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
-        public PlayerSession Session(string nameOrIdOrIp)
+        public PlayerSession Find(string nameOrIdOrIp)
         {
             PlayerSession session = null;
             foreach (var s in Sessions)
@@ -219,7 +221,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public PlayerSession SessionById(string id)
+        public PlayerSession FindById(string id)
         {
             PlayerSession session = null;
             foreach (var s in Sessions)
@@ -312,7 +314,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="session"></param>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
-        public void Reply(PlayerSession session, string message, string prefix = null) => Message(session, prefix != null ? $"{prefix} {message}" : message);
+        public void Reply(PlayerSession session, string message, string prefix = null) => Message(session, message, prefix);
 
         /// <summary>
         /// Sends a chat message to the player

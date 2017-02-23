@@ -44,10 +44,10 @@ namespace Oxide.Game.Rust
         private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
         private readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
-            {"CommandUsageLang", "Usage: lang <two-digit language code>"},
-            {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
             {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
             {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
+            {"CommandUsageLang", "Usage: lang <two-digit language code>"},
+            {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
             {"CommandUsageReload", "Usage: reload *|<pluginname>+"},
             {"CommandUsageRevoke", "Usage: revoke <group|user> <name|id> <permission>"},
             {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"}, // TODO: Split this up
@@ -101,10 +101,6 @@ namespace Oxide.Game.Rust
 
         // Track when the server has been initialized
         private bool serverInitialized;
-
-        // Cache the serverInput field info
-        private readonly FieldInfo serverInputField = typeof(BasePlayer).GetField("serverInput", BindingFlags.Instance | BindingFlags.NonPublic);
-        private readonly Dictionary<BasePlayer, InputState> playerInputState = new Dictionary<BasePlayer, InputState>();
 
         // Track if a BasePlayer.OnAttacked call is in progress
         private bool isPlayerTakingDamage;
@@ -165,8 +161,8 @@ namespace Oxide.Game.Rust
             lang.RegisterMessages(messages, this);
 
             // Add core general commands
-            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
             AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
 
             // Add core plugin commands
             AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand");
@@ -284,6 +280,10 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnDisableServerConsole")]
         private object IOnDisableServerConsole() => ConsoleWindow.Check(true) && !Interface.Oxide.CheckConsole(true) ? (object)null : false;
 
+        /// <summary>
+        /// Called when the command-line is ran
+        /// </summary>
+        /// <returns></returns>
         [HookMethod("IOnRunCommandLine")]
         private object IOnRunCommandLine()
         {
@@ -298,6 +298,7 @@ namespace Oxide.Game.Rust
             }
             return false;
         }
+
         #endregion
 
         #region Player Hooks
@@ -371,9 +372,6 @@ namespace Oxide.Game.Rust
             // Set language for player
             lang.SetLanguage(player.net.connection.info.GetString("global.language", "en"), player.UserIDString);
 
-            // Cache serverInput for player so that reflection only needs to be used once
-            playerInputState[player] = (InputState)serverInputField.GetValue(player);
-
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
             var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
@@ -392,8 +390,6 @@ namespace Oxide.Game.Rust
             var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
             if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, reason);
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
-
-            playerInputState.Remove(player);
         }
 
         /// <summary>
@@ -427,11 +423,7 @@ namespace Oxide.Game.Rust
         /// <param name="player"></param>
         /// <returns></returns>
         [HookMethod("OnPlayerTick")]
-        private object OnPlayerTick(BasePlayer player)
-        {
-            InputState input;
-            return playerInputState.TryGetValue(player, out input) ? Interface.Call("OnPlayerInput", player, input) : null;
-        }
+        private object OnPlayerTick(BasePlayer player) => Interface.Call("OnPlayerInput", player, player.serverInput);
 
         /// <summary>
         /// Called when a BasePlayer is attacked
@@ -1008,6 +1000,9 @@ namespace Oxide.Game.Rust
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
                     return;
                 }
+
+                // TODO: Check if group already has permission, show message
+
                 permission.GrantGroupPermission(name, perm, null);
                 player.Reply(lang.GetMessage("GroupPermissionGranted", this, player.Id), name, perm);
             }
@@ -1019,6 +1014,7 @@ namespace Oxide.Game.Rust
                     player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -1026,6 +1022,9 @@ namespace Oxide.Game.Rust
                     name = target.Name;
                     permission.UpdateNickname(userId, name);
                 }
+
+                // TODO: Check if user already has permission, show message
+
                 permission.GrantUserPermission(userId, perm, null);
                 player.Reply(lang.GetMessage("UserPermissionGranted", this, player.Id), $"{name} ({userId})", perm);
             }
@@ -1075,6 +1074,10 @@ namespace Oxide.Game.Rust
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
                     return;
                 }
+
+                // TODO: Check if group doesn't has permission, show message
+                // TODO: Check if group is inheriting permission
+
                 permission.RevokeGroupPermission(name, perm);
                 player.Reply(lang.GetMessage("GroupPermissionRevoked", this, player.Id), name, perm);
             }
@@ -1086,6 +1089,7 @@ namespace Oxide.Game.Rust
                     player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -1093,6 +1097,10 @@ namespace Oxide.Game.Rust
                     name = target.Name;
                     permission.UpdateNickname(userId, name);
                 }
+
+                // TODO: Check if user doesn't has permission, show message
+                // TODO: Check if user is inheriting permission
+
                 permission.RevokeUserPermission(userId, perm);
                 player.Reply(lang.GetMessage("UserPermissionRevoked", this, player.Id), $"{name} ({userId})", perm);
             }
@@ -1237,7 +1245,7 @@ namespace Oxide.Game.Rust
             if (string.IsNullOrEmpty(str)) return null;
 
             // Is it a chat command?
-            if (str[0] != '/') return null;
+            if (str[0] != '/') return null; // TODO: Return if no arguments given
 
             // Get the full command
             var message = str.Substring(1);

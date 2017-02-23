@@ -179,6 +179,93 @@
             "HookCategory": "Server"
           }
         }
+      ],
+      "Modifiers": [
+        {
+          "Name": "Application::mGameServer",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "Application",
+          "Type": 0,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "mGameServer",
+            "FullTypeName": "TNet.GameServer Application::mGameServer",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "TNet.GameServer::RemovePlayer",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "TNet.GameServer",
+          "Type": 1,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "RemovePlayer",
+            "FullTypeName": "System.Void",
+            "Parameters": [
+              "TNet.TcpPlayer"
+            ]
+          },
+          "MSILHash": "aBTJHPOC2YGv7ppZQBzFaO9AwYN7nNzX8IGnhZinqio="
+        },
+        {
+          "Name": "TNet.GameServer::mBan",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "TNet.GameServer",
+          "Type": 0,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "mBan",
+            "FullTypeName": "TNet.List`1<System.String> TNet.GameServer::mBan",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "TNet.Tools::SaveList",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "TNet.Tools",
+          "Type": 1,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "SaveList",
+            "FullTypeName": "System.Void",
+            "Parameters": [
+              "System.String",
+              "TNet.List`1<System.String>"
+            ]
+          },
+          "MSILHash": "x09z/bayHzANWzNSByGeKsVrVEd28arMmKlwO1iWEFw="
+        }
       ]
     }
   ]

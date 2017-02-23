@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -36,9 +35,6 @@ namespace Oxide.Game.RustLegacy
 
         // Track when the server has been initialized
         private bool serverInitialized;
-
-        // Cache the VoiceCom.playerList field info
-        private readonly FieldInfo playerList = typeof(VoiceCom).GetField("playerList", BindingFlags.Static | BindingFlags.NonPublic);
 
         // Cache some player information
         private static readonly Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
@@ -310,12 +306,7 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         /// <param name="netUser"></param>
         [HookMethod("IOnPlayerVoice")]
-        private object IOnPlayerVoice(NetUser netUser)
-        {
-            var players = (List<uLink.NetworkPlayer>)playerList.GetValue(null);
-            playerList.SetValue(null, players);
-            return (int?)Interface.Call("OnPlayerVoice", netUser, players);
-        }
+        private object IOnPlayerVoice(NetUser netUser) => (int?)Interface.Call("OnPlayerVoice", netUser, VoiceCom.playerList);
 
         #endregion
 

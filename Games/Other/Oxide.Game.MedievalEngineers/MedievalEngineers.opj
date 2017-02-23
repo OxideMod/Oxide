@@ -48,7 +48,7 @@
             "TypeName": "Sandbox.Engine.Multiplayer.MyDedicatedServerBase",
             "Flagged": false,
             "Signature": {
-              "Exposure": 3,
+              "Exposure": 1,
               "Name": "Initialize",
               "ReturnType": "System.Void",
               "Parameters": [
@@ -84,7 +84,8 @@
             "HookCategory": "Server"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     },
     {
       "AssemblyName": "VRage.Dedicated.dll",
@@ -92,7 +93,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 2,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -111,14 +112,14 @@
               ]
             },
             "MSILHash": "EHnIJXeENtCPdSJ+AgJ37G12InPNpshbqxsxjHr1rIE=",
-            "BaseHookName": null,
+            "BaseHookName": "DisableConsole [patch]",
             "HookCategory": "Server"
           }
         },
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 1,
+            "InjectionIndex": 0,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -150,11 +151,12 @@
               ]
             },
             "MSILHash": "EHnIJXeENtCPdSJ+AgJ37G12InPNpshbqxsxjHr1rIE=",
-            "BaseHookName": "InitOxide [internal]",
+            "BaseHookName": null,
             "HookCategory": "_Patches"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -13,6 +12,10 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustPlayer : IPlayer, IEquatable<IPlayer>
     {
+        #region Initialization
+
+        internal readonly Player Player = new Player();
+
         private static Permission libPerms;
         private readonly BasePlayer player;
         private readonly ulong steamId;
@@ -33,6 +36,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             // Store user object
             this.player = player;
         }
+
+        #endregion
 
         #region Objects
 
@@ -63,37 +68,37 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the user's language
         /// </summary>
-        public CultureInfo Language => CultureInfo.GetCultureInfo(player?.net?.connection?.info?.GetString("global.language") ?? "en");
+        public CultureInfo Language => Player.Language(player);
 
         /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
+        public string Address => Player.Address(player);
 
         /// <summary>
         /// Gets the user's average network ping
         /// </summary>
-        public int Ping => Network.Net.sv.GetAveragePing(player.net.connection);
+        public int Ping => Player.Ping(player);
 
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player?.IsAdmin() ?? ServerUsers.Is(steamId, ServerUsers.UserGroup.Moderator) || ServerUsers.Is(steamId, ServerUsers.UserGroup.Owner);
+        public bool IsAdmin => Player.IsAdmin(player);
 
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => ServerUsers.Is(steamId, ServerUsers.UserGroup.Banned);
+        public bool IsBanned => Player.IsBanned(player);
 
         /// <summary>
         /// Returns if the user is connected
         /// </summary>
-        public bool IsConnected => player?.IsConnected() ?? false;
+        public bool IsConnected => Player.IsConnected(player);
 
         /// <summary>
         /// Returns if the user is sleeping
         /// </summary>
-        public bool IsSleeping => player?.IsSleeping() ?? BasePlayer.FindSleeping(steamId) != null;
+        public bool IsSleeping => Player.IsSleeping(player);
 
         #endregion
 
@@ -104,16 +109,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
-        public void Ban(string reason, TimeSpan duration = default(TimeSpan))
-        {
-            // Check if already banned
-            if (IsBanned) return;
-
-            // Ban and kick user
-            ServerUsers.Set(steamId, ServerUsers.UserGroup.Banned, Name, reason);
-            ServerUsers.Save();
-            if (IsConnected) Kick(reason);
-        }
+        public void Ban(string reason, TimeSpan duration = default(TimeSpan)) => Player.Ban(player, reason);
 
         /// <summary>
         /// Gets the amount of time remaining on the user's ban
@@ -124,7 +120,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Heals the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Heal(float amount) => player.Heal(amount);
+        public void Heal(float amount) => Player.Heal(player, amount);
 
         /// <summary>
         /// Gets/sets the user's health
@@ -139,18 +135,18 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Hurt(float amount) => player.Hurt(amount);
+        public void Hurt(float amount) => Player.Hurt(player, amount);
 
         /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => player.Kick(reason);
+        public void Kick(string reason) => Player.Kick(player, reason);
 
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => player.Die();
+        public void Kill() => Player.Kill(player);
 
         readonly FieldInfo maxHealth = typeof(BasePlayer).GetField("_maxHealth", BindingFlags.NonPublic);
 
@@ -163,9 +159,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
         }
 
-        readonly FieldInfo displayName = typeof(BasePlayer).GetField("_displayName", (BindingFlags.Instance | BindingFlags.NonPublic));
-        readonly FieldInfo cachedName = typeof(BasePlayer).GetField("_name", (BindingFlags.Instance | BindingFlags.NonPublic));
-
         /// <summary>
         /// Renames the user to specified name
         /// <param name="name"></param>
@@ -174,10 +167,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             name = string.IsNullOrEmpty(name.Trim()) ? player.displayName : name;
             player.net.connection.username = name;
-            displayName?.SetValue(player, name);
-            cachedName?.SetValue(player, null);
+            player.displayName = name;
+            player._name = name;
             Name = name;
-
             player.SendNetworkUpdateImmediate();
         }
 
@@ -187,27 +179,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z)
-        {
-            if (player.IsSpectating()) return;
-
-            var postion = new UnityEngine.Vector3(x, y, z);
-            player.MovePosition(postion);
-            player.ClientRPCPlayer(null, player, "ForcePositionTo", postion);
-        }
+        public void Teleport(float x, float y, float z) => Player.Teleport(player, x, y, z);
 
         /// <summary>
         /// Unbans the user
         /// </summary>
-        public void Unban()
-        {
-            // Check not banned
-            if (!IsBanned) return;
-
-            // Set to unbanned
-            ServerUsers.Remove(steamId);
-            ServerUsers.Save();
-        }
+        public void Unban() => Player.Unban(player);
 
         #endregion
 
@@ -221,7 +198,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            var pos = player.transform.position;
+            var pos = Player.Position(player);
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -233,7 +210,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            var pos = player.transform.position;
+            var pos = Player.Position(player);
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
@@ -242,21 +219,17 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
+        /// Runs the specified console command on the user
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        public void Command(string command, params object[] args) => player.SendConsoleCommand(command, args);
+
+        /// <summary>
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
-        {
-            switch (LastCommand)
-            {
-                case CommandType.Chat:
-                    player.ChatMessage(message);
-                    break;
-                case CommandType.Console:
-                    Command($"echo {message}");
-                    break;
-            }
-        }
+        public void Message(string message) => Player.Message(player, message);
 
         /// <summary>
         /// Sends the specified message to the user
@@ -269,21 +242,25 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
+        public void Reply(string message)
+        {
+            switch (LastCommand)
+            {
+                case CommandType.Chat:
+                    Message(message);
+                    break;
+                case CommandType.Console:
+                    Command($"echo {message}");
+                    break;
+            }
+        }
 
         /// <summary>
         /// Replies to the user with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(message, args);
-
-        /// <summary>
-        /// Runs the specified console command on the user
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        public void Command(string command, params object[] args) => player.SendConsoleCommand(command, args);
+        public void Reply(string message, params object[] args) => Reply(string.Format(message, args));
 
         #endregion
 

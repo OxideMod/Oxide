@@ -6,7 +6,6 @@ using CodeHatch.Common;
 using CodeHatch.Engine.Administration;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
-using CodeHatch.Engine.Sockets;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Game.ReignOfKings.Libraries;
@@ -155,9 +154,6 @@ namespace Oxide.Game.ReignOfKings
         {
         }
 
-        private static readonly FieldInfo SocketServerField = typeof(SocketAdminConsole).GetField("_server", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo MessagesField = typeof(Console).GetField("m_messages", BindingFlags.NonPublic | BindingFlags.Static);
-
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
@@ -166,8 +162,7 @@ namespace Oxide.Game.ReignOfKings
             if (!Interface.Oxide.CheckConsole() || !Interface.Oxide.EnableConsole()) return;
 
             var socketAdminConsole = UnityEngine.Object.FindObjectOfType<SocketAdminConsole>();
-            var socketServer = (SocketServer)SocketServerField.GetValue(socketAdminConsole);
-            if (socketServer.Clients.Count > 0) return;
+            if (SocketAdminConsole._server.Clients.Count > 0) return;
             socketAdminConsole.enabled = false;
 
             Application.logMessageReceived += HandleLog;

@@ -50,7 +50,8 @@
             "HookCategory": "Server"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     },
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -1658,7 +1659,8 @@
             "HookCategory": "_Patches"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     },
     {
       "AssemblyName": "Assembly-UnityScript.dll",
@@ -1809,7 +1811,8 @@
             "HookCategory": "_UNTESTED"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }

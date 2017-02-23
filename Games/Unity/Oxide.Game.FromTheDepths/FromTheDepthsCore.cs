@@ -104,7 +104,7 @@ namespace Oxide.Game.FromTheDepths
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Collect();
+            //Analytics.Collect(); // TODO: Uncomment once game has Covalence
 
             // Update server console window and status bars
             FromTheDepthsExtension.ServerConsole();
@@ -113,8 +113,8 @@ namespace Oxide.Game.FromTheDepths
         /// <summary>
         /// Called when the server is saving
         /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+        //[HookMethod("OnServerSave")]
+        //private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down

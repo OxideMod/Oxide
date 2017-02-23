@@ -52,11 +52,7 @@ namespace Oxide.Game.InterstellarRift
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new InterstellarRiftPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new InterstellarRiftPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension

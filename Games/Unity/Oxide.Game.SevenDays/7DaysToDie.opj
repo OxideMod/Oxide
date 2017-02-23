@@ -1,6 +1,6 @@
 {
   "Name": "7 Days to Die",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\7DaysToDie\\7DaysToDieServer_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\SevenDays\\7DaysToDieServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "jCbdsYAEwBsaQTciO7JRTKDI5YB33r1uEIcVF4bugR4=",
+            "MSILHash": "43jmcSgRkNCyhDW5a9480zne95zjNC1tUmBgLTFesFk=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "jCbdsYAEwBsaQTciO7JRTKDI5YB33r1uEIcVF4bugR4=",
+            "MSILHash": "43jmcSgRkNCyhDW5a9480zne95zjNC1tUmBgLTFesFk=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -228,7 +228,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "TYIsjGJt0tP0NPmDMXf5vOR+WrLogRLY1fxwq9yeflo=",
+            "MSILHash": "koilvrc4d1QuYaIIIxWJQV4NvfaRCBi9QpnU1wpCXS8=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -254,7 +254,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "sgrleLBMirvna2iXOoM5arLcjbLNXe5Dwj7efVBNAQo=",
+            "MSILHash": "psr/7VowY96ds0OjkRPTeTCkGqt4NN16BaupfP4ai3c=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -448,7 +448,8 @@
             "HookCategory": "Player"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }
