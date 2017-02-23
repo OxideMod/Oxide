@@ -93,8 +93,7 @@ namespace Oxide.Plugins
                     }
                     break;
             }
-
-            BinaryPath = EscapePath(binaryPath);
+            BinaryPath = binaryPath;
         }
 
         private static void DependencyTrace()

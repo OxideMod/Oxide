@@ -25,7 +25,6 @@ namespace Oxide.Game.Rust.Libraries
         /// Gets private bindingflag for accessing private methods, fields, and properties
         /// </summary>
         [LibraryFunction("PrivateBindingFlag")]
-        [Obsolete("No replacement, not necessary for C# plugins")]
         public BindingFlags PrivateBindingFlag() => (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
 
         /// <summary>
@@ -33,7 +32,6 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         /// <param name="str"></param>
         [LibraryFunction("QuoteSafe")]
-        [Obsolete("Use string.QuoteSafe() instead")]
         public string QuoteSafe(string str) => str.Quote();
 
         #endregion
@@ -47,7 +45,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="userId"></param>
         [LibraryFunction("BroadcastChat")]
-        [Obsolete("Use Server.Broadcast(string, string) instead")]
         public void BroadcastChat(string name, string message = null, string userId = "0")
         {
             ConsoleNetwork.BroadcastToAllClients("chat.add", userId, message != null ? $"<color=orange>{name}</color>: {message}" : name, 1.0);
@@ -61,7 +58,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="userId"></param>
         [LibraryFunction("SendChatMessage")]
-        [Obsolete("Use Player.Message(BasePlayer, string, string) instead")]
         public void SendChatMessage(BasePlayer player, string name, string message = null, string userId = "0")
         {
             player?.SendConsoleCommand("chat.add", userId, message != null ? $"<color=orange>{name}</color>: {message}" : name, 1.0);
@@ -78,7 +74,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="command"></param>
         /// <param name="args"></param>
         [LibraryFunction("RunClientCommand")]
-        [Obsolete("Use Player.Command(BasePlayer, string, object[]) instead")]
         public void RunClientCommand(BasePlayer player, string command, params object[] args) => player.SendConsoleCommand(command, args);
 
         /// <summary>
@@ -98,7 +93,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="connection"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromConnection")]
-        [Obsolete("No replacement, not necessary for C# plugins")]
         public string UserIDFromConnection(Connection connection) => connection.userid.ToString();
 
         /// <summary>
@@ -107,7 +101,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="priv"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDsFromBuildingPrivilege")]
-        [Obsolete("No replacement, not necessary for C# plugins")]
         public Array UserIDsFromBuildingPrivlidge(BuildingPrivlidge priv) => priv.authorizedPlayers.Select(eid => eid.userid.ToString()).ToArray();
 
         /// <summary>
@@ -116,7 +109,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <returns></returns>
         [LibraryFunction("UserIDFromPlayer")]
-        [Obsolete("No replacement, not necessary for C# plugins")]
         public string UserIDFromPlayer(BasePlayer player) => player.UserIDString;
 
         /// <summary>
@@ -125,7 +117,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="entity"></param>
         /// <returns></returns>
         [LibraryFunction("OwnerIDFromEntity")]
-        [Obsolete("No replacement, not necessary for C# plugins")]
         public string OwnerIDFromEntity(BaseEntity entity) => entity.OwnerID.ToString();
 
         /// <summary>
@@ -134,7 +125,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayer")]
-        [Obsolete("Use Player.Find(string) instead")]
         public BasePlayer FindPlayer(string nameOrIdOrIp) => RustCore.FindPlayer(nameOrIdOrIp);
 
         /// <summary>
@@ -143,7 +133,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="name"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayerByName")]
-        [Obsolete("Use Player.Find(string) instead")]
         public BasePlayer FindPlayerByName(string name) => RustCore.FindPlayerByName(name);
 
         /// <summary>
@@ -152,7 +141,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayerById")]
-        [Obsolete("Use Player.FindById(ulong) instead")]
         public BasePlayer FindPlayerById(ulong id) => RustCore.FindPlayerById(id);
 
         /// <summary>
@@ -161,7 +149,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayerByIdString")]
-        [Obsolete("Use Player.FindById(string) instead")]
         public BasePlayer FindPlayerByIdString(string id) => RustCore.FindPlayerByIdString(id);
 
         /// <summary>
@@ -172,7 +159,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="y"></param>
         /// <param name="z"></param>
         [LibraryFunction("ForcePlayerPosition")]
-        [Obsolete("Use Player.Teleport(BasePlayer, float, float, float) instead")]
         public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
         {
             player.transform.position = new Vector3(x, y, z);
