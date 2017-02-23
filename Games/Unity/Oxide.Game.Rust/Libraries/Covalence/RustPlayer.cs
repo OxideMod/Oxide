@@ -159,9 +159,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
         }
 
-        readonly FieldInfo displayName = typeof(BasePlayer).GetField("_displayName", (BindingFlags.Instance | BindingFlags.NonPublic));
-        readonly FieldInfo cachedName = typeof(BasePlayer).GetField("_name", (BindingFlags.Instance | BindingFlags.NonPublic));
-
         /// <summary>
         /// Renames the user to specified name
         /// <param name="name"></param>
@@ -170,10 +167,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
             name = string.IsNullOrEmpty(name.Trim()) ? player.displayName : name;
             player.net.connection.username = name;
-            displayName?.SetValue(player, name);
-            cachedName?.SetValue(player, null);
+            player.displayName = name;
+            player._name = name;
             Name = name;
-
             player.SendNetworkUpdateImmediate();
         }
 
