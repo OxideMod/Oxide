@@ -35,12 +35,32 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        public bool IsAdmin(BasePlayer player) => player.net.connection.authLevel > 0;
+        public bool IsAdmin(string id) => ServerUsers.Is(Convert.ToUInt64(id), ServerUsers.UserGroup.Owner);
+
+        /// <summary>
+        /// Returns if the player is admin
+        /// </summary>
+        public bool IsAdmin(ulong id) => ServerUsers.Is(id, ServerUsers.UserGroup.Owner);
+
+        /// <summary>
+        /// Returns if the player is admin
+        /// </summary>
+        public bool IsAdmin(BasePlayer player) => IsBanned(player.userID);
 
         /// <summary>
         /// Gets if the player is banned
         /// </summary>
-        public bool IsBanned(BasePlayer player) => ServerUsers.Is(player.userID, ServerUsers.UserGroup.Banned);
+        public bool IsBanned(string id) => ServerUsers.Is(Convert.ToUInt64(id), ServerUsers.UserGroup.Banned);
+
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
+        public bool IsBanned(ulong id) => ServerUsers.Is(id, ServerUsers.UserGroup.Banned);
+
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
+        public bool IsBanned(BasePlayer player) => IsBanned(player.userID);
 
         /// <summary>
         /// Gets if the player is connected
@@ -50,7 +70,17 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Returns if the player is sleeping
         /// </summary>
-        public bool IsSleeping(BasePlayer player) => BasePlayer.FindSleeping(player.userID);
+        public bool IsSleeping(string id) => BasePlayer.FindSleeping(Convert.ToUInt64(id));
+
+        /// <summary>
+        /// Returns if the player is sleeping
+        /// </summary>
+        public bool IsSleeping(ulong id) => BasePlayer.FindSleeping(id);
+
+        /// <summary>
+        /// Returns if the player is sleeping
+        /// </summary>
+        public bool IsSleeping(BasePlayer player) => IsSleeping(player.userID);
 
         #endregion
 

@@ -83,22 +83,22 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player != null ? Player.IsAdmin(player) : ServerUsers.Is(steamId, ServerUsers.UserGroup.Owner);
+        public bool IsAdmin => Player.IsAdmin(player.userID);
 
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => player != null ? Player.IsBanned(player) : ServerUsers.Is(steamId, ServerUsers.UserGroup.Banned);
+        public bool IsBanned => Player.IsBanned(player.userID);
 
         /// <summary>
         /// Returns if the user is connected
         /// </summary>
-        public bool IsConnected => player != null ? Player.IsConnected(player) : false;
+        public bool IsConnected => Player.IsConnected(player);
 
         /// <summary>
         /// Returns if the user is sleeping
         /// </summary>
-        public bool IsSleeping => player != null ? Player.IsSleeping(player) : BasePlayer.FindSleeping(steamId);
+        public bool IsSleeping => Player.IsSleeping(player);
 
         #endregion
 
