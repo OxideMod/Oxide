@@ -1660,7 +1660,27 @@
           }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [
+        {
+          "Name": "CoopKickToken",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CoopKickToken",
+          "Type": 3,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "CoopKickToken",
+            "FullTypeName": "CoopKickToken",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        }
+      ]
     },
     {
       "AssemblyName": "Assembly-UnityScript.dll",

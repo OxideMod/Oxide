@@ -74,7 +74,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "JozlotqLYngNTZFb36kL9rTiEpcGDVEblvlNNoFKgE8=",
+            "MSILHash": "Y92GyweFStYhXR5jBlXj2BJkrSE9dTn0ftJ1wvUjjTo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -100,7 +100,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "JozlotqLYngNTZFb36kL9rTiEpcGDVEblvlNNoFKgE8=",
+            "MSILHash": "Y92GyweFStYhXR5jBlXj2BJkrSE9dTn0ftJ1wvUjjTo=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -182,55 +182,12 @@
       ],
       "Modifiers": [
         {
-          "Name": "Application::mGameServer",
-          "AssemblyName": "NomadServer.exe",
-          "TypeName": "Application",
-          "Type": 0,
-          "TargetExposure": [
-            2,
-            4
-          ],
-          "Flagged": false,
-          "Signature": {
-            "Exposure": [
-              0
-            ],
-            "Name": "mGameServer",
-            "FullTypeName": "TNet.GameServer Application::mGameServer",
-            "Parameters": []
-          },
-          "MSILHash": ""
-        },
-        {
-          "Name": "TNet.GameServer::RemovePlayer",
-          "AssemblyName": "NomadServer.exe",
-          "TypeName": "TNet.GameServer",
-          "Type": 1,
-          "TargetExposure": [
-            2,
-            4
-          ],
-          "Flagged": false,
-          "Signature": {
-            "Exposure": [
-              0
-            ],
-            "Name": "RemovePlayer",
-            "FullTypeName": "System.Void",
-            "Parameters": [
-              "TNet.TcpPlayer"
-            ]
-          },
-          "MSILHash": "aBTJHPOC2YGv7ppZQBzFaO9AwYN7nNzX8IGnhZinqio="
-        },
-        {
           "Name": "TNet.GameServer::mBan",
           "AssemblyName": "NomadServer.exe",
           "TypeName": "TNet.GameServer",
           "Type": 0,
           "TargetExposure": [
-            2,
-            4
+            2
           ],
           "Flagged": false,
           "Signature": {
@@ -265,6 +222,66 @@
             ]
           },
           "MSILHash": "x09z/bayHzANWzNSByGeKsVrVEd28arMmKlwO1iWEFw="
+        },
+        {
+          "Name": "Application::mGameServer",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "Application",
+          "Type": 0,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "mGameServer",
+            "FullTypeName": "TNet.GameServer Application::mGameServer",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "TNet.GameServer::lobbyLink",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "TNet.GameServer",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              2
+            ],
+            "Name": "lobbyLink",
+            "FullTypeName": "TNet.LobbyServerLink TNet.GameServer::lobbyLink",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "TNet.GameServer::RemovePlayer",
+          "AssemblyName": "NomadServer.exe",
+          "TypeName": "TNet.GameServer",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "RemovePlayer",
+            "FullTypeName": "System.Void",
+            "Parameters": [
+              "TNet.TcpPlayer"
+            ]
+          },
+          "MSILHash": "aBTJHPOC2YGv7ppZQBzFaO9AwYN7nNzX8IGnhZinqio="
         }
       ]
     }

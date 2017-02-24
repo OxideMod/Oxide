@@ -80,7 +80,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => GameServer.mBan.Contains(player.address);
+        public bool IsBanned => Application.mGameServer.mBan.Contains(player.address);
 
         /// <summary>
         /// Gets if the user is connected
@@ -108,8 +108,8 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
 
             // Ban and kick user
             //GameServer.mBan.Add($"// [{player.name}] banned by [Admin] - {reason}");
-            GameServer.mBan.Add(player.address);
-            Tools.SaveList("Config/ban.txt", GameServer.mBan);
+            Application.mGameServer.mBan.Add(player.address);
+            Tools.SaveList("Config/ban.txt", Application.mGameServer.mBan);
             Kick(reason);
         }
 
@@ -149,7 +149,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => GameServer.RemovePlayer(player);
+        public void Kick(string reason) => Application.mGameServer.RemovePlayer(player);
 
         /// <summary>
         /// Causes the user's character to die
@@ -200,7 +200,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             if (!IsBanned) return;
 
             // Set to unbanned
-            GameServer.mBan.Remove(player.address);
+            Application.mGameServer.mBan.Remove(player.address);
         }
 
         #endregion
