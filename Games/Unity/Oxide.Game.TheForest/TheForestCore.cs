@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Bolt;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
@@ -10,7 +9,6 @@ using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
 using TheForest.UI;
 using TheForest.Utils;
-using UdpKit;
 using UnityEngine;
 
 namespace Oxide.Game.TheForest
@@ -28,15 +26,6 @@ namespace Oxide.Game.TheForest
 
         // The covalence provider
         internal static readonly TheForestCovalenceProvider Covalence = TheForestCovalenceProvider.Instance;
-
-        // Avoid CoopKickToken reflection
-        internal class CoopKickToken : IProtocolToken
-        {
-            public bool Banned;
-            public string KickMessage;
-            public void Read(UdpPacket packet) => KickMessage = packet.ReadString();
-            public void Write(UdpPacket packet) => packet.WriteString(KickMessage);
-        }
 
         // TODO: Localization of core
 
@@ -205,12 +194,12 @@ namespace Oxide.Game.TheForest
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", name, id, ip);
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
-                /*var coopKickToken = new CoopKickToken
+                var coopKickToken = new CoopKickToken
                 {
                     KickMessage = canLogin is string ? canLogin.ToString() : "Connection was rejected", // TODO: Localization
                     Banned = false
                 };
-                connection.Disconnect(coopKickToken);*/
+                connection.Disconnect(coopKickToken);
                 return true;
             }
 
