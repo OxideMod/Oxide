@@ -162,7 +162,7 @@ namespace Oxide.Game.ReignOfKings
             if (!Interface.Oxide.CheckConsole() || !Interface.Oxide.EnableConsole()) return;
 
             var socketAdminConsole = UnityEngine.Object.FindObjectOfType<SocketAdminConsole>();
-            if (SocketAdminConsole._server.Clients.Count > 0) return;
+            if (socketAdminConsole._server.Clients.Count > 0) return;
             socketAdminConsole.enabled = false;
 
             Application.logMessageReceived += HandleLog;
