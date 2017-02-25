@@ -63,9 +63,10 @@ namespace Oxide.Plugins
                         {
                             UpdateCheck(filename); // TODO: Only check once on server startup
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; unable to find {filename}");
+                            Interface.Oxide.LogWarning(ex.Message);
                             return;
                         }
                     }
@@ -118,8 +119,21 @@ namespace Oxide.Plugins
         private static void UpdateCheck(string filename)
         {
             var filePath = Path.Combine(Interface.Oxide.RootDirectory, filename);
-            var request = WebRequest.Create($"https://dl.bintray.com/oxidemod/builds/{filename}");
-            var response = request.GetResponse();
+
+            HttpWebRequest request;
+            try
+            {
+                request = (HttpWebRequest)WebRequest.Create($"https://dl.bintray.com/oxidemod/builds/{filename}");
+            }
+            catch (Exception ex)
+            {
+                Interface.Oxide.LogWarning("Main download location failed, using mirror");
+                request = (HttpWebRequest)WebRequest.Create($"https://bintray.com/oxidemod/builds/download_file?file_path={filename}");
+                Interface.Oxide.LogWarning(ex.Message);
+            }
+
+            var response = (HttpWebResponse)request.GetResponse();
+            var statusCode = (int)response.StatusCode;
             var etag = response.Headers[HttpResponseHeader.ETag];
             var remoteChecksum = etag.Substring(0, etag.LastIndexOf(':')).Trim('"').ToLower();
             var localChecksum = "0";
