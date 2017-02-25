@@ -94,6 +94,9 @@ namespace Oxide.Game.Hurtworld
             // Register our libraries
             Manager.RegisterLibrary("Hurt", new Libraries.Hurtworld());
             Manager.RegisterLibrary("Command", new Libraries.Command());
+            Manager.RegisterLibrary("Item", new Libraries.Item());
+            Manager.RegisterLibrary("Player", new Libraries.Player());
+            Manager.RegisterLibrary("Server", new Libraries.Server());
         }
 
         /// <summary>
