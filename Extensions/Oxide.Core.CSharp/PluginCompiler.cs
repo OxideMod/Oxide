@@ -134,6 +134,8 @@ namespace Oxide.Plugins
 
             var response = (HttpWebResponse)request.GetResponse();
             var statusCode = (int)response.StatusCode;
+            if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay; code {statusCode}");
+
             var etag = response.Headers[HttpResponseHeader.ETag];
             var remoteChecksum = etag.Substring(0, etag.LastIndexOf(':')).Trim('"').ToLower();
             var localChecksum = "0";
