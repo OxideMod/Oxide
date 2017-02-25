@@ -82,7 +82,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="command"></param>
         /// <param name="args"></param>
         [LibraryFunction("RunServerCommand")]
-        [Obsolete("Use Server.Command(string, object[]) instead")]
         public void RunServerCommand(string command, params object[] args) => ConsoleSystem.Run(ConsoleSystem.Option.Server, command, args);
 
         #endregion
