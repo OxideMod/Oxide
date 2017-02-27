@@ -13,6 +13,9 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     {
         internal readonly Server Server = new Server();
 
+        // Game references
+        internal static readonly BanManager BanManager = BanManager.Instance;
+
         #region Information
 
         /// <summary>
@@ -118,7 +121,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             if (IsBanned(id)) return;
 
             // Ban and kick user
-            BanManager.Instance?.AddBan(ulong.Parse(id));
+            Server.Ban(id, reason, duration);
         }
 
         /// <summary>
@@ -131,7 +134,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Gets if the user is banned
         /// </summary>
         /// <param name="id"></param>
-        public bool IsBanned(string id) => BanManager.Instance.IsBanned(ulong.Parse(id));
+        public bool IsBanned(string id) => Server.IsBanned(id);
 
         /// <summary>
         /// Saves the server and any related information
@@ -148,7 +151,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             if (!IsBanned(id)) return;
 
             // Set to unbanned
-            Command("unban", id);
+            Server.Unban(id);
         }
 
         #endregion

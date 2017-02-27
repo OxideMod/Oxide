@@ -14,6 +14,7 @@ namespace Oxide.Game.Hurtworld.Libraries
     {
         // Game references
         internal static readonly BanManager BanManager = BanManager.Instance;
+        internal static readonly ChatManagerServer ChatManager = ChatManagerServer.Instance;
         internal static readonly GameManager GameManager = GameManager.Instance;
         internal static readonly GlobalItemManager ItemManager = GlobalItemManager.Instance;
 
@@ -37,22 +38,52 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
+        public bool IsAdmin(string id) => GameManager.IsAdmin(new CSteamID(Convert.ToUInt64(id)));
+
+        /// <summary>
+        /// Returns if the player is admin
+        /// </summary>
+        public bool IsAdmin(ulong id) => GameManager.IsAdmin(new CSteamID(id));
+
+        /// <summary>
+        /// Returns if the player is admin
+        /// </summary>
         public bool IsAdmin(PlayerSession session) => session.IsAdmin;
 
         /// <summary>
         /// Gets if the player is banned
         /// </summary>
-        public bool IsBanned(PlayerSession session) => BanManager.Instance.IsBanned(session.SteamId.m_SteamID);
+        public bool IsBanned(string id) => BanManager.IsBanned(Convert.ToUInt64(id));
+
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
+        public bool IsBanned(ulong id) => BanManager.IsBanned(id);
+
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
+        public bool IsBanned(PlayerSession session) => IsBanned(session.SteamId.m_SteamID);
 
         /// <summary>
         /// Gets if the player is connected
         /// </summary>
-        public bool IsConnected(PlayerSession session) => session.IsLoaded;
+        public bool IsConnected(PlayerSession session) => session.Player.isConnected;
 
         /// <summary>
         /// Returns if the player is sleeping
         /// </summary>
-        public bool IsSleeping(PlayerSession session) => session.Identity.Sleeper != null;
+        //public bool IsSleeping(string id) => session.Identity.Sleeper != null; // TODO: Session is null OnUserDisconnected?
+
+        /// <summary>
+        /// Returns if the player is sleeping
+        /// </summary>
+        //public bool IsSleeping(ulong id) => session.Identity.Sleeper != null; // TODO: Session is null OnUserDisconnected?
+
+        /// <summary>
+        /// Returns if the player is sleeping
+        /// </summary>
+        public bool IsSleeping(PlayerSession session) => session.Identity.Sleeper != null; // TODO: Session is null OnUserDisconnected?
 
         #endregion
 
@@ -70,7 +101,7 @@ namespace Oxide.Game.Hurtworld.Libraries
 
             // Ban and kick user
             BanManager.AddBan(session.SteamId.m_SteamID);
-            if (session.IsLoaded) Kick(session, reason);
+            if (session.Player.isConnected) Kick(session, reason);
         }
 
         /// <summary>
@@ -180,7 +211,7 @@ namespace Oxide.Game.Hurtworld.Libraries
             if (!IsBanned(session)) return;
 
             // Set to unbanned
-            ConsoleManager.Instance.ExecuteCommand($"unban {session.SteamId}");
+            BanManager.RemoveBan(session.SteamId.m_SteamID);
         }
 
         #endregion
@@ -256,7 +287,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public PlayerSession Session(uLink.NetworkPlayer player) => GameManager.Instance.GetSession(player);
+        public PlayerSession Session(uLink.NetworkPlayer player) => GameManager.GetSession(player);
 
         /// <summary>
         /// Gets the player session using a UnityEngine.GameObject
@@ -271,7 +302,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <summary>
         /// Returns all connected sessions
         /// </summary>
-        public Dictionary<uLink.NetworkPlayer, PlayerSession> Sessions => GameManager.Instance.GetSessions();
+        public Dictionary<uLink.NetworkPlayer, PlayerSession> Sessions => GameManager.GetSessions();
 
         #endregion
 
@@ -296,7 +327,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="prefix"></param>
         public void Message(PlayerSession session, string message, string prefix = null)
         {
-            ChatManagerServer.Instance.RPC("RelayChat", session.Player, prefix != null ? $"{prefix}: {message}" : message);
+            ChatManager.RPC("RelayChat", session.Player, prefix != null ? $"{prefix}: {message}" : message);
         }
 
         /// <summary>
