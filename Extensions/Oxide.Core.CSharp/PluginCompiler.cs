@@ -416,8 +416,9 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.NextTick(() =>
             {
-                OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpetantly");
-                Interface.Oxide.LogWarning("Compiler may have been closed by interference from security softare");
+                OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpectedly");
+                if (Environment.OSVersion.Platform == PlatformID.Unix) Interface.Oxide.LogWarning("User running server may not have access to all service files");
+                else Interface.Oxide.LogWarning("Compiler may have been closed by interference from security software");
                 DependencyTrace();
                 Shutdown();
             });
