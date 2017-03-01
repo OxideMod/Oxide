@@ -141,7 +141,7 @@ namespace Oxide.Core
             if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
 
             // Clean and set directory paths
-            ExtensionDirectory = Path.Combine(RootDirectory, Utility.CleanPath(Config.ExtensionDirectory));
+            ExtensionDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             PluginDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("plugins"));
             DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("data"));
             LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("lang"));
