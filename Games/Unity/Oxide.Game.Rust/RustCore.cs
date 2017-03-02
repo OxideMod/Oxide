@@ -496,36 +496,6 @@ namespace Oxide.Game.Rust
         #region Structure Hooks
 
         /// <summary>
-        /// Called when the player attempts to use a update a sign
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="sign"></param>
-        [HookMethod("CanUpdateSign")]
-        private object CanUpdateSign(BasePlayer player, Signage sign)
-        {
-            // Call deprecated hooks
-            var canLockSign = Interface.CallDeprecatedHook("CanLockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
-            if (!sign.IsLocked() && canLockSign != null) return (bool)canLockSign;
-            var canUnlockSign = Interface.CallDeprecatedHook("CanUnlockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
-            if (sign.IsLocked() && canUnlockSign != null) return (bool)canUnlockSign;
-
-            return null;
-        }
-
-        /// <summary>
-        /// Called when the player attempts to use a lock
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="lock"></param>
-        [HookMethod("CanUseLock")]
-        private object CanUseLock(BasePlayer player, BaseLock @lock)
-        {
-            // Call deprecated hook
-            var canUseDoor = Interface.CallDeprecatedHook("CanUseDoor", "CanUseLock", new DateTime(2017, 1, 3), player, @lock);
-            return (bool?)canUseDoor;
-        }
-
-        /// <summary>
         /// Called when a player selects Demolish from the BuildingBlock menu
         /// </summary>
         /// <param name="block"></param>
