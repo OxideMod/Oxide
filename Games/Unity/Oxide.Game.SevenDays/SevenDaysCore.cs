@@ -152,7 +152,7 @@ namespace Oxide.Game.SevenDays
             if (client == null || string.IsNullOrEmpty(message)) return null;
 
             var chatSpecific = Interface.Call("OnPlayerChat", client, message);
-            var chatCovalence = Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayer(client.playerId), message);
+            var chatCovalence = Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayerById(client.playerId), message);
             return chatSpecific ?? chatCovalence;
         }
 
@@ -175,7 +175,7 @@ namespace Oxide.Game.SevenDays
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(client);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(client.playerId));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayerById(client.playerId));
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Oxide.Game.SevenDays
         private void OnPlayerDisconnected(ClientInfo client)
         {
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(client.playerId), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(client.playerId), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(client);
         }
 
@@ -195,7 +195,7 @@ namespace Oxide.Game.SevenDays
         /// </summary>
         /// <param name="client"></param>
         [HookMethod("OnPlayerSpawn")]
-        private void OnPlayerSpawn(ClientInfo client) => Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayer(client.playerId));
+        private void OnPlayerSpawn(ClientInfo client) => Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(client.playerId));
 
         /// <summary>
         /// Called when the player attempts to use a door

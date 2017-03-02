@@ -1200,7 +1200,7 @@ namespace Oxide.Game.Rust
             if (arg.Connection == null) return null;
 
             // Get the covalence player
-            var iplayer = Covalence.PlayerManager.FindPlayer(arg.Connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
             if (iplayer == null) return null;
 
             // Is the command blocked?
