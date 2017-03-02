@@ -1015,12 +1015,6 @@ namespace Oxide.Game.Rust
             var name = args[1];
             var perm = args[2];
 
-            if (!permission.PermissionExists(perm))
-            {
-                player.Reply(lang.GetMessage("PermissionNotFound", this, player.Id), perm);
-                return;
-            }
-
             if (mode.Equals("group"))
             {
                 if (!permission.GroupExists(name))
