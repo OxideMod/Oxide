@@ -13,6 +13,7 @@ using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
+using Oxide.Plugins;
 using UnityEngine;
 
 namespace Oxide.Game.Rust
@@ -34,6 +35,10 @@ namespace Oxide.Game.Rust
         internal bool serverInitialized;
         internal bool isPlayerTakingDamage;
 
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+            "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine", "Rust.Data", "Rust.Global", "Rust.Workshop"
+        };
 
         internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
@@ -110,11 +115,8 @@ namespace Oxide.Game.Rust
             Author = "Oxide Team";
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
-            // Cheat references in the default plugin reference list
-            var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
-            var fpSystem = Facepunch.Math.Epoch.Current; // Facepunch.System
-            var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
-            var rustGlobal = global::Rust.Global.SteamServer; // Rust.Global
+            // Add additional common default references for plugins
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
         }
 
         /// <summary>
