@@ -250,7 +250,7 @@ namespace Oxide.Game.RustLegacy
 
             // Let covalence know
             covalence.PlayerManager.NotifyPlayerConnect(netUser);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
+            Interface.Call("OnUserConnected", covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()), "Unknown");
             covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
 
             // Delay removing player until OnPlayerDisconnect has fired in plugins
@@ -282,7 +282,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(client.userID.ToString()));
+            Interface.Call("OnUserSpawn", covalence.PlayerManager.FindPlayerById(client.userID.ToString()));
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
             // Call covalence hook
-            Interface.Call("OnUserSpawned", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
+            Interface.Call("OnUserSpawned", covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -737,7 +737,7 @@ namespace Oxide.Game.RustLegacy
             var str = arg.GetString(0);
 
             // Get the covalence player
-            var iplayer = arg.argUser != null ? Covalence.PlayerManager.FindPlayerById(arg.argUser.userID.ToString()) : null;
+            var iplayer = arg.argUser != null ? covalence.PlayerManager.FindPlayerById(arg.argUser.userID.ToString()) : null;
 
             // Is it a console command?
             if (cmdnamefull != "chat.say")
