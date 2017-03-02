@@ -309,7 +309,7 @@ namespace Oxide.Game.Hurtworld
             var str = message.Substring(0, 1);
 
             // Get covalence player
-            var iplayer = Covalence.PlayerManager.FindPlayer(session.SteamId.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayerById(session.SteamId.ToString());
 
             // Is it a chat command?
             if (!str.Equals("/"))
@@ -375,7 +375,7 @@ namespace Oxide.Game.Hurtworld
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(session);
-            var iplayer = Covalence.PlayerManager.FindPlayer(session.SteamId.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayerById(session.SteamId.ToString());
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
 
@@ -387,7 +387,7 @@ namespace Oxide.Game.Hurtworld
         private void OnPlayerDisconnected(PlayerSession session)
         {
             // Let covalence know
-            var iplayer = Covalence.PlayerManager.FindPlayer(session.SteamId.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayerById(session.SteamId.ToString());
             if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(session);
         }

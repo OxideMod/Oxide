@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using ProtoBuf;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -25,7 +25,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         internal void Initialize()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, RustPlayer>();
@@ -33,41 +32,35 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             connectedPlayers = new Dictionary<string, RustPlayer>();
         }
 
-        private void NotifyPlayerJoin(BasePlayer player)
+        internal void PlayerJoin(ulong userId, string name)
         {
-            // Do they exist?
-            PlayerRecord record;
-            if (playerData.TryGetValue(player.UserIDString, out record))
-            {
-                // Update
-                record.Name = player.displayName;
-                playerData[player.UserIDString] = record;
+            var id = userId.ToString();
 
-                // Swap out Rust player
-                allPlayers.Remove(player.UserIDString);
-                allPlayers.Add(player.UserIDString, new RustPlayer(player));
+            PlayerRecord record;
+            if (playerData.TryGetValue(id, out record))
+            {
+                record.Name = name;
+                playerData[id] = record;
+                allPlayers.Remove(id);
+                allPlayers.Add(id, new RustPlayer(userId, name));
             }
             else
             {
-                // Insert
-                record = new PlayerRecord { Id = player.userID, Name = player.displayName };
-                playerData.Add(player.UserIDString, record);
-
-                // Create Rust player
-                allPlayers.Add(player.UserIDString, new RustPlayer(player));
+                record = new PlayerRecord { Id = userId, Name = name };
+                playerData.Add(id, record);
+                allPlayers.Add(id, new RustPlayer(userId, name));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(BasePlayer player)
+        internal void PlayerConnected(BasePlayer player)
         {
-            NotifyPlayerJoin(player);
+            allPlayers[player.UserIDString] = new RustPlayer(player);
             connectedPlayers[player.UserIDString] = new RustPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(BasePlayer player) => connectedPlayers.Remove(player.UserIDString);
+        internal void PlayerDisconnected(BasePlayer player) => connectedPlayers.Remove(player.UserIDString);
 
         #region Player Finding
 

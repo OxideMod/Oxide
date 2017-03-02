@@ -57,11 +57,6 @@ namespace Oxide.Core.Configuration
         public string ConfigDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets the directory to find extensions (relative to the startup path)
-        /// </summary>
-        public string ExtensionDirectory { get; set; }
-
-        /// <summary>
         /// Sets defaults for Oxide configuration
         /// </summary>
         public OxideConfig(string filename) : base(filename)

@@ -11,6 +11,5 @@
     "Server\\oxide",
     "oxide"
   ],
-  "ConfigDirectory": "config",
-  "ExtensionDirectory": "Server\\PE_Server_Data\\Managed"
+  "ConfigDirectory": "config"
 }

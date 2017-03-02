@@ -309,7 +309,7 @@ namespace Oxide.Game.ReignOfKings
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
             // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayer(evt.PlayerId.ToString()), evt.Message);
+            return Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayerById(evt.PlayerId.ToString()), evt.Message);
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace Oxide.Game.ReignOfKings
 
             // Let covalence know
             Covalence.PlayerManager.NotifyPlayerConnect(player);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayer(player.Id.ToString()));
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayerById(player.Id.ToString()));
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace Oxide.Game.ReignOfKings
             Interface.Call("OnPlayerDisconnected", player);
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayer(player.Id.ToString()), "Unknown");
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(player.Id.ToString()), "Unknown");
             Covalence.PlayerManager.NotifyPlayerDisconnect(player);
         }
 
@@ -374,7 +374,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(evt.Player.Id.ToString()));
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerRespawn(PlayerRespawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayer(evt.Player.Id.ToString()));
+            Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayerById(evt.Player.Id.ToString()));
         }
 
         #endregion
@@ -883,7 +883,7 @@ namespace Oxide.Game.ReignOfKings
             if (message[0] != '/') return null;
 
             // Is this a covalence command?
-            var iplayer = Covalence.PlayerManager.FindPlayer(evt.PlayerId.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayerById(evt.PlayerId.ToString());
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
 
             // Get the command string

@@ -22,10 +22,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         internal RustPlayer(ulong id, string name)
         {
-            // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            // Store user details
             steamId = id;
             Name = name;
             Id = id.ToString();
@@ -33,7 +31,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         internal RustPlayer(BasePlayer player) : this(player.userID, player.displayName)
         {
-            // Store user object
             this.player = player;
         }
 

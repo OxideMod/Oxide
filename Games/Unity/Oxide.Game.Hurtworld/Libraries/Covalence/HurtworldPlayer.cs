@@ -85,12 +85,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => Player.IsAdmin(session);
+        public bool IsAdmin => Player.IsAdmin(steamId);
 
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => Player.IsBanned(session);
+        public bool IsBanned => Player.IsBanned(steamId);
 
         /// <summary>
         /// Gets if the user is connected

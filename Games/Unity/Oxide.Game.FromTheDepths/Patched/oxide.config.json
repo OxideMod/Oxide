@@ -10,6 +10,5 @@
     "{oxide.directory}",
     "oxide"
   ],
-  "ConfigDirectory": "config",
-  "ExtensionDirectory": "From_The_Depths_Data\\Managed"
+  "ConfigDirectory": "config"
 }

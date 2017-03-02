@@ -158,7 +158,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         {
             RegisteredCommand cmd;
             if (!registeredCommands.TryGetValue(cmdInfo.Label.ToLowerInvariant(), out cmd)) return;
-            var iplayer = reignOfKingsCovalence.PlayerManager.FindPlayer(cmdInfo.PlayerId.ToString()) ?? consolePlayer;
+            var iplayer = reignOfKingsCovalence.PlayerManager.FindPlayerById(cmdInfo.PlayerId.ToString()) ?? consolePlayer;
             HandleChatMessage(iplayer, $"/{cmdInfo.Label} {string.Join(" ", cmdInfo.Args)}");
         }
 

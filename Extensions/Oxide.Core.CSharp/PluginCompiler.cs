@@ -101,19 +101,23 @@ namespace Oxide.Plugins
         {
             if (Environment.OSVersion.Platform != PlatformID.Unix) return;
 
-            var startInfo = new ProcessStartInfo("LD_TRACE_LOADED_OBJECTS=1", BinaryPath)
+            try
             {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
-            var process = Process.Start(startInfo);
-            process.OutputDataReceived += (s, e) => Interface.Oxide.LogError(e.Data);
-            process.BeginOutputReadLine();
-            process.Start();
-            process.WaitForExit();
-            //Thread.Sleep(5000);
+                var startInfo = new ProcessStartInfo("LD_TRACE_LOADED_OBJECTS=1", BinaryPath)
+                {
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                };
+                var process = Process.Start(startInfo);
+                process.OutputDataReceived += (s, e) => Interface.Oxide.LogError(e.Data);
+                process.BeginOutputReadLine();
+                process.Start();
+                process.WaitForExit();
+                //Thread.Sleep(5000);
+            }
+            catch { }
         }
 
         private static void UpdateCheck(string filename)
@@ -416,8 +420,9 @@ namespace Oxide.Plugins
         {
             Interface.Oxide.NextTick(() =>
             {
-                OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpetantly");
-                Interface.Oxide.LogWarning("Compiler may have been closed by interference from security softare");
+                OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpectedly");
+                if (Environment.OSVersion.Platform == PlatformID.Unix) Interface.Oxide.LogWarning("User running server may not have access to all service files");
+                else Interface.Oxide.LogWarning("Compiler may have been closed by interference from security software");
                 DependencyTrace();
                 Shutdown();
             });

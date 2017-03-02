@@ -13,6 +13,7 @@ using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
+using Oxide.Plugins;
 using UnityEngine;
 
 namespace Oxide.Game.Rust
@@ -24,24 +25,27 @@ namespace Oxide.Game.Rust
     {
         #region Initialization
 
-        // The plugin manager
-        private readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
-
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
-
-        // The command library
-        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
-
-        // The covalence provider
+        internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
         internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
         internal static readonly IServer Server = Covalence.CreateServer();
+        internal static string ipPattern = @":{1}[0-9]{1}\d*";
+        internal bool serverInitialized;
+        internal bool isPlayerTakingDamage;
+
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+            "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine", "Rust.Data", "Rust.Global", "Rust.Workshop"
+        };
+
+        internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+
+        internal static IEnumerable<string> RestrictedCommands => new[] { "ownerid", "moderatorid" };
 
         #region Localization
 
-        // The language library
-        private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
         private readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
             {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
@@ -55,6 +59,8 @@ namespace Oxide.Game.Rust
             {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
             {"ConnectionRejected", "Connection was rejected"},
             {"GroupAlreadyExists", "Group '{0}' already exists"},
+            {"GroupAlreadyHasPermission", "Group '{0}' already has permission '{1}'"},
+            {"GroupDoesNotHavePermission", "Group '{0}' does not have permission '{1}'"},
             {"GroupChanged", "Group '{0}' changed"},
             {"GroupCreated", "Group '{0}' created"},
             {"GroupDeleted", "Group '{0}' deleted"},
@@ -88,6 +94,8 @@ namespace Oxide.Game.Rust
             {"ServerLanguage", "Server language set to {0}"},
             {"UnknownCommand", "Unknown command: {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
+            {"UserAlreadyHasPermission", "User '{0}' already has permission '{1}'"},
+            {"UserDoesNotHavePermission", "User '{0}' does not have permission '{1}'"},
             {"UserNotFound", "User '{0}' not found"},
             {"UserGroups", "User '{0}' groups"},
             {"UserPermissions", "User '{0}' permissions"},
@@ -99,18 +107,6 @@ namespace Oxide.Game.Rust
 
         #endregion
 
-        // Track when the server has been initialized
-        private bool serverInitialized;
-
-        // Track if a BasePlayer.OnAttacked call is in progress
-        private bool isPlayerTakingDamage;
-
-        // Commands that a plugin can't override
-        internal static IEnumerable<string> RestrictedCommands => new[]
-        {
-            "ownerid", "moderatorid"
-        };
-
         /// <summary>
         /// Initializes a new instance of the RustCore class
         /// </summary>
@@ -118,17 +114,13 @@ namespace Oxide.Game.Rust
         {
             var assemblyVersion = RustExtension.AssemblyVersion;
 
-            // Set attributes
             Name = "RustCore";
             Title = "Rust";
             Author = "Oxide Team";
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
 
-            // Cheat references in the default plugin reference list
-            var fpNetwork = Network.Client.disconnectReason; // Facepunch.Network
-            var fpSystem = Facepunch.Math.Epoch.Current; // Facepunch.System
-            var fpUnity = TimeWarning.Enabled; // Facepunch.UnityEngine
-            var rustGlobal = global::Rust.Global.SteamServer; // Rust.Global
+            // Add additional common default references for plugins
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
         }
 
         /// <summary>
@@ -231,9 +223,6 @@ namespace Oxide.Game.Rust
             if (serverInitialized) return;
             serverInitialized = true;
 
-            Analytics.Collect();
-
-            // Destroy default server console
             if (Interface.Oxide.CheckConsole() && ServerConsole.Instance != null)
             {
                 ServerConsole.Instance.enabled = false;
@@ -241,8 +230,9 @@ namespace Oxide.Game.Rust
                 typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
             }
 
-            // Update server console window and status bars
             RustExtension.ServerConsole();
+
+            Analytics.Collect();
         }
 
         /// <summary>
@@ -304,33 +294,40 @@ namespace Oxide.Game.Rust
         #region Player Hooks
 
         /// <summary>
-        /// Called when a user is attempting to connect
+        /// Called when a player is attempting to connect
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(Connection connection)
         {
+            var name = connection.username;
             var id = connection.userid.ToString();
-            var ip = Regex.Replace(connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
+            var authLevel = connection.authLevel;
+            var ip = Regex.Replace(connection.ipaddress, ipPattern, "");
 
-            // Call out and see if we should reject
+            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
+            {
+                permission.UpdateNickname(id, name);
+                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
+            }
+
+            Covalence.PlayerManager.PlayerJoin(connection.userid, name);
+
             var loginSpecific = Interface.Call("CanClientLogin", connection);
-            var loginCovalence = Interface.Call("CanUserLogin", connection.username, id, ip);
-            var canLogin = loginSpecific ?? loginCovalence;
+            var loginCovalence = Interface.Call("CanUserLogin", name, id, ip);
+            var canLogin = loginSpecific ?? loginCovalence; // TODO: Fix 'RustCore' hook conflict when both return
 
-            // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
-                // Reject the user with the message
                 ConnectionAuth.Reject(connection, canLogin is string ? canLogin.ToString() : lang.GetMessage("ConnectionRejected", this, id));
                 return true;
             }
 
-            // Call the approval hooks
             var approvedSpecific = Interface.Call("OnUserApprove", connection);
-            var approvedCovalence = Interface.Call("OnUserApproved", connection.username, id, ip);
-            return approvedSpecific ?? approvedCovalence;
+            var approvedCovalence = Interface.Call("OnUserApproved", name, id, ip);
+            return approvedSpecific ?? approvedCovalence; // TODO: Fix 'RustCore' hook conflict when both return
         }
 
         /// <summary>
@@ -341,8 +338,7 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerChat")]
         private object OnPlayerChat(ConsoleSystem.Arg arg)
         {
-            // Call covalence hook
-            var iplayer = Covalence.PlayerManager.FindPlayer(arg.Connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
             return string.IsNullOrEmpty(arg.GetString(0)) ? null : Interface.Call("OnUserChat", iplayer, arg.GetString(0));
         }
 
@@ -353,28 +349,11 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerInit")]
         private void OnPlayerInit(BasePlayer player)
         {
-            // Do permission stuff
-            var authLevel = player.net.connection.authLevel;
-            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
-            {
-                var id = player.UserIDString;
-
-                // Update stored name
-                permission.UpdateNickname(id, player.displayName);
-
-                // Add player to default group
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-
-                // Add player to group based on auth level
-                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
-            }
-
             // Set language for player
             lang.SetLanguage(player.net.connection.info.GetString("global.language", "en"), player.UserIDString);
 
-            // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(player);
-            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            Covalence.PlayerManager.PlayerConnected(player);
+            var iplayer = Covalence.PlayerManager.FindPlayerById(player.UserIDString);
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
 
@@ -386,10 +365,9 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerDisconnected")]
         private void OnPlayerDisconnected(BasePlayer player, string reason)
         {
-            // Let covalence know
-            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            var iplayer = Covalence.PlayerManager.FindPlayerById(player.UserIDString);
             if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, reason);
-            Covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            Covalence.PlayerManager.PlayerDisconnected(player);
         }
 
         /// <summary>
@@ -400,8 +378,7 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerRespawn")]
         private object OnPlayerRespawn(BasePlayer player)
         {
-            // Call covalence hook
-            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            var iplayer = Covalence.PlayerManager.FindPlayerById(player.UserIDString);
             return iplayer != null ? Interface.Call("OnUserRespawn", iplayer) : null;
         }
 
@@ -412,8 +389,7 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerRespawned")]
         private void OnPlayerRespawned(BasePlayer player)
         {
-            // Call covalence hook
-            var iplayer = Covalence.PlayerManager.FindPlayer(player.UserIDString);
+            var iplayer = Covalence.PlayerManager.FindPlayerById(player.UserIDString);
             if (iplayer != null) Interface.Call("OnUserRespawned", iplayer);
         }
 
@@ -524,36 +500,6 @@ namespace Oxide.Game.Rust
         #endregion
 
         #region Structure Hooks
-
-        /// <summary>
-        /// Called when the player attempts to use a update a sign
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="sign"></param>
-        [HookMethod("CanUpdateSign")]
-        private object CanUpdateSign(BasePlayer player, Signage sign)
-        {
-            // Call deprecated hooks
-            var canLockSign = Interface.CallDeprecatedHook("CanLockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
-            if (!sign.IsLocked() && canLockSign != null) return (bool)canLockSign;
-            var canUnlockSign = Interface.CallDeprecatedHook("CanUnlockSign", "CanUpdateSign", new DateTime(2017, 1, 3), player, sign);
-            if (sign.IsLocked() && canUnlockSign != null) return (bool)canUnlockSign;
-
-            return null;
-        }
-
-        /// <summary>
-        /// Called when the player attempts to use a lock
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="lock"></param>
-        [HookMethod("CanUseLock")]
-        private object CanUseLock(BasePlayer player, BaseLock @lock)
-        {
-            // Call deprecated hook
-            var canUseDoor = Interface.CallDeprecatedHook("CanUseDoor", "CanUseLock", new DateTime(2017, 1, 3), player, @lock);
-            return (bool?)canUseDoor;
-        }
 
         /// <summary>
         /// Called when a player selects Demolish from the BuildingBlock menu
@@ -1001,7 +947,11 @@ namespace Oxide.Game.Rust
                     return;
                 }
 
-                // TODO: Check if group already has permission, show message
+                if (permission.GroupHasPermission(name, perm))
+                {
+                    player.Reply(lang.GetMessage("GroupAlreadyHasPermission", this, player.Id), name, perm);
+                    return;
+                }
 
                 permission.GrantGroupPermission(name, perm, null);
                 player.Reply(lang.GetMessage("GroupPermissionGranted", this, player.Id), name, perm);
@@ -1023,7 +973,11 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                 }
 
-                // TODO: Check if user already has permission, show message
+                if (permission.UserHasPermission(name, perm))
+                {
+                    player.Reply(lang.GetMessage("UserAlreadyHasPermission", this, player.Id), userId, perm);
+                    return;
+                }
 
                 permission.GrantUserPermission(userId, perm, null);
                 player.Reply(lang.GetMessage("UserPermissionGranted", this, player.Id), $"{name} ({userId})", perm);
@@ -1061,12 +1015,6 @@ namespace Oxide.Game.Rust
             var name = args[1];
             var perm = args[2];
 
-            if (!permission.PermissionExists(perm))
-            {
-                player.Reply(lang.GetMessage("PermissionNotFound", this, player.Id), perm);
-                return;
-            }
-
             if (mode.Equals("group"))
             {
                 if (!permission.GroupExists(name))
@@ -1075,8 +1023,12 @@ namespace Oxide.Game.Rust
                     return;
                 }
 
-                // TODO: Check if group doesn't has permission, show message
-                // TODO: Check if group is inheriting permission
+                if (!permission.GroupHasPermission(name, perm))
+                {
+                    // TODO: Check if group is inheriting permission, mention
+                    player.Reply(lang.GetMessage("GroupDoesNotHavePermission", this, player.Id), name, perm);
+                    return;
+                }
 
                 permission.RevokeGroupPermission(name, perm);
                 player.Reply(lang.GetMessage("GroupPermissionRevoked", this, player.Id), name, perm);
@@ -1098,8 +1050,12 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                 }
 
-                // TODO: Check if user doesn't has permission, show message
-                // TODO: Check if user is inheriting permission
+                if (!permission.UserHasPermission(userId, perm))
+                {
+                    // TODO: Check if user is inheriting permission, mention
+                    player.Reply(lang.GetMessage("UserDoesNotHavePermission", this, player.Id), name, perm);
+                    return;
+                }
 
                 permission.RevokeUserPermission(userId, perm);
                 player.Reply(lang.GetMessage("UserPermissionRevoked", this, player.Id), $"{name} ({userId})", perm);
@@ -1260,7 +1216,7 @@ namespace Oxide.Game.Rust
             if (arg.Connection == null) return null;
 
             // Get the covalence player
-            var iplayer = Covalence.PlayerManager.FindPlayer(arg.Connection.userid.ToString());
+            var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
             if (iplayer == null) return null;
 
             // Is the command blocked?
