@@ -10,6 +10,5 @@
     "{oxide.directory}",
     "oxide"
   ],
-  "ConfigDirectory": "config",
-  "ExtensionDirectory": "TheForest_Data\\Managed"
+  "ConfigDirectory": "config"
 }

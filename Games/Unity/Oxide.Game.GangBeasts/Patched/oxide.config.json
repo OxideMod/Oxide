@@ -10,6 +10,5 @@
     "{oxide.directory}",
     "oxide"
   ],
-  "ConfigDirectory": "config",
-  "ExtensionDirectory": "game\\GangBeasts_Data\\Managed"
+  "ConfigDirectory": "config"
 }

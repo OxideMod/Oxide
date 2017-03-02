@@ -10,6 +10,5 @@
     "{oxide.directory}",
     "oxide"
   ],
-  "ConfigDirectory": "config",
-  "ExtensionDirectory": "Blockstorm_Data\\Managed"
+  "ConfigDirectory": "config"
 }

@@ -10,6 +10,5 @@
     "{oxide.directory}",
     "oxide"
   ],
-  "ConfigDirectory": "config",
-  "ExtensionDirectory": "Nomad Server"
+  "ConfigDirectory": "config"
 }
