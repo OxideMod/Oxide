@@ -9,6 +9,12 @@ namespace Oxide.Game.Rust.Libraries
 {
     public class Player : Library
     {
+        #region Initialization
+
+        private static string ipPattern = @":{1}[0-9]{1}\d*";
+
+        #endregion
+
         #region Information
 
         /// <summary>
@@ -19,12 +25,22 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Gets the player's IP address
         /// </summary>
-        public string Address(BasePlayer player) => Regex.Replace(player.net.connection.ipaddress, @":{1}[0-9]{1}\d*", ""); // TODO: Move IP regex to utility method and make static
+        public string Address(Network.Connection connection) => Regex.Replace(connection.ipaddress, ipPattern, "");
+
+        /// <summary>
+        /// Gets the player's IP address
+        /// </summary>
+        public string Address(BasePlayer player) => Address(player.net.connection);
 
         /// <summary>
         /// Gets the player's average network ping
         /// </summary>
-        public int Ping(BasePlayer player) => Network.Net.sv.GetAveragePing(player.net.connection);
+        public int Ping(Network.Connection connection) => Network.Net.sv.GetAveragePing(connection);
+
+        /// <summary>
+        /// Gets the player's average network ping
+        /// </summary>
+        public int Ping(BasePlayer player) => Ping(player.net.connection);
 
         /// <summary>
         /// Returns if the player is admin
@@ -87,10 +103,8 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="reason"></param>
         public void Ban(BasePlayer player, string reason = "")
         {
-            // Check if already banned
             if (IsBanned(player)) return;
 
-            // Ban and kick user
             ServerUsers.Set(player.userID, ServerUsers.UserGroup.Banned, player.displayName, reason);
             ServerUsers.Save();
             if (IsConnected(player)) Kick(player, reason);
@@ -157,10 +171,8 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         public void Unban(BasePlayer player)
         {
-            // Check if unbanned already
             if (!IsBanned(player)) return;
 
-            // Set to unbanned
             ServerUsers.Remove(player.userID);
             ServerUsers.Save();
         }

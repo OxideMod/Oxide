@@ -192,7 +192,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
                     if (arg.Connection != null && arg.Player())
                     {
-                        var iplayer = rustCovalence.PlayerManager.FindPlayer(arg.Connection.userid.ToString()) as RustPlayer;
+                        var iplayer = rustCovalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString()) as RustPlayer;
                         if (iplayer == null) return;
 
                         iplayer.LastCommand = CommandType.Console;

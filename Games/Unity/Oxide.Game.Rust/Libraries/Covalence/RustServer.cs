@@ -11,7 +11,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
     /// </summary>
     public class RustServer : IServer
     {
+        #region Initialiation
+
         internal readonly Server Server = new Server();
+
+        #endregion
 
         #region Information
 
@@ -104,10 +108,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check if already banned
             if (IsBanned(id)) return;
 
-            // Ban and kick user
             ServerUsers.Set(ulong.Parse(id), ServerUsers.UserGroup.Banned, Name, reason);
             ServerUsers.Save();
             //if (IsConnected) Kick(reason); // TODO: Implement if possible
@@ -140,10 +142,8 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="id"></param>
         public void Unban(string id)
         {
-            // Check if unbanned already
             if (!IsBanned(id)) return;
 
-            // Set to unbanned
             ServerUsers.Remove(ulong.Parse(id));
             ServerUsers.Save();
         }
