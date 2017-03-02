@@ -59,6 +59,8 @@ namespace Oxide.Game.Rust
             {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
             {"ConnectionRejected", "Connection was rejected"},
             {"GroupAlreadyExists", "Group '{0}' already exists"},
+            {"GroupAlreadyHasPermission", "Group '{0}' already has permission '{1}'"},
+            {"GroupDoesNotHavePermission", "Group '{0}' does not have permission '{1}'"},
             {"GroupChanged", "Group '{0}' changed"},
             {"GroupCreated", "Group '{0}' created"},
             {"GroupDeleted", "Group '{0}' deleted"},
@@ -92,6 +94,8 @@ namespace Oxide.Game.Rust
             {"ServerLanguage", "Server language set to {0}"},
             {"UnknownCommand", "Unknown command: {0}"},
             {"UserAddedToGroup", "User '{0}' added to group: {1}"},
+            {"UserAlreadyHasPermission", "User '{0}' already has permission '{1}'"},
+            {"UserDoesNotHavePermission", "User '{0}' does not have permission '{1}'"},
             {"UserNotFound", "User '{0}' not found"},
             {"UserGroups", "User '{0}' groups"},
             {"UserPermissions", "User '{0}' permissions"},
@@ -943,7 +947,11 @@ namespace Oxide.Game.Rust
                     return;
                 }
 
-                // TODO: Check if group already has permission, show message
+                if (permission.GroupHasPermission(name, perm))
+                {
+                    player.Reply(lang.GetMessage("GroupAlreadyHasPermission", this, player.Id), name, perm);
+                    return;
+                }
 
                 permission.GrantGroupPermission(name, perm, null);
                 player.Reply(lang.GetMessage("GroupPermissionGranted", this, player.Id), name, perm);
@@ -965,7 +973,11 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                 }
 
-                // TODO: Check if user already has permission, show message
+                if (permission.UserHasPermission(name, perm))
+                {
+                    player.Reply(lang.GetMessage("UserAlreadyHasPermission", this, player.Id), userId, perm);
+                    return;
+                }
 
                 permission.GrantUserPermission(userId, perm, null);
                 player.Reply(lang.GetMessage("UserPermissionGranted", this, player.Id), $"{name} ({userId})", perm);
@@ -1017,8 +1029,12 @@ namespace Oxide.Game.Rust
                     return;
                 }
 
-                // TODO: Check if group doesn't has permission, show message
-                // TODO: Check if group is inheriting permission
+                if (!permission.GroupHasPermission(name, perm))
+                {
+                    // TODO: Check if group is inheriting permission, mention
+                    player.Reply(lang.GetMessage("GroupDoesNotHavePermission", this, player.Id), name, perm);
+                    return;
+                }
 
                 permission.RevokeGroupPermission(name, perm);
                 player.Reply(lang.GetMessage("GroupPermissionRevoked", this, player.Id), name, perm);
@@ -1040,8 +1056,12 @@ namespace Oxide.Game.Rust
                     permission.UpdateNickname(userId, name);
                 }
 
-                // TODO: Check if user doesn't has permission, show message
-                // TODO: Check if user is inheriting permission
+                if (!permission.UserHasPermission(userId, perm))
+                {
+                    // TODO: Check if user is inheriting permission, mention
+                    player.Reply(lang.GetMessage("UserDoesNotHavePermission", this, player.Id), name, perm);
+                    return;
+                }
 
                 permission.RevokeUserPermission(userId, perm);
                 player.Reply(lang.GetMessage("UserPermissionRevoked", this, player.Id), $"{name} ({userId})", perm);
