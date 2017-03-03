@@ -205,7 +205,7 @@
                 "WorldItemInteractServer"
               ]
             },
-            "MSILHash": "qprYdPcBocdr/3O75XzaXV9VXboYHLfK1dYZyFpsxD0=",
+            "MSILHash": "EWG2GssYivqPftM9+44KdhcYNbv16139EYRZVacnxl8=",
             "BaseHookName": null,
             "HookCategory": "Vehicle"
           }
@@ -253,7 +253,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "tI987z1yVZYl7XNo2lXTGRQm2z/q+0uI4MNt9URAwHs=",
+            "MSILHash": "3OIA+9Lz/tRT8mXhobuobQ0sC1L9Ds+nvrL2iuapcDs=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -367,7 +367,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "mcBehSeK/wJcH2pvoz9NKRD/HMC2A0m+WbCG6jEwVdA=",
+            "MSILHash": "kvX09WzXKGqCVg6pHO1eAkVBChuidDoQV0eUJ/jrS4U=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
