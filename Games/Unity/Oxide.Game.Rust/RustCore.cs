@@ -499,28 +499,6 @@ namespace Oxide.Game.Rust
 
         #endregion
 
-        #region Structure Hooks
-
-        /// <summary>
-        /// Called when a player selects Demolish from the BuildingBlock menu
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        [HookMethod("IOnStructureDemolish")]
-        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, false);
-
-        /// <summary>
-        /// Called when a player selects Demolish Immediate from the BuildingBlock menu
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        [HookMethod("IOnStructureImmediateDemolish")]
-        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, true);
-
-        #endregion
-
         #region Item Hooks
 
         /// <summary>
@@ -540,6 +518,37 @@ namespace Oxide.Game.Rust
             if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
             return true;
         }
+
+        /// <summary>
+        /// Called when an item is used
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        [HookMethod("OnItemUse")]
+        private void OnItemUse(Item item, int amount) => Interface.Oxide.CallDeprecatedHook("OnConsumableUse", "OnItemUse", new DateTime(2017, 4, 1), item, amount);
+
+        #endregion
+
+        #region Structure Hooks
+
+        /// <summary>
+        /// Called when a player selects Demolish from the BuildingBlock menu
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("IOnStructureDemolish")]
+        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, false);
+
+        /// <summary>
+        /// Called when a player selects Demolish Immediate from the BuildingBlock menu
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("IOnStructureImmediateDemolish")]
+        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, true);
 
         #endregion
 
