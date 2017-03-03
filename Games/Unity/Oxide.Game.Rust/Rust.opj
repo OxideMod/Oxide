@@ -890,32 +890,6 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerSave",
-            "HookName": "OnServerSave",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SaveRestore",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "DoAutomatedSave",
-              "ReturnType": "System.Collections.IEnumerator",
-              "Parameters": [
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "LZP9XLsr3MQ0KyuChO5JOSjsebgL2hXlwOlV239UCy8=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -2318,7 +2292,7 @@
             "InjectionIndex": 53,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, l1",
+            "ArgumentString": "this, l1, a0.position",
             "HookTypeName": "Simple",
             "Name": "CanBuild",
             "HookName": "CanBuild",
@@ -3586,6 +3560,188 @@
             "MSILHash": "eooABwxtr86uWZ9yLz/IdrVVDtzvbeYeM9qvKjD9928=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnFindBurnable",
+            "HookName": "OnFindBurnable",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseOven",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "FindBurnable",
+              "ReturnType": "Item",
+              "Parameters": []
+            },
+            "MSILHash": "XyCdhGZqXeUB8Hz2X4p/tK7564Z1yuU0qjyI5RCVvw4=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.npc, a0.entity",
+            "HookTypeName": "Simple",
+            "Name": "CanNpcAttack",
+            "HookName": "CanNpcAttack",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AIDecider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Attacks",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "AITarget"
+              ]
+            },
+            "MSILHash": "q45ka4nUifKqtiKThqDoAg2VKUNMZMBnfb9WlRNs9rI=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.npc, a0.entity",
+            "HookTypeName": "Simple",
+            "Name": "CanNpcFear",
+            "HookName": "CanNpcFear",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AIDecider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Fears",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "AITarget"
+              ]
+            },
+            "MSILHash": "1llMFZjLsgFsFsbXjzWmEPDag5MmveE/HiU5AAxBopM=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 10,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SaveRestore",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Save",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "CBhHql3FDocP0UPfJj45XEwzy9W9IteBm3stW+7Jw7g=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "CanStackItem",
+            "HookName": "CanStackItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Item",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanStack",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "Item"
+              ]
+            },
+            "MSILHash": "vDY+4yrnEfPL9oGSl3TEv3Xjkm8lUgnbodZU1+ehpaI=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnMoveToContainer",
+            "HookName": "OnMoveToContainer",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Item",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "MoveToContainer",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "ItemContainer",
+                "System.Int32",
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "fRh9DxRcZ2ndw6qPoBZi3hDMl5ELknxY4sH5dNd8oVU=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 95,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.player, l2",
+            "HookTypeName": "Simple",
+            "Name": "OnExplosiveDropped",
+            "HookName": "OnExplosiveDropped",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ThrownWeapon",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoDrop",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "6T4Jde8oT1PJu6jzq77YmRvX+yj9fepx1LxmSB7hOE8=",
+            "BaseHookName": null,
+            "HookCategory": "Weapon"
           }
         }
       ],
