@@ -4004,6 +4004,32 @@
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "CanPickupEntity",
+            "HookName": "CanPickupEntity",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseCombatEntity",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanPickup",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "KCbrRo2oEFLSS/rCMscX27qMX/B+DPe9G314imnHBdU=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
         }
       ],
       "Modifiers": [
