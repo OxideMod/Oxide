@@ -55,7 +55,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <summary>
         /// Gets the public-facing network port of the server, if known
         /// </summary>
-        public ushort Port => (ushort)uLink.MasterServer.port;
+        public ushort Port => (ushort)GameManager.Instance.ServerConfig.Port;
 
         /// <summary>
         /// Gets the version or build number of the server
