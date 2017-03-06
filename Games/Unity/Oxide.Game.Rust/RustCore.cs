@@ -286,20 +286,6 @@ namespace Oxide.Game.Rust
         #region Player Hooks
 
         /// <summary>
-        /// Called when a server group is set for an ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="group"></param>
-        /// <param name="name"></param>
-        /// <param name="reason"></param>
-        /// <returns></returns>
-        [HookMethod("IOnServerUsersSet")]
-        private void IOnServerUsersSet(ulong id, ServerUsers.UserGroup group, string name, string reason)
-        {
-            if (group == ServerUsers.UserGroup.Banned) Interface.Oxide.CallHook("OnUserBanned", id.ToString(), name, reason);
-        }
-
-        /// <summary>
         /// Called when a player is attempting to connect
         /// </summary>
         /// <param name="connection"></param>
@@ -337,13 +323,32 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when a server group is set for an ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="group"></param>
+        /// <param name="name"></param>
+        /// <param name="reason"></param>
+        /// <returns></returns>
+        [HookMethod("IOnServerUsersSet")]
+        private void IOnServerUsersSet(ulong id, ServerUsers.UserGroup group, string name, string reason)
+        {
+            var iplayer = Covalence.PlayerManager.FindPlayerById(id.ToString());
+            if (group == ServerUsers.UserGroup.Banned) Interface.Oxide.CallHook("OnUserBanned", name, id.ToString(), iplayer.Address, reason);
+        }
+
+        /// <summary>
         /// Called when a player has been banned on connection
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="reason"></param>
         /// <returns></returns>
         [HookMethod("OnPlayerBanned")]
-        private void OnPlayerBanned(Connection connection, string reason) => Interface.Oxide.CallHook("OnUserBanned", connection.userid.ToString(), connection.username, reason);
+        private void OnPlayerBanned(Connection connection, string reason)
+        {
+            var ip = Regex.Replace(connection.ipaddress, ipPattern, "");
+            Interface.Oxide.CallHook("OnUserBanned", connection.username, connection.userid.ToString(), ip, reason);
+        }
 
         /// <summary>
         /// Called when the player has been initialized
