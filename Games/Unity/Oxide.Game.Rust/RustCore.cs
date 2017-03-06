@@ -333,6 +333,8 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnServerUsersSet")]
         private void IOnServerUsersSet(ulong id, ServerUsers.UserGroup group, string name, string reason)
         {
+            if (!serverInitialized) return;
+
             var iplayer = Covalence.PlayerManager.FindPlayerById(id.ToString());
             if (group == ServerUsers.UserGroup.Banned) Interface.Oxide.CallHook("OnUserBanned", name, id.ToString(), iplayer?.Address ?? "0", reason);
         }
