@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Facepunch;
@@ -6,6 +7,7 @@ using Facepunch.Extend;
 using Network;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Plugins;
 using Rust;
 using UnityEngine;
 
@@ -32,6 +34,11 @@ namespace Oxide.Game.Rust
         /// Gets the author of this extension
         /// </summary>
         public override string Author => "Oxide Team";
+
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+            "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine", "Rust.Data", "Rust.Global", "Rust.Workshop"
+        };
 
         public override string[] WhitelistAssemblies => new[]
         {
@@ -77,10 +84,7 @@ namespace Oxide.Game.Rust
         /// </summary>
         public override void Load()
         {
-            // Register our loader
             Manager.RegisterPluginLoader(new RustPluginLoader());
-
-            // Register our libraries
             Manager.RegisterLibrary("Rust", new Libraries.Rust());
             Manager.RegisterLibrary("Command", new Libraries.Command());
             Manager.RegisterLibrary("Item", new Libraries.Item());
@@ -101,6 +105,7 @@ namespace Oxide.Game.Rust
         /// </summary>
         public override void OnModLoad()
         {
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
             if (Interface.Oxide.EnableConsole()) Output.OnMessage += HandleLog;
         }
 

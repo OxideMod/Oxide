@@ -14,6 +14,16 @@ namespace Oxide.Core.Libraries.Covalence
     /// </summary>
     public class Covalence : Library
     {
+        private ICommandSystem cmdSystem;
+        private ICovalenceProvider provider;
+        private Logger logger;
+        private Stopwatch trackStopwatch = new Stopwatch();
+        private Stopwatch stopwatch = new Stopwatch();
+        private double sum;
+        private int nestcount;
+
+        public double totalCommandTime { get; internal set; }
+
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
@@ -31,17 +41,11 @@ namespace Oxide.Core.Libraries.Covalence
         [LibraryProperty("Players")]
         public IPlayerManager Players { get; private set; }
 
-        // The provider
-        private ICovalenceProvider provider;
-
-        // The command system provider
-        private ICommandSystem cmdSystem;
-
         /// <summary>
         /// Gets the name of the current game
         /// </summary>
         [LibraryProperty("Game")]
-        public string Game => provider == null ? string.Empty : provider.GameName;
+        public string Game => provider?.GameName ?? string.Empty;
 
         /// <summary>
         /// Gets the Steam app ID of the game's client, if available
@@ -56,34 +60,17 @@ namespace Oxide.Core.Libraries.Covalence
         public uint ServerAppId => provider?.ServerAppId ?? 0;
 
         /// <summary>
-        /// Formats the text with markup as specified in Oxide.Core.Libraries.Covalence.Formatter
-        /// into the game-specific markup language
+        /// Formats the text with markup into the game-specific markup language
         /// </summary>
-        /// <param name="text">text to format</param>
-        /// <returns>formatted text</returns>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public string FormatText(string text) => provider.FormatText(text);
-
-        // The logger
-        private Logger logger;
-
-        // Used to measure time spent in the command
-        private Stopwatch trackStopwatch = new Stopwatch();
-        private Stopwatch stopwatch = new Stopwatch();
-        //private float trackStartAt;
-        private float averageAt;
-        private double sum;
-        private int preHookGcCount;
-        public double totalCommandTime { get; internal set; }
-
-        // The depth of hook call nesting
-        private int nestcount;
 
         /// <summary>
         /// Initializes a new instance of the Covalence class
         /// </summary>
         public Covalence()
         {
-            // Get logger
             logger = Interface.Oxide.RootLogger;
         }
 
@@ -92,7 +79,6 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         internal void Initialize()
         {
-            // Search for all provider types
             var baseType = typeof(ICovalenceProvider);
             IEnumerable<Type> candidateSet = null;
             foreach (var ass in AppDomain.CurrentDomain.GetAssemblies())
@@ -118,11 +104,8 @@ namespace Oxide.Core.Libraries.Covalence
                 logger.Write(LogType.Warning, "Covalence not available yet for this game");
                 return;
             }
-            var candidates = new List<Type>(
-                candidateSet.Where(t => t != null && t.IsClass && !t.IsAbstract && t.FindInterfaces((m, o) => m == baseType, null).Length == 1)
-                );
+            var candidates = new List<Type>(candidateSet.Where(t => t != null && t.IsClass && !t.IsAbstract && t.FindInterfaces((m, o) => m == baseType, null).Length == 1));
 
-            // Select a candidate
             Type selectedCandidate;
             if (candidates.Count == 0)
             {
@@ -141,9 +124,10 @@ namespace Oxide.Core.Libraries.Covalence
                 logger.Write(LogType.Warning, "Multiple Covalence providers found! Using {0}. (Also found {1})", selectedCandidate, sb);
             }
             else
+            {
                 selectedCandidate = candidates[0];
+            }
 
-            // Create it
             try
             {
                 provider = (ICovalenceProvider)Activator.CreateInstance(selectedCandidate);
@@ -155,12 +139,10 @@ namespace Oxide.Core.Libraries.Covalence
                 return;
             }
 
-            // Create mediators
             Server = provider.CreateServer();
             Players = provider.CreatePlayerManager();
             cmdSystem = provider.CreateCommandSystemProvider();
 
-            // Log
             logger.Write(LogType.Info, "Using Covalence provider for game '{0}'", provider.GameName);
         }
 

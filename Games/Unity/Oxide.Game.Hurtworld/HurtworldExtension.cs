@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Plugins;
 using UnityEngine;
 
 namespace Oxide.Game.Hurtworld
@@ -29,10 +31,16 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         public override string Author => "Oxide Team";
 
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+            "UnityEngine.UI"
+        };
+
         public override string[] WhitelistAssemblies => new[]
         {
             "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine", "uLink"
         };
+
         public override string[] WhitelistNamespaces => new[]
         {
             "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine", "uLink"
@@ -40,7 +48,6 @@ namespace Oxide.Game.Hurtworld
 
         public static string[] Filter =
         {
-            ".",
             "Applying hit on",
             "Authorizing player for region",
             "Automove Source item not found",
@@ -88,15 +95,12 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         public override void Load()
         {
-            // Register our loader
-            Manager.RegisterPluginLoader(new HurtworldPluginLoader());
-
-            // Register our libraries
             Manager.RegisterLibrary("Hurt", new Libraries.Hurtworld());
             Manager.RegisterLibrary("Command", new Libraries.Command());
             Manager.RegisterLibrary("Item", new Libraries.Item());
             Manager.RegisterLibrary("Player", new Libraries.Player());
             Manager.RegisterLibrary("Server", new Libraries.Server());
+            Manager.RegisterPluginLoader(new HurtworldPluginLoader());
         }
 
         /// <summary>
@@ -112,11 +116,9 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         public override void OnModLoad()
         {
-            if (!Interface.Oxide.EnableConsole()) return;
-
             Application.logMessageReceived += HandleLog;
-
-            Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
+            if (Interface.Oxide.EnableConsole()) Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 
         internal static void ServerConsole()
@@ -161,20 +163,19 @@ namespace Oxide.Game.Hurtworld
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
-        private static void ServerConsoleOnInput(string input)
+        internal static void ServerConsoleOnInput(string input)
         {
             if (!string.IsNullOrEmpty(input)) ConsoleManager.Instance.ExecuteCommand(input);
         }
 
-        private static void HandleLog(string message, string stackTrace, LogType type)
+        internal static void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
 
             var color = ConsoleColor.Gray;
-            if (type == LogType.Warning)
-                color = ConsoleColor.Yellow;
-            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
-                color = ConsoleColor.Red;
+            if (type == LogType.Warning) color = ConsoleColor.Yellow;
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) color = ConsoleColor.Red;
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
         }
     }

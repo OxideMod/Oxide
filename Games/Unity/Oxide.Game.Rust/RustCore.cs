@@ -13,7 +13,6 @@ using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
-using Oxide.Plugins;
 using UnityEngine;
 
 namespace Oxide.Game.Rust
@@ -35,18 +34,16 @@ namespace Oxide.Game.Rust
         internal bool serverInitialized;
         internal bool isPlayerTakingDamage;
 
-        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
-        {
-            "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine", "Rust.Data", "Rust.Global", "Rust.Workshop"
-        };
-
         internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
-        internal static IEnumerable<string> RestrictedCommands => new[] { "ownerid", "moderatorid" };
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            "ownerid", "moderatorid"
+        };
 
         #region Localization
 
-        private readonly Dictionary<string, string> messages = new Dictionary<string, string>
+        internal readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
             {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
             {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
@@ -118,9 +115,6 @@ namespace Oxide.Game.Rust
             Title = "Rust";
             Author = "Oxide Team";
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            // Add additional common default references for plugins
-            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
         }
 
         /// <summary>
@@ -145,11 +139,9 @@ namespace Oxide.Game.Rust
         [HookMethod("Init")]
         private void Init()
         {
-            // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", BuildInformation.VersionStampDays.ToString());
 
-            // Register messages for localization
             lang.RegisterMessages(messages, this);
 
             // Add core general commands
@@ -180,7 +172,6 @@ namespace Oxide.Game.Rust
             permission.RegisterPermission("oxide.show", this);
             permission.RegisterPermission("oxide.usergroup", this);
 
-            // Setup the default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
@@ -231,7 +222,6 @@ namespace Oxide.Game.Rust
             }
 
             RustExtension.ServerConsole();
-
             Analytics.Collect();
         }
 

@@ -4,7 +4,6 @@ using System.Reflection;
 using Network;
 using Oxide.Core;
 using Oxide.Core.Libraries;
-using UnityEngine;
 
 namespace Oxide.Game.Rust.Libraries
 {
@@ -13,6 +12,9 @@ namespace Oxide.Game.Rust.Libraries
     /// </summary>
     public class Rust : Library
     {
+        internal readonly Player Player = new Player();
+        internal readonly Server Server = new Server();
+
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
@@ -45,10 +47,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="userId"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null, string userId = "0")
-        {
-            ConsoleNetwork.BroadcastToAllClients("chat.add", userId, message != null ? $"<color=orange>{name}</color>: {message}" : name, 1.0);
-        }
+        public void BroadcastChat(string name, string message = null, string userId = "0") => Server.Broadcast(message, name, userId);
 
         /// <summary>
         /// Sends a chat message to the player
@@ -58,10 +57,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="userId"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(BasePlayer player, string name, string message = null, string userId = "0")
-        {
-            player?.SendConsoleCommand("chat.add", userId, message != null ? $"<color=orange>{name}</color>: {message}" : name, 1.0);
-        }
+        public void SendChatMessage(BasePlayer player, string name, string message = null, string userId = "0") => Player.Message(player, message, name);
 
         #endregion
 
@@ -74,7 +70,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="command"></param>
         /// <param name="args"></param>
         [LibraryFunction("RunClientCommand")]
-        public void RunClientCommand(BasePlayer player, string command, params object[] args) => player.SendConsoleCommand(command, args);
+        public void RunClientCommand(BasePlayer player, string command, params object[] args) => Player.Command(player, command, args);
 
         /// <summary>
         /// Runs a server command
@@ -82,7 +78,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="command"></param>
         /// <param name="args"></param>
         [LibraryFunction("RunServerCommand")]
-        public void RunServerCommand(string command, params object[] args) => ConsoleSystem.Run(ConsoleSystem.Option.Server, command, args);
+        public void RunServerCommand(string command, params object[] args) => Server.Command(command, args);
 
         #endregion
 
@@ -124,7 +120,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="nameOrIdOrIp"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayer")]
-        public BasePlayer FindPlayer(string nameOrIdOrIp) => RustCore.FindPlayer(nameOrIdOrIp);
+        public BasePlayer FindPlayer(string nameOrIdOrIp) => Player.Find(nameOrIdOrIp);
 
         /// <summary>
         /// Returns the player for the specified name
@@ -132,7 +128,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="name"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayerByName")]
-        public BasePlayer FindPlayerByName(string name) => RustCore.FindPlayerByName(name);
+        public BasePlayer FindPlayerByName(string name) => Player.Find(name);
 
         /// <summary>
         /// Returns the player for the specified id
@@ -140,7 +136,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayerById")]
-        public BasePlayer FindPlayerById(ulong id) => RustCore.FindPlayerById(id);
+        public BasePlayer FindPlayerById(ulong id) => Player.FindById(id);
 
         /// <summary>
         /// Returns the player for the specified id
@@ -148,7 +144,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="id"></param>
         /// <returns></returns>
         [LibraryFunction("FindPlayerByIdString")]
-        public BasePlayer FindPlayerByIdString(string id) => RustCore.FindPlayerByIdString(id);
+        public BasePlayer FindPlayerByIdString(string id) => Player.FindById(id);
 
         /// <summary>
         /// Forces player position (teleportation)
@@ -158,11 +154,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="y"></param>
         /// <param name="z"></param>
         [LibraryFunction("ForcePlayerPosition")]
-        public void ForcePlayerPosition(BasePlayer player, float x, float y, float z)
-        {
-            player.transform.position = new Vector3(x, y, z);
-            player.MovePosition(player.transform.position);
-            player.ClientRPCPlayer(null, player, "ForcePositionTo", player.transform.position);
-        }
+        public void ForcePlayerPosition(BasePlayer player, float x, float y, float z) => Player.Teleport(player, x, y, z);
     }
 }
