@@ -4030,6 +4030,35 @@
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnServerUsersSet [internal]",
+            "HookName": "IOnServerUsersSet",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerUsers",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Set",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt64",
+                "ServerUsers/UserGroup",
+                "System.String",
+                "System.String"
+              ]
+            },
+            "MSILHash": "6V1/PWY0lny8vV7tZMceC1cAYTGbGr2dX0jxfVajkXI=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [
