@@ -46,7 +46,9 @@ namespace Oxide.Game.Rust
         internal readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
             {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
-            {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
+            {"CommandUsageGroup", "Usage: group <add|set> <name> [title] [rank]"},
+            {"CommandUsageGroupParent", "Usage: group <parent> <name> <parentName>"},
+            {"CommandUsageGroupRemove", "Usage: group <remove> <name>"},
             {"CommandUsageLang", "Usage: lang <two-digit language code>"},
             {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
             {"CommandUsageReload", "Usage: reload *|<pluginname>+"},
@@ -798,10 +800,11 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 2)
+            if (args.Length < 2)
             {
                 player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
-                return;
+                player.Reply(lang.GetMessage("CommandUsageGroupParent", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
             }
 
             var mode = args[0];
@@ -811,54 +814,88 @@ namespace Oxide.Game.Rust
 
             if (mode.Equals("add"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                    return;
+                }
+
                 if (permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupAlreadyExists", this, player.Id), group);
                     return;
                 }
+
                 permission.CreateGroup(group, title, rank);
                 player.Reply(lang.GetMessage("GroupCreated", this, player.Id), group);
             }
             else if (mode.Equals("remove"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
+                    return;
+                }
+
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
+
                 permission.RemoveGroup(group);
                 player.Reply(lang.GetMessage("GroupDeleted", this, player.Id), group);
             }
             else if (mode.Equals("set"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                    return;
+                }
+
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
+
                 permission.SetGroupTitle(group, args[2]);
                 permission.SetGroupRank(group, int.Parse(args[3]));
                 player.Reply(lang.GetMessage("GroupChanged", this, player.Id), group);
             }
             else if (mode.Equals("parent"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroupParent", this, player.Id));
+                    return;
+                }
+
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
+
                 var parent = args[2];
                 if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
                     player.Reply(lang.GetMessage("GroupParentNotFound", this, player.Id), parent);
                     return;
                 }
+
                 if (permission.SetGroupParent(group, parent))
                     player.Reply(lang.GetMessage("GroupParentChanged", this, player.Id), group, parent);
                 else
                     player.Reply(lang.GetMessage("GroupParentNotChanged", this, player.Id), group);
             }
-            else player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+            else
+            {
+                player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageGroupParent", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
+            }
         }
 
         #endregion
@@ -881,7 +918,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
                 player.Reply(lang.GetMessage("CommandUsageUserGroup", this, player.Id));
                 return;
@@ -945,7 +982,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
                 player.Reply(lang.GetMessage("CommandUsageGrant", this, player.Id));
                 return;
@@ -1027,7 +1064,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
                 player.Reply(lang.GetMessage("CommandUsageRevoke", this, player.Id));
                 return;
@@ -1105,7 +1142,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length == 0)
+            if (args.Length < 2)
             {
                 player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
                 return;
