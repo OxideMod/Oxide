@@ -47,7 +47,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="userId"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null, string userId = "0") => Server.Broadcast(message, name, userId);
+        public void BroadcastChat(string name, string message = null, string userId = "0") => Server.Broadcast(message, name, Convert.ToUInt64(userId));
 
         /// <summary>
         /// Sends a chat message to the player
