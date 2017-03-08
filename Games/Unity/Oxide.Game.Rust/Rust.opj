@@ -3641,32 +3641,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 10,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerSave",
-            "HookName": "OnServerSave",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SaveRestore",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Save",
-              "ReturnType": "System.Boolean",
-              "Parameters": [
-                "System.Boolean"
-              ]
-            },
-            "MSILHash": "CBhHql3FDocP0UPfJj45XEwzy9W9IteBm3stW+7Jw7g=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
@@ -4058,6 +4032,32 @@
             "MSILHash": "6V1/PWY0lny8vV7tZMceC1cAYTGbGr2dX0jxfVajkXI=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerSave",
+            "HookName": "OnServerSave",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SaveRestore",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "DoAutomatedSave",
+              "ReturnType": "System.Collections.IEnumerator",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "LZP9XLsr3MQ0KyuChO5JOSjsebgL2hXlwOlV239UCy8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ],
