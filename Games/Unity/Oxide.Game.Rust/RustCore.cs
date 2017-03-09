@@ -812,6 +812,7 @@ namespace Oxide.Game.Rust
                 player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
                 player.Reply(lang.GetMessage("CommandUsageGroupParent", this, player.Id));
                 player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
+                return;
             }
 
             var mode = args[0];
@@ -821,12 +822,6 @@ namespace Oxide.Game.Rust
 
             if (mode.Equals("add"))
             {
-                if (args.Length <= 2)
-                {
-                    player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
-                    return;
-                }
-
                 if (permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupAlreadyExists", this, player.Id), group);
@@ -838,12 +833,6 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("remove"))
             {
-                if (args.Length <= 2)
-                {
-                    player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
-                    return;
-                }
-
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
@@ -855,20 +844,14 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("set"))
             {
-                if (args.Length <= 2)
-                {
-                    player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
-                    return;
-                }
-
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
 
-                permission.SetGroupTitle(group, args[2]);
-                permission.SetGroupRank(group, int.Parse(args[3]));
+                permission.SetGroupTitle(group, title);
+                permission.SetGroupRank(group, rank);
                 player.Reply(lang.GetMessage("GroupChanged", this, player.Id), group);
             }
             else if (mode.Equals("parent"))
@@ -1149,7 +1132,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length < 2)
+            if (args.Length < 1)
             {
                 player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
                 return;
@@ -1164,6 +1147,12 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("perm"))
             {
+                if (args.Length < 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(name))
                 {
                     player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
@@ -1180,6 +1169,12 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("user"))
             {
+                if (args.Length < 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(name))
                 {
                     player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
@@ -1211,6 +1206,12 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("group"))
             {
+                if (args.Length < 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(name))
                 {
                     player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));

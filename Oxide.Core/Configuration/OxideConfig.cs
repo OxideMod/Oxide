@@ -35,10 +35,42 @@ namespace Oxide.Core.Configuration
         }
 
         /// <summary>
-        /// Gets or sets information regarding the Oxide Console
+        /// Settings for the custom Oxide remote console
+        /// </summary>
+        public class OxideRcon
+        {
+            /// <summary>
+            /// Gets or sets if the Oxide remote console should be setup
+            /// </summary>
+            public bool Enabled { get; set; }
+
+            /// <summary>
+            /// Gets or sets the Oxide remote console port
+            /// </summary>
+            public int Port { get; set; }
+
+            /// <summary>
+            /// Gets or sets the Oxide remote console password
+            /// </summary>
+            public string Password { get; set; }
+
+            /// <summary>
+            /// Gets or sets the Oxide remote console chat prefix
+            /// </summary>
+            public string ChatPrefix { get; set; }
+        }
+
+        /// <summary>
+        /// Gets or sets information regarding the Oxide console
         /// </summary>
         [JsonProperty(PropertyName = "OxideConsole")]
         public OxideConsole Console { get; set; }
+
+        /// <summary>
+        /// Gets or sets information regarding the Oxide remote console
+        /// </summary>
+        [JsonProperty(PropertyName = "OxideRcon")]
+        public OxideRcon Rcon { get; set; }
 
         /// <summary>
         /// Gets or sets the default permissions group for new players
@@ -63,7 +95,8 @@ namespace Oxide.Core.Configuration
         {
             ConfigDirectory = "config";
             DefaultGroup = "default";
-            Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true};
+            Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true };
+            Rcon = new OxideRcon { Enabled = true, ChatPrefix = "[Server Console]", Port = 25580, Password = string.Empty };
         }
 
         /// <summary>

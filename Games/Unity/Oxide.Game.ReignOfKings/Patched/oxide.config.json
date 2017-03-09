@@ -5,6 +5,12 @@
     "ShowStatusBar": true,
     "ShowStacktraces": false
   },
+  "OxideRcon": {
+    "Enabled": true,
+    "Port": 25580,
+    "Password": "",
+    "ChatPrefix": "[Server Console]"
+  },
   "InstanceCommandLines":
   [
     "{oxide.directory}",

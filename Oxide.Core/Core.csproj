@@ -60,6 +60,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="websocket-sharp">
+      <HintPath>Dependencies\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics.cs" />
@@ -111,6 +114,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProtoStorage.cs" />
     <Compile Include="Random.cs" />
+    <Compile Include="RemoteConsole\RemoteConsole.cs" />
+    <Compile Include="RemoteConsole\RemoteMessage.cs" />
     <Compile Include="RemoteLogger.cs" />
     <Compile Include="ServerConsole\ConsoleInput.cs" />
     <Compile Include="ServerConsole\ConsoleWindow.cs" />

@@ -95,6 +95,7 @@ namespace Oxide.Core
         private bool isInitialized;
         public bool HasLoadedCorePlugins { get; private set; }
 
+        public RemoteConsole.RemoteConsole RemoteConsole;
         public ServerConsole.ServerConsole ServerConsole;
 
         private Stopwatch timer;
@@ -118,16 +119,13 @@ namespace Oxide.Core
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { Culture = CultureInfo.InvariantCulture };
 
-            // Create the commandline
             CommandLine = new CommandLine(Environment.GetCommandLineArgs());
 
-            // Load the config
             var oxideConfig = Path.Combine(RootDirectory, "oxide.config.json");
             if (!File.Exists(oxideConfig)) throw new FileNotFoundException("Could not load the Oxide configuration file", oxideConfig);
             Config = ConfigFile.Load<OxideConfig>(oxideConfig);
             Config.Save();
 
-            // Work out the instance directory
             for (var i = 0; i < Config.InstanceCommandLines.Length; i++)
             {
                 string varname, format;
@@ -140,15 +138,12 @@ namespace Oxide.Core
             }
             if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
 
-            // Clean and set directory paths
             ExtensionDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             PluginDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("plugins"));
             DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("data"));
             LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("lang"));
             LogDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("logs"));
             ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(Config.ConfigDirectory));
-
-            // Create directories if needed
             if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
@@ -157,28 +152,20 @@ namespace Oxide.Core
             if (!Directory.Exists(LogDirectory)) Directory.CreateDirectory(LogDirectory);
             if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
 
-            // Register the library path
             RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
 
-            // Set the default group
             DefaultGroup = Config.DefaultGroup;
 
-            // Create the loggers
             RootLogger = new CompoundLogger();
             RootLogger.AddLogger(new RotatingFileLogger { Directory = LogDirectory });
             if (debugCallback != null) RootLogger.AddLogger(new CallbackLogger(debugCallback));
 
-            // Log Oxide core loading
             LogInfo("Loading Oxide Core v{0}...", Version);
 
-            // Create the managers
             RootPluginManager = new PluginManager(RootLogger) { ConfigPath = ConfigDirectory };
             extensionManager = new ExtensionManager(RootLogger);
-
-            // Initialize other things
             DataFileSystem = new DataFileSystem(DataDirectory);
 
-            // Register core libraries
             extensionManager.RegisterLibrary("Covalence", covalence = new Covalence());
             extensionManager.RegisterLibrary("Global", new Global());
             extensionManager.RegisterLibrary("Lang", new Lang());
@@ -188,18 +175,13 @@ namespace Oxide.Core
             extensionManager.RegisterLibrary("Timer", libtimer = new Timer());
             extensionManager.RegisterLibrary("WebRequests", new WebRequests());
 
-            // Load all extensions
             LogInfo("Loading extensions...");
             extensionManager.LoadAllExtensions(ExtensionDirectory);
 
-            // Initialize covalence library after extensions (as it depends on things from within an ext)
             covalence.Initialize();
+            RemoteConsole = new RemoteConsole.RemoteConsole();
+            RemoteConsole?.Initalize();
 
-            // Remove old files
-            Cleanup.Add(Path.Combine(Interface.Oxide.RootDirectory, "oxide.root.json"));
-            Cleanup.Run();
-
-            // If no clock has been defined, make our own unreliable clock
             if (getTimeSinceStartup == null)
             {
                 timer = new Stopwatch();
@@ -208,14 +190,10 @@ namespace Oxide.Core
                 LogWarning("A reliable clock is not available, falling back to a clock which may be unreliable on certain hardware");
             }
 
-            // Load all watchers
             foreach (var ext in extensionManager.GetAllExtensions()) ext.LoadPluginWatchers(PluginDirectory);
-
-            // Load all plugins
             LogInfo("Loading plugins...");
             LoadAllPlugins(true);
 
-            // Hook all watchers
             foreach (var watcher in extensionManager.GetPluginChangeWatchers())
             {
                 watcher.OnPluginSourceChanged += watcher_OnPluginSourceChanged;
@@ -223,11 +201,10 @@ namespace Oxide.Core
                 watcher.OnPluginRemoved += watcher_OnPluginRemoved;
             }
 
-            // Check for 'load' variable and warn
             if (CommandLine.HasVariable("load")) LogWarning("The 'load' variable is unused and can be removed");
-
-            // Check for 'nolog' variable and warn
             if (CommandLine.HasVariable("nolog")) LogWarning("Usage of the 'nolog' variable will prevent logging");
+
+            Cleanup.Run();
         }
 
         /// <summary>
@@ -577,12 +554,14 @@ namespace Oxide.Core
         public void OnShutdown()
         {
             if (IsShuttingDown) return;
+
             IsShuttingDown = true;
             UnloadAllPlugins();
-            foreach (var extension in extensionManager.GetAllExtensions())
-                extension.OnShutdown();
-            foreach (var name in extensionManager.GetLibraries())
-                extensionManager.GetLibrary(name).Shutdown();
+
+            foreach (var extension in extensionManager.GetAllExtensions()) extension.OnShutdown();
+            foreach (var name in extensionManager.GetLibraries()) extensionManager.GetLibrary(name).Shutdown();
+
+            RemoteConsole?.Shutdown();
             ServerConsole?.OnDisable();
             RootLogger.Shutdown();
         }
