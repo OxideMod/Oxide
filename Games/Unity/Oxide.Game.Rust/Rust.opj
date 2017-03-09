@@ -3329,12 +3329,12 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 266,
+            "InjectionIndex": 96,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l5, l5.authStatus",
+            "ArgumentString": "l2, l2.authStatus",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerBanned [eac]",
+            "Name": "OnPlayerBanned [eac, player]",
             "HookName": "OnPlayerBanned",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
@@ -4058,6 +4058,32 @@
             "MSILHash": "XkPJK9ywssHfyJaUfp6n41AusaHphFKBukyw15ha4gA=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 220,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l5, l5.authStatus",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerBanned [eac, owner]",
+            "HookName": "OnPlayerBanned",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ServerMgr",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "AntiCheatKickPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EasyAntiCheat.Server.Legacy.ClientStatusUpdate"
+              ]
+            },
+            "MSILHash": "eD2Zd9lGDqVT/7YF7FpfWOZkFjR0UF90GIty50F/hIg=",
+            "BaseHookName": "OnPlayerBanned [eac, player]",
+            "HookCategory": "Player"
           }
         }
       ],
