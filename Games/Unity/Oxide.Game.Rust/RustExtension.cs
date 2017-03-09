@@ -7,6 +7,7 @@ using Facepunch.Extend;
 using Network;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using Oxide.Plugins;
 using Rust;
 using UnityEngine;
@@ -161,6 +162,7 @@ namespace Oxide.Game.Rust
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 
             var color = ConsoleColor.Gray;
+            var remoteType = "generic";
             if (type == LogType.Warning)
             {
                 color = ConsoleColor.Yellow;
@@ -184,11 +186,19 @@ namespace Oxide.Game.Rust
             else if (message.ToLower().StartsWith("[chat]"))
             {
                 ConVar.Server.Log("Log.Chat.txt", message);
+                remoteType = "chat";
             }
             else
                 ConVar.Server.Log("Log.Log.txt", message);
 
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }
