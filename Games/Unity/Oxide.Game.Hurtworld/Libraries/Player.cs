@@ -248,6 +248,42 @@ namespace Oxide.Game.Hurtworld.Libraries
         }
 
         /// <summary>
+        /// Gets the player session using a uLink.NetworkPlayer
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public PlayerSession Find(uLink.NetworkPlayer player) => GameManager.Instance.GetSession(player);
+
+        /// <summary>
+        /// Gets the player session using a UnityEngine.Collider
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns></returns>
+        public PlayerSession Find(Collider col)
+        {
+            PlayerSession session = null;
+            var stats = col.gameObject.GetComponent<EntityStatsTriggerProxy>().Stats;
+            foreach (var s in Sessions)
+            {
+                if (!s.Value.WorldPlayerEntity.GetComponent<EntityStats>() == stats) continue;
+                session = s.Value;
+                break;
+            }
+            return session;
+        }
+
+        /// <summary>
+        /// Gets the player session using a UnityEngine.GameObject
+        /// </summary>
+        /// <param name="go"></param>
+        /// <returns></returns>
+        public PlayerSession Find(GameObject go)
+        {
+            var sessions = GameManager.Instance.GetSessions();
+            return (from i in sessions where go.Equals(i.Value.WorldPlayerEntity) select i.Value).FirstOrDefault();
+        }
+
+        /// <summary>
         /// Gets the player session using a Steam ID
         /// </summary>
         /// <param name="id"></param>
@@ -258,24 +294,6 @@ namespace Oxide.Game.Hurtworld.Libraries
             foreach (var s in Sessions)
             {
                 if (!id.Equals(s.Value.SteamId.ToString())) continue;
-                session = s.Value;
-                break;
-            }
-            return session;
-        }
-
-        /// <summary>
-        /// Gets the player session using a Collider
-        /// </summary>
-        /// <param name="col"></param>
-        /// <returns></returns>
-        public PlayerSession Session(Collider col)
-        {
-            PlayerSession session = null;
-            var stats = col.gameObject.GetComponent<EntityStatsTriggerProxy>().Stats;
-            foreach (var s in Sessions)
-            {
-                if (!s.Value.WorldPlayerEntity.GetComponent<EntityStats>() == stats) continue;
                 session = s.Value;
                 break;
             }

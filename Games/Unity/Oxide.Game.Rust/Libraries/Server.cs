@@ -27,14 +27,6 @@ namespace Oxide.Game.Rust.Libraries
         public void Broadcast(string message, string prefix = null, ulong userId = 0, params object[] args) => Broadcast(string.Format(message, args), prefix, userId);
 
         /// <summary>
-        /// Broadcasts a chat message to all players
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Broadcast(string message, string prefix = null, params object[] args) => Broadcast(string.Format(message, args), prefix);
-
-        /// <summary>
         /// Runs the specified server command
         /// </summary>
         /// <param name="command"></param>

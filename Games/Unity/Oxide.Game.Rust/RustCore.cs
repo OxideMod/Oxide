@@ -13,7 +13,6 @@ using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
-using Oxide.Plugins;
 using UnityEngine;
 
 namespace Oxide.Game.Rust
@@ -35,21 +34,21 @@ namespace Oxide.Game.Rust
         internal bool serverInitialized;
         internal bool isPlayerTakingDamage;
 
-        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
-        {
-            "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine", "Rust.Data", "Rust.Global", "Rust.Workshop"
-        };
-
         internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
-        internal static IEnumerable<string> RestrictedCommands => new[] { "ownerid", "moderatorid" };
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            "ownerid", "moderatorid"
+        };
 
         #region Localization
 
-        private readonly Dictionary<string, string> messages = new Dictionary<string, string>
+        internal readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
             {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
-            {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
+            {"CommandUsageGroup", "Usage: group <add|set> <name> [title] [rank]"},
+            {"CommandUsageGroupParent", "Usage: group <parent> <name> <parentName>"},
+            {"CommandUsageGroupRemove", "Usage: group <remove> <name>"},
             {"CommandUsageLang", "Usage: lang <two-digit language code>"},
             {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
             {"CommandUsageReload", "Usage: reload *|<pluginname>+"},
@@ -118,9 +117,6 @@ namespace Oxide.Game.Rust
             Title = "Rust";
             Author = "Oxide Team";
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            // Add additional common default references for plugins
-            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
         }
 
         /// <summary>
@@ -145,11 +141,9 @@ namespace Oxide.Game.Rust
         [HookMethod("Init")]
         private void Init()
         {
-            // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", BuildInformation.VersionStampDays.ToString());
 
-            // Register messages for localization
             lang.RegisterMessages(messages, this);
 
             // Add core general commands
@@ -180,7 +174,6 @@ namespace Oxide.Game.Rust
             permission.RegisterPermission("oxide.show", this);
             permission.RegisterPermission("oxide.usergroup", this);
 
-            // Setup the default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
@@ -231,7 +224,6 @@ namespace Oxide.Game.Rust
             }
 
             RustExtension.ServerConsole();
-
             Analytics.Collect();
         }
 
@@ -328,6 +320,36 @@ namespace Oxide.Game.Rust
             var approvedSpecific = Interface.Call("OnUserApprove", connection);
             var approvedCovalence = Interface.Call("OnUserApproved", name, id, ip);
             return approvedSpecific ?? approvedCovalence; // TODO: Fix 'RustCore' hook conflict when both return
+        }
+
+        /// <summary>
+        /// Called when a server group is set for an ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="group"></param>
+        /// <param name="name"></param>
+        /// <param name="reason"></param>
+        /// <returns></returns>
+        [HookMethod("IOnServerUsersSet")]
+        private void IOnServerUsersSet(ulong id, ServerUsers.UserGroup group, string name, string reason)
+        {
+            if (!serverInitialized) return;
+
+            var iplayer = Covalence.PlayerManager.FindPlayerById(id.ToString());
+            if (group == ServerUsers.UserGroup.Banned) Interface.Oxide.CallHook("OnUserBanned", name, id.ToString(), iplayer?.Address ?? "0", reason);
+        }
+
+        /// <summary>
+        /// Called when a player has been banned on connection
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="reason"></param>
+        /// <returns></returns>
+        [HookMethod("OnPlayerBanned")]
+        private void OnPlayerBanned(Connection connection, string reason)
+        {
+            var ip = Regex.Replace(connection.ipaddress, ipPattern, "");
+            Interface.Oxide.CallHook("OnUserBanned", connection.username, connection.userid.ToString(), ip, reason);
         }
 
         /// <summary>
@@ -499,28 +521,6 @@ namespace Oxide.Game.Rust
 
         #endregion
 
-        #region Structure Hooks
-
-        /// <summary>
-        /// Called when a player selects Demolish from the BuildingBlock menu
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        [HookMethod("IOnStructureDemolish")]
-        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, false);
-
-        /// <summary>
-        /// Called when a player selects Demolish Immediate from the BuildingBlock menu
-        /// </summary>
-        /// <param name="block"></param>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        [HookMethod("IOnStructureImmediateDemolish")]
-        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, true);
-
-        #endregion
-
         #region Item Hooks
 
         /// <summary>
@@ -540,6 +540,37 @@ namespace Oxide.Game.Rust
             if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
             return true;
         }
+
+        /// <summary>
+        /// Called when an item is used
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        [HookMethod("OnItemUse")]
+        private void OnItemUse(Item item, int amount) => Interface.Oxide.CallDeprecatedHook("OnConsumableUse", "OnItemUse", new DateTime(2017, 4, 1), item, amount);
+
+        #endregion
+
+        #region Structure Hooks
+
+        /// <summary>
+        /// Called when a player selects Demolish from the BuildingBlock menu
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("IOnStructureDemolish")]
+        private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, false);
+
+        /// <summary>
+        /// Called when a player selects Demolish Immediate from the BuildingBlock menu
+        /// </summary>
+        /// <param name="block"></param>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        [HookMethod("IOnStructureImmediateDemolish")]
+        private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, true);
 
         #endregion
 
@@ -776,10 +807,11 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 2)
+            if (args.Length < 2)
             {
                 player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
-                return;
+                player.Reply(lang.GetMessage("CommandUsageGroupParent", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
             }
 
             var mode = args[0];
@@ -789,54 +821,88 @@ namespace Oxide.Game.Rust
 
             if (mode.Equals("add"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                    return;
+                }
+
                 if (permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupAlreadyExists", this, player.Id), group);
                     return;
                 }
+
                 permission.CreateGroup(group, title, rank);
                 player.Reply(lang.GetMessage("GroupCreated", this, player.Id), group);
             }
             else if (mode.Equals("remove"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
+                    return;
+                }
+
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
+
                 permission.RemoveGroup(group);
                 player.Reply(lang.GetMessage("GroupDeleted", this, player.Id), group);
             }
             else if (mode.Equals("set"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                    return;
+                }
+
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
+
                 permission.SetGroupTitle(group, args[2]);
                 permission.SetGroupRank(group, int.Parse(args[3]));
                 player.Reply(lang.GetMessage("GroupChanged", this, player.Id), group);
             }
             else if (mode.Equals("parent"))
             {
+                if (args.Length <= 2)
+                {
+                    player.Reply(lang.GetMessage("CommandUsageGroupParent", this, player.Id));
+                    return;
+                }
+
                 if (!permission.GroupExists(group))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), group);
                     return;
                 }
+
                 var parent = args[2];
                 if (!string.IsNullOrEmpty(parent) && !permission.GroupExists(parent))
                 {
                     player.Reply(lang.GetMessage("GroupParentNotFound", this, player.Id), parent);
                     return;
                 }
+
                 if (permission.SetGroupParent(group, parent))
                     player.Reply(lang.GetMessage("GroupParentChanged", this, player.Id), group, parent);
                 else
                     player.Reply(lang.GetMessage("GroupParentNotChanged", this, player.Id), group);
             }
-            else player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+            else
+            {
+                player.Reply(lang.GetMessage("CommandUsageGroup", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageGroupParent", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageGroupRemove", this, player.Id));
+            }
         }
 
         #endregion
@@ -859,7 +925,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
                 player.Reply(lang.GetMessage("CommandUsageUserGroup", this, player.Id));
                 return;
@@ -923,7 +989,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
                 player.Reply(lang.GetMessage("CommandUsageGrant", this, player.Id));
                 return;
@@ -1005,7 +1071,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length != 3)
+            if (args.Length < 3)
             {
                 player.Reply(lang.GetMessage("CommandUsageRevoke", this, player.Id));
                 return;
@@ -1083,7 +1149,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            if (args.Length == 0)
+            if (args.Length < 2)
             {
                 player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
                 return;

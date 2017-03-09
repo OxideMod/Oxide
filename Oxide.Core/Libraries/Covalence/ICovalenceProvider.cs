@@ -6,17 +6,17 @@
     public interface ICovalenceProvider
     {
         /// <summary>
-        /// Gets the name of the game for which this provider provides
+        /// Gets the name of the game
         /// </summary>
         string GameName { get; }
 
         /// <summary>
-        /// Gets the Steam app ID of the game's client for which this provider provides
+        /// Gets the Steam app ID of the game's client
         /// </summary>
         uint ClientAppId { get; }
 
         /// <summary>
-        /// Gets the Steam app ID of the game's server for which this provider provides
+        /// Gets the Steam app ID of the game's server
         /// </summary>
         uint ServerAppId { get; }
 
@@ -39,11 +39,10 @@
         ICommandSystem CreateCommandSystemProvider();
 
         /// <summary>
-        /// Formats the text with markup as specified in Oxide.Core.Libraries.Covalence.Formatter
-        /// into the game-specific markup language
+        /// Formats the text with markup into the game-specific markup language
         /// </summary>
-        /// <param name="text">text to format</param>
-        /// <returns>formatted text</returns>
+        /// <param name="text"></param>
+        /// <returns></returns>
         string FormatText(string text);
     }
 }

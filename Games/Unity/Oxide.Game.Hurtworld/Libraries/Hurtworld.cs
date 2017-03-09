@@ -9,6 +9,9 @@ namespace Oxide.Game.Hurtworld.Libraries
     /// </summary>
     public class Hurtworld : Library
     {
+        internal readonly Player Player = new Player();
+        internal readonly Server Server = new Server();
+
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
         /// </summary>
@@ -40,11 +43,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("BroadcastChat")]
-        public void BroadcastChat(string name, string message = null)
-        {
-            ConsoleManager.SendLog(string.Concat("[Broadcast] ", message != null ? $"{name} {message}" : name));
-            ChatManagerServer.Instance.RPC("RelayChat", uLink.RPCMode.Others, message != null ? $"{name} {message}" : name);
-        }
+        public void BroadcastChat(string name, string message = null) => Server.Broadcast(message, name);
 
         /// <summary>
         /// Sends a chat message to the player
@@ -53,10 +52,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="name"></param>
         /// <param name="message"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(PlayerSession session, string name, string message = null)
-        {
-            if (session.Player.isConnected) ChatManagerServer.Instance.RPC("RelayChat", session.Player, message != null ? $"{name} {message}" : name);
-        }
+        public void SendChatMessage(PlayerSession session, string name, string message = null) => Player.Message(session, message, name);
 
         #endregion
     }
