@@ -181,7 +181,11 @@ namespace Oxide.Game.Rust
                 color = ConsoleColor.Red;
                 ConVar.Server.Log("Log.Assert.txt", message);
             }
-            else if (!message.StartsWith("[CHAT]"))
+            else if (message.ToLower().StartsWith("[chat]"))
+            {
+                ConVar.Server.Log("Log.Chat.txt", message);
+            }
+            else
                 ConVar.Server.Log("Log.Log.txt", message);
 
             Interface.Oxide.ServerConsole.AddMessage(message, color);

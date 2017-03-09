@@ -305,7 +305,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 105,
+            "InjectionIndex": 107,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -323,7 +323,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "eqzzbBLAC8p/t433Nn04EQyJCTTefArF5SWfqbDf9Hc=",
+            "MSILHash": "vH0CIZZz8VAJVbLvD6alxk9ooSLjceKNFi06fMAoFOo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -934,7 +934,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "sY9hyfNs4CfKOy9cyqMeJNGZT62tq2y17Il6thY4e2A=",
+            "MSILHash": "bngdsPUhabM6Kcg8YeqDPxLQAG2LdNlMULAJbuuk/C0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -986,7 +986,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "XkMlwMztxPHzFlyU/jeqsViQUW+LwbGbx2yFLPw8Ezg=",
+            "MSILHash": "amBsf7avJ3/8AjvSVafQ5SJ7+B7jRxk50ylQODmL0JA=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -1065,7 +1065,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "LqQVNxwtNRnl8aNPaoT4yeXCHE634TZi9hjh80qsgLE=",
+            "MSILHash": "y9DS5QpKSVE3AtRcgvXdCZeA1x+Mi2WwcB34qJeS/yk=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -1270,7 +1270,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "MvY9MapXvaesqg1el18Cmx8XVemkBlbt+7le5MSm8jA=",
+            "MSILHash": "wpefNkQOoOsYjuanZ04lPVBd0DvSTii3K90e/BOkazA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1684,7 +1684,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "zYsuKz9cr/wty2iAWkPnF+W0OWVFjBTQ4ztaw4602Kg=",
+            "MSILHash": "WtRaw7TcBUXDbX6ng2avCF8aObANjyaqef6WufRleNY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1836,7 +1836,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "Tv6C7uCFJGHFMunOtFeG+aEl6ZNRS0EJYUMK3fYjVOM=",
+            "MSILHash": "i3h/M033klqqdwysVETLIP4XAVWNdzxUgEf2+NHuWHU=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2045,7 +2045,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "h/WyPD2jq3ND8Y6d0NC2V5M3ZH5C7kyY0K3c4b4UoSw=",
+            "MSILHash": "tXJeYFYpP9tRcTzQslFqnVzqfRO947QYG0ZkONgYgn8=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2125,7 +2125,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "cHZtUERV/eMVnhdmTTAuYwO+7XMULwFCIK/CYflM3/o=",
+            "MSILHash": "Wq4qlDsNyxZzzb53pSpObGebsmHSJE57AxPzyvhKiE8=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2151,7 +2151,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "kRXy6Yi5yak/41D2P6+7TfCOaBGPDBBncpTEzffl/4E=",
+            "MSILHash": "x+t203kWpZN2YS2EF6qXKI7+Hb6QdODRuI205l87Xas=",
             "BaseHookName": null,
             "HookCategory": "Structure"
           }
@@ -2464,7 +2464,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "E1v70IHun/fDHTvxIK9JXAeCiu6eHCoqV04nfjF7NL4=",
+            "MSILHash": "SOj9KcKRshKEhhtyOrRZRJIPjtqk63KCAGyckxYifLA=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2868,7 +2868,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "9ChV2qufBtO7Dw7rhQ67ZdY1SDle5yLEXx13NWEPtqI=",
+            "MSILHash": "ifi2bKIg5CCTFeTkHWttFsAlk6oNRZJx2Pwa+xc43Tg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2895,7 +2895,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rm4kQpwwZE9Hdnra8iUV+uYlflyzJbAWFuIf2bGCXlg=",
+            "MSILHash": "uvY2yxKGFjnDmrb3GlJ4a05EsyZUKXJM4X9BxsSpVps=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -2972,7 +2972,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "rm4kQpwwZE9Hdnra8iUV+uYlflyzJbAWFuIf2bGCXlg=",
+            "MSILHash": "uvY2yxKGFjnDmrb3GlJ4a05EsyZUKXJM4X9BxsSpVps=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
@@ -3347,7 +3347,7 @@
                 "EasyAntiCheat.Server.Legacy.ClientStatusUpdate"
               ]
             },
-            "MSILHash": "uYu8AmeiYvLCMv+q1ijIIt98bvUdtdIADYCvZHxFLOQ=",
+            "MSILHash": "eD2Zd9lGDqVT/7YF7FpfWOZkFjR0UF90GIty50F/hIg=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3375,7 +3375,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "0YteuH2cAHqnFKogLC2U1869kmNO73HWLGhoTvMmgkI=",
+            "MSILHash": "BsP5PId8nRNT4r1sTxBxtninsFnXtzmBynCKjL0R49I=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3403,7 +3403,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "0YteuH2cAHqnFKogLC2U1869kmNO73HWLGhoTvMmgkI=",
+            "MSILHash": "BsP5PId8nRNT4r1sTxBxtninsFnXtzmBynCKjL0R49I=",
             "BaseHookName": "OnPlayerBanned [server]",
             "HookCategory": "Player"
           }
@@ -3431,7 +3431,7 @@
                 "Facepunch.Steamworks.ServerAuth/Status"
               ]
             },
-            "MSILHash": "0YteuH2cAHqnFKogLC2U1869kmNO73HWLGhoTvMmgkI=",
+            "MSILHash": "BsP5PId8nRNT4r1sTxBxtninsFnXtzmBynCKjL0R49I=",
             "BaseHookName": "OnPlayerBanned [vac]",
             "HookCategory": "Player"
           }
@@ -3792,7 +3792,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "92DNtZj9JkSsQJcZGcC/AaR3CQjKVe2tp1lD8KZh5JA=",
+            "MSILHash": "o7jnKWO/lFSV256Cs9YVI0CwxlBMXqRbzX9LIWlfW+A=",
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
@@ -3818,7 +3818,7 @@
                 "ItemDefinition"
               ]
             },
-            "MSILHash": "sUvbtVYO/QdBO4ZM6eeYLNNQglbVMCFxkQuJJR0kNzI=",
+            "MSILHash": "Vlz3ll6PjZ/v99CSPCyHTZ0mcKWkRnRk/ED8B4mlJMs=",
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
@@ -3844,7 +3844,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "KAPQlpC5uMck/XRtKimeSBYlzilCW1lUWBhv6QL+RoQ=",
+            "MSILHash": "ZuPHRvyJ1oG227EO1TCXYtQ4yJbfhjTIxXDaoQxXOEs=",
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
@@ -3896,7 +3896,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "q3nmIcw2EOtkYffiTJOAWDKr8NraFw6xmEH16rWnq6c=",
+            "MSILHash": "qgUNqvOeIxbo9/7cN3AzyRvH7D7yAQMdDQJCmCtjOQU=",
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
@@ -4029,7 +4029,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "6V1/PWY0lny8vV7tZMceC1cAYTGbGr2dX0jxfVajkXI=",
+            "MSILHash": "RGE8qdqO/rz7T5RxLmIrVtuL0EDikYRvH7j75+/tV5A=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -4055,7 +4055,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "LZP9XLsr3MQ0KyuChO5JOSjsebgL2hXlwOlV239UCy8=",
+            "MSILHash": "XkPJK9ywssHfyJaUfp6n41AusaHphFKBukyw15ha4gA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
