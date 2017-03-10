@@ -57,7 +57,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="userId"></param>
         [LibraryFunction("SendChatMessage")]
-        public void SendChatMessage(BasePlayer player, string name, string message = null, string userId = "0") => Player.Message(player, message, name);
+        public void SendChatMessage(BasePlayer player, string name, string message = null, string userId = "0") => Player.Message(player, message, name, Convert.ToUInt64(userId));
 
         #endregion
 

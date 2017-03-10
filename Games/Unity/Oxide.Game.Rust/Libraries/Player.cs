@@ -266,7 +266,10 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
-        public void Message(BasePlayer player, string message, string prefix = null) => player.ChatMessage(prefix != null ? $"{prefix} {message}" : message);
+        public void Message(BasePlayer player, string message, string prefix = null, ulong userId = 0)
+        {
+            player.SendConsoleCommand("chat.add", userId, prefix != null ? $"{prefix} {message}" : message, 1.0);
+        }
 
         /// <summary>
         /// Sends a chat message to the player
@@ -275,7 +278,10 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="prefix"></param>
         /// <param name="args"></param>
-        public void Message(BasePlayer player, string message, string prefix = null, params object[] args) => Message(player, string.Format(message, args), prefix);
+        public void Message(BasePlayer player, string message, string prefix = null, ulong userId = 0, params object[] args)
+        {
+            Message(player, string.Format(message, args), prefix);
+        }
 
         /// <summary>
         /// Sends a chat message to the player
@@ -283,7 +289,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
-        public void Reply(BasePlayer player, string message, string prefix = null) => Message(player, message, prefix);
+        public void Reply(BasePlayer player, string message, string prefix = null, ulong userId = 0) => Message(player, message, prefix);
 
         /// <summary>
         /// Sends a chat message to the player
@@ -292,7 +298,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="message"></param>
         /// <param name="prefix"></param>
         /// <param name="args"></param>
-        public void Reply(BasePlayer player, string message, string prefix = null, params object[] args) => Reply(player, string.Format(message, args), prefix);
+        public void Reply(BasePlayer player, string message, string prefix = null, ulong userId = 0, params object[] args) => Reply(player, string.Format(message, args), prefix);
 
         #endregion
 
