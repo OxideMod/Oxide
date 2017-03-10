@@ -345,7 +345,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="prefix"></param>
         public void Message(PlayerSession session, string message, string prefix = null)
         {
-            ChatManager.RPC("RelayChat", session.Player, prefix != null ? $"{prefix}: {message}" : message);
+            ChatManager.RPC("RelayChat", session.Player, string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}"));
         }
 
         /// <summary>
