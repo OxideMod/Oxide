@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "O8BOET8B43hs45Uv3k11dHCjz0o8u79hRpGFEaKMTPI=",
+            "MSILHash": "7UPFxbRSVYsYOXQxBV/QbFcabv4OhHwJtqE+29qJIgE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "O8BOET8B43hs45Uv3k11dHCjz0o8u79hRpGFEaKMTPI=",
+            "MSILHash": "7UPFxbRSVYsYOXQxBV/QbFcabv4OhHwJtqE+29qJIgE=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -98,79 +98,6 @@
             "MSILHash": "LMm2e6EpdFbcpsdU7k1wCIn6Wlv2CtpkJHQKk/syGM4=",
             "BaseHookName": null,
             "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 307,
-            "RemoveCount": 1,
-            "Instructions": [
-              {
-                "OpCode": "ldc_i4",
-                "OpType": "Int32",
-                "Operand": "16"
-              }
-            ],
-            "HookTypeName": "Modify",
-            "Name": "AddGameTags [patch] [part 1]",
-            "HookName": "AddGameTags",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "openGameServer",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "IWzJER3lnSUVB2fYEHg8PRjOmpBQkVFTKT/UKiF8JKQ=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 401,
-            "RemoveCount": 0,
-            "Instructions": [
-              {
-                "OpCode": "dup",
-                "OpType": "None",
-                "Operand": null
-              },
-              {
-                "OpCode": "ldc_i4",
-                "OpType": "Int32",
-                "Operand": "15"
-              },
-              {
-                "OpCode": "ldstr",
-                "OpType": "String",
-                "Operand": ",oxide,modded"
-              },
-              {
-                "OpCode": "stelem_ref",
-                "OpType": "None",
-                "Operand": null
-              }
-            ],
-            "HookTypeName": "Modify",
-            "Name": "AddGameTags [patch] [part 2]",
-            "HookName": "AddGameTags",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "openGameServer",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "IWzJER3lnSUVB2fYEHg8PRjOmpBQkVFTKT/UKiF8JKQ=",
-            "BaseHookName": "AddGameTags [patch] [part 1]",
-            "HookCategory": "_Patches"
           }
         },
         {
@@ -268,6 +195,79 @@
             "MSILHash": "fivNlPXZO7OOBnkHaMjh4mYzg/TpkR9Glk4G+ZbRYjQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 131,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4",
+                "OpType": "Int32",
+                "Operand": "16"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "AddGameTags [patch] [part 1]",
+            "HookName": "AddGameTags",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "onDedicatedUGCInstalled",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "pyqn4hXuISQNY2nBUB2m5f2NWspXgM3iV/vHsLz+vNs=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 225,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "dup",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4",
+                "OpType": "Int32",
+                "Operand": "15"
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": ",oxide,modded"
+              },
+              {
+                "OpCode": "stelem_ref",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "AddGameTags [patch] [part 2]",
+            "HookName": "AddGameTags",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "onDedicatedUGCInstalled",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "pyqn4hXuISQNY2nBUB2m5f2NWspXgM3iV/vHsLz+vNs=",
+            "BaseHookName": "AddGameTags [patch] [part 1]",
+            "HookCategory": "_Patches"
           }
         }
       ],
