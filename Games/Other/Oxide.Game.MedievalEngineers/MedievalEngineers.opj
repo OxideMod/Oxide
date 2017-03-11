@@ -93,7 +93,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 2,
+            "InjectionIndex": 0,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -112,14 +112,14 @@
               ]
             },
             "MSILHash": "EHnIJXeENtCPdSJ+AgJ37G12InPNpshbqxsxjHr1rIE=",
-            "BaseHookName": "DisableConsole [patch]",
+            "BaseHookName": null,
             "HookCategory": "Server"
           }
         },
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 1,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -151,7 +151,7 @@
               ]
             },
             "MSILHash": "EHnIJXeENtCPdSJ+AgJ37G12InPNpshbqxsxjHr1rIE=",
-            "BaseHookName": null,
+            "BaseHookName": "InitOxide [internal]",
             "HookCategory": "_Patches"
           }
         }
