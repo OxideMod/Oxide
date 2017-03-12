@@ -85,7 +85,7 @@ namespace Oxide.Game.Blackwake
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            var maxPlayers = 0;
+            /*var maxPlayers = 0;
             switch (FCNGAAPKKEO.CPEDGJLHPFP)
             {
                 case 1:
@@ -109,7 +109,7 @@ namespace Oxide.Game.Blackwake
 
             Interface.Oxide.ServerConsole.Title = () => $"{GameMode.KGGCHDAHENK.FDHEIBCAAOH.Count() - 1} | {FCNGAAPKKEO.MHBDLHCODIH}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => FCNGAAPKKEO.MHBDLHCODIH;
+            Interface.Oxide.ServerConsole.Status1Left = () => FCNGAAPKKEO.MHBDLHCODIH;*/
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -118,7 +118,7 @@ namespace Oxide.Game.Blackwake
                 return string.Concat(fps, "fps, ", uptime);
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $"{GameMode.KGGCHDAHENK.FDHEIBCAAOH.Count() - 1}/{maxPlayers} players";
+            //Interface.Oxide.ServerConsole.Status2Left = () => $"{GameMode.KGGCHDAHENK.FDHEIBCAAOH.Count() - 1}/{maxPlayers} players";
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (!NetUtils.NManager.isNetworkActive) return "not connected";
@@ -143,7 +143,7 @@ namespace Oxide.Game.Blackwake
                 var map = SceneManager.GetActiveScene().name == "Menu" ? "Lobby" : SceneManager.GetActiveScene().name;
                 return $"{map} [{GlobalManager.I.GameMode.Name.ToLower()}, ?? lives]";
             };*/
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {SteamAuth.NPCPMKJLAJN()}";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version}"/* for {SteamAuth.NPCPMKJLAJN()}"*/;
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 

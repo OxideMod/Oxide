@@ -106,6 +106,8 @@
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\Oxide.Core.CSharp.dll" />
+    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy') And '$(OS)' != 'Unix'" />
   </Target>
   <Target Name="Deploy">

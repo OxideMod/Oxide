@@ -40,8 +40,8 @@ namespace Oxide.Game.Blackwake
         private void Init()
         {
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH);
-            RemoteLogger.SetTag("version", SteamAuth.NPCPMKJLAJN());
+            //RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH);
+            //RemoteLogger.SetTag("version", SteamAuth.NPCPMKJLAJN());
 
             if (permission.IsLoaded)
             {
