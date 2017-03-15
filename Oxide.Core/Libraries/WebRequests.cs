@@ -351,6 +351,23 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
+        /// Enqueues a put request
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="body"></param>
+        /// <param name="callback"></param>
+        /// <param name="owner"></param>
+        /// <param name="headers"></param>
+        /// <param name="timeout"></param>
+        [LibraryFunction("EnqueuePut")]
+        public void EnqueuePut(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
+        {
+            var request = new WebRequest(url, callback, owner) { Method = "PUT", RequestHeaders = headers, Timeout = timeout, Body = body };
+            lock (syncroot) queue.Enqueue(request);
+            workevent.Set();
+        }
+
+        /// <summary>
         /// Returns the current queue length
         /// </summary>
         /// <returns></returns>
