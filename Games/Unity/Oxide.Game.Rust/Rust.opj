@@ -4085,6 +4085,32 @@
             "BaseHookName": "OnPlayerBanned [eac, player]",
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 15,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l2, l1",
+            "HookTypeName": "Simple",
+            "Name": "OnItemAction",
+            "HookName": "OnItemAction",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerInventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "ItemCmd",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "2/sjV0lcTAXrBODoMZA8/W+CF0x/Wm/kM7MMCXusefM=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
         }
       ],
       "Modifiers": [
