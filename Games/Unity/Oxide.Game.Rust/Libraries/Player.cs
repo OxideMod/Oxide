@@ -30,7 +30,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Gets the player's IP address
         /// </summary>
-        public string Address(BasePlayer player) => Address(player.net.connection);
+        public string Address(BasePlayer player) => player?.net?.connection != null ? Address(player.net.connection) : null;
 
         /// <summary>
         /// Gets the player's average network ping
