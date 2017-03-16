@@ -8,13 +8,13 @@ Thank you for contributing by opening an issue. We try to keep the Oxide issue t
   * For help or issues with a specific plugin, please use the plugin's support thread on our [forums](http://oxidemod.org/). 
   * For general help, visit our [forums](http://oxidemod.org/) and create a new thread if no existing, recent thread matches.
 
-### Step 2: Describe your setup:
+### Step 2: Describe your setup
 
   * Oxide version _("latest" is not a version)_: _____
   * Game name and version: _____
   * OS version: _____
 
-### Step 3: Describe the problem:
+### Step 3: Describe the problem
 
 #### Steps to reproduce:
 
@@ -41,3 +41,6 @@ Thank you for contributing by opening an issue. We try to keep the Oxide issue t
 #### Other references:
 
 Are there any other GitHub issues _(open or closed)_, Pull Requests, or forum threads that should be linked here?
+
+After reviewing the steps above you can delete this text. Thanks again for contributing!
+
