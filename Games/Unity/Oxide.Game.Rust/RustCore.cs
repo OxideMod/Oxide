@@ -745,7 +745,7 @@ namespace Oxide.Game.Rust
         {
             if (player.Id != "server_console")
             {
-                var format = Covalence.FormatText("[+15]Server is running [b][#ffb658]Oxide {0}[/#][/b] and [b][#ee715c]{1} {2}[/#][/b][/+]");
+                var format = Covalence.FormatText("Server is running [#ffb658]Oxide {0}[/#] and [#ee715c]{1} {2}[/#]");
                 player.Reply(format, OxideMod.Version, Covalence.GameName, Server.Version);
             }
             else
