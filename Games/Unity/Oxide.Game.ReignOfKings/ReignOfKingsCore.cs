@@ -967,7 +967,7 @@ namespace Oxide.Game.ReignOfKings
         private static void ReplyWith(Player player, string message)
         {
             if (player.IsServer) Console.AddMessage(message);
-            else EventManager.CallEvent(new PlayerErrorEvent(player.Id, message));
+            else EventManager.CallEvent(new PlayerMessageEvent(player.Id, message));
         }
 
         /// <summary>
