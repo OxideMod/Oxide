@@ -4111,6 +4111,58 @@
             "BaseHookName": null,
             "HookCategory": "Item"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 19,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0.player, l0",
+            "HookTypeName": "Simple",
+            "Name": "CanAssignBed",
+            "HookName": "CanAssignBed",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SleepingBag",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "AssignToFriend",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "bBEV+Qv0idxo2uNbcj+lL+yzz9jefCVSd1rT15dkQww=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 23,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.player, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseLock [code, unlock]",
+            "HookName": "CanUseLock",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeLock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "UnlockWithCode",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "Je/gEcXKHNGwD0N+uK4ol2q/7L9/5iFV+Ef/HnE130w=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
         }
       ],
       "Modifiers": [
