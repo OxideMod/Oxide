@@ -4120,8 +4120,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0.player, l0",
             "HookTypeName": "Simple",
-            "Name": "CanAssignBedToUser",
-            "HookName": "CanAssignBedToUser",
+            "Name": "CanAssignBed",
+            "HookName": "CanAssignBed",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SleepingBag",
             "Flagged": false,
@@ -4144,10 +4144,10 @@
             "InjectionIndex": 23,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0.player",
+            "ArgumentString": "a0.player, this",
             "HookTypeName": "Simple",
-            "Name": "CanUnlockCodeLock",
-            "HookName": "CanUnlockCodeLock",
+            "Name": "CanUseLock [code, unlock]",
+            "HookName": "CanUseLock",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CodeLock",
             "Flagged": false,
@@ -4161,7 +4161,7 @@
             },
             "MSILHash": "Je/gEcXKHNGwD0N+uK4ol2q/7L9/5iFV+Ef/HnE130w=",
             "BaseHookName": null,
-            "HookCategory": "Entity"
+            "HookCategory": "Structure"
           }
         }
       ],
