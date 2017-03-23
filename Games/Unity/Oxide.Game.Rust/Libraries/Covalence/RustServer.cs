@@ -66,7 +66,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the network protocol version of the server
         /// </summary>
-        public string Protocol => global::Rust.Protocol.network.ToString();
+        public string Protocol => global::Rust.Protocol.printable;
 
         /// <summary>
         /// Gets the language set by the server
