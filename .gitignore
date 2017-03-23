@@ -197,4 +197,7 @@ FakesAssemblies/
 !**/Dependencies/Linux/x64/
 !**/Dependencies/Linux/x86/
 Bundles/
+.idea/
 .deploy
+.userprefs
+
