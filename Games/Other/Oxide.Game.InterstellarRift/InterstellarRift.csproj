@@ -93,11 +93,11 @@
     <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" />
     <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" DestinationFiles="$(BundleDir)\$(GameName)\Build\protobuf-net.dll" />
     <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" />
-    <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy') And '$(OS)' != 'Unix'" />
+    <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
-    <Exec Command="start /b /wait taskkill /f /im IR.exe /fi &quot;memusage gt 2&quot;" />
-    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" />
+    <Exec Command="start /b /wait taskkill /f /im IR.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <ReadLinesFromFile File="$(ProjectDir).deploy">
       <Output PropertyName="DeployPath" TaskParameter="Lines" />
     </ReadLinesFromFile>
