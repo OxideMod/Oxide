@@ -401,6 +401,17 @@ namespace Oxide.Game.Hurtworld
             return session != null ? Interface.Call("OnPlayerSuicide", session) : null;
         }
 
+        /// <summary>
+        /// Called when the player attempts to suicide
+        /// </summary>
+        /// <param name="player"></param>
+        [HookMethod("IOnPlayerVoice")]
+        private object IOnPlayerVoice(uLink.NetworkPlayer player)
+        {
+            var session = Player.Find(player);
+            return session != null ? Interface.Call("OnPlayerVoice", session) : null;
+        }
+
         #endregion
 
         #region Structure Hooks
@@ -485,10 +496,10 @@ namespace Oxide.Game.Hurtworld
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnEnterVehicle")]
-        private object IOnEnterVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle)
+        private void IOnEnterVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle)
         {
             var session = Player.Find(player);
-            return session != null ? Interface.Call("OnEnterVehicle", session, vehicle) : null;
+            Interface.Call("OnEnterVehicle", session, vehicle);
         }
 
         /// <summary>
@@ -498,10 +509,45 @@ namespace Oxide.Game.Hurtworld
         /// <param name="vehicle"></param>
         /// <returns></returns>
         [HookMethod("IOnExitVehicle")]
-        private object IOnExitVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle)
+        private void IOnExitVehicle(uLink.NetworkPlayer player, VehiclePassenger vehicle)
         {
             var session = Player.Find(player);
-            return session != null ? Interface.Call("OnExitVehicle", session, vehicle) : null;
+            Interface.Call("OnExitVehicle", session, vehicle);
+        }
+
+        #endregion
+
+        #region Entity Hooks
+
+        [HookMethod("IOnTakeDamage")]
+        private void IOnTakeDamage(EntityEffectFluid effect, EntityStats target, EntityEffectSourceData source)
+        {
+            if (source.Value == 0) return;
+
+            switch (effect.GetEffectType())
+            {
+                case EEntityFluidEffectType.PlayerToCreatureDamage:
+                    var ent = target.GetComponent<AIEntity>();
+                    if (ent != null)
+                        Interface.CallHook("OnEntityTakeDamage", ent, source);
+                    break;
+                case EEntityFluidEffectType.StructureDamage:
+                    var structure = target.GetComponent<AttachmentData>();
+                    if (structure != null)
+                        Interface.CallHook("OnStructureTakeDamage", structure, source);
+                    break;
+                case EEntityFluidEffectType.CreatureToPlayerDamage:
+                case EEntityFluidEffectType.Damage:
+                case EEntityFluidEffectType.FallDamageProxy:
+                    var entity = target.GetComponent<AIEntity>();
+                    if (entity != null) break;
+
+                    var player = target.GetComponent<uLinkNetworkView>().owner;
+                    var session = GameManager.Instance.GetSession(player);
+                    if (session != null)
+                        Interface.CallHook("OnPlayerTakeDamage", session, source);
+                    break;
+            }
         }
 
         #endregion
