@@ -4500,6 +4500,58 @@
             "BaseHookName": null,
             "HookCategory": "Item"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 4,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0.player",
+            "HookTypeName": "Simple",
+            "Name": "CanSeeStash",
+            "HookName": "CanSeeStash",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "StashContainer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RPC_WantsUnhide",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "eEiw/eS8hgHee6ZeXyfwCbMDStJI0aeQvxd/BRVxP4I=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0.player",
+            "HookTypeName": "Simple",
+            "Name": "CanHideStash",
+            "HookName": "CanHideStash",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "StashContainer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RPC_HideStash",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "yg+1x4pMkW/iuB2HZHwPdA5KTyMdjgD77HqfD/rJIXc=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
         }
       ],
       "Modifiers": [
