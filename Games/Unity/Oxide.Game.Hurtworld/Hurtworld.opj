@@ -213,10 +213,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 3,
+            "InjectionIndex": 52,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this.AttachedIdentity.ConnectedSession",
+            "ArgumentString": "this.AttachedIdentity.ConnectedSession, l2",
             "HookTypeName": "Simple",
             "Name": "OnPlayerRespawn",
             "HookName": "OnPlayerRespawn",
@@ -376,7 +376,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 13,
-            "ReturnBehavior": 1,
+            "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.AttachedIdentity.ConnectedSession, a1",
             "HookTypeName": "Simple",
@@ -942,6 +942,622 @@
             "MSILHash": "SjFa+AFDDr1n2D0sYjVXUUeD+Yyte0l25wSo4yNvp7Y=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1.sender",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerVoice [internal]",
+            "HookName": "IOnPlayerVoice",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VoiceChatServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "SendToServer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.BitStream",
+                "uLink.NetworkMessageInfo"
+              ]
+            },
+            "MSILHash": "RW+/6qn4TvWSUb3aYaWSz+blsKlsCunAtMkEdhnSL5o=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 30,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemDrop",
+            "HookName": "OnItemDrop",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Inventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DropSlot",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "UnityEngine.Vector3",
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "XRQ/swP98t731YcY6ujJtlz0Bn/h837h97S7f2GrpOM=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 9,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlantGather",
+            "HookName": "OnPlantGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GrowingPlantUsable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnBeginUse",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "I5fgDm/j4l+QvWiahF1YZ351c4Ppr/RhPmQlYwpHH3E=",
+            "BaseHookName": null,
+            "HookCategory": "Resource"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 14,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1, this, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemEquipped",
+            "HookName": "OnItemEquipped",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EquippedHandlerServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "EquipGear",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "ItemInstance"
+              ]
+            },
+            "MSILHash": "nsmAqELXcjvRGIbK9DR8hUOpsS92XaQkXOLS49n1/DA=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 18,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1, this, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemSelected",
+            "HookName": "OnItemSelected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EquippedHandlerServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "EquipItem",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "ItemInstance",
+                "System.Byte"
+              ]
+            },
+            "MSILHash": "/XJA9g580XZoPFiqApBxgOshzvLs3HOMDDDUiz8FZNE=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 49,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a1",
+            "HookTypeName": "Simple",
+            "Name": "OnEntityDeath",
+            "HookName": "OnEntityDeath",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AnimalStatManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "StatsOnEventPublished",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityEventData",
+                "EntityEffectSourceData"
+              ]
+            },
+            "MSILHash": "ywQ+yUCfQw/ban0lRsqdhpTrY2RdoKy2WtXGbOk2JKA=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this._storage, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnItemPickup",
+            "HookName": "OnItemPickup",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "WorldItemUsableServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnBeginUseEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "XuHcl7OGAIlYhdNyJHuE10i9OqOQlHjrlK/zNOfbVkw=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 14,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a3, this, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnDispenserGather",
+            "HookName": "OnDispenserGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ResourceNode",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "GenerateItems",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.Vector3",
+                "UnityEngine.Vector3",
+                "System.Int32&",
+                "UnityEngine.GameObject"
+              ]
+            },
+            "MSILHash": "Ulf9hBCJHv5K5Vzp8Hqj2aqIL0ZpNJU9N4kVQehE8GU=",
+            "BaseHookName": null,
+            "HookCategory": "Resource"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 5,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0, l0",
+            "HookTypeName": "Simple",
+            "Name": "OnCollectiblePickup",
+            "HookName": "OnCollectiblePickup",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "LootOnPickup",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnBeginUseEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WorldItemInteractServer"
+              ]
+            },
+            "MSILHash": "pZtobnD9iNxCEFduy7GZBRVH5jWGBxgeN9GfsS18udQ=",
+            "BaseHookName": null,
+            "HookCategory": "Resource"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": " a1.entitySource, this, l2",
+            "HookTypeName": "Simple",
+            "Name": "OnDispenserGather [Single]",
+            "HookName": "OnDispenserGather",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ResourceNodeOneRoll",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "_stats_OnEventPublished",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityEventData",
+                "EntityEffectSourceData"
+              ]
+            },
+            "MSILHash": "GokvKdM1DOAzME7pg1J3sUO1/jsc7Gy/VFM06PfW+sw=",
+            "BaseHookName": null,
+            "HookCategory": "Resource"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 44,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0, a1",
+            "HookTypeName": "Simple",
+            "Name": "IOnTakeDamage",
+            "HookName": "IOnTakeDamage",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 78,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EntityEffectSourceData|Value"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "IOnTakeDamagePatch1",
+            "HookName": "IOnTakeDamagePatch1",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": "IOnTakeDamage",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 91,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EntityEffectSourceData|Value"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "IOnTakeDamagePatch2",
+            "HookName": "IOnTakeDamagePatch2",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": "IOnTakeDamagePatch1",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 114,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EntityEffectSourceData|Value"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "IOnTakeDamagePatch3",
+            "HookName": "IOnTakeDamagePatch3",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": "IOnTakeDamagePatch2",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 121,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EntityEffectSourceData|Value"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "IOnTakeDamagePatch4",
+            "HookName": "IOnTakeDamagePatch4",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": "IOnTakeDamagePatch3",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 132,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EntityEffectSourceData|Value"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "IOnTakeDamagePatch5",
+            "HookName": "IOnTakeDamagePatch5",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": "IOnTakeDamagePatch4",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 145,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EntityEffectSourceData|Value"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "IOnTakeDamagePatch6",
+            "HookName": "IOnTakeDamagePatch6",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": "IOnTakeDamagePatch5",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 159,
+            "RemoveCount": 2,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_2",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EntityEffectSourceData|Value"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "IOnTakeDamagePatch7",
+            "HookName": "IOnTakeDamagePatch7",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "EntityEffectFluid",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Apply",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EntityStats",
+                "EntityEffectSourceData",
+                "EHitboxItem",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "dSUwmUOpvOcbINIeg353LOmf3/tPju38qmaI92sTjrk=",
+            "BaseHookName": "IOnTakeDamagePatch6",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 47,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "callvirt",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|Inventory|Invalidate"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "OnItemDropPatch",
+            "HookName": "OnItemDropPatch",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Inventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DropSlot",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "UnityEngine.Vector3",
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "XRQ/swP98t731YcY6ujJtlz0Bn/h837h97S7f2GrpOM=",
+            "BaseHookName": "OnItemDrop",
+            "HookCategory": "_Patches"
           }
         }
       ],
