@@ -3413,7 +3413,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 18,
+            "InjectionIndex": 17,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
