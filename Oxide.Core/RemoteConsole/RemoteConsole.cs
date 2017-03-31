@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries.Covalence;
@@ -11,8 +11,8 @@ namespace Oxide.Core.RemoteConsole
     {
         #region Initialization
 
-        private readonly Covalence covalence = Interface.Oxide.GetLibrary<Covalence>();
         private readonly OxideConfig.OxideRcon config = Interface.Oxide.Config.Rcon;
+        private readonly Covalence covalence = Interface.Oxide.GetLibrary<Covalence>();
         private RconListener listener;
         private WebSocketServer server;
 
@@ -33,7 +33,7 @@ namespace Oxide.Core.RemoteConsole
             {
                 server = new WebSocketServer(config.Port);
                 server.WaitTime = TimeSpan.FromSeconds(5.0);
-                server.AddWebSocketService($"/{config.Password}", () => listener = new RconListener());
+                server.AddWebSocketService($"/{config.Password}", () => listener = new RconListener(this));
                 server.Start();
 
                 Interface.Oxide.LogInfo($"[Rcon] Server started successfully on port {server.Port}");
@@ -62,6 +62,17 @@ namespace Oxide.Core.RemoteConsole
         #region Message Handling
 
         /// <summary>
+        /// Broadcast a message to all connected clients
+        /// </summary>
+        /// <param name="message"></param>
+        public void SendMessage(RemoteMessage message)
+        {
+            if (message == null || server == null || !server.IsListening || listener == null) return;
+
+            listener.SendMessage(message);
+        }
+
+        /// <summary>
         /// Handles messages sent from the clients
         /// </summary>
         /// <param name="e"></param>
@@ -76,21 +87,23 @@ namespace Oxide.Core.RemoteConsole
                     var commands = message.Message.Split(' ');
                     covalence.Server.Command(commands[0], commands.Length > 1 ? commands.Skip(1).ToArray() : null);
                     break;
+
                 case "chat":
                     covalence.Server.Broadcast($"{config.ChatPrefix}: {message.Message}");
                     break;
+
+                case "players":
+                    var format = "ID: {0};NAME: {1};IP: {2};HP: {3}/{4};PING: {5};LANG: {6}";
+                    var list = string.Empty;
+                    foreach (var player in covalence.Players.Connected)
+                        list += string.Format(format, player.Id, player.Name, player.Address, player.Health, player.MaxHealth, player.Ping, player.Language.TwoLetterISOLanguageName);
+                    SendMessage(RemoteMessage.CreateMessage(list));
+                    break;
+
+                default:
+                    SendMessage(RemoteMessage.CreateMessage("Unknown command"));
+                    break;
             }
-        }
-
-        /// <summary>
-        /// Broadcast a message to all connected clients
-        /// </summary>
-        /// <param name="message"></param>
-        public void SendMessage(RemoteMessage message)
-        {
-            if (message == null || server == null || !server.IsListening || listener == null) return;
-
-            listener.SendMessage(message);
         }
 
         #endregion
@@ -99,20 +112,23 @@ namespace Oxide.Core.RemoteConsole
 
         public class RconListener : WebSocketBehavior
         {
-            public RconListener()
+            private readonly RemoteConsole Parent;
+
+            public RconListener(RemoteConsole parent)
             {
                 IgnoreExtensions = true;
+                Parent = parent;
             }
 
-            protected override void OnMessage(MessageEventArgs e) => OnMessage(e);
-
-            protected override void OnOpen() => Interface.Oxide.LogInfo($"[Rcon] New connection from {Context.UserEndPoint.Address}");
+            public void SendMessage(RemoteMessage message) => Sessions.Broadcast(message.ToJSON());
 
             protected override void OnClose(CloseEventArgs e) => Interface.Oxide.LogInfo($"[Rcon] Connection from {Context.UserEndPoint.Address} closed: {e.Reason} ({e.Code}");
 
             protected override void OnError(ErrorEventArgs e) => Interface.Oxide.LogException(e.Message, e.Exception);
 
-            public void SendMessage(RemoteMessage message) => Sessions.Broadcast(message.ToJSON());
+            protected override void OnMessage(MessageEventArgs e) => Parent?.OnMessage(e);
+
+            protected override void OnOpen() => Interface.Oxide.LogInfo($"[Rcon] New connection from {Context.UserEndPoint.Address}");
         }
 
         #endregion
