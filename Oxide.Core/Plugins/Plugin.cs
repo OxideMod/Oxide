@@ -73,6 +73,11 @@ namespace Oxide.Core.Plugins
         public bool HasConfig { get; protected set; }
 
         /// <summary>
+        /// Gets if this plugin has a lang file or not
+        /// </summary>
+        public bool HasMessages { get; protected set; }
+
+        /// <summary>
         /// Gets if this plugin should never be unloaded
         /// </summary>
         private bool isCorePlugin;
@@ -181,6 +186,7 @@ namespace Oxide.Core.Plugins
         {
             Manager = manager;
             if (HasConfig) LoadConfig();
+            if (HasMessages) LoadDefaultMessages();
             OnAddedToManager?.Invoke(this, manager);
             RegisterWithCovalence();
         }
@@ -357,6 +363,15 @@ namespace Oxide.Core.Plugins
                 RaiseError($"Failed to save config file (does the config have illegal objects in it?) ({ex.Message})");
             }
         }
+
+        #endregion
+
+        #region Lang
+
+        /// <summary>
+        /// Populates the lang file(s) with default messages
+        /// </summary>
+        protected virtual void LoadDefaultMessages() => CallHook("LoadDefaultMessages", null);
 
         #endregion
 
