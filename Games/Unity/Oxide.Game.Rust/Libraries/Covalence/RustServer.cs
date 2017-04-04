@@ -101,51 +101,12 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="reason"></param>
-        /// <param name="duration"></param>
-        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
-        {
-            if (IsBanned(id)) return;
-
-            ServerUsers.Set(ulong.Parse(id), ServerUsers.UserGroup.Banned, Name, reason);
-            ServerUsers.Save();
-            //if (IsConnected) Kick(reason); // TODO: Implement if possible
-        }
-
-        /// <summary>
-        /// Gets the amount of time remaining on the user's ban
-        /// </summary>
-        /// <param name="id"></param>
-        public TimeSpan BanTimeRemaining(string id) => IsBanned(id) ? TimeSpan.MaxValue : TimeSpan.Zero;
-
-        /// <summary>
-        /// Gets if the user is banned
-        /// </summary>
-        /// <param name="id"></param>
-        public bool IsBanned(string id) => ServerUsers.Is(ulong.Parse(id), ServerUsers.UserGroup.Banned);
-
-        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         public void Save()
         {
             ConVar.Server.save(null);
             ConVar.Server.writecfg(null);
-        }
-
-        /// <summary>
-        /// Unbans the user
-        /// </summary>
-        /// <param name="id"></param>
-        public void Unban(string id)
-        {
-            if (!IsBanned(id)) return;
-
-            ServerUsers.Remove(ulong.Parse(id));
-            ServerUsers.Save();
         }
 
         #endregion
