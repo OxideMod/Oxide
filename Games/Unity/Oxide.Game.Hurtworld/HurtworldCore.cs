@@ -522,7 +522,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnTakeDamage")]
         private void IOnTakeDamage(EntityEffectFluid effect, EntityStats target, EntityEffectSourceData source)
         {
-            if (source.Value == 0) return;
+            if (effect == null || target == null || source?.Value == 0) return;
 
             switch (effect.GetEffectType())
             {
@@ -539,11 +539,8 @@ namespace Oxide.Game.Hurtworld
                 case EEntityFluidEffectType.CreatureToPlayerDamage:
                 case EEntityFluidEffectType.Damage:
                 case EEntityFluidEffectType.FallDamageProxy:
-                    var entity = target.GetComponent<AIEntity>();
-                    if (entity != null) break;
-
-                    var player = target.GetComponent<uLinkNetworkView>().owner;
-                    var session = GameManager.Instance.GetSession(player);
+                    if (target.GetComponent<AIEntity>() != null) break;
+                    var session = GameManager.Instance.GetSession(target.GetComponent<uLinkNetworkView>().owner);
                     if (session != null)
                         Interface.CallHook("OnPlayerTakeDamage", session, source);
                     break;

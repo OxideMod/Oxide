@@ -99,56 +99,9 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="reason"></param>
-        /// <param name="duration"></param>
-        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
-        {
-            // Check if already banned
-            if (IsBanned(id)) return;
-
-            // Ban and kick user
-            ServerAdministrator.AddBlacklist(int.Parse(id));
-            //if (IsConnected)
-            //{
-            //    player.RPCOthers(EPacketType.PT_InGame_LoginBan); // TODO: Needed?
-            //    player.RPCOthers(EPacketType.PT_InGame_AddBlackList); // TODO: Needed?
-            //    Kick(reason);
-            // }
-        }
-
-        /// <summary>
-        /// Gets the amount of time remaining on the user's ban
-        /// </summary>
-        /// <param name="id"></param>
-        public TimeSpan BanTimeRemaining(string id) => TimeSpan.MaxValue;
-
-        /// <summary>
-        /// Gets if the user is banned
-        /// </summary>
-        /// <param name="id"></param>
-        public bool IsBanned(string id) => ServerAdministrator.IsBlack(int.Parse(id));
-
-        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         public void Save() => LoadManager.Save();
-
-        /// <summary>
-        /// Unbans the user
-        /// </summary>
-        /// <param name="id"></param>
-        public void Unban(string id)
-        {
-            // Check if unbanned already
-            if (!IsBanned(id)) return;
-
-            // Set to unbanned
-            ServerAdministrator.DeleteBlacklist(int.Parse(id));
-            //player.RPCOthers(EPacketType.PT_InGame_DelBlackList); // TODO: Needed?
-        }
 
         #endregion
 

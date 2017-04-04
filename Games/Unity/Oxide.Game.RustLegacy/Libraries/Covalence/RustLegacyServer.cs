@@ -95,50 +95,9 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="reason"></param>
-        /// <param name="duration"></param>
-        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
-        {
-            // Check if already banned
-            if (IsBanned(id)) return;
-
-            // Ban and kick user
-            BanList.Add(ulong.Parse(id));
-            //if (IsConnected) Kick(reason); // TODO: Implement if possible
-        }
-
-        /// <summary>
-        /// Gets the amount of time remaining on the user's ban
-        /// </summary>
-        /// <param name="id"></param>
-        public TimeSpan BanTimeRemaining(string id) => TimeSpan.MaxValue;
-
-        /// <summary>
-        /// Gets if the user is banned
-        /// </summary>
-        /// <param name="id"></param>
-        public bool IsBanned(string id) => BanList.Contains(ulong.Parse(id));
-
-        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         public void Save() => ServerSaveManager.AutoSave();
-
-        /// <summary>
-        /// Unbans the user
-        /// </summary>
-        /// <param name="id"></param>
-        public void Unban(string id)
-        {
-            // Check if unbanned already
-            if (!IsBanned(id)) return;
-
-            // Set to unbanned
-            BanList.Remove(ulong.Parse(id));
-        }
 
         #endregion
 

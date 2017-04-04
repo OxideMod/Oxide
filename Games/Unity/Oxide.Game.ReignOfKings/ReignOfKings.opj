@@ -1,6 +1,6 @@
 {
   "Name": "Reign of Kings",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\ReignOfKings\\ROK_Data\\Managed",
+  "TargetDirectory": "W:\\Servers\\Unity\\ReignOfKings\\ROK_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

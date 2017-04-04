@@ -226,10 +226,10 @@ namespace Oxide.Plugins
             Name = name;
             Filename = path;
 
-            var info_attributes = GetType().GetCustomAttributes(typeof(InfoAttribute), true);
-            if (info_attributes.Length > 0)
+            var infoAttributes = GetType().GetCustomAttributes(typeof(InfoAttribute), true);
+            if (infoAttributes.Length > 0)
             {
-                var info = info_attributes[0] as InfoAttribute;
+                var info = infoAttributes[0] as InfoAttribute;
                 Title = info.Title;
                 Author = info.Author;
                 Version = info.Version;
@@ -248,8 +248,11 @@ namespace Oxide.Plugins
                 Description = info.Description;
             }
 
-            var method = GetType().GetMethod("LoadDefaultConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            HasConfig = method.DeclaringType != typeof(Plugin);
+            var config = GetType().GetMethod("LoadDefaultConfig", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            HasConfig = config.DeclaringType != typeof(Plugin);
+
+            var messages = GetType().GetMethod("LoadDefaultMessages", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            HasMessages = messages.DeclaringType != typeof(Plugin);
 
             return true;
         }

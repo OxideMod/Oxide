@@ -61,35 +61,9 @@ namespace Oxide.Core.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="reason"></param>
-        /// <param name="duration"></param>
-        void Ban(string id, string reason, TimeSpan duration = default(TimeSpan));
-
-        /// <summary>
-        /// Gets the amount of time remaining on the user's ban
-        /// </summary>
-        /// <param name="id"></param>
-        TimeSpan BanTimeRemaining(string id);
-
-        /// <summary>
-        /// Gets if the user is banned
-        /// </summary>
-        /// <param name="id"></param>
-        bool IsBanned(string id);
-
-        /// <summary>
         /// Saves the server and any related information
         /// </summary>
         void Save();
-
-        /// <summary>
-        /// Unbans the user
-        /// </summary>
-        /// <param name="id"></param>
-        void Unban(string id);
 
         #endregion
 
