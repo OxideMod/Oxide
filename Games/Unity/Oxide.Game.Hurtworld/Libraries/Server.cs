@@ -10,6 +10,44 @@ namespace Oxide.Game.Hurtworld.Libraries
         internal static readonly ChatManagerServer ChatManager = ChatManagerServer.Instance;
         internal static readonly ConsoleManager ConsoleManager = ConsoleManager.Instance;
 
+        #region Administration
+
+        /// <summary>
+        /// Bans the player for the specified reason and duration
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        /// <param name="duration"></param>
+        public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
+        {
+            // Check if already banned
+            if (IsBanned(id)) return;
+
+            // Ban and kick user
+            BanManager.AddBan(Convert.ToUInt64(id));
+        }
+
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
+        /// <param name="id"></param>
+        public bool IsBanned(string id) => BanManager.IsBanned(Convert.ToUInt64(id));
+
+        /// <summary>
+        /// Unbans the player
+        /// </summary>
+        /// <param name="id"></param>
+        public void Unban(string id)
+        {
+            // Check if unbanned already
+            if (!IsBanned(id)) return;
+
+            // Set to unbanned
+            BanManager.RemoveBan(Convert.ToUInt64(id));
+        }
+
+        #endregion
+
         #region Chat and Commands
 
         /// <summary>

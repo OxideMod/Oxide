@@ -531,16 +531,13 @@ namespace Oxide.Game.Hurtworld
                     if (ent != null)
                         Interface.CallHook("OnEntityTakeDamage", ent, source);
                     break;
-                case EEntityFluidEffectType.StructureDamage:
-                    var structure = target.GetComponent<AttachmentData>();
-                    if (structure != null)
-                        Interface.CallHook("OnStructureTakeDamage", structure, source);
-                    break;
                 case EEntityFluidEffectType.CreatureToPlayerDamage:
                 case EEntityFluidEffectType.Damage:
                 case EEntityFluidEffectType.FallDamageProxy:
                     if (target.GetComponent<AIEntity>() != null) break;
-                    var session = GameManager.Instance.GetSession(target.GetComponent<uLinkNetworkView>().owner);
+                    var networkView = target.GetComponent<uLinkNetworkView>();
+                    if (networkView == null) break;
+                    var session = GameManager.Instance.GetSession(networkView.owner);
                     if (session != null)
                         Interface.CallHook("OnPlayerTakeDamage", session, source);
                     break;
