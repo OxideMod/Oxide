@@ -2581,7 +2581,7 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 13,
-            "ReturnBehavior": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": " this.item, a0.player",
             "HookTypeName": "Simple",
@@ -4577,6 +4577,181 @@
             "MSILHash": "hysJw0QzFR9Ng+e2IQ1dmwtEwKh3Vnq9YFvpRA1Twxc=",
             "BaseHookName": null,
             "HookCategory": "Item"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 32,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|Recycler|HasRecyclable"
+              },
+              {
+                "OpCode": "brtrue",
+                "OpType": "Instruction",
+                "Operand": 32
+              },
+              {
+                "OpCode": "ldarg_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|Recycler|StopRecycling"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "OnRecycleItem [patch]",
+            "HookName": "OnRecycleItem [patch]",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Recycler",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RecycleThink",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "CX9XZc/Z2U4RYl2ENz/Uwok7jhg0U78kqmfkotk3A1I=",
+            "BaseHookName": "OnRecycleItem",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 25,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|WorldItem|item"
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|Item|info"
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|ItemDefinition|stackable"
+              },
+              {
+                "OpCode": "ldc_i4_1",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "bgt",
+                "OpType": "Instruction",
+                "Operand": 25
+              },
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "CanCombineDroppedItem [patch]",
+            "HookName": "CanCombineDroppedItem [patch]",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DroppedItem",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnDroppedOn",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "DroppedItem"
+              ]
+            },
+            "MSILHash": "hysJw0QzFR9Ng+e2IQ1dmwtEwKh3Vnq9YFvpRA1Twxc=",
+            "BaseHookName": "CanCombineDroppedItem",
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 2,
+            "RemoveCount": 9,
+            "Instructions": [
+              {
+                "OpCode": "brtrue",
+                "OpType": "Instruction",
+                "Operand": 11
+              },
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "CanCombineDroppedItem [patch 2]",
+            "HookName": "CanCombineDroppedItem [patch 2]",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DroppedItem",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "OnCollision",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.Collision",
+                "BaseEntity"
+              ]
+            },
+            "MSILHash": "JmcV4KVLPtC1Um0tNbH+sd2C800D4kQqMLY3qHvBHBU=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 10,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnContainerDropItems",
+            "HookName": "OnContainerDropItems",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "DropUtil",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DropItems",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ItemContainer",
+                "UnityEngine.Vector3",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "53lawu9VHB6BV+RK8cHH8Frjgd0DcjjDE+sEPhOPoGk=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
           }
         }
       ],
