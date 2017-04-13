@@ -1281,7 +1281,7 @@
             "InjectionIndex": 87,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0.player, l3",
+            "ArgumentString": "a0.player, l4",
             "HookTypeName": "Simple",
             "Name": "OnExplosiveThrown",
             "HookName": "OnExplosiveThrown",
