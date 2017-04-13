@@ -117,9 +117,9 @@ namespace Oxide.Game.GangBeasts
                 var bytesSent = 0;
                 foreach (var connection in NetUtils.GetMembers())
                 {
-                    int unused;
-                    int statsOut;
-                    int statsIn;
+                    //int unused;
+                    //int statsOut;
+                    //int statsIn;
                     //connection.GetStatsIn(out unused, out statsIn);
                     //connection.GetStatsOut(out unused, out unused, out statsOut, out unused);
                     //bytesReceived += statsIn;
