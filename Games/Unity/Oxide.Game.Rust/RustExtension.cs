@@ -38,7 +38,7 @@ namespace Oxide.Game.Rust
 
         internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
         {
-            "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine", "Rust.Data", "Rust.Global", "Rust.Workshop"
+            "ApexAI", "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine", "Rust.Data", "Rust.Global", "Rust.Workshop"
         };
 
         public override string[] WhitelistAssemblies => new[]

@@ -215,9 +215,9 @@ namespace Oxide.Game.Rust.Libraries
                 var message = $"{newPluginName} has replaced the '{command}' console command previously registered by {previousPluginName}";
                 Interface.Oxide.LogWarning(message);
 
-                ConsoleSystem.Index.Dict.Remove(consoleCommand.RustCommand.FullName);
-                if (parent == "global") ConsoleSystem.Index.GlobalDict.Remove(consoleCommand.RustCommand.Name);
-                ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
+                ConsoleSystem.Index.Server.Dict.Remove(consoleCommand.RustCommand.FullName);
+                if (parent == "global") ConsoleSystem.Index.Server.GlobalDict.Remove(consoleCommand.RustCommand.Name);
+                ConsoleSystem.Index.All = ConsoleSystem.Index.Server.Dict.Values.ToArray();
             }
 
             RustCommandSystem.RegisteredCommand covalenceCommand;
@@ -237,7 +237,7 @@ namespace Oxide.Game.Rust.Libraries
             cmd.AddCallback(plugin, callback);
 
             ConsoleSystem.Command rustCommand;
-            if (ConsoleSystem.Index.Dict.TryGetValue(fullName, out rustCommand))
+            if (ConsoleSystem.Index.Server.Dict.TryGetValue(fullName, out rustCommand))
             {
                 // This is a vanilla Rust command which has not yet been hooked by a plugin
                 if (rustCommand.Variable)
@@ -250,9 +250,9 @@ namespace Oxide.Game.Rust.Libraries
             }
 
             // Register the console command
-            ConsoleSystem.Index.Dict[fullName] = cmd.RustCommand;
-            if (parent == "global") ConsoleSystem.Index.GlobalDict[name] = cmd.RustCommand;
-            ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
+            ConsoleSystem.Index.Server.Dict[fullName] = cmd.RustCommand;
+            if (parent == "global") ConsoleSystem.Index.Server.GlobalDict[name] = cmd.RustCommand;
+            ConsoleSystem.Index.All = ConsoleSystem.Index.Server.Dict.Values.ToArray();
             consoleCommands[fullName] = cmd;
         }
 
@@ -287,15 +287,15 @@ namespace Oxide.Game.Rust.Libraries
                 // If this was originally a vanilla rust command then restore it, otherwise remove it
                 if (cmd.OriginalCallback != null)
                 {
-                    ConsoleSystem.Index.Dict[cmd.RustCommand.FullName].Call = cmd.OriginalCallback;
+                    ConsoleSystem.Index.Server.Dict[cmd.RustCommand.FullName].Call = cmd.OriginalCallback;
                     if (cmd.RustCommand.FullName.StartsWith("global."))
-                        ConsoleSystem.Index.GlobalDict[cmd.RustCommand.Name].Call = cmd.OriginalCallback;
+                        ConsoleSystem.Index.Server.GlobalDict[cmd.RustCommand.Name].Call = cmd.OriginalCallback;
                 }
                 else
                 {
-                    ConsoleSystem.Index.Dict.Remove(cmd.RustCommand.FullName);
-                    if (cmd.Name.StartsWith("global.")) ConsoleSystem.Index.GlobalDict.Remove(cmd.RustCommand.Name);
-                    ConsoleSystem.Index.All = ConsoleSystem.Index.Dict.Values.ToArray();
+                    ConsoleSystem.Index.Server.Dict.Remove(cmd.RustCommand.FullName);
+                    if (cmd.Name.StartsWith("global.")) ConsoleSystem.Index.Server.GlobalDict.Remove(cmd.RustCommand.Name);
+                    ConsoleSystem.Index.All = ConsoleSystem.Index.Server.Dict.Values.ToArray();
                 }
             }
 

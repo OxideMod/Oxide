@@ -68,7 +68,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <summary>
         /// Gets if the player is connected
         /// </summary>
-        public bool IsConnected(PlayerSession session) => session.Player.isConnected;
+        public bool IsConnected(PlayerSession session) => session?.Player != null ? session.Player.isConnected : false;
 
         /// <summary>
         /// Returns if the player is sleeping
