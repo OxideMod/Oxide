@@ -1539,7 +1539,7 @@
             "InjectionIndex": 166,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "a0.player, l7",
+            "ArgumentString": "a0.player, l8",
             "HookTypeName": "Simple",
             "Name": "OnRocketLaunched",
             "HookName": "OnRocketLaunched",
