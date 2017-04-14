@@ -1270,11 +1270,11 @@ namespace Oxide.Game.Rust
         [HookMethod("OnServerCommand")]
         private object OnServerCommand(ConsoleSystem.Arg arg)
         {
+            if (arg?.cmd == null) return null;
+            if (arg.cmd.FullName != "chat.say") return null;
+
             try
             {
-                if (arg?.cmd == null) return null;
-                if (arg.cmd.FullName != "chat.say") return null;
-
                 // Get the args
                 var str = arg.GetString(0);
                 if (string.IsNullOrEmpty(str)) return null;
@@ -1292,7 +1292,8 @@ namespace Oxide.Game.Rust
                 if (cmd == null) return null;
 
                 // Check if command is from a player
-                if (arg.Connection == null) return null;
+                var player = arg.Connection?.player as BasePlayer;
+                if (player == null) return null;
 
                 // Get the covalence player
                 var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
@@ -1307,10 +1308,7 @@ namespace Oxide.Game.Rust
                 if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
                 // Is it a regular chat command?
-                var player = arg.Connection.player as BasePlayer;
-                if (player == null)
-                    Interface.Oxide.LogDebug("Player is actually a {0}!", arg.Connection.player.GetType());
-                else if (!cmdlib.HandleChatCommand(player, cmd, args))
+                if (!cmdlib.HandleChatCommand(player, cmd, args))
                     iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
             }
             catch (NullReferenceException ex)
@@ -1323,23 +1321,16 @@ namespace Oxide.Game.Rust
                     string cmd;
                     string[] args;
                     ParseChatCommand(message, out cmd, out args);
-                    var iplayer = Covalence.PlayerManager.FindPlayerById(arg?.Connection.userid.ToString());
-                    var player = arg?.Connection?.player as BasePlayer;
-
                     sb.AppendLine("NullReferenceError in Oxide.Game.Rust when running OnServerCommand.");
-                    sb.AppendLine($"  Command: {arg?.cmd?.FullName}");
+                    sb.AppendLine($"  Command: {arg.cmd?.FullName}");
                     sb.AppendLine($"  Full command: {str}");
                     sb.AppendLine($"  Command: {cmd}");
                     sb.AppendLine($"  Arguments: {args.ToSentence()}");
-                    sb.AppendLine($"  Connection: {arg?.Connection}");
-                    sb.AppendLine($"  Connection ID: {arg?.Connection.userid}");
-                    sb.AppendLine($"  Covalence PlayerManager: {Covalence.PlayerManager}");
-                    sb.AppendLine($"  IPlayer: {iplayer}");
-                    sb.AppendLine($"  Covalence CommandHandler: {Covalence.CommandSystem}");
-                    sb.AppendLine($"  Covalence Command output: {Covalence.CommandSystem.HandleChatMessage(iplayer, str)}");
-                    sb.AppendLine($"  BasePlayer: {player}");
-                    sb.AppendLine($"  Regular Command library: {cmdlib}");
-                    sb.AppendLine($"  Regular Command output: {cmdlib.HandleChatCommand(player, cmd, args)}");
+                    sb.AppendLine($"  Connection: {arg.Connection}");
+                    sb.AppendLine($"  Connection ID: {arg.Connection?.userid}");
+                    sb.AppendLine($"  Connection player? {arg.Connection?.player != null}");
+                    sb.AppendLine($"  Connection player: {arg.Connection?.player}");
+                    sb.AppendLine($"  Connection player type: {arg.Connection?.player?.GetType()}");
                 }
                 catch
                 {
