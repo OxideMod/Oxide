@@ -37,7 +37,7 @@
       <HintPath>Patched\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>Patched\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="bolt">
       <HintPath>Dependencies\bolt.dll</HintPath>
