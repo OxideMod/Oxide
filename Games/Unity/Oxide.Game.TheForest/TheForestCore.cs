@@ -135,21 +135,6 @@ namespace Oxide.Game.TheForest
 
             // Update server console window and status bars
             TheForestExtension.ServerConsole();
-
-            // Save the level every X minutes
-            Interface.Oxide.GetLibrary<Timer>().Repeat(300f, 0, () =>
-            {
-                LevelSerializer.SaveGame("Game"); // TODO: Make optional
-                LevelSerializer.Checkpoint();
-                Interface.Oxide.LogInfo("Server has been saved!");
-            });
-
-            // Check if client should be disabled
-            //if (commandLine.HasVariable("batchmode") || commandLine.HasVariable("nographics"))
-            //{
-            TheForestExtension.DisableAudio();
-            TheForestExtension.DisableClient();
-            //}
         }
 
         /// <summary>
@@ -161,12 +146,8 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IOnServerShutdown")]
-        private void IOnServerShutdown()
-        {
-            Interface.Call("OnServerShutdown");
-            Interface.Oxide.OnShutdown();
-        }
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
 
@@ -292,90 +273,6 @@ namespace Oxide.Game.TheForest
 
         #endregion
 
-        #region Server Magic
-
-        /// <summary>
-        /// Initializes the server
-        /// </summary>
-        [HookMethod("InitServer")]
-        private void InitServer()
-        {
-            VirtualCursor.Instance.enabled = false;
-
-            Interface.Oxide.NextTick(() =>
-            {
-                var coop = UnityEngine.Object.FindObjectOfType<TitleScreen>();
-                coop.OnCoOp();
-                coop.OnMpHost();
-
-                // Check for saved games
-                if (LevelSerializer.SavedGames.Count > 0)
-                {
-                    coop.OnLoad();
-                    coop.OnSlotSelection((int)GameSetup.Slot);
-                }
-                else
-                {
-                    coop.OnNewGame(GameSetup.DifficultyModes.Normal); // TODO: Difficulty mode command-line option
-                }
-            });
-        }
-
-        /// <summary>
-        /// Sets up the coop lobby
-        /// </summary>
-        [HookMethod("ILobbySetup")]
-        private void ILobbySetup(Enum screen)
-        {
-            var type = typeof(CoopSteamNGUI).GetNestedTypes(BindingFlags.NonPublic).FirstOrDefault(x => x.IsEnum && x.Name.Equals("Screens"));
-            var enumValue = type?.GetField("LobbySetup", BindingFlags.Static | BindingFlags.Public)?.GetValue(null);
-            if (enumValue != null) if (Convert.ToInt32(screen) != (int)enumValue) return;
-
-            Interface.Oxide.NextTick(() =>
-            {
-                var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
-                coop.OnHostLobbySetup();
-            });
-        }
-
-        /// <summary>
-        /// Starts the server from lobby screen
-        /// </summary>
-        [HookMethod("ILobbyReady")]
-        private void ILobbyReady()
-        {
-            Interface.Oxide.NextTick(() =>
-            {
-                var coop = UnityEngine.Object.FindObjectOfType<CoopSteamNGUI>();
-                coop.OnHostStartGame();
-            });
-        }
-
-        /// <summary>
-        /// Skips the plane cut scene
-        /// </summary>
-        [HookMethod("ICutScene")]
-        private void ICutScene(TriggerCutScene scene)
-        {
-            Scene.TriggerCutScene.SpaceTut.SetActive(false);
-            Scene.TriggerCutScene.LightsFlight.SetActive(false);
-            Scene.TriggerCutScene.pmTrigger.SendEvent("toSkipOpening");
-            //Scene.TriggerCutScene.skipOpening = true;
-            scene.planeController.setPlanePosition();
-
-            if (Scene.TriggerCutScene && Scene.TriggerCutScene.planeController) Scene.TriggerCutScene.planeController.enabled = false;
-            var transform = PlaneCrashLocations.finalPositions[PlaneCrashLocations.crashSite].transform;
-            scene.planeController.transform.position = transform.position;
-            scene.planeController.transform.rotation = transform.rotation;
-            var gameObjectArray = scene.enableAfterCrash;
-            foreach (var gameObject in gameObjectArray) if (gameObject) gameObject.SetActive(true);
-            Scene.PlaneGreebles.transform.position = scene.planeController.transform.position;
-            Scene.PlaneGreebles.transform.rotation = scene.planeController.transform.rotation;
-            Scene.PlaneGreebles.SetActive(true);
-
-            UnityEngine.Object.Destroy(scene);
-        }
-
         /// <summary>
         /// Overrides the default save path
         /// </summary>
@@ -387,7 +284,5 @@ namespace Oxide.Game.TheForest
             if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
             return saveDir;
         }
-
-        #endregion
     }
 }

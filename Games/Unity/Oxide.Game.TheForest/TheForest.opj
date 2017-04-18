@@ -1,111 +1,10 @@
 {
   "Name": "The Forest",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\TheForest\\TheForest_Data\\Managed",
+  "TargetDirectory": "W:\\Servers\\Unity\\TheForest\\TheForestDedicatedServer_Data\\Managed",
   "Manifests": [
-    {
-      "AssemblyName": "Assembly-CSharp-firstpass.dll",
-      "Hooks": [
-        {
-          "Type": "InitOxide",
-          "Hook": {
-            "InjectionIndex": 0,
-            "HookTypeName": "Initialize Oxide",
-            "Name": "InitOxide [internal]",
-            "HookName": "InitOxide",
-            "AssemblyName": "Assembly-CSharp-firstpass.dll",
-            "TypeName": "FMOD_Listener",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": ".cctor",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "OCBkQSM0BiPDhJfDE4Ke3rbdhFGhRw/g2qQtuFD6Zs0=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 1,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "InitLogging [internal]",
-            "HookName": "InitLogging",
-            "AssemblyName": "Assembly-CSharp-firstpass.dll",
-            "TypeName": "FMOD_Listener",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": ".cctor",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "OCBkQSM0BiPDhJfDE4Ke3rbdhFGhRw/g2qQtuFD6Zs0=",
-            "BaseHookName": "InitOxide [internal]",
-            "HookCategory": "Server"
-          }
-        }
-      ],
-      "Modifiers": []
-    },
     {
       "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 2,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "InitServer [internal]",
-            "HookName": "InitServer",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamManager",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Initialize",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "8Oy19Ruv+9JjAVSRqOB7uWmuOMfGH+QStDSpmfp0pk4=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 44,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "ILobbySetup [internal]",
-            "HookName": "ILobbySetup",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamNGUI",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "OpenScreen",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "CoopSteamNGUI/Screens"
-              ]
-            },
-            "MSILHash": "g5EihOCrs74cdxotMyMUiZjoLL9YJc6o1/pWqAbOwmk=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
         {
           "Type": "Simple",
           "Hook": {
@@ -135,32 +34,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "ILobbyReady [internal]",
-            "HookName": "ILobbyReady",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopLobbyManager",
-            "Flagged": true,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "LobbyCreated",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "Steamworks.LobbyCreated_t"
-              ]
-            },
-            "MSILHash": "7vyKVmtw2/k7LP1Gabd09aui5nnvhX33S1EJwngfLPI=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 6,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
@@ -179,7 +52,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "jeFpD4xB0dbr71GP7KkZVeoAfSDiOLph5Rjbi3z8CzI=",
+            "MSILHash": "c5eNUnKnEaXbz8/lRcy5sDnozsFg27zxvHIT3HUN8UU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -959,7 +832,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "2lcdXnPTdflWAKpGxGaEBEAPUys2Ip1Z3epIPkdYeo0=",
+            "MSILHash": "kWmDqahvs1xlHtlCJgN9xuoYU+pndzsBO7VVCdXPFVI=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -985,7 +858,7 @@
                 "SetCorpsePosition"
               ]
             },
-            "MSILHash": "D0h55ADatRFV+zVNl4ZHcNP6mk2SnPM2wNM2dMhcRp4=",
+            "MSILHash": "/0xFHqsX7XiAYoA4uWDyE4cyrF3rjfR7LPvsnqUZg4s=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1037,7 +910,7 @@
                 "DamageTree"
               ]
             },
-            "MSILHash": "saHoQtaxGsU47/I5SaBgcsAwCTLaZoWNNLy35MaLHwQ=",
+            "MSILHash": "OzU1kA6QBW1TvwHWlUk0CROxm/LId1C77rg8QWyPRgY=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1297,7 +1170,7 @@
                 "PlayerHitEnemy"
               ]
             },
-            "MSILHash": "ytf+OGw3cCOFQYDacAXVFd+hv2CVk4v2GIR5kpOEuWU=",
+            "MSILHash": "+JI9mmh+VNY8RFlPUZh/pfZY0EbZ04ADZwdCnUv4Wyg=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1331,30 +1204,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 2,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IOnServerShutdown [internal]",
-            "HookName": "IOnServerShutdown",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Shutdown",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "/owflklXcVJ2YaOOWJBl9YUY6BAZwymKL+aADA73x2U=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 27,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
@@ -1373,55 +1222,9 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "ME1TGIEEqkj6TLhvaPoSzzzYUCithsIwZFeG4kCh4pc=",
+            "MSILHash": "QCTn/0YObv8vW2hNU+Za+HY4b2Ka6wmdSG0EEnzbA9M=",
             "BaseHookName": null,
             "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 15,
-            "RemoveCount": 4,
-            "Instructions": [],
-            "HookTypeName": "Modify",
-            "Name": "CleanupHostname [patch]",
-            "HookName": "CleanupHostname",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamNGUI",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "GetHostGameName",
-              "ReturnType": "System.String",
-              "Parameters": []
-            },
-            "MSILHash": "QEPB7qE4H5RU9fNoMcO8cIbkWrvQFYbc3wCUcL4CEjk=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
-          }
-        },
-        {
-          "Type": "Modify",
-          "Hook": {
-            "InjectionIndex": 3,
-            "RemoveCount": 3,
-            "Instructions": [],
-            "HookTypeName": "Modify",
-            "Name": "ModifyMaxPlayers [patch]",
-            "HookName": "ModifyMaxPlayers",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopSteamNGUI",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "GetHostPlayersMax",
-              "ReturnType": "System.Int32",
-              "Parameters": []
-            },
-            "MSILHash": "9f3HJFic1Jy60tP4fQYrvqzhT2g1i5LPRnWHhzLEkZo=",
-            "BaseHookName": null,
-            "HookCategory": "_Patches"
           }
         },
         {
@@ -1497,7 +1300,7 @@
               "ReturnType": "System.String",
               "Parameters": []
             },
-            "MSILHash": "fK4Ez0ttbiEUf9HNj0GXFgAneLARBaG+YbzMi5gkrMU=",
+            "MSILHash": "udjwpYXWzosKBoMa9XbSAngMe8iHD/k9yURTvn47orU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1549,7 +1352,7 @@
                 "BoltConnection"
               ]
             },
-            "MSILHash": "9rGrL+U87BJMngOo/gqKGVSgByYWltnv6JfdBksHzW4=",
+            "MSILHash": "KjfXw+qLlJF6jBbSjmcIYHiGm5tQ3rJxPKi/5IF0RXs=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1589,17 +1392,14 @@
           }
         },
         {
-          "Type": "Simple",
+          "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 18,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerInitialized",
-            "HookName": "OnServerInitialized",
+            "InjectionIndex": 0,
+            "HookTypeName": "Initialize Oxide",
+            "Name": "InitOxide [internal]",
+            "HookName": "InitOxide",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "Clock",
+            "TypeName": "CoopDedicatedBootstrap",
             "Flagged": false,
             "Signature": {
               "Exposure": 0,
@@ -1607,8 +1407,32 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "QMLZbJ/XJy8dHTpGHTfT+P90UIOjYFKlMZwzzzMQeVs=",
+            "MSILHash": "l1U1Np8HEO10IvmAeKIxv5VzsAu8y7MuJ42WAzpotcc=",
             "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopDedicatedBootstrap",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "l1U1Np8HEO10IvmAeKIxv5VzsAu8y7MuJ42WAzpotcc=",
+            "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
         },
@@ -1616,47 +1440,48 @@
           "Type": "Simple",
           "Hook": {
             "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "ICutScene [internal]",
-            "HookName": "ICutScene",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TriggerCutScene",
-            "Flagged": true,
+            "TypeName": "CoopSteamManagerDS",
+            "Flagged": false,
             "Signature": {
-              "Exposure": 0,
-              "Name": "Awake",
+              "Exposure": 2,
+              "Name": "Shutdown",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "HiDDkoDbI/eqH3xBHmmafoZUDYCRUi5fIb6sSf22Q+g=",
+            "MSILHash": "dFSt2CHo4mAQETO2cLwHVA50VteiFZGvR/UOCC/rcJk=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
         },
         {
-          "Type": "Modify",
+          "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 3,
-            "RemoveCount": 43,
-            "Instructions": [],
-            "HookTypeName": "Modify",
-            "Name": "DummyLocalPlayer [patch]",
-            "HookName": "DummyLocalPlayer",
+            "InjectionIndex": 58,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TheForest.Save.PlayerSpawn",
+            "TypeName": "CoopDedicatedServerStarter",
             "Flagged": false,
             "Signature": {
               "Exposure": 0,
-              "Name": "Awake",
+              "Name": "Start",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "SnWOkx7J2QLSz4Owl0RYj9HoZ9lD15yhMdkBpRZLq8M=",
+            "MSILHash": "MysXhcxX/iNzcsDaNdCQ37sbLh+NFAEEb38SjGKUacQ=",
             "BaseHookName": null,
-            "HookCategory": "_Patches"
+            "HookCategory": "Server"
           }
         }
       ],

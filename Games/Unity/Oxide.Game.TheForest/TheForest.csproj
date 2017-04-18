@@ -11,7 +11,7 @@
     <AssemblyName>Oxide.Game.TheForest</AssemblyName>
     <GameName>$(MSBuildProjectName)</GameName>
     <BundleDir>$(SolutionDir)Bundles</BundleDir>
-    <ManagedDir>TheForest_Data\Managed</ManagedDir>
+    <ManagedDir>TheForestDedicatedServer_Data\Managed</ManagedDir>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -48,9 +48,6 @@
     <Reference Include="PlayMaker">
       <HintPath>Dependencies\PlayMaker.dll</HintPath>
     </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="udpkit">
@@ -61,6 +58,9 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Dependencies\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +85,9 @@
       <Name>CSharp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="Clean">
     <RemoveDir Directories="$(BundleDir)\$(GameName)" />
@@ -106,11 +109,11 @@
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
-    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles-&gt;'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles-&gt;'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles-&gt;'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
@@ -122,6 +125,6 @@
     <ItemGroup>
       <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
     </ItemGroup>
-    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles-&gt;'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>
