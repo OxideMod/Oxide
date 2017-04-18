@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "7UPFxbRSVYsYOXQxBV/QbFcabv4OhHwJtqE+29qJIgE=",
+            "MSILHash": "EP6vj0IIdnS/ArkTUKxErcoM1KyRdD+k6x2zrv1pEH4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "7UPFxbRSVYsYOXQxBV/QbFcabv4OhHwJtqE+29qJIgE=",
+            "MSILHash": "EP6vj0IIdnS/ArkTUKxErcoM1KyRdD+k6x2zrv1pEH4=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -121,7 +121,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "/aNr/LvCZ3lg5wA2ai99tc851dZ2tA7VQ6ZfW64qs5U=",
+            "MSILHash": "ir8oa/ES41gfDv3A7GBSXLNXphK7KK3vMkS96Lo61nY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -148,53 +148,6 @@
             "MSILHash": "2eSLsFVaLZX7Z1HGYjVZh+zvzhzr0vXMRuzG1x7v/sM=",
             "BaseHookName": null,
             "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 225,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0",
-            "HookTypeName": "Simple",
-            "Name": "IOnPlayerInit [internal]",
-            "HookName": "IOnPlayerInit",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "SDG.Unturned.Provider",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "addPlayer",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "SDG.Unturned.SteamPlayerID",
-                "UnityEngine.Vector3",
-                "System.Byte",
-                "System.Boolean",
-                "System.Boolean",
-                "System.Int32",
-                "System.Byte",
-                "System.Byte",
-                "System.Byte",
-                "UnityEngine.Color",
-                "UnityEngine.Color",
-                "System.Boolean",
-                "System.Int32",
-                "System.Int32",
-                "System.Int32",
-                "System.Int32",
-                "System.Int32",
-                "System.Int32",
-                "System.Int32",
-                "System.Int32[]",
-                "SDG.Unturned.EPlayerSkillset",
-                "System.String"
-              ]
-            },
-            "MSILHash": "fivNlPXZO7OOBnkHaMjh4mYzg/TpkR9Glk4G+ZbRYjQ=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
           }
         },
         {
@@ -268,6 +221,54 @@
             "MSILHash": "pyqn4hXuISQNY2nBUB2m5f2NWspXgM3iV/vHsLz+vNs=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 226,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerInit [internal]",
+            "HookName": "IOnPlayerInit",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SDG.Unturned.Provider",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "addPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "SDG.Unturned.SteamPlayerID",
+                "UnityEngine.Vector3",
+                "System.Byte",
+                "System.Boolean",
+                "System.Boolean",
+                "System.Int32",
+                "System.Byte",
+                "System.Byte",
+                "System.Byte",
+                "UnityEngine.Color",
+                "UnityEngine.Color",
+                "System.Boolean",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32",
+                "System.Int32[]",
+                "SDG.Unturned.EPlayerSkillset",
+                "System.String",
+                "Steamworks.CSteamID"
+              ]
+            },
+            "MSILHash": "CMZskn2CB70+OSf38dpO55ReCaRmQbeujEjOhhvG1dY=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
           }
         }
       ],
