@@ -1,11 +1,11 @@
-using System;
-using System.Linq;
+using Newtonsoft.Json;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace Oxide.Core.RemoteConsole
 {
@@ -138,13 +138,21 @@ namespace Oxide.Core.RemoteConsole
 
         private string GetPlayerList()
         {
-            List<RconPlayer> playerlist = new List<RconPlayer>();
-            foreach (var player in covalence.Players.Connected)
-                playerlist.Add(new RconPlayer(player));
+            try
+            {
+                List<RconPlayer> playerlist = new List<RconPlayer>();
+                foreach (var player in covalence.Players.Connected)
+                    playerlist.Add(new RconPlayer(player));
 
-            string json = JsonConvert.SerializeObject(playerlist, Formatting.None);
-            playerlist = null;
-            return json;
+                string json = JsonConvert.SerializeObject(playerlist, Formatting.None);
+                playerlist = null;
+                return json;
+            }
+            catch
+            {
+                Interface.Oxide.LogError("[Rcon]: Oxide's Covalence API is not loaded yet");
+                return string.Empty;
+            }
         }
 
         #endregion
