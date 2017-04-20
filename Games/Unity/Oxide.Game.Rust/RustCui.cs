@@ -304,6 +304,45 @@ namespace Oxide.Game.Rust.Cui
         public bool UseGraphicAlpha { get; set; }
     }
 
+    public class CuiInputFieldComponent : ICuiComponent, ICuiColor
+    {
+        public string Type => "UnityEngine.UI.InputField";
+
+        //The string value this text will display.
+        [DefaultValue("Text")]
+        [JsonProperty("text")]
+        public string Text { get; set; } = "Text";
+
+        //The size that the Font should render at.
+        [DefaultValue(14)]
+        [JsonProperty("fontSize")]
+        public int FontSize { get; set; } = 14;
+
+        //The Font used by the text.
+        [DefaultValue("RobotoCondensed-Bold.ttf")]
+        [JsonProperty("font")]
+        public string Font { get; set; } = "RobotoCondensed-Bold.ttf";
+
+        //The positioning of the text reliative to its RectTransform.
+        [DefaultValue(TextAnchor.UpperLeft)]
+        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty("align")]
+        public TextAnchor Align { get; set; } = TextAnchor.UpperLeft;
+
+        public string Color { get; set; } = "1.0 1.0 1.0 1.0";
+
+        [DefaultValue(100)]
+        [JsonProperty("characterLimit")]
+        public int CharsLimit { get; set; } = 100;
+
+        [JsonProperty("command")]
+        public string Command { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty("password")]
+        public bool IsPassword { get; set; }
+    }
+
     public class CuiNeedsCursorComponent : ICuiComponent
     {
         public string Type => "NeedsCursor";
