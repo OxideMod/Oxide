@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Oxide.Core.Libraries;
 
 namespace Oxide.Core.Plugins
@@ -43,7 +44,10 @@ namespace Oxide.Core.Plugins
         public virtual IEnumerable<string> ScanDirectory(string directory)
         {
             if (FileExtension == null || !Directory.Exists(directory)) yield break;
-            foreach (var file in Directory.GetFiles(directory, "*" + FileExtension)) yield return Utility.GetFileNameWithoutExtension(file);
+
+            var files = new DirectoryInfo(directory).GetFiles("*" + FileExtension);
+            var filtered = files.Where(f => (f.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden);
+            foreach (var file in filtered) yield return Utility.GetFileNameWithoutExtension(file.FullName);
         }
 
         /// <summary>
