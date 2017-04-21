@@ -46,9 +46,10 @@ namespace Oxide.Plugins
                         {
                             UpdateCheck(filename); // TODO: Only check once on server startup
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             Interface.Oxide.LogError($"Cannot compile C# (.cs) plugins; unable to find {filename}");
+                            Interface.Oxide.LogError(ex.Message);
                             return;
                         }
                     }
@@ -117,37 +118,12 @@ namespace Oxide.Plugins
                 process.WaitForExit();
                 //Thread.Sleep(5000);
             }
-            catch { }
-        }
-
-        private static void UpdateCheck(string filename)
-        {
-            var filePath = Path.Combine(Interface.Oxide.RootDirectory, filename);
-
-            HttpWebRequest request;
-            try
-            {
-                request = (HttpWebRequest)WebRequest.Create($"https://dl.bintray.com/oxidemod/builds/{filename}");
-            }
             catch (Exception ex)
             {
-                Interface.Oxide.LogWarning("Main download location failed, using mirror");
-                request = (HttpWebRequest)WebRequest.Create($"https://bintray.com/oxidemod/builds/download_file?file_path={filename}");
-                Interface.Oxide.LogWarning(ex.Message);
+                Interface.Oxide.LogError(ex.Message);
             }
-
-            var response = (HttpWebResponse)request.GetResponse();
-            var statusCode = (int)response.StatusCode;
-            if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay; code {statusCode}");
-
-            var etag = response.Headers[HttpResponseHeader.ETag];
-            var remoteChecksum = etag.Substring(0, etag.LastIndexOf(':')).Trim('"').ToLower();
-            var localChecksum = "0";
-
-            if (File.Exists(filePath)) localChecksum = GetChecksum(filePath, Algorithms.MD5);
-            if (remoteChecksum != localChecksum) DownloadCompiler(filename, response);
         }
-
+ 
         private static void DownloadCompiler(string filename, WebResponse response)
         {
             try
@@ -173,9 +149,32 @@ namespace Oxide.Plugins
 
                 Interface.Oxide.LogInfo($"Download of {filename} for completed successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Interface.Oxide.LogError($"Couldn't download {filename}, please download manually from:\nhttps://dl.bintray.com/oxidemod/builds/{filename}");
+                Interface.Oxide.LogError($"Couldn't download {filename}! Please download manually from: https://dl.bintray.com/oxidemod/builds/{filename}");
+                Interface.Oxide.LogError(ex.Message);
+            }
+        }
+
+        private static void UpdateCheck(string filename)
+        {
+            try
+            {
+                var filePath = Path.Combine(Interface.Oxide.RootDirectory, filename);
+                var request = (HttpWebRequest)WebRequest.Create($"https://bintray.com/oxidemod/builds/download_file?file_path={filename}");
+                var response = (HttpWebResponse)request.GetResponse();
+                var statusCode = (int)response.StatusCode;
+                if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay; code {statusCode}");
+
+                var etag = response.Headers[HttpResponseHeader.ETag];
+                var remoteChecksum = etag.Substring(0, etag.LastIndexOf(':')).Trim('"').ToLower();
+                var localChecksum = File.Exists(filePath) ? GetChecksum(filePath, Algorithms.MD5) : "0";
+                if (remoteChecksum != localChecksum) DownloadCompiler(filename, response);
+            }
+            catch (Exception ex)
+            {
+                Interface.Oxide.LogError($"Couldn't check for update to {filename}!");
+                Interface.Oxide.LogError(ex.Message);
             }
         }
 
