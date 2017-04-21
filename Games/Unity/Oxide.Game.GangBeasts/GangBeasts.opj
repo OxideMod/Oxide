@@ -1,6 +1,6 @@
 {
   "Name": "Gang Beasts",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\GangBeasts\\game\\GangBeasts_Data\\Managed",
+  "TargetDirectory": "W:\\Servers\\Unity\\GangBeasts\\game\\GangBeasts_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -93,7 +93,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "kokS0AOEE4up9wZm/3/Jt3fZEPVHIYC6GCCDN4Abw0c=",
+            "MSILHash": "r4/CI9sRvql4SObmQXPxiWpkwlxy39r2xDKjC5pcLgA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -145,7 +145,7 @@
                 "UnityEngine.Networking.NetworkConnection"
               ]
             },
-            "MSILHash": "0qTIdx0CFl8ZQHAtgJI/0a/s9gN/7lARmtC1y0Ds47k=",
+            "MSILHash": "KQgPXo/MCbncpEWKMfpHRJSIor6d1M3fqDWnhAg8Ht8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -171,7 +171,7 @@
                 "UnityEngine.Networking.NetworkConnection"
               ]
             },
-            "MSILHash": "YNOT53Zmq1HZAMsfavenjLcChvgqBEnlNv17aFRtCe0=",
+            "MSILHash": "eAcTGdUoommuInOwcftCkBCAsgDcHJ3FqugFl1uKj9I=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
