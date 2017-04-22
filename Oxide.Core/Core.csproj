@@ -57,7 +57,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
-      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
+      <HintPath>Dependencies\protobuf-net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
