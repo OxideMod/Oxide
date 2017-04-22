@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
@@ -293,7 +293,7 @@ namespace Oxide.Core.Lua.Plugins
             base.HandleRemovedFromManager(manager);
 
             Table.Dispose();
-            LuaEnvironment.DeleteObject(this);
+            //LuaEnvironment.DeleteObject(this); // TODO: Re-implement
             LuaEnvironment.DoString("collectgarbage()");
         }
 
