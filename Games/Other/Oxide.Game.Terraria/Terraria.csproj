@@ -41,8 +41,7 @@
       <HintPath>Patched\TerrariaServer.exe</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
-      <HintPath>..\..\..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
