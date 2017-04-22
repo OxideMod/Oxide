@@ -91,12 +91,14 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\Oxide.Core.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\packages\lib\net20\*.dll; $(SolutionDir)\packages\lib\net35\*.dll" />
+      <PackageFiles Include="$(SolutionDir)\packages\**\lib\net20\*.dll; $(SolutionDir)\packages\**\lib\net35\*.dll" />
+      <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\**\*.*" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles-&gt;'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>

@@ -90,7 +90,8 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\Oxide.Core.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
-      <ManagedFiles Include="$(SolutionDir)\packages\lib\net20\*.dll; $(SolutionDir)\packages\lib\net35\*.dll" />
+      <PackageFiles Include="$(SolutionDir)\packages\**\lib\net20\*.dll; $(SolutionDir)\packages\**\lib\net35\*.dll" />
+      <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />
       <PatchedFiles Include="$(ProjectDir)\Patched\**\*.*" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
