@@ -293,7 +293,7 @@ namespace Oxide.Core.Lua.Plugins
             base.HandleRemovedFromManager(manager);
 
             Table.Dispose();
-            //LuaEnvironment.DeleteObject(this); // TODO: Re-implement
+            LuaEnvironment.DeleteObject(this);
             LuaEnvironment.DoString("collectgarbage()");
         }
 

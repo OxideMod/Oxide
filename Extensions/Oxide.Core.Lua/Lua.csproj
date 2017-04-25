@@ -48,12 +48,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="KeraLua">
-      <HintPath>..\..\packages\NLua.1.3.2.1\lib\net35\KeraLua.dll</HintPath>
-    </Reference>
-    <Reference Include="NLua">
-      <HintPath>..\..\packages\NLua.1.3.2.1\lib\net35\NLua.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\LuaDatafile.cs" />
@@ -70,9 +64,6 @@
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
       <Name>Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
