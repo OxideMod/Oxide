@@ -119,10 +119,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check if already banned
             if (IsBanned(id)) return;
 
-            // Ban and kick user
             Scene.HudGui.MpPlayerList.Ban(ulong.Parse(id));
             CoopKick.SaveList();
         }
@@ -154,10 +152,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="id"></param>
         public void Unban(string id)
         {
-            // Check if unbanned already
             if (!IsBanned(id)) return;
 
-            // Set to unbanned
             CoopKick.UnBanPlayer(ulong.Parse(id));
         }
 
@@ -171,15 +167,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
-            // Set the sender name to "Server"
-            var player = new ChatBox.Player { _name = "Server", _color = Color.cyan };
-            //ChatBox.Instance.Players[NetworkId] = player;
-            //LocalPlayer.Entity.GetState<IPlayerState>().name = "Server";
+            CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = "Server";
 
-            // Create and send the chat event
-            var chatEvent = ChatEvent.Create(GlobalTargets.Others);
+            var chatEvent = ChatEvent.Create(GlobalTargets.AllClients);
             chatEvent.Message = message;
-            chatEvent.Sender = NetworkId;
+            chatEvent.Sender = CoopServerInfo.Instance.entity.networkId;
             chatEvent.Send();
 
             Debug.Log($"[Chat] {message}");
@@ -192,7 +184,10 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO: Implement when possible
+            var adminCommand = AdminCommand.Create(GlobalTargets.OnlyServer);
+            adminCommand.Command = command;
+            adminCommand.Data = string.Concat(args.Select(o => o.ToString()));
+            adminCommand.Send();
         }
 
         #endregion
