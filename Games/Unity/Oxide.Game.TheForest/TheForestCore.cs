@@ -1,13 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
-using TheForest.UI;
 using TheForest.Utils;
 using UnityEngine;
 
@@ -82,7 +80,7 @@ namespace Oxide.Game.TheForest
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", TheForestExtension.GameVersion);
+            RemoteLogger.SetTag("game version", SteamDSConfig.ServerVersion);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -129,11 +127,7 @@ namespace Oxide.Game.TheForest
             serverInitialized = true;
 
             Analytics.Collect();
-
-            // Add some Steam tags
             SteamGameServer.SetGameTags("oxide,modded");
-
-            // Update server console window and status bars
             TheForestExtension.ServerConsole();
         }
 

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
+using Bolt;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using UnityEngine;
@@ -62,11 +62,7 @@ namespace Oxide.Game.TheForest
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load()
-        {
-            // Register our loader
-            Manager.RegisterPluginLoader(new TheForestPluginLoader());
-        }
+        public override void Load() => Manager.RegisterPluginLoader(new TheForestPluginLoader());
 
         /// <summary>
         /// Loads plugin watchers used by this extension
@@ -76,34 +72,20 @@ namespace Oxide.Game.TheForest
         {
         }
 
-        public static string GameVersion = "Unknown";
         private const string logFileName = "logs/output_log.txt"; // TODO: Add -logfile support
         private TextWriter logWriter;
-        public static CommandLine CommandLine;
 
         /// <summary>
         /// Called when all other extensions have been loaded
         /// </summary>
         public override void OnModLoad()
         {
-            // Get the game's version from mainData
-            var regex = new Regex(@"Version v(\d+\.\d+[a-z]?)"); // TODO: Make global static
-            using (var reader = new StreamReader(Path.Combine(Application.dataPath, "level0")))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    var match = regex.Match(line);
-                    if (!match.Success) continue;
-                    GameVersion = match.Groups[1].Value;
-                }
-            }
-
             if (!Directory.Exists("logs")) Directory.CreateDirectory("logs");
             if (File.Exists(logFileName)) File.Delete(logFileName);
             var logStream = File.AppendText(logFileName);
             logStream.AutoFlush = true;
             logWriter = TextWriter.Synchronized(logStream);
+
             Application.logMessageReceived += HandleLog;
 
             if (Interface.Oxide.EnableConsole()) Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
@@ -124,22 +106,26 @@ namespace Oxide.Game.TheForest
                 return string.Concat(fps, "fps, ", uptime);
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $"{BoltNetwork.connections.Count()}/{SteamDSConfig.ServerPlayers}";
-            /*Interface.Oxide.ServerConsole.Status2Right = () =>
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{BoltNetwork.clients.Count()}/{SteamDSConfig.ServerPlayers} players";
+            Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (BoltNetwork.serverTime <= 0) return "not connected";
+                if (Time.realtimeSinceStartup < 0 /*!SteamDSConfig.connectedToSteam*/) return "not connected";
 
                 double bytesReceived = 0;
                 double bytesSent = 0;
-                foreach (var connection in BoltNetwork.connections)
+                foreach (var connection in BoltNetwork.clients)
                 {
                     bytesReceived += connection.BitsPerSecondOut / 8f;
                     bytesSent += connection.BitsPerSecondIn / 8f;
                 }
                 return $"{Utility.FormatBytes(bytesReceived)}/s in, {Utility.FormatBytes(bytesSent)}/s out";
-            };*/
+            };
 
-            //Interface.Oxide.ServerConsole.Status3Left = () => DateTime.Today.AddMinutes(TheForestAtmosphere.Instance.TimeOfDay).ToString("h:mm tt").ToLower();
+            Interface.Oxide.ServerConsole.Status3Left = () =>
+            {
+                //var gameTime = DateTime.Today.AddMinutes(CoopServerInfo.Instance.state.StartDayTime).ToString("h:mm tt");
+                return $"Slot {SteamDSConfig.GameSaveSlot} [{SteamDSConfig.GameDifficulty}]";
+            };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {SteamDSConfig.ServerVersion}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
@@ -148,7 +134,11 @@ namespace Oxide.Game.TheForest
 
         private static void ServerConsoleOnInput(string input)
         {
-            // TODO: Handle console input
+            var inputArray = input.Split();
+            var adminCommand = AdminCommand.Create(GlobalTargets.OnlyServer);
+            adminCommand.Command = inputArray[0];
+            adminCommand.Data = string.Concat(inputArray.Skip(1).Select(s => s));
+            adminCommand.Send();
         }
 
         private void HandleLog(string message, string stackTrace, LogType type)

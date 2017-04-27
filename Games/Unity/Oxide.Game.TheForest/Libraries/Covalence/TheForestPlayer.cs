@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using Bolt;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -105,12 +106,12 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Returns if the user is connected
         /// </summary>
-        public bool IsConnected => false; // TODO: Implement when possible
+        public bool IsConnected => BoltNetwork.clients.Contains(entity.source); // TODO: Test
 
         /// <summary>
         /// Returns if the user is sleeping
         /// </summary>
-        public bool IsSleeping => Scene.Atmosphere.Sleeping;
+        public bool IsSleeping => Scene.Atmosphere.Sleeping; // TODO: Fix
 
         #endregion
 
@@ -123,10 +124,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check if already banned
             if (IsBanned) return;
 
-            // Set to banned
             Scene.HudGui.MpPlayerList.Ban(steamId);
             CoopKick.SaveList();
             if (IsConnected) CoopKick.KickPlayer(entity, (int)duration.TotalMinutes, reason);
@@ -195,9 +194,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// Renames the user to specified name
         /// <param name="name"></param>
         /// </summary>
-        public void Rename(string name)
-        {
-        }
+        public void Rename(string name) => entity.GetState<IPlayerState>().name = "Server"; // TODO: Test
 
         /// <summary>
         /// Teleports the user's character to the specified position
@@ -212,10 +209,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public void Unban()
         {
-            // Check if unbanned already
             if (!IsBanned) return;
 
-            // Set to unbanned
             CoopKick.UnBanPlayer(steamId);
         }
 
@@ -257,7 +252,13 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="message"></param>
         public void Message(string message)
         {
-            // TODO: Not possible yet?
+            CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = "Server";
+
+            var chatEvent = ChatEvent.Create(entity.source);
+            chatEvent.Message = message;
+            chatEvent.Sender = CoopServerInfo.Instance.entity.networkId;
+            chatEvent.Send();
+            //CoopAdminCommand.SendNetworkMessage
         }
 
         /// <summary>
@@ -287,7 +288,10 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args)
         {
-            // TODO: Implement when possible
+            var adminCommand = AdminCommand.Create(entity.source);
+            adminCommand.Command = command;
+            adminCommand.Data = string.Concat(args.Select(o => o.ToString()));
+            adminCommand.Send();
         }
 
         #endregion
