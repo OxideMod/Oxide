@@ -1,6 +1,6 @@
 {
   "Name": "Rust",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\Rust\\RustDedicated_Data\\Managed",
+  "TargetDirectory": "W:\\Servers\\Unity\\Rust\\RustDedicated_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -882,7 +882,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "Nufgdc5ecz1E0MGhEAxgAO8bnvirVIeCuvEq4rSPe+Q=",
+            "MSILHash": "PatX9kDBjVMUUfSAtdx14utP/yXYwkGUIw3C0GAQ3HU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2412,7 +2412,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2HSo38/hUkZ34osg/MAyluxQUyp+2pUvtY9K9VD1xkU=",
+            "MSILHash": "ny3Z14hlSxxwaMtbBCPpsDBdZm/nStGXggznwMTJPw8=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2816,7 +2816,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "V8JH8vGC3XQ8FF8UdoLWq31S5gIXIs5lMvGp71ge8lk=",
+            "MSILHash": "zMpAn97fcuAeOrxqYaTslepzNZzpp6odqsFCFGAP/ac=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2904,7 +2904,7 @@
             "InjectionIndex": 285,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l0",
+            "ArgumentString": "l1",
             "HookTypeName": "Simple",
             "Name": "OnSaveLoad",
             "HookName": "OnSaveLoad",
@@ -4639,7 +4639,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "mK4jY1D2axKS3VD5fITnU3grzqKLkD1zi8q++4LFLlM=",
+            "MSILHash": "I/y+aJXv7lTg5/l7ZyjxVJZp5BSrK6ia09UwWzWvOf0=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
