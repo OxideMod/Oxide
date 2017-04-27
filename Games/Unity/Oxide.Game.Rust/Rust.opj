@@ -4728,6 +4728,25 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "AutoTurret::authorizedPlayers",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "AutoTurret",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "authorizedPlayers",
+            "FullTypeName": "System.Collections.Generic.List`1<ProtoBuf.PlayerNameID> AutoTurret::authorizedPlayers",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
       ]
     },
