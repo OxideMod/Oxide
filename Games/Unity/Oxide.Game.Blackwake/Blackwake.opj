@@ -1,6 +1,6 @@
 {
   "Name": "Blackwake",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\Blackwake\\BlackwakeServer_Data\\Managed",
+  "TargetDirectory": "W:\\Servers\\Unity\\Blackwake\\BlackwakeServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "OUOuKNb+Cr1vPeFpKuv7rNMs3DVTDBgz3raoKP43MzQ=",
+            "MSILHash": "qIFyes51Ylvq8yKF/X1WHwxgOq/S07YLWBYXfVVURkQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "OUOuKNb+Cr1vPeFpKuv7rNMs3DVTDBgz3raoKP43MzQ=",
+            "MSILHash": "qIFyes51Ylvq8yKF/X1WHwxgOq/S07YLWBYXfVVURkQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -74,7 +74,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "7UVa8AymXEYPxvh1YT7w1D49HSM9jzZfPnS5wwBy9TM=",
+            "MSILHash": "VtL/SZAJkrfC4+dIWKycC762gE3MDKQxcYq13dfWlic=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
