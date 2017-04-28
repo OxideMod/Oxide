@@ -58,9 +58,6 @@ namespace Oxide.Core
         public string LangDirectory { get; private set; }
         public string LogDirectory { get; private set; }
 
-        // Permission settings
-        public string DefaultGroup { get; private set; }
-
         // Gets the number of seconds since the server started
         public float Now => getTimeSinceStartup();
 
@@ -116,35 +113,28 @@ namespace Oxide.Core
             if (RootDirectory.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)))
                 RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
+            InstanceDirectory = Path.Combine(RootDirectory, "oxide");
+
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { Culture = CultureInfo.InvariantCulture };
 
             CommandLine = new CommandLine(Environment.GetCommandLineArgs());
-
-            var oxideConfig = Path.Combine(RootDirectory, "oxide.config.json");
-            if (!File.Exists(oxideConfig)) throw new FileNotFoundException("Could not load the Oxide configuration file", oxideConfig);
-            Config = ConfigFile.Load<OxideConfig>(oxideConfig);
-            Config.Save();
-
-            for (var i = 0; i < Config.InstanceCommandLines.Length; i++)
+            if (CommandLine.HasVariable("oxide.directory"))
             {
-                string varname, format;
-                Config.GetInstanceCommandLineArg(i, out varname, out format);
-                if (string.IsNullOrEmpty(varname) || CommandLine.HasVariable(varname))
-                {
-                    InstanceDirectory = Path.Combine(RootDirectory, Utility.CleanPath(string.Format(format, CommandLine.GetVariable(varname))));
-                    break;
-                }
+                string var, format;
+                CommandLine.GetArgument("oxide.directory", out var, out format);
+                if (string.IsNullOrEmpty(var) || CommandLine.HasVariable(var))
+                    InstanceDirectory = Path.Combine(RootDirectory, Utility.CleanPath(string.Format(format, CommandLine.GetVariable(var))));
             }
-            if (InstanceDirectory == null) throw new Exception("Could not identify instance directory");
 
             ExtensionDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (ExtensionDirectory == null || !Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
+
             PluginDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("plugins"));
             DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("data"));
             LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("lang"));
             LogDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("logs"));
-            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath(Config.ConfigDirectory));
-            if (!Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
+            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("config"));
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
             if (!Directory.Exists(DataDirectory)) Directory.CreateDirectory(DataDirectory);
@@ -154,7 +144,21 @@ namespace Oxide.Core
 
             RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
 
-            DefaultGroup = Config.DefaultGroup;
+            Cleanup.Add(Path.Combine(RootDirectory, "oxide.config.json"));
+
+            var config = Path.Combine(InstanceDirectory, "oxide.config.json");
+            if (File.Exists(config))
+            {
+                Config = ConfigFile.Load<OxideConfig>(config);
+            }
+            else
+            {
+                Config = new OxideConfig(config);
+                Config.Save();
+            }
+
+            if (CommandLine.HasVariable("rcon.port"))
+                Config.Rcon.Port = int.Parse(CommandLine.GetVariable("rcon.port"));
 
             RootLogger = new CompoundLogger();
             RootLogger.AddLogger(new RotatingFileLogger { Directory = LogDirectory });
