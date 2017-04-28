@@ -2391,13 +2391,53 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 32,
-            "RemoveCount": 1,
+            "InjectionIndex": 81,
+            "RemoveCount": 0,
             "Instructions": [
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "Oxide.Core|Oxide.Core.Interface|get_Oxide"
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "Oxide.Core|Oxide.Core.OxideMod|get_Config"
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "Oxide.Core|Oxide.Core.Configuration.OxideConfig|get_Options"
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Oxide.Core|Oxide.Core.Configuration.OxideConfig/OxideOptions|Modded"
+              },
+              {
+                "OpCode": "brfalse",
+                "OpType": "Instruction",
+                "Operand": 81
+              },
               {
                 "OpCode": "ldstr",
                 "OpType": "String",
-                "Operand": "oxide,modded,mp{0},cp{1},qp{5},v{2}{3},h{4},{6},{7}"
+                "Operand": "oxide,modded,"
+              },
+              {
+                "OpCode": "ldloc_3",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "mscorlib|System.String|Concat(System.String, System.String)"
+              },
+              {
+                "OpCode": "stloc_3",
+                "OpType": "None",
+                "Operand": null
               }
             ],
             "HookTypeName": "Modify",

@@ -116,7 +116,7 @@ namespace Oxide.Game.Rust
 
             Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => ConVar.Server.hostname;
+            Interface.Oxide.ServerConsole.Status1Left = () => $"{(ConVar.Server.hostname.Length > 30 ? $"{ConVar.Server.hostname.Substring(0, 30)}..." : ConVar.Server.hostname)} [{(Interface.Oxide.Config.Options.Modded ? "Modded" : "Community")}]";
             Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.current.frameRate}fps, {((ulong)Time.realtimeSinceStartup).FormatSeconds()}";
 
             Interface.Oxide.ServerConsole.Status2Left = () =>

@@ -225,6 +225,11 @@ namespace Oxide.Game.Rust
 
             RustExtension.ServerConsole();
             Analytics.Collect();
+
+            if (!Interface.Oxide.Config.Options.Modded)
+            {
+                Interface.Oxide.LogWarning("The server is currently listed under Community. Please be aware that Facepunch only allows admin tools (that do not affect gameplay) under the Community section");
+            }
         }
 
         /// <summary>
@@ -1294,6 +1299,11 @@ namespace Oxide.Game.Rust
                 // Check if command is from a player
                 var player = arg.Connection?.player as BasePlayer;
                 if (player == null) return null;
+
+                // Disable chat commands for non-admins if the server is not set to modded
+                if (!Interface.Oxide.Config.Options.Modded)
+                    if (!player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin"))
+                        return null;
 
                 // Get the covalence player
                 var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
