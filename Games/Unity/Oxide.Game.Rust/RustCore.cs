@@ -1301,9 +1301,7 @@ namespace Oxide.Game.Rust
                 if (player == null) return null;
 
                 // Disable chat commands for non-admins if the server is not set to modded
-                if (!Interface.Oxide.Config.Options.Modded)
-                    if (!player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin"))
-                        return null;
+                if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return null;
 
                 // Get the covalence player
                 var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());

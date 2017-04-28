@@ -5,6 +5,8 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Libraries.Covalence;
+using UnityEngine;
+using Event = Oxide.Core.Event;
 
 namespace Oxide.Game.Rust.Libraries
 {
@@ -40,6 +42,7 @@ namespace Oxide.Game.Rust.Libraries
             public PluginCallback Callback;
             public readonly ConsoleSystem.Command RustCommand;
             public Action<ConsoleSystem.Arg> OriginalCallback;
+            internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
 
             public ConsoleCommand(string name)
             {
@@ -65,6 +68,12 @@ namespace Oxide.Game.Rust.Libraries
 
             public void HandleCommand(ConsoleSystem.Arg arg)
             {
+                if (arg.Connection != null && arg.Player())
+                {
+                    var player = arg.Player();
+                    if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return;
+                }
+
                 Callback.Plugin?.TrackStart();
                 Callback.Call(arg);
                 Callback.Plugin?.TrackEnd();
