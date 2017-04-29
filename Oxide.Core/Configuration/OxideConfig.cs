@@ -13,14 +13,14 @@ namespace Oxide.Core.Configuration
         public class OxideOptions
         {
             public bool Modded;
-            
+
             public DefaultGroups DefaultGroups;
         }
 
         public class DefaultGroups
         {
             public string Players;
-            
+
             public string Administrators;
         }
 
@@ -92,13 +92,13 @@ namespace Oxide.Core.Configuration
         /// </summary>
         [JsonProperty(PropertyName = "OxideRcon")]
         public OxideRcon Rcon { get; set; }
-        
+
         /// <summary>
         /// Sets defaults for Oxide configuration
         /// </summary>
         public OxideConfig(string filename) : base(filename)
         {
-            Options = new OxideOptions { Modded = true, DefaultGroups = new DefaultGroups { Administrators = "admin", Players = "player" } };
+            Options = new OxideOptions { Modded = true, DefaultGroups = new DefaultGroups { Administrators = "admin", Players = "default" } };
             Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true };
             Rcon = new OxideRcon { Enabled = false, ChatPrefix = "[Server Console]", Port = 25580, Password = string.Empty };
         }
