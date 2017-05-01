@@ -2452,7 +2452,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ny3Z14hlSxxwaMtbBCPpsDBdZm/nStGXggznwMTJPw8=",
+            "MSILHash": "0N3fPfXHFf0uprvMZ2R8mo3+YilYoJuB0+Jobvuemks=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -4784,6 +4784,120 @@
             ],
             "Name": "authorizedPlayers",
             "FullTypeName": "System.Collections.Generic.List`1<ProtoBuf.PlayerNameID> AutoTurret::authorizedPlayers",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "CodeLock::whitelistPlayers",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CodeLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "whitelistPlayers",
+            "FullTypeName": "System.Collections.Generic.List`1<System.UInt64> CodeLock::whitelistPlayers",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "CodeLock::guestPlayers",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CodeLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "guestPlayers",
+            "FullTypeName": "System.Collections.Generic.List`1<System.UInt64> CodeLock::guestPlayers",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "CodeLock::code",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CodeLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "code",
+            "FullTypeName": "System.String CodeLock::code",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "CodeLock::guestCode",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CodeLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "guestCode",
+            "FullTypeName": "System.String CodeLock::guestCode",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "CodeLock::wrongCodes",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CodeLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "wrongCodes",
+            "FullTypeName": "System.Int32 CodeLock::wrongCodes",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "CodeLock::lastWrongTime",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CodeLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "lastWrongTime",
+            "FullTypeName": "System.Single CodeLock::lastWrongTime",
             "Parameters": []
           },
           "MSILHash": ""

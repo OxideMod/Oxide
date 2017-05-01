@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using Facepunch;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 
@@ -61,7 +62,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the version or build number of the server
         /// </summary>
-        public string Version => BuildInformation.VersionStampDays.ToString();
+        public string Version => BuildInfo.Current.Build.Number;
 
         /// <summary>
         /// Gets the network protocol version of the server
