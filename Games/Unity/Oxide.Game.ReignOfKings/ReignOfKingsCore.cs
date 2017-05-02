@@ -49,7 +49,6 @@ namespace Oxide.Game.ReignOfKings
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
-            ""
         };
 
         /// <summary>
@@ -114,7 +113,7 @@ namespace Oxide.Game.ReignOfKings
         #region Plugin Hooks
 
         /// <summary>
-        /// Called when the plugin is initialising
+        /// Called when the plugin is initializing
         /// </summary>
         [HookMethod("Init")]
         private void Init()
