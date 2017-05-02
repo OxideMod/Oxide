@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace Oxide.Core.ServerConsole
 {
+    public delegate void ServerConsoleDelegate(ConsoleSystemEventArgs e);
+
     public class ServerConsole
     {
         private readonly ConsoleWindow console = new ConsoleWindow();
@@ -10,6 +12,13 @@ namespace Oxide.Core.ServerConsole
         private bool init;
         private float nextUpdate;
         private float nextTitleUpdate;
+
+        /// <summary>
+        /// Handles Outbound ConsoleMessages
+        /// Proper use is to check if null and if it is create a new Delegate
+        /// else subcribe to it with +=
+        /// </summary>
+        public event ServerConsoleDelegate ConsoleMessageHandler;
 
         public event Action<string> Input;
 
@@ -79,6 +88,7 @@ namespace Oxide.Core.ServerConsole
             Console.WriteLine(message);
             input.RedrawInputLine();
             Console.ForegroundColor = ConsoleColor.Gray;
+            if (ConsoleMessageHandler != null) ConsoleMessageHandler.Invoke(new ConsoleSystemEventArgs(message, color));
         }
 
         public void OnDisable()

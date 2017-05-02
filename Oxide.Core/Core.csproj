@@ -97,6 +97,7 @@
     <Compile Include="Logging\CallbackLogger.cs" />
     <Compile Include="Logging\CompoundLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LogMessageEventArgs.cs" />
     <Compile Include="Logging\RotatingFileLogger.cs" />
     <Compile Include="Logging\ThreadedLogger.cs" />
     <Compile Include="OxideMod.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="RemoteConsole\RemoteMessage.cs" />
     <Compile Include="RemoteLogger.cs" />
     <Compile Include="ServerConsole\ConsoleInput.cs" />
+    <Compile Include="ServerConsole\ConsoleSystemEventArgs.cs" />
     <Compile Include="ServerConsole\ConsoleWindow.cs" />
     <Compile Include="ServerConsole\ServerConsole.cs" />
     <Compile Include="Utility.cs" />
