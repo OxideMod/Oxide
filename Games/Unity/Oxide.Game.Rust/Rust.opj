@@ -4901,6 +4901,25 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "BasePlayer::buildingPrivilege",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BasePlayer",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "buildingPrivilege",
+            "FullTypeName": "System.Collections.Generic.List`1<BuildingPrivlidge> BasePlayer::buildingPrivilege",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
       ]
     },

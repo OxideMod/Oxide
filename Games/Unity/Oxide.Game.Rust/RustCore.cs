@@ -767,7 +767,7 @@ namespace Oxide.Game.Rust
             else
             {
                 player.Reply($"Protocol: {Server.Protocol}\nBuild Date: {BuildInfo.Current.BuildDate}\n" +
-                $"Unity Version: {Application.unityVersion}\nChangeset: {BuildInfo.Current.Scm.ChangeId}\n" + 
+                $"Unity Version: {Application.unityVersion}\nChangeset: {BuildInfo.Current.Scm.ChangeId}\n" +
                 $"Branch: {BuildInfo.Current.Scm.Branch}\nOxide Version: {OxideMod.Version}");
             }
         }
@@ -1312,7 +1312,7 @@ namespace Oxide.Game.Rust
                 var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
                 var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
                 if (blockedSpecific != null || blockedCovalence != null) return true;
-                
+
                 // Is it a covalance command?
                 if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
