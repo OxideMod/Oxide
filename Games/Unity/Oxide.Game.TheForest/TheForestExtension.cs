@@ -42,7 +42,6 @@ namespace Oxide.Game.TheForest
 
         public static string[] Filter =
         {
-            "[Steamworks.NET] SteamAPI_Init() failed.",
             "GameServer.InitSafe success:",
             "Set a LogOnAnonymous",
             "Started.",
