@@ -3424,7 +3424,7 @@
             "InjectionIndex": 53,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l2, this",
+            "ArgumentString": "l3, this",
             "HookTypeName": "Simple",
             "Name": "CanBeTargeted [flameturret]",
             "HookName": "CanBeTargeted",
@@ -4982,6 +4982,129 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "ItemContainer::Clear",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "ItemContainer",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "Clear",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "PLM7QyhIDCqKQAPvyGf3oq4M0TgyGANbOitL+p4Ewd8="
+        },
+        {
+          "Name": "ItemContainer::FindContainer",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "ItemContainer",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "FindContainer",
+            "FullTypeName": "ItemContainer",
+            "Parameters": [
+              "System.UInt32"
+            ]
+          },
+          "MSILHash": "KfhCfAWGJLTOajWivksnILYzI2gYeaosMZP9kz5CTAw="
+        },
+        {
+          "Name": "ItemContainer::FindPosition",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "ItemContainer",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "FindPosition",
+            "FullTypeName": "System.Boolean",
+            "Parameters": [
+              "Item"
+            ]
+          },
+          "MSILHash": "5fF8wOYKU+7uh1zds2HAClRJOPfvhfI0tfX7kEjdttQ="
+        },
+        {
+          "Name": "ItemContainer::Insert",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "ItemContainer",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "Insert",
+            "FullTypeName": "System.Boolean",
+            "Parameters": [
+              "Item"
+            ]
+          },
+          "MSILHash": "9iF3D5BlcqAPf6IuhOJVarxrZBsUhAr9i3RXjPMS1E4="
+        },
+        {
+          "Name": "ItemContainer::Remove",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "ItemContainer",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "Remove",
+            "FullTypeName": "System.Boolean",
+            "Parameters": [
+              "Item"
+            ]
+          },
+          "MSILHash": "VzZNlOgsBfWZ6xXn3XUt7WpxqILBVTXo+IL06nc/3EI="
+        },
+        {
+          "Name": "BuildingBlock::NewBuildingID",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BuildingBlock",
+          "Type": 1,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "NewBuildingID",
+            "FullTypeName": "System.UInt32",
+            "Parameters": []
+          },
+          "MSILHash": "rKfKTU8aw0OW1ra5wQBmBDvYRbok6FusXVxFZ8eYw/k="
         }
       ]
     },
