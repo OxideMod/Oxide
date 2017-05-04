@@ -1269,7 +1269,7 @@ namespace Oxide.Game.Rust
         #region Command Handling
 
         /// <summary>
-        /// Called when a console command was run
+        /// Called when a server command was run
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>

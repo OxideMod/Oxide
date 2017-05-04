@@ -4709,6 +4709,30 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 18,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerRecover",
+            "HookName": "OnPlayerRecover",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "WoundingTick",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "ED0PKGyZUnVFvksAaJwdlH8ZWAWAEBVPXMw2rTgxTg8=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [
@@ -4917,6 +4941,44 @@
             ],
             "Name": "buildingPrivilege",
             "FullTypeName": "System.Collections.Generic.List`1<BuildingPrivlidge> BasePlayer::buildingPrivilege",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "KeyLock::keyCode",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "KeyLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "keyCode",
+            "FullTypeName": "System.Int32 KeyLock::keyCode",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "KeyLock::firstKeyCreated",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "KeyLock",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "firstKeyCreated",
+            "FullTypeName": "System.Boolean KeyLock::firstKeyCreated",
             "Parameters": []
           },
           "MSILHash": ""
