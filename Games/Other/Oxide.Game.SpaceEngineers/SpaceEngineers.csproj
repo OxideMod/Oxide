@@ -36,33 +36,44 @@
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="Sandbox.Common">
-      <HintPath>Dependencies\Sandbox.Common.dll</HintPath>
+    <Reference Include="Sandbox.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Extensions\Oxide.Core.VRage\Dependencies\Sandbox.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Sandbox.Game">
+    <Reference Include="Sandbox.Game, Version=0.1.6314.21407, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Patched\Sandbox.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="SteamSDK, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\SteamSDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="VRage">
+    <Reference Include="VRage, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\VRage.dll</HintPath>
     </Reference>
-    <Reference Include="VRage.Dedicated">
-      <HintPath>Patched\VRage.Dedicated.dll</HintPath>
-    </Reference>
-    <Reference Include="VRage.Game">
+    <Reference Include="VRage.Game, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\VRage.Game.dll</HintPath>
     </Reference>
-    <Reference Include="VRage.Math">
+    <Reference Include="VRage.Math, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\VRage.Math.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libraries\Command.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersPlayer.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersServer.cs" />
+    <Compile Include="Libraries\Server.cs" />
+    <Compile Include="Libraries\SEGameCore.cs" />
+    <Compile Include="Libraries\Player.cs" />
+    <Compile Include="Logging\SpaceEngineersLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpaceEngineersCore.cs" />
     <Compile Include="SpaceEngineersExtension.cs" />
@@ -78,6 +89,9 @@
       <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
       <Name>CSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="Dependencies\SteamSDK.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="Clean">
@@ -99,13 +113,11 @@
       <PatchedFiles Include="$(ProjectDir)\Patched\*.dll; $(ProjectDir)\Patched\*.config" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
-    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(NativeFiles)" DestinationFiles="@(NativeFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\Oxide.Core.CSharp.dll" />
-    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
