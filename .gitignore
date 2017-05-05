@@ -54,6 +54,12 @@ ipch/
 *.sdf
 *.cachefile
 
+# Visual Studio
+.vs/
+*.psess
+*.vsp
+*.vspx
+
 # Visual Studio add-ins
 ## DotCover code coverage tool
 *.dotCover
@@ -65,8 +71,3 @@ _ReSharper*/
 *.DotSettings.user
 ## TeamCity add-in
 _TeamCity*
-
-# Visual Studio profiler
-*.psess
-*.vsp
-*.vspx

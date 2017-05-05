@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Oxide.Core.Configuration;
-using Oxide.Core.Libraries.Covalence;
+using Newtonsoft.Json;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using Oxide.Core.Configuration;
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Core.RemoteConsole
 {
@@ -85,7 +87,17 @@ namespace Oxide.Core.RemoteConsole
             {
                 case "command":
                     var commands = message.Message.Split(' ');
-                    covalence.Server.Command(commands[0], commands.Length > 1 ? commands.Skip(1).ToArray() : null);
+                    try
+                    {
+                        if (commands.Count() > 1)
+                            covalence.Server.Command(commands[0]);
+                        else
+                            covalence.Server.Command(commands[0], commands.Skip(1).ToArray());
+                    }
+                    catch
+                    {
+                        Interface.Oxide.LogError("[Rcon] Failed to run command {0} - Command might not exist", commands[0]);
+                    }
                     break;
 
                 case "chat":
@@ -93,16 +105,53 @@ namespace Oxide.Core.RemoteConsole
                     break;
 
                 case "players":
-                    var format = "ID: {0};NAME: {1};IP: {2};HP: {3}/{4};PING: {5};LANG: {6}";
-                    var list = string.Empty;
-                    foreach (var player in covalence.Players.Connected)
-                        list += string.Format(format, player.Id, player.Name, player.Address, player.Health, player.MaxHealth, player.Ping, player.Language.TwoLetterISOLanguageName);
-                    SendMessage(RemoteMessage.CreateMessage(list));
+                    SendMessage(RemoteMessage.CreateMessage(GetPlayerList(), 0, "players"));
                     break;
 
                 default:
                     SendMessage(RemoteMessage.CreateMessage("Unknown command"));
                     break;
+            }
+        }
+
+        private class RconPlayer
+        {
+            public string SteamId { get; private set; }
+            public string Name { get; private set; }
+            public string Address { get; private set; }
+            public float Health { get; private set; }
+            public float MaxHealth { get; private set; }
+            public int Ping { get; private set; }
+            public string Lang { get; private set; }
+
+            public RconPlayer(IPlayer player)
+            {
+                SteamId = player.Id;
+                Name = player.Name;
+                Address = player.Address;
+                Health = player.Health;
+                MaxHealth = player.MaxHealth;
+                Ping = player.Ping;
+                Lang = player.Language.TwoLetterISOLanguageName;
+            }
+        }
+
+        private string GetPlayerList()
+        {
+            try
+            {
+                List<RconPlayer> playerlist = new List<RconPlayer>();
+                foreach (var player in covalence.Players.Connected)
+                    playerlist.Add(new RconPlayer(player));
+
+                string json = JsonConvert.SerializeObject(playerlist, Formatting.None);
+                playerlist = null;
+                return json;
+            }
+            catch
+            {
+                Interface.Oxide.LogError("[Rcon] Covalence API is not loaded yet");
+                return string.Empty;
             }
         }
 

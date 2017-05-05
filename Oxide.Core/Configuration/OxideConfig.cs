@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Oxide.Core.Configuration
 {
@@ -8,6 +7,23 @@ namespace Oxide.Core.Configuration
     /// </summary>
     public class OxideConfig : ConfigFile
     {
+        /// <summary>
+        /// Settings for the modded server
+        /// </summary>
+        public class OxideOptions
+        {
+            public bool Modded;
+
+            public DefaultGroups DefaultGroups;
+        }
+
+        public class DefaultGroups
+        {
+            public string Players;
+
+            public string Administrators;
+        }
+
         /// <summary>
         /// Settings for the custom Oxide console
         /// </summary>
@@ -61,6 +77,11 @@ namespace Oxide.Core.Configuration
         }
 
         /// <summary>
+        /// Gets or sets information regarding the Oxide mod
+        /// </summary>
+        public OxideOptions Options { get; set; }
+
+        /// <summary>
         /// Gets or sets information regarding the Oxide console
         /// </summary>
         [JsonProperty(PropertyName = "OxideConsole")]
@@ -73,65 +94,13 @@ namespace Oxide.Core.Configuration
         public OxideRcon Rcon { get; set; }
 
         /// <summary>
-        /// Gets or sets the default permissions group for new players
-        /// </summary>
-        [JsonIgnore] // Ignored for now until this is implemented
-        public string DefaultGroup { get; set; }
-
-        /// <summary>
-        /// Gets or sets the command line arguments to search for the instance directory
-        /// </summary>
-        public string[] InstanceCommandLines { get; set; }
-
-        /// <summary>
-        /// Gets or sets the directory to find plugin config files (relative to the instance path)
-        /// </summary>
-        public string ConfigDirectory { get; set; }
-
-        /// <summary>
         /// Sets defaults for Oxide configuration
         /// </summary>
         public OxideConfig(string filename) : base(filename)
         {
-            ConfigDirectory = "config";
-            DefaultGroup = "default";
+            Options = new OxideOptions { Modded = true, DefaultGroups = new DefaultGroups { Administrators = "admin", Players = "default" } };
             Console = new OxideConsole { Enabled = true, MinimalistMode = true, ShowStatusBar = true, ShowStacktraces = true };
-            Rcon = new OxideRcon { Enabled = true, ChatPrefix = "[Server Console]", Port = 25580, Password = string.Empty };
-        }
-
-        /// <summary>
-        /// Gets argument data for the specified index
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="varname"></param>
-        /// <param name="format"></param>
-        public void GetInstanceCommandLineArg(int index, out string varname, out string format)
-        {
-            // Format is "folder/{variable}/otherfolder"
-            var cmd = InstanceCommandLines[index];
-            StringBuilder varnamesb = new StringBuilder(), formatsb = new StringBuilder();
-            var invar = 0;
-            foreach (var c in cmd)
-            {
-                switch (c)
-                {
-                    case '{':
-                        invar++;
-                        break;
-                    case '}':
-                        invar--;
-                        if (invar == 0) formatsb.Append("{0}");
-                        break;
-                    default:
-                        if (invar == 0)
-                            formatsb.Append(c);
-                        else
-                            varnamesb.Append(c);
-                        break;
-                }
-            }
-            varname = varnamesb.ToString();
-            format = formatsb.ToString();
+            Rcon = new OxideRcon { Enabled = false, ChatPrefix = "[Server Console]", Port = 25580, Password = string.Empty };
         }
     }
 }

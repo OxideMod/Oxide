@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Facepunch;
 using Network;
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -136,13 +137,13 @@ namespace Oxide.Game.Rust
         #region Plugin Hooks
 
         /// <summary>
-        /// Called when the plugin is initialising
+        /// Called when the plugin is initializing
         /// </summary>
         [HookMethod("Init")]
         private void Init()
         {
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", BuildInformation.VersionStampDays.ToString());
+            RemoteLogger.SetTag("game version", Server.Version);
 
             lang.RegisterMessages(messages, this);
 
@@ -224,14 +225,19 @@ namespace Oxide.Game.Rust
             }
 
             RustExtension.ServerConsole();
-            Analytics.Collect();
+            Core.Analytics.Collect();
+
+            if (!Interface.Oxide.Config.Options.Modded)
+            {
+                Interface.Oxide.LogWarning("The server is currently listed under Community. Please be aware that Facepunch only allows admin tools (that do not affect gameplay) under the Community section");
+            }
         }
 
         /// <summary>
         /// Called when the server is saving
         /// </summary>
         [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+        private void OnServerSave() => Core.Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down
@@ -760,9 +766,9 @@ namespace Oxide.Game.Rust
             }
             else
             {
-                player.Reply($"Protocol: {Server.Protocol}\nBuild Version: {BuildInformation.VersionStampDays}\n" +
-                $"Build Date: {BuildInformation.VersionStampString}\nUnity Version: {UnityEngine.Application.unityVersion}\n" +
-                $"Changeset: {BuildInformation.ChangeSet}\nBranch: {BuildInformation.BranchName}\nOxide Version: {OxideMod.Version}");
+                player.Reply($"Protocol: {Server.Protocol}\nBuild Date: {BuildInfo.Current.BuildDate}\n" +
+                $"Unity Version: {Application.unityVersion}\nChangeset: {BuildInfo.Current.Scm.ChangeId}\n" +
+                $"Branch: {BuildInfo.Current.Scm.Branch}\nOxide Version: {OxideMod.Version}");
             }
         }
 
@@ -1263,7 +1269,7 @@ namespace Oxide.Game.Rust
         #region Command Handling
 
         /// <summary>
-        /// Called when a console command was run
+        /// Called when a server command was run
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
@@ -1295,6 +1301,9 @@ namespace Oxide.Game.Rust
                 var player = arg.Connection?.player as BasePlayer;
                 if (player == null) return null;
 
+                // Disable chat commands for non-admins if the server is not set to modded
+                if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return null;
+
                 // Get the covalence player
                 var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
                 if (iplayer == null) return null;
@@ -1303,7 +1312,7 @@ namespace Oxide.Game.Rust
                 var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
                 var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
                 if (blockedSpecific != null || blockedCovalence != null) return true;
-                
+
                 // Is it a covalance command?
                 if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 

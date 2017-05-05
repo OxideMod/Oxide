@@ -116,7 +116,11 @@ namespace Oxide.Game.Rust
 
             Interface.Oxide.ServerConsole.Title = () => $"{BasePlayer.activePlayerList.Count} | {ConVar.Server.hostname}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => ConVar.Server.hostname;
+            Interface.Oxide.ServerConsole.Status1Left = () =>
+            {
+                var hostname = ConVar.Server.hostname.Length > 30 ? $"{ConVar.Server.hostname.Substring(0, 30)}..." : ConVar.Server.hostname;
+                return $"{hostname} [{(Interface.Oxide.Config.Options.Modded ? "Modded" : "Community")}]";
+            };
             Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.current.frameRate}fps, {((ulong)Time.realtimeSinceStartup).FormatSeconds()}";
 
             Interface.Oxide.ServerConsole.Status2Left = () =>
@@ -140,7 +144,7 @@ namespace Oxide.Game.Rust
                 var gameTime = (!TOD_Sky.Instance ? DateTime.Now : TOD_Sky.Instance.Cycle.DateTime).ToString("h:mm tt");
                 return $"{gameTime.ToLower()}, {ConVar.Server.level} [{ConVar.Server.worldsize}, {ConVar.Server.seed}]";
             };
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInformation.VersionStampDays} ({Protocol.network})";
+            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {BuildInfo.Current.Build.Number} ({Protocol.printable})";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
 
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;

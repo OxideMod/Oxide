@@ -114,7 +114,7 @@ namespace Oxide.Game.ReignOfKings
         #region Plugin Hooks
 
         /// <summary>
-        /// Called when the plugin is initialising
+        /// Called when the plugin is initializing
         /// </summary>
         [HookMethod("Init")]
         private void Init()

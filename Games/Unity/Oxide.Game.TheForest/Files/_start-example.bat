@@ -3,7 +3,7 @@ cls
 :start
 echo Starting server...
 
-TheForest.exe -batchmode -nographics -dedicated -servername "My Oxide Server" -serverplayers 16 -serverautosaveinterval 15
+TheForestDedicatedServer.exe -dedicated -servername "My Oxide Server" -serverplayers 8 -serverautosaveinterval 15
 
 echo.
 echo Restarting server...

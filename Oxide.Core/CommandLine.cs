@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Oxide.Core
@@ -90,6 +91,41 @@ namespace Oxide.Core
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Gets variable data for the specified argument
+        /// </summary>
+        /// <param name="var"></param>
+        /// <param name="varname"></param>
+        /// <param name="format"></param>
+        public void GetArgument(string var, out string varname, out string format)
+        {
+            // Format is "folder/{variable}/otherfolder"
+            var cmd = GetVariable(var);
+            StringBuilder varnamesb = new StringBuilder(), formatsb = new StringBuilder();
+            var invar = 0;
+            foreach (var c in cmd)
+            {
+                switch (c)
+                {
+                    case '{':
+                        invar++;
+                        break;
+                    case '}':
+                        invar--;
+                        if (invar == 0) formatsb.Append("{0}");
+                        break;
+                    default:
+                        if (invar == 0)
+                            formatsb.Append(c);
+                        else
+                            varnamesb.Append(c);
+                        break;
+                }
+            }
+            varname = varnamesb.ToString();
+            format = formatsb.ToString();
         }
     }
 }

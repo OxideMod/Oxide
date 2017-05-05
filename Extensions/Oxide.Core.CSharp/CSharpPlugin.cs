@@ -406,8 +406,9 @@ namespace Oxide.Plugins
         /// <param name="plugin"></param>
         protected void LogToFile(string filename, string text, Plugin plugin)
         {
-            filename = Path.Combine(Interface.Oxide.LogDirectory, Utility.CleanPath($"{plugin.Name.ToLower()}_{filename}-{DateTime.Now:yyyy-MM-dd}.txt"));
-            using (var writer = new StreamWriter((filename), true)) writer.WriteLine(text);
+            filename = Utility.CleanPath($"{plugin.Name.ToLower()}_{filename.ToLower()}-{DateTime.Now:yyyy-MM-dd}.txt");
+            var path = Path.Combine(Interface.Oxide.LogDirectory, filename);
+            using (var writer = new StreamWriter((path), true)) writer.WriteLine(text);
         }
 
         /// <summary>
