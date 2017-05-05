@@ -13,10 +13,10 @@ namespace Oxide.Core
 {
     public static class RemoteLogger
     {
-        private const int projectId = 110943;
+        private const int projectId = 141692;
         private const string host = "sentry.io";
-        private const string publicKey = "c1be8178899f4fbf808653c5ea6b7d1d";
-        private const string secretKey = "d54f5fa31f804866acdf4f797de62082";
+        private const string publicKey = "2d0162c790be4036a94d2d8326d7f900";
+        private const string secretKey = "8a6249aad4b84e368f900b32396e8b04";
         private static readonly string Url = "https://" + host + "/api/" + projectId + "/store/";
 
         private static readonly string[][] sentryAuth =

@@ -112,7 +112,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
             ServerUsers.Set(ulong.Parse(id), ServerUsers.UserGroup.Banned, Name, reason);
             ServerUsers.Save();
-            //if (IsConnected) Kick(reason); // TODO: Implement if possible
         }
 
         /// <summary>

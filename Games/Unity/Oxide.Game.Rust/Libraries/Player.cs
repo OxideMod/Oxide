@@ -45,27 +45,27 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        public bool IsAdmin(string id) => ServerUsers.Is(Convert.ToUInt64(id), ServerUsers.UserGroup.Owner);
-
-        /// <summary>
-        /// Returns if the player is admin
-        /// </summary>
         public bool IsAdmin(ulong id) => ServerUsers.Is(id, ServerUsers.UserGroup.Owner);
 
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        public bool IsAdmin(BasePlayer player) => IsBanned(player.userID);
+        public bool IsAdmin(string id) => IsAdmin(Convert.ToUInt64(id));
 
         /// <summary>
-        /// Gets if the player is banned
+        /// Returns if the player is admin
         /// </summary>
-        public bool IsBanned(string id) => ServerUsers.Is(Convert.ToUInt64(id), ServerUsers.UserGroup.Banned);
+        public bool IsAdmin(BasePlayer player) => IsAdmin(player.userID);
 
         /// <summary>
         /// Gets if the player is banned
         /// </summary>
         public bool IsBanned(ulong id) => ServerUsers.Is(id, ServerUsers.UserGroup.Banned);
+
+        /// <summary>
+        /// Gets if the player is banned
+        /// </summary>
+        public bool IsBanned(string id) => IsBanned(Convert.ToUInt64(id));
 
         /// <summary>
         /// Gets if the player is banned
@@ -80,12 +80,12 @@ namespace Oxide.Game.Rust.Libraries
         /// <summary>
         /// Returns if the player is sleeping
         /// </summary>
-        public bool IsSleeping(string id) => BasePlayer.FindSleeping(Convert.ToUInt64(id));
+        public bool IsSleeping(ulong id) => BasePlayer.FindSleeping(id);
 
         /// <summary>
         /// Returns if the player is sleeping
         /// </summary>
-        public bool IsSleeping(ulong id) => BasePlayer.FindSleeping(id);
+        public bool IsSleeping(string id) => IsSleeping(Convert.ToUInt64(id));
 
         /// <summary>
         /// Returns if the player is sleeping
@@ -97,18 +97,33 @@ namespace Oxide.Game.Rust.Libraries
         #region Administration
 
         /// <summary>
+        /// Bans the player from the server based on user ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        public void Ban(ulong id, string reason = "")
+        {
+            if (IsBanned(id)) return;
+
+            var player = FindById(id);
+            ServerUsers.Set(id, ServerUsers.UserGroup.Banned, player?.displayName ?? "Unknown", reason);
+            ServerUsers.Save();
+            if (player != null && IsConnected(player)) Kick(player, reason);
+        }
+
+        /// <summary>
+        /// Bans the player from the server based on user ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reason"></param>
+        public void Ban(string id, string reason = "") => Ban(Convert.ToUInt64(id), reason);
+
+        /// <summary>
         /// Bans the player from the server
         /// </summary>
         /// <param name="player"></param>
         /// <param name="reason"></param>
-        public void Ban(BasePlayer player, string reason = "")
-        {
-            if (IsBanned(player)) return;
-
-            ServerUsers.Set(player.userID, ServerUsers.UserGroup.Banned, player.displayName, reason);
-            ServerUsers.Save();
-            if (IsConnected(player)) Kick(player, reason);
-        }
+        public void Ban(BasePlayer player, string reason = "") => Ban(player.UserIDString, reason);
 
         /// <summary>
         /// Heals the player by specified amount
@@ -167,15 +182,25 @@ namespace Oxide.Game.Rust.Libraries
         public void Teleport(BasePlayer player, float x, float y, float z) => Teleport(player, new Vector3(x, y, z));
 
         /// <summary>
-        /// Unbans the player
+        /// Unbans the player by user ID
         /// </summary>
-        public void Unban(BasePlayer player)
+        public void Unban(ulong id)
         {
-            if (!IsBanned(player)) return;
+            if (!IsBanned(id)) return;
 
-            ServerUsers.Remove(player.userID);
+            ServerUsers.Remove(id);
             ServerUsers.Save();
         }
+
+        /// <summary>
+        /// Unbans the player by user ID
+        /// </summary>
+        public void Unban(string id) => Unban(Convert.ToUInt64(id));
+
+        /// <summary>
+        /// Unbans the player
+        /// </summary>
+        public void Unban(BasePlayer player) => Unban(player.userID);
 
         #endregion
 

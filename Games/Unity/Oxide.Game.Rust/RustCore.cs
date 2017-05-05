@@ -1273,43 +1273,74 @@ namespace Oxide.Game.Rust
             if (arg?.cmd == null) return null;
             if (arg.cmd.FullName != "chat.say") return null;
 
-            // Get the args
-            var str = arg.GetString(0);
-            if (string.IsNullOrEmpty(str)) return null;
+            try
+            {
+                // Get the args
+                var str = arg.GetString(0);
+                if (string.IsNullOrEmpty(str)) return null;
 
-            // Is it a chat command?
-            if (str[0] != '/') return null; // TODO: Return if no arguments given
+                // Is it a chat command?
+                if (str[0] != '/') return null; // TODO: Return if no arguments given
 
-            // Get the full command
-            var message = str.Substring(1);
+                // Get the full command
+                var message = str.Substring(1);
 
-            // Parse it
-            string cmd;
-            string[] args;
-            ParseChatCommand(message, out cmd, out args);
-            if (cmd == null) return null;
+                // Parse it
+                string cmd;
+                string[] args;
+                ParseChatCommand(message, out cmd, out args);
+                if (cmd == null) return null;
 
-            // Check if command is from a player
-            if (arg.Connection == null) return null;
+                // Check if command is from a player
+                var player = arg.Connection?.player as BasePlayer;
+                if (player == null) return null;
 
-            // Get the covalence player
-            var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
-            if (iplayer == null) return null;
+                // Get the covalence player
+                var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
+                if (iplayer == null) return null;
 
-            // Is the command blocked?
-            var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
-            var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
-            if (blockedSpecific != null || blockedCovalence != null) return true;
+                // Is the command blocked?
+                var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
+                var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
+                if (blockedSpecific != null || blockedCovalence != null) return true;
+                
+                // Is it a covalance command?
+                if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
-            // Is it a covalance command?
-            if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
-
-            // Is it a regular chat command?
-            var player = arg.Connection.player as BasePlayer;
-            if (player == null)
-                Interface.Oxide.LogDebug("Player is actually a {0}!", arg.Connection.player.GetType());
-            else if (!cmdlib.HandleChatCommand(player, cmd, args))
-                iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+                // Is it a regular chat command?
+                if (!cmdlib.HandleChatCommand(player, cmd, args))
+                    iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+            }
+            catch (NullReferenceException ex)
+            {
+                var sb = new StringBuilder();
+                try
+                {
+                    var str = arg?.GetString(0);
+                    var message = str?.Substring(1);
+                    string cmd;
+                    string[] args;
+                    ParseChatCommand(message, out cmd, out args);
+                    sb.AppendLine("NullReferenceError in Oxide.Game.Rust when running OnServerCommand.");
+                    sb.AppendLine($"  Command: {arg.cmd?.FullName}");
+                    sb.AppendLine($"  Full command: {str}");
+                    sb.AppendLine($"  Command: {cmd}");
+                    sb.AppendLine($"  Arguments: {args.ToSentence()}");
+                    sb.AppendLine($"  Connection: {arg.Connection}");
+                    sb.AppendLine($"  Connection ID: {arg.Connection?.userid}");
+                    sb.AppendLine($"  Connection player? {arg.Connection?.player != null}");
+                    sb.AppendLine($"  Connection player: {arg.Connection?.player}");
+                    sb.AppendLine($"  Connection player type: {arg.Connection?.player?.GetType()}");
+                }
+                catch
+                {
+                    // ignore
+                }
+                finally
+                {
+                    RemoteLogger.Exception(ex.Message, sb.ToString());
+                }
+            }
 
             // Handled
             arg.ReplyWith(string.Empty);

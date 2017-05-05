@@ -16,13 +16,7 @@ namespace Oxide.Core.Libraries.Covalence
     {
         private ICommandSystem cmdSystem;
         private ICovalenceProvider provider;
-        private Logger logger;
-        private Stopwatch trackStopwatch = new Stopwatch();
-        private Stopwatch stopwatch = new Stopwatch();
-        private double sum;
-        private int nestcount;
-
-        public double totalCommandTime { get; internal set; }
+        private readonly Logger logger;
 
         /// <summary>
         /// Returns if this library should be loaded into the global namespace
@@ -150,6 +144,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Registers a command (chat + console)
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="plugin"></param>
         /// <param name="callback"></param>
         public void RegisterCommand(string command, Plugin plugin, CommandCallback callback)
         {
@@ -170,6 +165,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Unregisters a command (chat + console)
         /// </summary>
         /// <param name="command"></param>
+        /// <param name="plugin"></param>
         public void UnregisterCommand(string command, Plugin plugin) => cmdSystem?.UnregisterCommand(command, plugin);
     }
 }
