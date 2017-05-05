@@ -99,7 +99,6 @@
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
-      <ConfigFiles Include="$(ProjectDir)\Patched\oxide.config.json" />
       <GameFiles Include="$(ProjectDir)\Files\**\*.*; $(ProjectDir)\Files\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.dll; $(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.so*" />
