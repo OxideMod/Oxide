@@ -5,6 +5,7 @@ using ProtoBuf;
 using Sandbox.Game.World;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using VRage.Game.ModAPI;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
@@ -34,9 +35,9 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             connectedPlayers = new Dictionary<string, SpaceEngineersPlayer>();
         }
 
-        private void NotifyPlayerJoin(MyPlayer player)
+        private void NotifyPlayerJoin(IMyPlayer player)
         {
-            var id = player.Id.SteamId.ToString();
+            var id = player.SteamUserId.ToString();
 
             // Do they exist?
             PlayerRecord record;
@@ -53,7 +54,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             else
             {
                 // Insert
-                record = new PlayerRecord { Id = player.Id.SteamId, Name = player.DisplayName};
+                record = new PlayerRecord { Id = player.SteamUserId, Name = player.DisplayName };
                 playerData.Add(id, record);
 
                 // Create Rust player
@@ -64,13 +65,13 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(MyPlayer player)
+        internal void NotifyPlayerConnect(IMyPlayer player)
         {
             NotifyPlayerJoin(player);
-            connectedPlayers[player.Id.SteamId.ToString()] = new SpaceEngineersPlayer(player);
+            connectedPlayers[player.SteamUserId.ToString()] = new SpaceEngineersPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(MyPlayer player) => connectedPlayers.Remove(player.Id.SteamId.ToString());
+        internal void NotifyPlayerDisconnect(IMyPlayer player) => connectedPlayers.Remove(player.SteamUserId.ToString());
 
         #region Player Finding
 

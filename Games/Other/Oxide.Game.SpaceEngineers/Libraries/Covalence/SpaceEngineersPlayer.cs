@@ -9,6 +9,7 @@ using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using VRage.Game;
 using VRageMath;
+using VRage.Game.ModAPI;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
@@ -18,7 +19,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
     public class SpaceEngineersPlayer : IPlayer, IEquatable<IPlayer>
     {
         private static Permission libPerms;
-        private readonly MyPlayer player;
+        private readonly IMyPlayer player;
         private readonly ulong steamId;
 
         internal SpaceEngineersPlayer(ulong id, string name)
@@ -32,7 +33,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal SpaceEngineersPlayer(MyPlayer player) : this(player.Id.SteamId, player.DisplayName)
+        internal SpaceEngineersPlayer(IMyPlayer player) : this(player.SteamUserId, player.DisplayName)
         {
             // Store user object
             this.player = player;
@@ -127,15 +128,15 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// Heals the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Heal(float amount) => player.Character.StatComp.Health.Increase(amount, null);
+        public void Heal(float amount) => (player as MyPlayer).Character.StatComp.Health.Increase(amount, null);
 
         /// <summary>
         /// Gets/sets the user's health
         /// </summary>
         public float Health
         {
-            get { return player.Character.StatComp.Health.Value; }
-            set { player.Character.StatComp.Health.Value = value; }
+            get { return (player as MyPlayer).Character.StatComp.Health.Value; }
+            set { (player as MyPlayer).Character.StatComp.Health.Value = value; }
         }
 
         /// <summary>
@@ -153,15 +154,15 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => Sync.Players.KillPlayer(player); // TODO: player.Character.Kill(??) ?
+        public void Kill() => player.Character.Kill(); // TODO: player.Character.Kill(??) ?
 
         /// <summary>
         /// Gets/sets the user's maximum health
         /// </summary>
         public float MaxHealth
         {
-            get { return player.Character.StatComp.Health.MaxValue; }
-            set { player.Character.StatComp.Health.m_maxValue = value; } // TODO: Test if this works
+            get { return (player as MyPlayer).Character.StatComp.Health.MaxValue; }
+            set { /* player.Character.StatComp.Health.m_maxValue = value; */ } // TODO: Test if this works
         }
 
         /// <summary>
@@ -231,7 +232,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="message"></param>
         public void Message(string message)
         {
-            player.Character.SendNewPlayerMessage(MySession.Static.LocalHumanPlayer.Id, player.Id, message, TimeSpan.FromMilliseconds(DateTime.Now.Ticks));
+            (player as MyPlayer).Character.SendNewPlayerMessage(MySession.Static.LocalHumanPlayer.Id, (player as MyPlayer).Id, message, TimeSpan.FromMilliseconds(DateTime.Now.Ticks));
         }
 
         /// <summary>

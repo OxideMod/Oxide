@@ -8,25 +8,28 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 266,
+            "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnServerInitialized",
-            "HookName": "OnServerInitialized",
+            "Name": "InitLogging [internal]",
+            "HookName": "InitLogging",
             "AssemblyName": "Sandbox.Game.dll",
-            "TypeName": "Sandbox.Engine.Multiplayer.MyDedicatedServerBase",
+            "TypeName": "Sandbox.MyInitializer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 1,
-              "Name": "Initialize",
+              "Exposure": 2,
+              "Name": "InvokeBeforeRun",
               "ReturnType": "System.Void",
               "Parameters": [
-                "System.Net.IPEndPoint"
+                "System.UInt32",
+                "System.String",
+                "System.String",
+                "System.Boolean"
               ]
             },
-            "MSILHash": "URCifdZDUfu6LzXpRIfdf3P5yGhMkQc/xsLdGgxktJY=",
+            "MSILHash": "iaMUJVcRbq+VI2XCoPnDBpD5pu2CwuA3GWda7M1wAss=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -58,54 +61,188 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
+            "InjectionIndex": 266,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "InitLogging [internal]",
-            "HookName": "InitLogging",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
             "AssemblyName": "Sandbox.Game.dll",
-            "TypeName": "Sandbox.MyInitializer",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyDedicatedServerBase",
             "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "InvokeBeforeRun",
+              "Exposure": 1,
+              "Name": "Initialize",
               "ReturnType": "System.Void",
               "Parameters": [
-                "System.UInt32",
-                "System.String",
-                "System.String",
-                "System.Boolean"
+                "System.Net.IPEndPoint"
               ]
             },
-            "MSILHash": "5kv7e0rA3ldp7Ezabd92Tjxfq6oDzs1F1stt0Nr7rXU=",
+            "MSILHash": "URCifdZDUfu6LzXpRIfdf3P5yGhMkQc/xsLdGgxktJY=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 37,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnSandboxCreated [Internal]",
+            "HookName": "IOnSandboxCreated",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.MySandboxGame",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "SY3V0OF4hJuMPhLActm6TR5kPbfwc7oGnj2GlabSHQo=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 408,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnNextTick [internal]",
+            "HookName": "IOnNextTick",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.MySandboxGame",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "Update",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "wR/Qs0jikBbANOmzD6FbCM+h5uWeDH2dE3dskT2wahQ=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyMultiplayerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "RaiseChatMessageReceived",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt64",
+                "System.String",
+                "SteamSDK.ChatEntryTypeEnum"
+              ]
+            },
+            "MSILHash": "QC2Fuq4RmrQku0TWnq+sTeL8FlClCHK5a7XS7k+DM90=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDisconnected",
+            "HookName": "OnPlayerDisconnected",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyMultiplayerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "RaiseClientLeft",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt64",
+                "SteamSDK.ChatMemberStateChangeEnum"
+              ]
+            },
+            "MSILHash": "+h9S18Rt/g2JB1vxHKZTIkuG+PqwNeNZ8wxpiMF9eMs=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyMultiplayerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "IsClientKickedOrBanned",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt64"
+              ]
+            },
+            "MSILHash": "/1wcCBSiwFVy1dVk0kpKNzCaYg2uT7j70XDSbAy3lyo=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 48,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "v0",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerConnected [internal]",
+            "HookName": "IOnPlayerConnected",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Game.Multiplayer.MyPlayerCollection",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CreateNewPlayerInternal",
+              "ReturnType": "Sandbox.Game.World.MyPlayer",
+              "Parameters": [
+                "Sandbox.Game.World.MyNetworkClient",
+                "Sandbox.Game.World.MyPlayer/PlayerId",
+                "VRage.Game.MyObjectBuilder_Player"
+              ]
+            },
+            "MSILHash": "0sM6kMA/LZV14Fe1gRDINeL6IwSo67KDpcdMGoi6LEU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
         }
       ],
-      "Modifiers": [
-        {
-          "Name": "Sandbox.Game.Entities.MyEntityStat::m_maxValue",
-          "AssemblyName": "Sandbox.Game.dll",
-          "TypeName": "Sandbox.Game.Entities.MyEntityStat",
-          "Type": 0,
-          "TargetExposure": [
-            2
-          ],
-          "Flagged": false,
-          "Signature": {
-            "Exposure": [
-              1
-            ],
-            "Name": "m_maxValue",
-            "FullTypeName": "System.Single Sandbox.Game.Entities.MyEntityStat::m_maxValue",
-            "Parameters": []
-          },
-          "MSILHash": ""
-        }
-      ]
+      "Modifiers": []
     },
     {
       "AssemblyName": "VRage.Dedicated.dll",
@@ -173,6 +310,38 @@
             "MSILHash": "+Q0jiaEAnOmFeimRzFbbxU8RzHh20us+Cxg+uMdiFVg=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "_Patches"
+          }
+        }
+      ],
+      "Modifiers": []
+    },
+    {
+      "AssemblyName": "VRage.dll",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 10,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "MyLog [internal]",
+            "HookName": "OnWriteLine",
+            "AssemblyName": "VRage.dll",
+            "TypeName": "VRage.Utils.MyLog",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "WriteLine",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "PqHPFF7L0lgUq19MhwdRxWworQW1Mvlpt2XVCDxi4kg=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ],
