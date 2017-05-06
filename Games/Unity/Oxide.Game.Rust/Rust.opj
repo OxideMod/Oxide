@@ -2177,7 +2177,7 @@
                 "BaseCombatEntity"
               ]
             },
-            "MSILHash": "4qPc50Tv21j1o5QisD9Rmacm/xo6PCdNnjVmti70RkI=",
+            "MSILHash": "8rec2t/q/5JuFRbkCK/CpzPSO5HnbkkJG3hP200zap4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3437,7 +3437,7 @@
               "ReturnType": "System.Boolean",
               "Parameters": []
             },
-            "MSILHash": "NyoDmZujpqduz8Aoyc/yKFT/a/oD8b1tJEAszhF2XCA=",
+            "MSILHash": "mYBL7Z5tb0eSJD28OFGg9LPg6S5A5mn+nrUm7lU1Wuo=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
