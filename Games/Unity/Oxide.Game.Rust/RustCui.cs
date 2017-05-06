@@ -402,6 +402,9 @@ namespace Oxide.Game.Rust.Cui
                 case "UnityEngine.UI.Outline":
                     type = typeof (CuiOutlineComponent);
                     break;
+                case "UnityEngine.UI.InputField":
+                    type = typeof (CuiInputFieldComponent);
+                    break;
                 case "NeedsCursor":
                     type = typeof (CuiNeedsCursorComponent);
                     break;
