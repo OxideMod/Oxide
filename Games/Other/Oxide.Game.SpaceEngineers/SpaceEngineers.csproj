@@ -56,6 +56,9 @@
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
+    <Reference Include="SteamSDK">
+      <HintPath>Dependencies\SteamSDK.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Covalence\SpaceEngineersCommandSystem.cs" />
@@ -63,6 +66,9 @@
     <Compile Include="Libraries\Covalence\SpaceEngineersPlayer.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersServer.cs" />
+    <Compile Include="Libraries\Command.cs" />
+    <Compile Include="Libraries\Player.cs" />
+    <Compile Include="Libraries\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpaceEngineersCore.cs" />
     <Compile Include="SpaceEngineersExtension.cs" />
@@ -95,7 +101,6 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\$(OutputPath)\Oxide.Core.SQLite.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\Oxide.Core.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <PackageFiles Include="$(SolutionDir)\packages\**\lib\net20\*.dll; $(SolutionDir)\packages\**\lib\net35\*.dll" />
@@ -109,6 +114,7 @@
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\Oxide.Core.CSharp.dll" />
     <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" />
+    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\System.Data.SQLite.dll" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
