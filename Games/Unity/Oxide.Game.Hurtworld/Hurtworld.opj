@@ -1559,6 +1559,58 @@
             "BaseHookName": "OnItemDrop",
             "HookCategory": "_Patches"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnStructureRemove",
+            "HookName": "OnStructureRemove",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "StructureManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RemoveAttachmentsForDeploymentData",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "AttachmentData"
+              ]
+            },
+            "MSILHash": "CZn9k5VZWeSHwPHHBZ/cQ3BG1R7+8E6kVW0IYAnUYIo=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 209,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l12",
+            "HookTypeName": "Simple",
+            "Name": "OnStructureBuilt",
+            "HookName": "OnStructureBuilt",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "StructureManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "AttachInternal",
+              "ReturnType": "AttachmentData",
+              "Parameters": [
+                "StructureCommandBufferRow"
+              ]
+            },
+            "MSILHash": "/zYeoqWihhkTnfLDfP5HcA6kkkQan5se5jr1bIRcPWw=",
+            "BaseHookName": null,
+            "HookCategory": "Structure"
+          }
         }
       ],
       "Modifiers": []
