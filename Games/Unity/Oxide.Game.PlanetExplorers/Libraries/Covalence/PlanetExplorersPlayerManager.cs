@@ -93,6 +93,13 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         }
 
         /// <summary>
+        /// Finds a single connected player given game object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public IPlayer FindPlayerByObj(object obj) => connectedPlayers.Values.FirstOrDefault(p => p.Object == obj);
+
+        /// <summary>
         /// Finds a single player given a partial name or unique ID (case-insensitive, wildcards accepted, multiple matches returns null)
         /// </summary>
         /// <param name="partialNameOrId"></param>

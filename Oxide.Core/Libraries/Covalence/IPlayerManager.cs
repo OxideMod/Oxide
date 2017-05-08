@@ -29,6 +29,13 @@ namespace Oxide.Core.Libraries.Covalence
         IPlayer FindPlayerById(string id);
 
         /// <summary>
+        /// Finds a single connected player given game object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        IPlayer FindPlayerByObj(object obj);
+
+        /// <summary>
         /// Finds a single player given a partial name or unique ID (case-insensitive, wildcards accepted, multiple matches returns null)
         /// </summary>
         /// <param name="partialNameOrId"></param>
