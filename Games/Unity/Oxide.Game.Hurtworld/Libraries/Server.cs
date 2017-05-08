@@ -5,10 +5,13 @@ namespace Oxide.Game.Hurtworld.Libraries
 {
     public class Server : Library
     {
-        // Game references
+        #region Initialization
+
         internal static readonly BanManager BanManager = BanManager.Instance;
         internal static readonly ChatManagerServer ChatManager = ChatManagerServer.Instance;
         internal static readonly ConsoleManager ConsoleManager = ConsoleManager.Instance;
+
+        #endregion
 
         #region Administration
 
@@ -20,11 +23,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="duration"></param>
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check if already banned
-            if (IsBanned(id)) return;
-
-            // Ban and kick user
-            BanManager.AddBan(Convert.ToUInt64(id));
+            if (!IsBanned(id)) BanManager.AddBan(Convert.ToUInt64(id));
         }
 
         /// <summary>
@@ -39,11 +38,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="id"></param>
         public void Unban(string id)
         {
-            // Check if unbanned already
-            if (!IsBanned(id)) return;
-
-            // Set to unbanned
-            BanManager.RemoveBan(Convert.ToUInt64(id));
+            if (IsBanned(id)) BanManager.RemoveBan(Convert.ToUInt64(id));
         }
 
         #endregion

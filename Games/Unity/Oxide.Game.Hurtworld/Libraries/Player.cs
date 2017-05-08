@@ -21,7 +21,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         #region Information
 
         /// <summary>
-        /// Gets the user's language
+        /// Gets the player's language
         /// </summary>
         public CultureInfo Language(PlayerSession session) => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
 
@@ -96,10 +96,8 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="reason"></param>
         public void Ban(PlayerSession session, string reason = "")
         {
-            // Check if already banned
             if (IsBanned(session)) return;
 
-            // Ban and kick user
             BanManager.AddBan(session.SteamId.m_SteamID);
             if (session.Player.isConnected) Kick(session, reason);
         }
@@ -207,11 +205,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         public void Unban(PlayerSession session)
         {
-            // Check if unbanned already
-            if (!IsBanned(session)) return;
-
-            // Set to unbanned
-            BanManager.RemoveBan(session.SteamId.m_SteamID);
+            if (IsBanned(session)) BanManager.RemoveBan(session.SteamId.m_SteamID);
         }
 
         #endregion

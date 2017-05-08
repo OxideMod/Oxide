@@ -11,10 +11,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
     /// </summary>
     public class HurtworldServer : IServer
     {
-        internal readonly Server Server = new Server();
+        #region Initialization
 
-        // Game references
+        internal readonly Server Server = new Server();
         internal static readonly BanManager BanManager = BanManager.Instance;
+
+        #endregion
 
         #region Information
 
@@ -117,11 +119,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check if already banned
-            if (IsBanned(id)) return;
-
-            // Ban and kick user
-            Server.Ban(id, reason, duration);
+            if (!IsBanned(id)) Server.Ban(id, reason, duration);
         }
 
         /// <summary>
@@ -147,11 +145,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="id"></param>
         public void Unban(string id)
         {
-            // Check if unbanned already
-            if (!IsBanned(id)) return;
-
-            // Set to unbanned
-            Server.Unban(id);
+            if (IsBanned(id)) Server.Unban(id);
         }
 
         #endregion

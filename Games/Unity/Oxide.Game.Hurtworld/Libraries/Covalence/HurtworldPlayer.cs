@@ -23,10 +23,8 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
 
         internal HurtworldPlayer(ulong id, string name)
         {
-            // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            // Store user details
             steamId = id;
             Name = name;
             Id = id.ToString();
@@ -34,7 +32,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
 
         internal HurtworldPlayer(PlayerSession session) : this(session.SteamId.m_SteamID, session.Name)
         {
-            // Store user object
             this.session = session;
             cSteamId = session.SteamId;
         }
