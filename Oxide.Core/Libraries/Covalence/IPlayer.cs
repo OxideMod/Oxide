@@ -253,6 +253,15 @@ namespace Oxide.Core.Libraries.Covalence
             X = x; Y = y; Z = z;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is GenericPosition)) return false;
+            var pos = (GenericPosition)obj;
+            return X.Equals(pos.X) && Y.Equals(pos.Y) && Z.Equals(pos.Z);
+        }
+
+        public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2;
+
         public override string ToString() => $"({X}, {Y}, {Z})";
     }
 }
