@@ -404,11 +404,13 @@ namespace Oxide.Plugins
         /// <param name="filename"></param>
         /// <param name="text"></param>
         /// <param name="plugin"></param>
-        protected void LogToFile(string filename, string text, Plugin plugin)
+        /// <param name="timeStamp"></param>
+        protected void LogToFile(string filename, string text, Plugin plugin, bool timeStamp = true)
         {
-            filename = Utility.CleanPath($"{plugin.Name.ToLower()}_{filename.ToLower()}-{DateTime.Now:yyyy-MM-dd}.txt");
-            var path = Path.Combine(Interface.Oxide.LogDirectory, filename);
-            using (var writer = new StreamWriter((path), true)) writer.WriteLine(text);
+            var path = Path.Combine(Interface.Oxide.LogDirectory, plugin.Name);
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            filename = $"{plugin.Name.ToLower()}_{filename.ToLower()}{(timeStamp ? $"-{DateTime.Now:yyyy-MM-dd}" : "")}.txt";
+            using (var writer = new StreamWriter(Path.Combine(path, Utility.CleanPath(filename)), true)) writer.WriteLine(text);
         }
 
         /// <summary>
