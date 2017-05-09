@@ -5105,6 +5105,101 @@
             "Parameters": []
           },
           "MSILHash": "rKfKTU8aw0OW1ra5wQBmBDvYRbok6FusXVxFZ8eYw/k="
+        },
+        {
+          "Name": "BaseCombatEntity::_health",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BaseCombatEntity",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "_health",
+            "FullTypeName": "System.Single BaseCombatEntity::_health",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "BaseCombatEntity::_lastAttackedTime",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BaseCombatEntity",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "_lastAttackedTime",
+            "FullTypeName": "System.Single BaseCombatEntity::_lastAttackedTime",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "BaseCombatEntity::_maxHealth",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BaseCombatEntity",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "_maxHealth",
+            "FullTypeName": "System.Single BaseCombatEntity::_maxHealth",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "BaseCombatEntity::lastHostilePos",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BaseCombatEntity",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "lastHostilePos",
+            "FullTypeName": "UnityEngine.Vector3 BaseCombatEntity::lastHostilePos",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "BaseCombatEntity::lastHostileTime",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BaseCombatEntity",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "lastHostileTime",
+            "FullTypeName": "System.Single BaseCombatEntity::lastHostileTime",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
       ]
     },

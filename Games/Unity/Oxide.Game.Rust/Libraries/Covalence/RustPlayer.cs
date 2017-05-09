@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -145,15 +144,13 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Kill() => Player.Kill(player);
 
-        readonly FieldInfo maxHealth = typeof(BasePlayer).GetField("_maxHealth", BindingFlags.NonPublic);
-
         /// <summary>
         /// Gets/sets the user's maximum health
         /// </summary>
         public float MaxHealth
         {
             get { return player.MaxHealth(); }
-            set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
+            set { player._maxHealth = value; }
         }
 
         /// <summary>
