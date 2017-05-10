@@ -5,7 +5,6 @@ using System.Net;
 using Bolt;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
-using Steamworks;
 using TheForest.Utils;
 using UdpKit;
 using UnityEngine;
@@ -26,13 +25,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public string Name
         {
-            get { return CoopServerInfo.Instance.state.ServerName; }
-            set
-            {
-                //SteamDSConfig.ServerName = value;
-                CoopServerInfo.Instance.state.ServerName = value;
-                //SteamGameServer.SetServerName(value); // TODO: Check if needed
-            }
+            get { return CoopLobby.Instance.Info.Name ?? SteamDSConfig.ServerName; }
+            set { CoopLobby.Instance.SetName(value); }
         }
 
         private static IPAddress address;
@@ -83,20 +77,15 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Gets the total of players currently on the server
         /// </summary>
-        public int Players => CoopServerInfo.Instance.state.PlayerCount;
+        public int Players => CoopLobby.Instance.Info.CurrentMembers;
 
         /// <summary>
         /// Gets/sets the maximum players allowed on the server
         /// </summary>
         public int MaxPlayers
         {
-            get { return CoopServerInfo.Instance.state.MaxPlayers; }
-            set
-            {
-                //SteamDSConfig.ServerPlayers = value;
-                CoopServerInfo.Instance.state.MaxPlayers = value;
-                //SteamGameServer.SetMaxPlayerCount(value); // TODO: Check if needed
-            }
+            get { return CoopLobby.Instance.Info.MemberLimit; }
+            set { CoopLobby.Instance.SetMemberLimit(value); }
         }
 
         /// <summary>
@@ -104,8 +93,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return DateTime.Today.AddMinutes(CoopWeatherProxy.Instance.state.TimeOfDay); } // TODO: Update
-            set { CoopWeatherProxy.Instance.state.TimeOfDay = value.Minute; }
+            get { return DateTime.Today.AddMinutes(Scene.Atmosphere.TimeOfDay); } // TODO: Fix this not working
+            set { Scene.Atmosphere.TimeOfDay = value.Minute; } // TODO: Fix this not working
         }
 
         #endregion

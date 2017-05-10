@@ -1463,7 +1463,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 58,
+            "InjectionIndex": 60,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -1471,15 +1471,15 @@
             "Name": "OnServerInitialized",
             "HookName": "OnServerInitialized",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopDedicatedServerStarter",
+            "TypeName": "CoopSteamManagerDS",
             "Flagged": false,
             "Signature": {
               "Exposure": 0,
-              "Name": "Start",
+              "Name": "Launch",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "MysXhcxX/iNzcsDaNdCQ37sbLh+NFAEEb38SjGKUacQ=",
+            "MSILHash": "Cp0rOGRlHE2gbrlviIKU+UGfgJlCOjhsI6ueqwPWD1Y=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

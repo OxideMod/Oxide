@@ -5,6 +5,7 @@ using System.Reflection;
 using Bolt;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using TheForest.Utils;
 using UnityEngine;
 
 namespace Oxide.Game.TheForest
@@ -42,6 +43,8 @@ namespace Oxide.Game.TheForest
 
         public static string[] Filter =
         {
+            "CoopLobby.LeaveActive instance",
+            "CoopSteamManager Initialize",
             "GameServer.InitSafe success:",
             "Set a LogOnAnonymous",
             "Started.",
@@ -122,7 +125,7 @@ namespace Oxide.Game.TheForest
 
             Interface.Oxide.ServerConsole.Status3Left = () =>
             {
-                //var gameTime = DateTime.Today.AddMinutes(CoopServerInfo.Instance.state.StartDayTime).ToString("h:mm tt");
+                //var gameTime = Scene.Atmosphere.TimeOfDay/*).ToString("h:mm tt")*/;
                 return $"Slot {SteamDSConfig.GameSaveSlot} [{SteamDSConfig.GameDifficulty}]";
             };
             Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {SteamDSConfig.ServerVersion}";
