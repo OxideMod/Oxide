@@ -398,12 +398,12 @@ namespace Oxide.Core.Plugins
         {
             foreach (var cmdName in commands)
             {
-                if (commandInfos.ContainsKey(cmdName))
+                if (commandInfos.ContainsKey(cmdName.ToLowerInvariant()))
                 {
                     Interface.Oxide.LogWarning("Covalence command alias already exists: {0}", cmdName);
                     continue;
                 }
-                commandInfos.Add(cmdName, new CommandInfo(commands, perms, callback));
+                commandInfos.Add(cmdName.ToLowerInvariant(), new CommandInfo(commands, perms, callback));
             }
 
             if (perms == null) return;

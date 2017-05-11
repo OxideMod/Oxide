@@ -138,7 +138,7 @@ namespace Oxide.Core.Libraries.Covalence
                 args = null;
                 return;
             }
-            cmd = arglist[0];
+            cmd = arglist[0].ToLowerInvariant();
             arglist.RemoveAt(0);
             args = arglist.ToArray();
         }
