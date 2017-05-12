@@ -2,11 +2,10 @@
 using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using VRage.Game.ModAPI;
 
-namespace Oxide.Game.SpaceEngineers.Libraries
+namespace Oxide.Game.MedievalEngineers.Libraries
 {
     /// <summary>
     /// A library containing functions for adding console and chat commands

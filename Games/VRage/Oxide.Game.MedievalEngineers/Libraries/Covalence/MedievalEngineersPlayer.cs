@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Globalization;
-using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
-using Sandbox;
-using Sandbox.Engine.Multiplayer;
-using Sandbox.Game.Entities;
-using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
-using VRage.Game;
-using VRageMath;
+using VRage.Game.ModAPI;
 
 namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
 {
@@ -19,26 +13,31 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
     /// </summary>
     public class MedievalEngineersPlayer : IPlayer, IEquatable<IPlayer>
     {
+        #region Initialization
+
+        internal readonly Player Player = new Player();
+
         private static Permission libPerms;
-        private readonly MyPlayer player;
+        private readonly IMyPlayer player;
+        private readonly MyPlayer myPlayer;
         private readonly ulong steamId;
 
         internal MedievalEngineersPlayer(ulong id, string name)
         {
-            // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            // Store user details
             steamId = id;
             Name = name;
             Id = id.ToString();
         }
 
-        internal MedievalEngineersPlayer(MyPlayer player) : this(player.Id.SteamId, player.DisplayName)
+        internal MedievalEngineersPlayer(IMyPlayer player) : this(player.SteamUserId, player.DisplayName)
         {
-            // Store user object
             this.player = player;
+            this.myPlayer = player as MyPlayer;
         }
+
+        #endregion
 
         #region Objects
 
@@ -67,57 +66,51 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         public string Id { get; }
 
         /// <summary>
-        /// Gets the user's language
-        /// </summary>
-        public CultureInfo Language => CultureInfo.GetCultureInfo("en"); // TODO: Implement when possible
-
-        /// <summary>
         /// Gets the user's IP address
         /// </summary>
-        public string Address => string.Empty; // TODO: Implement when possible
+        public string Address => Player.Address(player);
 
         /// <summary>
         /// Gets the user's average network ping
         /// </summary>
-        public int Ping => 0; // TODO: Implement when possible
+        public int Ping => Player.Ping(player);
+
+        /// <summary>
+        /// Gets the user's language
+        /// </summary>
+        public CultureInfo Language => Player.Language(player);
 
         /// <summary>
         /// Returns if the user is admin
         /// </summary>
-        public bool IsAdmin => player.IsAdmin;
+        public bool IsAdmin => Player.IsAdmin(player); // TODO: Switch to steamId
 
         /// <summary>
         /// Gets if the user is banned
         /// </summary>
-        public bool IsBanned => MySandboxGame.ConfigDedicated.Banned.Contains(steamId);
+        public bool IsBanned => Player.IsBanned(steamId);
 
         /// <summary>
         /// Gets if the user is connected
         /// </summary>
-        public bool IsConnected => Sync.Clients.HasClient(steamId);
+        public bool IsConnected => Player.IsConnected(player);
 
         /// <summary>
         /// Returns if the user is sleeping
         /// </summary>
-        public bool IsSleeping => false;
+        public bool IsSleeping => Player.IsSleeping(steamId);
 
         #endregion
 
         #region Administration
-
-        /// <summary>
+ /// <summary>
         /// Bans the user for the specified reason and duration
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
         public void Ban(string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check if already banned
-            if (IsBanned) return;
-
-            // Ban and kick user
-            MyMultiplayer.Static.BanClient(steamId, true);
-            if (IsConnected) Kick(reason); // TODO: Needed?
+            if (!IsBanned) Player.Ban(player, reason);
         }
 
         /// <summary>
@@ -129,53 +122,48 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Heals the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Heal(float amount) => player.Character.StatComp.Health.Increase(amount, null);
+        public void Heal(float amount) => Player.Heal(player, amount);
 
         /// <summary>
         /// Gets/sets the user's health
         /// </summary>
         public float Health
         {
-            get { return player.Character.StatComp.Health.Value; }
-            set { player.Character.StatComp.Health.Value = value; }
+            get { return myPlayer.Character.StatComp.Health.Value; }
+            set { myPlayer.Character.StatComp.Health.Value = value; }
         }
 
         /// <summary>
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Hurt(float amount) => player.Character.DoDamage(amount, MyDamageType.Unknown, true);
+        public void Hurt(float amount) => Player.Hurt(player, amount);
 
         /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => MyMultiplayer.Static.KickClient(steamId);
+        public void Kick(string reason) => Player.Kick(player, reason);
 
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => Sync.Players.KillPlayer(player); // TODO: player.Character.Kill(??) ?
-
-        readonly FieldInfo maxHealth = typeof(MyEntityStat).GetField("m_maxValue", BindingFlags.NonPublic);
+        public void Kill() => Player.Kill(player);
 
         /// <summary>
         /// Gets/sets the user's maximum health
         /// </summary>
         public float MaxHealth
         {
-            get { return player.Character.StatComp.Health.MaxValue; }
-            set { maxHealth?.SetValue(player, value); } // TODO: Test if this works
+            get { return myPlayer.Character.StatComp.Health.MaxValue; }
+            set { myPlayer.Character.StatComp.Health.m_maxValue = value; }
         }
 
         /// <summary>
         /// Renames the user to specified name
         /// <param name="name"></param>
         /// </summary>
-        public void Rename(string name)
-        {
-            // TODO: Implement when possible
-        }
+        public void Rename(string name) => Player.Rename(player, name);
 
         /// <summary>
         /// Teleports the user's character to the specified position
@@ -183,18 +171,14 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => player.Character.Teleport(new Vector3D(x, y, z));
+        public void Teleport(float x, float y, float z) => Player.Teleport(player, x, y, z);
 
         /// <summary>
         /// Unbans the user
         /// </summary>
         public void Unban()
         {
-            // Check if unbanned already
-            if (!IsBanned) return;
-
-            // Set to unbanned
-            MyMultiplayer.Static.BanClient(steamId, false);
+            if (IsBanned) return;  Player.Unban(player);
         }
 
         #endregion
@@ -209,7 +193,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            var pos = player.GetPosition();
+            var pos = Player.Position(player);
             x = (float)pos.X;
             y = (float)pos.Y;
             z = (float)pos.Z;
@@ -221,7 +205,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            var pos = player.GetPosition();
+            var pos = Player.Position(player);
             return new GenericPosition((float)pos.X, (float)pos.Y, (float)pos.Z);
         }
 
@@ -233,10 +217,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
-        {
-            player.Character.SendNewPlayerMessage(MySession.Static.LocalHumanPlayer.Id, player.Id, message, TimeSpan.FromMilliseconds(DateTime.Now.Ticks));
-        }
+        public void Message(string message) => Player.Message(player, message);
 
         /// <summary>
         /// Sends the specified message to the user
@@ -263,10 +244,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args)
-        {
-            // TODO: Implement when possible
-        }
+        public void Command(string command, params object[] args) => Player.Command(player, command, args);
 
         #endregion
 

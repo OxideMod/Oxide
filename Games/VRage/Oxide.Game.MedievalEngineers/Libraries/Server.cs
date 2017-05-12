@@ -3,7 +3,7 @@ using Oxide.Core.Libraries;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 
-namespace Oxide.Game.SpaceEngineers.Libraries
+namespace Oxide.Game.MedievalEngineers.Libraries
 {
     public class Server : Library
     {
@@ -17,7 +17,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// <param name="duration"></param>
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
-            if (!IsBanned(id)) MyMultiplayer.Static.BanClient(ulong.Parse(id), true);
+            if (!IsBanned(id)) MyMultiplayer.Static.BanClient(Convert.ToUInt64(id), true);
         }
 
         /// <summary>

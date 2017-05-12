@@ -33,9 +33,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sandbox.Common">
-      <HintPath>Dependencies\Sandbox.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>Patched\Sandbox.Game.dll</HintPath>
     </Reference>
@@ -68,6 +65,9 @@
     <Compile Include="MedievalEngineersExtension.cs" />
     <Compile Include="MedievalEngineersPlugin.cs" />
     <Compile Include="MedievalEngineersPluginLoader.cs" />
+    <Compile Include="Libraries\Server.cs" />
+    <Compile Include="Libraries\Command.cs" />
+    <Compile Include="Libraries\Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">
@@ -106,8 +106,7 @@
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\Oxide.Core.CSharp.dll" />
-    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" />
+    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\System.Data.SQLite.dll" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">

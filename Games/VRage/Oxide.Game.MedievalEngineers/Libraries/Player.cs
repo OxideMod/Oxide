@@ -9,9 +9,10 @@ using Sandbox.Game.World;
 using Sandbox.ModAPI;
 using VRage.Game;
 using VRage.Game.ModAPI;
+using VRage.Network;
 using VRageMath;
 
-namespace Oxide.Game.SpaceEngineers.Libraries
+namespace Oxide.Game.MedievalEngineers.Libraries
 {
     public class Player : Library
     {
@@ -35,22 +36,22 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        //public bool IsAdmin(string id) => player.PromoteLevel == MyPromoteLevel.Admin; // TODO: 
+        public bool IsAdmin(string id) => IsAdmin(Convert.ToUInt64(id));
 
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        //public bool IsAdmin(ulong id) => player.PromoteLevel == MyPromoteLevel.Admin;
+        public bool IsAdmin(ulong id) => MySession.Static.HasPlayerAdminRights(id);
 
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        public bool IsAdmin(IMyPlayer player) => player.PromoteLevel == MyPromoteLevel.Admin;
+        public bool IsAdmin(IMyPlayer player) => player.IsAdmin;
 
         /// <summary>
         /// Gets if the player is banned
         /// </summary>
-        public bool IsBanned(string id) => MySandboxGame.ConfigDedicated.Banned.Contains(Convert.ToUInt64(id));
+        public bool IsBanned(string id) => IsBanned(Convert.ToUInt64(id));
 
         /// <summary>
         /// Gets if the player is banned
@@ -108,7 +109,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// </summary>
         /// <param name="player"></param>
         /// <param name="amount"></param>
-        public void Hurt(IMyPlayer player, float amount) => player.Character.DoDamage(amount, MyDamageType.Unknown, true);
+        public void Hurt(IMyPlayer player, float amount) => (player as MyPlayer).Character.DoDamage(amount, MyDamageType.Unknown, true);
 
         /// <summary>
         /// Kicks the player from the server
@@ -121,7 +122,11 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// Causes the player to die
         /// </summary>
         /// <param name="player"></param>
-        public void Kill(IMyPlayer player) => player.Character.Kill();
+        public void Kill(IMyPlayer player)
+        {
+            var damageInformation = new MyDamageInformation(true, 1f, MyDamageType.Deformation, (long)Sync.ServerId);
+            (player as MyPlayer).Character.Kill(true, damageInformation);
+        }
 
         /// <summary>
         /// Renames the player to specified name
@@ -250,14 +255,12 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         {
             if (string.IsNullOrEmpty(message)) return;
 
-            var msg = new ScriptedChatMsg()
+            var msg = new ChatMsg
             {
                 Text = string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}"),
-                Author = "server",
-                Target = player.IdentityId,
-                Font = "Green"
+                Author = Sync.ServerId
             };
-            MyMultiplayerBase.SendScriptedChatMessage(ref msg);
+            MyMultiplayerBase.SendChatMessage(ref msg);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 {
   "Name": "MedievalEngineers",
-  "TargetDirectory": "D:\\Servers\\Game\\Other\\MedievalEngineers\\DedicatedServer64",
+  "TargetDirectory": "W:\\Servers\\VRage\\MedievalEngineers\\DedicatedServer64",
   "Manifests": [
     {
       "AssemblyName": "Sandbox.Game.dll",
@@ -29,7 +29,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "LOL8HZ+YI4Gb/C384cHY+MduJTowuGM12ZsNBY0FNQ8=",
+            "MSILHash": "E2HBayzwb3xtQPx68tMq/VXbIW4ityYBVyIbGm7stm4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -37,7 +37,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 265,
+            "InjectionIndex": 339,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -55,7 +55,7 @@
                 "System.Net.IPEndPoint"
               ]
             },
-            "MSILHash": "YnWxvH8IAgJFxNlgjovBfuwyqagekU+9OnVYOLrPLa8=",
+            "MSILHash": "9gIENVjSr6a5ohHQ9cwaco0TppKy8wuXqDGpXSTXWJI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,8 +68,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnServerShutdown [internal]",
-            "HookName": "IOnServerShutdown",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "Sandbox.Game.dll",
             "TypeName": "Sandbox.Engine.Multiplayer.MyDedicatedServerBase",
             "Flagged": false,
@@ -83,9 +83,160 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyMultiplayerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "RaiseChatMessageReceived",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt64",
+                "System.String",
+                "SteamSDK.ChatEntryTypeEnum"
+              ]
+            },
+            "MSILHash": "RpqVpElo2zssCc0S9ySwbeFpDihwZlzMO9hGPGDfOTo=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "v0",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerConnected [internal]",
+            "HookName": "IOnPlayerConnected",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Game.Multiplayer.MyPlayerCollection",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CreateNewPlayerInternal",
+              "ReturnType": "Sandbox.Game.World.MyPlayer",
+              "Parameters": [
+                "Sandbox.Game.World.MyNetworkClient",
+                "Sandbox.Game.World.MyPlayer/PlayerId",
+                "VRage.Game.MyObjectBuilder_Player"
+              ]
+            },
+            "MSILHash": "KZCZaC3bJ8pa1RoiXxM2BNEAbhrpYJYKocUy0FAAT7Y=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerDisconnected [internal]",
+            "HookName": "IOnPlayerDisconnected",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyMultiplayerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "RaiseClientLeft",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.UInt64",
+                "SteamSDK.ChatMemberStateChangeEnum"
+              ]
+            },
+            "MSILHash": "+h9S18Rt/g2JB1vxHKZTIkuG+PqwNeNZ8wxpiMF9eMs=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0",
+            "HookTypeName": "Simple",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
+            "AssemblyName": "Sandbox.Game.dll",
+            "TypeName": "Sandbox.Engine.Multiplayer.MyMultiplayerBase",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "IsClientKickedOrBanned",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt64"
+              ]
+            },
+            "MSILHash": "/1wcCBSiwFVy1dVk0kpKNzCaYg2uT7j70XDSbAy3lyo=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [
+        {
+          "Name": "Sandbox.Game.Entities.MyEntityStat::m_maxValue",
+          "AssemblyName": "Sandbox.Game.dll",
+          "TypeName": "Sandbox.Game.Entities.MyEntityStat",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              1
+            ],
+            "Name": "m_maxValue",
+            "FullTypeName": "System.Single Sandbox.Game.Entities.MyEntityStat::m_maxValue",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "Sandbox.Engine.Multiplayer.MyMultiplayerBase::SendChatMessage",
+          "AssemblyName": "Sandbox.Game.dll",
+          "TypeName": "Sandbox.Engine.Multiplayer.MyMultiplayerBase",
+          "Type": 1,
+          "TargetExposure": [
+            2,
+            4
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              1
+            ],
+            "Name": "SendChatMessage",
+            "FullTypeName": "System.Void",
+            "Parameters": [
+              "VRage.Network.ChatMsg&"
+            ]
+          },
+          "MSILHash": "iiNnog5kz6DD/0ZyhXEarsh0/5XqF5QAMsq3CI0pX9w="
+        }
+      ]
     },
     {
       "AssemblyName": "VRage.Dedicated.dll",

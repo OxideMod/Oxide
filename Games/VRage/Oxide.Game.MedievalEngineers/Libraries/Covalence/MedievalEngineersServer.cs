@@ -15,6 +15,12 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
     /// </summary>
     public class MedievalEngineersServer : IServer
     {
+        #region Initialization
+
+        internal readonly Server Server = new Server();
+
+        #endregion
+
         #region Information
 
         /// <summary>
@@ -90,8 +96,8 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// </summary>
         public DateTime Time
         {
-            get { return MySession.Static.GameDateTime; }
-            set { MySession.Static.GameDateTime = value; }
+            get { return MySession.Static.InGameTime; }
+            set { MySession.Static.InGameTime = value; }
         }
 
         #endregion
@@ -106,12 +112,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// <param name="duration"></param>
         public void Ban(string id, string reason, TimeSpan duration = default(TimeSpan))
         {
-            // Check if already banned
-            if (IsBanned(id)) return;
-
-            // Ban and kick user
-            MyMultiplayer.Static.BanClient(ulong.Parse(id), true);
-            //if (IsConnected) Kick(reason); // TODO: Needed? Implement if possible
+            if (!IsBanned(id)) Server.Ban(id, reason, duration);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Gets if the user is banned
         /// </summary>
         /// <param name="id"></param>
-        public bool IsBanned(string id) => MySandboxGame.ConfigDedicated.Banned.Contains(ulong.Parse(id));
+        public bool IsBanned(string id) => Server.IsBanned(id);
 
         /// <summary>
         /// Saves the server and any related information
@@ -137,11 +138,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// <param name="id"></param>
         public void Unban(string id)
         {
-            // Check if unbanned already
-            if (!IsBanned(id)) return;
-
-            // Set to unbanned
-            MyMultiplayer.Static.BanClient(ulong.Parse(id), false);
+            if (IsBanned(id)) Server.Unban(id);
         }
 
         #endregion
@@ -152,17 +149,14 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => MyMultiplayer.Static.SendChatMessage(message);
+        public void Broadcast(string message) => Server.Broadcast(message);
 
         /// <summary>
         /// Runs the specified server command
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args)
-        {
-            // TODO: Not possible yet?
-        }
+        public void Command(string command, params object[] args) => Server.Command(command, args);
 
         #endregion
     }

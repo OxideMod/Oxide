@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
-using Sandbox.Game.World;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using ProtoBuf;
+using Sandbox.Game.World;
+using VRage.Game.ModAPI;
 
 namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
 {
@@ -34,9 +35,9 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             connectedPlayers = new Dictionary<string, MedievalEngineersPlayer>();
         }
 
-        private void NotifyPlayerJoin(MyPlayer player)
+        private void NotifyPlayerJoin(IMyPlayer player)
         {
-            var id = player.Id.SteamId.ToString();
+            var id = player.SteamUserId.ToString();
 
             // Do they exist?
             PlayerRecord record;
@@ -53,7 +54,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             else
             {
                 // Insert
-                record = new PlayerRecord { Id = player.Id.SteamId, Name = player.DisplayName};
+                record = new PlayerRecord { Id = player.SteamUserId, Name = player.DisplayName};
                 playerData.Add(id, record);
 
                 // Create Rust player
@@ -70,7 +71,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             connectedPlayers[player.Id.SteamId.ToString()] = new MedievalEngineersPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(MyPlayer player) => connectedPlayers.Remove(player.Id.SteamId.ToString());
+        internal void NotifyPlayerDisconnect(IMyPlayer player) => connectedPlayers.Remove(player.SteamUserId.ToString());
 
         #region Player Finding
 
