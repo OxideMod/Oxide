@@ -35,12 +35,12 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        //public bool IsAdmin(string id) => player.PromoteLevel == MyPromoteLevel.Admin; // TODO: 
+        public bool IsAdmin(string id) => IsAdmin(Convert.ToUInt64(id));
 
         /// <summary>
         /// Returns if the player is admin
         /// </summary>
-        //public bool IsAdmin(ulong id) => player.PromoteLevel == MyPromoteLevel.Admin;
+        public bool IsAdmin(ulong id) => MySession.Static.IsUserAdmin(id);
 
         /// <summary>
         /// Returns if the player is admin
@@ -50,7 +50,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// <summary>
         /// Gets if the player is banned
         /// </summary>
-        public bool IsBanned(string id) => MySandboxGame.ConfigDedicated.Banned.Contains(Convert.ToUInt64(id));
+        public bool IsBanned(string id) => IsBanned(Convert.ToUInt64(id));
 
         /// <summary>
         /// Gets if the player is banned
@@ -250,7 +250,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         {
             if (string.IsNullOrEmpty(message)) return;
 
-            var msg = new ScriptedChatMsg()
+            var msg = new ScriptedChatMsg
             {
                 Text = string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}"),
                 Author = "server",
