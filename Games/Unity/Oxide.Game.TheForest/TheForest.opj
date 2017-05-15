@@ -1504,6 +1504,25 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "CoopKick::kickedSteamIds",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CoopKick",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "kickedSteamIds",
+            "FullTypeName": "System.Collections.Generic.List`1<CoopKick/KickedPlayer> CoopKick::kickedSteamIds",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
       ]
     },

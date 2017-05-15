@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using Bolt;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -24,10 +23,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         internal TheForestPlayer(ulong id, string name)
         {
-            // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            // Store user details
             Name = name;
             steamId = id;
             Id = id.ToString();
@@ -35,11 +32,10 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         internal TheForestPlayer(BoltEntity entity)
         {
-            // Store user object
             steamId = entity.controller.RemoteEndPoint.SteamId.Id;
             cSteamId = new CSteamID(steamId);
             Id = steamId.ToString();
-            Name = SteamFriends.GetFriendPersonaName(cSteamId);
+            Name = entity.GetState<IPlayerState>().name;
             this.entity = entity;
         }
 
@@ -126,9 +122,15 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             if (IsBanned) return;
 
-            Scene.HudGui.MpPlayerList.Ban(steamId);
+            var kickedPlayer = new CoopKick.KickedPlayer()
+            {
+                Name = Name,
+                SteamId = steamId,
+                BanEndTime = (duration.TotalMinutes <= 0 ? 0 : DateTime.UtcNow.ToUnixTimestamp() + (long)duration.TotalMinutes)
+            };
+            CoopKick.Instance.kickedSteamIds.Add(kickedPlayer);
             CoopKick.SaveList();
-            if (IsConnected) CoopKick.KickPlayer(entity, (int)duration.TotalMinutes, reason);
+            if (IsConnected) Kick(reason);
         }
 
         /// <summary>
@@ -168,7 +170,16 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => CoopKick.KickPlayer(entity, -1, reason);
+        public void Kick(string reason)
+        {
+            var connection = entity.source;
+            var coopKickToken = new CoopKickToken()
+            {
+                KickMessage = reason,
+                Banned = false
+            };
+            connection.Disconnect(coopKickToken);
+        }
 
         /// <summary>
         /// Causes the user's character to die
@@ -194,7 +205,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// Renames the user to specified name
         /// <param name="name"></param>
         /// </summary>
-        public void Rename(string name) => entity.GetState<IPlayerState>().name = "Server"; // TODO: Test
+        public void Rename(string name) => entity.GetState<IPlayerState>().name = name; // TODO: Test
 
         /// <summary>
         /// Teleports the user's character to the specified position
@@ -211,7 +222,12 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             if (!IsBanned) return;
 
-            CoopKick.UnBanPlayer(steamId);
+            var kickedPlayer = CoopKick.Instance.kickedSteamIds.First<CoopKick.KickedPlayer>((CoopKick.KickedPlayer k) => k.SteamId == steamId);
+            if (kickedPlayer != null)
+            {
+                CoopKick.Instance.kickedSteamIds.Remove(kickedPlayer);
+                CoopKick.SaveList();
+            }
         }
 
         #endregion
