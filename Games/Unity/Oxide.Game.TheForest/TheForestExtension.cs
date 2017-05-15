@@ -45,12 +45,16 @@ namespace Oxide.Game.TheForest
         {
             "CoopLobby.LeaveActive instance",
             "CoopSteamManager Initialize",
+            "Game Activation Sequence step",
             "GameServer.InitSafe success:",
+            "InitMaterial Starfield",
+            "PlayerPreferences.Load",
             "Set a LogOnAnonymous",
             "Started.",
             "SteamManager - Awake",
             "SteamManager - Someone call OnDestroy",
-            "SteamManager OnEnable"
+            "SteamManager OnEnable",
+            "Trying to reload asset from disk that is not stored on disk"
         };
 
         /// <summary>

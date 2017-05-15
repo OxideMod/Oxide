@@ -32,7 +32,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         internal TheForestPlayer(BoltEntity entity)
         {
-            steamId = Convert.ToUInt64(entity.controller.RemoteEndPoint.SteamId);
+            steamId = entity.controller.RemoteEndPoint.SteamId.Id;
             cSteamId = new CSteamID(steamId);
             Id = steamId.ToString();
             Name = entity.GetState<IPlayerState>().name;
@@ -140,7 +140,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             get
             {
-                var kickedPlayer = CoopKick.Instance.KickedPlayers.First(p => p.SteamId == steamId);
+                var kickedPlayer = CoopKick.Instance.KickedPlayers.First(k => k.SteamId == steamId);
                 return kickedPlayer != null ? TimeSpan.FromTicks(kickedPlayer.BanEndTime) : TimeSpan.Zero;
             }
         }
