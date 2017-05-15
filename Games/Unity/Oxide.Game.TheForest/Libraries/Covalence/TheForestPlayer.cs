@@ -32,7 +32,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         internal TheForestPlayer(BoltEntity entity)
         {
-            steamId = entity.controller.RemoteEndPoint.SteamId.Id;
+            steamId = Convert.ToUInt64(entity.controller.RemoteEndPoint.SteamId);
             cSteamId = new CSteamID(steamId);
             Id = steamId.ToString();
             Name = entity.GetState<IPlayerState>().name;
@@ -222,7 +222,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             if (!IsBanned) return;
 
-            var kickedPlayer = CoopKick.Instance.kickedSteamIds.First<CoopKick.KickedPlayer>((CoopKick.KickedPlayer k) => k.SteamId == steamId);
+            var kickedPlayer = CoopKick.Instance.kickedSteamIds.First(k => k.SteamId == steamId);
             if (kickedPlayer != null)
             {
                 CoopKick.Instance.kickedSteamIds.Remove(kickedPlayer);
