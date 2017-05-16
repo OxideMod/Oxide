@@ -1105,26 +1105,6 @@
       ],
       "Modifiers": [
         {
-          "Name": "FileCounter::_folders",
-          "AssemblyName": "Assembly-CSharp.dll",
-          "TypeName": "FileCounter",
-          "Type": 0,
-          "TargetExposure": [
-            2,
-            4
-          ],
-          "Flagged": false,
-          "Signature": {
-            "Exposure": [
-              0
-            ],
-            "Name": "_folders",
-            "FullTypeName": "System.String[] FileCounter::_folders",
-            "Parameters": []
-          },
-          "MSILHash": ""
-        },
-        {
           "Name": "CodeHatch.Engine.Administration.SocketAdminConsole::_server",
           "AssemblyName": "Assembly-CSharp.dll",
           "TypeName": "CodeHatch.Engine.Administration.SocketAdminConsole",
