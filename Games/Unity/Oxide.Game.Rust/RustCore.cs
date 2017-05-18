@@ -767,7 +767,7 @@ namespace Oxide.Game.Rust
             else
             {
                 player.Reply($"Protocol: {Server.Protocol}\nBuild Date: {BuildInfo.Current.BuildDate}\n" +
-                $"Unity Version: {Application.unityVersion}\nChangeset: {BuildInfo.Current.Scm.ChangeId}\n" +
+                $"Unity Version: {UnityEngine.Application.unityVersion}\nChangeset: {BuildInfo.Current.Scm.ChangeId}\n" +
                 $"Branch: {BuildInfo.Current.Scm.Branch}\nOxide Version: {OxideMod.Version}");
             }
         }
