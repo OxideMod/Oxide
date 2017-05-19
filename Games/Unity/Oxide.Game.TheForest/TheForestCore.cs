@@ -157,7 +157,7 @@ namespace Oxide.Game.TheForest
         {
             var id = connection.RemoteEndPoint.SteamId.Id.ToString();
             var cSteamId = new CSteamID(connection.RemoteEndPoint.SteamId.Id);
-            var name = SteamFriends.GetFriendPersonaName(cSteamId);
+            var name = SteamFriends.GetFriendPersonaName(cSteamId); // TODO: Does this even work? Might just use "Unnamed"
 
             // Get IP address from Steam
             P2PSessionState_t sessionState;

@@ -832,7 +832,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "m85YCdWvZPZvCWpl69P/RndhpEdFN/YDhoBWUU5Dbcc=",
+            "MSILHash": "GqSjZhOE9cvFiyn445iZhJEEFkxB5tZa6sQ/SCx1zeY=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1222,7 +1222,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "TOHPJCehH8saVfz3vVo92vkfmgqCNp+kqHmPuf2ZBUU=",
+            "MSILHash": "cw6+uYPmRZD8YE0N/Zro5LB6bEFT7vDCpFJD34Kp4bk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
