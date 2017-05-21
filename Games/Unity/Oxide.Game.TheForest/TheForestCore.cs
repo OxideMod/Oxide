@@ -157,7 +157,6 @@ namespace Oxide.Game.TheForest
         {
             var id = connection.RemoteEndPoint.SteamId.Id.ToString();
             var cSteamId = new CSteamID(connection.RemoteEndPoint.SteamId.Id);
-            var name = SteamFriends.GetFriendPersonaName(cSteamId); // TODO: Does this even work? Might just use "Unnamed"
 
             // Get IP address from Steam
             P2PSessionState_t sessionState;
@@ -166,7 +165,7 @@ namespace Oxide.Game.TheForest
             var ip = string.Concat(remoteIp >> 24 & 255, ".", remoteIp >> 16 & 255, ".", remoteIp >> 8 & 255, ".", remoteIp & 255);
 
             // Call out and see if we should reject
-            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", name, id, ip);
+            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", "Unnamed", id, ip);
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
                 var coopKickToken = new CoopKickToken
@@ -178,7 +177,7 @@ namespace Oxide.Game.TheForest
                 return true;
             }
 
-            return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", name, id, ip);
+            return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", "Unnamed", id, ip);
         }
 
         /// <summary>
