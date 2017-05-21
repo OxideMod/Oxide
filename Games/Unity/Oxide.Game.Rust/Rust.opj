@@ -3963,7 +3963,7 @@
             },
             "MSILHash": "TLlQd4c6vNlOGS3JR4NedvSmRUE9gpFT0tHAQj1D510=",
             "BaseHookName": null,
-            "HookCategory": "Structure"
+            "HookCategory": "Player"
           }
         },
         {
@@ -4067,7 +4067,7 @@
             },
             "MSILHash": "AYk5MSjbxah7cskBA5/j51cj3mNLqj31Cz/XC1Sfuys=",
             "BaseHookName": null,
-            "HookCategory": "Structure"
+            "HookCategory": "Player"
           }
         },
         {
@@ -4430,7 +4430,7 @@
             },
             "MSILHash": "yg+1x4pMkW/iuB2HZHwPdA5KTyMdjgD77HqfD/rJIXc=",
             "BaseHookName": null,
-            "HookCategory": "Structure"
+            "HookCategory": "Player"
           }
         },
         {
@@ -4730,6 +4730,193 @@
               "Parameters": []
             },
             "MSILHash": "ED0PKGyZUnVFvksAaJwdlH8ZWAWAEBVPXMw2rTgxTg8=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerViolation",
+            "HookName": "OnPlayerViolation",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "AntiHack",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "AddViolation",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer",
+                "AntiHackType",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "svYslTZFQXZam0/MceYw6fmI7NJUBYBsc4DpJNwAlkU=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1, this, a0",
+            "HookTypeName": "Simple",
+            "Name": "CanChangeGrade",
+            "HookName": "CanChangeGrade",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CanChangeToGrade",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BuildingGrade/Enum",
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "bZQsPzeF1dacSx9cyR6tXVNjy5lpvJ/9VRR2AbvORZg=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a1, this, a0",
+            "HookTypeName": "Simple",
+            "Name": "CanAffordUpgrade",
+            "HookName": "CanAffordUpgrade",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CanAffordUpgrade",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BuildingGrade/Enum",
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "HYXIKudhAPhtZqC7dv0Clm7rARFVDRxDUw2LMUvFnvE=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanDemolish",
+            "HookName": "CanDemolish",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BuildingBlock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CanDemolish",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "FgoZ0VlYoiTQa2qsx77r0acYssX7a5eukQI/T+6Ba0w=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0, this",
+            "HookTypeName": "Simple",
+            "Name": "CanUseMailbox",
+            "HookName": "CanUseMailbox",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Mailbox",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PlayerIsOwner",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "81DlptaujzwGJ53xxJ1/pQjigUm6WkGphcIXY9EjiMM=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 12,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.player, this",
+            "HookTypeName": "Simple",
+            "Name": "OnSpinWheel",
+            "HookName": "OnSpinWheel",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SpinnerWheel",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "RPC_Spin",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "Faoog5ufVPzQ4EtNKUrfYM6OPLoerL8NS9pl+yUCrxU=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 39,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l3, this",
+            "HookTypeName": "Simple",
+            "Name": "CanBeTargeted [guntrap]",
+            "HookName": "CanBeTargeted",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "GunTrap",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CheckTrigger",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.Single",
+                "System.Single"
+              ]
+            },
+            "MSILHash": "7s4m2XG4qytnxpkH960+91Olu3Dx6Xe+N0a4YMXkpV0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
