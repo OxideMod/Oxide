@@ -162,7 +162,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             name = string.IsNullOrEmpty(name.Trim()) ? player.displayName : name;
             player.net.connection.username = name;
             player.displayName = name;
-            player._name = name;
+            //player._name = name; // TODO: Remove or replace if needed
             Name = name;
             player.SendNetworkUpdateImmediate();
         }
