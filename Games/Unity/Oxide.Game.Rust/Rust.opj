@@ -1,6 +1,6 @@
 {
   "Name": "Rust",
-  "TargetDirectory": "W:\\Servers\\Unity\\Rust\\RustDedicated_Data\\Managed",
+  "TargetDirectory": "D:\\Servers\\Game\\Unity\\Rust\\RustDedicated_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -1606,7 +1606,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "fLDpngphqfDHI+g4MJGY2hL9izLD7uFBET9+5vh3uKA=",
+            "MSILHash": "RIG9W1dlvgypOTYtvPLzAwqbbHtXFMUeIOvbHMpLNTI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2812,7 +2812,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 39,
+            "InjectionIndex": 51,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0.connection",
@@ -2830,7 +2830,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "uJaaMhTi8A7ZAxT+5kK7AxclSm3mr4Lc4assJFB8U9w=",
+            "MSILHash": "Qes7frLja+oT2GP2QnwDyNYKJiovFiM3O0WYzEO7Uag=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
