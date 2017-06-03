@@ -37,7 +37,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 34,
+            "InjectionIndex": 36,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -53,7 +53,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "46OrAVnShTQhAeU41Ru5PNQNylaGv9zCHaFq5CJy/0I=",
+            "MSILHash": "JMWAuwMeVvr9TqO8UlNyIR6hxCq5Aqy7/ZLirY3dhTE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -61,7 +61,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 266,
+            "InjectionIndex": 265,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -79,7 +79,7 @@
                 "System.Net.IPEndPoint"
               ]
             },
-            "MSILHash": "URCifdZDUfu6LzXpRIfdf3P5yGhMkQc/xsLdGgxktJY=",
+            "MSILHash": "cvlHGxZHwoyGiikM3w/lghBCePEikzo4S9hofRSZHwQ=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -120,14 +120,14 @@
             "HookName": "IOnNextTick",
             "AssemblyName": "Sandbox.Game.dll",
             "TypeName": "Sandbox.MySandboxGame",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 1,
               "Name": "Update",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "wR/Qs0jikBbANOmzD6FbCM+h5uWeDH2dE3dskT2wahQ=",
+            "MSILHash": "/ekiNAw7URq4n64Ji+C522iCjYnQ/xufC0VcZv5E7+M=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

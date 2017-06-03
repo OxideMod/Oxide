@@ -8,7 +8,6 @@ using Oxide.Core.Plugins;
 using Oxide.Game.SpaceEngineers.Libraries;
 using Oxide.Game.SpaceEngineers.Libraries.Covalence;
 using Sandbox;
-using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using Sandbox.ModAPI;
@@ -98,13 +97,13 @@ namespace Oxide.Game.SpaceEngineers
         /// </summary>
         public SpaceEngineersCore()
         {
-            var assemblyVersion = SpaceEngineersExtension.AssemblyVersion;
+            var aVersion = SpaceEngineersExtension.AssemblyVersion;
 
             // Set attributes
             Name = "SpaceEngineersCore";
             Title = "Space Engineers";
             Author = "Oxide Team";
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Version = new VersionNumber(aVersion.Major, aVersion.Minor, aVersion.Build);
         }
 
         /// <summary>
@@ -194,12 +193,6 @@ namespace Oxide.Game.SpaceEngineers
             SpaceEngineersExtension.ServerConsole();
             Analytics.Collect();
         }
-
-        /// <summary>
-        /// Called when the server is saving
-        /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
 
         /// <summary>
         /// Called when the server is shutting down
