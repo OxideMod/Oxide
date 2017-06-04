@@ -24,6 +24,6 @@ namespace Oxide.Core.RemoteConsole
 
         public static RemoteMessage GetMessage(string message) => JsonConvert.DeserializeObject<RemoteMessage>(message) ?? null;
 
-        internal string ToJSON() => JsonConvert.SerializeObject(this);
+        internal string ToJSON() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }

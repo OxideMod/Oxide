@@ -6,6 +6,7 @@ using WebSocketSharp;
 using WebSocketSharp.Server;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries.Covalence;
+using System.Runtime.InteropServices;
 
 namespace Oxide.Core.RemoteConsole
 {
@@ -24,6 +25,8 @@ namespace Oxide.Core.RemoteConsole
         public void Initalize()
         {
             if (!config.Enabled) return;
+            if (listener != null || server != null)
+                return;
 
             if (string.IsNullOrEmpty(config.Password))
             {
@@ -56,6 +59,7 @@ namespace Oxide.Core.RemoteConsole
 
             server.Stop(code, reason);
             server = null;
+            listener = null;
             Interface.Oxide.LogInfo($"[Rcon] Service has stopped: {reason} ({code})");
         }
 
@@ -83,7 +87,7 @@ namespace Oxide.Core.RemoteConsole
             var message = RemoteMessage.GetMessage(e.Data);
             if (message == null)
             {
-                Interface.Oxide.LogError("[Rcon]: Failed OnMessage Receiced Message is Null");
+                Interface.Oxide.LogError("[Rcon]: Failed OnMessage Received Message is Null");
                 return;
             }
             if (covalence == null)
@@ -103,9 +107,9 @@ namespace Oxide.Core.RemoteConsole
                 case "say":
                 case "global.say":
                 case "chat.say":
-                    if (Interface.Call<bool?>("OnRconBroadcast", args) != false)
+                    if (Interface.CallHook("OnRconBroadcast", args) != null)
                         return;
-                    covalence.Server.Broadcast(string.Join(" ", args));
+                    covalence.Server.Broadcast(string.Format(config.ChatPrefix + " {0}", string.Join(" ", args)));
                     break;
 
                 case "playerlist":
@@ -113,7 +117,7 @@ namespace Oxide.Core.RemoteConsole
                     List<RconPlayer> players = new List<RconPlayer>();
                     foreach (var pl in covalence.Players.Connected)
                         players.Add(new RconPlayer(pl));
-                    SendMessage(RemoteMessage.CreateMessage(JsonConvert.SerializeObject(players, Formatting.None)));
+                    SendMessage(RemoteMessage.CreateMessage(JsonConvert.SerializeObject(players.ToArray(), Formatting.Indented)));
                     break;
 
                 case "server.hostname":
@@ -127,7 +131,7 @@ namespace Oxide.Core.RemoteConsole
                 case "kick":
                     if (args.Length == 0)
                         return;
-                    if (Interface.Call<bool?>("OnRconKick", args) != false)
+                    if (Interface.CallHook("OnRconKick", args) != null)
                         return;
                     covalence.Players.FindPlayer(args[0])?.Kick(string.Join(" ", args.Skip(1).ToArray()));
                     break;
@@ -143,7 +147,7 @@ namespace Oxide.Core.RemoteConsole
                 case "global.banid":
                     if (args.Length == 0)
                         return;
-                    if (Interface.Call<bool?>("OnRconBan", args) != false)
+                    if (Interface.CallHook("OnRconBan", args) != null)
                         return;
                     var banplayer = covalence.Players.FindPlayer(args[0]);
                     if (banplayer != null)
@@ -156,7 +160,7 @@ namespace Oxide.Core.RemoteConsole
                 case "global.unban":
                     if (args.Length == 0)
                         return;
-                    if (Interface.Call<bool?>("OnRconUnban", args) != false)
+                    if (Interface.CallHook("OnRconUnban", args) != null)
                         return;
                     var unbanplayer = covalence.Players.FindPlayer(string.Join(" ", args));
                     if (unbanplayer != null)
@@ -179,17 +183,18 @@ namespace Oxide.Core.RemoteConsole
             }
         }
 
-        private class RconPlayer
+        [StructLayout(LayoutKind.Sequential)]
+        private struct RconPlayer
         {
             public string SteamID { get; private set; }
             public string OwnerSteamID { get; private set; }
             public string DisplayName { get; private set; }
             public int Ping { get; private set; }
             public string Address { get; private set; }
-            public uint ConnectedSeconds { get; private set; }
-            public double VoiationLevel { get; private set; }
-            public double CurrentLevel { get; private set; }
-            public double UnspentXp { get; private set; }
+            public int ConnectedSeconds { get; private set; }
+            public float VoiationLevel { get; private set; }
+            public float CurrentLevel { get; private set; }
+            public float UnspentXp { get; private set; }
             public float Health { get; private set; }
 
             public RconPlayer(IPlayer player)
@@ -201,6 +206,9 @@ namespace Oxide.Core.RemoteConsole
                 Health = player.Health;
                 Ping = player.Ping;
                 ConnectedSeconds = 0; // Todo when support is added
+                VoiationLevel = 0; // Needed For Compat
+                CurrentLevel = 0; // Needed For Compat
+                UnspentXp = 0; // Needed For Compat
             }
         }
 
