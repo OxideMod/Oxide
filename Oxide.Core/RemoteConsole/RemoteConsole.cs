@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
+using System.Linq;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using Oxide.Core.Configuration;
@@ -81,77 +81,126 @@ namespace Oxide.Core.RemoteConsole
         private void OnMessage(MessageEventArgs e)
         {
             var message = RemoteMessage.GetMessage(e.Data);
-            if (message == null || covalence == null) return; // TODO: Return/show why
-
-            switch (message.Type.ToLower())
+            if (message == null)
             {
-                case "command":
-                    var commands = message.Message.Split(' ');
-                    try
-                    {
-                        if (commands.Count() > 1)
-                            covalence.Server.Command(commands[0]);
-                        else
-                            covalence.Server.Command(commands[0], commands.Skip(1).ToArray());
-                    }
-                    catch
-                    {
-                        Interface.Oxide.LogError("[Rcon] Failed to run command {0} - Command might not exist", commands[0]);
-                    }
+                Interface.Oxide.LogError("[Rcon]: Failed OnMessage Receiced Message is Null");
+                return;
+            }
+            if (covalence == null)
+            {
+                Interface.Oxide.LogError("[Rcon]: Failed OnMessage Covalence is Null");
+                return;
+            }
+            if (string.IsNullOrEmpty(message.Message))
+                return;
+
+            var messagearray = message.Message.Split(' ');
+            var cmd = messagearray[0];
+            var args = messagearray.Skip(1).ToArray();
+            switch (cmd.ToLower())
+            {
+                case "broadcast":
+                case "say":
+                case "global.say":
+                case "chat.say":
+                    if (Interface.Call<bool?>("OnRconBroadcast", args) != false)
+                        return;
+                    covalence.Server.Broadcast(string.Join(" ", args));
                     break;
 
-                case "chat":
-                    covalence.Server.Broadcast($"{config.ChatPrefix}: {message.Message}");
+                case "playerlist":
+                case "global.playerlist":
+                    List<RconPlayer> players = new List<RconPlayer>();
+                    foreach (var pl in covalence.Players.Connected)
+                        players.Add(new RconPlayer(pl));
+                    SendMessage(RemoteMessage.CreateMessage(JsonConvert.SerializeObject(players, Formatting.None)));
                     break;
 
-                case "players":
-                    SendMessage(RemoteMessage.CreateMessage(GetPlayerList(), 0, "players"));
+                case "server.hostname":
+                case "hostname":
+                    if (args.Length != 0)
+                        covalence.Server.Name = string.Join(" ", args);
+                    SendMessage(RemoteMessage.CreateMessage(covalence.Server.Name));
+                    break;
+
+                case "global.kick":
+                case "kick":
+                    if (args.Length == 0)
+                        return;
+                    if (Interface.Call<bool?>("OnRconKick", args) != false)
+                        return;
+                    covalence.Players.FindPlayer(args[0])?.Kick(string.Join(" ", args.Skip(1).ToArray()));
+                    break;
+
+                case "server.save":
+                case "save":
+                    covalence.Server.Save();
+                    break;
+
+                case "ban":
+                case "banid":
+                case "global.ban":
+                case "global.banid":
+                    if (args.Length == 0)
+                        return;
+                    if (Interface.Call<bool?>("OnRconBan", args) != false)
+                        return;
+                    var banplayer = covalence.Players.FindPlayer(args[0]);
+                    if (banplayer != null)
+                        banplayer.Ban(string.Join(" ", args.Skip(1).ToArray()));
+                    else
+                        covalence.Server.Ban(args[0], string.Join(" ", args.Skip(1).ToArray()));
+                    break;
+
+                case "unban":
+                case "global.unban":
+                    if (args.Length == 0)
+                        return;
+                    if (Interface.Call<bool?>("OnRconUnban", args) != false)
+                        return;
+                    var unbanplayer = covalence.Players.FindPlayer(string.Join(" ", args));
+                    if (unbanplayer != null)
+                        unbanplayer.Unban();
+                    else
+                        covalence.Server.Unban(args[0]);
+                    break;
+
+                case "version":
+                case "server.version":
+                    var serverversion = covalence.Server.Version;
+                    var Game = covalence.Game;
+                    var oxideversion = OxideMod.Version;
+                    SendMessage(RemoteMessage.CreateMessage($"{Game} - {serverversion} Protocol {covalence.Server.Protocol} with OxideMod v{oxideversion.Major}.{oxideversion.Minor}.{oxideversion.Patch}"));
                     break;
 
                 default:
-                    SendMessage(RemoteMessage.CreateMessage("Unknown command"));
+                    covalence.Server.Command(cmd, args);
                     break;
             }
         }
 
         private class RconPlayer
         {
-            public string SteamId { get; private set; }
-            public string Name { get; private set; }
-            public string Address { get; private set; }
-            public float Health { get; private set; }
-            public float MaxHealth { get; private set; }
+            public string SteamID { get; private set; }
+            public string OwnerSteamID { get; private set; }
+            public string DisplayName { get; private set; }
             public int Ping { get; private set; }
-            public string Lang { get; private set; }
+            public string Address { get; private set; }
+            public uint ConnectedSeconds { get; private set; }
+            public double VoiationLevel { get; private set; }
+            public double CurrentLevel { get; private set; }
+            public double UnspentXp { get; private set; }
+            public float Health { get; private set; }
 
             public RconPlayer(IPlayer player)
             {
-                SteamId = player.Id;
-                Name = player.Name;
+                SteamID = player.Id;
+                OwnerSteamID = "0";
+                DisplayName = player.Name;
                 Address = player.Address;
                 Health = player.Health;
-                MaxHealth = player.MaxHealth;
                 Ping = player.Ping;
-                Lang = player.Language.TwoLetterISOLanguageName;
-            }
-        }
-
-        private string GetPlayerList()
-        {
-            try
-            {
-                List<RconPlayer> playerlist = new List<RconPlayer>();
-                foreach (var player in covalence.Players.Connected)
-                    playerlist.Add(new RconPlayer(player));
-
-                string json = JsonConvert.SerializeObject(playerlist, Formatting.None);
-                playerlist = null;
-                return json;
-            }
-            catch
-            {
-                Interface.Oxide.LogError("[Rcon] Covalence API is not loaded yet");
-                return string.Empty;
+                ConnectedSeconds = 0; // Todo when support is added
             }
         }
 
