@@ -154,7 +154,9 @@ namespace Oxide.Core.RemoteConsole
                     break;
 
                 case "global.teleport":
+                case "global.teleportpos":
                 case "teleport":
+                case "teleportpos":
                     TeleportCommand(cmd, args, message.Identifier, context);
                     break;
 
