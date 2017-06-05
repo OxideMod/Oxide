@@ -1,10 +1,10 @@
-using Newtonsoft.Json;
-using Oxide.Core.Configuration;
-using Oxide.Core.Libraries.Covalence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+using Oxide.Core.Configuration;
+using Oxide.Core.Libraries.Covalence;
 using WebSocketSharp;
 using WebSocketSharp.Net.WebSockets;
 using WebSocketSharp.Server;
@@ -25,9 +25,7 @@ namespace Oxide.Core.RemoteConsole
         /// </summary>
         public void Initalize()
         {
-            if (!config.Enabled) return;
-
-            if (listener != null || server != null) return;
+            if (!config.Enabled || listener != null || server != null) return;
 
             if (string.IsNullOrEmpty(config.Password))
             {
@@ -88,13 +86,11 @@ namespace Oxide.Core.RemoteConsole
             var message = RemoteMessage.GetMessage(e.Data);
             message.Message = message.Message.Replace("\"", string.Empty);
 
-            if (message == null || covalence == null)
+            if (message == null || covalence == null || string.IsNullOrEmpty(message.Message))
             {
                 Interface.Oxide.LogError($"[Rcon] Failed to process command {(message == null ? "RemoteMessage" : "Covalence")} is null");
                 return;
             }
-
-            if (string.IsNullOrEmpty(message.Message)) return;
 
             var msg = message.Message.Split(' ');
             var cmd = msg[0];
@@ -143,10 +139,7 @@ namespace Oxide.Core.RemoteConsole
 
                 case "server.version":
                 case "version":
-                    var serverVersion = covalence.Server.Version;
-                    var game = covalence.Game;
-                    var oxideVersion = OxideMod.Version;
-                    context?.WebSocket?.Send(RemoteMessage.CreateMessage($"{game} {serverVersion} - Protocol {covalence.Server.Protocol} with OxideMod v{oxideVersion.Major}.{oxideVersion.Minor}.{oxideVersion.Patch}", message.Identifier).ToJSON());
+                    context?.WebSocket?.Send(RemoteMessage.CreateMessage($"{covalence.Game} {covalence.Server.Version} - Protocol {covalence.Server.Protocol} with Oxide v{OxideMod.Version}", message.Identifier).ToJSON());
                     break;
 
                 case "global.teleport":
@@ -225,7 +218,7 @@ namespace Oxide.Core.RemoteConsole
         {
             if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
-            string message = string.Join(" ", args);
+            var message = string.Join(" ", args);
 
             var msg = $"{config.ChatPrefix} {message}";
             covalence?.Server.Broadcast(msg);
@@ -240,7 +233,7 @@ namespace Oxide.Core.RemoteConsole
 
             var players = new List<RconPlayer>();
 
-            foreach (var pl in covalence.Players.Connected) players.Add(new RconPlayer(pl));
+            foreach (var player in covalence.Players.Connected) players.Add(new RconPlayer(player));
 
             context?.WebSocket?.Send(RemoteMessage.CreateMessage(JsonConvert.SerializeObject(players.ToArray(), Formatting.Indented), identifier).ToJSON());
         }
@@ -250,7 +243,7 @@ namespace Oxide.Core.RemoteConsole
         {
             if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
-            string hostname = string.Join(" ", args);
+            var hostname = string.Join(" ", args);
 
             if (!string.IsNullOrEmpty(hostname)) covalence.Server.Name = hostname;
 
@@ -265,7 +258,7 @@ namespace Oxide.Core.RemoteConsole
             var player = covalence.Players.FindPlayer(args[0]);
             if (player != null && player.IsConnected)
             {
-                string reason = string.Join(" ", args.Skip(1).ToArray());
+                var reason = string.Join(" ", args.Skip(1).ToArray());
                 player.Kick(reason);
                 SendMessage(RemoteMessage.CreateMessage($"User Kicked {player} - {reason}"));
                 return;
@@ -279,7 +272,7 @@ namespace Oxide.Core.RemoteConsole
         {
             if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
-            ulong Id = 0;
+            var Id = 0ul;
             if (ulong.TryParse(args[0], out Id))
             {
                 if (covalence.Server.IsBanned(Id.ToString()))
@@ -288,7 +281,7 @@ namespace Oxide.Core.RemoteConsole
                     return;
                 }
 
-                string reason = string.Join(" ", args.Skip(1).ToArray());
+                var reason = string.Join(" ", args.Skip(1).ToArray());
                 covalence.Server.Ban(Id.ToString(), reason);
                 context?.WebSocket?.Send(RemoteMessage.CreateMessage($"UserID Banned: {Id}", identifier).ToJSON());
                 return;
@@ -312,23 +305,21 @@ namespace Oxide.Core.RemoteConsole
             if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), context, args) != null) return;
 
             var lookup = string.Join(" ", args);
-            ulong Id = 0;
-
+            var Id = 0ul;
             if (ulong.TryParse(lookup, out Id))
             {
                 if (covalence.Server.IsBanned(lookup))
                 {
                     covalence.Server.Unban(lookup);
-                    context?.WebSocket?.Send(RemoteMessage.CreateMessage($"Unbanned Id {lookup}", identifier).ToJSON());
+                    context?.WebSocket?.Send(RemoteMessage.CreateMessage($"Unbanned ID {lookup}", identifier).ToJSON());
                     return;
                 }
 
-                context?.WebSocket?.Send(RemoteMessage.CreateMessage($"Id {lookup} is not banned", identifier).ToJSON());
+                context?.WebSocket?.Send(RemoteMessage.CreateMessage($"ID {lookup} is not banned", identifier).ToJSON());
             }
             else
             {
                 var player = covalence.Players.FindPlayer(lookup);
-
                 if (player == null) return;
 
                 if (!player.IsBanned)
