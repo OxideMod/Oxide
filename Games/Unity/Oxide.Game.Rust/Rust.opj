@@ -1,6 +1,6 @@
 {
   "Name": "Rust",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\Rust\\RustDedicated_Data\\Managed",
+  "TargetDirectory": "W:\\Servers\\Unity\\Rust\\RustDedicated_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -117,7 +117,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "wGhP59VWbgdIe7MtUrDF5b1+midh+ErFfhGWzE/5UqE=",
+            "MSILHash": "0XjFdLa93UchBGKGC6PlyUNYYUUpPIxpGgkw3DwAkZ4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -305,7 +305,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 110,
+            "InjectionIndex": 107,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -323,7 +323,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "Lehh85l9A9+o47SIsSp0y6nemoN0oeISqVCCEqax/MA=",
+            "MSILHash": "X/9uFVjNfJnC0vzWM4UDZZDVEgd5gyGsMImfOuvHQFk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1199,7 +1199,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 14,
+            "InjectionIndex": 8,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -1218,7 +1218,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "wpefNkQOoOsYjuanZ04lPVBd0DvSTii3K90e/BOkazA=",
+            "MSILHash": "EC/DGW16e0C3g7P89IjXxZwSb20Wt2+nj2HBwhU66zk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2830,7 +2830,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "Qes7frLja+oT2GP2QnwDyNYKJiovFiM3O0WYzEO7Uag=",
+            "MSILHash": "Hj7t2GP2bZ3ppOiQ1M0eRgXnqJ8jgmM3S2BeQUo7ddc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
