@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using WebSocketSharp.Net.WebSockets;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries.Covalence;
 using System.Runtime.InteropServices;
@@ -82,9 +83,10 @@ namespace Oxide.Core.RemoteConsole
         /// Handles messages sent from the clients
         /// </summary>
         /// <param name="e"></param>
-        private void OnMessage(MessageEventArgs e)
+        private void OnMessage(MessageEventArgs e, WebSocketContext context = null)
         {
             var message = RemoteMessage.GetMessage(e.Data);
+            message.Message = message.Message.Replace("\"", string.Empty);
             if (message == null)
             {
                 Interface.Oxide.LogError("[Rcon]: Failed OnMessage Received Message is Null");
@@ -98,83 +100,62 @@ namespace Oxide.Core.RemoteConsole
             if (string.IsNullOrEmpty(message.Message))
                 return;
 
-            var messagearray = message.Message.Split(' ');
-            var cmd = messagearray[0];
-            var args = messagearray.Skip(1).ToArray();
+            var msg = message.Message.Split(' ');
+            var cmd = msg[0];
+            var args = msg.Skip(1).ToArray();
             switch (cmd.ToLower())
             {
                 case "broadcast":
-                case "say":
-                case "global.say":
                 case "chat.say":
-                    if (Interface.CallHook("OnRconBroadcast", args) != null)
-                        return;
-                    covalence.Server.Broadcast(string.Format(config.ChatPrefix + " {0}", string.Join(" ", args)));
+                case "global.say":
+                case "say":
+                    BroadcastMessage(cmd, args, message.Identifier, context);
                     break;
 
-                case "playerlist":
                 case "global.playerlist":
-                    List<RconPlayer> players = new List<RconPlayer>();
-                    foreach (var pl in covalence.Players.Connected)
-                        players.Add(new RconPlayer(pl));
-                    SendMessage(RemoteMessage.CreateMessage(JsonConvert.SerializeObject(players.ToArray(), Formatting.Indented)));
+                case "playerlist":
+                    PlayerListCommand(cmd, args, message.Identifier, context);
                     break;
 
-                case "server.hostname":
                 case "hostname":
-                    if (args.Length != 0)
-                        covalence.Server.Name = string.Join(" ", args);
-                    SendMessage(RemoteMessage.CreateMessage(covalence.Server.Name));
+                case "server.hostname":
+                    HostnameCommand(cmd, args, message.Identifier, context);
                     break;
 
                 case "global.kick":
                 case "kick":
-                    if (args.Length == 0)
-                        return;
-                    if (Interface.CallHook("OnRconKick", args) != null)
-                        return;
-                    covalence.Players.FindPlayer(args[0])?.Kick(string.Join(" ", args.Skip(1).ToArray()));
+                    KickCommand(cmd, args, message.Identifier, context);
                     break;
 
-                case "server.save":
                 case "save":
+                case "server.save":
                     covalence.Server.Save();
+                    SendMessage(RemoteMessage.CreateMessage("Server Saved"));
                     break;
 
                 case "ban":
                 case "banid":
                 case "global.ban":
                 case "global.banid":
-                    if (args.Length == 0)
-                        return;
-                    if (Interface.CallHook("OnRconBan", args) != null)
-                        return;
-                    var banplayer = covalence.Players.FindPlayer(args[0]);
-                    if (banplayer != null)
-                        banplayer.Ban(string.Join(" ", args.Skip(1).ToArray()));
-                    else
-                        covalence.Server.Ban(args[0], string.Join(" ", args.Skip(1).ToArray()));
+                    BanCommand(cmd, args, message.Identifier, context);
                     break;
 
-                case "unban":
                 case "global.unban":
-                    if (args.Length == 0)
-                        return;
-                    if (Interface.CallHook("OnRconUnban", args) != null)
-                        return;
-                    var unbanplayer = covalence.Players.FindPlayer(string.Join(" ", args));
-                    if (unbanplayer != null)
-                        unbanplayer.Unban();
-                    else
-                        covalence.Server.Unban(args[0]);
+                case "unban":
+                    UnBanCommand(cmd, args, message.Identifier, context);
                     break;
 
-                case "version":
                 case "server.version":
+                case "version":
                     var serverversion = covalence.Server.Version;
                     var Game = covalence.Game;
                     var oxideversion = OxideMod.Version;
-                    SendMessage(RemoteMessage.CreateMessage($"{Game} - {serverversion} Protocol {covalence.Server.Protocol} with OxideMod v{oxideversion.Major}.{oxideversion.Minor}.{oxideversion.Patch}"));
+                    context.WebSocket.Send(RemoteMessage.CreateMessage($"{Game} {serverversion} - Protocol {covalence.Server.Protocol} with OxideMod v{oxideversion.Major}.{oxideversion.Minor}.{oxideversion.Patch}", message.Identifier).ToJSON());
+                    break;
+
+                case "global.teleport":
+                case "teleport":
+                    TeleportCommand(cmd, args, message.Identifier, context);
                     break;
 
                 default:
@@ -206,9 +187,9 @@ namespace Oxide.Core.RemoteConsole
                 Health = player.Health;
                 Ping = player.Ping;
                 ConnectedSeconds = 0; // Todo when support is added
-                VoiationLevel = 0; // Needed For Compat
-                CurrentLevel = 0; // Needed For Compat
-                UnspentXp = 0; // Needed For Compat
+                VoiationLevel = 0.0f; // Needed For Compat
+                CurrentLevel = 0.0f; // Needed For Compat
+                UnspentXp = 0.0f; // Needed For Compat
             }
         }
 
@@ -232,9 +213,189 @@ namespace Oxide.Core.RemoteConsole
 
             protected override void OnError(ErrorEventArgs e) => Interface.Oxide.LogException(e.Message, e.Exception);
 
-            protected override void OnMessage(MessageEventArgs e) => Parent?.OnMessage(e);
+            protected override void OnMessage(MessageEventArgs e) => Parent?.OnMessage(e, Context);
 
             protected override void OnOpen() => Interface.Oxide.LogInfo($"[Rcon] New connection from {Context.UserEndPoint.Address}");
+        }
+
+        #endregion
+
+        #region Command Processing
+
+        // Broacasts a message into the game chat
+        private void BroadcastMessage(string command, string[] args, int identifier, WebSocketContext context)
+        {
+            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null)
+                return;
+
+            string message = string.Join(" ", args);
+
+            var msg = string.Format("{0} {1}", config.ChatPrefix, message);
+            covalence?.Server.Broadcast(msg);
+            msg = System.Text.RegularExpressions.Regex.Replace(msg, @"<[^>]*>", string.Empty);
+            SendMessage(RemoteMessage.CreateMessage("[RCON]" + message));
+        }
+
+        // Returns the playerlist to the requesting socket
+        private void PlayerListCommand(string command, string[] args, int identifier, WebSocketContext context)
+        {
+            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null)
+                return;
+
+            List<RconPlayer> players = new List<RconPlayer>();
+            foreach (var pl in covalence.Players.Connected)
+                players.Add(new RconPlayer(pl));
+            context.WebSocket?.Send(RemoteMessage.CreateMessage(JsonConvert.SerializeObject(players.ToArray(), Formatting.Indented), identifier).ToJSON());
+        }
+
+        // returns or sets the hostname via rcon
+        private void HostnameCommand(string command, string[] args, int identifier, WebSocketContext context)
+        {
+            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null)
+                return;
+
+            string hostname = string.Join(" ", args);
+
+            if (!string.IsNullOrEmpty(hostname))
+                covalence.Server.Name = hostname;
+            context?.WebSocket?.Send(RemoteMessage.CreateMessage(string.Format("server.hostname: \"{0}\"", covalence.Server.Name), identifier).ToJSON());
+        }
+
+        // kicks a currently connected user from the server
+        private void KickCommand(string command, string[] args, int identifier, WebSocketContext context)
+        {
+            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), context, args) != null)
+                return;
+
+            IPlayer player = covalence.Players.FindPlayer(args[0]);
+            if (player != null && player.IsConnected)
+            {
+                string reason = string.Join(" ", args.Skip(1).ToArray());
+                player.Kick(reason);
+                SendMessage(RemoteMessage.CreateMessage(string.Format("User Kicked: {0} - {1}", player.Id, reason)));
+            }
+            else
+                context.WebSocket.Send(RemoteMessage.CreateMessage(string.Format("User not found: {0}", args[0]), identifier).ToJSON());
+        }
+
+        // Bans a player/id from the server
+        private void BanCommand(string command, string[] args, int identifier, WebSocketContext context)
+        {
+            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null)
+                return;
+
+            ulong Id = 0;
+            if (ulong.TryParse(args[0], out Id))
+            {
+                if (covalence.Server.IsBanned(Id.ToString()))
+                {
+                    context.WebSocket.Send(RemoteMessage.CreateMessage($"User already banned: {Id}", identifier).ToJSON());
+                    return;
+                }
+                string reason = string.Join(" ", args.Skip(1).ToArray());
+                covalence.Server.Ban(Id.ToString(), reason);
+                context.WebSocket.Send(RemoteMessage.CreateMessage($"UserID Banned: {Id}", identifier).ToJSON());
+                return;
+            }
+            else
+            {
+                IPlayer player = covalence.Players.FindPlayer(args[0]);
+                if (player == null)
+                {
+                    context.WebSocket.Send(RemoteMessage.CreateMessage($"Unable to find player: {args[0]}", identifier).ToJSON());
+                    return;
+                }
+                player.Ban(string.Join(" ", args.Skip(1).ToArray()));
+                SendMessage(RemoteMessage.CreateMessage($"Player {player.Name} banned"));
+            }
+        }
+
+        // Unban a banned player
+        private void UnBanCommand(string command, string[] args, int identifier, WebSocketContext context)
+        {
+            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), context, args) != null)
+                return;
+            string userstring = string.Join(" ", args);
+            ulong Id = 0;
+            if (ulong.TryParse(userstring, out Id))
+            {
+                if (covalence.Server.IsBanned(userstring))
+                {
+                    covalence.Server.Unban(userstring);
+                    context.WebSocket.Send(RemoteMessage.CreateMessage($"Unbanned Id {userstring}", identifier).ToJSON());
+                }
+                else
+                {
+                    context.WebSocket.Send(RemoteMessage.CreateMessage($"Id {userstring} is not banned", identifier).ToJSON());
+                }
+            }
+            else
+            {
+                IPlayer player = covalence.Players.FindPlayer(userstring);
+                if (player == null)
+                    return;
+                else
+                {
+                    if (!player.IsBanned)
+                        context.WebSocket.Send(RemoteMessage.CreateMessage($"{player.Name} is not banned", identifier).ToJSON());
+                    else
+                    {
+                        player.Unban();
+                        context.WebSocket.Send(RemoteMessage.CreateMessage($"{player.Name} was unbanned successfully", identifier).ToJSON());
+                    }
+                }
+            }
+        }
+
+        // Teleport a player to another player
+        private void TeleportCommand(string command, string[] args, int identifier, WebSocketContext context)
+        {
+            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null)
+                return;
+
+            if ((args.Length != 2) && (args.Length != 4))
+            {
+                context.WebSocket.Send(RemoteMessage.CreateMessage("Invalid format: teleport [player] [targetplayer]").ToJSON());
+                return;
+            }
+
+            if (args.Length == 2)
+            {
+                IPlayer player1 = covalence.Players.FindPlayer(args[0]);
+                IPlayer player2 = covalence.Players.FindPlayer(args[1]);
+
+                if (player1 == null || player2 == null)
+                {
+                    context.WebSocket.Send(RemoteMessage.CreateMessage("Unable to find target players").ToJSON());
+                    return;
+                }
+
+                player1.Teleport(player2.Position().X, player2.Position().Y, player2.Position().Z);
+                context.WebSocket.Send(RemoteMessage.CreateMessage($"{player1.Name} was teleported to {player2.Name}").ToJSON());
+            }
+            else
+            {
+                IPlayer player1 = covalence.Players.FindPlayer(args[0]);
+
+                if (player1 == null)
+                {
+                    context.WebSocket.Send(RemoteMessage.CreateMessage("Unable to find target player").ToJSON());
+                    return;
+                }
+
+                float X = -1;
+                float Y = -1;
+                float Z = -1;
+
+                if (!float.TryParse(args[1], out X) && !float.TryParse(args[2], out Y) && !float.TryParse(args[3], out Z))
+                {
+                    context.WebSocket.Send(RemoteMessage.CreateMessage($"Unable to parse coordinates X: {args[1]} Y: {args[2]} Z: {args[3]}").ToJSON());
+                    return;
+                }
+
+                player1.Teleport(X, Y, Z);
+                context.WebSocket.Send(RemoteMessage.CreateMessage($"{player1.Name} was teleported to X: {args[1]} Y: {args[2]} Z: {args[3]}").ToJSON());
+            }
         }
 
         #endregion
