@@ -5,6 +5,30 @@
     {
       "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
+	    {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "GetMaxStackable",
+            "HookName": "GetMaxStackable",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Item",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "MaxStackable",
+              "ReturnType": "System.Int32",
+              "Parameters": []
+            },
+            "MSILHash": "P2IfCznXCPJye7XUTUYArWuHQYO0XNp07/pWToic5Xs=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
         {
           "Type": "Simple",
           "Hook": {
