@@ -1,6 +1,6 @@
 {
   "Name": "Rust",
-  "TargetDirectory": "W:\\Servers\\Unity\\Rust\\RustDedicated_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\Rust\\RustDedicated_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -56,7 +56,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 26,
+            "InjectionIndex": 24,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -69,7 +69,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "WwogmS1gsTUjep3XKBKETUX/SmqnTPNWKvon/7wLkmE=",
+            "MSILHash": "nw3EJ7ZAnzLu09ycwwpomh+opPLDJ3jHxwZUC3xDzNk=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -882,7 +882,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "2MAtExaB6LLCev0SWoPzuk0A874k2nC2mcrCD/bA66o=",
+            "MSILHash": "U3PxrKQBhTRCnnbOJ220f0NlOut3eHW+pgXLGZoGwYQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1502,7 +1502,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "s5gmcPB+ybxRCjYNzr6ChE41Ex+o7r/G8+M/l6pxQqI=",
+            "MSILHash": "gZquJWOgKfFWwOmbMOxGZIrNQnQpKN8jdV7FQ619crw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1510,7 +1510,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 154,
+            "InjectionIndex": 155,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0.player, l8",
@@ -1528,7 +1528,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "NQhKiK4OM1x6GsENzmXuxFXlIWDxc/pYSgonAt+VDt0=",
+            "MSILHash": "DQpup3tIefR3v9pztHqoSFZj0O1qdYTea84a0Y4GmfA=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -1680,7 +1680,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "2irOjR1zOmjMHumXorQk3JmDjTDQZiEpwBaaVsFhryE=",
+            "MSILHash": "mKGlTpXfYvbJirk5x8Cr64Ah6qxBmTHFYj2nccHmgSY=",
             "BaseHookName": null,
             "HookCategory": "Resource"
           }
@@ -2426,7 +2426,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "uBwfzcyYMB5dgVuAsYz0oBRHqI4jVAwXxzN1twm3DoI=",
+            "MSILHash": "kU9awRANMQatsce6/g8/YFwmmOlO+HXRTPI5Ljq6kHw=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2830,7 +2830,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "Hj7t2GP2bZ3ppOiQ1M0eRgXnqJ8jgmM3S2BeQUo7ddc=",
+            "MSILHash": "Kjnm4pwSmy/iftNmw9y2gTJSMA+oyJ0r0UXoXnuNv3g=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

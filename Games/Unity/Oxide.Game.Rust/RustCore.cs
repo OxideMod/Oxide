@@ -525,16 +525,6 @@ namespace Oxide.Game.Rust
             return entity is BasePlayer ? null : Interface.Call("OnEntityTakeDamage", entity, info);
         }
 
-        /// <summary>
-        /// Called when a locked entity is used
-        /// This is used to call the deprecated hook CanUseLock for a limited time
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="baseLock"></param>
-        /// <returns></returns>
-        [HookMethod("CanUseLockedEntity")]
-        private object CanUseLockedEntity(BasePlayer player, BaseLock baseLock) => Interface.CallDeprecatedHook("CanUseLock", "CanUseLockedEntity", new DateTime(2017, 4, 13), player, baseLock);
-
         #endregion
 
         #region Item Hooks
@@ -556,15 +546,6 @@ namespace Oxide.Game.Rust
             if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
             return true;
         }
-
-        /// <summary>
-        /// Called when an item is used
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        [HookMethod("OnItemUse")]
-        private void OnItemUse(Item item, int amount) => Interface.Oxide.CallDeprecatedHook("OnConsumableUse", "OnItemUse", new DateTime(2017, 4, 1), item, amount);
 
         #endregion
 
