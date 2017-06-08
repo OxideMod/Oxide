@@ -5,6 +5,56 @@
     {
       "AssemblyName": "Assembly-CSharp.dll",
       "Hooks": [
+	    {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 18,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, this",
+            "HookTypeName": "Simple",
+            "Name": "OnStartReload",
+            "HookName": "OnStartReload",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseProjectile",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "StartReload",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "ArluQ/rvqun5ShrigF6Y0dUPGAJjb3tNmjZPPln7410=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0,this",
+            "HookTypeName": "Simple",
+            "Name": "OnReloadMagazine",
+            "HookName": "OnReloadMagazine",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseProjectile",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "ReloadMagazine",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "R8rZRVIDHdXW22RBjMP1nshbH9wqt9TLQGO3ZZDkWpE=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
+        },
         {
           "Type": "Simple",
           "Hook": {
