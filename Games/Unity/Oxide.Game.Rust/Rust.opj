@@ -4256,6 +4256,30 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnHeliCriticalDamage",
+            "HookName": "OnHeliCriticalDamage",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PatrolHelicopterAI",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CriticalDamage",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "zk0N50MgarlDCNOPS3STAev1/j3UNNufz0XmKjPv8/Y=",
+            "BaseHookName": null,
+            "HookCategory": null
+          }
         }
       ],
       "Modifiers": [
