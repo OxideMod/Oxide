@@ -25,22 +25,26 @@ namespace Oxide.Game.Rust
     {
         #region Initialization
 
+        // Libraries
         internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
         internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
         internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
+
+        // Instances
         internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
-        internal static readonly IServer Server = Covalence.CreateServer();
-        internal static string ipPattern = @":{1}[0-9]{1}\d*";
-        internal bool serverInitialized;
-        internal bool isPlayerTakingDamage;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
-        internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
-
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             "ownerid", "moderatorid"
         };
+
+        internal bool serverInitialized;
+        internal bool isPlayerTakingDamage;
+        internal static string ipPattern = @":{1}[0-9]{1}\d*";
 
         #region Localization
 
@@ -112,11 +116,10 @@ namespace Oxide.Game.Rust
         /// </summary>
         public RustCore()
         {
-            var assemblyVersion = RustExtension.AssemblyVersion;
-
-            Name = "RustCore";
+            // Set plugin info attributes
             Title = "Rust";
             Author = "Oxide Team";
+            var assemblyVersion = RustExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
@@ -142,10 +145,9 @@ namespace Oxide.Game.Rust
         [HookMethod("Init")]
         private void Init()
         {
+            // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
-
-            lang.RegisterMessages(messages, this);
 
             // Add core general commands
             AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
@@ -175,14 +177,15 @@ namespace Oxide.Game.Rust
             permission.RegisterPermission("oxide.show", this);
             permission.RegisterPermission("oxide.usergroup", this);
 
+            lang.RegisterMessages(messages, this);
+
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -190,18 +193,9 @@ namespace Oxide.Game.Rust
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when another plugin has been loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         #endregion
@@ -275,7 +269,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnRunCommandLine")]
         private object IOnRunCommandLine()
         {
-            foreach (KeyValuePair<string, string> pair in Facepunch.CommandLine.GetSwitches())
+            foreach (var pair in Facepunch.CommandLine.GetSwitches())
             {
                 var value = pair.Value;
                 if (value == "") value = "1";
@@ -1275,7 +1269,7 @@ namespace Oxide.Game.Rust
                 // Parse it
                 string cmd;
                 string[] args;
-                ParseChatCommand(message, out cmd, out args);
+                ParseCommand(message, out cmd, out args);
                 if (cmd == null) return null;
 
                 // Check if command is from a player
@@ -1310,7 +1304,7 @@ namespace Oxide.Game.Rust
                     var message = str?.Substring(1);
                     string cmd;
                     string[] args;
-                    ParseChatCommand(message, out cmd, out args);
+                    ParseCommand(message, out cmd, out args);
                     sb.AppendLine("NullReferenceError in Oxide.Game.Rust when running OnServerCommand.");
                     sb.AppendLine($"  Command: {arg.cmd?.FullName}");
                     sb.AppendLine($"  Full command: {str}");
@@ -1324,7 +1318,7 @@ namespace Oxide.Game.Rust
                 }
                 catch
                 {
-                    // ignore
+                    // Ignored
                 }
                 finally
                 {
@@ -1338,12 +1332,12 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Parses the specified chat command
+        /// Parses the specified command
         /// </summary>
         /// <param name="argstr"></param>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="args"></param>
-        private void ParseChatCommand(string argstr, out string cmd, out string[] args)
+        private void ParseCommand(string argstr, out string command, out string[] args)
         {
             var arglist = new List<string>();
             var sb = new StringBuilder();
@@ -1361,9 +1355,7 @@ namespace Oxide.Game.Rust
                         inlongarg = false;
                     }
                     else
-                    {
                         inlongarg = true;
-                    }
                 }
                 else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
@@ -1372,132 +1364,25 @@ namespace Oxide.Game.Rust
                     sb.Clear();
                 }
                 else
-                {
                     sb.Append(c);
-                }
             }
+
             if (sb.Length > 0)
             {
                 var arg = sb.ToString().Trim();
                 if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
             }
+
             if (arglist.Count == 0)
             {
-                cmd = null;
+                command = null;
                 args = null;
                 return;
             }
-            cmd = arglist[0];
+
+            command = arglist[0];
             arglist.RemoveAt(0);
             args = arglist.ToArray();
-        }
-
-        #endregion
-
-        #region Helpers
-
-        /// <summary>
-        /// Returns the BasePlayer for the specified name, ID, or IP address string
-        /// </summary>
-        /// <param name="nameOrIdOrIp"></param>
-        /// <returns></returns>
-        public static BasePlayer FindPlayer(string nameOrIdOrIp)
-        {
-            BasePlayer player = null;
-            foreach (var activePlayer in BasePlayer.activePlayerList)
-            {
-                if (string.IsNullOrEmpty(activePlayer.UserIDString)) continue;
-                if (activePlayer.UserIDString.Equals(nameOrIdOrIp))
-                    return activePlayer;
-                if (string.IsNullOrEmpty(activePlayer.displayName)) continue;
-                if (activePlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
-                    return activePlayer;
-                if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
-                    player = activePlayer;
-                if (activePlayer.net?.connection != null && activePlayer.net.connection.ipaddress.Equals(nameOrIdOrIp))
-                    return activePlayer;
-            }
-            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
-            {
-                if (string.IsNullOrEmpty(sleepingPlayer.UserIDString)) continue;
-                if (sleepingPlayer.UserIDString.Equals(nameOrIdOrIp))
-                    return sleepingPlayer;
-                if (string.IsNullOrEmpty(sleepingPlayer.displayName)) continue;
-                if (sleepingPlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
-                    return sleepingPlayer;
-                if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
-                    player = sleepingPlayer;
-            }
-            return player;
-        }
-
-        /// <summary>
-        /// Returns the BasePlayer for the specified name string
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static BasePlayer FindPlayerByName(string name)
-        {
-            BasePlayer player = null;
-            foreach (var activePlayer in BasePlayer.activePlayerList)
-            {
-                if (string.IsNullOrEmpty(activePlayer.displayName)) continue;
-                if (activePlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
-                    return activePlayer;
-                if (activePlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
-                    player = activePlayer;
-            }
-            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
-            {
-                if (string.IsNullOrEmpty(sleepingPlayer.displayName)) continue;
-                if (sleepingPlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
-                    return sleepingPlayer;
-                if (sleepingPlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
-                    player = sleepingPlayer;
-            }
-            return player;
-        }
-
-        /// <summary>
-        /// Returns the BasePlayer for the specified ID ulong
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static BasePlayer FindPlayerById(ulong id)
-        {
-            foreach (var activePlayer in BasePlayer.activePlayerList)
-            {
-                if (activePlayer.userID == id)
-                    return activePlayer;
-            }
-            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
-            {
-                if (sleepingPlayer.userID == id)
-                    return sleepingPlayer;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the BasePlayer for the specified ID string
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static BasePlayer FindPlayerByIdString(string id)
-        {
-            foreach (var activePlayer in BasePlayer.activePlayerList)
-            {
-                if (string.IsNullOrEmpty(activePlayer.UserIDString)) continue;
-                if (activePlayer.UserIDString.Equals(id))
-                    return activePlayer;
-            }
-            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
-            {
-                if (string.IsNullOrEmpty(sleepingPlayer.UserIDString)) continue;
-                if (sleepingPlayer.UserIDString.Equals(id))
-                    return sleepingPlayer;
-            }
-            return null;
         }
 
         #endregion

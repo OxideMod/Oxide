@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Unturned.Libraries.Covalence;
 using SDG.Unturned;
@@ -14,41 +16,34 @@ namespace Oxide.Game.Unturned
     {
         #region Initialization
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        // Libraries
+        //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // The covalence provider
+        // Instances
         internal static readonly UnturnedCovalenceProvider Covalence = UnturnedCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
-        // Track when the server has been initialized
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         private bool serverInitialized;
-        private bool loggingInitialized;
 
         /// <summary>
         /// Initializes a new instance of the UnturnedCore class
         /// </summary>
         public UnturnedCore()
         {
-            var assemblyVersion = UnturnedExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "UnturnedCore";
+            // Set plugin info attributes
             Title = "Unturned";
             Author = "Oxide Team";
+            var assemblyVersion = UnturnedExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
-            if (plugins.Exists("unitycore")) InitializeLogging();
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
 
         #endregion
@@ -61,19 +56,17 @@ namespace Oxide.Game.Unturned
         [HookMethod("Init")]
         private void Init()
         {
-            // Configure remote logging
+            // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", Provider.APP_VERSION);
+            RemoteLogger.SetTag("game version", Server.Version);
 
-            // Setup the default permission groups
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -81,19 +74,9 @@ namespace Oxide.Game.Unturned
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
         #endregion

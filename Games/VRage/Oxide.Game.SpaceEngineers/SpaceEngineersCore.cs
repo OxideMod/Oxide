@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.SpaceEngineers.Libraries;
 using Oxide.Game.SpaceEngineers.Libraries.Covalence;
@@ -25,35 +26,35 @@ namespace Oxide.Game.SpaceEngineers
     {
         #region Initialization
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
-
-        // Track 'load' chat commands
-        private readonly List<string> loadingPlugins = new List<string>();
-
-        // The covalence provider
-        internal static readonly SpaceEngineersCovalenceProvider Covalence = SpaceEngineersCovalenceProvider.Instance;
-
-        //// The command library
+        // Libraries
         internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
-
-        //// The player library
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // Track when the server has been initialized
-        private bool serverInitialized;
-        private bool loggingInitialized;
+        // Instances
+        internal static readonly SpaceEngineersCovalenceProvider Covalence = SpaceEngineersCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
-        //private SpaceEngineersLogger logger;
-
-        private int m_totalTimeInMilliseconds;
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
 
         public static string[] Filter =
         {
         };
 
-        private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        // Track 'load' chat commands
+        private readonly List<string> loadingPlugins = new List<string>();
+
+        private bool serverInitialized;
+
+        //private SpaceEngineersLogger logger;
+
+        private int m_totalTimeInMilliseconds;
+
         private readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
             {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
@@ -97,13 +98,11 @@ namespace Oxide.Game.SpaceEngineers
         /// </summary>
         public SpaceEngineersCore()
         {
-            var aVersion = SpaceEngineersExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "SpaceEngineersCore";
+            // Set plugin info attributes
             Title = "Space Engineers";
             Author = "Oxide Team";
-            Version = new VersionNumber(aVersion.Major, aVersion.Minor, aVersion.Build);
+            var assemblyVersion = SpaceEngineersExtension.AssemblyVersion;
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
         /// <summary>
@@ -111,9 +110,6 @@ namespace Oxide.Game.SpaceEngineers
         /// </summary>
         private void InitializeLogging()
         {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
-
             Interface.Oxide.NextTick(() =>
             {
                 //logger = new SpaceEngineersLogger();
@@ -134,17 +130,15 @@ namespace Oxide.Game.SpaceEngineers
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", MyFinalBuildConstants.APP_VERSION.FormattedText.ToString().Replace('_', '.'));
+            RemoteLogger.SetTag("game version", Server.Version);
 
-            // Setup the default permission groups
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -152,23 +146,9 @@ namespace Oxide.Game.SpaceEngineers
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized) InitializeLogging();
-            if (!loadingPlugins.Contains(plugin.Name)) return;
-
-            Interface.Oxide.LogInfo($"Loaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
-            loadingPlugins.Remove(plugin.Name);
         }
 
         #endregion
@@ -212,6 +192,17 @@ namespace Oxide.Game.SpaceEngineers
         }
 
         /// <summary>
+        /// Called when the server is created sandbox
+        /// </summary>
+        [HookMethod("IOnNextTick")]
+        private void IOnNextTick()
+        {
+            var deltaTime = MySandboxGame.TotalTimeInMilliseconds - m_totalTimeInMilliseconds / 1000.0f;
+            m_totalTimeInMilliseconds = MySandboxGame.TotalTimeInMilliseconds;
+            Interface.Oxide.OnFrame(deltaTime);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="bytes"></param>
@@ -224,17 +215,6 @@ namespace Oxide.Game.SpaceEngineers
                 IOnPlayerChat(steamId, args[1], ChatEntryTypeEnum.ChatMsg);
             else
                 Interface.Oxide.LogError("Can't parse steam id...");
-        }
-
-        /// <summary>
-        /// Called when the server is created sandbox
-        /// </summary>
-        [HookMethod("IOnNextTick")]
-        private void IOnNextTick()
-        {
-            var deltaTime = MySandboxGame.TotalTimeInMilliseconds - m_totalTimeInMilliseconds / 1000.0f;
-            m_totalTimeInMilliseconds = MySandboxGame.TotalTimeInMilliseconds;
-            Interface.Oxide.OnFrame(deltaTime);
         }
 
         /// <summary>
@@ -283,7 +263,7 @@ namespace Oxide.Game.SpaceEngineers
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(command, out cmd, out args);
+            ParseCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
             // Get session IMyPlayer
@@ -371,12 +351,12 @@ namespace Oxide.Game.SpaceEngineers
         }
 
         /// <summary>
-        /// Parses the specified chat command
+        /// Parses the specified command
         /// </summary>
         /// <param name="argstr"></param>
         /// <param name="cmd"></param>
         /// <param name="args"></param>
-        private void ParseChatCommand(string argstr, out string cmd, out string[] args)
+        private void ParseCommand(string argstr, out string cmd, out string[] args)
         {
             var arglist = new List<string>();
             var sb = new StringBuilder();
@@ -448,28 +428,6 @@ namespace Oxide.Game.SpaceEngineers
         /// <param name="id"></param>
         /// <param name="args"></param>
         private string Lang(string key, string id = null, params object[] args) => string.Format(lang.GetMessage(key, this, id), args);
-
-        #endregion
-
-        #region Console/Logging
-
-        /// <summary>
-        /// Prints an info message to the server console/log
-        /// </summary>
-        /// <param name="message"></param>
-        public void Print(string message) => MyLog.Default.Info(message);
-
-        /// <summary>
-        /// Prints a warning message to the server console/log
-        /// </summary>
-        /// <param name="message"></param>
-        public void PrintWarning(string message) => MyLog.Default.Warning(message);
-
-        /// <summary>
-        /// Prints an error message to the server console/log
-        /// </summary>
-        /// <param name="message"></param>
-        public void PrintError(string message) => MyLog.Default.Error(message);
 
         #endregion
     }
