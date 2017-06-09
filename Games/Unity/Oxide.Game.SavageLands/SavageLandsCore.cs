@@ -89,20 +89,17 @@ namespace Oxide.Game.SavageLands
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
-            // Update server console window and status bars
+            //Analytics.Collect(); // TODO: Uncomment once Covalence is added
             SavageLandsExtension.ServerConsole();
+
+            serverInitialized = true;
         }
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IOnServerShutdown")]
-        private void IOnServerShutdown()
-        {
-            Interface.Call("OnServerShutdown");
-            Interface.Oxide.OnShutdown();
-        }
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
     }

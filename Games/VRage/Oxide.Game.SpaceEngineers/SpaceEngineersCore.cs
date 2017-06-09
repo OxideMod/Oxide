@@ -162,23 +162,24 @@ namespace Oxide.Game.SpaceEngineers
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
             /*SteamServerAPI.Instance.GameServer.SetGameTags(
-                $"groupId{m_groupId} version{MyFinalBuildConstants.APP_VERSION}" +
+                $"groupId{m_groupId} version{Server.Version" +
                 $" datahash{MyDataIntegrityChecker.GetHashBase64()} {MyMultiplayer.ModCountTag}{ModCount}" +
                 $" gamemode{gamemode} {MyMultiplayer.ViewDistanceTag}{ViewDistance}"
             );*/
 
-            SpaceEngineersExtension.ServerConsole();
             Analytics.Collect();
+            SpaceEngineersExtension.ServerConsole();
+
+            serverInitialized = true;
         }
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IOnServerShutdown")]
-        private void IOnServerShutdown() => Interface.Oxide.OnShutdown();
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when the server is created sandbox

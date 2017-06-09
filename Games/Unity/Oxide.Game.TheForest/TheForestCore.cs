@@ -108,18 +108,13 @@ namespace Oxide.Game.TheForest
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
             Analytics.Collect();
-            SteamGameServer.SetGameTags("oxide,modded");
             TheForestExtension.ServerConsole();
-        }
+            SteamGameServer.SetGameTags("oxide,modded");
 
-        /// <summary>
-        /// Called when the server is saving
-        /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+            serverInitialized = true;
+        }
 
         /// <summary>
         /// Called when the server is shutting down

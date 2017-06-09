@@ -89,13 +89,14 @@ namespace Oxide.Game.GangBeasts
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
             // Configure remote logging
-            //RemoteLogger.SetTag("hostname", CoreNet.Config.Server.ServerConfig.ServerName);
+            //RemoteLogger.SetTag("hostname", Server.Name); // TODO: Uncomment once implemented
 
-            // Update server console window and status bars
+            //Analytics.Collect(); // TODO: Uncomment once Covalence is added
             GangBeastsExtension.ServerConsole();
+
+            serverInitialized = true;
         }
 
         /// <summary>
