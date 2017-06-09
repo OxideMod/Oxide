@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
@@ -18,43 +20,38 @@ namespace Oxide.Game.TheForest
     {
         #region Initialization
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        // Libraries
+        //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // The covalence provider
+        // Instances
         internal static readonly TheForestCovalenceProvider Covalence = TheForestCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
+
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
+        private bool serverInitialized;
 
         // TODO: Localization of core
-
-        // Track when the server has been initialized
-        private bool serverInitialized;
-        private bool loggingInitialized;
 
         /// <summary>
         /// Initializes a new instance of the TheForestCore class
         /// </summary>
         public TheForestCore()
         {
-            var assemblyVersion = TheForestExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "TheForestCore";
+            // Set plugin info attributes
             Title = "The Forest";
             Author = "Oxide Team";
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
-            if (plugins.Exists("unitycore")) InitializeLogging();
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
+            var aVersion = TheForestExtension.AssemblyVersion;
+            Version = new VersionNumber(aVersion.Major, aVersion.Minor, aVersion.Build);
         }
 
         /// <summary>
@@ -78,9 +75,9 @@ namespace Oxide.Game.TheForest
         [HookMethod("Init")]
         private void Init()
         {
-            // Configure remote logging
+            // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", SteamDSConfig.ServerVersion);
+            RemoteLogger.SetTag("game version", Server.Version);
 
             // Setup the default permission groups
             if (permission.IsLoaded)
@@ -100,17 +97,6 @@ namespace Oxide.Game.TheForest
                 });
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
         #endregion

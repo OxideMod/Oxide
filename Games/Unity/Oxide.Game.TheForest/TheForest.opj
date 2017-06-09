@@ -1,6 +1,6 @@
 {
   "Name": "The Forest",
-  "TargetDirectory": "W:\\Servers\\Unity\\TheForest\\TheForestDedicatedServer_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\TheForest\\TheForestDedicatedServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -806,7 +806,7 @@
                 "DropItem"
               ]
             },
-            "MSILHash": "U/uq3qhNqKxmXKLJ737ZVBhrWNZtELFU1+QW+0AjKzg=",
+            "MSILHash": "C8h9siAqyhYFzPDlqj+OdFBiF7IwzBgQkM1OiBWJnJk=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -832,7 +832,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "GqSjZhOE9cvFiyn445iZhJEEFkxB5tZa6sQ/SCx1zeY=",
+            "MSILHash": "bobiPTE+Hcgks63SpdaTrxluMiyCAV/IcCdO1/z58Ig=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1170,7 +1170,7 @@
                 "PlayerHitEnemy"
               ]
             },
-            "MSILHash": "+JI9mmh+VNY8RFlPUZh/pfZY0EbZ04ADZwdCnUv4Wyg=",
+            "MSILHash": "bpH/sBxfn6DLsc48sM17ZNM1oScSx/Yh/2azK1wpMYE=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1222,7 +1222,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "cw6+uYPmRZD8YE0N/Zro5LB6bEFT7vDCpFJD34Kp4bk=",
+            "MSILHash": "dzn6z8KysXas8wKKdSDCrPpVZ8JuOIC66kJiX+mVj7g=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
