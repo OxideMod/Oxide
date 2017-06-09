@@ -1,6 +1,6 @@
 {
   "Name": "Savage Lands",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\SavageLands\\SavageLandsDedicatedServer_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\SavageLands\\SavageLandsDedicatedServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -144,7 +144,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "hJw1kwNqbaPgANdymCPHjaBjTbFEMBZalpga+ZmG0Eg=",
+            "MSILHash": "h7EeTi8BgRpEoOCPqMw06/kq/nwFfbiPeM3zWZVu+C0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -168,7 +168,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "hJw1kwNqbaPgANdymCPHjaBjTbFEMBZalpga+ZmG0Eg=",
+            "MSILHash": "h7EeTi8BgRpEoOCPqMw06/kq/nwFfbiPeM3zWZVu+C0=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -264,7 +264,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "hJw1kwNqbaPgANdymCPHjaBjTbFEMBZalpga+ZmG0Eg=",
+            "MSILHash": "h7EeTi8BgRpEoOCPqMw06/kq/nwFfbiPeM3zWZVu+C0=",
             "BaseHookName": "InitLogging [internal]",
             "HookCategory": "_Patches"
           }

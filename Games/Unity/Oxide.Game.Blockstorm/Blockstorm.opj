@@ -1,6 +1,6 @@
 {
   "Name": "Blockstorm",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\Blockstorm\\Blockstorm_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\Blockstorm\\Blockstorm_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "MUXBwM5TmuDYYr8CFkrhrbCK5orBI3GSktYDd0igpHk=",
+            "MSILHash": "WRpNRJylhsxh+8D2Rsn/W5d8x0MDqJhzMbsFn2ASD10=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "MUXBwM5TmuDYYr8CFkrhrbCK5orBI3GSktYDd0igpHk=",
+            "MSILHash": "WRpNRJylhsxh+8D2Rsn/W5d8x0MDqJhzMbsFn2ASD10=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -69,7 +69,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "icSYo/qQdTF8GVTRuR8fAnNUranmcFMePuAZP3z+QdU=",
+            "MSILHash": "/w9LPNRU0Gy4rcDc/77SzHPQBUgMpYYy80/Ty4kwAi0=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -93,7 +93,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "ccMVJc7QSRMXeNlss97qYQsClVOGk/ajKT6xPk0XAIE=",
+            "MSILHash": "84/01JhvYUSR0cx4YbNi4S6s4JdazuuAXcC9d++8mIo=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -119,7 +119,7 @@
                 "GamePlayer"
               ]
             },
-            "MSILHash": "38tCJVyRMwuslflRlR1aiB4uT5LiHZ8mj4vM2esLQc4=",
+            "MSILHash": "DbvyP7ULiHiUqWll2et9IzM41pqiDCYCFpLOjIBxlhc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -145,12 +145,13 @@
                 "GamePlayer"
               ]
             },
-            "MSILHash": "p0v15+mXVMXQFbBhnxLolHc9BYkQhhiiht+Q55TOtF4=",
+            "MSILHash": "FWAlGdgSxpNzyhUTZVnblME4v+zUC0d51R7DKe7xZ5k=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }

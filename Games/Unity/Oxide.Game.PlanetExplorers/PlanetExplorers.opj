@@ -1,6 +1,6 @@
 {
   "Name": "Planet Explorers",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\PlanetExplorers\\Server\\PE_Server_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\PlanetExplorers\\Server\\PE_Server_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -171,7 +171,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "WhH8Zt6V0DgfuHIt6PgCRmVqr02QQWXwhGzhHXiDnDM=",
+            "MSILHash": "7wPugWLCVgqDwfiJ/aWqnZsGQb7xx+AiZjwfu24eYQM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -195,12 +195,13 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "WhH8Zt6V0DgfuHIt6PgCRmVqr02QQWXwhGzhHXiDnDM=",
+            "MSILHash": "7wPugWLCVgqDwfiJ/aWqnZsGQb7xx+AiZjwfu24eYQM=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }

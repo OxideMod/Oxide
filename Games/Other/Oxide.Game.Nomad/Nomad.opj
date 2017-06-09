@@ -1,6 +1,6 @@
 {
   "Name": "Nomad",
-  "TargetDirectory": "W:\\Servers\\Other\\Nomad\\Nomad Server",
+  "TargetDirectory": "E:\\Servers\\Other\\Nomad\\Nomad Server",
   "Manifests": [
     {
       "AssemblyName": "NomadServer.exe",
@@ -13,8 +13,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnServerShutdown [internal]",
-            "HookName": "IOnServerShutdown",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "NomadServer.exe",
             "TypeName": "TNet.GameServer",
             "Flagged": false,
@@ -74,7 +74,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "BYr4BHfNxWw3pDHqUuTtoN+QqvjLnr7GZ64JRJVukBw=",
+            "MSILHash": "Nn2kUOxbS+Tu2E1t1bPg/ubZFJSQwvqZhwL2THaIiwY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -100,7 +100,7 @@
                 "System.String[]"
               ]
             },
-            "MSILHash": "BYr4BHfNxWw3pDHqUuTtoN+QqvjLnr7GZ64JRJVukBw=",
+            "MSILHash": "Nn2kUOxbS+Tu2E1t1bPg/ubZFJSQwvqZhwL2THaIiwY=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
