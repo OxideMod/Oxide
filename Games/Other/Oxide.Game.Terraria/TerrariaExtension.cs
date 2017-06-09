@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using Terraria;
 
 namespace Oxide.Game.Terraria
@@ -54,7 +56,6 @@ namespace Oxide.Game.Terraria
         /// </summary>
         public override void Load()
         {
-            // Register our loader
             Manager.RegisterPluginLoader(new TerrariaPluginLoader());
         }
 
@@ -108,6 +109,25 @@ namespace Oxide.Game.Terraria
         private static void ServerConsoleOnInput(string input)
         {
             // TODO: Handle console input
+        }
+
+        private static void HandleLog(string message, string stackTrace)
+        {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
+            var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
+            // TODO: Color handling
+
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

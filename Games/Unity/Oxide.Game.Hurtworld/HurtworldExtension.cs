@@ -175,12 +175,14 @@ namespace Oxide.Game.Hurtworld
 
             var color = ConsoleColor.Gray;
             var remoteType = "generic";
-            if (type == LogType.Warning) color = ConsoleColor.Yellow;
-            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) color = ConsoleColor.Red;
+
+            if (type == LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
+                color = ConsoleColor.Red;
             if (message.ToLower().StartsWith("[chat]")) remoteType = "chat";
 
             Interface.Oxide.ServerConsole.AddMessage(message, color);
-
             Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
             {
                 Message = message,

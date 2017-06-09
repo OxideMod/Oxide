@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using UnityEngine;
 
 namespace Oxide.Game.SavageLands
@@ -57,7 +58,10 @@ namespace Oxide.Game.SavageLands
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load() => Manager.RegisterPluginLoader(new SavageLandsPluginLoader());
+        public override void Load()
+        {
+            Manager.RegisterPluginLoader(new SavageLandsPluginLoader());
+        }
 
         /// <summary>
         /// Loads plugin watchers used by this extension
@@ -96,11 +100,21 @@ namespace Oxide.Game.SavageLands
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 
             var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
             else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
+            
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

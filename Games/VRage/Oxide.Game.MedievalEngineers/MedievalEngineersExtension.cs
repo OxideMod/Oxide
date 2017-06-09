@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using VRage.Game;
@@ -54,7 +56,10 @@ namespace Oxide.Game.MedievalEngineers
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load() => Manager.RegisterPluginLoader(new MedievalEngineersPluginLoader());
+        public override void Load()
+        {
+            Manager.RegisterPluginLoader(new MedievalEngineersPluginLoader());
+        }
 
         /// <summary>
         /// Loads plugin watchers used by this extension
@@ -108,6 +113,25 @@ namespace Oxide.Game.MedievalEngineers
         private static void ServerConsoleOnInput(string input)
         {
             // TODO: Handle console input
+        }
+
+        private static void HandleLog(string message, string stackTrace)
+        {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
+            var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
+            // TODO: Color handling
+
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }
