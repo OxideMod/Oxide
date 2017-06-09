@@ -209,7 +209,6 @@ namespace Oxide.Game.Rust
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
             if (Interface.Oxide.CheckConsole() && ServerConsole.Instance != null)
             {
@@ -218,30 +217,21 @@ namespace Oxide.Game.Rust
                 typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
             }
 
-            RustExtension.ServerConsole();
             Core.Analytics.Collect();
+            RustExtension.ServerConsole();
 
             if (!Interface.Oxide.Config.Options.Modded)
-            {
-                Interface.Oxide.LogWarning("The server is currently listed under Community. Please be aware that Facepunch only allows admin tools (that do not affect gameplay) under the Community section");
-            }
-        }
+                Interface.Oxide.LogWarning("The server is currently listed under Community. Please be aware that Facepunch only allows admin tools" +
+                                           "(that do not affect gameplay) under the Community section");
 
-        /// <summary>
-        /// Called when the server is saving
-        /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Core.Analytics.Collect();
+            serverInitialized = true;
+        }
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IOnServerShutdown")]
-        private void IOnServerShutdown()
-        {
-            Interface.Call("OnServerShutdown");
-            Interface.Oxide.OnShutdown();
-        }
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when ServerConsole is enabled

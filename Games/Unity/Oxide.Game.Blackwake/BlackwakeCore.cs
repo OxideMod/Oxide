@@ -71,7 +71,15 @@ namespace Oxide.Game.Blackwake
         /// Called when the server is first initialized
         /// </summary>
         [HookMethod("OnServerInitialized")]
-        private void OnServerInitialized() => BlackwakeExtension.ServerConsole();
+        private void OnServerInitialized()
+        {
+            if (serverInitialized) return;
+
+            Analytics.Collect();
+            BlackwakeExtension.ServerConsole();
+
+            serverInitialized = true;
+        }
 
         /// <summary>
         /// Called when the server is shutting down
