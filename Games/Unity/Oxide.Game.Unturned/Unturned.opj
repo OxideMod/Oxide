@@ -1,6 +1,6 @@
 {
   "Name": "Unturned",
-  "TargetDirectory": "W:\\Servers\\Unity\\Unturned\\Unturned_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\Unturned\\Unturned_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -134,8 +134,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnServerShutdown [internal]",
-            "HookName": "IOnServerShutdown",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SDG.Unturned.Provider",
             "Flagged": false,

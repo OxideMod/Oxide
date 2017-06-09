@@ -1,6 +1,6 @@
 {
   "Name": "MedievalEngineers",
-  "TargetDirectory": "W:\\Servers\\VRage\\MedievalEngineers\\DedicatedServer64",
+  "TargetDirectory": "E:\\Servers\\VRage\\MedievalEngineers\\DedicatedServer64",
   "Manifests": [
     {
       "AssemblyName": "Sandbox.Game.dll",
@@ -37,7 +37,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 339,
+            "InjectionIndex": 342,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -55,7 +55,7 @@
                 "System.Net.IPEndPoint"
               ]
             },
-            "MSILHash": "9gIENVjSr6a5ohHQ9cwaco0TppKy8wuXqDGpXSTXWJI=",
+            "MSILHash": "jfYjJT/DNJu2tr45+q1MrPxOIoQufae1F0EeKgY16nE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

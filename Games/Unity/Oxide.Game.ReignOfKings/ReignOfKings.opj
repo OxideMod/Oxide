@@ -1,6 +1,6 @@
 {
   "Name": "Reign of Kings",
-  "TargetDirectory": "W:\\Servers\\Unity\\ReignOfKings\\ROK_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\ReignOfKings\\ROK_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -145,7 +145,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "Lw199n90NQ7UkVOJr3kkQhGyylaweiI6T7LfDiw0894=",
+            "MSILHash": "5kSp/dkk4H0OYpNUzkEUw9oLEFg3hs17gmhRPJ/EMdc=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -171,7 +171,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "DcX/Tq+mwBvxhs44hlMeE0H5J3oDfC8a6LXPTCJRWvs=",
+            "MSILHash": "tYDrn4UkNKWlGgSY4WeYj88qkeLATXDYP7/Vprz6SiI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -614,7 +614,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "DcX/Tq+mwBvxhs44hlMeE0H5J3oDfC8a6LXPTCJRWvs=",
+            "MSILHash": "tYDrn4UkNKWlGgSY4WeYj88qkeLATXDYP7/Vprz6SiI=",
             "BaseHookName": "OnPlayerChat [guild]",
             "HookCategory": "Player"
           }

@@ -1,6 +1,6 @@
 {
   "Name": "SpaceEngineers",
-  "TargetDirectory": "W:\\Servers\\VRage\\SpaceEngineers\\DedicatedServer64",
+  "TargetDirectory": "E:\\Servers\\VRage\\SpaceEngineers\\DedicatedServer64",
   "Manifests": [
     {
       "AssemblyName": "Sandbox.Game.dll",
@@ -111,7 +111,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 408,
+            "InjectionIndex": 452,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -120,14 +120,14 @@
             "HookName": "IOnNextTick",
             "AssemblyName": "Sandbox.Game.dll",
             "TypeName": "Sandbox.MySandboxGame",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 1,
               "Name": "Update",
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "/ekiNAw7URq4n64Ji+C522iCjYnQ/xufC0VcZv5E7+M=",
+            "MSILHash": "PQ/kpPWAGLQ5NmW02zaNNhFtZxQXukUxdH2N3CkWJjE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }

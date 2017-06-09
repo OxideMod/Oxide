@@ -1,6 +1,6 @@
 {
   "Name": "Hurtworld",
-  "TargetDirectory": "W:\\Servers\\Unity\\Hurtworld\\Hurtworld_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\Hurtworld\\Hurtworld_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -928,8 +928,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnServerShutdown [internal]",
-            "HookName": "IOnServerShutdown",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "GameManager",
             "Flagged": false,

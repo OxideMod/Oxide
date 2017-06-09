@@ -1,6 +1,6 @@
 {
   "Name": "Blackwake",
-  "TargetDirectory": "W:\\Servers\\Unity\\Blackwake\\BlackwakeServer_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\Blackwake\\BlackwakeServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

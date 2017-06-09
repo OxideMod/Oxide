@@ -1,6 +1,6 @@
 {
   "Name": "FortressCraft",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\FortressCraft\\64\\FC_64_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\FortressCraft\\64\\FC_64_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -95,11 +95,11 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnServerShutdown [internal]",
-            "HookName": "IOnServerShutdown",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "NetworkServerThread",
-            "Flagged": true,
+            "Flagged": false,
             "Signature": {
               "Exposure": 0,
               "Name": "CloseServer",
@@ -251,7 +251,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "YZamH7QgNRMJwupiAotJx7eUDJwIUdB8kuJQ/N+xspM=",
+            "MSILHash": "hTIKIOdiXV8T8vnAc3wB2nF17TXbvtoHCIWE3b7Yvps=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -309,7 +309,8 @@
             "HookCategory": "_Patches"
           }
         }
-      ]
+      ],
+      "Modifiers": []
     }
   ]
 }
