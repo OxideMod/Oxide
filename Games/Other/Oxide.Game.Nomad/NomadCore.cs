@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Nomad.Libraries.Covalence;
 
@@ -13,41 +15,34 @@ namespace Oxide.Game.Nomad
     {
         #region Initialization
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        // Libraries
+        //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // The covalence provider
+        // Instances
         internal static readonly NomadCovalenceProvider Covalence = NomadCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
-        // Track when the server has been initialized
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         private bool serverInitialized;
-        private bool loggingInitialized;
-
-        // Get commandline arguments
-        public static CommandLine CommandLine = new CommandLine(Environment.GetCommandLineArgs());
 
         /// <summary>
         /// Initializes a new instance of the NomadCore class
         /// </summary>
         public NomadCore()
         {
-            var assemblyVersion = NomadExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "NomadCore";
+            // Set plugin info attributes
             Title = "Nomad";
             Author = "Oxide Team";
+            var assemblyVersion = NomadExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
 
         #endregion
@@ -62,37 +57,25 @@ namespace Oxide.Game.Nomad
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", CommandLine.GetVariable("clientVersion"));
+            RemoteLogger.SetTag("game version", Server.Version);
 
-            // Setup the default permission groups
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
-                permission.RegisterValidate(s =>
+ 
+               permission.RegisterValidate(s =>
                 {
                     ulong temp;
                     if (!ulong.TryParse(s, out temp)) return false;
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized) InitializeLogging();
         }
 
         #endregion

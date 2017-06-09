@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.SevenDays.Libraries.Covalence;
 
@@ -14,47 +15,34 @@ namespace Oxide.Game.SevenDays
     {
         #region Initialization
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        // Libraries
+        //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // The covalence provider
+        // Instances
         internal static readonly SevenDaysCovalenceProvider Covalence = SevenDaysCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
-        // Track when the server has been initialized
-        private bool serverInitialized;
-        private bool loggingInitialized;
-
-        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             ""
         };
+
+        private bool serverInitialized;
 
         /// <summary>
         /// Initializes a new instance of the SevenDaysCore class
         /// </summary>
         public SevenDaysCore()
         {
-            var assemblyVersion = SevenDaysExtension.AssemblyVersion;
-
             // Set attributes
-            Name = "SevenDaysCore";
             Title = "7 Days to Die";
             Author = "Oxide Team";
+            var assemblyVersion = SevenDaysExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
-            if (plugins.Exists("unitycore")) InitializeLogging();
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
 
         #endregion
@@ -69,17 +57,15 @@ namespace Oxide.Game.SevenDays
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", GamePrefs.GetString(EnumGamePrefs.GameVersion));
+            RemoteLogger.SetTag("game version", Server.Version);
 
-            // Setup the default permission groups
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -87,19 +73,9 @@ namespace Oxide.Game.SevenDays
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
         #endregion
@@ -166,10 +142,7 @@ namespace Oxide.Game.SevenDays
             // Do permission stuff
             if (permission.IsLoaded)
             {
-                // Update stored name
                 permission.UpdateNickname(client.playerId, client.playerName);
-
-                // Add player to default group
                 if (!permission.UserHasGroup(client.playerId, DefaultGroups[0])) permission.AddUserGroup(client.playerId, DefaultGroups[0]);
             }
 

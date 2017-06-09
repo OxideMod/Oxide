@@ -16,16 +16,16 @@ namespace Oxide.Game.Blackwake
 
         private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
 
+        private bool serverInitialized;
+
         /// <summary>
         /// Initializes a new instance of the BlackwakeCore class
         /// </summary>
         public BlackwakeCore()
         {
-            var assemblyVersion = BlackwakeExtension.AssemblyVersion;
-
-            Name = "BlackwakeCore";
             Title = "Blackwake";
             Author = "Oxide Team";
+            var assemblyVersion = BlackwakeExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
@@ -40,9 +40,10 @@ namespace Oxide.Game.Blackwake
         private void Init()
         {
             RemoteLogger.SetTag("game", Title.ToLower());
-            //RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH);
+            //RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH); // TODO: Use Covalence
             //RemoteLogger.SetTag("version", SteamAuth.NPCPMKJLAJN());
 
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;

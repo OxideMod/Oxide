@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Game.Configuration;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.InterstellarRift
@@ -13,35 +16,34 @@ namespace Oxide.Game.InterstellarRift
     {
         #region Initialization
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        // Libraries
+        //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // Track when the server has been initialized
+        // Instances
+        //internal static readonly InterstellarRiftCovalenceProvider Covalence = InterstellarRiftCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        //internal readonly IServer Server = Covalence.CreateServer();
+
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         private bool serverInitialized;
-        private bool loggingInitialized;
 
         /// <summary>
         /// Initializes a new instance of the InterstellarRiftCore class
         /// </summary>
         public InterstellarRiftCore()
         {
-            var assemblyVersion = InterstellarRiftExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "InterstellarRiftCore";
+            // Set plugin info attributes
             Title = "Interstellar Rift";
             Author = "Oxide Team";
+            var assemblyVersion = InterstellarRiftExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
 
         #endregion
@@ -56,17 +58,15 @@ namespace Oxide.Game.InterstellarRift
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", Globals.Version);
+            RemoteLogger.SetTag("game version", Globals.Version); // TODO: Use Covalence
 
-            // Setup the default permission groups
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+ 
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -76,17 +76,6 @@ namespace Oxide.Game.InterstellarRift
                 });
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized) InitializeLogging();
         }
 
         #endregion

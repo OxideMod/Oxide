@@ -19,22 +19,22 @@ namespace Oxide.Game.Rust
     /// </summary>
     public class RustExtension : Extension
     {
-        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
         /// <summary>
         /// Gets the name of this extension
         /// </summary>
         public override string Name => "Rust";
 
         /// <summary>
-        /// Gets the version of this extension
-        /// </summary>
-        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
-
-        /// <summary>
         /// Gets the author of this extension
         /// </summary>
         public override string Author => "Oxide Team";
+
+        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+        /// <summary>
+        /// Gets the version of this extension
+        /// </summary>
+        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
 
         internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
         {
@@ -85,12 +85,12 @@ namespace Oxide.Game.Rust
         /// </summary>
         public override void Load()
         {
-            Manager.RegisterPluginLoader(new RustPluginLoader());
             Manager.RegisterLibrary("Rust", new Libraries.Rust());
             Manager.RegisterLibrary("Command", new Libraries.Command());
             Manager.RegisterLibrary("Item", new Libraries.Item());
             Manager.RegisterLibrary("Player", new Libraries.Player());
             Manager.RegisterLibrary("Server", new Libraries.Server());
+            Manager.RegisterPluginLoader(new RustPluginLoader());
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Oxide.Game.Rust
 
             Interface.Oxide.ServerConsole.Status1Left = () =>
             {
-                var hostname = ConVar.Server.hostname.Length > 30 ? $"{ConVar.Server.hostname.Substring(0, 30)}..." : ConVar.Server.hostname;
+                var hostname = ConVar.Server.hostname.Length > 30 ? ConVar.Server.hostname.Truncate(30) : ConVar.Server.hostname;
                 return $"{hostname} [{(Interface.Oxide.Config.Options.Modded ? "Modded" : "Community")}]";
             };
             Interface.Oxide.ServerConsole.Status1Right = () => $"{Performance.current.frameRate}fps, {((ulong)Time.realtimeSinceStartup).FormatSeconds()}";

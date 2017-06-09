@@ -41,10 +41,8 @@ namespace Oxide.Core.Unity
         /// </summary>
         public override void Load()
         {
-            // Register our loader
             Manager.RegisterPluginLoader(new UnityPluginLoader());
 
-            // Register engine clock
             Interface.Oxide.RegisterEngineClock(() => Time.realtimeSinceStartup);
 
             // Register our MonoBehaviour

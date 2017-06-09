@@ -88,7 +88,7 @@ namespace Oxide.Plugins
         /// <param name="name"></param>
         public override void Reload(string directory, string name)
         {
-            if (Regex.Match(directory, @"\\Include\b", RegexOptions.IgnoreCase).Success)
+            if (Regex.Match(directory, @"\\include\b", RegexOptions.IgnoreCase).Success)
             {
                 name = $"Oxide.{name}";
                 foreach (var plugin in plugins.Values)
