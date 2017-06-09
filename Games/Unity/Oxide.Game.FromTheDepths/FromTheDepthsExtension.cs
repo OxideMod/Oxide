@@ -5,6 +5,7 @@ using BrilliantSkies.FromTheDepths.Game.UserInterfaces;
 using BrilliantSkies.FromTheDepths.Multiplayer;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using UnityEngine;
 
 namespace Oxide.Game.FromTheDepths
@@ -57,7 +58,6 @@ namespace Oxide.Game.FromTheDepths
         /// </summary>
         public override void Load()
         {
-            // Register our loader
             Manager.RegisterPluginLoader(new FromTheDepthsPluginLoader());
         }
 
@@ -146,11 +146,21 @@ namespace Oxide.Game.FromTheDepths
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 
             var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
             else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

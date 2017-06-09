@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
@@ -57,7 +58,10 @@ namespace Oxide.Game.Unturned
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load() => Manager.RegisterPluginLoader(new UnturnedPluginLoader());
+        public override void Load()
+        {
+            Manager.RegisterPluginLoader(new UnturnedPluginLoader());
+        }
 
         /// <summary>
         /// Loads plugin watchers used by this extension
@@ -123,11 +127,21 @@ namespace Oxide.Game.Unturned
             if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
 
             var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
             else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
+            
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

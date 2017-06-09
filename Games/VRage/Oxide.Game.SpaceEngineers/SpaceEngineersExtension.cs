@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using Oxide.Plugins;
 using Sandbox;
 using Sandbox.Game.World;
@@ -127,6 +129,25 @@ namespace Oxide.Game.SpaceEngineers
         {
             //if (!string.IsNullOrEmpty(input)) ConsoleManager.Instance.ExecuteCommand(input);
             if (input.ToLower().Equals("quit") || input.ToLower().Equals("shutdown")) MySandboxGame.ExitThreadSafe();
+        }
+
+        private static void HandleLog(string message, string stackTrace)
+        {
+            if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
+
+            var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
+            // TODO: Color handling
+
+            Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

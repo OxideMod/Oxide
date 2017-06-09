@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using Oxide.Core.Logging;
 
 namespace Oxide.Game.Nomad
@@ -59,7 +60,6 @@ namespace Oxide.Game.Nomad
         /// </summary>
         public override void Load()
         {
-            // Register our loader
             Manager.RegisterPluginLoader(new NomadPluginLoader());
         }
 
@@ -134,11 +134,21 @@ namespace Oxide.Game.Nomad
             if (!string.IsNullOrEmpty(stackTrace)) logWriter.WriteLine(stackTrace);
 
             var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
             else if (type == LogType.Error)
                 color = ConsoleColor.Red;
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

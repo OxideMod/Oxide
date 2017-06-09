@@ -8,6 +8,7 @@ using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using Oxide.Game.ReignOfKings.Libraries;
 using UnityEngine;
 
@@ -138,12 +139,8 @@ namespace Oxide.Game.ReignOfKings
         /// </summary>
         public override void Load()
         {
-            // Register our loader
-            Manager.RegisterPluginLoader(new ReignOfKingsPluginLoader());
-
-            // Register our libraries
             Manager.RegisterLibrary("Command", new Command());
-            Manager.RegisterLibrary("RoK", new Libraries.ReignOfKings());
+            Manager.RegisterPluginLoader(new ReignOfKingsPluginLoader());
         }
 
         /// <summary>
@@ -252,11 +249,21 @@ namespace Oxide.Game.ReignOfKings
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 
             var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
             else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
                 color = ConsoleColor.Red;
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

@@ -167,6 +167,7 @@ namespace Oxide.Game.Rust
 
             var color = ConsoleColor.Gray;
             var remoteType = "generic";
+
             if (type == LogType.Warning)
             {
                 color = ConsoleColor.Yellow;

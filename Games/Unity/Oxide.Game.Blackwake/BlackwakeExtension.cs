@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
 using UnityEngine;
 
 namespace Oxide.Game.Blackwake
@@ -62,7 +63,10 @@ namespace Oxide.Game.Blackwake
         /// <summary>
         /// Loads this extension
         /// </summary>
-        public override void Load() => Manager.RegisterPluginLoader(new BlackwakePluginLoader());
+        public override void Load()
+        {
+            Manager.RegisterPluginLoader(new BlackwakePluginLoader());
+        }
 
         /// <summary>
         /// Loads plugin watchers used by this extension
@@ -157,9 +161,21 @@ namespace Oxide.Game.Blackwake
             if (string.IsNullOrEmpty(message) || Filter.Any(message.Contains)) return;
 
             var color = ConsoleColor.Gray;
-            if (type == LogType.Warning) color = ConsoleColor.Yellow;
-            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) color = ConsoleColor.Red;
+            var remoteType = "generic";
+
+            if (type == LogType.Warning)
+                color = ConsoleColor.Yellow;
+            else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
+                color = ConsoleColor.Red;
+            
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }
