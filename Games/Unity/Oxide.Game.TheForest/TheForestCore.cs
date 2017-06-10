@@ -189,10 +189,13 @@ namespace Oxide.Game.TheForest
             var id = entity.source.RemoteEndPoint.SteamId.Id.ToString();
             var name = entity.GetState<IPlayerState>().name;
 
+            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
                 permission.UpdateNickname(id, name);
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (entity.source.IsDedicatedServerAdmin() && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             Debug.Log($"{id}/{name} joined");

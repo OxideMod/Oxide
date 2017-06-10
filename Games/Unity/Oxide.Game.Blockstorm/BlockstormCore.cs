@@ -22,6 +22,7 @@ namespace Oxide.Game.Blockstorm
         //internal static readonly BlockstormCovalenceProvider Covalence = BlockstormCovalenceProvider.Instance;
         //internal static readonly IServer Server = Covalence.CreateServer();
 
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             ""

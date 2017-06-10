@@ -37,6 +37,7 @@ namespace Oxide.Game.ReignOfKings
         internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
         internal readonly IServer Server = Covalence.CreateServer();
 
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             ""
@@ -292,21 +293,14 @@ namespace Oxide.Game.ReignOfKings
             // Ignore the server player
             if (player.Id == 9999999999) return;
 
-            // Do permission stuff
+            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
                 var id = player.Id.ToString();
-
-                // Update stored name
                 permission.UpdateNickname(id, player.Name);
-
-                // Add player to default group
-                if (permission.GroupExists("default")) permission.AddUserGroup(id, "default");
-                else if (permission.GroupExists("guest")) permission.AddUserGroup(id, "guest");
-
-                // Add player to admin group if admin
-                if (permission.GroupExists("admin") && player.HasPermission("admin") && !permission.UserHasGroup(id, "admin"))
-                    permission.AddUserGroup(id, "admin");
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (player.HasPermission("admin") && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             // Call game hook

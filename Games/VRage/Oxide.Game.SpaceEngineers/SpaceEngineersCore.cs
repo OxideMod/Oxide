@@ -37,6 +37,7 @@ namespace Oxide.Game.SpaceEngineers
         internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
         internal readonly IServer Server = Covalence.CreateServer();
 
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             ""
@@ -294,11 +295,14 @@ namespace Oxide.Game.SpaceEngineers
 
             var id = player.SteamUserId.ToString();
 
+            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
                 permission.UpdateNickname(id, player.DisplayName);
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-                if (player.PromoteLevel == MyPromoteLevel.Admin && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (player.PromoteLevel == MyPromoteLevel.Admin && !permission.UserHasGroup(id, defaultGroups.Administrators))
+                    permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             Interface.Call("OnPlayerConnected", player);
