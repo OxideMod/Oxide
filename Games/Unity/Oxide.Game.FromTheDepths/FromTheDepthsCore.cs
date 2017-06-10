@@ -23,6 +23,7 @@ namespace Oxide.Game.FromTheDepths
         //internal static readonly FromTheDepthsCovalenceProvider Covalence = FromTheDepthsCovalenceProvider.Instance;
         //internal static readonly IServer Server = Covalence.CreateServer();
 
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             ""

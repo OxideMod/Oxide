@@ -288,11 +288,13 @@ namespace Oxide.Game.Rust
             var authLevel = connection.authLevel;
             var ip = Regex.Replace(connection.ipaddress, ipPattern, "");
 
-            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
+            // Update player's permissions group and name
+            if (permission.IsLoaded)
             {
                 permission.UpdateNickname(id, name);
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (authLevel >= 1 && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             Covalence.PlayerManager.PlayerJoin(connection.userid, name);

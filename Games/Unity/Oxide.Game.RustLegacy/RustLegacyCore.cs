@@ -32,6 +32,7 @@ namespace Oxide.Game.RustLegacy
         internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
         internal readonly IServer Server = Covalence.CreateServer();
 
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             "rcon.login",
@@ -204,14 +205,14 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(NetUser netUser)
         {
-            // Do permission stuff
+            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
                 var id = netUser.userID.ToString();
-                permission.UpdateNickname(id, netUser.displayName);
-                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups.ToArray();
-                if (!permission.UserHasGroup(id, defaultGroups[0])) permission.AddUserGroup(id, defaultGroups[0]);
-                if (netUser.CanAdmin() && !permission.UserHasGroup(id, defaultGroups[1])) permission.AddUserGroup(id, defaultGroups[1]);
+                permission.UpdateNickname(id, name);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (netUser.CanAdmin() && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             // Let covalence know

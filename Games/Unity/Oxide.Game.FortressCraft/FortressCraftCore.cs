@@ -24,6 +24,7 @@ namespace Oxide.Game.FortressCraft
         internal static readonly FortressCraftCovalenceProvider Covalence = FortressCraftCovalenceProvider.Instance;
         internal static readonly IServer Server = Covalence.CreateServer();
 
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             ""

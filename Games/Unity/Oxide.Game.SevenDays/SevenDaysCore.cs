@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -26,6 +27,7 @@ namespace Oxide.Game.SevenDays
         internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
         internal readonly IServer Server = Covalence.CreateServer();
 
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             ""
@@ -128,11 +130,12 @@ namespace Oxide.Game.SevenDays
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(ClientInfo client)
         {
-            // Do permission stuff
             if (permission.IsLoaded)
             {
                 permission.UpdateNickname(client.playerId, client.playerName);
-                if (!permission.UserHasGroup(client.playerId, DefaultGroups[0])) permission.AddUserGroup(client.playerId, DefaultGroups[0]);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(client.playerId, defaultGroups.Players)) permission.AddUserGroup(client.playerId, defaultGroups.Players);
+                // TODO: Admin group automation
             }
 
             // Let covalence know
