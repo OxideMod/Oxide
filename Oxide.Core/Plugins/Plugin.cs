@@ -123,6 +123,10 @@ namespace Oxide.Core.Plugins
         /// </summary>
         public bool IsLoaded { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets the total hook time
+        /// </summary>
+        /// <value>The total hook time.</value>
         public double TotalHookTime { get; internal set; }
 
         // Used to measure time spent in this plugin
