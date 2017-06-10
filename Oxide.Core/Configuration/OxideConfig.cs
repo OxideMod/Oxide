@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Oxide.Core.Configuration
 {
     /// <summary>
-    /// Represents all "root" Oxide config settings
+    /// Represents all Oxide config settings
     /// </summary>
     public class OxideConfig : ConfigFile
     {
@@ -13,15 +15,22 @@ namespace Oxide.Core.Configuration
         public class OxideOptions
         {
             public bool Modded;
-
             public DefaultGroups DefaultGroups;
         }
 
-        public class DefaultGroups
+        [JsonObject]
+        public class DefaultGroups : IEnumerable<string>
         {
             public string Players;
-
             public string Administrators;
+
+            public IEnumerator<string> GetEnumerator()
+            {
+                yield return Players;
+                yield return Administrators;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
         /// <summary>
