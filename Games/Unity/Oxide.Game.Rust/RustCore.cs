@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,6 +11,7 @@ using Network;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using RemoteMessage = Oxide.Core.RemoteConsole.RemoteMessage;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
@@ -287,6 +289,22 @@ namespace Oxide.Game.Rust
             return false;
         }
 
+        [HookMethod("IOnRconCommand")]
+        private object IOnRconCommand(IPAddress sender, string message)
+        {
+            if (string.IsNullOrEmpty(message)) return null;
+
+            var msg = RemoteMessage.GetMessage(message);
+            if (msg == null) return null;
+
+            var args = msg.Message.Split(' ');
+            var cmd = args[0];
+            var call = Interface.Call("OnRconCommand", sender, cmd, (args.Length > 1) ? args.Skip(1).ToArray() : null);
+            if (call != null) return true;
+
+            return null;
+        }
+
         #endregion
 
         #region Player Hooks
@@ -525,16 +543,6 @@ namespace Oxide.Game.Rust
             return entity is BasePlayer ? null : Interface.Call("OnEntityTakeDamage", entity, info);
         }
 
-        /// <summary>
-        /// Called when a locked entity is used
-        /// This is used to call the deprecated hook CanUseLock for a limited time
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="baseLock"></param>
-        /// <returns></returns>
-        [HookMethod("CanUseLockedEntity")]
-        private object CanUseLockedEntity(BasePlayer player, BaseLock baseLock) => Interface.CallDeprecatedHook("CanUseLock", "CanUseLockedEntity", new DateTime(2017, 4, 13), player, baseLock);
-
         #endregion
 
         #region Item Hooks
@@ -556,15 +564,6 @@ namespace Oxide.Game.Rust
             if ((item.condition <= 0f) && (item.condition < condition)) item.OnBroken();
             return true;
         }
-
-        /// <summary>
-        /// Called when an item is used
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        [HookMethod("OnItemUse")]
-        private void OnItemUse(Item item, int amount) => Interface.Oxide.CallDeprecatedHook("OnConsumableUse", "OnItemUse", new DateTime(2017, 4, 1), item, amount);
 
         #endregion
 
