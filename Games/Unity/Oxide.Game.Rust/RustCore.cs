@@ -1244,7 +1244,6 @@ namespace Oxide.Game.Rust
         private object OnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
-            if (arg.cmd.FullName != "chat.say") return null;
 
             try
             {
@@ -1252,24 +1251,18 @@ namespace Oxide.Game.Rust
                 var str = arg.GetString(0);
                 if (string.IsNullOrEmpty(str)) return null;
 
-                // Is it a chat command?
-                if (str[0] != '/') return null; // TODO: Return if no arguments given
+                // Check if command is from a player
+                var player = arg.Connection?.player as BasePlayer;
+                if (player == null) return null;
 
                 // Get the full command
-                var message = str.Substring(1);
+                var message = str.TrimStart('/');
 
                 // Parse it
                 string cmd;
                 string[] args;
                 ParseCommand(message, out cmd, out args);
                 if (cmd == null) return null;
-
-                // Check if command is from a player
-                var player = arg.Connection?.player as BasePlayer;
-                if (player == null) return null;
-
-                // Disable chat commands for non-admins if the server is not set to modded
-                if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return null;
 
                 // Get the covalence player
                 var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
@@ -1279,6 +1272,13 @@ namespace Oxide.Game.Rust
                 var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
                 var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
                 if (blockedSpecific != null || blockedCovalence != null) return true;
+
+                // Is it a chat command?
+                if (arg.cmd.FullName != "chat.say") return null;
+                if (str[0] != '/') return null; // TODO: Return if no arguments given
+
+                // Disable chat commands for non-admins if the server is not set to modded
+                if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return null;
 
                 // Is it a covalance command?
                 if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
