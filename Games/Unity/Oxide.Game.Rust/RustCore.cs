@@ -1378,5 +1378,113 @@ namespace Oxide.Game.Rust
         }
 
         #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Returns the BasePlayer for the specified name, ID, or IP address string
+        /// </summary>
+        /// <param name="nameOrIdOrIp"></param>
+        /// <returns></returns>
+        public static BasePlayer FindPlayer(string nameOrIdOrIp)
+        {
+            BasePlayer player = null;
+            foreach (var activePlayer in BasePlayer.activePlayerList)
+            {
+                if (string.IsNullOrEmpty(activePlayer.UserIDString)) continue;
+                if (activePlayer.UserIDString.Equals(nameOrIdOrIp))
+                    return activePlayer;
+                if (string.IsNullOrEmpty(activePlayer.displayName)) continue;
+                if (activePlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
+                    return activePlayer;
+                if (activePlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
+                    player = activePlayer;
+                if (activePlayer.net?.connection != null && activePlayer.net.connection.ipaddress.Equals(nameOrIdOrIp))
+                    return activePlayer;
+            }
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (string.IsNullOrEmpty(sleepingPlayer.UserIDString)) continue;
+                if (sleepingPlayer.UserIDString.Equals(nameOrIdOrIp))
+                    return sleepingPlayer;
+                if (string.IsNullOrEmpty(sleepingPlayer.displayName)) continue;
+                if (sleepingPlayer.displayName.Equals(nameOrIdOrIp, StringComparison.OrdinalIgnoreCase))
+                    return sleepingPlayer;
+                if (sleepingPlayer.displayName.Contains(nameOrIdOrIp, CompareOptions.OrdinalIgnoreCase))
+                    player = sleepingPlayer;
+            }
+            return player;
+        }
+
+        /// <summary>
+        /// Returns the BasePlayer for the specified name string
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static BasePlayer FindPlayerByName(string name)
+        {
+            BasePlayer player = null;
+            foreach (var activePlayer in BasePlayer.activePlayerList)
+            {
+                if (string.IsNullOrEmpty(activePlayer.displayName)) continue;
+                if (activePlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    return activePlayer;
+                if (activePlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
+                    player = activePlayer;
+            }
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (string.IsNullOrEmpty(sleepingPlayer.displayName)) continue;
+                if (sleepingPlayer.displayName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    return sleepingPlayer;
+                if (sleepingPlayer.displayName.Contains(name, CompareOptions.OrdinalIgnoreCase))
+                    player = sleepingPlayer;
+            }
+            return player;
+        }
+
+        /// <summary>
+        /// Returns the BasePlayer for the specified ID ulong
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static BasePlayer FindPlayerById(ulong id)
+        {
+            foreach (var activePlayer in BasePlayer.activePlayerList)
+            {
+                if (activePlayer.userID == id)
+                    return activePlayer;
+            }
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (sleepingPlayer.userID == id)
+                    return sleepingPlayer;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the BasePlayer for the specified ID string
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static BasePlayer FindPlayerByIdString(string id)
+        {
+            foreach (var activePlayer in BasePlayer.activePlayerList)
+            {
+                if (string.IsNullOrEmpty(activePlayer.UserIDString)) continue;
+                if (activePlayer.UserIDString.Equals(id))
+                    return activePlayer;
+            }
+            foreach (var sleepingPlayer in BasePlayer.sleepingPlayerList)
+            {
+                if (string.IsNullOrEmpty(sleepingPlayer.UserIDString)) continue;
+                if (sleepingPlayer.UserIDString.Equals(id))
+                    return sleepingPlayer;
+            }
+            return null;
+        }
+
+        #endregion
     }
 }
