@@ -516,7 +516,7 @@ namespace Oxide.Game.Hurtworld
         {
             if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
 
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -552,7 +552,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ConsolePlugins")]
         private void ConsolePlugins(string command, string[] args)
         {
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -667,7 +667,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
@@ -703,7 +703,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", null, name));
@@ -744,7 +744,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
@@ -780,7 +780,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", null, name));

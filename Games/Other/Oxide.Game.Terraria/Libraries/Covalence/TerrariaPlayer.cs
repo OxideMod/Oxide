@@ -6,6 +6,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Terraria;
+using Terraria.Localization;
 
 namespace Oxide.Game.Terraria.Libraries.Covalence
 {
@@ -122,7 +123,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// Heals the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Heal(float amount) => NetMessage.SendData(35, -1, -1, "", player.whoAmI, amount);
+        public void Heal(float amount) => NetMessage.SendData(35, -1, -1, NetworkText.Empty, player.whoAmI, amount);
 
         /// <summary>
         /// Gets/sets the user's health
@@ -143,18 +144,18 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// Damages the user's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Hurt(float amount) => NetMessage.SendData(84, -1, -1, "", player.whoAmI, amount);
+        public void Hurt(float amount) => NetMessage.SendData(84, -1, -1, NetworkText.Empty, player.whoAmI, amount);
 
         /// <summary>
         /// Kicks the user from the game
         /// </summary>
         /// <param name="reason"></param>
-        public void Kick(string reason) => NetMessage.SendData(2, player.whoAmI, -1, reason);
+        public void Kick(string reason) => NetMessage.SendData(2, player.whoAmI, -1, NetworkText.FromLiteral(reason));
 
         /// <summary>
         /// Causes the user's character to die
         /// </summary>
-        public void Kill() => NetMessage.SendData(21, -1, -1, "", player.whoAmI);
+        public void Kill() => NetMessage.SendData(21, -1, -1, NetworkText.Empty, player.whoAmI);
 
         /// <summary>
         /// Gets/sets the user's maximum health
@@ -189,7 +190,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         public void Teleport(float x, float y, float z)
         {
             player.Teleport(new Vector2(x, y), 1);
-            NetMessage.SendData(65, -1, -1, "", 0, player.whoAmI, x, y, 1);
+            NetMessage.SendData(65, -1, -1, NetworkText.Empty, 0, player.whoAmI, x, y, 1);
         }
 
         /// <summary>
@@ -243,7 +244,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// Sends the specified message to the user
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => NetMessage.SendData(25, player.whoAmI, -1, message);
+        public void Message(string message) => NetMessage.SendData(25, player.whoAmI, -1, NetworkText.FromLiteral(message));
 
         /// <summary>
         /// Sends the specified message to the user
