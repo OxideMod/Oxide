@@ -940,15 +940,15 @@ namespace Oxide.Game.ReignOfKings
         /// <returns></returns>
         private Player FindPlayer(string nameOrIdOrIp)
         {
-            var player = Server.GetPlayerByName(nameOrIdOrIp);
+            var player = CodeHatch.Engine.Networking.Server.GetPlayerByName(nameOrIdOrIp);
             if (player == null)
             {
                 ulong id;
-                if (ulong.TryParse(nameOrIdOrIp, out id)) player = Server.GetPlayerById(id);
+                if (ulong.TryParse(nameOrIdOrIp, out id)) player = CodeHatch.Engine.Networking.Server.GetPlayerById(id);
             }
             if (player == null)
             {
-                foreach (var target in Server.ClientPlayers)
+                foreach (var target in CodeHatch.Engine.Networking.Server.ClientPlayers)
                     if (target.Connection.IpAddress == nameOrIdOrIp) player = target;
             }
             return player;
