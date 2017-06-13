@@ -8,37 +8,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerShutdown",
-            "HookName": "OnServerShutdown",
-            "AssemblyName": "NomadServer.exe",
-            "TypeName": "TNet.GameServer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "Stop",
-              "ReturnType": "System.Void",
-              "Parameters": []
-            },
-            "MSILHash": "jPDB+I//ewsn0QSkZmT2a09JGKOdloekgvPugdxv49g=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 54,
-            "ReturnBehavior": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 1,
-            "ArgumentString": "",
+            "ArgumentString": "this.name, this.id, this.address",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
+            "Name": "OnUserApprove",
+            "HookName": "OnUserApprove",
             "AssemblyName": "NomadServer.exe",
             "TypeName": "TNet.TcpProtocol",
             "Flagged": false,
@@ -139,8 +115,8 @@
             "ArgumentBehavior": 1,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnPlayerInit",
-            "HookName": "OnPlayerInit",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
             "AssemblyName": "NomadServer.exe",
             "TypeName": "TNet.TcpPlayer",
             "Flagged": false,
@@ -175,6 +151,30 @@
               "Parameters": []
             },
             "MSILHash": "f4cDToOAEwGwE3Rvc5ZqXr6WR8rX0FXfbx0Aaz4qhEE=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
+            "AssemblyName": "NomadServer.exe",
+            "TypeName": "Application",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Dispose",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "azzbPy67FpvDmDmtYLTGt2k/rXPX4GubiEFN4m1ZJ/g=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
