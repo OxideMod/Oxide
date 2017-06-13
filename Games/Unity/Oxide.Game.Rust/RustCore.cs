@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,6 +11,7 @@ using Network;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using RemoteMessage = Oxide.Core.RemoteConsole.RemoteMessage;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
 using Oxide.Game.Rust.Libraries;
@@ -269,6 +271,22 @@ namespace Oxide.Game.Rust
                 ConsoleSystem.Run(options, str, value);
             }
             return false;
+        }
+
+        [HookMethod("IOnRconCommand")]
+        private object IOnRconCommand(IPAddress sender, string message)
+        {
+            if (string.IsNullOrEmpty(message)) return null;
+
+            var msg = RemoteMessage.GetMessage(message);
+            if (msg == null) return null;
+
+            var args = msg.Message.Split(' ');
+            var cmd = args[0];
+            var call = Interface.Call("OnRconCommand", sender, cmd, (args.Length > 1) ? args.Skip(1).ToArray() : null);
+            if (call != null) return true;
+
+            return null;
         }
 
         #endregion
