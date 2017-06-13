@@ -120,7 +120,7 @@
             "HookName": "IOnNextTick",
             "AssemblyName": "Sandbox.Game.dll",
             "TypeName": "Sandbox.MySandboxGame",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 1,
               "Name": "Update",
