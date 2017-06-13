@@ -216,7 +216,7 @@ namespace Oxide.Core.RemoteConsole
         // Broacasts a message into the game chat
         private void BroadcastMessage(string command, string[] args, int identifier, WebSocketContext context)
         {
-            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
+            if (Interface.CallHook("OnRconCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
             var message = string.Join(" ", args);
 
@@ -229,7 +229,7 @@ namespace Oxide.Core.RemoteConsole
         // Returns the playerlist to the requesting socket
         private void PlayerListCommand(string command, string[] args, int identifier, WebSocketContext context)
         {
-            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
+            if (Interface.CallHook("OnRconCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
             var players = new List<RconPlayer>();
 
@@ -241,7 +241,7 @@ namespace Oxide.Core.RemoteConsole
         // returns or sets the hostname via rcon
         private void HostnameCommand(string command, string[] args, int identifier, WebSocketContext context)
         {
-            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
+            if (Interface.CallHook("OnRconCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
             var hostname = string.Join(" ", args);
 
@@ -253,7 +253,7 @@ namespace Oxide.Core.RemoteConsole
         // Kicks a currently connected user from the server
         private void KickCommand(string command, string[] args, int identifier, WebSocketContext context)
         {
-            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), context, args) != null) return;
+            if (Interface.CallHook("OnRconCommand", context.UserEndPoint.Address.ToString(), context, args) != null) return;
 
             var player = covalence.Players.FindPlayer(args[0]);
             if (player != null && player.IsConnected)
@@ -270,7 +270,7 @@ namespace Oxide.Core.RemoteConsole
         // Bans a player/id from the server
         private void BanCommand(string command, string[] args, int identifier, WebSocketContext context)
         {
-            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
+            if (Interface.CallHook("OnRconCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
             var Id = 0ul;
             if (ulong.TryParse(args[0], out Id))
@@ -302,7 +302,7 @@ namespace Oxide.Core.RemoteConsole
         // Unban a banned player
         private void UnbanCommand(string command, string[] args, int identifier, WebSocketContext context)
         {
-            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), context, args) != null) return;
+            if (Interface.CallHook("OnRconCommand", context.UserEndPoint.Address.ToString(), context, args) != null) return;
 
             var lookup = string.Join(" ", args);
             var Id = 0ul;
@@ -336,7 +336,7 @@ namespace Oxide.Core.RemoteConsole
         // Teleport a player to another player
         private void TeleportCommand(string command, string[] args, int identifier, WebSocketContext context)
         {
-            if (Interface.CallHook("OnIServerCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
+            if (Interface.CallHook("OnRconCommand", context.UserEndPoint.Address.ToString(), command, args) != null) return;
 
             if ((args.Length != 2) && (args.Length != 4))
             {

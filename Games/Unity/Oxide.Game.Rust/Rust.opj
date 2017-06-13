@@ -5454,6 +5454,38 @@
           "MSILHash": ""
         }
       ]
+    },
+    {
+      "AssemblyName": "Facepunch.Rcon.dll",
+      "Hooks": [
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 5,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.context.UserEndPoint.Address,a0.Data",
+            "HookTypeName": "Simple",
+            "Name": "IOnRconCommand",
+            "HookName": "IOnRconCommand",
+            "AssemblyName": "Facepunch.Rcon.dll",
+            "TypeName": "Facepunch.Rcon.Listener/RConBehaviour",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 1,
+              "Name": "OnMessage",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "WebSocketSharp.MessageEventArgs"
+              ]
+            },
+            "MSILHash": "zW7Kqr8TPkoIwkR42tGawFztO+fmBTEbIoHOotj5dL8=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        }
+      ],
+      "Modifiers": []
     }
   ]
 }
