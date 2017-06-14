@@ -172,21 +172,25 @@ namespace Oxide.Game.Rust
             {
                 color = ConsoleColor.Yellow;
                 ConVar.Server.Log("Log.Warning.txt", message);
+                remoteType = "warning";
             }
             else if (type == LogType.Error)
             {
                 color = ConsoleColor.Red;
                 ConVar.Server.Log("Log.Error.txt", message);
+                remoteType = "error";
             }
             else if (type == LogType.Exception)
             {
                 color = ConsoleColor.Red;
                 ConVar.Server.Log("Log.Exception.txt", message);
+                remoteType = "error";
             }
             else if (type == LogType.Assert)
             {
                 color = ConsoleColor.Red;
                 ConVar.Server.Log("Log.Assert.txt", message);
+                remoteType = "error";
             }
             else if (message.ToLower().StartsWith("[chat]"))
             {

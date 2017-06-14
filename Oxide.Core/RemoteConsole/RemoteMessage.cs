@@ -14,11 +14,11 @@ namespace Oxide.Core.RemoteConsole
         public string Type;
         public string Stacktrace;
 
-        public static RemoteMessage CreateMessage(string message, int ident = 0, string type = "Generic", string trace = "") => new RemoteMessage()
+        public static RemoteMessage CreateMessage(string message, int ident = 0, string type = "generic", string trace = "") => new RemoteMessage()
         {
             Message = message,
             Identifier = ident,
-            Type = type,
+            Type = type.ToLower(),
             Stacktrace = trace
         };
 
