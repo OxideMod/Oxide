@@ -239,9 +239,8 @@ namespace Oxide.Game.SpaceEngineers
         [HookMethod("IOnPlayerChat")]
         private object IOnPlayerChat(ulong steamId, string message, ChatEntryTypeEnum chatType)
         {
-            if (Sync.MyId == steamId) return true;
+            if (Sync.MyId == steamId || message.Trim().Length <= 1) return true;
 
-            if (message.Trim().Length <= 1) return true;
             var str = message.Substring(0, 1);
 
             // Get covalence player
@@ -270,7 +269,6 @@ namespace Oxide.Game.SpaceEngineers
 
             // Get session IMyPlayer
             var player = Player.Find(id);
-            // Handle it
             if (!cmdlib.HandleChatCommand(player, cmd, args))
             {
                 Player.Reply(player, Lang("UnknownCommand", player.SteamUserId.ToString(), cmd));
