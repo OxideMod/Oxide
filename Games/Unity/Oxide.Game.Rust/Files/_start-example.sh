@@ -4,12 +4,13 @@ clear
 while :
 do
     echo "Starting server...\n"
+
     exec ./RustDedicated -batchmode -nographics \
-    -server.ip 0.0.0.0 \
-    -server.port 28015 \
     -rcon.ip 0.0.0.0 \
     -rcon.port 28016 \
     -rcon.password "changeme" \
+    -server.ip 0.0.0.0 \
+    -server.port 28015 \
     -server.maxplayers 10 \
     -server.hostname "My Oxide Server" \
     -server.identity "my_server_identity" \
@@ -21,6 +22,7 @@ do
     -server.description "Powered by Oxide" \
     -server.headerimage "http://i.imgur.com/xNyLhMt.jpg" \
     -server.url "http://oxidemod.org"
+
     echo "\nRestarting server...\n"
     sleep 10
 done
