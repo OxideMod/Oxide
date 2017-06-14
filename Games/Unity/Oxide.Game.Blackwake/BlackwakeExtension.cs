@@ -164,10 +164,16 @@ namespace Oxide.Game.Blackwake
             var remoteType = "generic";
 
             if (type == LogType.Warning)
+            {
                 color = ConsoleColor.Yellow;
+                remoteType = "warning";
+            }
             else if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert)
+            {
                 color = ConsoleColor.Red;
-            
+                remoteType = "error";
+            }
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
             Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
             {
