@@ -22,7 +22,19 @@ namespace Oxide.Core.RemoteConsole
             Stacktrace = trace
         };
 
-        public static RemoteMessage GetMessage(string message) => JsonConvert.DeserializeObject<RemoteMessage>(message) ?? null;
+        public static RemoteMessage GetMessage(string message)
+        {
+            try
+            {
+                var msg = JsonConvert.DeserializeObject<RemoteMessage>(message);
+                return msg;
+            }
+            catch(JsonReaderException)
+            {
+                Interface.Oxide.LogError("[Rcon] Failed to parse message. Incorrect format");
+                return null;
+            }
+        }
 
         internal string ToJSON() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
