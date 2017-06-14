@@ -107,6 +107,7 @@ namespace Oxide.Game.Rust
         public override void OnModLoad()
         {
             CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
+            if (Interface.Oxide.Config.Console.Enabled) RCon.Shutdown();
             if (Interface.Oxide.EnableConsole()) Output.OnMessage += HandleLog;
         }
 
