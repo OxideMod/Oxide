@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Hurtworld.Libraries;
 using Oxide.Game.Hurtworld.Libraries.Covalence;
@@ -19,26 +20,30 @@ namespace Oxide.Game.Hurtworld
     {
         #region Initialization
 
-        // The pluginmanager
-        internal readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
-
-        // The permission library
-        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
-
-        // The command library
+        // Libraries
         internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
-
-        // The player library
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
         internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // The covalence provider
+        // Instances
         internal static readonly HurtworldCovalenceProvider Covalence = HurtworldCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
+
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            "bindip", "host", "queryport"
+        };
+
+        private bool serverInitialized;
+
+        // Track 'load' chat commands
+        private readonly List<string> loadingPlugins = new List<string>();
 
         #region Localization
 
-        // The language library
-        private readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
         private readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
             {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
@@ -79,42 +84,15 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
-        // Track when the server has been initialized
-        private bool serverInitialized;
-        private bool loggingInitialized;
-
-        // Track 'load' chat commands
-        private readonly List<string> loadingPlugins = new List<string>();
-
-        // Commands that a plugin can't override
-        internal static IEnumerable<string> RestrictedCommands => new[]
-        {
-            "bindip", "host", "queryport"
-        };
-
         /// <summary>
         /// Initializes a new instance of the HurtworldCore class
         /// </summary>
         public HurtworldCore()
         {
-            var assemblyVersion = HurtworldExtension.AssemblyVersion;
-
-            Name = "HurtworldCore";
             Title = "Hurtworld";
             Author = "Oxide Team";
+            var assemblyVersion = HurtworldExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
-            if (plugins.Exists("unitycore")) InitializeLogging();
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
 
         /// <summary>
@@ -140,10 +118,7 @@ namespace Oxide.Game.Hurtworld
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", GameManager.Instance.Version.ToString());
-
-            // Register messages for localization
-            lang.RegisterMessages(messages, this);
+            RemoteLogger.SetTag("game version", Server.Version);
 
             // Add general commands
             //cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
@@ -193,15 +168,16 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
             cmdlib.AddConsoleCommand("show", this, "ConsoleShow");
 
-            // Setup the default permission groups
+            // Register messages for localization
+            lang.RegisterMessages(messages, this);
+
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -209,24 +185,9 @@ namespace Oxide.Game.Hurtworld
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+               
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
-
-            if (!loadingPlugins.Contains(plugin.Name)) return;
-
-            Interface.Oxide.LogInfo($"Loaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
-            loadingPlugins.Remove(plugin.Name);
         }
 
         #endregion
@@ -240,18 +201,19 @@ namespace Oxide.Game.Hurtworld
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
-            SteamGameServer.SetGameTags("oxide,modded");
-            HurtworldExtension.ServerConsole();
             Analytics.Collect();
-        }
+            HurtworldExtension.ServerConsole();
+            SteamGameServer.SetGameTags("oxide,modded");
 
+            serverInitialized = true;
+        }
+ 
         /// <summary>
-        /// Called when the server is saving
+        /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
 
@@ -341,19 +303,14 @@ namespace Oxide.Game.Hurtworld
             var session = Player.Find(name);
             if (session == null) return;
 
-            // Do permission stuff
+            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
                 var id = session.SteamId.ToString();
-
-                // Update stored name
-                permission.UpdateNickname(id, session.Name);
-
-                // Add player to default group
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-
-                // Add player to admin group if admin
-                if (session.IsAdmin && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
+                permission.UpdateNickname(id, name);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (session.IsAdmin && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             // Call game hook
@@ -379,7 +336,7 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when the server receives input from a player
+        /// Called when the server receives input from the player
         /// </summary>
         /// <param name="player"></param>
         /// <param name="input"></param>
@@ -528,8 +485,7 @@ namespace Oxide.Game.Hurtworld
             {
                 case EEntityFluidEffectType.PlayerToCreatureDamage:
                     var ent = target.GetComponent<AIEntity>();
-                    if (ent != null)
-                        Interface.CallHook("OnEntityTakeDamage", ent, source);
+                    if (ent != null) Interface.CallHook("OnEntityTakeDamage", ent, source);
                     break;
                 case EEntityFluidEffectType.CreatureToPlayerDamage:
                 case EEntityFluidEffectType.Damage:
@@ -538,8 +494,7 @@ namespace Oxide.Game.Hurtworld
                     var networkView = target.GetComponent<uLinkNetworkView>();
                     if (networkView == null) break;
                     var session = GameManager.Instance.GetSession(networkView.owner);
-                    if (session != null)
-                        Interface.CallHook("OnPlayerTakeDamage", session, source);
+                    if (session != null) Interface.CallHook("OnPlayerTakeDamage", session, source);
                     break;
             }
         }
@@ -561,7 +516,7 @@ namespace Oxide.Game.Hurtworld
         {
             if (!PermissionsLoaded(session) || !IsAdmin(session)) return;
 
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -597,7 +552,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("ConsolePlugins")]
         private void ConsolePlugins(string command, string[] args)
         {
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -712,7 +667,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
@@ -748,7 +703,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", null, name));
@@ -789,7 +744,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", session.SteamId.ToString(), name), session);
@@ -825,7 +780,7 @@ namespace Oxide.Game.Hurtworld
             {
                 if (string.IsNullOrEmpty(name)) continue;
 
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     Reply(Lang("PluginNotLoaded", null, name));

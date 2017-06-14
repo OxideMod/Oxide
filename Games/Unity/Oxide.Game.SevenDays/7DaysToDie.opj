@@ -1,6 +1,6 @@
 {
   "Name": "7 Days to Die",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\SevenDays\\7DaysToDieServer_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unity\\SevenDays\\7DaysToDieServer_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -53,7 +53,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 110,
+            "InjectionIndex": 112,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -377,8 +377,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "IOnServerShutdown [internal]",
-            "HookName": "IOnServerShutdown",
+            "Name": "OnServerShutdown",
+            "HookName": "OnServerShutdown",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ModManager",
             "Flagged": false,

@@ -4,7 +4,11 @@ using System.Linq;
 using System.Reflection;
 using Oxide.Core;
 using Oxide.Core.Extensions;
+using Oxide.Core.RemoteConsole;
+using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Logging;
+using Oxide.Game.Nomad.Libraries.Covalence;
 
 namespace Oxide.Game.Nomad
 {
@@ -13,6 +17,10 @@ namespace Oxide.Game.Nomad
     /// </summary>
     public class NomadExtension : Extension
     {
+        // Instances
+        //internal static readonly NomadCovalenceProvider Covalence = NomadCovalenceProvider.Instance;
+        //internal static readonly IServer Server = Covalence.CreateServer();
+
         internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
         /// <summary>
@@ -59,7 +67,6 @@ namespace Oxide.Game.Nomad
         /// </summary>
         public override void Load()
         {
-            // Register our loader
             Manager.RegisterPluginLoader(new NomadPluginLoader());
         }
 
@@ -92,9 +99,9 @@ namespace Oxide.Game.Nomad
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{Application.mGameServer.playerCount} | {Application.mGameServer.name}";
+            //Interface.Oxide.ServerConsole.Title = () => $"{Server.Players} | {Server.Name}";
 
-            Interface.Oxide.ServerConsole.Status1Left = () => Application.mGameServer.name;
+            //Interface.Oxide.ServerConsole.Status1Left = () => Server.Name;
             /*Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Main.fpsCount;
@@ -103,7 +110,7 @@ namespace Oxide.Game.Nomad
                 return string.Concat(fps, "fps, ", uptime);
             };*/
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $"{Application.mGameServer.playerCount}/{Application.mGameServer.playerLimit} players";
+            //Interface.Oxide.ServerConsole.Status2Left = () => $"{Server.Players}/{Server.MaxPlayers} players";
             /*Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 var bytesReceived = Utility.FormatBytes(Main.rxData);
@@ -116,7 +123,7 @@ namespace Oxide.Game.Nomad
                 var time = DateTime.Today.AddSeconds(Main.mapTime).ToString("h:mm tt").ToLower();
                 return string.Concat(" ", time);
             };*/
-            Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {NomadCore.CommandLine.GetVariable("clientVersion")}";
+            //Interface.Oxide.ServerConsole.Status3Right = () => $"Oxide {OxideMod.Version} for {Server.Version}";
             Interface.Oxide.ServerConsole.Status3RightColor = ConsoleColor.Yellow;
         }
 
@@ -134,11 +141,21 @@ namespace Oxide.Game.Nomad
             if (!string.IsNullOrEmpty(stackTrace)) logWriter.WriteLine(stackTrace);
 
             var color = ConsoleColor.Gray;
+            var remoteType = "generic";
+
             if (type == LogType.Warning)
                 color = ConsoleColor.Yellow;
             else if (type == LogType.Error)
                 color = ConsoleColor.Red;
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
+            Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
+            {
+                Message = message,
+                Identifier = 0,
+                Type = remoteType,
+                Stacktrace = stackTrace
+            });
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
@@ -12,20 +13,33 @@ namespace Oxide.Game.Blackwake
     {
         #region Initialization
 
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        // Libraries
+        //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        // Instances
+        //internal static readonly BlackwakeCovalenceProvider Covalence = BlackwakeCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        //internal readonly IServer Server = Covalence.CreateServer();
+
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            "ownerid", "moderatorid"
+        };
+
+        internal bool serverInitialized;
 
         /// <summary>
         /// Initializes a new instance of the BlackwakeCore class
         /// </summary>
         public BlackwakeCore()
         {
-            var assemblyVersion = BlackwakeExtension.AssemblyVersion;
-
-            Name = "BlackwakeCore";
             Title = "Blackwake";
             Author = "Oxide Team";
+            var assemblyVersion = BlackwakeExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
@@ -40,17 +54,16 @@ namespace Oxide.Game.Blackwake
         private void Init()
         {
             RemoteLogger.SetTag("game", Title.ToLower());
-            //RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH);
+            //RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH); // TODO: Use Covalence
             //RemoteLogger.SetTag("version", SteamAuth.NPCPMKJLAJN());
 
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -58,6 +71,7 @@ namespace Oxide.Game.Blackwake
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
         }
@@ -70,7 +84,15 @@ namespace Oxide.Game.Blackwake
         /// Called when the server is first initialized
         /// </summary>
         [HookMethod("OnServerInitialized")]
-        private void OnServerInitialized() => BlackwakeExtension.ServerConsole();
+        private void OnServerInitialized()
+        {
+            if (serverInitialized) return;
+
+            Analytics.Collect();
+            BlackwakeExtension.ServerConsole();
+
+            serverInitialized = true;
+        }
 
         /// <summary>
         /// Called when the server is shutting down

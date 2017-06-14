@@ -1,6 +1,6 @@
 {
   "Name": "Interstellar Rift",
-  "TargetDirectory": "D:\\Servers\\Game\\Other\\InterstellarRift\\Build",
+  "TargetDirectory": "E:\\Servers\\Other\\InterstellarRift\\Build",
   "Manifests": [
     {
       "AssemblyName": "IR.exe",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "+eGEYLjPoOAIDKaBxKS1lWnPUbH3k6smm0pjiIszs3M=",
+            "MSILHash": "IPMuv5LIVdhCj4RYlgIOC8TW9Yd337t4DcfyOQvxyH8=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,7 +45,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "+eGEYLjPoOAIDKaBxKS1lWnPUbH3k6smm0pjiIszs3M=",
+            "MSILHash": "IPMuv5LIVdhCj4RYlgIOC8TW9Yd337t4DcfyOQvxyH8=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "+eGEYLjPoOAIDKaBxKS1lWnPUbH3k6smm0pjiIszs3M=",
+            "MSILHash": "IPMuv5LIVdhCj4RYlgIOC8TW9Yd337t4DcfyOQvxyH8=",
             "BaseHookName": "InitLogging [internal]",
             "HookCategory": "_Patches"
           }

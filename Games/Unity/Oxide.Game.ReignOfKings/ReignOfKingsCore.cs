@@ -12,6 +12,7 @@ using CodeHatch.Networking.Events;
 using CodeHatch.Networking.Events.Players;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.ReignOfKings.Libraries;
 using Oxide.Game.ReignOfKings.Libraries.Covalence;
@@ -25,29 +26,16 @@ namespace Oxide.Game.ReignOfKings
     {
         #region Initialization
 
-        // The pluginmanager
-        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
+        // Libraries
+        internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-
-        // The RoK permission library
-        private CodeHatch.Permissions.Permission rokPerms;
-
-        // The command library
-        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
-
-        // The covalence provider
+        // Instances
         internal static readonly ReignOfKingsCovalenceProvider Covalence = ReignOfKingsCovalenceProvider.Instance;
-
-        // Track when the server has been initialized
-        private bool serverInitialized;
-        private bool loggingInitialized;
-
-        // Track 'load' chat commands
-        private readonly Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
-
-        private static readonly FieldInfo FoldersField = typeof(FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
@@ -55,21 +43,26 @@ namespace Oxide.Game.ReignOfKings
             ""
         };
 
+        // The RoK permission library
+        private CodeHatch.Permissions.Permission rokPerms;
+
+        private bool serverInitialized;
+
+        // Track 'load' chat commands
+        private readonly Dictionary<string, Player> loadingPlugins = new Dictionary<string, Player>();
+
+        private static readonly FieldInfo FoldersField = typeof(FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
+
         /// <summary>
         /// Initializes a new instance of the ReignOfKingsCore class
         /// </summary>
         public ReignOfKingsCore()
         {
-            var assemblyVersion = ReignOfKingsExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "ReignOfKingsCore";
+            // Set plugin info attributes
             Title = "Reign of Kings";
             Author = "Oxide Team";
+            var assemblyVersion = ReignOfKingsExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
-            if (plugins.Exists("unitycore")) InitializeLogging();
 
             CommandManager.OnRegisterCommand += (attribute) =>
             {
@@ -90,15 +83,6 @@ namespace Oxide.Game.ReignOfKings
                     }
                 }
             };
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
 
         /// <summary>
@@ -124,7 +108,7 @@ namespace Oxide.Game.ReignOfKings
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", GameInfo.VersionString);
+            RemoteLogger.SetTag("game version", Server.Version);
 
             // Add general commands
             cmdlib.AddChatCommand("oxide.plugins", this, "ChatPlugins");
@@ -151,21 +135,6 @@ namespace Oxide.Game.ReignOfKings
             cmdlib.AddChatCommand("show", this, "ChatShow");
         }
 
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
-
-            if (!loadingPlugins.ContainsKey(plugin.Name)) return;
-            ReplyWith(loadingPlugins[plugin.Name], $"Loaded plugin {plugin.Title} v{plugin.Version} by {plugin.Author}");
-            loadingPlugins.Remove(plugin.Name);
-        }
-
         #endregion
 
         #region Server Hooks
@@ -177,21 +146,16 @@ namespace Oxide.Game.ReignOfKings
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
-            Analytics.Collect();
-
-            // Setup the default permission groups
-            rokPerms = Server.Permissions;
+            // Setup default permission groups
+            rokPerms = CodeHatch.Engine.Networking.Server.Permissions;
             if (permission.IsLoaded)
             {
                 var rank = 0;
                 var rokGroups = rokPerms.GetGroups();
-                for (var i = rokGroups.Count - 1; i >= 0; i--)
-                {
-                    var defaultGroup = rokGroups[i].Name;
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -199,18 +163,21 @@ namespace Oxide.Game.ReignOfKings
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
 
-            // Update server console window and status bars
+            Analytics.Collect();
             ReignOfKingsExtension.ServerConsole();
+
+            serverInitialized = true;
         }
 
         /// <summary>
-        /// Called when the server is saving
+        /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called by the server when starting, wrapped to prevent errors with dynamic assemblies
@@ -326,21 +293,14 @@ namespace Oxide.Game.ReignOfKings
             // Ignore the server player
             if (player.Id == 9999999999) return;
 
-            // Do permission stuff
+            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
                 var id = player.Id.ToString();
-
-                // Update stored name
                 permission.UpdateNickname(id, player.Name);
-
-                // Add player to default group
-                if (permission.GroupExists("default")) permission.AddUserGroup(id, "default");
-                else if (permission.GroupExists("guest")) permission.AddUserGroup(id, "guest");
-
-                // Add player to admin group if admin
-                if (permission.GroupExists("admin") && player.HasPermission("admin") && !permission.UserHasGroup(id, "admin"))
-                    permission.AddUserGroup(id, "admin");
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (player.HasPermission("admin") && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             // Call game hook
@@ -407,7 +367,7 @@ namespace Oxide.Game.ReignOfKings
             if (!PermissionsLoaded(player)) return;
             if (!HasPermission(player, "admin")) return;
 
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -491,7 +451,7 @@ namespace Oxide.Game.ReignOfKings
                 if (string.IsNullOrEmpty(name)) continue;
 
                 // Reload
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     ReplyWith(player, $"Plugin '{name}' not loaded.");
@@ -530,7 +490,7 @@ namespace Oxide.Game.ReignOfKings
                 if (string.IsNullOrEmpty(name)) continue;
 
                 // Unload
-                var plugin = pluginmanager.GetPlugin(name);
+                var plugin = pluginManager.GetPlugin(name);
                 if (plugin == null)
                 {
                     ReplyWith(player, $"Plugin '{name}' not loaded.");
@@ -895,7 +855,7 @@ namespace Oxide.Game.ReignOfKings
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(command, out cmd, out args);
+            ParseCommand(command, out cmd, out args);
             if (cmd == null) return null;
 
             Interface.Call("OnChatCommand", evt.Player, cmd, args);
@@ -905,12 +865,12 @@ namespace Oxide.Game.ReignOfKings
         }
 
         /// <summary>
-        /// Parses the specified chat command
+        /// Parses the specified command
         /// </summary>
         /// <param name="argstr"></param>
         /// <param name="cmd"></param>
         /// <param name="args"></param>
-        private void ParseChatCommand(string argstr, out string cmd, out string[] args)
+        private void ParseCommand(string argstr, out string cmd, out string[] args)
         {
             var arglist = new List<string>();
             var sb = new StringBuilder();
@@ -980,15 +940,15 @@ namespace Oxide.Game.ReignOfKings
         /// <returns></returns>
         private Player FindPlayer(string nameOrIdOrIp)
         {
-            var player = Server.GetPlayerByName(nameOrIdOrIp);
+            var player = CodeHatch.Engine.Networking.Server.GetPlayerByName(nameOrIdOrIp);
             if (player == null)
             {
                 ulong id;
-                if (ulong.TryParse(nameOrIdOrIp, out id)) player = Server.GetPlayerById(id);
+                if (ulong.TryParse(nameOrIdOrIp, out id)) player = CodeHatch.Engine.Networking.Server.GetPlayerById(id);
             }
             if (player == null)
             {
-                foreach (var target in Server.ClientPlayers)
+                foreach (var target in CodeHatch.Engine.Networking.Server.ClientPlayers)
                     if (target.Connection.IpAddress == nameOrIdOrIp) player = target;
             }
             return player;

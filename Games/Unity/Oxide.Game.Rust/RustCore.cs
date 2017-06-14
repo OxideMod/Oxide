@@ -27,22 +27,26 @@ namespace Oxide.Game.Rust
     {
         #region Initialization
 
+        // Libraries
         internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
         internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
         internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
+
+        // Instances
         internal static readonly RustCovalenceProvider Covalence = RustCovalenceProvider.Instance;
-        internal static readonly IServer Server = Covalence.CreateServer();
-        internal static string ipPattern = @":{1}[0-9]{1}\d*";
-        internal bool serverInitialized;
-        internal bool isPlayerTakingDamage;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
-        internal static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
-
+        // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
             "ownerid", "moderatorid"
         };
+
+        internal bool serverInitialized;
+        internal bool isPlayerTakingDamage;
+        internal static string ipPattern = @":{1}[0-9]{1}\d*";
 
         #region Localization
 
@@ -114,11 +118,10 @@ namespace Oxide.Game.Rust
         /// </summary>
         public RustCore()
         {
-            var assemblyVersion = RustExtension.AssemblyVersion;
-
-            Name = "RustCore";
+            // Set plugin info attributes
             Title = "Rust";
             Author = "Oxide Team";
+            var assemblyVersion = RustExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
@@ -144,10 +147,9 @@ namespace Oxide.Game.Rust
         [HookMethod("Init")]
         private void Init()
         {
+            // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
-
-            lang.RegisterMessages(messages, this);
 
             // Add core general commands
             AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
@@ -177,14 +179,15 @@ namespace Oxide.Game.Rust
             permission.RegisterPermission("oxide.show", this);
             permission.RegisterPermission("oxide.usergroup", this);
 
+            lang.RegisterMessages(messages, this);
+
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -192,18 +195,9 @@ namespace Oxide.Game.Rust
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when another plugin has been loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         #endregion
@@ -217,7 +211,6 @@ namespace Oxide.Game.Rust
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
             if (Interface.Oxide.CheckConsole() && ServerConsole.Instance != null)
             {
@@ -226,30 +219,21 @@ namespace Oxide.Game.Rust
                 typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
             }
 
-            RustExtension.ServerConsole();
             Core.Analytics.Collect();
+            RustExtension.ServerConsole();
 
             if (!Interface.Oxide.Config.Options.Modded)
-            {
-                Interface.Oxide.LogWarning("The server is currently listed under Community. Please be aware that Facepunch only allows admin tools (that do not affect gameplay) under the Community section");
-            }
-        }
+                Interface.Oxide.LogWarning("The server is currently listed under Community. Please be aware that Facepunch only allows admin tools" +
+                                           "(that do not affect gameplay) under the Community section");
 
-        /// <summary>
-        /// Called when the server is saving
-        /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Core.Analytics.Collect();
+            serverInitialized = true;
+        }
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IOnServerShutdown")]
-        private void IOnServerShutdown()
-        {
-            Interface.Call("OnServerShutdown");
-            Interface.Oxide.OnShutdown();
-        }
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         /// <summary>
         /// Called when ServerConsole is enabled
@@ -277,7 +261,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnRunCommandLine")]
         private object IOnRunCommandLine()
         {
-            foreach (KeyValuePair<string, string> pair in Facepunch.CommandLine.GetSwitches())
+            foreach (var pair in Facepunch.CommandLine.GetSwitches())
             {
                 var value = pair.Value;
                 if (value == "") value = "1";
@@ -322,11 +306,13 @@ namespace Oxide.Game.Rust
             var authLevel = connection.authLevel;
             var ip = Regex.Replace(connection.ipaddress, ipPattern, "");
 
-            if (permission.IsLoaded && authLevel <= DefaultGroups.Length)
+            // Update player's permissions group and name
+            if (permission.IsLoaded)
             {
                 permission.UpdateNickname(id, name);
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-                if (authLevel >= 1 && !permission.UserHasGroup(id, DefaultGroups[authLevel])) permission.AddUserGroup(id, DefaultGroups[authLevel]);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (authLevel >= 1 && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             Covalence.PlayerManager.PlayerJoin(connection.userid, name);
@@ -1276,7 +1262,6 @@ namespace Oxide.Game.Rust
         private object OnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
-            if (arg.cmd.FullName != "chat.say") return null;
 
             try
             {
@@ -1284,24 +1269,18 @@ namespace Oxide.Game.Rust
                 var str = arg.GetString(0);
                 if (string.IsNullOrEmpty(str)) return null;
 
-                // Is it a chat command?
-                if (str[0] != '/') return null; // TODO: Return if no arguments given
-
-                // Get the full command
-                var message = str.Substring(1);
-
-                // Parse it
-                string cmd;
-                string[] args;
-                ParseChatCommand(message, out cmd, out args);
-                if (cmd == null) return null;
-
                 // Check if command is from a player
                 var player = arg.Connection?.player as BasePlayer;
                 if (player == null) return null;
 
-                // Disable chat commands for non-admins if the server is not set to modded
-                if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return null;
+                // Get the full command
+                var message = str.TrimStart('/');
+
+                // Parse it
+                string cmd;
+                string[] args;
+                ParseCommand(message, out cmd, out args);
+                if (cmd == null) return null;
 
                 // Get the covalence player
                 var iplayer = Covalence.PlayerManager.FindPlayerById(arg.Connection.userid.ToString());
@@ -1311,6 +1290,13 @@ namespace Oxide.Game.Rust
                 var blockedSpecific = Interface.Call("OnPlayerCommand", arg);
                 var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
                 if (blockedSpecific != null || blockedCovalence != null) return true;
+
+                // Is it a chat command?
+                if (arg.cmd.FullName != "chat.say") return null;
+                if (str[0] != '/') return null; // TODO: Return if no arguments given
+
+                // Disable chat commands for non-admins if the server is not set to modded
+                if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return null;
 
                 // Is it a covalance command?
                 if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
@@ -1328,7 +1314,7 @@ namespace Oxide.Game.Rust
                     var message = str?.Substring(1);
                     string cmd;
                     string[] args;
-                    ParseChatCommand(message, out cmd, out args);
+                    ParseCommand(message, out cmd, out args);
                     sb.AppendLine("NullReferenceError in Oxide.Game.Rust when running OnServerCommand.");
                     sb.AppendLine($"  Command: {arg.cmd?.FullName}");
                     sb.AppendLine($"  Full command: {str}");
@@ -1342,7 +1328,7 @@ namespace Oxide.Game.Rust
                 }
                 catch
                 {
-                    // ignore
+                    // Ignored
                 }
                 finally
                 {
@@ -1356,12 +1342,12 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Parses the specified chat command
+        /// Parses the specified command
         /// </summary>
         /// <param name="argstr"></param>
-        /// <param name="cmd"></param>
+        /// <param name="command"></param>
         /// <param name="args"></param>
-        private void ParseChatCommand(string argstr, out string cmd, out string[] args)
+        private void ParseCommand(string argstr, out string command, out string[] args)
         {
             var arglist = new List<string>();
             var sb = new StringBuilder();
@@ -1379,9 +1365,7 @@ namespace Oxide.Game.Rust
                         inlongarg = false;
                     }
                     else
-                    {
                         inlongarg = true;
-                    }
                 }
                 else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
@@ -1390,22 +1374,23 @@ namespace Oxide.Game.Rust
                     sb.Clear();
                 }
                 else
-                {
                     sb.Append(c);
-                }
             }
+
             if (sb.Length > 0)
             {
                 var arg = sb.ToString().Trim();
                 if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
             }
+
             if (arglist.Count == 0)
             {
-                cmd = null;
+                command = null;
                 args = null;
                 return;
             }
-            cmd = arglist[0];
+
+            command = arglist[0];
             arglist.RemoveAt(0);
             args = arglist.ToArray();
         }

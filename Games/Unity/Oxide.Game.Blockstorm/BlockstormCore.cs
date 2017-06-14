@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
@@ -12,38 +13,33 @@ namespace Oxide.Game.Blockstorm
     {
         #region Initialization
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
+        // Libraries
+        //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
 
-        // Track when the server has been initialized
+        // Instances
+        //internal static readonly BlockstormCovalenceProvider Covalence = BlockstormCovalenceProvider.Instance;
+        //internal static readonly IServer Server = Covalence.CreateServer();
+
+        // Commands that a plugin can't override
+        internal static IEnumerable<string> RestrictedCommands => new[]
+        {
+            ""
+        };
+
         private bool serverInitialized;
-        private bool loggingInitialized;
 
         /// <summary>
         /// Initializes a new instance of the BlockstormCore class
         /// </summary>
         public BlockstormCore()
         {
-            var assemblyVersion = BlockstormExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "BlockstormCore";
+            // Set plugin info attributes
             Title = "Blockstorm";
             Author = "Oxide Team";
+            var assemblyVersion = BlockstormExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-
-            var plugins = Interface.Oxide.GetLibrary<Core.Libraries.Plugins>();
-            if (plugins.Exists("unitycore")) InitializeLogging();
-        }
-
-        /// <summary>
-        /// Starts the logging
-        /// </summary>
-        private void InitializeLogging()
-        {
-            loggingInitialized = true;
-            CallHook("InitLogging", null);
         }
 
         #endregion
@@ -56,19 +52,17 @@ namespace Oxide.Game.Blockstorm
         [HookMethod("Init")]
         private void Init()
         {
-            // Configure remote logging
+            // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", Constants.smethod_0());
+            RemoteLogger.SetTag("game version", Constants.smethod_0()); // TODO: Use Covalence
 
-            // Setup the default permission groups
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -76,19 +70,9 @@ namespace Oxide.Game.Blockstorm
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when a plugin is loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
-            if (!loggingInitialized && plugin.Name == "unitycore") InitializeLogging();
         }
 
         #endregion
@@ -102,29 +86,18 @@ namespace Oxide.Game.Blockstorm
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
-            //Analytics.Collect(); // TODO: Uncomment once game has Covalence
-
-            // Update server console window and status bars
+            //Analytics.Collect(); // TODO: Uncomment once Covalence is added
             BlockstormExtension.ServerConsole();
-        }
 
-        /// <summary>
-        /// Called when the server is saving
-        /// </summary>
-        //[HookMethod("OnServerSave")]
-        //private void OnServerSave() => Analytics.Collect();
+            serverInitialized = true;
+        }
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IOnServerShutdown")]
-        private void IOnServerShutdown()
-        {
-            Interface.Call("OnServerShutdown");
-            Interface.Oxide.OnShutdown();
-        }
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
     }

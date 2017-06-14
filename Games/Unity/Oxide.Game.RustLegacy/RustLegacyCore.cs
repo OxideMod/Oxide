@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.RustLegacy.Libraries;
 using Oxide.Game.RustLegacy.Libraries.Covalence;
 using Rust;
-using uLink;
 using UnityEngine;
+using uLink;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -20,33 +21,16 @@ namespace Oxide.Game.RustLegacy
     {
         #region Initialization
 
-        // The pluginmanager
-        private readonly PluginManager pluginmanager = Interface.Oxide.RootPluginManager;
+        // Libraries
+        internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
+        internal readonly Lang lang = Interface.Oxide.GetLibrary<Lang>();
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+        //internal readonly Player Player = Interface.Oxide.GetLibrary<Player>();
 
-        // The permission library
-        private readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
-        private static readonly string[] DefaultGroups = { "default", "moderator", "admin" };
-
-        // The command library
-        private readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
-
-        // The Rust Legacy covalence provider
-        private readonly RustLegacyCovalenceProvider covalence = RustLegacyCovalenceProvider.Instance;
-
-        // Track when the server has been initialized
-        private bool serverInitialized;
-
-        // Cache some player information
-        private static readonly Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
-
-        public class PlayerData
-        {
-            public Character character;
-            public PlayerInventory inventory;
-        }
-
-        // Last Metabolism hacker notification time
-        float lastWarningAt;
+        // Instances
+        internal static readonly RustLegacyCovalenceProvider Covalence = RustLegacyCovalenceProvider.Instance;
+        internal readonly PluginManager pluginManager = Interface.Oxide.RootPluginManager;
+        internal readonly IServer Server = Covalence.CreateServer();
 
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
@@ -55,17 +39,27 @@ namespace Oxide.Game.RustLegacy
             "rcon.password"
         };
 
+        private bool serverInitialized;
+        private float lastWarningAt; // Last Metabolism hacker notification time
+
+        public class PlayerData
+        {
+            public Character character;
+            public PlayerInventory inventory;
+        }
+
+        // Cache some player information
+        private static readonly Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
+
         /// <summary>
         /// Initializes a new instance of the RustCore class
         /// </summary>
         public RustLegacyCore()
         {
-            var assemblyVersion = RustLegacyExtension.AssemblyVersion;
-
             // Set attributes
-            Name = "RustLegacyCore";
             Title = "Rust Legacy";
             Author = "Oxide Team";
+            var assemblyVersion = RustLegacyExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
@@ -92,7 +86,7 @@ namespace Oxide.Game.RustLegacy
         {
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
-            RemoteLogger.SetTag("game version", Rust.Defines.Connection.protocol.ToString());
+            RemoteLogger.SetTag("game version", Server.Version);
 
             // Add general commands
             cmdlib.AddConsoleCommand("oxide.plugins", this, "ConsolePlugins");
@@ -118,15 +112,13 @@ namespace Oxide.Game.RustLegacy
             cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
             cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
 
-            // Setup the default permission groups
+            // Setup default permission groups
             if (permission.IsLoaded)
             {
                 var rank = 0;
-                for (var i = DefaultGroups.Length - 1; i >= 0; i--)
-                {
-                    var defaultGroup = DefaultGroups[i];
+                foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
-                }
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -134,18 +126,9 @@ namespace Oxide.Game.RustLegacy
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
+
                 permission.CleanUp();
             }
-        }
-
-        /// <summary>
-        /// Called when another plugin has been loaded
-        /// </summary>
-        /// <param name="plugin"></param>
-        [HookMethod("OnPluginLoaded")]
-        private void OnPluginLoaded(Plugin plugin)
-        {
-            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         #endregion
@@ -159,29 +142,18 @@ namespace Oxide.Game.RustLegacy
         private void OnServerInitialized()
         {
             if (serverInitialized) return;
-            serverInitialized = true;
 
             Analytics.Collect();
-
-            // Update server console window and status bars
             RustLegacyExtension.ServerConsole();
-        }
 
-        /// <summary>
-        /// Called when the server is saving
-        /// </summary>
-        [HookMethod("OnServerSave")]
-        private void OnServerSave() => Analytics.Collect();
+            serverInitialized = true;
+        }
 
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
-        [HookMethod("IOnServerShutdown")]
-        private void IOnServerShutdown()
-        {
-            Interface.Call("OnServerShutdown");
-            Interface.Oxide.OnShutdown();
-        }
+        [HookMethod("OnServerShutdown")]
+        private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
 
@@ -233,24 +205,19 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnPlayerConnected")]
         private void OnPlayerConnected(NetUser netUser)
         {
-            // Do permission stuff
+            // Update player's permissions group and name
             if (permission.IsLoaded)
             {
                 var id = netUser.userID.ToString();
-
-                // Update stored name
-                permission.UpdateNickname(id, netUser.displayName);
-
-                // Add player to default group
-                if (!permission.UserHasGroup(id, DefaultGroups[0])) permission.AddUserGroup(id, DefaultGroups[0]);
-
-                // Add player to admin group if admin
-                if (netUser.CanAdmin() && !permission.UserHasGroup(id, DefaultGroups[2])) permission.AddUserGroup(id, DefaultGroups[2]);
+                permission.UpdateNickname(id, name);
+                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
+                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
+                if (netUser.CanAdmin() && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             // Let covalence know
-            covalence.PlayerManager.NotifyPlayerConnect(netUser);
-            Interface.Call("OnUserConnected", covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
+            Covalence.PlayerManager.NotifyPlayerConnect(netUser);
+            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -264,8 +231,8 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()), "Unknown");
-            covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
+            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()), "Unknown");
+            Covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
 
             // Delay removing player until OnPlayerDisconnect has fired in plugins
             Interface.Oxide.NextTick(() =>
@@ -282,7 +249,7 @@ namespace Oxide.Game.RustLegacy
         private void OnPlayerSpawn(PlayerClient client)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", covalence.PlayerManager.FindPlayerById(client.userID.ToString()));
+            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(client.userID.ToString()));
         }
 
         /// <summary>
@@ -298,7 +265,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
             // Call covalence hook
-            Interface.Call("OnUserSpawned", covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
+            Interface.Call("OnUserSpawned", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
         }
 
         /// <summary>
@@ -320,7 +287,7 @@ namespace Oxide.Game.RustLegacy
         {
             if (!IsAdmin(arg)) return;
 
-            var loadedPlugins = pluginmanager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
+            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
             foreach (var loader in Interface.Oxide.GetPluginLoaders())
@@ -371,7 +338,7 @@ namespace Oxide.Game.RustLegacy
             {
                 if (string.IsNullOrEmpty(name)) continue;
                 Interface.Oxide.LoadPlugin(name);
-                pluginmanager.GetPlugin(name);
+                pluginManager.GetPlugin(name);
             }
         }
 
@@ -737,12 +704,12 @@ namespace Oxide.Game.RustLegacy
             var str = arg.GetString(0);
 
             // Get the covalence player
-            var iplayer = arg.argUser != null ? covalence.PlayerManager.FindPlayerById(arg.argUser.userID.ToString()) : null;
+            var iplayer = arg.argUser != null ? Covalence.PlayerManager.FindPlayerById(arg.argUser.userID.ToString()) : null;
 
             // Is it a console command?
             if (cmdnamefull != "chat.say")
             {
-                if (covalence.CommandSystem.HandleConsoleMessage(iplayer, $"{cmdnamefull} {str}") || cmdlib.HandleConsoleCommand(arg, wantreply)) return true;
+                if (Covalence.CommandSystem.HandleConsoleMessage(iplayer, $"{cmdnamefull} {str}") || cmdlib.HandleConsoleCommand(arg, wantreply)) return true;
                 return null;
             }
 
@@ -762,7 +729,7 @@ namespace Oxide.Game.RustLegacy
             // Parse it
             string cmd;
             string[] args;
-            ParseChatCommand(command, out cmd, out args);
+            ParseCommand(command, out cmd, out args);
             if (cmd == null) return true;
 
             // Is the command blocked?
@@ -771,7 +738,7 @@ namespace Oxide.Game.RustLegacy
             if (commandSpecific != null || commandCovalence != null) return true;
 
             // Is this a Covalence command?
-            if (covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
             // Is it a regular chat command?
             var player = arg.argUser;
@@ -791,7 +758,7 @@ namespace Oxide.Game.RustLegacy
         /// <param name="argstr"></param>
         /// <param name="cmd"></param>
         /// <param name="args"></param>
-        private void ParseChatCommand(string argstr, out string cmd, out string[] args)
+        private void ParseCommand(string argstr, out string cmd, out string[] args)
         {
             var arglist = new List<string>();
             var sb = new StringBuilder();
@@ -808,9 +775,7 @@ namespace Oxide.Game.RustLegacy
                         inlongarg = false;
                     }
                     else
-                    {
                         inlongarg = true;
-                    }
                 }
                 else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
@@ -819,9 +784,7 @@ namespace Oxide.Game.RustLegacy
                     sb = new StringBuilder();
                 }
                 else
-                {
                     sb.Append(c);
-                }
             }
             if (sb.Length > 0)
             {
@@ -937,10 +900,6 @@ namespace Oxide.Game.RustLegacy
             if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == nameOrIdOrIp)?.netUser) != null) return netUser;
             return null;
         }
-
-        public static Character GetCharacter(NetUser netUser) => playerData[netUser].character;
-
-        public static PlayerInventory GetInventory(NetUser netUser) => playerData[netUser].inventory;
 
         #endregion
     }
