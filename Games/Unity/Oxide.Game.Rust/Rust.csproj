@@ -93,7 +93,6 @@
     <Compile Include="RustExtension.cs" />
     <Compile Include="RustPlugin.cs" />
     <Compile Include="RustPluginLoader.cs" />
-    <None Include="Plugins\SamplePlugin.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
