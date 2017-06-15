@@ -882,7 +882,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "U3PxrKQBhTRCnnbOJ220f0NlOut3eHW+pgXLGZoGwYQ=",
+            "MSILHash": "nvvb8fww19LOcLkwc2uNt3gYrKN39b5luujEhAw0RTk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2426,7 +2426,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "kU9awRANMQatsce6/g8/YFwmmOlO+HXRTPI5Ljq6kHw=",
+            "MSILHash": "10H0kXqKg4cMg0Mt6EweJmQMT1O+x5sWYcdyCbXQ3xc=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2830,7 +2830,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "Kjnm4pwSmy/iftNmw9y2gTJSMA+oyJ0r0UXoXnuNv3g=",
+            "MSILHash": "CmJpxrCUS8y4TjnNZZUIpVWdb9Yqp/mYqsiyLuVJgpQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -5461,7 +5461,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 5,
+            "InjectionIndex": 4,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this.context.UserEndPoint.Address,a0.Data",
