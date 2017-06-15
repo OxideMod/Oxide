@@ -62,13 +62,13 @@ namespace Oxide.Game.Rust
 
             return null;
         }
- 
+
         /// <summary>
         /// Called when RCon is initialized
         /// </summary>
         /// <returns></returns>
         [HookMethod("IOnRconInitialize")]
-        private object IOnRconInitialize() => Interface.Oxide.Config.Console.Enabled ? (object)true : null;
+        private object IOnRconInitialize() => Interface.Oxide.Config.Rcon.Enabled ? (object)true : null;
 
         /// <summary>
         /// Called when the command-line is ran
