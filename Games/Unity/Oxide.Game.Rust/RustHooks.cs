@@ -42,7 +42,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a remote console was run
+        /// Called when a remote console command was run
         /// </summary>
         /// <returns></returns>
         /// <param name="sender"></param>
@@ -62,6 +62,13 @@ namespace Oxide.Game.Rust
 
             return null;
         }
+ 
+        /// <summary>
+        /// Called when RCon is initialized
+        /// </summary>
+        /// <returns></returns>
+        [HookMethod("IOnRconInitialize")]
+        private object IOnRconInitialize() => Interface.Oxide.Config.Console.Enabled ? (object)true : null;
 
         /// <summary>
         /// Called when the command-line is ran
