@@ -27,7 +27,7 @@ namespace Oxide.Game.Blackwake
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
-            "ownerid", "moderatorid"
+            ""
         };
 
         internal bool serverInitialized;
