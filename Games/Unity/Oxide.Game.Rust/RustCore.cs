@@ -369,8 +369,6 @@ namespace Oxide.Game.Rust
         }
 
 
-        #region Helpers
-
         /// <summary>
         /// Returns the BasePlayer for the specified name, ID, or IP address string
         /// </summary>
