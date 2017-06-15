@@ -4894,6 +4894,30 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnRconInitialize [internal]",
+            "HookName": "IOnRconInitialize",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Facepunch.RCon",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "MFpZsDs2IdCmdMRyj9Ut06QzbizZ7Uilm/Y1irsF9WM=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
         }
       ],
       "Modifiers": [
@@ -5466,7 +5490,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "this.context.UserEndPoint.Address,a0.Data",
             "HookTypeName": "Simple",
-            "Name": "IOnRconCommand",
+            "Name": "IOnRconCommand [internal]",
             "HookName": "IOnRconCommand",
             "AssemblyName": "Facepunch.Rcon.dll",
             "TypeName": "Facepunch.Rcon.Listener/RConBehaviour",
