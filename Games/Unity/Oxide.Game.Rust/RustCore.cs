@@ -195,6 +195,16 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
+        /// Called when another plugin has been loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+        }
+
+        /// <summary>
         /// Called when the server is first initialized
         /// </summary>
         [HookMethod("OnServerInitialized")]

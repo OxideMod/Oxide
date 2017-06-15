@@ -76,6 +76,16 @@ namespace Oxide.Game.Blackwake
             }
         }
 
+        /// <summary>
+        /// Called when another plugin has been loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
+        }
+
         #endregion
 
         #region Server Hooks
