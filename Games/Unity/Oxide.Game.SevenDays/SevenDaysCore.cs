@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
@@ -78,6 +77,16 @@ namespace Oxide.Game.SevenDays
 
                 permission.CleanUp();
             }
+        }
+
+        /// <summary>
+        /// Called when another plugin has been loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         #endregion

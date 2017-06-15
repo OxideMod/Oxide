@@ -13,9 +13,7 @@ using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using Sandbox.ModAPI;
 using SteamSDK;
-using VRage.Game;
 using VRage.Game.ModAPI;
-using VRage.Utils;
 
 namespace Oxide.Game.SpaceEngineers
 {
@@ -150,6 +148,16 @@ namespace Oxide.Game.SpaceEngineers
 
                 permission.CleanUp();
             }
+        }
+
+        /// <summary>
+        /// Called when another plugin has been loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         #endregion

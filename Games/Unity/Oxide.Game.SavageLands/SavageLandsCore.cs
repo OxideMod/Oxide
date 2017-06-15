@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Oxide.Core;
 using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.SavageLands
@@ -76,6 +75,16 @@ namespace Oxide.Game.SavageLands
 
                 permission.CleanUp();
             }
+        }
+
+        /// <summary>
+        /// Called when another plugin has been loaded
+        /// </summary>
+        /// <param name="plugin"></param>
+        [HookMethod("OnPluginLoaded")]
+        private void OnPluginLoaded(Plugin plugin)
+        {
+            if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
         #endregion
