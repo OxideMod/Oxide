@@ -208,7 +208,7 @@ namespace Oxide.Game.Rust
                 permission.UpdateNickname(id, name);
                 var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
                 if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
-                if (authLevel >= 1 && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
+                if (authLevel == 2 && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             Covalence.PlayerManager.PlayerJoin(connection.userid, name);
