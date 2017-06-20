@@ -71,7 +71,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "MWWx0dcW0z52rHBdV32x9D4GuRgPAOOzHMeiFfFfDt8=",
+            "MSILHash": "0P2DQRH2mDPFJdxCFwoZe3ZyzIqjSEVZqxKgOhkQajE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -253,7 +253,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "1k8l/ZlK7x4aoNYgwhqF5G9VyWcI/3jj6uUIYvMtyZw=",
+            "MSILHash": "N+JQZew/ZeqvP/0qQpePUI+6DzQJJ2lWIxS9jDip5+g=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -315,7 +315,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "461bV27ln8SO0Mc/l3OHZrcMGanJnga8l7HcsWaaR5E=",
+            "MSILHash": "SbXmFLrGqzsT3cqxm4lt1XYV1CP8uumPCWn3D0OqAEc=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -349,7 +349,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 158,
+            "InjectionIndex": 123,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l2",
@@ -367,7 +367,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "EmDzMKPQnJIqPpgfSkYuo8toAhKOR+v01Yrvnf/JybA=",
+            "MSILHash": "t8XxlxcKJJJBZ2Xi91BpzAEQQ3FfZfY8xLRIwTiv3sI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -419,7 +419,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "MWWx0dcW0z52rHBdV32x9D4GuRgPAOOzHMeiFfFfDt8=",
+            "MSILHash": "0P2DQRH2mDPFJdxCFwoZe3ZyzIqjSEVZqxKgOhkQajE=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -427,7 +427,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 2204,
+            "InjectionIndex": 2212,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -450,7 +450,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "MWWx0dcW0z52rHBdV32x9D4GuRgPAOOzHMeiFfFfDt8=",
+            "MSILHash": "0P2DQRH2mDPFJdxCFwoZe3ZyzIqjSEVZqxKgOhkQajE=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
