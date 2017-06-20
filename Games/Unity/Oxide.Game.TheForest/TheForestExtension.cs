@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -6,7 +6,6 @@ using Bolt;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.RemoteConsole;
-using TheForest.Utils;
 using UnityEngine;
 
 namespace Oxide.Game.TheForest
