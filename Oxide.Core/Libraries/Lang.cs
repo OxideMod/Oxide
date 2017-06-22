@@ -232,7 +232,7 @@ namespace Oxide.Core.Libraries
                 }
 
                 var defaultLangFile = GetMessageFile(plugin.Name);
-                if (MergeMessages(langFile, defaultLangFile) && File.Exists(Path.Combine(Interface.Oxide.LangDirectory, file)))
+                if (defaultLangFile != null && MergeMessages(langFile, defaultLangFile) && File.Exists(Path.Combine(Interface.Oxide.LangDirectory, file)))
                     File.WriteAllText(Path.Combine(Interface.Oxide.LangDirectory, file), JsonConvert.SerializeObject(langFile, Formatting.Indented));
 
                 AddLangFile(file, langFile, plugin);
@@ -251,18 +251,24 @@ namespace Oxide.Core.Libraries
         private bool MergeMessages(Dictionary<string, string> existingMessages, Dictionary<string, string> messages)
         {
             var changed = false;
+
             foreach (var message in messages)
             {
                 if (existingMessages.ContainsKey(message.Key)) continue;
                 existingMessages.Add(message.Key, message.Value);
                 changed = true;
             }
-            foreach (var message in existingMessages.Keys.ToArray())
+
+            if (existingMessages.Count > 0)
             {
-                if (messages.ContainsKey(message)) continue;
-                existingMessages.Remove(message);
-                changed = true;
+                foreach (var message in existingMessages.Keys.ToArray())
+                {
+                    if (messages.ContainsKey(message)) continue;
+                    existingMessages.Remove(message);
+                    changed = true;
+                }
             }
+
             return changed;
         }
 
