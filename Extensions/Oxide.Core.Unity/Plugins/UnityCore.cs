@@ -8,7 +8,6 @@ namespace Oxide.Core.Unity.Plugins
     /// </summary>
     public class UnityCore : CSPlugin
     {
-        // The logger
         private UnityLogger logger;
 
         /// <summary>
@@ -16,12 +15,10 @@ namespace Oxide.Core.Unity.Plugins
         /// </summary>
         public UnityCore()
         {
-            var assemblyVersion = UnityExtension.AssemblyVersion;
-
-            // Set attributes
-            Name = "unitycore";
-            Title = "Unity Core";
+            // Set plugin info attributes
+            Title = "Unity";
             Author = "Oxide Team";
+            var assemblyVersion = UnityExtension.AssemblyVersion;
             Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
         }
 
