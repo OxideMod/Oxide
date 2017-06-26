@@ -250,6 +250,7 @@ namespace Oxide.Game.TheForest
             // Call covalence hook
             var iplayer = Covalence.PlayerManager.FindPlayerById(entity.source.RemoteEndPoint.SteamId.Id.ToString());
             if (iplayer != null) Interface.Call("OnUserSpawn", iplayer);
+            Interface.Call("OnPlayerConnected", entity);
         }
 
         #endregion

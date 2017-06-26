@@ -5,6 +5,7 @@ using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using ProtoBuf;
 using Steamworks;
+using UnityEngine;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -34,19 +35,19 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             connectedPlayers = new Dictionary<string, TheForestPlayer>();
         }
 
-        private void NotifyPlayerJoin(BoltEntity entity)
+        internal void NotifyPlayerConnect(BoltEntity entity)
         {
             var steamId = entity.source.RemoteEndPoint.SteamId.Id;
             var cSteamId = new CSteamID(steamId);
             var id = steamId.ToString();
-            var name = SteamFriends.GetFriendPersonaName(cSteamId);
+            var name = entity.GetState<IPlayerState>().name;
 
             // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
                 // Update
-                record.Name = SteamFriends.GetFriendPersonaName(cSteamId);
+                record.Name = name;
                 playerData[id] = record;
 
                 // Swap out Rust player
@@ -56,22 +57,14 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             else
             {
                 // Insert
-                record = new PlayerRecord { Id = steamId, Name = name };
+                record = new PlayerRecord { Id = steamId, Name = name };                
                 playerData.Add(id, record);
-
-                // Create Rust player
+                // Create TheForest player
                 allPlayers.Add(id, new TheForestPlayer(steamId, name));
             }
 
             // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
-        }
-
-        internal void NotifyPlayerConnect(BoltEntity entity)
-        {
-            NotifyPlayerJoin(entity);
-            var id = entity.source.RemoteEndPoint.SteamId.Id;
-            connectedPlayers[id.ToString()] = new TheForestPlayer(entity);
         }
 
         internal void NotifyPlayerDisconnect(BoltEntity entity) => connectedPlayers.Remove(entity.source.RemoteEndPoint.SteamId.Id.ToString());
