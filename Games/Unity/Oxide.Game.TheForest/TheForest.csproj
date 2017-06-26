@@ -70,8 +70,10 @@
     <Compile Include="Libraries\Covalence\TheForestPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\TheForestServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TheForestCommands.cs" />
     <Compile Include="TheForestCore.cs" />
     <Compile Include="TheForestExtension.cs" />
+    <Compile Include="TheForestHooks.cs" />
     <Compile Include="TheForestPlugin.cs" />
     <Compile Include="TheForestPluginLoader.cs" />
   </ItemGroup>

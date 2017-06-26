@@ -1,24 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
-using TheForest.Utils;
-using UnityEngine;
 
 namespace Oxide.Game.TheForest
 {
     /// <summary>
     /// The core The Forest plugin
     /// </summary>
-    public class TheForestCore : CSPlugin
+    public partial class TheForestCore : CSPlugin
     {
         #region Initialization
+
+        /// <summary>
+        /// Initializes a new instance of the TheForestCore class
+        /// </summary>
+        public TheForestCore()
+        {
+            // Set plugin info attributes
+            Title = "The Forest";
+            Author = "Oxide Team";
+            var assemblyVersion = TheForestExtension.AssemblyVersion;
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+        }
 
         // Libraries
         //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -39,34 +47,27 @@ namespace Oxide.Game.TheForest
 
         private bool serverInitialized;
 
-        // TODO: Localization of core
-
-        /// <summary>
-        /// Initializes a new instance of the TheForestCore class
-        /// </summary>
-        public TheForestCore()
-        {
-            // Set plugin info attributes
-            Title = "The Forest";
-            Author = "Oxide Team";
-            var assemblyVersion = TheForestExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-        }
-
         /// <summary>
         /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
+        /// <param name="player"></param>
         /// <returns></returns>
-        private bool PermissionsLoaded(BoltEntity entity)
+        private bool PermissionsLoaded(IPlayer player)
         {
             if (permission.IsLoaded) return true;
-            // TODO: PermissionsNotLoaded reply to player
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
             return false;
         }
 
         #endregion
 
-        #region Plugin Hooks
+        #region Localization
+
+        // TODO: Localization of core
+
+        #endregion
+
+        #region Core Hooks
 
         /// <summary>
         /// Called when the plugin is initializing
@@ -77,6 +78,36 @@ namespace Oxide.Game.TheForest
             // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
+
+            // Add core general commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
+
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand");
+
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand");
+
+            // Register core permissions
+            permission.RegisterPermission("oxide.plugins", this);
+            permission.RegisterPermission("oxide.load", this);
+            permission.RegisterPermission("oxide.reload", this);
+            permission.RegisterPermission("oxide.unload", this);
+            permission.RegisterPermission("oxide.grant", this);
+            permission.RegisterPermission("oxide.group", this);
+            permission.RegisterPermission("oxide.revoke", this);
+            permission.RegisterPermission("oxide.show", this);
+            permission.RegisterPermission("oxide.usergroup", this);
+
+            //lang.RegisterMessages(messages, this); // TODO: Implement
 
             // Setup default permission groups
             if (permission.IsLoaded)
@@ -107,10 +138,6 @@ namespace Oxide.Game.TheForest
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
-        #endregion
-
-        #region Server Hooks
-
         /// <summary>
         /// Called when the server is first initialized
         /// </summary>
@@ -133,137 +160,5 @@ namespace Oxide.Game.TheForest
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
-
-        #region Player Hooks
-
-        /// <summary>
-        /// Called when a user is attempting to connect
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <returns></returns>
-        [HookMethod("IOnUserApprove")]
-        private object IOnUserApprove(BoltConnection connection)
-        {
-            var id = connection.RemoteEndPoint.SteamId.Id.ToString();
-            var cSteamId = new CSteamID(connection.RemoteEndPoint.SteamId.Id);
-
-            // Get IP address from Steam
-            P2PSessionState_t sessionState;
-            SteamGameServerNetworking.GetP2PSessionState(cSteamId, out sessionState);
-            var remoteIp = sessionState.m_nRemoteIP;
-            var ip = string.Concat(remoteIp >> 24 & 255, ".", remoteIp >> 16 & 255, ".", remoteIp >> 8 & 255, ".", remoteIp & 255);
-
-            // Call out and see if we should reject
-            var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", "Unnamed", id, ip);
-            if (canLogin is string || (canLogin is bool && !(bool)canLogin))
-            {
-                var coopKickToken = new CoopKickToken
-                {
-                    KickMessage = canLogin is string ? canLogin.ToString() : "Connection was rejected", // TODO: Localization
-                    Banned = false
-                };
-                connection.Disconnect(coopKickToken);
-                return true;
-            }
-
-            return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", "Unnamed", id, ip);
-        }
-
-        /// <summary>
-        /// Called when the player sends a message
-        /// </summary>
-        /// <param name="evt"></param>
-        [HookMethod("OnPlayerChat")]
-        private object OnPlayerChat(ChatEvent evt)
-        {
-            var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
-            if (entity == null) return null;
-
-            var id = entity.source.RemoteEndPoint.SteamId.Id;
-            var name = entity.GetState<IPlayerState>().name;
-
-            Debug.Log($"[Chat] {name}: {evt.Message}");
-
-            // Call covalence hook
-            var iplayer = Covalence.PlayerManager.FindPlayerById(id.ToString());
-            return iplayer != null ? Interface.Call("OnUserChat", iplayer, evt.Message) : null;
-        }
-
-        /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="entity"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(BoltEntity entity)
-        {
-            var id = entity.source.RemoteEndPoint.SteamId.Id.ToString();
-            var name = entity.GetState<IPlayerState>().name;
-
-            // Update player's permissions group and name
-            if (permission.IsLoaded)
-            {
-                permission.UpdateNickname(id, name);
-                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
-                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
-                if (entity.source.IsDedicatedServerAdmin() && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
-            }
-
-            Debug.Log($"{id}/{name} joined");
-
-            // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(entity);
-            var iplayer = Covalence.PlayerManager.FindPlayerById(id);
-            if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="connection"></param>
-        [HookMethod("IOnPlayerDisconnected")]
-        private void IOnPlayerDisconnected(BoltConnection connection)
-        {
-            var id = connection.RemoteEndPoint.SteamId.Id.ToString();
-            var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.ConnectionId == connection.ConnectionId);
-            if (entity == null) return;
-
-            var name = entity.GetState<IPlayerState>().name;
-
-            Debug.Log($"{id}/{name} quit");
-
-            // Call game hook
-            Interface.Call("OnPlayerDisconnected", entity);
-
-            // Let covalence know
-            var iplayer = Covalence.PlayerManager.FindPlayerById(id);
-            if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, "Unknown");
-            Covalence.PlayerManager.NotifyPlayerDisconnect(entity);
-        }
-
-        /// <summary>
-        /// Called when the player spawns
-        /// </summary>
-        /// <param name="entity"></param>
-        [HookMethod("OnPlayerSpawn")]
-        private void OnPlayerSpawn(BoltEntity entity)
-        {
-            // Call covalence hook
-            var iplayer = Covalence.PlayerManager.FindPlayerById(entity.source.RemoteEndPoint.SteamId.Id.ToString());
-            if (iplayer != null) Interface.Call("OnUserSpawn", iplayer);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Overrides the default save path
-        /// </summary>
-        /// <returns></returns>
-        [HookMethod("IGetSavePath")]
-        private string IGetSavePath()
-        {
-            var saveDir = Path.Combine(Interface.Oxide.RootDirectory, "saves/");
-            if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
-            return saveDir;
-        }
     }
 }
