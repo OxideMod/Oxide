@@ -1,11 +1,14 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
+using TheForest.Utils;
 
 namespace Oxide.Game.TheForest
 {
@@ -47,18 +50,6 @@ namespace Oxide.Game.TheForest
 
         private bool serverInitialized;
 
-        /// <summary>
-        /// Checks if the permission system has loaded, shows an error if it failed to load
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        private bool PermissionsLoaded(IPlayer player)
-        {
-            if (permission.IsLoaded) return true;
-            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
-            return false;
-        }
-
         #endregion
 
         #region Localization
@@ -69,9 +60,6 @@ namespace Oxide.Game.TheForest
 
         #region Core Hooks
 
-        /// <summary>
-        /// Called when the plugin is initializing
-        /// </summary>
         [HookMethod("Init")]
         private void Init()
         {
@@ -128,19 +116,13 @@ namespace Oxide.Game.TheForest
             }
         }
 
-        /// <summary>
-        /// Called when another plugin has been loaded
-        /// </summary>
-        /// <param name="plugin"></param>
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
+            // Call OnServerInitialized for hotloaded plugins
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
-        /// <summary>
-        /// Called when the server is first initialized
-        /// </summary>
         [HookMethod("OnServerInitialized")]
         private void OnServerInitialized()
         {
@@ -153,11 +135,124 @@ namespace Oxide.Game.TheForest
             serverInitialized = true;
         }
 
-        /// <summary>
-        /// Called when the server is shutting down
-        /// </summary>
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
+        #endregion
+
+        #region Command Handling
+
+        /// <summary>
+        /// Parses the specified command
+        /// </summary>
+        /// <param name="argstr"></param>
+        /// <param name="cmd"></param>
+        /// <param name="args"></param>
+        private void ParseCommand(string argstr, out string cmd, out string[] args)
+        {
+            var arglist = new List<string>();
+            var sb = new StringBuilder();
+            var inlongarg = false;
+            foreach (var c in argstr)
+            {
+                if (c == '"')
+                {
+                    if (inlongarg)
+                    {
+                        var arg = sb.ToString().Trim();
+                        if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
+                        sb = new StringBuilder();
+                        inlongarg = false;
+                    }
+                    else
+                    {
+                        inlongarg = true;
+                    }
+                }
+                else if (char.IsWhiteSpace(c) && !inlongarg)
+                {
+                    var arg = sb.ToString().Trim();
+                    if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
+                    sb = new StringBuilder();
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            if (sb.Length > 0)
+            {
+                var arg = sb.ToString().Trim();
+                if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
+            }
+            if (arglist.Count == 0)
+            {
+                cmd = null;
+                args = null;
+                return;
+            }
+            cmd = arglist[0];
+            arglist.RemoveAt(0);
+            args = arglist.ToArray();
+        }
+
+        [HookMethod("IOnServerCommand")]
+        private object IOnServerCommand(BoltConnection connection, string command, string data) // TODO: Convert string data to string[] args?
+        {
+            if (command.Length == 0) return null;
+            if (Interface.Call("OnServerCommand", connection, command, data) != null) return true;
+
+            // Check if command is from a player
+            var id = connection.RemoteEndPoint.SteamId.Id.ToString();
+            var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.ConnectionId == connection.ConnectionId);
+            if (entity == null) return null;
+
+            // Get the full command
+            var message = command.TrimStart('/');
+
+            // Parse it
+            string cmd;
+            string[] args;
+            ParseCommand(message, out cmd, out args);
+            if (cmd == null) return null;
+
+            // Get the covalence player
+            var iplayer = Covalence.PlayerManager.FindPlayerById(id);
+            if (iplayer == null) return null;
+
+            // Is the command blocked?
+            var blockedSpecific = Interface.Call("OnPlayerCommand", entity, cmd, args);
+            var blockedCovalence = Interface.Call("OnUserCommand", iplayer, cmd, args);
+            if (blockedSpecific != null || blockedCovalence != null) return true;
+
+            // Is it a chat command?
+            if (message[0] != '/') return null;
+
+            // Is it a covalance command?
+            if (Covalence.CommandSystem.HandleChatMessage(iplayer, command)) return true;
+
+            // Is it a regular chat command?
+            //if (!cmdlib.HandleChatCommand(player, cmd, args)) // TODO: Implement
+            //    iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+
+            return true;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool PermissionsLoaded(IPlayer player)
+        {
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            return false;
+        }
 
         #endregion
     }

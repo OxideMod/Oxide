@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Steamworks;
@@ -13,22 +12,6 @@ namespace Oxide.Game.TheForest
     /// </summary>
     public partial class TheForestCore : CSPlugin
     {
-        #region Server Hooks
-
-        /// <summary>
-        /// Overrides the default save path
-        /// </summary>
-        /// <returns></returns>
-        [HookMethod("IGetSavePath")]
-        private string IGetSavePath()
-        {
-            var saveDir = Path.Combine(Interface.Oxide.RootDirectory, "saves/");
-            if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
-            return saveDir;
-        }
-
-        #endregion
-
         #region Player Hooks
 
         /// <summary>
@@ -48,6 +31,9 @@ namespace Oxide.Game.TheForest
             var remoteIp = sessionState.m_nRemoteIP;
             var ip = string.Concat(remoteIp >> 24 & 255, ".", remoteIp >> 16 & 255, ".", remoteIp >> 8 & 255, ".", remoteIp & 255);
 
+            // Let covalence know
+            Covalence.PlayerManager.PlayerJoin(connection.RemoteEndPoint.SteamId.Id, "Unnamed");
+
             // Call out and see if we should reject
             var canLogin = Interface.Call("CanClientLogin", connection) ?? Interface.Call("CanUserLogin", "Unnamed", id, ip); // TODO: Localization
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
@@ -61,6 +47,7 @@ namespace Oxide.Game.TheForest
                 return true;
             }
 
+            // Call game and covalence hooks
             return Interface.Call("OnUserApprove", connection) ?? Interface.Call("OnUserApproved", "Unnamed", id, ip); // TODO: Localization
         }
 
@@ -68,8 +55,8 @@ namespace Oxide.Game.TheForest
         /// Called when the player sends a message
         /// </summary>
         /// <param name="evt"></param>
-        [HookMethod("OnPlayerChat")]
-        private object OnPlayerChat(ChatEvent evt)
+        [HookMethod("IOnPlayerChat")]
+        private object IOnPlayerChat(ChatEvent evt)
         {
             var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.networkId == evt.Sender);
             if (entity == null) return null;
@@ -79,9 +66,9 @@ namespace Oxide.Game.TheForest
 
             Debug.Log($"[Chat] {name}: {evt.Message}");
 
-            // Call covalence hook
+            // Call game and covalence hooks
             var iplayer = Covalence.PlayerManager.FindPlayerById(id.ToString());
-            return iplayer != null ? Interface.Call("OnUserChat", iplayer, evt.Message) : null;
+            return Interface.Call("OnPlayerChat", entity, evt.Message) ?? (iplayer != null ? Interface.Call("OnUserChat", iplayer, evt.Message) : null);
         }
 
         /// <summary>
@@ -106,7 +93,7 @@ namespace Oxide.Game.TheForest
             Debug.Log($"{id}/{name} joined");
 
             // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(entity);
+            Covalence.PlayerManager.PlayerConnected(entity);
             var iplayer = Covalence.PlayerManager.FindPlayerById(id);
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
@@ -132,7 +119,7 @@ namespace Oxide.Game.TheForest
             // Let covalence know
             var iplayer = Covalence.PlayerManager.FindPlayerById(id);
             if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, "Unknown"); // TODO: Localization
-            Covalence.PlayerManager.NotifyPlayerDisconnect(entity);
+            Covalence.PlayerManager.PlayerDisconnected(entity);
         }
 
         /// <summary>

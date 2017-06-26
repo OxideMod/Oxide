@@ -4,7 +4,6 @@ using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using ProtoBuf;
-using Steamworks;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -20,61 +19,45 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, TheForestPlayer> allPlayers;
-        private readonly IDictionary<string, TheForestPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, TheForestPlayer> allPlayers;
+        private IDictionary<string, TheForestPlayer> connectedPlayers;
 
-        internal TheForestPlayerManager()
+        internal void Initialize()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, TheForestPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new TheForestPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, TheForestPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new TheForestPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(BoltEntity entity)
+        internal void PlayerJoin(ulong userId, string name)
         {
-            var steamId = entity.source.RemoteEndPoint.SteamId.Id;
-            var cSteamId = new CSteamID(steamId);
-            var id = steamId.ToString();
-            var name = SteamFriends.GetFriendPersonaName(cSteamId);
+            var id = userId.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
-                record.Name = SteamFriends.GetFriendPersonaName(cSteamId);
+                record.Name = name;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
-                allPlayers.Add(id, new TheForestPlayer(entity));
+                allPlayers.Add(id, new TheForestPlayer(userId, name));
             }
             else
             {
-                // Insert
-                record = new PlayerRecord { Id = steamId, Name = name };
+                record = new PlayerRecord { Id = userId, Name = name };
                 playerData.Add(id, record);
-
-                // Create Rust player
-                allPlayers.Add(id, new TheForestPlayer(steamId, name));
+                allPlayers.Add(id, new TheForestPlayer(userId, name));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(BoltEntity entity)
-        {
-            NotifyPlayerJoin(entity);
-            var id = entity.source.RemoteEndPoint.SteamId.Id;
-            connectedPlayers[id.ToString()] = new TheForestPlayer(entity);
-        }
+        internal void PlayerConnected(BoltEntity entity) => connectedPlayers[entity.source.RemoteEndPoint.SteamId.Id.ToString()] = new TheForestPlayer(entity);
 
-        internal void NotifyPlayerDisconnect(BoltEntity entity) => connectedPlayers.Remove(entity.source.RemoteEndPoint.SteamId.Id.ToString());
+        internal void PlayerDisconnected(BoltEntity entity) => connectedPlayers.Remove(entity.source.RemoteEndPoint.SteamId.Id.ToString());
 
         #region Player Finding
 

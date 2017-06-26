@@ -13,8 +13,8 @@
             "ArgumentBehavior": 2,
             "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerChat",
-            "HookName": "OnPlayerChat",
+            "Name": "IOnPlayerChat [internal]",
+            "HookName": "IOnPlayerChat",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopServerCallbacks",
             "Flagged": false,
@@ -34,13 +34,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 6,
+            "InjectionIndex": 38,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnPlayerSpawn",
-            "HookName": "OnPlayerSpawn",
+            "Name": "OnPlayerConnected",
+            "HookName": "OnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopServerCallbacks",
             "Flagged": false,
@@ -1204,32 +1204,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 27,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerConnected",
-            "HookName": "OnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoopPlayerCallbacks",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "EntityAttached",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "BoltEntity"
-              ]
-            },
-            "MSILHash": "dzn6z8KysXas8wKKdSDCrPpVZ8JuOIC66kJiX+mVj7g=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -1263,8 +1237,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0.RaisedBy, a0.Command, a0.Data",
             "HookTypeName": "Simple",
-            "Name": "OnServerCommand",
-            "HookName": "OnServerCommand",
+            "Name": "IOnServerCommand [internal]",
+            "HookName": "IOnServerCommand",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopServerCallbacks",
             "Flagged": false,
@@ -1277,30 +1251,6 @@
               ]
             },
             "MSILHash": "Pvhas3bEbm5Zt3ykNE5YP6SZwfr1yJLe7Q2Mv9bpOoo=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "IGetSavePath [internal]",
-            "HookName": "IGetSavePath",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "TheForest.Utils.SaveSlotUtils",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "GetUserPath",
-              "ReturnType": "System.String",
-              "Parameters": []
-            },
-            "MSILHash": "udjwpYXWzosKBoMa9XbSAngMe8iHD/k9yURTvn47orU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1472,7 +1422,7 @@
             "HookName": "OnServerInitialized",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "CoopSteamManagerDS",
-            "Flagged": false,
+            "Flagged": true,
             "Signature": {
               "Exposure": 0,
               "Name": "Launch",
@@ -1505,6 +1455,281 @@
             "MSILHash": "l1U1Np8HEO10IvmAeKIxv5VzsAu8y7MuJ42WAzpotcc=",
             "BaseHookName": "InitLogging [internal]",
             "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 14,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "FixStartupProxyNREs [patch]",
+            "HookName": "FixStartupProxyNREs",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheForest.Utils.AnimationSequence",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "Y1jT3wYfIEJPKn0iYIg5x31VFbJJglXcyhD5WLzwZog=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "FixStartupInputNREs [patch]",
+            "HookName": "FixStartupInputNREs",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TriggerCutScene",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Update",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "zsRIWND6tx1+udUXnwygjQj+0zFMctA6etDVbhlzcdE=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 5,
+            "Instructions": [
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "mscorlib|System.Environment|get_CurrentDirectory"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "ConfigDirInRoot [patch]",
+            "HookName": "ConfigDirInRoot",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SteamDSConfig",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetServerCfgDir",
+              "ReturnType": "System.String",
+              "Parameters": []
+            },
+            "MSILHash": "6wQrOtDaWj6sL7Hou26Xloqs0Xa9IzOb7Wq0TJNJBK8=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 22,
+            "Instructions": [
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "mscorlib|System.Environment|get_CurrentDirectory"
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": "/saves/"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "SavesDirInRoot [patch]",
+            "HookName": "SavesDirInRoot",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "TheForest.Utils.SaveSlotUtils",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "GetUserPath",
+              "ReturnType": "System.String",
+              "Parameters": []
+            },
+            "MSILHash": "udjwpYXWzosKBoMa9XbSAngMe8iHD/k9yURTvn47orU=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 80,
+            "RemoveCount": 20,
+            "Instructions": [
+              {
+                "OpCode": "ldc_i4_3",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "newarr",
+                "OpType": "Type",
+                "Operand": "mscorlib|System.String"
+              },
+              {
+                "OpCode": "dup",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "mscorlib|System.Environment|get_CurrentDirectory"
+              },
+              {
+                "OpCode": "stelem_ref",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "dup",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4_1",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": "/"
+              },
+              {
+                "OpCode": "stelem_ref",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "dup",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4_2",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "ConfigFileInRoot [patch]",
+            "HookName": "ConfigFileInRoot",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "SteamDSConfig",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": ".cctor",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "qBdL07n78xLlmgFeo0HHZ9yKDfT2nBIMrcSb6HRJVOs=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 81,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "LoadSave",
+            "Flagged": true,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "Awake",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "7esotQZJdt5KOvxk4xzks3ilbXD4WU97No8UGAU6c5A=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 11,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "LoadSave",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Activation",
+              "ReturnType": "System.Collections.IEnumerator",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "fTZcsWbTggMdkoaDxsm5TlWokhM39JqhcSu2sstK9SQ=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 73,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerSpawn",
+            "HookName": "OnPlayerSpawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopServerCallbacks",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "EntityReceived",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BoltEntity"
+              ]
+            },
+            "MSILHash": "vN9Bkjrj8eTaGcI/q6ogEx4UT04+Uhwb0lcEwPLq4d8=",
+            "BaseHookName": "OnPlayerConnected",
+            "HookCategory": "Player"
           }
         }
       ],
