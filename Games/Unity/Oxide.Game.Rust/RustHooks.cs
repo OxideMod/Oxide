@@ -11,7 +11,7 @@ using Oxide.Core.ServerConsole;
 namespace Oxide.Game.Rust
 {
     /// <summary>
-    /// Game hook and wrappers for the core Rust plugin
+    /// Game hooks and wrappers for the core Rust plugin
     /// </summary>
     public partial class RustCore : CSPlugin
     {
@@ -173,20 +173,25 @@ namespace Oxide.Game.Rust
         private object IOnPlayerRevive(MedicalTool tool, BasePlayer target) => Interface.Call("OnPlayerRevive", tool.GetOwnerPlayer(), target);
 
         /// <summary>
-        /// Called when a server group is set for an ID
+        /// Called when a server group is set for an ID (i.e. Banned)
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="steamId"></param>
         /// <param name="group"></param>
         /// <param name="name"></param>
         /// <param name="reason"></param>
         /// <returns></returns>
         [HookMethod("IOnServerUsersSet")]
-        private void IOnServerUsersSet(ulong id, ServerUsers.UserGroup group, string name, string reason)
+        private void IOnServerUsersSet(ulong steamId, ServerUsers.UserGroup group, string name, string reason)
         {
             if (!serverInitialized) return;
 
-            var iplayer = Covalence.PlayerManager.FindPlayerById(id.ToString());
-            if (group == ServerUsers.UserGroup.Banned) Interface.Oxide.CallHook("OnUserBanned", name, id.ToString(), iplayer?.Address ?? "0", reason);
+            var id = steamId.ToString();
+            var iplayer = Covalence.PlayerManager.FindPlayerById(id);
+            if (group == ServerUsers.UserGroup.Banned) 
+            {
+                Interface.Oxide.CallHook("OnPlayerBanned", name, steamId, iplayer?.Address ?? "0", reason);
+                Interface.Oxide.CallHook("OnUserBanned", name, id, iplayer?.Address ?? "0", reason);
+            }
         }
 
         /// <summary>
@@ -211,6 +216,7 @@ namespace Oxide.Game.Rust
                 if (authLevel == 2 && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
+            // Let covalence know
             Covalence.PlayerManager.PlayerJoin(connection.userid, name);
 
             var loginSpecific = Interface.Call("CanClientLogin", connection);
@@ -223,21 +229,24 @@ namespace Oxide.Game.Rust
                 return true;
             }
 
+            // Call game and covalence hooks
             var approvedSpecific = Interface.Call("OnUserApprove", connection);
             var approvedCovalence = Interface.Call("OnUserApproved", name, id, ip);
             return approvedSpecific ?? approvedCovalence; // TODO: Fix 'RustCore' hook conflict when both return
         }
 
         /// <summary>
-        /// Called when a player has been banned on connection
+        /// Called when a player has been banned by EAC
         /// </summary>
         /// <param name="connection"></param>
-        /// <param name="reason"></param>
         /// <returns></returns>
-        [HookMethod("OnPlayerBanned")]
-        private void OnPlayerBanned(Connection connection, string reason)
+        [HookMethod("IOnPlayerBanned")]
+        private void IOnPlayerBanned(Connection connection)
         {
-            var ip = Regex.Replace(connection.ipaddress, ipPattern, "");
+            var ip = Regex.Replace(connection.ipaddress, ipPattern, "") ?? "0";
+            var reason = connection.authStatus ?? "Unknown"; // TODO: Localization
+
+            Interface.Oxide.CallHook("OnPlayerBanned", connection.username, connection.userid, ip, reason);
             Interface.Oxide.CallHook("OnUserBanned", connection.username, connection.userid.ToString(), ip, reason);
         }
 
@@ -276,6 +285,7 @@ namespace Oxide.Game.Rust
             // Set language for player
             lang.SetLanguage(player.net.connection.info.GetString("global.language", "en"), player.UserIDString);
 
+            // Let covalence know
             Covalence.PlayerManager.PlayerConnected(player);
             var iplayer = Covalence.PlayerManager.FindPlayerById(player.UserIDString);
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
