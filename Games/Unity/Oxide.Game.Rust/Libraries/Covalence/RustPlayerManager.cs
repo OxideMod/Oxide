@@ -55,7 +55,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void PlayerConnected(BasePlayer player) => connectedPlayers[player.UserIDString] = new RustPlayer(player);
+        internal void PlayerConnected(BasePlayer player)
+        {
+            allPlayers[player.UserIDString] = new RustPlayer(player);
+            connectedPlayers[player.UserIDString] = new RustPlayer(player);
+        }
 
         internal void PlayerDisconnected(BasePlayer player) => connectedPlayers.Remove(player.UserIDString);
 
