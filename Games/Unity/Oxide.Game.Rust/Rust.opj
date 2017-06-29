@@ -3267,13 +3267,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 96,
+            "InjectionIndex": 98,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l5, l5.authStatus",
+            "ArgumentString": "l5",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerBanned [eac, player]",
-            "HookName": "OnPlayerBanned",
+            "Name": "IOnPlayerBanned [internal, eac, player]",
+            "HookName": "IOnPlayerBanned",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
@@ -3865,13 +3865,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 220,
+            "InjectionIndex": 217,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l9, l9.authStatus",
+            "ArgumentString": "l9",
             "HookTypeName": "Simple",
-            "Name": "OnPlayerBanned [eac, owner]",
-            "HookName": "OnPlayerBanned",
+            "Name": "IOnPlayerBanned [internal, eac, owner]",
+            "HookName": "IOnPlayerBanned",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ServerMgr",
             "Flagged": false,
@@ -3884,7 +3884,7 @@
               ]
             },
             "MSILHash": "CACdOi6iwf7YfjKFaxqKgfjg/KetMcT/1VbrLOgCzjA=",
-            "BaseHookName": "OnPlayerBanned [eac, player]",
+            "BaseHookName": "IOnPlayerBanned [internal, eac, player]",
             "HookCategory": "Player"
           }
         },
