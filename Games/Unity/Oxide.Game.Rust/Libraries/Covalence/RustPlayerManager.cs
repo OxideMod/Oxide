@@ -28,8 +28,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, RustPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new RustPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, RustPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new RustPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         internal void PlayerJoin(ulong userId, string name)
@@ -54,11 +55,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void PlayerConnected(BasePlayer player)
-        {
-            allPlayers[player.UserIDString] = new RustPlayer(player);
-            connectedPlayers[player.UserIDString] = new RustPlayer(player);
-        }
+        internal void PlayerConnected(BasePlayer player) => connectedPlayers[player.UserIDString] = new RustPlayer(player);
 
         internal void PlayerDisconnected(BasePlayer player) => connectedPlayers.Remove(player.UserIDString);
 

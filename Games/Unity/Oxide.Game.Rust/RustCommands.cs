@@ -290,7 +290,7 @@ namespace Oxide.Game.Rust
                 foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
                 {
                     string msg;
-                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
+                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded"; // TODO: Localization
                 }
             }
 
@@ -301,7 +301,7 @@ namespace Oxide.Game.Rust
                 return;
             }
 
-            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
+            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:"; // TODO: Localization
             var number = 1;
             foreach (var plugin in loadedPlugins)
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
@@ -671,7 +671,7 @@ namespace Oxide.Game.Rust
         {
             if (player.Id != "server_console")
             {
-                var format = Covalence.FormatText("Server is running [#ffb658]Oxide {0}[/#] and [#ee715c]{1} {2}[/#]");
+                var format = Covalence.FormatText("Server is running [#ffb658]Oxide {0}[/#] and [#ee715c]{1} {2}[/#]"); // TODO: Localization
                 player.Reply(format, OxideMod.Version, Covalence.GameName, Server.Version);
             }
             else

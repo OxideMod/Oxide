@@ -296,10 +296,11 @@ namespace Oxide.Game.Rust
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>
-        [HookMethod("OnServerCommand")]
-        private object OnServerCommand(ConsoleSystem.Arg arg)
+        [HookMethod("IOnServerCommand")]
+        private object IOnServerCommand(ConsoleSystem.Arg arg)
         {
             if (arg?.cmd == null) return null;
+            if (Interface.Call("OnServerCommand", arg) != null) return true;
 
             try
             {

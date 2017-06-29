@@ -6,9 +6,9 @@ echo Starting server...
 TheForestDedicatedServer.exe ^
 -nosteamclient ^
 -serverip 0.0.0.0 ^
--serversteamport 8766 ^
 -servergameport 27015 ^
 -serverqueryport 27016 ^
+-serversteamport 27016 ^
 -servername "My Oxide Server" ^
 -serverplayers 10 ^
 -serverautosaveinterval 15 ^

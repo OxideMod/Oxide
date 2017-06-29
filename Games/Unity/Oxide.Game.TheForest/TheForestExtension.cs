@@ -54,7 +54,9 @@ namespace Oxide.Game.TheForest
             "SteamManager - Awake",
             "SteamManager - Someone call OnDestroy",
             "SteamManager OnEnable",
-            "Trying to reload asset from disk that is not stored on disk"
+            "Trying to reload asset from disk that is not stored on disk",
+            "setPlanePosition site=",
+            "starting enemy spawn"
         };
 
         /// <summary>
@@ -153,12 +155,12 @@ namespace Oxide.Game.TheForest
         private void HandleLog(string message, string stackTrace, LogType type)
         {
             if (string.IsNullOrEmpty(message) || Filter.Any(message.StartsWith)) return;
+
             logWriter.WriteLine(message); // TODO: Fix access violation
             if (!string.IsNullOrEmpty(stackTrace)) logWriter.WriteLine(stackTrace);
 
             var color = ConsoleColor.Gray;
             var remoteType = "generic";
-
             if (type == LogType.Warning)
             {
                 color = ConsoleColor.Yellow;
@@ -169,7 +171,6 @@ namespace Oxide.Game.TheForest
                 color = ConsoleColor.Red;
                 remoteType = "error";
             }
-
             Interface.Oxide.ServerConsole.AddMessage(message, color);
             Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
             {
