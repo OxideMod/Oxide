@@ -187,6 +187,7 @@ namespace Oxide.Game.Rust
 
             var id = steamId.ToString();
             var iplayer = Covalence.PlayerManager.FindPlayerById(id);
+
             if (group == ServerUsers.UserGroup.Banned) 
             {
                 Interface.Oxide.CallHook("OnPlayerBanned", name, steamId, iplayer?.Address ?? "0", reason);

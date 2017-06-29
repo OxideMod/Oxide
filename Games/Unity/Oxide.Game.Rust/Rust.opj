@@ -178,30 +178,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnFindSpawnPoint",
-            "HookName": "OnFindSpawnPoint",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ServerMgr",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "FindSpawnPoint",
-              "ReturnType": "BasePlayer/SpawnPoint",
-              "Parameters": []
-            },
-            "MSILHash": "S6FAUtcCkChzNU5KB8mdruKgNkU5XR5zuhGHAQJBj/c=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 32,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 3,
@@ -273,33 +249,6 @@
             "MSILHash": "+Be+qL4i7VqQPpcRNeD9z0v6f7jQJSwnizoVcVRLdE8=",
             "BaseHookName": null,
             "HookCategory": "Entity"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 33,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 1,
-            "ArgumentString": "",
-            "HookTypeName": "Simple",
-            "Name": "OnPlayerRespawn",
-            "HookName": "OnPlayerRespawn",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "BasePlayer",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "RespawnAt",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "UnityEngine.Vector3",
-                "UnityEngine.Quaternion"
-              ]
-            },
-            "MSILHash": "pAIST3OyALipYX3udipSNsKQyI164GkREMBgjY+r35w=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
           }
         },
         {
@@ -882,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "fu2uXea18NlDGcBL06Z3wlznKQcQLkXcclJECyWmBxk=",
+            "MSILHash": "kDnR9Kx5HLojUMAvMsTYP2mw4NedoAEWeDLap/2cel8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2426,7 +2375,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "e6O83Oz+Tk3hgAGIVetOfWEOqZ87hj0RT3zA9OFNoIM=",
+            "MSILHash": "mMaRUBpjF+IQQp+39vDBCJ/X+almyYVvxHJia+tDBKo=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2672,7 +2621,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 81,
+            "InjectionIndex": 86,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 1,
             "ArgumentString": null,
@@ -2692,7 +2641,7 @@
               ]
             },
             "MSILHash": "pAIST3OyALipYX3udipSNsKQyI164GkREMBgjY+r35w=",
-            "BaseHookName": "OnPlayerRespawn",
+            "BaseHookName": null,
             "HookCategory": "Player"
           }
         },
@@ -2830,7 +2779,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "WMEQPML+dRzDarotfmayXZiOxnZtrlmsyn5/RrvlSEA=",
+            "MSILHash": "8SL/cr/8AyBTFIzVUjAh5rTCxhpZZNivVDjNN/hOnG8=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -4350,7 +4299,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "kbb8hoTa0jmq2Y1EfTRTH3ARcUhyid+nZhVMGxKt8Xs=",
+            "MSILHash": "MJNmVx+n9u+PYpOnmYtHPbqNqUW4GaYaNpBbVkTBm2Y=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -4992,6 +4941,56 @@
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 2,
+            "ReturnBehavior": 3,
+            "ArgumentBehavior": 1,
+            "ArgumentString": "this => l0",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerRespawn",
+            "HookName": "OnPlayerRespawn",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Respawn",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "PnykUTXAX5N0I5bMDPnQf0MXeF0haWDLpskvmoELK0s=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 9,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.player, this",
+            "HookTypeName": "Simple",
+            "Name": "CanPickupLock",
+            "HookName": "CanPickupLock",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseLock",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RPC_TakeLock",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BaseEntity/RPCMessage"
+              ]
+            },
+            "MSILHash": "z72O17rPEfT/BJ0NW+cCUjS5vEPulA+3Ae4LQKiK6IE=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [
@@ -5454,8 +5453,8 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
             "HookTypeName": "Simple",
-            "Name": "OnServerCommand",
-            "HookName": "OnServerCommand",
+            "Name": "IOnServerCommand [internal]",
+            "HookName": "IOnServerCommand",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem",
             "Flagged": false,
