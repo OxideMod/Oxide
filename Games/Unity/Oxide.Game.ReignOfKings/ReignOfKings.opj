@@ -1101,6 +1101,33 @@
             "BaseHookName": null,
             "HookCategory": "_Patch"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnServerCommand [internal]",
+            "HookName": "IOnServerCommand",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Core.Commands.CommandManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ExecuteCommand",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.UInt64",
+                "System.String"
+              ]
+            },
+            "MSILHash": "hQ9Lpokao71CZgldParsElEKW+hjMC300lu/7lPxy80=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
+          }
         }
       ],
       "Modifiers": [

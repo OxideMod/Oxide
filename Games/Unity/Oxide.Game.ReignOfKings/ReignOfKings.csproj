@@ -58,8 +58,10 @@
     <Compile Include="Libraries\Covalence\ReignOfKingsPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\ReignOfKingsServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReignOfKingsCommands.cs" />
     <Compile Include="ReignOfKingsCore.cs" />
     <Compile Include="ReignOfKingsExtension.cs" />
+    <Compile Include="ReignOfKingsHooks.cs" />
     <Compile Include="ReignOfKingsPlugin.cs" />
     <Compile Include="ReignOfKingsPluginLoader.cs" />
   </ItemGroup>
