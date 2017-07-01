@@ -97,9 +97,11 @@ namespace Oxide.Game.GangBeasts
         {
             if (Interface.Oxide.ServerConsole == null) return;
 
-            Interface.Oxide.ServerConsole.Title = () => $"{NetUtils.NManager.numPlayers} | {ServerConfig.ServerName}"; // GetCurrentPlayerCount()
+            var gbConfig = UnityEngine.Object.FindObjectOfType<ServerConfig>();
 
-            Interface.Oxide.ServerConsole.Status1Left = () => ServerConfig.ServerName;
+            Interface.Oxide.ServerConsole.Title = () => $"{NetUtils.NManager.numPlayers} | {gbConfig.ServerName}"; // GetCurrentPlayerCount()
+
+            Interface.Oxide.ServerConsole.Status1Left = () => gbConfig.ServerName;
             Interface.Oxide.ServerConsole.Status1Right = () =>
             {
                 var fps = Mathf.RoundToInt(1f / Time.smoothDeltaTime);
@@ -108,7 +110,7 @@ namespace Oxide.Game.GangBeasts
                 return string.Concat(fps, "fps, ", uptime);
             };
 
-            Interface.Oxide.ServerConsole.Status2Left = () => $"{NetUtils.NManager.numPlayers}/{NetUtils.NManager.maxConnections} players";
+            Interface.Oxide.ServerConsole.Status2Left = () => $"{NetUtils.NManager.numPlayers}/{NetUtils.NManager.maxConnections - 1} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
                 if (!NetUtils.NManager.isNetworkActive) return "not connected";

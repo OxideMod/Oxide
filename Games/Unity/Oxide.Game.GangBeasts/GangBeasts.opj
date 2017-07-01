@@ -93,33 +93,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "r4/CI9sRvql4SObmQXPxiWpkwlxy39r2xDKjC5pcLgA=",
-            "BaseHookName": null,
-            "HookCategory": "Server"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
-            "InjectionIndex": 0,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 0,
-            "ArgumentString": null,
-            "HookTypeName": "Simple",
-            "Name": "OnServerInitialized",
-            "HookName": "OnServerInitialized",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "CoreNet.NetworkManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "OnServerReady",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "UnityEngine.Networking.NetworkConnection"
-              ]
-            },
-            "MSILHash": "uDTlyOs57q/6487eQMC37hGfTBSHKyCCaDsGWL6qCuw=",
+            "MSILHash": "IgkaV4EMwfeVKvq3dC5bGq00kOvV1z2NGwptkx7Ckog=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -174,6 +148,61 @@
             "MSILHash": "eAcTGdUoommuInOwcftCkBCAsgDcHJ3FqugFl1uKj9I=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 0,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ret",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "FixStartupInputNRE [patch]",
+            "HookName": "FixStartupInputNRE",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Rewired.Boneloaf.RemappingMenuManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "InitialiseAssignmentManager",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "2p7vEDtYXHizGPHPKeIh95mAk7gQt1jL6JIwvtNLBtY=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 24,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 0,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnServerInitialized",
+            "HookName": "OnServerInitialized",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoreNet.Bootstrap.CoreNetBootstrapper",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "BootstrapServer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Boolean"
+              ]
+            },
+            "MSILHash": "ueibXliMnj7dRamDVTw/3QPfS8piWyEd0boLrmBUKmM=",
+            "BaseHookName": null,
+            "HookCategory": "Server"
           }
         }
       ],
