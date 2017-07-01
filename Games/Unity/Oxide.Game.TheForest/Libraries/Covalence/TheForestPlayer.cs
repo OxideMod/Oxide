@@ -32,7 +32,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
 
         internal TheForestPlayer(BoltEntity entity)
         {
-            steamId = entity.controller.RemoteEndPoint.SteamId.Id;
+            steamId = entity.source.RemoteEndPoint.SteamId.Id;
             cSteamId = new CSteamID(steamId);
             Id = steamId.ToString();
             Name = entity.GetState<IPlayerState>().name;
