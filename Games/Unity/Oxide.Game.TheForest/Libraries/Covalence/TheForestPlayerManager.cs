@@ -36,8 +36,8 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         internal void PlayerJoin(ulong userId, string name)
         {
             var id = userId.ToString();
-
             PlayerRecord record;
+
             if (playerData.TryGetValue(id, out record))
             {
                 record.Name = name;
@@ -51,11 +51,14 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
                 playerData.Add(id, record);
                 allPlayers.Add(id, new TheForestPlayer(userId, name));
             }
-
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void PlayerConnected(BoltEntity entity) => connectedPlayers[entity.source.RemoteEndPoint.SteamId.Id.ToString()] = new TheForestPlayer(entity);
+        internal void PlayerConnected(BoltEntity entity)
+        {
+            allPlayers[entity.source.RemoteEndPoint.SteamId.Id.ToString()] = new TheForestPlayer(entity);
+            connectedPlayers[entity.source.RemoteEndPoint.SteamId.Id.ToString()] = new TheForestPlayer(entity);
+        }
 
         internal void PlayerDisconnected(BoltEntity entity) => connectedPlayers.Remove(entity.source.RemoteEndPoint.SteamId.Id.ToString());
 
