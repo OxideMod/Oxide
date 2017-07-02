@@ -204,7 +204,9 @@ namespace Oxide.Game.TheForest
             if (Interface.Call("OnServerCommand", command, data) != null) return true;
 
             // Check if command is from a player
-            var id = connection?.RemoteEndPoint.SteamId.Id.ToString();
+            if (connection == null) return null;
+
+            var id = connection.RemoteEndPoint.SteamId.Id.ToString();
             var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.ConnectionId == connection.ConnectionId);
             if (entity == null) return null;
 
