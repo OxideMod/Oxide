@@ -95,6 +95,7 @@ namespace Oxide.Game.TheForest
             permission.RegisterPermission("oxide.show", this);
             permission.RegisterPermission("oxide.usergroup", this);
 
+            // Register messages for localization
             //lang.RegisterMessages(messages, this); // TODO: Implement
 
             // Setup default permission groups
@@ -200,9 +201,11 @@ namespace Oxide.Game.TheForest
         private object IOnServerCommand(BoltConnection connection, string command, string data) // TODO: Convert string data to string[] args?
         {
             if (command.Length == 0) return null;
-            if (Interface.Call("OnServerCommand", connection, command, data) != null) return true;
+            if (Interface.Call("OnServerCommand", command, data) != null) return true;
 
             // Check if command is from a player
+            if (connection == null) return null;
+
             var id = connection.RemoteEndPoint.SteamId.Id.ToString();
             var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.ConnectionId == connection.ConnectionId);
             if (entity == null) return null;
