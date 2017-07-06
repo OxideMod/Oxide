@@ -258,7 +258,7 @@ namespace Oxide.Game.ReignOfKings
             if (blockedSpecific != null || blockedCovalence != null) return true;
 
             // Is it a chat command?
-            if (message[0] != '/') return null;
+            if (str[0] != '/') return null;
 
             // Is it a covalance command?
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
