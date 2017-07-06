@@ -264,10 +264,9 @@ namespace Oxide.Game.ReignOfKings
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, str)) return true;
 
             // Is it a regular chat command?
-            if (!cmdlib.HandleChatCommand(player, cmd, args))
-                iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+            if (cmdlib.HandleChatCommand(player, cmd, args)) return true;
 
-            return true;
+            return null;
         }
 
         #endregion
