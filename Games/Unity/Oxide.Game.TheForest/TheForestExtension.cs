@@ -43,20 +43,26 @@ namespace Oxide.Game.TheForest
 
         public static string[] Filter =
         {
+            "------- Rewired System Info -------",
             "CoopLobby.LeaveActive instance",
             "CoopSteamManager Initialize",
             "Game Activation Sequence step",
             "GameServer.InitSafe success:",
             "InitMaterial Starfield",
             "PlayerPreferences.Load",
+            "Please initialize AssetBundleManifest by calling",
+            "Refreshing Input Mapping Icons",
             "Set a LogOnAnonymous",
             "Started.",
             "SteamManager - Awake",
             "SteamManager - Someone call OnDestroy",
             "SteamManager OnEnable",
             "Trying to reload asset from disk that is not stored on disk",
+            "initializing asset bundle manager with manifest:",
             "setPlanePosition site=",
-            "starting enemy spawn"
+            "setting asset bundle manifest",
+            "starting enemy spawn",
+            "starting to load manifest"
         };
 
         /// <summary>
@@ -145,10 +151,10 @@ namespace Oxide.Game.TheForest
 
         private static void ServerConsoleOnInput(string input)
         {
-            var inputArray = input.Split();
+            var inputArray = input.TrimEnd().Split();
             var adminCommand = AdminCommand.Create(GlobalTargets.OnlyServer);
             adminCommand.Command = inputArray[0];
-            adminCommand.Data = string.Concat(inputArray.Skip(1).Select(s => s));
+            adminCommand.Data = string.Concat(inputArray.Skip(1).Select(s => s).ToArray());
             adminCommand.Send();
         }
 

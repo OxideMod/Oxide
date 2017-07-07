@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Covalence\TheForestCommandSystem.cs" />
+    <Compile Include="Libraries\Covalence\TheForestConsolePlayer.cs" />
     <Compile Include="Libraries\Covalence\TheForestCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\TheForestPlayer.cs" />
     <Compile Include="Libraries\Covalence\TheForestPlayerManager.cs" />
