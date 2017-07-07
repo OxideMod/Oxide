@@ -143,65 +143,16 @@ namespace Oxide.Game.TheForest
 
         #region Command Handling
 
-        /// <summary>
-        /// Parses the specified command
-        /// </summary>
-        /// <param name="argstr"></param>
-        /// <param name="cmd"></param>
-        /// <param name="args"></param>
-        private void ParseCommand(string argstr, out string cmd, out string[] args)
-        {
-            var arglist = new List<string>();
-            var sb = new StringBuilder();
-            var inlongarg = false;
-            foreach (var c in argstr)
-            {
-                if (c == '"')
-                {
-                    if (inlongarg)
-                    {
-                        var arg = sb.ToString().Trim();
-                        if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
-                        sb = new StringBuilder();
-                        inlongarg = false;
-                    }
-                    else
-                    {
-                        inlongarg = true;
-                    }
-                }
-                else if (char.IsWhiteSpace(c) && !inlongarg)
-                {
-                    var arg = sb.ToString().Trim();
-                    if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
-                    sb = new StringBuilder();
-                }
-                else
-                {
-                    sb.Append(c);
-                }
-            }
-            if (sb.Length > 0)
-            {
-                var arg = sb.ToString().Trim();
-                if (!string.IsNullOrEmpty(arg)) arglist.Add(arg);
-            }
-            if (arglist.Count == 0)
-            {
-                cmd = null;
-                args = null;
-                return;
-            }
-            cmd = arglist[0];
-            arglist.RemoveAt(0);
-            args = arglist.ToArray();
-        }
-
         [HookMethod("IOnServerCommand")]
-        private object IOnServerCommand(BoltConnection connection, string command, string data) // TODO: Convert string data to string[] args?
+        private object IOnServerCommand(BoltConnection connection, string command, string data)
         {
             if (command.Length == 0) return null;
-            if (Interface.Call("OnServerCommand", command, data) != null) return true;
+
+            // Get the full command
+            var cmd = command.TrimStart('/');
+            var args = string.IsNullOrEmpty(data) ? new string[] {} : data.Split();
+
+            if (Interface.Call("OnServerCommand", cmd, args) != null) return true;
 
             // Check if command is from a player
             if (connection == null) return null;
@@ -209,15 +160,6 @@ namespace Oxide.Game.TheForest
             var id = connection.RemoteEndPoint.SteamId.Id.ToString();
             var entity = Scene.SceneTracker.allPlayerEntities.FirstOrDefault(ent => ent.source.ConnectionId == connection.ConnectionId);
             if (entity == null) return null;
-
-            // Get the full command
-            var message = command.TrimStart('/');
-
-            // Parse it
-            string cmd;
-            string[] args;
-            ParseCommand(message, out cmd, out args);
-            if (cmd == null) return null;
 
             // Get the covalence player
             var iplayer = Covalence.PlayerManager.FindPlayerById(id);
@@ -229,7 +171,7 @@ namespace Oxide.Game.TheForest
             if (blockedSpecific != null || blockedCovalence != null) return true;
 
             // Is it a chat command?
-            if (message[0] != '/') return null;
+            if (command[0] != '/') return null;
 
             // Is it a covalance command?
             if (Covalence.CommandSystem.HandleChatMessage(iplayer, command)) return true;

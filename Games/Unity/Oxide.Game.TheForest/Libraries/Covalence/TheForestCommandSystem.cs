@@ -9,11 +9,10 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
     /// </summary>
     public class TheForestCommandSystem : ICommandSystem
     {
-        // Default constructor
-        public TheForestCommandSystem()
-        {
-            Initialize();
-        }
+        #region Initialization
+
+        // The console player
+        internal TheForestConsolePlayer consolePlayer;
 
         // Command handler
         private CommandHandler commandHandler;
@@ -22,12 +21,13 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         private IDictionary<string, CommandCallback> registeredCommands;
 
         /// <summary>
-        /// Initializes the command system provider
+        /// Initializes the command system
         /// </summary>
-        private void Initialize()
+        public TheForestCommandSystem()
         {
             registeredCommands = new Dictionary<string, CommandCallback>();
             commandHandler = new CommandHandler(ChatCommandCallback, registeredCommands.ContainsKey);
+            consolePlayer = new TheForestConsolePlayer();
         }
 
         private bool ChatCommandCallback(IPlayer caller, string command, string[] args)
@@ -35,6 +35,10 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             CommandCallback callback;
             return registeredCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
+
+        #endregion
+
+        #region Command Registration
 
         /// <summary>
         /// Registers the specified command
@@ -66,5 +70,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="message"></param>
         /// <returns></returns>
         public bool HandleChatMessage(IPlayer player, string message) => commandHandler.HandleChatMessage(player, message);
+
+        #endregion
     }
 }

@@ -306,7 +306,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             var adminCommand = AdminCommand.Create(entity.source);
             adminCommand.Command = command;
-            adminCommand.Data = string.Concat(args.Select(o => o.ToString()));
+            adminCommand.Data = string.Concat(args.Select(o => o.ToString()).ToArray());
             adminCommand.Send();
         }
 
