@@ -1444,7 +1444,7 @@
             "TypeName": "BasePlayer",
             "Flagged": false,
             "Signature": {
-              "Exposure": 2,
+              "Exposure": 0,
               "Name": "EligibleForWounding",
               "ReturnType": "System.Boolean",
               "Parameters": [
@@ -1503,7 +1503,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "X8rdROxzz55hhwZl/1Z8XQEGudHzkcBuzjEcJ1YJc6s=",
+            "MSILHash": "es3zDszYaSmfR8kbRmHZgHQOR0CaGPVSM8TF4r0a5Fw=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -4602,7 +4602,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "bFJgtSR5XzpEMjYKSUZVlW92jSP4G7Np2gmI0CzFt7g=",
+            "MSILHash": "I/y+aJXv7lTg5/l7ZyjxVJZp5BSrK6ia09UwWzWvOf0=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
