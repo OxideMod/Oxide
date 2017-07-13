@@ -26,41 +26,33 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
 
         internal NomadPlayerManager()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, NomadPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new NomadPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, NomadPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new NomadPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(TcpPlayer player)
         {
             var id = player.id.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
                 record.Name = player.name;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new NomadPlayer(player));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord {Id = id, Name = player.name};
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new NomadPlayer(player));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 

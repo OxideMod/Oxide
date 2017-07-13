@@ -25,44 +25,33 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
 
         internal RustLegacyPlayerManager()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, RustLegacyPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new RustLegacyPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, RustLegacyPlayer>();
 
-            // Cleanup old .data
-            Cleanup.Add(ProtoStorage.GetFileDataPath("oxide.covalence.playerdata.data"));
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new RustLegacyPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(NetUser netUser)
         {
             var id = netUser.userID.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
                 record.Name = netUser.displayName;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new RustLegacyPlayer(netUser));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord { Id = netUser.userID, Name = netUser.displayName };
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new RustLegacyPlayer(netUser));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 

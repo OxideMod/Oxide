@@ -26,41 +26,33 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
 
         internal TerrariaPlayerManager()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, TerrariaPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new TerrariaPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, TerrariaPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new TerrariaPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(Player player)
         {
             var id = player.whoAmI.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // UpdateA
                 record.Name = player.name;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new TerrariaPlayer(player));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord { Id = id, Name = player.name };
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new TerrariaPlayer(player));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 

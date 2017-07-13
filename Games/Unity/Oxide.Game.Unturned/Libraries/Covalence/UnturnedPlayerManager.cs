@@ -26,41 +26,33 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
 
         internal UnturnedPlayerManager()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, UnturnedPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new UnturnedPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, UnturnedPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new UnturnedPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(SteamPlayer steamPlayer)
         {
             var id = steamPlayer.playerID.steamID.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
                 record.Name = steamPlayer.player.name;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new UnturnedPlayer(steamPlayer));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord { Id = steamPlayer.playerID.steamID.m_SteamID, Name = steamPlayer.player.name };
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new UnturnedPlayer(steamPlayer));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 

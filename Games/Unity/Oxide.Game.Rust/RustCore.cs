@@ -171,6 +171,7 @@ namespace Oxide.Game.Rust
             permission.RegisterPermission("oxide.show", this);
             permission.RegisterPermission("oxide.usergroup", this);
 
+            // Register messages for localization
             lang.RegisterMessages(messages, this);
 
             // Setup default permission groups

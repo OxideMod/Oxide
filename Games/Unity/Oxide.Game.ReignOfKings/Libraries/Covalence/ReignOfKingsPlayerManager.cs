@@ -26,44 +26,33 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         internal ReignOfKingsPlayerManager()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, ReignOfKingsPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new ReignOfKingsPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, ReignOfKingsPlayer>();
 
-            // Cleanup old .data
-            Cleanup.Add(ProtoStorage.GetFileDataPath("oxide.covalence.playerdata.data"));
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new ReignOfKingsPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(Player player)
         {
             var id = player.Id.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
                 record.Name = player.Name;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new ReignOfKingsPlayer(player));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord { Id = player.Id, Name = player.Name };
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new ReignOfKingsPlayer(player));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
