@@ -138,7 +138,7 @@ namespace Oxide.Game.SevenDays
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
             Interface.Oxide.ServerConsole.Completion = input =>
             {
-                return string.IsNullOrEmpty(input) ? null : SdtdConsole.Instance.commands.Keys.Where(c => c.StartsWith(input.ToLower())).ToArray();
+                return string.IsNullOrEmpty(input) ? null : SdtdConsole.Instance.GetCommands().SelectMany(g => g.GetCommands()).Where(c => c.StartsWith(input.ToLower())).ToArray();
             };
         }
 

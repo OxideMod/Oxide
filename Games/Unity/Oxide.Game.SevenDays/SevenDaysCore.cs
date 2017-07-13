@@ -11,9 +11,21 @@ namespace Oxide.Game.SevenDays
     /// <summary>
     /// The core 7 Days to Die plugin
     /// </summary>
-    public class SevenDaysCore : CSPlugin
+    public partial class SevenDaysCore : CSPlugin
     {
         #region Initialization
+ 
+        /// <summary>
+        /// Initializes a new instance of the SevenDaysCore class
+        /// </summary>
+        public SevenDaysCore()
+        {
+            // Set attributes
+            Title = "7 Days to Die";
+            Author = "Oxide Team";
+            var assemblyVersion = SevenDaysExtension.AssemblyVersion;
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+        }
 
         // Libraries
         //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -34,21 +46,51 @@ namespace Oxide.Game.SevenDays
 
         private bool serverInitialized;
 
-        /// <summary>
-        /// Initializes a new instance of the SevenDaysCore class
-        /// </summary>
-        public SevenDaysCore()
+        #endregion
+
+        #region Localization
+
+        private readonly Dictionary<string, string> messages = new Dictionary<string, string>
         {
-            // Set attributes
-            Title = "7 Days to Die";
-            Author = "Oxide Team";
-            var assemblyVersion = SevenDaysExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-        }
+            {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
+            {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
+            {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
+            {"CommandUsageReload", "Usage: reload *|<pluginname>+"},
+            {"CommandUsageRevoke", "Usage: revoke <group|user> <name|id> <permission>"},
+            {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"},
+            {"CommandUsageUnload", "Usage: unload *|<pluginname>+"},
+            {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
+            {"GroupAlreadyExists", "Group '{0}' already exists"},
+            {"GroupChanged", "Group '{0}' changed"},
+            {"GroupCreated", "Group '{0}' created"},
+            {"GroupDeleted", "Group '{0}' deleted"},
+            {"GroupNotFound", "Group '{0}' doesn't exist"},
+            {"GroupParentChanged", "Group '{0}' parent changed to '{1}'"},
+            {"GroupParentNotChanged", "Group '{0}' parent was not changed"},
+            {"GroupParentNotFound", "Group parent '{0}' doesn't exist"},
+            {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
+            {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
+            {"NoPluginsFound", "No plugins are currently available"},
+            {"PermissionNotFound", "Permission '{0}' doesn't exist"},
+            {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
+            {"PlayerLanguage", "Player language set to {0}"},
+            {"PluginNotLoaded", "Plugin '{0}' not loaded."},
+            {"PluginReloaded", "Reloaded plugin {0} v{1} by {2}"},
+            {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
+            {"ShowGroups", "Groups: {0}"},
+            {"ServerLanguage", "Server language set to {0}"},
+            {"UnknownCommand", "Unknown command: {0}"},
+            {"UserAddedToGroup", "User '{0}' added to group: {1}"},
+            {"UserNotFound", "User '{0}' not found"},
+            {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
+            {"UserPermissionRevoked", "User '{0}' revoked permission '{1}'"},
+            {"UserRemovedFromGroup", "User '{0}' removed from group '{1}'"},
+            {"YouAreNotAdmin", "You are not an admin"}
+        };
 
         #endregion
 
-        #region Plugins Hooks
+        #region Core Hooks
 
         /// <summary>
         /// Called when the plugin is initializing
@@ -56,9 +98,40 @@ namespace Oxide.Game.SevenDays
         [HookMethod("Init")]
         private void Init()
         {
-            // Configure remote logging
+            // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
+
+            // Add core general commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
+
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand");
+
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand");
+
+            // Register core permissions
+            permission.RegisterPermission("oxide.plugins", this);
+            permission.RegisterPermission("oxide.load", this);
+            permission.RegisterPermission("oxide.reload", this);
+            permission.RegisterPermission("oxide.unload", this);
+            permission.RegisterPermission("oxide.grant", this);
+            permission.RegisterPermission("oxide.group", this);
+            permission.RegisterPermission("oxide.revoke", this);
+            permission.RegisterPermission("oxide.show", this);
+            permission.RegisterPermission("oxide.usergroup", this);
+
+            // Register messages for localization
+            //lang.RegisterMessages(messages, this); // TODO: Implement
 
             // Setup default permission groups
             if (permission.IsLoaded)
@@ -89,10 +162,6 @@ namespace Oxide.Game.SevenDays
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 
-        #endregion
-
-        #region Server Hooks
-
         /// <summary>
         /// Called when the server is first initialized
         /// </summary>
@@ -115,69 +184,19 @@ namespace Oxide.Game.SevenDays
 
         #endregion
 
-        #region Player Hooks
+        #region Helpers
 
         /// <summary>
-        /// Called when the player sends a message
+        /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="message"></param>
-        [HookMethod("IOnPlayerChat")]
-        private object IOnPlayerChat(ClientInfo client, string message)
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool PermissionsLoaded(IPlayer player)
         {
-            if (client == null || string.IsNullOrEmpty(message)) return null;
-
-            var chatSpecific = Interface.Call("OnPlayerChat", client, message);
-            var chatCovalence = Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayerById(client.playerId), message);
-            return chatSpecific ?? chatCovalence;
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            return false;
         }
-
-        /// <summary>
-        /// Called when the player has connected
-        /// </summary>
-        /// <param name="client"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(ClientInfo client)
-        {
-            if (permission.IsLoaded)
-            {
-                permission.UpdateNickname(client.playerId, client.playerName);
-                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
-                if (!permission.UserHasGroup(client.playerId, defaultGroups.Players)) permission.AddUserGroup(client.playerId, defaultGroups.Players);
-                // TODO: Admin group automation
-            }
-
-            // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(client);
-            Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayerById(client.playerId));
-        }
-
-        /// <summary>
-        /// Called when the player has disconnected
-        /// </summary>
-        /// <param name="client"></param>
-        [HookMethod("OnPlayerDisconnected")]
-        private void OnPlayerDisconnected(ClientInfo client)
-        {
-            // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(client.playerId), "Unknown");
-            Covalence.PlayerManager.NotifyPlayerDisconnect(client);
-        }
-
-        /// <summary>
-        /// Called when the player spawns
-        /// </summary>
-        /// <param name="client"></param>
-        [HookMethod("OnPlayerSpawn")]
-        private void OnPlayerSpawn(ClientInfo client) => Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(client.playerId));
-
-        /// <summary>
-        /// Called when the player attempts to use a door
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="entity"></param>
-        [HookMethod("ICanUseDoor")]
-        private void ICanUseDoor(string id, TileEntitySecure entity) => Interface.Call("CanUseDoor", ConsoleHelper.ParseParamIdOrName(id), entity);
 
         #endregion
     }

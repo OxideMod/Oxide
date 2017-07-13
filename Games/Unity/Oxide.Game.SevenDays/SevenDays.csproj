@@ -55,8 +55,10 @@
     <Compile Include="Libraries\Covalence\SevenDaysPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\SevenDaysServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SevenDaysCommands.cs" />
     <Compile Include="SevenDaysCore.cs" />
     <Compile Include="SevenDaysExtension.cs" />
+    <Compile Include="SevenDaysHooks.cs" />
     <Compile Include="SevenDaysPlugin.cs" />
     <Compile Include="SevenDaysPluginLoader.cs" />
   </ItemGroup>

@@ -16,60 +16,52 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         private struct PlayerRecord
         {
             public string Name;
-            public string Id;
+            public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, SevenDaysPlayer> allPlayers;
-        private readonly IDictionary<string, SevenDaysPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, SevenDaysPlayer> allPlayers;
+        private IDictionary<string, SevenDaysPlayer> connectedPlayers;
 
-        internal SevenDaysPlayerManager()
+        internal void Initialize()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, SevenDaysPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new SevenDaysPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, SevenDaysPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new SevenDaysPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(ClientInfo client)
+        internal void PlayerJoin(ulong userId, string name)
         {
-            var id = client.playerId;
+            var id = userId.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
-                record.Name = client.playerName;
+                record.Name = name;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
-                allPlayers.Add(id, new SevenDaysPlayer(client));
+                allPlayers.Add(id, new SevenDaysPlayer(userId, name));
             }
             else
             {
-                // Insert
-                record = new PlayerRecord { Id = id, Name = client.playerName };
+                record = new PlayerRecord { Id = userId, Name = name };
                 playerData.Add(id, record);
-
-                // Create Rust player
-                allPlayers.Add(id, new SevenDaysPlayer(client));
+                allPlayers.Add(id, new SevenDaysPlayer(userId, name));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(ClientInfo client)
+        internal void PlayerConnected(ClientInfo client)
         {
-            NotifyPlayerJoin(client);
+            allPlayers[client.playerId] = new SevenDaysPlayer(client);
             connectedPlayers[client.playerId] = new SevenDaysPlayer(client);
         }
 
-        internal void NotifyPlayerDisconnect(ClientInfo client) => connectedPlayers.Remove(client.playerId);
+        internal void PlayerDisconnected(ClientInfo client) => connectedPlayers.Remove(client.playerId);
 
         #region Player Finding
 
