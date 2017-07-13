@@ -27,41 +27,33 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
 
         internal MedievalEngineersPlayerManager()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, MedievalEngineersPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new MedievalEngineersPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, MedievalEngineersPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new MedievalEngineersPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(IMyPlayer player)
         {
             var id = player.SteamUserId.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
                 record.Name = player.DisplayName;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new MedievalEngineersPlayer(player));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord { Id = player.SteamUserId, Name = player.DisplayName};
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new MedievalEngineersPlayer(player));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 

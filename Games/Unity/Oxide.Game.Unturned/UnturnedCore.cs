@@ -5,14 +5,13 @@ using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Unturned.Libraries.Covalence;
-using SDG.Unturned;
 
 namespace Oxide.Game.Unturned
 {
     /// <summary>
     /// The core Unturned plugin
     /// </summary>
-    public class UnturnedCore : CSPlugin
+    public partial class UnturnedCore : CSPlugin
     {
         #region Initialization
 
@@ -60,6 +59,34 @@ namespace Oxide.Game.Unturned
             // Configure remote error logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
+
+            // Add core general commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
+
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand");
+
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand");
+
+            // Register core permissions
+            permission.RegisterPermission("oxide.plugins", this);
+            permission.RegisterPermission("oxide.load", this);
+            permission.RegisterPermission("oxide.reload", this);
+            permission.RegisterPermission("oxide.unload", this);
+            permission.RegisterPermission("oxide.grant", this);
+            permission.RegisterPermission("oxide.group", this);
+            permission.RegisterPermission("oxide.revoke", this);
+            permission.RegisterPermission("oxide.show", this);
+            permission.RegisterPermission("oxide.usergroup", this);
 
             // Setup default permission groups
             if (permission.IsLoaded)
@@ -116,29 +143,18 @@ namespace Oxide.Game.Unturned
 
         #endregion
 
-        #region Player Hooks
+        #region Helpers
 
         /// <summary>
-        /// Called when the player has connected
+        /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
-        /// <param name="steamPlayer"></param>
-        [HookMethod("OnPlayerConnected")]
-        private void OnPlayerConnected(SteamPlayer steamPlayer)
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool PermissionsLoaded(IPlayer player)
         {
-            var id = steamPlayer.playerID.steamID.ToString();
-
-            // Update player's permissions group and name
-            if (permission.IsLoaded)
-            {
-                permission.UpdateNickname(id, steamPlayer.player.name);
-                var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
-                if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
-                if (steamPlayer.isAdmin && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
-            }
-
-            Covalence.PlayerManager.NotifyPlayerConnect(steamPlayer);
-            var iplayer = Covalence.PlayerManager.FindPlayerById(id);
-            if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            return false;
         }
 
         #endregion

@@ -52,7 +52,12 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// Creates the game-specific player manager object
         /// </summary>
         /// <returns></returns>
-        public IPlayerManager CreatePlayerManager() => PlayerManager = new SevenDaysPlayerManager();
+        public IPlayerManager CreatePlayerManager()
+        {
+            PlayerManager = new SevenDaysPlayerManager();
+            PlayerManager.Initialize();
+            return PlayerManager;
+        }
 
         /// <summary>
         /// Creates the game-specific command system provider object

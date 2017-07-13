@@ -25,41 +25,33 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
 
         internal FortressCraftPlayerManager()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, FortressCraftPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new FortressCraftPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, FortressCraftPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new FortressCraftPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(Player player)
         {
             var id = player.mUserID.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
                 record.Name = player.mUserName;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new FortressCraftPlayer(player));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord { Id = player.mUserID, Name = player.mUserName };
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new FortressCraftPlayer(player));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 

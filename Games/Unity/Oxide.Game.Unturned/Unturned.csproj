@@ -55,8 +55,10 @@
     <Compile Include="Libraries\Covalence\UnturnedPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\UnturnedServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnturnedCommands.cs" />
     <Compile Include="UnturnedCore.cs" />
     <Compile Include="UnturnedExtension.cs" />
+    <Compile Include="UnturnedHooks.cs" />
     <Compile Include="UnturnedPlugin.cs" />
     <Compile Include="UnturnedPluginLoader.cs" />
   </ItemGroup>

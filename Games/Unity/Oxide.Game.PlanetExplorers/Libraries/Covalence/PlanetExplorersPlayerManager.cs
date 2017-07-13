@@ -25,41 +25,33 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 
         internal PlanetExplorersPlayerManager()
         {
-            // Load player data
             Core.Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, PlanetExplorersPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new PlanetExplorersPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, PlanetExplorersPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new PlanetExplorersPlayer(pair.Value.Id, pair.Value.Name));
         }
 
         private void NotifyPlayerJoin(Player player)
         {
             var id = player.steamId.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
                 record.Name = player.roleName;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new PlanetExplorersPlayer(player));
             }
             else
             {
-                // Insert
                 record = new PlayerRecord {Id = player.steamId, Name = player.roleName };
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new PlanetExplorersPlayer(player));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
