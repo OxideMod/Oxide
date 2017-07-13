@@ -51,6 +51,9 @@
     <Reference Include="Facepunch.System">
       <HintPath>Dependencies\Facepunch.System.dll</HintPath>
     </Reference>
+    <Reference Include="Facepunch.Unity">
+      <HintPath>Dependencies\Facepunch.Unity.dll</HintPath>
+    </Reference>
     <Reference Include="Facepunch.UnityEngine">
       <HintPath>Dependencies\Facepunch.UnityEngine.dll</HintPath>
     </Reference>
