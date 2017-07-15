@@ -313,7 +313,8 @@ namespace Oxide.Game.SpaceEngineers
 
             Interface.Call("OnPlayerConnected", player);
 
-            Covalence.PlayerManager.NotifyPlayerConnect(player);
+            Covalence.PlayerManager.PlayerJoin(player.SteamUserId, player.DisplayName); // TODO: Move to OnUserApprove hook once available
+            Covalence.PlayerManager.PlayerConnected(player);
             var iplayer = Covalence.PlayerManager.FindPlayerById(id);
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
@@ -332,7 +333,7 @@ namespace Oxide.Game.SpaceEngineers
 
             var iplayer = Covalence.PlayerManager.FindPlayerById(steamId.ToString());
             if (iplayer != null) Interface.Call("OnUserDisconnected", iplayer, "Unknown");
-            Covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            Covalence.PlayerManager.PlayerDisconnected(player);
 
             Interface.Oxide.ServerConsole.AddMessage($" *  {player}", ConsoleColor.Yellow);
         }
