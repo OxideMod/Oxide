@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Oxide.Core;
@@ -20,11 +20,11 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, SpaceEngineersPlayer> allPlayers;
-        private readonly IDictionary<string, SpaceEngineersPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, SpaceEngineersPlayer> allPlayers;
+        private IDictionary<string, SpaceEngineersPlayer> connectedPlayers;
 
-        internal SpaceEngineersPlayerManager()
+        internal void Initialize()
         {
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -34,35 +34,35 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new SpaceEngineersPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(IMyPlayer player)
+        internal void PlayerJoin(ulong userId, string name)
         {
-            var id = player.SteamUserId.ToString();
+            var id = userId.ToString();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = player.DisplayName;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
-                allPlayers.Add(id, new SpaceEngineersPlayer(player));
+                allPlayers.Add(id, new SpaceEngineersPlayer(userId, name));
             }
             else
             {
-                record = new PlayerRecord { Id = player.SteamUserId, Name = player.DisplayName };
+                record = new PlayerRecord { Id = userId, Name = name };
                 playerData.Add(id, record);
-                allPlayers.Add(id, new SpaceEngineersPlayer(player));
+                allPlayers.Add(id, new SpaceEngineersPlayer(userId, name));
             }
 
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(IMyPlayer player)
+        internal void PlayerConnected(IMyPlayer player)
         {
-            NotifyPlayerJoin(player);
+            allPlayers[player.SteamUserId.ToString()] = new SpaceEngineersPlayer(player);
             connectedPlayers[player.SteamUserId.ToString()] = new SpaceEngineersPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(IMyPlayer player) => connectedPlayers.Remove(player.SteamUserId.ToString());
+        internal void PlayerDisconnected(IMyPlayer player) => connectedPlayers.Remove(player.SteamUserId.ToString());
 
         #region Player Finding
 
