@@ -20,11 +20,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, UnturnedPlayer> allPlayers;
-        private readonly IDictionary<string, UnturnedPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, UnturnedPlayer> allPlayers;
+        private IDictionary<string, UnturnedPlayer> connectedPlayers;
 
-        internal UnturnedPlayerManager()
+        internal void Initialize()
         {
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -34,35 +34,35 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new UnturnedPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(SteamPlayer steamPlayer)
+        internal void PlayerJoin(ulong userId, string name)
         {
-            var id = steamPlayer.playerID.steamID.ToString();
+            var id = userId.ToString();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = steamPlayer.player.name;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
-                allPlayers.Add(id, new UnturnedPlayer(steamPlayer));
+                allPlayers.Add(id, new UnturnedPlayer(userId, name));
             }
             else
             {
-                record = new PlayerRecord { Id = steamPlayer.playerID.steamID.m_SteamID, Name = steamPlayer.player.name };
+                record = new PlayerRecord { Id = userId, Name = name };
                 playerData.Add(id, record);
-                allPlayers.Add(id, new UnturnedPlayer(steamPlayer));
+                allPlayers.Add(id, new UnturnedPlayer(userId, name));
             }
 
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(SteamPlayer steamPlayer)
+        internal void PlayerConnected(SteamPlayer steamPlayer)
         {
             var id = steamPlayer.playerID.steamID;
             connectedPlayers[id.ToString()] = new UnturnedPlayer(steamPlayer);
         }
 
-        internal void NotifyPlayerDisconnect(SteamPlayer steamPlayer) => connectedPlayers.Remove(steamPlayer.playerID.steamID.ToString());
+        internal void PlayerDisconnected(SteamPlayer steamPlayer) => connectedPlayers.Remove(steamPlayer.playerID.steamID.ToString());
 
         #region Player Finding
 

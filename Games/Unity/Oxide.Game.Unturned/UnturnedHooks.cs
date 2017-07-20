@@ -29,7 +29,8 @@ namespace Oxide.Game.Unturned
                 if (steamPlayer.isAdmin && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
-            Covalence.PlayerManager.NotifyPlayerConnect(steamPlayer);
+            Covalence.PlayerManager.PlayerJoin(steamPlayer.playerID.steamID.m_SteamID, steamPlayer.player.name); // TODO: Move to OnUserApprove hook once available
+            Covalence.PlayerManager.PlayerConnected(steamPlayer);
             var iplayer = Covalence.PlayerManager.FindPlayerById(id);
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
