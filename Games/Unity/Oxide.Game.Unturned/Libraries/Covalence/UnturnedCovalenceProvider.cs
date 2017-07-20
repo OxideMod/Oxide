@@ -52,7 +52,12 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Creates the game-specific player manager object
         /// </summary>
         /// <returns></returns>
-        public IPlayerManager CreatePlayerManager() => PlayerManager = new UnturnedPlayerManager();
+        public IPlayerManager CreatePlayerManager()
+        {
+            PlayerManager = new UnturnedPlayerManager();
+            PlayerManager.Initialize();
+            return PlayerManager;
+        }
 
         /// <summary>
         /// Creates the game-specific command system provider object
