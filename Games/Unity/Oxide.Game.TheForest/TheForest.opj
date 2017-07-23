@@ -832,7 +832,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "cit6vwk9QjOodcFU9juzQRTbP0MOWFmQJyC8GkF6ER4=",
+            "MSILHash": "Wvf1R22VZ4ftQM+CcHc/xruC9j+OvLjrkOYQpdW/yTw=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -910,7 +910,7 @@
                 "DamageTree"
               ]
             },
-            "MSILHash": "OzU1kA6QBW1TvwHWlUk0CROxm/LId1C77rg8QWyPRgY=",
+            "MSILHash": "uFyhsOpq7wTo9DeC6d0QN4N+A9imgoSj+GmXiTQ1zuA=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1653,7 +1653,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "EGJEPGcHOQUocwvvAJaPTu5IYkNjafj6EVII1UEo3Cg=",
+            "MSILHash": "DAd2rDLZTJku5fG1wWO3ZhkDik+LNWYsBd9pPTNNPfI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1708,7 +1708,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "BDotfpQwOyf0dKPbNp2862AyyY9xm5/3psXJGZeQjyI=",
+            "MSILHash": "Fbmb/4iv2nhzxHaDMu4bXyWD/2k/vY9kjTQNCiRnNaA=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }

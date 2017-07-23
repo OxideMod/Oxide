@@ -52,7 +52,12 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// Creates the game-specific player manager object
         /// </summary>
         /// <returns></returns>
-        public IPlayerManager CreatePlayerManager() => PlayerManager = new MedievalEngineersPlayerManager();
+        public IPlayerManager CreatePlayerManager()
+        {
+            PlayerManager = new MedievalEngineersPlayerManager();
+            PlayerManager.Initialize();
+            return PlayerManager;
+        }
 
         /// <summary>
         /// Creates the game-specific command system provider object

@@ -21,11 +21,11 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, MedievalEngineersPlayer> allPlayers;
-        private readonly IDictionary<string, MedievalEngineersPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, MedievalEngineersPlayer> allPlayers;
+        private IDictionary<string, MedievalEngineersPlayer> connectedPlayers;
 
-        internal MedievalEngineersPlayerManager()
+        internal void Initialize()
         {
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -35,7 +35,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new MedievalEngineersPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(IMyPlayer player)
+        internal void PlayerJoin(IMyPlayer player)
         {
             var id = player.SteamUserId.ToString();
 
@@ -57,13 +57,13 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(MyPlayer player)
+        internal void PlayerConnected(IMyPlayer player)
         {
-            NotifyPlayerJoin(player);
-            connectedPlayers[player.Id.SteamId.ToString()] = new MedievalEngineersPlayer(player);
+            allPlayers[player.SteamUserId.ToString()] = new MedievalEngineersPlayer(player);
+            connectedPlayers[player.SteamUserId.ToString()] = new MedievalEngineersPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(IMyPlayer player) => connectedPlayers.Remove(player.SteamUserId.ToString());
+        internal void PlayerDisconnected(IMyPlayer player) => connectedPlayers.Remove(player.SteamUserId.ToString());
 
         #region Player Finding
 
