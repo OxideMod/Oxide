@@ -20,11 +20,11 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             public string Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, NomadPlayer> allPlayers;
-        private readonly IDictionary<string, NomadPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, NomadPlayer> allPlayers;
+        private IDictionary<string, NomadPlayer> connectedPlayers;
 
-        internal NomadPlayerManager()
+        internal void Initialize()
         {
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -34,7 +34,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new NomadPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(TcpPlayer player)
+        internal void PlayerJoin(TcpPlayer player)
         {
             var id = player.id.ToString();
 
@@ -56,13 +56,13 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(TcpPlayer player)
+        internal void PlayerConnected(TcpPlayer player)
         {
-            NotifyPlayerJoin(player);
+            allPlayers[player.id.ToString()] = new NomadPlayer(player);
             connectedPlayers[player.id.ToString()] = new NomadPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(TcpPlayer player) => connectedPlayers.Remove(player.id.ToString());
+        internal void PlayerDisconnected(TcpPlayer player) => connectedPlayers.Remove(player.id.ToString());
 
         #region Player Finding
 
