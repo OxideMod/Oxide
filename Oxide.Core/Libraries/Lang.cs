@@ -160,8 +160,7 @@ namespace Oxide.Core.Libraries
             string currentLang;
             if (langData.UserData.TryGetValue(userId, out currentLang) && lang.Equals(currentLang)) return;
 
-            if (lang.Equals(langData.Lang)) langData.UserData.Remove(userId);
-            else langData.UserData[userId] = lang;
+            langData.UserData[userId] = lang;
             SaveData();
         }
 
