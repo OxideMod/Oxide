@@ -72,7 +72,7 @@
       <HintPath>Dependencies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.8\lib\net35\Newtonsoft.Json.dll</HintPath>
+      <HintPath>Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
@@ -139,7 +139,6 @@
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Newtonsoft.Json.dll" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
