@@ -204,6 +204,11 @@ namespace Oxide.Core.Libraries
         {
             if (string.IsNullOrEmpty(plugin)) return null;
 
+            foreach (char invalidChar in Path.GetInvalidFileNameChars())
+            {
+                lang = lang.Replace(invalidChar, '_');
+            }
+
             var file = $"{lang}{Path.DirectorySeparatorChar}{plugin}.json";
             var filename = Path.Combine(Interface.Oxide.LangDirectory, file);
             return File.Exists(filename) ? JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(filename)) : null;
