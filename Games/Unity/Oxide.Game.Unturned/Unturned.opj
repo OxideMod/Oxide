@@ -44,7 +44,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "FBdB5YTWhsPqE9uqydfOZtbs+jcSrMxMY+YfmN5ZqO0=",
+            "MSILHash": "4DdLOXITmXgpf2715sjX1zSddAcpxHuVrpkd5R+3MKA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -68,7 +68,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "FBdB5YTWhsPqE9uqydfOZtbs+jcSrMxMY+YfmN5ZqO0=",
+            "MSILHash": "4DdLOXITmXgpf2715sjX1zSddAcpxHuVrpkd5R+3MKA=",
             "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
@@ -153,7 +153,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 131,
+            "InjectionIndex": 136,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -174,7 +174,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "pyqn4hXuISQNY2nBUB2m5f2NWspXgM3iV/vHsLz+vNs=",
+            "MSILHash": "sCnpjzIVeq3OlrUMLTMXBlUJqR3DsdeMet1FoQmFj/A=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -182,7 +182,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 225,
+            "InjectionIndex": 230,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -218,7 +218,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "pyqn4hXuISQNY2nBUB2m5f2NWspXgM3iV/vHsLz+vNs=",
+            "MSILHash": "sCnpjzIVeq3OlrUMLTMXBlUJqR3DsdeMet1FoQmFj/A=",
             "BaseHookName": "AddGameTags [patch] [part 1]",
             "HookCategory": "_Patches"
           }
