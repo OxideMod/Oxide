@@ -56,7 +56,7 @@
         {
           "Type": "InitOxide",
           "Hook": {
-            "InjectionIndex": 24,
+            "InjectionIndex": 25,
             "HookTypeName": "Initialize Oxide",
             "Name": "InitOxide [internal]",
             "HookName": "InitOxide",
@@ -69,7 +69,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "nw3EJ7ZAnzLu09ycwwpomh+opPLDJ3jHxwZUC3xDzNk=",
+            "MSILHash": "b/bYKRYie+B8JfcNMNbNe4Nt9eju66VsXTl58QFe61Q=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -704,7 +704,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 109,
+            "InjectionIndex": 114,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0, l7",
@@ -726,7 +726,7 @@
                 "AttackEntity"
               ]
             },
-            "MSILHash": "QPttIfb56eTluAjDjia5QHu7oh1DXgo2pGQNCbJRpks=",
+            "MSILHash": "WGl+2fOtrUd3W+mT7ZrDtm+dGzAlL11CKUgxeMAubtM=",
             "BaseHookName": null,
             "HookCategory": "Resource"
           }
@@ -831,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "YWJthriGuuXTv2v0/OLYDedLn6DGiCSFLquIPOV6U6I=",
+            "MSILHash": "DK/rTiqlat+nW3xMHHwPdCQT/HVuNVKToi6//lPW9JE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2375,7 +2375,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "AdpLVipEPjfpJAnoWZ7I91m71XKJojDt5FnMw2XqNgo=",
+            "MSILHash": "WjLl978v6tV4sF9nrXqdXdDR7ALUGQHOt9bvft7bW8w=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2779,7 +2779,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "qI7p3Etlod5Tc4vPsQDtMZUyxLVExPVlzO2Q1UDYXO0=",
+            "MSILHash": "+O0VGRFNN9E4oVIKHcPSydCUh2h5ocz1w4aDI3r0CfU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
