@@ -68,12 +68,6 @@ namespace Oxide.Game.Rust.Libraries
 
             public void HandleCommand(ConsoleSystem.Arg arg)
             {
-                if (arg.Connection != null && arg.Player())
-                {
-                    var player = arg.Player();
-                    if (!Interface.Oxide.Config.Options.Modded && !player.IsAdmin && !permission.UserHasGroup(player.UserIDString, "admin")) return;
-                }
-
                 Callback.Plugin?.TrackStart();
                 Callback.Call(arg);
                 Callback.Plugin?.TrackEnd();
