@@ -173,13 +173,12 @@ namespace Oxide.Game.Rust
         private object IOnPlayerRevive(MedicalTool tool, BasePlayer target) => Interface.Call("OnPlayerRevive", tool.GetOwnerPlayer(), target);
 
         /// <summary>
-        /// Called when a server group is set for an ID (i.e. Banned)
+        /// Called when a server group is set for an ID (i.e. banned)
         /// </summary>
         /// <param name="steamId"></param>
         /// <param name="group"></param>
         /// <param name="name"></param>
         /// <param name="reason"></param>
-        /// <returns></returns>
         [HookMethod("IOnServerUsersSet")]
         private void IOnServerUsersSet(ulong steamId, ServerUsers.UserGroup group, string name, string reason)
         {
@@ -192,6 +191,25 @@ namespace Oxide.Game.Rust
             {
                 Interface.Oxide.CallHook("OnPlayerBanned", name, steamId, iplayer?.Address ?? "0", reason);
                 Interface.Oxide.CallHook("OnUserBanned", name, id, iplayer?.Address ?? "0", reason);
+            }
+        }
+
+        /// <summary>
+        /// Called when a server group is removed for an ID (i.e. unbanned)
+        /// </summary>
+        /// <param name="steamId"></param>
+        [HookMethod("IOnServerUsersRemove")]
+        private void IOnServerUsersRemove(ulong steamId)
+        {
+            if (!serverInitialized) return;
+
+            var id = steamId.ToString();
+            var iplayer = Covalence.PlayerManager.FindPlayerById(id);
+
+            if (ServerUsers.Is(steamId, ServerUsers.UserGroup.Banned))
+            {
+                Interface.Oxide.CallHook("OnPlayerUnbanned", iplayer?.Name ?? "Unnamed", steamId, iplayer?.Address ?? "0");
+                Interface.Oxide.CallHook("OnUserUnbanned", iplayer?.Name ?? "Unnamed", id, iplayer?.Address ?? "0");
             }
         }
 
@@ -240,7 +258,6 @@ namespace Oxide.Game.Rust
         /// Called when a player has been banned by EAC
         /// </summary>
         /// <param name="connection"></param>
-        /// <returns></returns>
         [HookMethod("IOnPlayerBanned")]
         private void IOnPlayerBanned(Connection connection)
         {
@@ -290,6 +307,18 @@ namespace Oxide.Game.Rust
             Covalence.PlayerManager.PlayerConnected(player);
             var iplayer = Covalence.PlayerManager.FindPlayerById(player.UserIDString);
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
+        }
+
+        /// <summary>
+        /// Called when a player has been kicked
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="reason"></param>
+        [HookMethod("OnPlayerKicked")]
+        private void OnPlayerKicked(BasePlayer player, string reason)
+        {
+            var iplayer = Covalence.PlayerManager.FindPlayerById(player.UserIDString);
+            if (iplayer != null) Interface.Oxide.CallHook("OnUserKicked", iplayer, reason);
         }
 
         /// <summary>
