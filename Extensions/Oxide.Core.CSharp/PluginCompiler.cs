@@ -267,7 +267,7 @@ namespace Oxide.Plugins
                 Interface.Oxide.NextTick(() =>
                 {
                     OnCompilerFailed($"compiler v{CompilerVersion} disconnected");
-                    DependencyTrace();
+                    DependencyTrace(); // TODO: Make this actually work
                     Shutdown();
                 });
                 return;
@@ -419,7 +419,7 @@ namespace Oxide.Plugins
                 OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpectedly");
                 if (Environment.OSVersion.Platform == PlatformID.Unix) Interface.Oxide.LogWarning("User running server may not have access to all service files");
                 else Interface.Oxide.LogWarning("Compiler may have been closed by interference from security software");
-                DependencyTrace();
+                DependencyTrace(); // TODO: Make this actually work
                 Shutdown();
             });
         }
@@ -445,7 +445,10 @@ namespace Oxide.Plugins
                 });
                 foreach (var filePath in filePaths) File.Delete(filePath);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                // Ignored
+            }
         }
 
         private static string EscapePath(string path)
@@ -475,6 +478,5 @@ namespace Oxide.Plugins
                 return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
             }
         }
-
     }
 }

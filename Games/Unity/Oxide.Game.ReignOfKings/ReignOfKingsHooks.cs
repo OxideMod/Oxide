@@ -143,7 +143,7 @@ namespace Oxide.Game.ReignOfKings
             Interface.Call("OnPlayerConnected", player);
 
             // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(player);
+            Covalence.PlayerManager.PlayerConnected(player);
             Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayerById(player.Id.ToString()));
         }
 
@@ -162,7 +162,7 @@ namespace Oxide.Game.ReignOfKings
 
             // Let covalence know
             Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(player.Id.ToString()), "Unknown"); // TODO: Localization
-            Covalence.PlayerManager.NotifyPlayerDisconnect(player);
+            Covalence.PlayerManager.PlayerDisconnected(player);
         }
 
         /// <summary>

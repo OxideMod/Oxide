@@ -19,11 +19,11 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, PlanetExplorersPlayer> allPlayers;
-        private readonly IDictionary<string, PlanetExplorersPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, PlanetExplorersPlayer> allPlayers;
+        private IDictionary<string, PlanetExplorersPlayer> connectedPlayers;
 
-        internal PlanetExplorersPlayerManager()
+        internal void Initialize()
         {
             Core.Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -33,7 +33,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new PlanetExplorersPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(Player player)
+        internal void PlayerJoin(Player player)
         {
             var id = player.steamId.ToString();
 
@@ -55,9 +55,13 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(Player player) => connectedPlayers[player.steamId.ToString()] = new PlanetExplorersPlayer(player);
+        internal void PlayerConnected(Player player)
+        {
+            allPlayers[player.steamId.ToString()] = new PlanetExplorersPlayer(player);
+            connectedPlayers[player.steamId.ToString()] = new PlanetExplorersPlayer(player);
+        }
 
-        internal void NotifyPlayerDisconnect(Player player) => connectedPlayers.Remove(player.steamId.ToString());
+        internal void PlayerDisconnected(Player player) => connectedPlayers.Remove(player.steamId.ToString());
 
         #region Player Finding
 

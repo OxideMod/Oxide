@@ -20,11 +20,11 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             public string Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, TerrariaPlayer> allPlayers;
-        private readonly IDictionary<string, TerrariaPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, TerrariaPlayer> allPlayers;
+        private IDictionary<string, TerrariaPlayer> connectedPlayers;
 
-        internal TerrariaPlayerManager()
+        internal void Initialize()
         {
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -34,7 +34,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new TerrariaPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(Player player)
+        internal void PlayerJoin(Player player)
         {
             var id = player.whoAmI.ToString();
 
@@ -56,9 +56,13 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(Player player) => connectedPlayers[player.whoAmI.ToString()] = new TerrariaPlayer(player);
+        internal void PlayerConnected(Player player)
+        {
+            allPlayers[player.whoAmI.ToString()] = new TerrariaPlayer(player);
+            connectedPlayers[player.whoAmI.ToString()] = new TerrariaPlayer(player);
+        }
 
-        internal void NotifyPlayerDisconnect(Player player) => connectedPlayers.Remove(player.whoAmI.ToString());
+        internal void PlayerDisconnected(Player player) => connectedPlayers.Remove(player.whoAmI.ToString());
 
         #region Player Finding
 
