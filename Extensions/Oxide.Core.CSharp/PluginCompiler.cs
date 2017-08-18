@@ -141,7 +141,6 @@ namespace Oxide.Plugins
                     if (result == -1 || result == 0) break;
                     fs.Write(buffer, 0, result);
                 }
-
                 fs.Flush();
                 fs.Close();
                 stream.Close();
@@ -165,11 +164,9 @@ namespace Oxide.Plugins
                 var response = (HttpWebResponse)request.GetResponse();
                 var statusCode = (int)response.StatusCode;
                 if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay; code {statusCode}");
-
-                var etag = response.Headers[HttpResponseHeader.ETag];
-                var remoteChecksum = etag.Substring(0, etag.LastIndexOf(':')).Trim('"').ToLower();
-                var localChecksum = File.Exists(filePath) ? GetChecksum(filePath, Algorithms.MD5) : "0";
-                if (remoteChecksum != localChecksum) DownloadCompiler(filename, response);
+                var remoteHash = response.Headers[HttpResponseHeader.ETag];
+                var localHash = File.Exists(filePath) ? GetHash(filePath, Algorithms.SHA256) : "0";
+                if (remoteHash != localHash) DownloadCompiler(filename, response);
             }
             catch (Exception ex)
             {
@@ -470,7 +467,7 @@ namespace Oxide.Plugins
             public static readonly HashAlgorithm RIPEMD160 = new RIPEMD160Managed();
         }
 
-        private static string GetChecksum(string filePath, HashAlgorithm algorithm)
+        private static string GetHash(string filePath, HashAlgorithm algorithm)
         {
             using (var stream = new BufferedStream(File.OpenRead(filePath), 100000))
             {
