@@ -52,7 +52,12 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// Creates the game-specific player manager object
         /// </summary>
         /// <returns></returns>
-        public IPlayerManager CreatePlayerManager() => PlayerManager = new PlanetExplorersPlayerManager();
+        public IPlayerManager CreatePlayerManager()
+        {
+            PlayerManager = new PlanetExplorersPlayerManager();
+            PlayerManager.Initialize();
+            return PlayerManager;
+        }
 
         /// <summary>
         /// Creates the game-specific command system provider object

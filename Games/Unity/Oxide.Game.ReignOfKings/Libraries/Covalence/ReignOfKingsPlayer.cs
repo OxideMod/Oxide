@@ -26,10 +26,8 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         internal ReignOfKingsPlayer(ulong id, string name)
         {
-            // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            // Store user details
             Name = name;
             steamId = id;
             Id = id.ToString();
@@ -37,7 +35,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 
         internal ReignOfKingsPlayer(Player player) : this(player.Id, player.Name)
         {
-            // Store user object
             this.player = player;
         }
 

@@ -20,11 +20,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, ReignOfKingsPlayer> allPlayers;
-        private readonly IDictionary<string, ReignOfKingsPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, ReignOfKingsPlayer> allPlayers;
+        private IDictionary<string, ReignOfKingsPlayer> connectedPlayers;
 
-        internal ReignOfKingsPlayerManager()
+        internal void Initialize()
         {
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -34,35 +34,35 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new ReignOfKingsPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(Player player)
+        internal void PlayerJoin(ulong userId, string name)
         {
-            var id = player.Id.ToString();
+            var id = userId.ToString();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = player.Name;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
-                allPlayers.Add(id, new ReignOfKingsPlayer(player));
+                allPlayers.Add(id, new ReignOfKingsPlayer(userId, name));
             }
             else
             {
-                record = new PlayerRecord { Id = player.Id, Name = player.Name };
+                record = new PlayerRecord { Id = userId, Name = name };
                 playerData.Add(id, record);
-                allPlayers.Add(id, new ReignOfKingsPlayer(player));
+                allPlayers.Add(id, new ReignOfKingsPlayer(userId, name));
             }
 
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(Player player)
+        internal void PlayerConnected(Player player)
         {
-            NotifyPlayerJoin(player);
+            allPlayers[player.Id.ToString()] = new ReignOfKingsPlayer(player);
             connectedPlayers[player.Id.ToString()] = new ReignOfKingsPlayer(player);
         }
 
-        internal void NotifyPlayerDisconnect(Player player) => connectedPlayers.Remove(player.Id.ToString());
+        internal void PlayerDisconnected(Player player) => connectedPlayers.Remove(player.Id.ToString());
 
         #region Player Finding
 

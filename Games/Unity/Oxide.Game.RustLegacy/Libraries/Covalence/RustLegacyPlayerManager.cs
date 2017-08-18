@@ -19,11 +19,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, RustLegacyPlayer> allPlayers;
-        private readonly IDictionary<string, RustLegacyPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, RustLegacyPlayer> allPlayers;
+        private IDictionary<string, RustLegacyPlayer> connectedPlayers;
 
-        internal RustLegacyPlayerManager()
+        internal void Initialize()
         {
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
@@ -33,7 +33,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new RustLegacyPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(NetUser netUser)
+        internal void PlayerJoin(NetUser netUser)
         {
             var id = netUser.userID.ToString();
 
@@ -55,13 +55,13 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(NetUser netUser)
+        internal void PlayerConnected(NetUser netUser)
         {
-            NotifyPlayerJoin(netUser);
+            allPlayers[netUser.userID.ToString()] = new RustLegacyPlayer(netUser);
             connectedPlayers[netUser.userID.ToString()] = new RustLegacyPlayer(netUser);
         }
 
-        internal void NotifyPlayerDisconnect(NetUser netUser) => connectedPlayers.Remove(netUser.userID.ToString());
+        internal void PlayerDisconnected(NetUser netUser) => connectedPlayers.Remove(netUser.userID.ToString());
 
         #region Player Finding
 
