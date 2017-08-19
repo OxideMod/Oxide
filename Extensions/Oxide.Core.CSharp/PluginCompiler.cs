@@ -18,10 +18,10 @@ namespace Oxide.Plugins
     public class PluginCompiler
     {
         public static bool AutoShutdown = true;
+        public static bool TraceRan;
         public static string FileName = "basic.exe";
         public static string BinaryPath;
         public static string CompilerVersion;
-        public static bool TraceRan;
 
         public static void CheckCompilerBinary()
         {
@@ -41,37 +41,13 @@ namespace Oxide.Plugins
                 case PlatformID.Win32Windows:
                     FileName = "CSharpCompiler.exe";
                     binaryPath = Path.Combine(rootDirectory, FileName);
-                    if (!File.Exists(binaryPath))
-                    {
-                        try
-                        {
-                            UpdateCheck(); // TODO: Only check once on server startup
-                        }
-                        catch (Exception ex)
-                        {
-                            Interface.Oxide.LogError($"Cannot compile C# (.cs) plugins; unable to find {FileName}");
-                            Interface.Oxide.LogError(ex.Message);
-                            return;
-                        }
-                    }
+                    UpdateCheck(); // TODO: Only check once on server startup
                     break;
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
                     FileName = $"CSharpCompiler.{(IntPtr.Size != 8 ? "x86" : "x86_x64")}";
                     binaryPath = Path.Combine(rootDirectory, FileName);
-                    if (!File.Exists(binaryPath))
-                    {
-                        try
-                        {
-                            UpdateCheck(); // TODO: Only check once on server startup
-                        }
-                        catch (Exception ex)
-                        {
-                            Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; unable to find {FileName}");
-                            Interface.Oxide.LogWarning(ex.Message);
-                            return;
-                        }
-                    }
+                    UpdateCheck(); // TODO: Only check once on server startup
                     try
                     {
                         if (Syscall.access(binaryPath, AccessModes.X_OK) == -1)
