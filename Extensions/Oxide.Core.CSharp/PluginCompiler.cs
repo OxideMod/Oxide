@@ -18,15 +18,16 @@ namespace Oxide.Plugins
     public class PluginCompiler
     {
         public static bool AutoShutdown = true;
+        public static string FileName = "basic.exe";
         public static string BinaryPath;
         public static string CompilerVersion;
+        public static bool TraceRan;
 
         public static void CheckCompilerBinary()
         {
             BinaryPath = null;
-            var filename = "basic.exe";
             var rootDirectory = Interface.Oxide.RootDirectory;
-            var binaryPath = Path.Combine(rootDirectory, filename);
+            var binaryPath = Path.Combine(rootDirectory, FileName);
             if (File.Exists(binaryPath))
             {
                 BinaryPath = binaryPath;
@@ -38,17 +39,17 @@ namespace Oxide.Plugins
                 case PlatformID.Win32NT:
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
-                    filename = "CSharpCompiler.exe";
-                    binaryPath = Path.Combine(rootDirectory, filename);
+                    FileName = "CSharpCompiler.exe";
+                    binaryPath = Path.Combine(rootDirectory, FileName);
                     if (!File.Exists(binaryPath))
                     {
                         try
                         {
-                            UpdateCheck(filename); // TODO: Only check once on server startup
+                            UpdateCheck(); // TODO: Only check once on server startup
                         }
                         catch (Exception ex)
                         {
-                            Interface.Oxide.LogError($"Cannot compile C# (.cs) plugins; unable to find {filename}");
+                            Interface.Oxide.LogError($"Cannot compile C# (.cs) plugins; unable to find {FileName}");
                             Interface.Oxide.LogError(ex.Message);
                             return;
                         }
@@ -56,17 +57,17 @@ namespace Oxide.Plugins
                     break;
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    filename = $"CSharpCompiler.{(IntPtr.Size != 8 ? "x86" : "x86_x64")}";
-                    binaryPath = Path.Combine(rootDirectory, filename);
+                    FileName = $"CSharpCompiler.{(IntPtr.Size != 8 ? "x86" : "x86_x64")}";
+                    binaryPath = Path.Combine(rootDirectory, FileName);
                     if (!File.Exists(binaryPath))
                     {
                         try
                         {
-                            UpdateCheck(filename); // TODO: Only check once on server startup
+                            UpdateCheck(); // TODO: Only check once on server startup
                         }
                         catch (Exception ex)
                         {
-                            Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; unable to find {filename}");
+                            Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; unable to find {FileName}");
                             Interface.Oxide.LogWarning(ex.Message);
                             return;
                         }
@@ -81,7 +82,7 @@ namespace Oxide.Plugins
                             }
                             catch (Exception ex)
                             {
-                                Interface.Oxide.LogError($"Could not set {filename} as executable; please set manually");
+                                Interface.Oxide.LogError($"Could not set {FileName} as executable; please set manually");
                                 Interface.Oxide.LogError(ex.Message);
                             }
                             return;
@@ -89,7 +90,7 @@ namespace Oxide.Plugins
                     }
                     catch (Exception ex)
                     {
-                        Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; {filename} is not executable");
+                        Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; {FileName} is not executable");
                         Interface.Oxide.LogError(ex.Message);
                         return;
                     }
@@ -98,40 +99,51 @@ namespace Oxide.Plugins
             BinaryPath = binaryPath;
         }
 
-        private static void DependencyTrace()
+        private void DependencyTrace()
         {
-            if (Environment.OSVersion.Platform != PlatformID.Unix) return;
+            if (TraceRan || Environment.OSVersion.Platform != PlatformID.Unix) return;
 
             try
             {
-                var startInfo = new ProcessStartInfo("LD_TRACE_LOADED_OBJECTS=1", BinaryPath)
+                Interface.Oxide.LogWarning($"Running dependency trace for {FileName}");
+                var trace = new Process
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
+                    StartInfo =
+                    {
+                        WorkingDirectory = Interface.Oxide.RootDirectory,
+                        FileName = "/bin/bash",
+                        Arguments = $"-c \"LD_TRACE_LOADED_OBJECTS=1 {BinaryPath}\"",
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true
+                    },
+                    EnableRaisingEvents = true
                 };
-                var process = Process.Start(startInfo);
-                process.OutputDataReceived += (s, e) => Interface.Oxide.LogError(e.Data);
-                process.BeginOutputReadLine();
-                process.Start();
-                process.WaitForExit();
-                //Thread.Sleep(5000);
+                trace.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
+                trace.ErrorDataReceived += (s, e) => Interface.Oxide.LogError(e.Data.TrimStart());
+                trace.OutputDataReceived += (s, e) => Interface.Oxide.LogError(e.Data.TrimStart());
+                trace.Start();
+                trace.BeginOutputReadLine();
+                trace.BeginErrorReadLine();
+                trace.WaitForExit();
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogError(ex.Message);
+                //Interface.Oxide.LogError($"Couldn't run dependency trace!"); // TODO: Fix this triggering sometimes
+                //Interface.Oxide.LogError(ex.Message);
             }
+            TraceRan = true;
         }
  
-        private static void DownloadCompiler(string filename, WebResponse response)
+        private static void DownloadCompiler(WebResponse response)
         {
             try
             {
-                Interface.Oxide.LogInfo($"Downloading {filename} for .cs (C#) plugin compilation");
+                Interface.Oxide.LogInfo($"Downloading {FileName} for .cs (C#) plugin compilation");
 
                 var stream = response.GetResponseStream();
-                var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+                var fs = new FileStream(FileName, FileMode.Create, FileAccess.Write, FileShare.None);
                 var bufferSize = 10000;
                 var buffer = new byte[bufferSize];
 
@@ -146,31 +158,31 @@ namespace Oxide.Plugins
                 stream.Close();
                 response.Close();
 
-                Interface.Oxide.LogInfo($"Download of {filename} for completed successfully");
+                Interface.Oxide.LogInfo($"Download of {FileName} completed successfully");
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogError($"Couldn't download {filename}! Please download manually from: https://dl.bintray.com/oxidemod/builds/{filename}");
+                Interface.Oxide.LogError($"Couldn't download {FileName}! Please download manually from: https://dl.bintray.com/oxidemod/builds/{FileName}");
                 Interface.Oxide.LogError(ex.Message);
             }
         }
 
-        private static void UpdateCheck(string filename)
+        private static void UpdateCheck()
         {
             try
             {
-                var filePath = Path.Combine(Interface.Oxide.RootDirectory, filename);
-                var request = (HttpWebRequest)WebRequest.Create($"https://bintray.com/oxidemod/builds/download_file?file_path={filename}");
+                var filePath = Path.Combine(Interface.Oxide.RootDirectory, FileName);
+                var request = (HttpWebRequest)WebRequest.Create($"https://bintray.com/oxidemod/builds/download_file?file_path={FileName}");
                 var response = (HttpWebResponse)request.GetResponse();
                 var statusCode = (int)response.StatusCode;
-                if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay; code {statusCode}");
+                if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay (code {statusCode})");
                 var remoteHash = response.Headers[HttpResponseHeader.ETag];
                 var localHash = File.Exists(filePath) ? GetHash(filePath, Algorithms.SHA256) : "0";
-                if (remoteHash != localHash) DownloadCompiler(filename, response);
+                if (remoteHash != localHash) DownloadCompiler(response);
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogError($"Couldn't check for update to {filename}!");
+                Interface.Oxide.LogError($"Couldn't check for update to {FileName}!");
                 Interface.Oxide.LogError(ex.Message);
             }
         }
@@ -267,7 +279,7 @@ namespace Oxide.Plugins
                 Interface.Oxide.NextTick(() =>
                 {
                     OnCompilerFailed($"compiler v{CompilerVersion} disconnected");
-                    DependencyTrace(); // TODO: Make this actually work
+                    DependencyTrace();
                     Shutdown();
                 });
                 return;
@@ -417,9 +429,10 @@ namespace Oxide.Plugins
             Interface.Oxide.NextTick(() =>
             {
                 OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpectedly");
-                if (Environment.OSVersion.Platform == PlatformID.Unix) Interface.Oxide.LogWarning("User running server may not have access to all service files");
-                else Interface.Oxide.LogWarning("Compiler may have been closed by interference from security software");
-                DependencyTrace(); // TODO: Make this actually work
+                if (Environment.OSVersion.Platform == PlatformID.Unix)
+                    Interface.Oxide.LogWarning("User running server may not have access to all service files");
+                else
+                    Interface.Oxide.LogWarning("Compiler may have been closed by interference from security software");
                 Shutdown();
             });
         }
