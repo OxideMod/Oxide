@@ -120,6 +120,7 @@ namespace Oxide.Plugins
                     },
                     EnableRaisingEvents = true
                 };
+                trace.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";
                 trace.ErrorDataReceived += (s, e) => Interface.Oxide.LogError(e.Data.TrimStart());
                 trace.OutputDataReceived += (s, e) => Interface.Oxide.LogError(e.Data.TrimStart());
                 trace.Start();
