@@ -96,9 +96,6 @@ namespace Oxide.Core.Lua
             // Register the loader
             loader = new LuaPluginLoader(LuaEnvironment, this);
             Manager.RegisterPluginLoader(loader);
-
-            Cleanup.Add(Path.Combine(Interface.Oxide.ExtensionDirectory, "x64/lua51.dll"));
-            Cleanup.Add(Path.Combine(Interface.Oxide.ExtensionDirectory, "x86/lua51.dll"));
         }
 
         /// <summary>

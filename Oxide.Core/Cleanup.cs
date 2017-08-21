@@ -4,12 +4,12 @@ using System.IO;
 
 namespace Oxide.Core
 {
-    public static class Cleanup
+    internal static class Cleanup
     {
-        private static HashSet<string> files = new HashSet<string>();
-        public static void Add(string file) => files.Add(file);
+        internal static HashSet<string> files = new HashSet<string>();
+        internal static void Add(string file) => files.Add(file);
 
-        public static void Run()
+        internal static void Run()
         {
             if (files == null) return;
             foreach (var file in files)
@@ -17,6 +17,7 @@ namespace Oxide.Core
                 try
                 {
                     if (!File.Exists(file)) continue;
+
                     Interface.Oxide.LogDebug("Cleanup file: {0}", file);
                     File.Delete(file);
                 }

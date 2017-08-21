@@ -31,9 +31,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             allPlayers = new Dictionary<string, HurtworldPlayer>();
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new HurtworldPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, HurtworldPlayer>();
-
-            // Cleanup old .data
-            Cleanup.Add(ProtoStorage.GetFileDataPath("oxide.covalence.playerdata.data"));
         }
 
         private void NotifyPlayerJoin(PlayerSession session)
