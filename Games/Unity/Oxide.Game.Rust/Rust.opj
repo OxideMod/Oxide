@@ -1151,7 +1151,7 @@
             "InjectionIndex": 8,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
-            "ArgumentString": null,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "OnPlayerTick",
             "HookName": "OnPlayerTick",
