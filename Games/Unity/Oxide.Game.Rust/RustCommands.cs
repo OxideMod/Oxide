@@ -303,7 +303,7 @@ namespace Oxide.Game.Rust
 
             var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:"; // TODO: Localization
             var number = 1;
-            foreach (var plugin in loadedPlugins)
+            foreach (var plugin in loadedPlugins.Where(p => p.Filename != null))
                 output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s) - {plugin.Filename.Basename()}";
             foreach (var pluginName in unloadedPluginErrors.Keys)
                 output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";

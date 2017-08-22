@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Net;
 using Facepunch;
 using Oxide.Core;
@@ -133,7 +134,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         public void Save()
         {
             ConVar.Server.save(null);
-            ConVar.Server.writecfg(null);
+
+            var serverFolder = ConVar.Server.GetServerFolder("cfg");
+            var configString = ConsoleSystem.SaveToConfigString(true);
+            File.WriteAllText(string.Concat(serverFolder, "/serverauto.cfg"), configString);
+            ServerUsers.Save();
         }
 
         /// <summary>

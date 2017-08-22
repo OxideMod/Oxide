@@ -5589,6 +5589,34 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "DroppedItemContainer::inventory",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "DroppedItemContainer",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "inventory",
+            "FullTypeName": "ItemContainer DroppedItemContainer::inventory",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        }
+      ],
+      "Fields": [
+        {
+          "Name": "IPlayer",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BasePlayer",
+          "FieldType": "Oxide.Core|Oxide.Core.Libraries.Covalence.IPlayer",
+          "Flagged": false
         }
       ]
     },
@@ -5700,7 +5728,8 @@
           },
           "MSILHash": ""
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "AssemblyName": "Facepunch.Rcon.dll",
@@ -5732,7 +5761,8 @@
           }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [],
+      "Fields": []
     }
   ]
 }
