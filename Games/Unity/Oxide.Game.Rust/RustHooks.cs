@@ -186,7 +186,7 @@ namespace Oxide.Game.Rust
 
             var id = steamId.ToString();
             var iplayer = Covalence.PlayerManager.FindPlayerById(id);
-            if (group == ServerUsers.UserGroup.Banned) 
+            if (group == ServerUsers.UserGroup.Banned)
             {
                 Interface.Oxide.CallHook("OnPlayerBanned", name, steamId, iplayer?.Address ?? "0", reason);
                 Interface.Oxide.CallHook("OnUserBanned", name, id, iplayer?.Address ?? "0", reason);
@@ -233,8 +233,7 @@ namespace Oxide.Game.Rust
                 if (authLevel == 2 && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
-            // Let covalence know
-            Covalence.PlayerManager.PlayerJoin(connection.userid, name);
+            Covalence.PlayerManager.PlayerJoin(connection.userid, name); // TODO: Handle this automatically
 
             var loginSpecific = Interface.Call("CanClientLogin", connection);
             var loginCovalence = Interface.Call("CanUserLogin", name, id, ip);
@@ -267,7 +266,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when the player has been initialized
+        /// Called when the player sends a chat message
         /// </summary>
         /// <param name="arg"></param>
         /// <returns></returns>

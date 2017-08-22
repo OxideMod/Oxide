@@ -131,16 +131,16 @@ namespace Oxide.Core
             if (ExtensionDirectory == null || !Directory.Exists(ExtensionDirectory)) throw new Exception("Could not identify extension directory");
 
             PluginDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("plugins"));
+            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("config"));
             DataDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("data"));
             LangDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("lang"));
             LogDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("logs"));
-            ConfigDirectory = Path.Combine(InstanceDirectory, Utility.CleanPath("config"));
             if (!Directory.Exists(InstanceDirectory)) Directory.CreateDirectory(InstanceDirectory);
             if (!Directory.Exists(PluginDirectory)) Directory.CreateDirectory(PluginDirectory);
+            if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
             if (!Directory.Exists(DataDirectory)) Directory.CreateDirectory(DataDirectory);
             if (!Directory.Exists(LangDirectory)) Directory.CreateDirectory(LangDirectory);
             if (!Directory.Exists(LogDirectory)) Directory.CreateDirectory(LogDirectory);
-            if (!Directory.Exists(ConfigDirectory)) Directory.CreateDirectory(ConfigDirectory);
 
             RegisterLibrarySearchPath(Path.Combine(ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86"));
 
@@ -375,8 +375,6 @@ namespace Oxide.Core
         public bool PluginLoaded(Plugin plugin)
         {
             plugin.OnError += plugin_OnError;
-
-            // Log plugin loaded
             LogInfo("Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
             {
@@ -576,6 +574,7 @@ namespace Oxide.Core
         public bool EnableConsole(bool force = false)
         {
             if (!CheckConsole(force)) return false;
+
             ServerConsole = new ServerConsole.ServerConsole();
             ServerConsole.OnEnable();
             return true;
@@ -617,6 +616,7 @@ namespace Oxide.Core
                     Environment.SetEnvironmentVariable("PATH", newPath);
                     SetDllDirectory(path);
                     break;
+
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
                     var currentLdLibraryPath = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH") ?? string.Empty;
