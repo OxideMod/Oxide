@@ -5122,6 +5122,104 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 20,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanBradleyApcTarget",
+            "HookName": "CanBradleyApcTarget",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BradleyAPC",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "VisibilityTest",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BaseEntity"
+              ]
+            },
+            "MSILHash": "VQGY95rvRnGiRNnltBO0Jg+R0mU+H+S7esOwc9ik2vQ=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBradleyApcInitialize",
+            "HookName": "OnBradleyApcInitialize",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BradleyAPC",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Initialize",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "ihMISRUnqBiATWKmp6+jAsgparz6MvP3qQidn4IIeq0=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBradleyApcHunt",
+            "HookName": "OnBradleyApcHunt",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BradleyAPC",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UpdateMovement_Hunt",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "g+aEDFH7pWs2IHAttUCnXLUJapbOi+cLwlUohvGw6YQ=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 17,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnBradleyApcPatrol",
+            "HookName": "OnBradleyApcPatrol",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BradleyAPC",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "UpdateMovement_Patrol",
+              "ReturnType": "System.Void",
+              "Parameters": []
+            },
+            "MSILHash": "6qJnpU2GCVyNx7SJnG57xHMyn1g84guItnvENJWSjlA=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
         }
       ],
       "Modifiers": [
