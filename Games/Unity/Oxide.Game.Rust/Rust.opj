@@ -5706,6 +5706,44 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "BradleyAPC::topTurretAimVector",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BradleyAPC",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "topTurretAimVector",
+            "FullTypeName": "UnityEngine.Vector3 BradleyAPC::topTurretAimVector",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "BradleyAPC::turretAimVector",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BradleyAPC",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "turretAimVector",
+            "FullTypeName": "UnityEngine.Vector3 BradleyAPC::turretAimVector",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
       ],
       "Fields": [
