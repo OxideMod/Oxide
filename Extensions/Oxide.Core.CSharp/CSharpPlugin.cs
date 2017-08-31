@@ -285,11 +285,7 @@ namespace Oxide.Plugins
 
         public override void HandleRemovedFromManager(PluginManager manager)
         {
-            if (IsLoaded)
-            {
-                CallHook("Unloaded", null);
-                CallHook("Unload", null);
-            }
+            if (IsLoaded) CallHook("Unload", null);
 
             Watcher.RemoveMapping(Name);
 
