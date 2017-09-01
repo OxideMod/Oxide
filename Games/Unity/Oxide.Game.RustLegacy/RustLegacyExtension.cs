@@ -66,6 +66,7 @@ namespace Oxide.Game.RustLegacy
         public override void Load()
         {
             Manager.RegisterLibrary("Command", new Command());
+            Manager.RegisterLibrary("Rust", new Libraries.RustLegacy());
             Manager.RegisterPluginLoader(new RustLegacyPluginLoader());
 
             // Register the OnServerInitialized hook that we can't hook using the IL injector
