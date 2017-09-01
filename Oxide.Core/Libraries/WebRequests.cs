@@ -368,6 +368,38 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
+        /// Enqueues a patch request
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="callback"></param>
+        /// <param name="owner"></param>
+        /// <param name="headers"></param>
+        /// <param name="timeout"></param>
+        [LibraryFunction("EnqueuePatch")]
+        public void EnqueuePatch(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
+        {
+            var request = new WebRequest(url, callback, owner) { Method = "PATCH", RequestHeaders = headers, Timeout = timeout, Body = body };
+            lock (syncroot) queue.Enqueue(request);
+            workevent.Set();
+        }
+
+        /// <summary>
+        /// Enqueues a delete request
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="callback"></param>
+        /// <param name="owner"></param>
+        /// <param name="headers"></param>
+        /// <param name="timeout"></param>
+        [LibraryFunction("EnqueueDelete")]
+        public void EnqueueDelete(string url, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
+        {
+            var request = new WebRequest(url, callback, owner) { Method = "DELETE", RequestHeaders = headers, Timeout = timeout };
+            lock (syncroot) queue.Enqueue(request);
+            workevent.Set();
+        }
+
+        /// <summary>
         /// Returns the current queue length
         /// </summary>
         /// <returns></returns>
