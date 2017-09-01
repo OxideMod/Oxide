@@ -65,6 +65,7 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public override void Load()
         {
+            Manager.RegisterLibrary("Rust", new Libraries.RustLegacy());
             Manager.RegisterLibrary("Command", new Command());
             Manager.RegisterPluginLoader(new RustLegacyPluginLoader());
 
