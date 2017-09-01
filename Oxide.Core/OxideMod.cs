@@ -15,6 +15,7 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
+
 using Timer = Oxide.Core.Libraries.Timer;
 
 namespace Oxide.Core
@@ -112,6 +113,7 @@ namespace Oxide.Core
             RootDirectory = Environment.CurrentDirectory;
             if (RootDirectory.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)))
                 RootDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            if (RootDirectory == null) throw new Exception($"RootDirectory is null");
 
             InstanceDirectory = Path.Combine(RootDirectory, "oxide");
 
