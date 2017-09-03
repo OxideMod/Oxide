@@ -911,6 +911,10 @@ namespace Oxide.Game.RustLegacy
             return null;
         }
 
+        public static Character GetCharacter(NetUser netUser) => netUser?.playerClient?.controllable?.GetComponent<Character>();
+
+        public static PlayerInventory GetInventory(NetUser netUser) => RustLegacyCore.GetCharacter(netUser)?.GetComponent<PlayerInventory>();
+
         #endregion
     }
 }
