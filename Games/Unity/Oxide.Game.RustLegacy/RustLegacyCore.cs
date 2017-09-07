@@ -219,14 +219,14 @@ namespace Oxide.Game.RustLegacy
             if (permission.IsLoaded)
             {
                 var id = netUser.userID.ToString();
-                permission.UpdateNickname(id, name);
+                permission.UpdateNickname(id, netUser.displayName);
                 var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
                 if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
                 if (netUser.CanAdmin() && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
             // Let covalence know
-            Covalence.PlayerManager.NotifyPlayerConnect(netUser);
+            Covalence.PlayerManager.PlayerConnected(netUser);
             Interface.Call("OnUserConnected", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()));
         }
 
@@ -242,7 +242,7 @@ namespace Oxide.Game.RustLegacy
 
             // Let covalence know
             Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(netUser.userID.ToString()), "Unknown");
-            Covalence.PlayerManager.NotifyPlayerDisconnect(netUser);
+            Covalence.PlayerManager.PlayerDisconnected(netUser);
 
             // Delay removing player until OnPlayerDisconnect has fired in plugins
             Interface.Oxide.NextTick(() =>
@@ -910,6 +910,10 @@ namespace Oxide.Game.RustLegacy
             if ((netUser = PlayerClient.All.Find(p => p.netUser.networkPlayer.ipAddress == nameOrIdOrIp)?.netUser) != null) return netUser;
             return null;
         }
+
+        public static Character GetCharacter(NetUser netUser) => netUser?.playerClient?.controllable?.GetComponent<Character>();
+
+        public static PlayerInventory GetInventory(NetUser netUser) => RustLegacyCore.GetCharacter(netUser)?.GetComponent<PlayerInventory>();
 
         #endregion
     }
