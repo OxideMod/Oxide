@@ -832,7 +832,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "WsHODSIbWYw04sZ6XIUINo2CCINnGP+NtfXqBzjplZw=",
+            "MSILHash": "XcA8C4yQcDvFOWdYKU/NNm61nab8Hmqz6J46eO566oA=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1653,7 +1653,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "kUAXHVqsMp6AtWW9qVfNURB3ii24dfDevPFh5xeM3qQ=",
+            "MSILHash": "HMOKiUAs1Nq1ivCpM/X9cLr4/K2UPZsHndn1lDf6vsU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1708,7 +1708,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "tAu47wKDiyajmsLNhxeq2W93cGPtSm2YvN+4WRND2xY=",
+            "MSILHash": "t17wib608Y0FVulCPrKwzPye/0l/6FgZYB5J+DtBqpE=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -1753,7 +1753,8 @@
           },
           "MSILHash": ""
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "AssemblyName": "Assembly-UnityScript.dll",
@@ -1905,7 +1906,8 @@
           }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [],
+      "Fields": []
     }
   ]
 }

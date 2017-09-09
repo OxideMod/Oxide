@@ -2139,7 +2139,7 @@
             "ArgumentBehavior": 4,
             "ArgumentString": "a0, this",
             "HookTypeName": "Simple",
-            "Name": "CanBeTargeted [helicopter]",
+            "Name": "CanBeTargeted [helicopter turret]",
             "HookName": "CanBeTargeted",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "HelicopterTurret",
@@ -5293,6 +5293,80 @@
               ]
             },
             "MSILHash": "fgZIk+XOHdOhgum4gRQEWcnHusHxEbZ8Lp5gClYPVT8=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanHelicopterUseNapalm",
+            "HookName": "CanHelicopterUseNapalm",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PatrolHelicopterAI",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanUseNapalm",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "aRyjm1VxkEyfCozM38XJsmsFfaWI9bI8CJbL+zgQplg=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanHelicopterStrafe",
+            "HookName": "CanHelicopterStrafe",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PatrolHelicopterAI",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanStrafe",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "DAjwZUqa+gn3AFYdpDR0WNBXIFs+sGJm11rKV0s+RmA=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "CanHelicopterTarget",
+            "HookName": "CanHelicopterTarget",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PatrolHelicopterAI",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "PlayerVisible",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "/LR7uwfqkA/tjjucTZw0cNLKKbdaVkgFR1RBb9kG/2k=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
