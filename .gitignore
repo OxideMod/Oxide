@@ -29,6 +29,7 @@ TestResult.xml
 
 # OS-specific files
 .*DS_Store
+._.*
 
 # Project-specific files
 !**/Dependencies/x64/
