@@ -132,6 +132,8 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="z"></param>
         void Teleport(float x, float y, float z);
 
+        void Teleport(GenericPosition pos);
+
         /// <summary>
         /// Unbans the user
         /// </summary>
@@ -242,7 +244,7 @@ namespace Oxide.Core.Libraries.Covalence
     /// </summary>
     public class GenericPosition
     {
-        public readonly float X, Y, Z;
+        public float X, Y, Z;
 
         public GenericPosition()
         {
@@ -258,6 +260,41 @@ namespace Oxide.Core.Libraries.Covalence
             if (!(obj is GenericPosition)) return false;
             var pos = (GenericPosition)obj;
             return X.Equals(pos.X) && Y.Equals(pos.Y) && Z.Equals(pos.Z);
+        }
+
+        public static bool operator ==(GenericPosition a, GenericPosition b)
+        {
+            return a.X.Equals(b.X) && a.Y.Equals(b.Y) && a.Z.Equals(b.Z);
+        }
+
+        public static bool operator !=(GenericPosition a, GenericPosition b)
+        {
+            return !(a == b);
+        }
+
+        public static GenericPosition operator +(GenericPosition a, GenericPosition b)
+        {
+            return new GenericPosition(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+        }
+
+        public static GenericPosition operator -(GenericPosition a, GenericPosition b)
+        {
+            return new GenericPosition(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+        }
+
+        public static GenericPosition operator *(float mult, GenericPosition a)
+        {
+            return new GenericPosition(a.X * mult, a.Y * mult, a.Z * mult);
+        }
+
+        public static GenericPosition operator *(GenericPosition a, float mult)
+        {
+            return new GenericPosition(a.X * mult, a.Y * mult, a.Z * mult);
+        }
+
+        public static GenericPosition operator /(GenericPosition a, float div)
+        {
+            return new GenericPosition(a.X / div, a.Y / div, a.Z / div);
         }
 
         public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2;

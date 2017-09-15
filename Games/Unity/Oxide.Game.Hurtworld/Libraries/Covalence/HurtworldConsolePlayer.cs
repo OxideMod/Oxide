@@ -149,6 +149,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
+        /// eleports the user's character to the specified generic position
+        /// </summary>
+        /// <param name="pos"></param>
+        public void Teleport(GenericPosition pos) => Teleport(pos.X, pos.Y, pos.Z);
+
+        /// <summary>
         /// Unbans the user
         /// </summary>
         public void Unban()

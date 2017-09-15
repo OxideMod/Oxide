@@ -210,9 +210,15 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// <param name="z"></param>
         public void Teleport(float x, float y, float z)
         {
-            var vector31 = steamPlayer.player.transform.rotation.eulerAngles;
-            steamPlayer.player.sendTeleport(new Vector3(x, y, z), MeasurementTool.angleToByte(vector31.y));
+            var angle = steamPlayer.player.transform.rotation.eulerAngles.y;
+            steamPlayer.player.sendTeleport(new Vector3(x, y, z), MeasurementTool.angleToByte(angle));
         }
+
+        /// <summary>
+        /// eleports the user's character to the specified generic position
+        /// </summary>
+        /// <param name="pos"></param>
+        public void Teleport(GenericPosition pos) => Teleport(pos.X, pos.Y, pos.Z);
 
         /// <summary>
         /// Unbans the user
