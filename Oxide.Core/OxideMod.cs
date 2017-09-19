@@ -350,15 +350,21 @@ namespace Oxide.Core
 
             // Find all plugin loaders that lay claim to the name
             var loaders = new HashSet<PluginLoader>(extensionManager.GetPluginLoaders().Where(l => l.ScanDirectory(PluginDirectory).Contains(name)));
-            if (loaders.Count == 0) return false;
+
+            if (loaders.Count == 0)
+            {
+                LogError("Failed to load plugin '{0}' (no source found)", name);
+                return false;
+            }
+
             if (loaders.Count > 1)
             {
                 LogError("Failed to load plugin '{0}' (multiple sources found)", name);
                 return false;
             }
-            var loader = loaders.First();
 
             // Load it and watch for errors
+            var loader = loaders.First();
             try
             {
                 var plugin = loader.Load(PluginDirectory, name);
