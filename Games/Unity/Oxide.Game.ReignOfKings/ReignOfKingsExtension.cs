@@ -227,6 +227,7 @@ namespace Oxide.Game.ReignOfKings
 
         private static void ServerConsoleOnInput(string input)
         {
+            input = input.Trim();
             if (!input.StartsWith("/")) input = "/" + input;
             Console.Messages.Clear();
             if (!CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, input)) return;

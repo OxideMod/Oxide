@@ -166,6 +166,7 @@ namespace Oxide.Game.Hurtworld
 
         internal static void ServerConsoleOnInput(string input)
         {
+            input = input.Trim();
             if (!string.IsNullOrEmpty(input)) ConsoleManager.Instance.ExecuteCommand(input);
         }
 

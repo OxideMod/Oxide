@@ -304,6 +304,7 @@ namespace Oxide.Game.FortressCraft
 
         private static void ServerConsoleOnInput(string input)
         {
+            input = input.Trim();
             if (!string.IsNullOrEmpty(input)) global::ServerConsole.DoServerString(input);
         }
 

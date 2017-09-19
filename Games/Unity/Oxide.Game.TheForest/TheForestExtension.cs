@@ -151,11 +151,15 @@ namespace Oxide.Game.TheForest
 
         private static void ServerConsoleOnInput(string input)
         {
-            var inputArray = input.TrimEnd().Split();
-            var adminCommand = AdminCommand.Create(GlobalTargets.OnlyServer);
-            adminCommand.Command = inputArray[0];
-            adminCommand.Data = string.Concat(inputArray.Skip(1).Select(s => s).ToArray());
-            adminCommand.Send();
+            input = input.Trim();
+            if (!string.IsNullOrEmpty(input))
+            {
+                var inputArray = input.Split();
+                var adminCommand = AdminCommand.Create(GlobalTargets.OnlyServer);
+                adminCommand.Command = inputArray[0];
+                adminCommand.Data = string.Concat(inputArray.Skip(1).Select(s => s).ToArray());
+                adminCommand.Send();
+            }
         }
 
         private void HandleLog(string message, string stackTrace, LogType type)
