@@ -14,12 +14,12 @@ namespace Oxide.Core.Libraries
     public class UserData
     {
         /// <summary>
-        /// Gets or sets the last seen nickname for this user
+        /// Gets or sets the last seen nickname for this player
         /// </summary>
         public string LastSeenNickname { get; set; } = "Unnamed";
 
         /// <summary>
-        /// Gets or sets the individual permissions for this user
+        /// Gets or sets the individual permissions for this player
         /// </summary>
         public HashSet<string> Perms { get; set; } = new HashSet<string>();
 
@@ -340,7 +340,7 @@ namespace Oxide.Core.Libraries
             if (string.IsNullOrEmpty(perm)) return false;
             perm = perm.ToLower();
 
-            // First, get the user data
+            // First, get the player data
             var data = GetUserData(id);
 
             // Check if they have the perm
@@ -399,7 +399,7 @@ namespace Oxide.Core.Libraries
         public string[] GetPermissions() => new HashSet<string>(permset.Values.SelectMany(v => v)).ToArray();
 
         /// <summary>
-        /// Returns the users with given permission
+        /// Returns the players with given permission
         /// </summary>
         /// <returns></returns>
         [LibraryFunction("GetPermissionUsers")]
@@ -477,7 +477,7 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
-        /// Get if the user belongs to given group
+        /// Get if the player belongs to given group
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
@@ -573,7 +573,7 @@ namespace Oxide.Core.Libraries
             // Check it's even a perm
             if (!PermissionExists(perm, owner)) return;
 
-            // Get the user data
+            // Get the player data
             var data = GetUserData(id);
 
             perm = perm.ToLower();
@@ -616,7 +616,7 @@ namespace Oxide.Core.Libraries
         {
             if (string.IsNullOrEmpty(perm)) return;
 
-            // Get the user data
+            // Get the player data
             var data = GetUserData(id);
 
             perm = perm.ToLower();

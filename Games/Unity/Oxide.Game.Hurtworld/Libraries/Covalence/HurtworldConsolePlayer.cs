@@ -13,12 +13,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Objects
 
         /// <summary>
-        /// Gets the object that backs the user
+        /// Gets the object that backs the player
         /// </summary>
         public object Object => null;
 
         /// <summary>
-        /// Gets the user's last command type
+        /// Gets the player's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
 
@@ -27,56 +27,61 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the name for the user
+        /// Gets the name for the player
         /// </summary>
         public string Name => "Server Console";
 
         /// <summary>
-        /// Gets the ID for the user (unique within the current game)
+        /// Gets the ID for the player (unique within the current game)
         /// </summary>
         public string Id => "server_console";
 
         /// <summary>
-        /// Gets the user's language
+        /// Gets the player's language
         /// </summary>
         public CultureInfo Language => CultureInfo.InstalledUICulture;
 
         /// <summary>
-        /// Gets the user's IP address
+        /// Gets the player's IP address
         /// </summary>
         public string Address => "127.0.0.1";
 
         /// <summary>
-        /// Gets the user's average network ping
+        /// Gets the player's average network ping
         /// </summary>
         public int Ping => 0;
 
         /// <summary>
-        /// Returns if the user is admin
+        /// Returns if the player is admin
         /// </summary>
         public bool IsAdmin => true;
 
         /// <summary>
-        /// Gets if the user is banned
+        /// Gets if the player is banned
         /// </summary>
         public bool IsBanned => false;
 
         /// <summary>
-        /// Returns if the user is connected
+        /// Returns if the player is connected
         /// </summary>
         public bool IsConnected => true;
 
         /// <summary>
-        /// Returns if the user is sleeping
+        /// Returns if the player is sleeping
         /// </summary>
         public bool IsSleeping => false;
+
+        /// <summary>
+        /// Returns if the player is the server
+        /// </summary>
+        public bool IsServer => true;
 
         #endregion
 
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
+        /// Bans the player for the specified reason and duration
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
@@ -85,12 +90,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the amount of time remaining on the user's ban
+        /// Gets the amount of time remaining on the player's ban
         /// </summary>
         public TimeSpan BanTimeRemaining => TimeSpan.Zero;
 
         /// <summary>
-        /// Heals the user's character by specified amount
+        /// Heals the player's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount)
@@ -98,12 +103,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets/sets the user's health
+        /// Gets/sets the player's health
         /// </summary>
         public float Health { get; set; }
 
         /// <summary>
-        /// Damages the user's character by specified amount
+        /// Damages the player's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount)
@@ -111,7 +116,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Kicks the user from the game
+        /// Kicks the player from the game
         /// </summary>
         /// <param name="reason"></param>
         public void Kick(string reason)
@@ -119,19 +124,19 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Causes the user's character to die
+        /// Causes the player's character to die
         /// </summary>
         public void Kill()
         {
         }
 
         /// <summary>
-        /// Gets/sets the user's maximum health
+        /// Gets/sets the player's maximum health
         /// </summary>
         public float MaxHealth { get; set; }
 
         /// <summary>
-        /// Renames the user to specified name
+        /// Renames the player to specified name
         /// <param name="name"></param>
         /// </summary>
         public void Rename(string name)
@@ -139,7 +144,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Teleports the user's character to the specified position
+        /// Teleports the player's character to the specified position
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -149,13 +154,13 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Teleports the user's character to the specified generic position
+        /// Teleports the player's character to the specified generic position
         /// </summary>
         /// <param name="pos"></param>
         public void Teleport(GenericPosition pos) => Teleport(pos.X, pos.Y, pos.Z);
 
         /// <summary>
-        /// Unbans the user
+        /// Unbans the player
         /// </summary>
         public void Unban()
         {
@@ -166,7 +171,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the user
+        /// Gets the position of the player
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -179,7 +184,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the user
+        /// Gets the position of the player
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position() => new GenericPosition(0, 0, 0);
@@ -189,33 +194,33 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the user
+        /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
         public void Message(string message) => Interface.Oxide.LogInfo(Formatter.ToPlaintext(message));
 
         /// <summary>
-        /// Sends the specified message to the user
+        /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
         public void Message(string message, params object[] args) => Message(string.Format(message, args));
 
         /// <summary>
-        /// Replies to the user with the specified message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         public void Reply(string message) => Message(message);
 
         /// <summary>
-        /// Replies to the user with the specified message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
         public void Reply(string message, params object[] args) => Message(message, args);
 
         /// <summary>
-        /// Runs the specified console command on the user
+        /// Runs the specified console command on the player
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
@@ -229,14 +234,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Permissions
 
         /// <summary>
-        /// Gets if the user has the specified permission
+        /// Gets if the player has the specified permission
         /// </summary>
         /// <param name="perm"></param>
         /// <returns></returns>
         public bool HasPermission(string perm) => true;
 
         /// <summary>
-        /// Grants the specified permission on this user
+        /// Grants the specified permission on this player
         /// </summary>
         /// <param name="perm"></param>
         public void GrantPermission(string perm)
@@ -244,7 +249,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Strips the specified permission from this user
+        /// Strips the specified permission from this player
         /// </summary>
         /// <param name="perm"></param>
         public void RevokePermission(string perm)
@@ -252,14 +257,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets if the user belongs to the specified usergroup
+        /// Gets if the player belongs to the specified group
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         public bool BelongsToGroup(string group) => false;
 
         /// <summary>
-        /// Adds the user to the specified usergroup
+        /// Adds the player to the specified group
         /// </summary>
         /// <param name="group"></param>
         public void AddToGroup(string group)
@@ -267,7 +272,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         }
 
         /// <summary>
-        /// Removes the user from the specified usergroup
+        /// Removes the player from the specified group
         /// </summary>
         /// <param name="group"></param>
         public void RemoveFromGroup(string group)

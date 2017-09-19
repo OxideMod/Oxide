@@ -170,7 +170,7 @@ namespace Oxide.Game.RustLegacy
         #region Player Hooks
 
         /// <summary>
-        /// Called when a user is attempting to connect
+        /// Called when the player is attempting to connect
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="approval"></param>
@@ -196,7 +196,7 @@ namespace Oxide.Game.RustLegacy
             // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
-                // Reject the user with the message
+                // Reject the player with the message
                 Notice.Popup(connection.netUser.networkPlayer, "", canLogin is string ? canLogin.ToString() : "Connection was rejected", 10f); // TODO: Localization
                 approval.Deny(uLink.NetworkConnectionError.NoError);
                 return true;
@@ -817,7 +817,7 @@ namespace Oxide.Game.RustLegacy
         #region Game Fixes
 
         /// <summary>
-        /// Called when the GetClientMove packet is received for a player
+        /// Called when the GetClientMove packet is received for the player
         /// Checks the player position in the packet to prevent harmful packets crashing the server
         /// </summary>
         /// <param name="netUser"></param>

@@ -47,7 +47,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         }
 
         /// <summary>
-        /// Sends a chat message to the user
+        /// Sends a chat message to the player
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="name"></param>
@@ -64,7 +64,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         #region Console
 
         /// <summary>
-        /// Print a message to a players console log
+        /// Print a message to the players console log
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="format"></param>
@@ -105,7 +105,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         #endregion
 
         /// <summary>
-        /// Finds a player by name, steam id or ip
+        /// Finds the player by name, steam id or ip
         /// </summary>
         /// <param name="strNameOrIdorIp"></param>
         [LibraryFunction("FindPlayer")]
@@ -122,7 +122,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         }
 
         /// <summary>
-        /// Returns the UserID for the specified player as a string
+        /// Returns the playerID for the specified player as a string
         /// </summary>
         /// <param name="netUser"></param>
         /// <returns></returns>
@@ -130,7 +130,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         public string UserIDFromPlayer(NetUser netUser) => netUser.userID.ToString();
 
         /// <summary>
-        /// Returns the UserID for the specified player as a string
+        /// Returns the playerID for the specified player as a string
         /// </summary>
         /// <param name="netUser"></param>
         /// <returns></returns>
@@ -144,7 +144,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         public NetUser[] GetAllNetUsers() => Enumerable.ToArray(PlayerClient.All.Select(playerClient => playerClient.netUser));
 
         /// <summary>
-        /// Shows a notice to a player
+        /// Shows a notice to the player
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="message"></param>
@@ -157,7 +157,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         }
 
         /// <summary>
-        /// Shows an inventory notice to a player
+        /// Shows an inventory notice to the player
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="message"></param>
@@ -177,14 +177,14 @@ namespace Oxide.Game.RustLegacy.Libraries
         }
 
         /// <summary>
-        /// Returns the character of a player
+        /// Returns the character of the player
         /// </summary>
         /// <param name="netUser"></param>
         [LibraryFunction("GetCharacter")]
         public Character GetCharacter(NetUser netUser) => RustLegacyCore.GetCharacter(netUser);
 
         /// <summary>
-        /// Returns the inventory of a player
+        /// Returns the inventory of the player
         /// </summary>
         /// <param name="netUser"></param>
         [LibraryFunction("GetInventory")]

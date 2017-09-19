@@ -95,7 +95,7 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Print a message to a players console log
+        /// Print a message to the players console log
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="format"></param>
@@ -116,7 +116,7 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Print a message to a players chat log
+        /// Print a message to the players chat log
         /// </summary>
         /// <param name="netUser"></param>
         /// <param name="format"></param>

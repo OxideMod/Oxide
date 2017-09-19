@@ -35,6 +35,7 @@ namespace Oxide.Game.Rust
         private object IOnEnableServerConsole(ServerConsole serverConsole)
         {
             if (ConsoleWindow.Check(true) && !Interface.Oxide.CheckConsole(true)) return null;
+
             serverConsole.enabled = false;
             UnityEngine.Object.Destroy(serverConsole);
             typeof(SingletonComponent<ServerConsole>).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static)?.SetValue(null, null);
@@ -119,7 +120,7 @@ namespace Oxide.Game.Rust
 
         /// <summary>
         /// Called when a BasePlayer is hurt
-        /// This is used to call OnEntityTakeDamage when a player was hurt without being attacked
+        /// This is used to call OnEntityTakeDamage when the player was hurt without being attacked
         /// </summary>
         /// <param name="player"></param>
         /// <param name="info"></param>
@@ -155,7 +156,7 @@ namespace Oxide.Game.Rust
         private void IOnLootPlayer(PlayerLoot source, BasePlayer target) => Interface.Call("OnLootPlayer", source.GetComponent<BasePlayer>(), target);
 
         /// <summary>
-        /// Called when a player attacks something
+        /// Called when the player attacks something
         /// </summary>
         /// <param name="melee"></param>
         /// <param name="info"></param>
@@ -164,7 +165,7 @@ namespace Oxide.Game.Rust
         private object IOnPlayerAttack(BaseMelee melee, HitInfo info) => Interface.Call("OnPlayerAttack", melee.GetOwnerPlayer(), info);
 
         /// <summary>
-        /// Called when a player revives another player
+        /// Called when the player revives another player
         /// </summary>
         /// <param name="tool"></param>
         /// <param name="target"></param>
@@ -212,7 +213,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a player is attempting to connect
+        /// Called when the player is attempting to connect
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
@@ -252,7 +253,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a player has been banned by EAC
+        /// Called when the player has been banned by EAC
         /// </summary>
         /// <param name="connection"></param>
         [HookMethod("IOnPlayerBanned")]
@@ -311,7 +312,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a player has been kicked
+        /// Called when the player has been kicked
         /// </summary>
         /// <param name="player"></param>
         /// <param name="reason"></param>
@@ -346,7 +347,7 @@ namespace Oxide.Game.Rust
         }
 
         /// <summary>
-        /// Called when a player tick is received from a client
+        /// Called when the player tick is received from a client
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
@@ -397,7 +398,7 @@ namespace Oxide.Game.Rust
         #region Structure Hooks
 
         /// <summary>
-        /// Called when a player selects Demolish from the BuildingBlock menu
+        /// Called when the player selects Demolish from the BuildingBlock menu
         /// </summary>
         /// <param name="block"></param>
         /// <param name="player"></param>
@@ -406,7 +407,7 @@ namespace Oxide.Game.Rust
         private object IOnStructureDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, false);
 
         /// <summary>
-        /// Called when a player selects Demolish Immediate from the BuildingBlock menu
+        /// Called when the player selects Demolish Immediate from the BuildingBlock menu
         /// </summary>
         /// <param name="block"></param>
         /// <param name="player"></param>

@@ -307,6 +307,7 @@ namespace Oxide.Core
                 foreach (var name in loader.ScanDirectory(PluginDirectory)) LoadPlugin(name);
 
             if (!init) return;
+
             var lastCall = Now;
             foreach (var loader in extensionManager.GetPluginLoaders())
             {

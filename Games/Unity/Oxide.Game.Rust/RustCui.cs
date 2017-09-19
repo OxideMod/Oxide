@@ -269,7 +269,7 @@ namespace Oxide.Game.Rust.Cui
         [JsonProperty("sprite")]
         public string Sprite { get; set; } = "Assets/Content/UI/UI.Background.Tile.psd";
 
-        //The Material set by the user.
+        //The Material set by the player.
         [DefaultValue("Assets/Icons/IconMaterial.mat")]
         [JsonProperty("material")]
         public string Material { get; set; } = "Assets/Icons/IconMaterial.mat";
