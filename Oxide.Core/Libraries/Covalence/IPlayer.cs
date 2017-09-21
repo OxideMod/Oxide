@@ -269,6 +269,12 @@ namespace Oxide.Core.Libraries.Covalence
 
         public static bool operator ==(GenericPosition a, GenericPosition b)
         {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if ((object) a == null || (object) b == null)
+                return false;
+
             return a.X.Equals(b.X) && a.Y.Equals(b.Y) && a.Z.Equals(b.Z);
         }
 
