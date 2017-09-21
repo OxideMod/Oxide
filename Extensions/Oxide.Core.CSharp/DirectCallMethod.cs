@@ -115,12 +115,7 @@ namespace Oxide.Core.CSharp
             {
                 //ignore compiler generated
                 if (m.Name.Contains("<")) continue;
-
-                var name = m.Name;
-                if (m.Parameters.Count > 0)
-                    name += $"({string.Join(", ", m.Parameters.Select(x => x.ParameterType.ToString().Replace("/", "+")).ToArray())})";
-
-                if (!hookMethods.ContainsKey(name)) hookMethods[name] = m;
+                if (!hookMethods.ContainsKey(m.Name)) hookMethods[m.Name] = m;
             }
 
             // Build a hook method name trie
