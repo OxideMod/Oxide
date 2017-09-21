@@ -119,6 +119,7 @@ namespace Oxide.Game.Unturned
 
         private static void ServerConsoleOnInput(string input)
         {
+            input = input.Trim();
             if (!string.IsNullOrEmpty(input)) Commander.execute(CSteamID.Nil, input);
         }
 

@@ -76,7 +76,7 @@ namespace Oxide.Game.ReignOfKings
         #region Player Hooks
 
         /// <summary>
-        /// Called when a user is attempting to connect
+        /// Called when the player is attempting to connect
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
@@ -94,7 +94,7 @@ namespace Oxide.Game.ReignOfKings
             // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
             {
-                // Reject the user with the message
+                // Reject the player with the message
                 player.ShowPopup("Disconnected", canLogin is string ? canLogin.ToString() : "Connection was rejected"); // TODO: Localization
                 player.Connection.Close();
                 return ConnectionError.NoError;

@@ -175,9 +175,15 @@ namespace Oxide.Core.Plugins
                     var value = values[i];
                     if (value == null) continue;
                     if (value.GetType().IsValueType)
-                        if (!values[i].Equals(finalValue)) hookConflicts.Add($"{plugins[i].Name} - {value} ({value.GetType().Name})");
+                    {
+                        if (!values[i].Equals(finalValue))
+                            hookConflicts.Add($"{plugins[i].Name} - {value} ({value.GetType().Name})");
+                    }
                     else
-                        if (values[i] != finalValue) hookConflicts.Add($"{plugins[i].Name} - {value} ({value.GetType().Name})");
+                    {
+                        if (values[i] != finalValue)
+                            hookConflicts.Add($"{plugins[i].Name} - {value} ({value.GetType().Name})");
+                    }
                 }
                 if (hookConflicts.Count > 0)
                 {

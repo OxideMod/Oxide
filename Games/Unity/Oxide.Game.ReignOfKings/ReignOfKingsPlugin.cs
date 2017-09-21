@@ -24,7 +24,7 @@ namespace Oxide.Plugins
                     var pluginField = new PluginFieldInfo(this, field);
                     if (pluginField.GenericArguments.Length != 2 || pluginField.GenericArguments[0] != typeof(Player))
                     {
-                        Puts($"The {field.Name} field is not a Hash with a Player key! (online players will not be tracked)");
+                        Puts($"The {field.Name} field is not a Hash with the player key! (online players will not be tracked)");
                         continue;
                     }
                     if (!pluginField.LookupMethod("Add", pluginField.GenericArguments))
@@ -81,7 +81,7 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Print a message to a players chat log
+        /// Print a message to the players chat log
         /// </summary>
         /// <param name="player"></param>
         /// <param name="format"></param>

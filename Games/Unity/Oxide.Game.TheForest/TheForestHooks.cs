@@ -15,7 +15,7 @@ namespace Oxide.Game.TheForest
         #region Player Hooks
 
         /// <summary>
-        /// Called when a user is attempting to connect
+        /// Called when the player is attempting to connect
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>

@@ -297,7 +297,7 @@ namespace Oxide.Core.RemoteConsole
             SendMessage(connection, $"Player not found {args[0]}", identifier);
         }
 
-        // Bans a player/id from the server
+        // Bans the player/id from the server
         private void BanCommand(string command, string[] args, int identifier, WebSocketContext connection)
         {
             var id = 0ul;
@@ -361,7 +361,7 @@ namespace Oxide.Core.RemoteConsole
             }
         }
 
-        // Teleport a player to another player
+        // Teleport the player to another player
         private void TeleportCommand(string command, string[] args, int identifier, WebSocketContext connection)
         {
             if (args.Length != 2 && args.Length != 4)

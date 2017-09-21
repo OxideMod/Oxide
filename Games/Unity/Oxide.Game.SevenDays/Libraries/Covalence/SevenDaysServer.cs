@@ -99,7 +99,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
+        /// Bans the player for the specified reason and duration
         /// </summary>
         /// <param name="id"></param>
         /// <param name="reason"></param>
@@ -115,13 +115,13 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the amount of time remaining on the user's ban
+        /// Gets the amount of time remaining on the player's ban
         /// </summary>
         /// <param name="id"></param>
         public TimeSpan BanTimeRemaining(string id) => GameManager.Instance.adminTools.GetAdminToolsClientInfo(id).BannedUntil.TimeOfDay;
 
         /// <summary>
-        /// Gets if the user is banned
+        /// Gets if the player is banned
         /// </summary>
         /// <param name="id"></param>
         public bool IsBanned(string id) => GameManager.Instance.adminTools.IsBanned(id);
@@ -136,7 +136,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         }
 
         /// <summary>
-        /// Unbans the user
+        /// Unbans the player
         /// </summary>
         /// <param name="id"></param>
         public void Unban(string id)

@@ -72,7 +72,7 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
-        /// Gets the language for a player, fall back to the default server language if no language is set
+        /// Gets the language for the player, fall back to the default server language if no language is set
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -148,7 +148,7 @@ namespace Oxide.Core.Libraries
         public string GetServerLanguage() => langData.Lang;
 
         /// <summary>
-        /// Sets the language preference for a player
+        /// Sets the language preference for the player
         /// </summary>
         /// <param name="lang"></param>
         /// <param name="userId"></param>

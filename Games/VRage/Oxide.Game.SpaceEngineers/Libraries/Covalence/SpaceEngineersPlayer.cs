@@ -9,7 +9,7 @@ using VRage.Game.ModAPI;
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
 {
     /// <summary>
-    /// Represents a player, either connected or not
+    /// Represents the player, either connected or not
     /// </summary>
     public class SpaceEngineersPlayer : IPlayer, IEquatable<IPlayer>
     {
@@ -42,12 +42,12 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         #region Objects
 
         /// <summary>
-        /// Gets the object that backs the user
+        /// Gets the object that backs the player
         /// </summary>
         public object Object => player;
 
         /// <summary>
-        /// Gets the user's last command type
+        /// Gets the player's last command type
         /// </summary>
         public CommandType LastCommand { get; set; }
 
@@ -66,46 +66,51 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public string Id { get; }
 
         /// <summary>
-        /// Gets the user's IP address
+        /// Gets the player's IP address
         /// </summary>
         public string Address => Player.Address(player);
 
         /// <summary>
-        /// Gets the user's average network ping
+        /// Gets the player's average network ping
         /// </summary>
         public int Ping => Player.Ping(player);
 
         /// <summary>
-        /// Gets the user's language
+        /// Gets the player's language
         /// </summary>
         public CultureInfo Language => Player.Language(player);
 
         /// <summary>
-        /// Returns if the user is admin
+        /// Returns if the player is admin
         /// </summary>
         public bool IsAdmin => Player.IsAdmin(player); // TODO: Switch to steamId
 
         /// <summary>
-        /// Gets if the user is banned
+        /// Gets if the player is banned
         /// </summary>
         public bool IsBanned => Player.IsBanned(steamId);
 
         /// <summary>
-        /// Gets if the user is connected
+        /// Gets if the player is connected
         /// </summary>
         public bool IsConnected => Player.IsConnected(player);
 
         /// <summary>
-        /// Returns if the user is sleeping
+        /// Returns if the player is sleeping
         /// </summary>
         public bool IsSleeping => Player.IsSleeping(steamId);
+
+        /// <summary>
+        /// Returns if the player is the server
+        /// </summary>
+        public bool IsServer => false;
 
         #endregion
 
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
+        /// Bans the player for the specified reason and duration
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
@@ -115,18 +120,18 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the amount of time remaining on the user's ban
+        /// Gets the amount of time remaining on the player's ban
         /// </summary>
         public TimeSpan BanTimeRemaining => TimeSpan.MaxValue;
 
         /// <summary>
-        /// Heals the user's character by specified amount
+        /// Heals the player's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Heal(float amount) => Player.Heal(player, amount);
 
         /// <summary>
-        /// Gets/sets the user's health
+        /// Gets/sets the player's health
         /// </summary>
         public float Health
         {
@@ -135,24 +140,24 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         }
 
         /// <summary>
-        /// Damages the user's character by specified amount
+        /// Damages the player's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         public void Hurt(float amount) => Player.Hurt(player, amount);
 
         /// <summary>
-        /// Kicks the user from the game
+        /// Kicks the player from the game
         /// </summary>
         /// <param name="reason"></param>
         public void Kick(string reason) => Player.Kick(player, reason);
 
         /// <summary>
-        /// Causes the user's character to die
+        /// Causes the player's character to die
         /// </summary>
         public void Kill() => Player.Kill(player);
 
         /// <summary>
-        /// Gets/sets the user's maximum health
+        /// Gets/sets the player's maximum health
         /// </summary>
         public float MaxHealth
         {
@@ -161,13 +166,13 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         }
 
         /// <summary>
-        /// Renames the user to specified name
+        /// Renames the player to specified name
         /// <param name="name"></param>
         /// </summary>
         public void Rename(string name) => Player.Rename(player, name);
 
         /// <summary>
-        /// Teleports the user's character to the specified position
+        /// Teleports the player's character to the specified position
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -175,7 +180,13 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public void Teleport(float x, float y, float z) => Player.Teleport(player, x, y, z);
 
         /// <summary>
-        /// Unbans the user
+        /// Teleports the player's character to the specified generic position
+        /// </summary>
+        /// <param name="pos"></param>
+        public void Teleport(GenericPosition pos) => Teleport(pos.X, pos.Y, pos.Z);
+
+        /// <summary>
+        /// Unbans the player
         /// </summary>
         public void Unban()
         {
@@ -187,7 +198,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         #region Location
 
         /// <summary>
-        /// Gets the position of the user
+        /// Gets the position of the player
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -201,7 +212,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the position of the user
+        /// Gets the position of the player
         /// </summary>
         /// <returns></returns>
         public GenericPosition Position()
@@ -215,33 +226,33 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the user
+        /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
         public void Message(string message) => Player.Message(player, message);
 
         /// <summary>
-        /// Sends the specified message to the user
+        /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
         public void Message(string message, params object[] args) => Message(string.Format(message, args));
 
         /// <summary>
-        /// Replies to the user with the specified message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         public void Reply(string message) => Message(message);
 
         /// <summary>
-        /// Replies to the user with the specified message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
         public void Reply(string message, params object[] args) => Message(message, args);
 
         /// <summary>
-        /// Runs the specified console command on the user
+        /// Runs the specified console command on the player
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
@@ -259,32 +270,32 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         public bool HasPermission(string perm) => libPerms.UserHasPermission(Id, perm);
 
         /// <summary>
-        /// Grants the specified permission on this user
+        /// Grants the specified permission on this player
         /// </summary>
         /// <param name="perm"></param>
         public void GrantPermission(string perm) => libPerms.GrantUserPermission(Id, perm, null);
 
         /// <summary>
-        /// Strips the specified permission from this user
+        /// Strips the specified permission from this player
         /// </summary>
         /// <param name="perm"></param>
         public void RevokePermission(string perm) => libPerms.RevokeUserPermission(Id, perm);
 
         /// <summary>
-        /// Gets if the player belongs to the specified usergroup
+        /// Gets if the player belongs to the specified group
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         public bool BelongsToGroup(string group) => libPerms.UserHasGroup(Id, group);
 
         /// <summary>
-        /// Adds the player to the specified usergroup
+        /// Adds the player to the specified group
         /// </summary>
         /// <param name="group"></param>
         public void AddToGroup(string group) => libPerms.AddUserGroup(Id, group);
 
         /// <summary>
-        /// Removes the player from the specified usergroup
+        /// Removes the player from the specified group
         /// </summary>
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);

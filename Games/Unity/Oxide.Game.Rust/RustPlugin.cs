@@ -100,7 +100,7 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Print a message to a players console log
+        /// Print a message to the players console log
         /// </summary>
         /// <param name="player"></param>
         /// <param name="format"></param>
@@ -122,7 +122,7 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Print a message to a players chat log
+        /// Print a message to the players chat log
         /// </summary>
         /// <param name="player"></param>
         /// <param name="format"></param>
@@ -206,7 +206,7 @@ namespace Oxide.Plugins
         }
 
         /// <summary>
-        /// Forces a player to a specific position
+        /// Forces the player to a specific position
         /// </summary>
         /// <param name="player"></param>
         /// <param name="destination"></param>

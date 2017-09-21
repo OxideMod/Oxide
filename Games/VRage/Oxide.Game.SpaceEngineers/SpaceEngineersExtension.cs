@@ -127,8 +127,12 @@ namespace Oxide.Game.SpaceEngineers
 
         internal static void ServerConsoleOnInput(string input)
         {
-            //if (!string.IsNullOrEmpty(input)) ConsoleManager.Instance.ExecuteCommand(input);
-            if (input.ToLower().Equals("quit") || input.ToLower().Equals("shutdown")) MySandboxGame.ExitThreadSafe();
+            input = input.Trim();
+            if (!string.IsNullOrEmpty(input))
+            {
+                // TODO: Handle command input
+                if (input.ToLower().Equals("quit") || input.ToLower().Equals("shutdown")) MySandboxGame.ExitThreadSafe();
+            }
         }
 
         private static void HandleLog(string message, string stackTrace)

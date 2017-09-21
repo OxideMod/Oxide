@@ -75,7 +75,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         #region Administration
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
+        /// Bans the player for the specified reason and duration
         /// </summary>
         /// <param name="id"></param>
         /// <param name="reason"></param>
@@ -90,13 +90,13 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         }
 
         /// <summary>
-        /// Gets the amount of time remaining on the user's ban
+        /// Gets the amount of time remaining on the player's ban
         /// </summary>
         /// <param name="id"></param>
         public TimeSpan BanTimeRemaining(string id) => TimeSpan.Zero; // TODO: Implement when possible
 
         /// <summary>
-        /// Gets if the user is banned
+        /// Gets if the player is banned
         /// </summary>
         /// <param name="id"></param>
         public bool IsBanned(string id) => false; // TODO: Implement when possible
@@ -107,7 +107,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         public void Save() => Application.mGameServer.SaveTo("server.dat");
 
         /// <summary>
-        /// Unbans the user
+        /// Unbans the player
         /// </summary>
         /// <param name="id"></param>
         public void Unban(string id)

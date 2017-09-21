@@ -230,7 +230,7 @@ namespace Oxide.Game.Hurtworld
         #region Player Hooks
 
         /// <summary>
-        /// Called when a user is attempting to connect
+        /// Called when the player is attempting to connect
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
@@ -433,7 +433,7 @@ namespace Oxide.Game.Hurtworld
         #region Vehicle Hooks
 
         /// <summary>
-        /// Called when a player tries to enter a vehicle
+        /// Called when the player tries to enter a vehicle
         /// </summary>
         /// <param name="session"></param>
         /// <param name="go"></param>
@@ -445,7 +445,7 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when a player tries to exit a vehicle
+        /// Called when the player tries to exit a vehicle
         /// </summary>
         /// <param name="vehicle"></param>
         /// <returns></returns>
@@ -457,7 +457,7 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when a player enters a vehicle
+        /// Called when the player enters a vehicle
         /// </summary>
         /// <param name="player"></param>
         /// <param name="vehicle"></param>
@@ -470,7 +470,7 @@ namespace Oxide.Game.Hurtworld
         }
 
         /// <summary>
-        /// Called when a player exits a vehicle
+        /// Called when the player exits a vehicle
         /// </summary>
         /// <param name="player"></param>
         /// <param name="vehicle"></param>

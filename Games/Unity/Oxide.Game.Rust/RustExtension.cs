@@ -151,6 +151,7 @@ namespace Oxide.Game.Rust
             Interface.Oxide.ServerConsole.Completion = input =>
             {
                 if (string.IsNullOrEmpty(input)) return null;
+
                 if (!input.Contains(".")) input = string.Concat("global.", input);
                 return ConsoleSystem.Index.All.Where(c => c.FullName.StartsWith(input.ToLower())).ToList().ConvertAll(c => c.FullName).ToArray();
             };
@@ -158,6 +159,7 @@ namespace Oxide.Game.Rust
 
         private static void ServerConsoleOnInput(string input)
         {
+            input = input.Trim();
             if (!string.IsNullOrEmpty(input)) ConsoleSystem.Run(ConsoleSystem.Option.Server, input);
         }
 

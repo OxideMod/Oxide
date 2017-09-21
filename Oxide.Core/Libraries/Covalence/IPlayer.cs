@@ -11,7 +11,7 @@ namespace Oxide.Core.Libraries.Covalence
         #region Objects
 
         /// <summary>
-        /// Gets the object that backs the user
+        /// Gets the object that backs the player
         /// </summary>
         object Object { get; }
 
@@ -35,75 +35,80 @@ namespace Oxide.Core.Libraries.Covalence
         string Id { get; }
 
         /// <summary>
-        /// Gets the user's IP address
+        /// Gets the player's IP address
         /// </summary>
         string Address { get; }
 
         /// <summary>
-        /// Gets the user's average network ping
+        /// Gets the player's average network ping
         /// </summary>
         int Ping { get; }
 
         /// <summary>
-        /// Gets the user's language
+        /// Gets the player's language
         /// </summary>
         CultureInfo Language { get; }
 
         /// <summary>
-        /// Returns if the user is connected
+        /// Returns if the player is connected
         /// </summary>
         bool IsConnected { get; }
 
         /// <summary>
-        /// Returns if the user is sleeping
+        /// Returns if the player is sleeping
         /// </summary>
         bool IsSleeping { get; }
+
+        /// <summary>
+        /// Returns if the player is the server
+        /// </summary>
+        bool IsServer { get; }
 
         #endregion
 
         #region Administration
 
         /// <summary>
-        /// Returns if the user is admin
+        /// Returns if the player is admin
         /// </summary>
         bool IsAdmin { get; }
 
         /// <summary>
-        /// Gets if the user is banned
+        /// Gets if the player is banned
         /// </summary>
         bool IsBanned { get; }
 
         /// <summary>
-        /// Bans the user for the specified reason and duration
+        /// Bans the player for the specified reason and duration
         /// </summary>
         /// <param name="reason"></param>
         /// <param name="duration"></param>
         void Ban(string reason, TimeSpan duration = default(TimeSpan));
 
         /// <summary>
-        /// Gets the amount of time remaining on the user's ban
+        /// Gets the amount of time remaining on the player's ban
         /// </summary>
         TimeSpan BanTimeRemaining { get; }
 
         /// <summary>
-        /// Heals the user's character by specified amount
+        /// Heals the player's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         void Heal(float amount);
 
         /// <summary>
-        /// Gets/sets the user's health
+        /// Gets/sets the player's health
         /// </summary>
         float Health { get; set; }
 
         /// <summary>
-        /// Damages the user's character by specified amount
+        /// Damages the player's character by specified amount
         /// </summary>
         /// <param name="amount"></param>
         void Hurt(float amount);
 
         /// <summary>
-        /// Kicks the user from the game
+        /// Kicks the player from the game
         /// </summary>
         /// <param name="reason"></param>
         void Kick(string reason);
@@ -114,12 +119,12 @@ namespace Oxide.Core.Libraries.Covalence
         void Kill();
 
         /// <summary>
-        /// Gets/sets the user's maximum health
+        /// Gets/sets the player's maximum health
         /// </summary>
         float MaxHealth { get; set; }
 
         /// <summary>
-        /// Renames the user to specified name
+        /// Renames the player to specified name
         /// <param name="name"></param>
         /// </summary>
         void Rename(string name);
@@ -132,8 +137,10 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="z"></param>
         void Teleport(float x, float y, float z);
 
+        void Teleport(GenericPosition pos);
+
         /// <summary>
-        /// Unbans the user
+        /// Unbans the player
         /// </summary>
         void Unban();
 
@@ -160,33 +167,33 @@ namespace Oxide.Core.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the user
+        /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
         void Message(string message);
 
         /// <summary>
-        /// Sends the specified message to the user
+        /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
         void Message(string message, params object[] args);
 
         /// <summary>
-        /// Replies to the user with the specified message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         void Reply(string message);
 
         /// <summary>
-        /// Replies to the user with the specified message
+        /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
         void Reply(string message, params object[] args);
 
         /// <summary>
-        /// Runs the specified console command on the user
+        /// Runs the specified console command on the player
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
@@ -204,32 +211,32 @@ namespace Oxide.Core.Libraries.Covalence
         bool HasPermission(string perm);
 
         /// <summary>
-        /// Grants the specified permission on this user
+        /// Grants the specified permission on this player
         /// </summary>
         /// <param name="perm"></param>
         void GrantPermission(string perm);
 
         /// <summary>
-        /// Strips the specified permission from this user
+        /// Strips the specified permission from this player
         /// </summary>
         /// <param name="perm"></param>
         void RevokePermission(string perm);
 
         /// <summary>
-        /// Gets if the player belongs to the specified usergroup
+        /// Gets if the player belongs to the specified group
         /// </summary>
         /// <param name="group"></param>
         /// <returns></returns>
         bool BelongsToGroup(string group);
 
         /// <summary>
-        /// Adds the player to the specified usergroup
+        /// Adds the player to the specified group
         /// </summary>
         /// <param name="group"></param>
         void AddToGroup(string group);
 
         /// <summary>
-        /// Removes the player from the specified usergroup
+        /// Removes the player from the specified group
         /// </summary>
         /// <param name="group"></param>
         void RemoveFromGroup(string group);
@@ -242,7 +249,7 @@ namespace Oxide.Core.Libraries.Covalence
     /// </summary>
     public class GenericPosition
     {
-        public readonly float X, Y, Z;
+        public float X, Y, Z;
 
         public GenericPosition()
         {
@@ -258,6 +265,41 @@ namespace Oxide.Core.Libraries.Covalence
             if (!(obj is GenericPosition)) return false;
             var pos = (GenericPosition)obj;
             return X.Equals(pos.X) && Y.Equals(pos.Y) && Z.Equals(pos.Z);
+        }
+
+        public static bool operator ==(GenericPosition a, GenericPosition b)
+        {
+            return a.X.Equals(b.X) && a.Y.Equals(b.Y) && a.Z.Equals(b.Z);
+        }
+
+        public static bool operator !=(GenericPosition a, GenericPosition b)
+        {
+            return !(a == b);
+        }
+
+        public static GenericPosition operator +(GenericPosition a, GenericPosition b)
+        {
+            return new GenericPosition(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+        }
+
+        public static GenericPosition operator -(GenericPosition a, GenericPosition b)
+        {
+            return new GenericPosition(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+        }
+
+        public static GenericPosition operator *(float mult, GenericPosition a)
+        {
+            return new GenericPosition(a.X * mult, a.Y * mult, a.Z * mult);
+        }
+
+        public static GenericPosition operator *(GenericPosition a, float mult)
+        {
+            return new GenericPosition(a.X * mult, a.Y * mult, a.Z * mult);
+        }
+
+        public static GenericPosition operator /(GenericPosition a, float div)
+        {
+            return new GenericPosition(a.X / div, a.Y / div, a.Z / div);
         }
 
         public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() << 2 ^ Z.GetHashCode() >> 2;

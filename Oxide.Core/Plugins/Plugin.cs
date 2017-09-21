@@ -132,7 +132,7 @@ namespace Oxide.Core.Plugins
         // Used to measure time spent in this plugin
         private Stopwatch trackStopwatch = new Stopwatch();
         private Stopwatch stopwatch = new Stopwatch();
-        private float trackStartAt;
+        //private float trackStartAt;
         private float averageAt;
         private double sum;
         private int preHookGcCount;
@@ -384,6 +384,11 @@ namespace Oxide.Core.Plugins
         public void AddCovalenceCommand(string command, string callback, string perm = null)
         {
             AddCovalenceCommand(new[] { command }, callback, string.IsNullOrEmpty(perm) ? null : new[] { perm });
+        }
+
+        public void AddCovalenceCommand(string[] commands, string callback, string perm)
+        {
+            AddCovalenceCommand(commands, callback, string.IsNullOrEmpty(perm) ? null : new[] { perm });
         }
 
         public void AddCovalenceCommand(string[] commands, string callback, string[] perms = null)

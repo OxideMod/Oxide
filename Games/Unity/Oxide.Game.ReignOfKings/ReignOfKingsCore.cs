@@ -292,7 +292,7 @@ namespace Oxide.Game.ReignOfKings
             if (str.Length == 0) return null;
             if (Interface.Call("OnServerCommand", str) != null) return true;
 
-            // Check if command is from a player
+            // Check if command is from the player
             var player = CodeHatch.Engine.Networking.Server.GetPlayerById(id);
             if (player == null) return null;
 
