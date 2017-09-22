@@ -52,7 +52,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "vN9Bkjrj8eTaGcI/q6ogEx4UT04+Uhwb0lcEwPLq4d8=",
+            "MSILHash": "fXUeIvxsUVVcdFqvIKffkv2rDqMFLIlB2c4blPB+XcQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -806,7 +806,7 @@
                 "DropItem"
               ]
             },
-            "MSILHash": "C8h9siAqyhYFzPDlqj+OdFBiF7IwzBgQkM1OiBWJnJk=",
+            "MSILHash": "Pwd+C4vv1XOPziOQB/ukWC/rm731iXDS54jyB6+aycA=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -832,7 +832,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "XcA8C4yQcDvFOWdYKU/NNm61nab8Hmqz6J46eO566oA=",
+            "MSILHash": "RnAPztgyZWjJCDpsM2zu8FZNZRysFBZNBIfXbwaZpFE=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1170,7 +1170,7 @@
                 "PlayerHitEnemy"
               ]
             },
-            "MSILHash": "3mUGSNmUB+vOSizFh82g92JC30BEl6IrLIIRA2je4wg=",
+            "MSILHash": "upngwoi2IRoq9qlJBzevaA8c88W5r4lxtPN2IpeZe0w=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1653,7 +1653,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "HMOKiUAs1Nq1ivCpM/X9cLr4/K2UPZsHndn1lDf6vsU=",
+            "MSILHash": "coukrSIw7dkSl4KMqjNoBWmHBJrSAV0o1gUDlIcy+IA=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1679,7 +1679,7 @@
                 "BoltEntity"
               ]
             },
-            "MSILHash": "vN9Bkjrj8eTaGcI/q6ogEx4UT04+Uhwb0lcEwPLq4d8=",
+            "MSILHash": "fXUeIvxsUVVcdFqvIKffkv2rDqMFLIlB2c4blPB+XcQ=",
             "BaseHookName": "OnPlayerConnected",
             "HookCategory": "Player"
           }

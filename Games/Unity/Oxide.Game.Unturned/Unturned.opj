@@ -121,7 +121,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "v/B5vkGn0YYfocpCIx81shiwI2QI4xWsTR8jw27gSBo=",
+            "MSILHash": "hoWxmh4IRWHyBC1zdLO211rYgXNTqggjuZGsFrHCLy4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -226,7 +226,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 226,
+            "InjectionIndex": 228,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "a0",
@@ -252,6 +252,7 @@
                 "System.Byte",
                 "UnityEngine.Color",
                 "UnityEngine.Color",
+                "UnityEngine.Color",
                 "System.Boolean",
                 "System.Int32",
                 "System.Int32",
@@ -266,7 +267,7 @@
                 "Steamworks.CSteamID"
               ]
             },
-            "MSILHash": "CMZskn2CB70+OSf38dpO55ReCaRmQbeujEjOhhvG1dY=",
+            "MSILHash": "FKZLTexBWIRM4rXFbNvgN7pFwV6nFWHpvD23Myei6sQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
