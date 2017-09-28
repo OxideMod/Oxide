@@ -248,7 +248,7 @@ namespace Oxide.Core.Plugins
                 {
                     stopwatch.Stop();
                     var duration = stopwatch.Elapsed.TotalSeconds;
-                    if (duration > 0.2)
+                    if (duration > 0.5)
                     {
                         var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
                         Interface.Oxide.LogWarning($"Calling '{hook}' on '{Name} v{Version}' took {duration * 1000:0}ms{suffix}");
@@ -259,7 +259,7 @@ namespace Oxide.Core.Plugins
                     if (endedAt - averageAt > 10)
                     {
                         total /= endedAt - averageAt;
-                        if (total > 0.2)
+                        if (total > 0.5)
                         {
                             var suffix = preHookGcCount == GC.CollectionCount(0) ? string.Empty : " [GARBAGE COLLECT]";
                             Interface.Oxide.LogWarning($"Calling '{hook}' on '{Name} v{Version}' took average {sum * 1000:0}ms{suffix}");
