@@ -47,7 +47,7 @@ namespace Oxide.Game.Rust
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
-            "ownerid", "moderatorid"
+            "ownerid", "moderatorid", "removeowner", "removemoderator"
         };
 
         internal bool serverInitialized;
