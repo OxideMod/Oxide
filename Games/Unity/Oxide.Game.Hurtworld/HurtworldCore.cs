@@ -11,6 +11,8 @@ using Oxide.Game.Hurtworld.Libraries.Covalence;
 using Steamworks;
 using UnityEngine;
 
+using Localization = Oxide.Core.Localization;
+
 namespace Oxide.Game.Hurtworld
 {
     /// <summary>

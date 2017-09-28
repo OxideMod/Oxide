@@ -7,6 +7,7 @@ using Oxide.Core.Plugins;
 using Oxide.Game.Terraria.Libraries.Covalence;
 
 using Lang = Oxide.Core.Libraries.Lang;
+using Localization = Oxide.Core.Localization;
 
 namespace Oxide.Game.Terraria
 {

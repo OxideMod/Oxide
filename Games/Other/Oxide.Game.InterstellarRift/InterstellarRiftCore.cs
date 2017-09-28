@@ -5,6 +5,8 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
+using Localization = Oxide.Core.Localization;
+
 namespace Oxide.Game.InterstellarRift
 {
     /// <summary>

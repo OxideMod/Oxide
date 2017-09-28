@@ -12,6 +12,8 @@ using Rust;
 using UnityEngine;
 using uLink;
 
+using Localization = Oxide.Core.Localization;
+
 namespace Oxide.Game.RustLegacy
 {
     /// <summary>

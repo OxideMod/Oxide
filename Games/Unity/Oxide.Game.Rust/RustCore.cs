@@ -12,6 +12,8 @@ using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
 using UnityEngine;
 
+using Localization = Oxide.Core.Localization;
+
 namespace Oxide.Game.Rust
 {
     /// <summary>

@@ -15,6 +15,8 @@ using Sandbox.ModAPI;
 using SteamSDK;
 using VRage.Game.ModAPI;
 
+using Localization = Oxide.Core.Localization;
+
 namespace Oxide.Game.SpaceEngineers
 {
     /// <summary>

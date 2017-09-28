@@ -9,6 +9,8 @@ using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
 using TheForest.Utils;
 
+using Localization = Oxide.Core.Localization;
+
 namespace Oxide.Game.TheForest
 {
     /// <summary>

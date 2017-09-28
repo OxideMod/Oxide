@@ -6,6 +6,8 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.PlanetExplorers.Libraries.Covalence;
 
+using Localization = Oxide.Core.Localization;
+
 namespace Oxide.Game.PlanetExplorers
 {
     /// <summary>
