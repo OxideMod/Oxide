@@ -2,7 +2,7 @@
 
 namespace Oxide.Core
 {
-    public static class Localziation
+    public static class Localization
     {
         public static readonly Dictionary<string, Dictionary<string, string>> languages = new Dictionary<string, Dictionary<string, string>>
         {

@@ -119,7 +119,7 @@ namespace Oxide.Game.ReignOfKings
             permission.RegisterPermission("oxide.usergroup", this);
 
             // Register messages for localization
-            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
         }
 
         [HookMethod("OnPluginLoaded")]

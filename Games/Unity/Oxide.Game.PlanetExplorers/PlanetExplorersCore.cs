@@ -61,7 +61,7 @@ namespace Oxide.Game.PlanetExplorers
             RemoteLogger.SetTag("game version", Server.Version);
 
             // Register messages for localization
-            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)
