@@ -4,8 +4,6 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.Blackwake
 {
     /// <summary>
@@ -60,7 +58,7 @@ namespace Oxide.Game.Blackwake
             //RemoteLogger.SetTag("version", SteamAuth.NPCPMKJLAJN());
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

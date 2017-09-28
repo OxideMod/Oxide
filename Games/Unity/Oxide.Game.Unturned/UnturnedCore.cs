@@ -6,8 +6,6 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Unturned.Libraries.Covalence;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.Unturned
 {
     /// <summary>
@@ -91,7 +89,7 @@ namespace Oxide.Game.Unturned
             permission.RegisterPermission("oxide.usergroup", this);
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

@@ -12,8 +12,6 @@ using Rust;
 using UnityEngine;
 using uLink;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.RustLegacy
 {
     /// <summary>
@@ -115,7 +113,7 @@ namespace Oxide.Game.RustLegacy
             cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

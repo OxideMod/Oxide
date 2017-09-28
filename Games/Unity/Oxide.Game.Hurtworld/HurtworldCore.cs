@@ -11,8 +11,6 @@ using Oxide.Game.Hurtworld.Libraries.Covalence;
 using Steamworks;
 using UnityEngine;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.Hurtworld
 {
     /// <summary>
@@ -171,7 +169,7 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddConsoleCommand("show", this, "ConsoleShow");
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
             
             // Setup default permission groups
             if (permission.IsLoaded)

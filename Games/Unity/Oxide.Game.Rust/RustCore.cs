@@ -12,8 +12,6 @@ using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
 using UnityEngine;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.Rust
 {
     /// <summary>
@@ -109,7 +107,7 @@ namespace Oxide.Game.Rust
             permission.RegisterPermission("oxide.usergroup", this);
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

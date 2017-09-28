@@ -7,8 +7,6 @@ using Oxide.Core.Plugins;
 using Oxide.Game.Terraria.Libraries.Covalence;
 
 using Lang = Oxide.Core.Libraries.Lang;
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.Terraria
 {
     /// <summary>
@@ -64,7 +62,7 @@ namespace Oxide.Game.Terraria
             RemoteLogger.SetTag("game version", Server.Version);
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

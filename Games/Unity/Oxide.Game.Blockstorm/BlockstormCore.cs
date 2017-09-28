@@ -4,8 +4,6 @@ using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.Blockstorm
 {
     /// <summary>
@@ -59,7 +57,7 @@ namespace Oxide.Game.Blockstorm
             RemoteLogger.SetTag("game version", Constants.smethod_0()); // TODO: Use Covalence
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

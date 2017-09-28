@@ -6,8 +6,6 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.SevenDays.Libraries.Covalence;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.SevenDays
 {
     /// <summary>

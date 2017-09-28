@@ -15,8 +15,6 @@ using Sandbox.ModAPI;
 using SteamSDK;
 using VRage.Game.ModAPI;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.SpaceEngineers
 {
     /// <summary>
@@ -134,7 +132,7 @@ namespace Oxide.Game.SpaceEngineers
             RemoteLogger.SetTag("game version", Server.Version);
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

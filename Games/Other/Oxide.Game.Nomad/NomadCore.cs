@@ -6,8 +6,6 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Nomad.Libraries.Covalence;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.Nomad
 {
     /// <summary>
@@ -59,7 +57,7 @@ namespace Oxide.Game.Nomad
         private void Init()
         {
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

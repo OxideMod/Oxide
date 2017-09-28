@@ -9,8 +9,6 @@ using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
 using TheForest.Utils;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.TheForest
 {
     /// <summary>
@@ -91,7 +89,7 @@ namespace Oxide.Game.TheForest
             permission.RegisterPermission("oxide.usergroup", this);
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

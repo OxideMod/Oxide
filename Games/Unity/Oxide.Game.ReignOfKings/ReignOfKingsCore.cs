@@ -11,8 +11,6 @@ using Oxide.Core.Plugins;
 using Oxide.Game.ReignOfKings.Libraries;
 using Oxide.Game.ReignOfKings.Libraries.Covalence;
 
-using Localization = Oxide.Core.Localization;
-
 namespace Oxide.Game.ReignOfKings
 {
     /// <summary>
@@ -121,7 +119,7 @@ namespace Oxide.Game.ReignOfKings
             permission.RegisterPermission("oxide.usergroup", this);
 
             // Register messages for localization
-            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
         }
 
         [HookMethod("OnPluginLoaded")]
