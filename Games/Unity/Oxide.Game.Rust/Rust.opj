@@ -2706,7 +2706,7 @@
             "InjectionIndex": 16,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "l1",
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "OnRconConnection",
             "HookName": "OnRconConnection",
@@ -4798,7 +4798,7 @@
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 0,
-            "ArgumentString": null,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "IOnRconInitialize [internal]",
             "HookName": "IOnRconInitialize",
@@ -6104,7 +6104,7 @@
             "InjectionIndex": 4,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this.context.UserEndPoint.Address,a0.Data",
+            "ArgumentString": "this.context.UserEndPoint.Address, a0.Data",
             "HookTypeName": "Simple",
             "Name": "IOnRconCommand [internal]",
             "HookName": "IOnRconCommand",
@@ -6121,7 +6121,7 @@
             },
             "MSILHash": "QA/UxLfFXC9bTMj2YTZY8pXKiJe3xeY6pg4s7dkuqUU=",
             "BaseHookName": null,
-            "HookCategory": "Player"
+            "HookCategory": "Server"
           }
         }
       ],
