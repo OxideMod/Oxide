@@ -5368,7 +5368,7 @@
             },
             "MSILHash": "qc1ORU2tt8EWe22wHCv5zUUFoNARGiHKUEhoJlKWcHo=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "Player"
           }
         },
         {
@@ -5394,7 +5394,7 @@
             },
             "MSILHash": "qc1ORU2tt8EWe22wHCv5zUUFoNARGiHKUEhoJlKWcHo=",
             "BaseHookName": "CanDismountEntity",
-            "HookCategory": null
+            "HookCategory": "Player"
           }
         },
         {
@@ -5420,7 +5420,7 @@
             },
             "MSILHash": "xETaOkN8jnspGN/q8nC4I/ptHFXSyMGIxbq0h44q6Es=",
             "BaseHookName": null,
-            "HookCategory": null
+            "HookCategory": "Player"
           }
         },
         {
@@ -5446,7 +5446,7 @@
             },
             "MSILHash": "xETaOkN8jnspGN/q8nC4I/ptHFXSyMGIxbq0h44q6Es=",
             "BaseHookName": "CanMountEntity",
-            "HookCategory": null
+            "HookCategory": "Player"
           }
         }
       ],

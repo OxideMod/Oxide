@@ -51,12 +51,6 @@ namespace Oxide.Game.TheForest
 
         #endregion
 
-        #region Localization
-
-        // TODO: Localization of core
-
-        #endregion
-
         #region Core Hooks
 
         [HookMethod("Init")]

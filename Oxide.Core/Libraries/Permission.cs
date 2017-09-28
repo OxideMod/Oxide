@@ -24,7 +24,7 @@ namespace Oxide.Core.Libraries
         public HashSet<string> Perms { get; set; } = new HashSet<string>();
 
         /// <summary>
-        /// Gets or sets the usergroup for this user
+        /// Gets or sets the group for this player
         /// </summary>
         public HashSet<string> Groups { get; set; } = new HashSet<string>();
     }

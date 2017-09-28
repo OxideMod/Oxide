@@ -200,6 +200,7 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
+            // Call OnServerInitialized for hotloaded plugins
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
 

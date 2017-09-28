@@ -445,13 +445,13 @@ namespace Oxide.Core.Plugins
                 foreach (var perm in cmdInfo.PermissionsRequired)
                 {
                     if (caller.HasPermission(perm)) continue;
-                    caller.Message($"You don\'t have permission to use the command '{cmd}'!"); // TODO: Use Lang API for this message
+
+                    caller.Message($"You don't have permission to use the command '{cmd}'!"); // TODO: Use Lang API for this message
                     return true;
                 }
             }
 
             cmdInfo.Callback(caller, cmd, args);
-
             return true;
         }
 
