@@ -57,6 +57,9 @@ namespace Oxide.Game.Blackwake
             //RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH); // TODO: Use Covalence
             //RemoteLogger.SetTag("version", SteamAuth.NPCPMKJLAJN());
 
+            // Register messages for localization
+            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+
             // Setup default permission groups
             if (permission.IsLoaded)
             {

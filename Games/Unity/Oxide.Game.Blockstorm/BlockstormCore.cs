@@ -56,6 +56,9 @@ namespace Oxide.Game.Blockstorm
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Constants.smethod_0()); // TODO: Use Covalence
 
+            // Register messages for localization
+            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+
             // Setup default permission groups
             if (permission.IsLoaded)
             {

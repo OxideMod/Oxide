@@ -58,6 +58,9 @@ namespace Oxide.Game.GangBeasts
             RemoteLogger.SetTag("game", Title.ToLower());
             //RemoteLogger.SetTag("version", Server.Version); // TODO: Uncomment once implemented
 
+            // Register messages for localization
+            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+
             // Setup default permission groups
             if (permission.IsLoaded)
             {

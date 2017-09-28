@@ -112,6 +112,9 @@ namespace Oxide.Game.RustLegacy
             cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
             cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
 
+            // Register messages for localization
+            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+
             // Setup default permission groups
             if (permission.IsLoaded)
             {

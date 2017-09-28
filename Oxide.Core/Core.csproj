@@ -113,6 +113,7 @@
     <Compile Include="RemoteConsole\RemoteConsole.cs" />
     <Compile Include="RemoteConsole\RemoteMessage.cs" />
     <Compile Include="RemoteLogger.cs" />
+    <Compile Include="Localization.cs" />
     <Compile Include="ServerConsole\ConsoleInput.cs" />
     <Compile Include="ServerConsole\ConsoleWindow.cs" />
     <Compile Include="ServerConsole\ServerConsole.cs" />

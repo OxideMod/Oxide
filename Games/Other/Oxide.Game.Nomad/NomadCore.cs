@@ -56,6 +56,9 @@ namespace Oxide.Game.Nomad
         [HookMethod("Init")]
         private void Init()
         {
+            // Register messages for localization
+            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+
             // Setup default permission groups
             if (permission.IsLoaded)
             {

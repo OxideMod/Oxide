@@ -88,6 +88,9 @@ namespace Oxide.Game.Unturned
             permission.RegisterPermission("oxide.show", this);
             permission.RegisterPermission("oxide.usergroup", this);
 
+            // Register messages for localization
+            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+
             // Setup default permission groups
             if (permission.IsLoaded)
             {

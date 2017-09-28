@@ -169,8 +169,8 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddConsoleCommand("show", this, "ConsoleShow");
 
             // Register messages for localization
-            lang.RegisterMessages(messages, this);
-
+            foreach (var language in Localziation.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            
             // Setup default permission groups
             if (permission.IsLoaded)
             {
