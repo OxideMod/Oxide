@@ -440,7 +440,8 @@ namespace Oxide.Core.Plugins
                 Interface.Oxide.LogWarning("Plugin.CovalenceCommandCallback received null as the caller (bad game Covalence bindings?)");
                 return false;
             }
-            if (cmdInfo.PermissionsRequired != null)
+
+            if (cmdInfo.PermissionsRequired != null && !caller.IsAdmin)
             {
                 foreach (var perm in cmdInfo.PermissionsRequired)
                 {
