@@ -265,7 +265,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public bool BelongsToGroup(string group) => false;
 
-
         /// <summary>
         /// Adds the player to the specified group
         /// </summary>

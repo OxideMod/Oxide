@@ -84,7 +84,6 @@ namespace Oxide.Game.PlanetExplorers
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 
-
         internal static void ServerConsole()
         {
             if (Interface.Oxide.ServerConsole == null) return;
