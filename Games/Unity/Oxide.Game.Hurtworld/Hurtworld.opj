@@ -71,7 +71,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "cwi7v+FFXYCiynFm7Jt7jJYe81TEioVVrk7lTghjs2E=",
+            "MSILHash": "I5va+g4gEe65liw1VFwa9mb9eL2Gq5O79T7fHysV8+Y=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -253,7 +253,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "5pMnNkFnSrzIH6ov68t5oHlagJnNLiea5CIvkcq3/Xk=",
+            "MSILHash": "a3t9959aG+ATe0n/01gjHgzIhDjb9Bg7+Rc5OgGlJYk=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -367,7 +367,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "NQ7P5m3AXRDvY2OV7dbdUGxPnHZELKwQNYTQSYm0lXo=",
+            "MSILHash": "kCsW2x3/pYS87Z9cHm1qbZPnbSrt8cynB8JMTBzk4Ps=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -419,7 +419,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "cwi7v+FFXYCiynFm7Jt7jJYe81TEioVVrk7lTghjs2E=",
+            "MSILHash": "I5va+g4gEe65liw1VFwa9mb9eL2Gq5O79T7fHysV8+Y=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -427,7 +427,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 2218,
+            "InjectionIndex": 2165,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -450,7 +450,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "cwi7v+FFXYCiynFm7Jt7jJYe81TEioVVrk7lTghjs2E=",
+            "MSILHash": "I5va+g4gEe65liw1VFwa9mb9eL2Gq5O79T7fHysV8+Y=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }

@@ -45,7 +45,7 @@ namespace Oxide.Game.Blackwake
 
         #endregion
 
-        #region Plugin Hooks
+        #region Core Hooks
 
         /// <summary>
         /// Called when the plugin is initializing
@@ -56,6 +56,9 @@ namespace Oxide.Game.Blackwake
             RemoteLogger.SetTag("game", Title.ToLower());
             //RemoteLogger.SetTag("hostname", FCNGAAPKKEO.MHBDLHCODIH); // TODO: Use Covalence
             //RemoteLogger.SetTag("version", SteamAuth.NPCPMKJLAJN());
+
+            // Register messages for localization
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)
@@ -83,12 +86,9 @@ namespace Oxide.Game.Blackwake
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
+            // Call OnServerInitialized for hotloaded plugins
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
-
-        #endregion
-
-        #region Server Hooks
 
         /// <summary>
         /// Called when the server is first initialized

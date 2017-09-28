@@ -138,7 +138,7 @@ namespace Oxide.Plugins
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogError($"Couldn't download {FileName}! Please download manually from: https://dl.bintray.com/oxidemod/builds/{FileName}");
+                Interface.Oxide.LogError($"Couldn't download {FileName}! Please download manually from: https://github.com/OxideMod/CSharpCompiler/releases/download/latest/{FileName}");
                 Interface.Oxide.LogError(ex.Message);
             }
         }
@@ -148,7 +148,7 @@ namespace Oxide.Plugins
             try
             {
                 var filePath = Path.Combine(Interface.Oxide.RootDirectory, FileName);
-                var request = (HttpWebRequest)WebRequest.Create($"https://bintray.com/oxidemod/builds/download_file?file_path={FileName}");
+                var request = (HttpWebRequest)WebRequest.Create($"https://github.com/OxideMod/CSharpCompiler/releases/download/latest/{FileName}");
                 var response = (HttpWebResponse)request.GetResponse();
                 var statusCode = (int)response.StatusCode;
                 if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay (code {statusCode})");

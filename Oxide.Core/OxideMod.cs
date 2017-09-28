@@ -384,7 +384,6 @@ namespace Oxide.Core
         public bool PluginLoaded(Plugin plugin)
         {
             plugin.OnError += plugin_OnError;
-            LogInfo("Loaded plugin {0} v{1} by {2}", plugin.Title, plugin.Version, plugin.Author);
             try
             {
                 plugin.Loader?.PluginErrors.Remove(plugin.Name);

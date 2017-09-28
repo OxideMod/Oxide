@@ -7,7 +7,6 @@ using Oxide.Core.Plugins;
 using Oxide.Game.Terraria.Libraries.Covalence;
 
 using Lang = Oxide.Core.Libraries.Lang;
-
 namespace Oxide.Game.Terraria
 {
     /// <summary>
@@ -50,7 +49,7 @@ namespace Oxide.Game.Terraria
 
         #endregion
 
-        #region Plugin Hooks
+        #region Core Hooks
 
         /// <summary>
         /// Called when the plugin is initializing
@@ -61,6 +60,9 @@ namespace Oxide.Game.Terraria
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
+
+            // Register messages for localization
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)
@@ -88,12 +90,9 @@ namespace Oxide.Game.Terraria
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
+            // Call OnServerInitialized for hotloaded plugins
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
-
-        #endregion
-
-        #region Server Hooks
 
         /// <summary>
         /// Called when the server is first initialized

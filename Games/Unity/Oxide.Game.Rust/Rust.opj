@@ -831,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "iHu1MG2GI91S/kt95sPA2T4NMw14HheDj7Z/ka6GjZk=",
+            "MSILHash": "NTeiNBfX6iAjWBo2vj2Llb4TPdy/0sjhE9DwWe7HNTY=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2375,7 +2375,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "bPlFvEE7sL/EIjNpxDI3c8nYYZKnTuhXY6iDUJXgoX0=",
+            "MSILHash": "5cJcvk8Rf1K09PHJluDrvnkBF9lH92wVDxV9IRAsCxg=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2779,7 +2779,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "Hxo+oMpSfoeqcEmQvq4yjppAgCZmgALNAgUkMd5EXfY=",
+            "MSILHash": "Qy9VUqftJhyiACqG1I3pyNoyEhYCMGE19KrzoHds+4U=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3384,7 +3384,7 @@
                 "Item"
               ]
             },
-            "MSILHash": "vDY+4yrnEfPL9oGSl3TEv3Xjkm8lUgnbodZU1+ehpaI=",
+            "MSILHash": "b8Ea457rBIMZRZkp4Ow8YK1rxPlFmEBOEURsDrAjJrc=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -3725,7 +3725,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "NGANQ3wIEp3BoozQDfkI2D2qslFAFv3TcvjhWOFKjr4=",
+            "MSILHash": "33tdXlpUvs6jq2lFrGbC0gasvSV1ZpiWDFOhCXzOkQg=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -5344,6 +5344,110 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "CanDismountEntity",
+            "HookName": "CanDismountEntity",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseMountable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DismountPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "cQh1pasq8E0ox2dIHEiOsqUvY9fvSviZFqetkp+/DH8=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 74,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnEntityDismounted",
+            "HookName": "OnEntityDismounted",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseMountable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DismountPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "cQh1pasq8E0ox2dIHEiOsqUvY9fvSviZFqetkp+/DH8=",
+            "BaseHookName": "CanDismountEntity",
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 6,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanMountEntity",
+            "HookName": "CanMountEntity",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseMountable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "MountPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "xETaOkN8jnspGN/q8nC4I/ptHFXSyMGIxbq0h44q6Es=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 86,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 3,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnEntityMounted",
+            "HookName": "OnEntityMounted",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseMountable",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "MountPlayer",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "xETaOkN8jnspGN/q8nC4I/ptHFXSyMGIxbq0h44q6Es=",
+            "BaseHookName": "CanMountEntity",
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [
@@ -6015,7 +6119,7 @@
                 "WebSocketSharp.MessageEventArgs"
               ]
             },
-            "MSILHash": "zW7Kqr8TPkoIwkR42tGawFztO+fmBTEbIoHOotj5dL8=",
+            "MSILHash": "QA/UxLfFXC9bTMj2YTZY8pXKiJe3xeY6pg4s7dkuqUU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

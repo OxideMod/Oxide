@@ -108,7 +108,7 @@ namespace Oxide.Game.Hurtworld
 
         #endregion
 
-        #region Plugin Hooks
+        #region Core Hooks
 
         /// <summary>
         /// Called when the plugin is initializing
@@ -169,8 +169,8 @@ namespace Oxide.Game.Hurtworld
             cmdlib.AddConsoleCommand("show", this, "ConsoleShow");
 
             // Register messages for localization
-            lang.RegisterMessages(messages, this);
-
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            
             // Setup default permission groups
             if (permission.IsLoaded)
             {
@@ -197,12 +197,9 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("OnPluginLoaded")]
         private void OnPluginLoaded(Plugin plugin)
         {
+            // Call OnServerInitialized for hotloaded plugins
             if (serverInitialized) plugin.CallHook("OnServerInitialized");
         }
-
-        #endregion
-
-        #region Server Hooks
 
         /// <summary>
         /// Called when the server is first initialized

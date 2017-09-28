@@ -51,12 +51,6 @@ namespace Oxide.Game.TheForest
 
         #endregion
 
-        #region Localization
-
-        // TODO: Localization of core
-
-        #endregion
-
         #region Core Hooks
 
         [HookMethod("Init")]
@@ -95,7 +89,7 @@ namespace Oxide.Game.TheForest
             permission.RegisterPermission("oxide.usergroup", this);
 
             // Register messages for localization
-            //lang.RegisterMessages(messages, this); // TODO: Implement
+            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

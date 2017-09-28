@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Oxide.Core.Libraries;
 
@@ -31,7 +32,7 @@ namespace Oxide.Core.Plugins
     /// </summary>
     public abstract class CSPlugin : Plugin
     {
-        public struct HookMethod
+        public class HookMethod
         {
             public MethodInfo Method;
             public string Name;
@@ -44,6 +45,43 @@ namespace Oxide.Core.Plugins
                 Name = method.Name;
                 Parameters = method.GetParameters();
                 IsBaseHook = method.Name.StartsWith("base_");
+
+                if (Parameters.Length > 0)
+                    Name += $"({string.Join(", ", Parameters.Select(x => x.ParameterType.ToString()).ToArray())})";
+            }
+
+            public bool HasMatchingSignature(object[] args, bool exact = false)
+            {
+                if (Parameters.Length == 0 && (args == null || args.Length == 0))
+                    return true;
+
+                // Check if hook signature matches
+                for (var n = 0; n < args.Length; n++)
+                {
+                    if (args[n] == null && !CanAssignNull(Parameters[n].ParameterType))
+                        return false;
+
+                    if (args[n] == null) continue;
+
+                    if (exact)
+                    {
+                        if (args[n].GetType() != Parameters[n].ParameterType)
+                            return false;
+                    }
+                    else
+                    {
+                        if (!Parameters[n].ParameterType.IsAssignableFrom(args[n].GetType()))
+                            return false;
+                    }
+                }
+
+                return true;
+            }
+
+            private bool CanAssignNull(Type type)
+            {
+                if (!type.IsValueType) return true;
+                return Nullable.GetUnderlyingType(type) != null;
             }
         }
 
@@ -127,70 +165,82 @@ namespace Oxide.Core.Plugins
             List<HookMethod> methods;
             if (!hooks.TryGetValue(name, out methods)) return null;
 
-            object return_value = null;
-            for (var i = 0; i < methods.Count; i++)
+            HookMethod method;
+            object[] hook_args;
+            var received = args?.Length ?? 0;
+            object return_value;
+
+            // Find a method matching the hook signature
+            if (!FindMatchingHook(methods, args, out method, out hook_args, true))
+                if (!FindMatchingHook(methods, args, out method, out hook_args))
+                    // No matching hook found on this plugin
+                    return null;
+
+            try
             {
-                var method = methods[i];
-                var hook_args = args;
-                var args_received = args?.Length ?? 0;
-                var parameters = method.Parameters;
-
-                if (args_received != parameters.Length)
-                {
-                    // The call argument count is different to the declared callback methods argument count
-                    hook_args = new object[parameters.Length];
-
-                    if (args_received > 0 && hook_args.Length > 0)
-                    {
-                        // Remove any additional arguments which the callback method does not declare
-                        Array.Copy(args, hook_args, Math.Min(args_received, hook_args.Length));
-                    }
-                    if (hook_args.Length > args_received)
-                    {
-                        // Create additional parameters for arguments excluded in this hook call
-                        for (var n = args_received; n < hook_args.Length; n++)
-                        {
-                            var parameter = parameters[n];
-                            if (parameter.DefaultValue != null && parameter.DefaultValue != DBNull.Value)
-                            {
-                                // Use the default value that was provided by the method definition
-                                hook_args[n] = parameter.DefaultValue;
-                            }
-                            else if (parameter.ParameterType.IsValueType)
-                            {
-                                // Use the default value for value types
-                                hook_args[n] = Activator.CreateInstance(parameter.ParameterType);
-                            }
-                        }
-                    }
-                }
-
-                try
-                {
-                    // Call method with the correct number of arguments
-                    return_value = InvokeMethod(method, hook_args);
-                }
-                catch (TargetInvocationException ex)
-                {
-                    throw ex.InnerException;
-                }
-
-                if (args_received != parameters.Length)
-                {
-                    // A copy of the call arguments was used for this method call
-                    for (var n = 0; n < parameters.Length; n++)
-                    {
-                        var parameter = parameters[n];
-                        // Copy output values for out and by reference arguments back to the calling args
-                        if (parameter.IsOut || parameter.ParameterType.IsByRef)
-                            args[n] = hook_args[n];
-                    }
-                }
+                // Call method with the correct number of arguments
+                return_value = InvokeMethod(method, hook_args);
             }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
+
+            if (received != method.Parameters.Length)
+                // A copy of the call arguments was used for this method call
+                for (var n = 0; n < method.Parameters.Length; n++)
+                    // Copy output values for out and by reference arguments back to the calling args
+                    if (method.Parameters[n].IsOut || method.Parameters[n].ParameterType.IsByRef)
+                        args[n] = hook_args[n];
 
             return return_value;
         }
 
         protected virtual object InvokeMethod(HookMethod method, object[] args) => method.Method.Invoke(this, args);
+
+        protected bool FindMatchingHook(List<HookMethod> methods, object[] args, out HookMethod match, out object[] hook_args, bool exact = false)
+        {
+            match = null;
+            hook_args = args;
+
+            foreach (var method in methods)
+            {
+                var received = args?.Length ?? 0;
+
+                if (received != method.Parameters.Length)
+                {
+                    // The call argument count is different to the declared callback methods argument count
+                    hook_args = new object[method.Parameters.Length];
+
+                    if (received > 0 && hook_args.Length > 0)
+                        // Remove any additional arguments which the callback method does not declare
+                        Array.Copy(args, hook_args, Math.Min(received, hook_args.Length));
+
+                    if (hook_args.Length > received)
+                    {
+                        // Create additional parameters for arguments excluded in this hook call
+                        for (var n = received; n < hook_args.Length; n++)
+                        {
+                            var parameter = method.Parameters[n];
+                            if (parameter.DefaultValue != null && parameter.DefaultValue != DBNull.Value)
+                                // Use the default value that was provided by the method definition
+                                hook_args[n] = parameter.DefaultValue;
+                            else if (parameter.ParameterType.IsValueType)
+                                // Use the default value for value types
+                                hook_args[n] = Activator.CreateInstance(parameter.ParameterType);
+                        }
+                    }
+                }
+                else
+                    hook_args = args;
+
+                if (!method.HasMatchingSignature(hook_args, exact)) continue;
+
+                match = method;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

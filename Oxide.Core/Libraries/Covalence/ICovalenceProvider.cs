@@ -21,10 +21,10 @@
         uint ServerAppId { get; }
 
         /// <summary>
-        /// Creates the game-specific server object
+        /// Creates the game-specific command system provider object
         /// </summary>
         /// <returns></returns>
-        IServer CreateServer();
+        ICommandSystem CreateCommandSystemProvider();
 
         /// <summary>
         /// Creates the game-specific player manager object
@@ -33,10 +33,10 @@
         IPlayerManager CreatePlayerManager();
 
         /// <summary>
-        /// Creates the game-specific command system provider object
+        /// Creates the game-specific server object
         /// </summary>
         /// <returns></returns>
-        ICommandSystem CreateCommandSystemProvider();
+        IServer CreateServer();
 
         /// <summary>
         /// Formats the text with markup into the game-specific markup language
