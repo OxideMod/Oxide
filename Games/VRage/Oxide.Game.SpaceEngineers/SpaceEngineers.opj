@@ -53,7 +53,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "JMWAuwMeVvr9TqO8UlNyIR6hxCq5Aqy7/ZLirY3dhTE=",
+            "MSILHash": "ZYIItWOJUmC448LjdQMQj+lpzUNd7rxwAA61UIyyJ2o=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -61,7 +61,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 265,
+            "InjectionIndex": 212,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
@@ -79,7 +79,7 @@
                 "System.Net.IPEndPoint"
               ]
             },
-            "MSILHash": "cvlHGxZHwoyGiikM3w/lghBCePEikzo4S9hofRSZHwQ=",
+            "MSILHash": "kici4SEfb32lYV3FpMDPuFsIZrFH6xVtmIld4ibjN3I=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -127,7 +127,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "PQ/kpPWAGLQ5NmW02zaNNhFtZxQXukUxdH2N3CkWJjE=",
+            "MSILHash": "Fb/y+64bEkn3qUDq5v9+gVG4bP1nQ8tpg1KqGToIbWY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -151,11 +151,10 @@
               "ReturnType": "System.Void",
               "Parameters": [
                 "System.UInt64",
-                "System.String",
-                "SteamSDK.ChatEntryTypeEnum"
+                "System.String"
               ]
             },
-            "MSILHash": "QC2Fuq4RmrQku0TWnq+sTeL8FlClCHK5a7XS7k+DM90=",
+            "MSILHash": "MB65Lgv+Ved6dYclngVkApSfPmtOPXmy+lCuTeniFAM=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -179,10 +178,10 @@
               "ReturnType": "System.Void",
               "Parameters": [
                 "System.UInt64",
-                "SteamSDK.ChatMemberStateChangeEnum"
+                "VRage.GameServices.MyChatMemberStateChangeEnum"
               ]
             },
-            "MSILHash": "+h9S18Rt/g2JB1vxHKZTIkuG+PqwNeNZ8wxpiMF9eMs=",
+            "MSILHash": "8TNwb+o/ziogVTLR5uzzWFWKLESaEINYxZPoM84Hnxs=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -262,7 +261,8 @@
           },
           "MSILHash": ""
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "AssemblyName": "VRage.Dedicated.dll",
@@ -333,7 +333,8 @@
           }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [],
+      "Fields": []
     }
   ]
 }
