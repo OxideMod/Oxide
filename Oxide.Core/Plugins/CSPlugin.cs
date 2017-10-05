@@ -50,12 +50,11 @@ namespace Oxide.Core.Plugins
                     Name += $"({string.Join(", ", Parameters.Select(x => x.ParameterType.ToString()).ToArray())})";
             }
 
-            public bool HasMatchingSignature(string name, object[] args, bool exact = false)
+            public bool HasMatchingSignature(object[] args, bool exact = false)
             {
                 if (Parameters.Length == 0 && (args == null || args.Length == 0))
                     return true;
-
-                // Check if hook signature matches
+                
                 for (var n = 0; n < args.Length; n++)
                 {
                     if (args[n] == null && !CanAssignNull(Parameters[n].ParameterType))
@@ -63,7 +62,7 @@ namespace Oxide.Core.Plugins
 
                     if (args[n] == null) continue;
 
-                    if (exact)
+                    if (exact && !IsBaseHook)
                     {
                         if (args[n].GetType() != Parameters[n].ParameterType)
                             return false;
@@ -82,6 +81,19 @@ namespace Oxide.Core.Plugins
             {
                 if (!type.IsValueType) return true;
                 return Nullable.GetUnderlyingType(type) != null;
+            }
+        }
+
+        public class HookMatch
+        {
+            public HookMethod Method;
+
+            public object[] Args;
+
+            public HookMatch(HookMethod method, object[] args)
+            {
+                Method = method;
+                Args = args;
             }
         }
 
@@ -162,53 +174,49 @@ namespace Oxide.Core.Plugins
         /// <returns></returns>
         protected sealed override object OnCallHook(string name, object[] args)
         {
-            HookMethod method;
-            object[] hook_args;
             var received = args?.Length ?? 0;
-            object return_value;
+            var matches = new List<HookMatch>();
+            object return_value = null;
 
             // Find a method matching the hook signature
-            if (!FindMatchingHook(name, args, out method, out hook_args, true))
-                if (!FindMatchingHook(name, args, out method, out hook_args))
-                    // No matching hook found on this plugin
-                    return null;
+            if (!FindMatchingHook(name, args, matches, true))
+                FindMatchingHook(name, args, matches);
 
-            try
+            // Call all matching hooks
+            foreach (var match in matches)
             {
-                // Call method with the correct number of arguments
-                return_value = InvokeMethod(method, hook_args);
-            }
-            catch (TargetInvocationException ex)
-            {
-                throw ex.InnerException;
-            }
+                try
+                {
+                    // Call method with the correct number of arguments
+                    return_value = InvokeMethod(match.Method, match.Args);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
+                }
 
-            if (received != method.Parameters.Length)
-                // A copy of the call arguments was used for this method call
-                for (var n = 0; n < method.Parameters.Length; n++)
-                    // Copy output values for out and by reference arguments back to the calling args
-                    if (method.Parameters[n].IsOut || method.Parameters[n].ParameterType.IsByRef)
-                        args[n] = hook_args[n];
+                if (received != match.Method.Parameters.Length)
+                    // A copy of the call arguments was used for this method call
+                    for (var n = 0; n < match.Method.Parameters.Length; n++)
+                        // Copy output values for out and by reference arguments back to the calling args
+                        if (match.Method.Parameters[n].IsOut || match.Method.Parameters[n].ParameterType.IsByRef)
+                            args[n] = match.Args[n];
+            }
 
             return return_value;
         }
 
-        protected virtual object InvokeMethod(HookMethod method, object[] args) => method.Method.Invoke(this, args);
-
-        protected bool FindMatchingHook(string name, object[] args, out HookMethod match, out object[] hook_args, bool exact = false)
+        protected bool FindMatchingHook(string name, object[] args, List<HookMatch> matches, bool exact = false)
         {
+            object[] hook_args;
             List<HookMethod> methods;
-            match = null;
-            hook_args = args;
 
             if (!hooks.TryGetValue(name, out methods)) return false;
 
             foreach (var method in methods)
             {
-                if (method.IsBaseHook) continue;
-
                 var received = args?.Length ?? 0;
-
+                
                 if (received != method.Parameters.Length)
                 {
                     // The call argument count is different to the declared callback methods argument count
@@ -236,13 +244,14 @@ namespace Oxide.Core.Plugins
                 else
                     hook_args = args;
 
-                if (!method.HasMatchingSignature(name, hook_args, exact)) continue;
-
-                match = method;
-                return true;
+                if (!method.HasMatchingSignature(hook_args, exact)) continue;
+                
+                matches.Add(new HookMatch(method, hook_args));
             }
-
-            return false;
+            
+            return matches.Any(x => !x.Method.IsBaseHook);
         }
+
+        protected virtual object InvokeMethod(HookMethod method, object[] args) => method.Method.Invoke(this, args);
     }
 }
