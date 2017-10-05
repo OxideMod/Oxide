@@ -68,6 +68,7 @@
     <Compile Include="Libraries\Server.cs" />
     <Compile Include="Libraries\Command.cs" />
     <Compile Include="Libraries\Player.cs" />
+    <Compile Include="MedievalEngineersCommands.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">

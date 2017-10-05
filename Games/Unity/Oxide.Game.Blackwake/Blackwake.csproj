@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <!--<Compile Include="BlackwakeCommands.cs" />-->
     <Compile Include="BlackwakeCore.cs" />
     <Compile Include="BlackwakeExtension.cs" />
     <Compile Include="BlackwakePlugin.cs" />

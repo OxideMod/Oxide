@@ -49,6 +49,7 @@
     <Compile Include="Libraries\Covalence\NomadPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\NomadServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NomadCommands.cs" />
     <Compile Include="NomadCore.cs" />
     <Compile Include="NomadExtension.cs" />
     <Compile Include="NomadPlugin.cs" />

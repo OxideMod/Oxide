@@ -70,6 +70,7 @@
     <Compile Include="Libraries\Player.cs" />
     <Compile Include="Libraries\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpaceEngineersCommands.cs" />
     <Compile Include="SpaceEngineersCore.cs" />
     <Compile Include="SpaceEngineersExtension.cs" />
     <Compile Include="SpaceEngineersPlugin.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -17,9 +16,21 @@ namespace Oxide.Game.RustLegacy
     /// <summary>
     /// The core Rust Legacy plugin
     /// </summary>
-    public class RustLegacyCore : CSPlugin
+    public partial class RustLegacyCore : CSPlugin
     {
         #region Initialization
+
+        /// <summary>
+        /// Initializes a new instance of the RustCore class
+        /// </summary>
+        public RustLegacyCore()
+        {
+            // Set attributes
+            Title = "Rust Legacy";
+            Author = "Oxide Team";
+            var assemblyVersion = RustLegacyExtension.AssemblyVersion;
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+        }
 
         // Libraries
         internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -51,29 +62,6 @@ namespace Oxide.Game.RustLegacy
         // Cache some player information
         private static readonly Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
 
-        /// <summary>
-        /// Initializes a new instance of the RustCore class
-        /// </summary>
-        public RustLegacyCore()
-        {
-            // Set attributes
-            Title = "Rust Legacy";
-            Author = "Oxide Team";
-            var assemblyVersion = RustLegacyExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-        }
-
-        /// <summary>
-        /// Checks if the permission system has loaded, shows an error if it failed to load
-        /// </summary>
-        /// <returns></returns>
-        private bool PermissionsLoaded(ConsoleSystem.Arg arg)
-        {
-            if (permission.IsLoaded) return true;
-            arg.ReplyWith("Unable to load permission files! Permissions will not work until resolved.\r\n => " + permission.LastException.Message);
-            return false;
-        }
-
         #endregion
 
         #region Core Hooks
@@ -88,29 +76,22 @@ namespace Oxide.Game.RustLegacy
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
 
-            // Add general commands
-            cmdlib.AddConsoleCommand("oxide.plugins", this, "ConsolePlugins");
-            cmdlib.AddConsoleCommand("global.plugins", this, "ConsolePlugins");
-            cmdlib.AddConsoleCommand("oxide.load", this, "ConsoleLoad");
-            cmdlib.AddConsoleCommand("global.load", this, "ConsoleLoad");
-            cmdlib.AddConsoleCommand("oxide.unload", this, "ConsoleUnload");
-            cmdlib.AddConsoleCommand("global.unload", this, "ConsoleUnload");
-            cmdlib.AddConsoleCommand("oxide.reload", this, "ConsoleReload");
-            cmdlib.AddConsoleCommand("global.reload", this, "ConsoleReload");
-            cmdlib.AddConsoleCommand("oxide.version", this, "ConsoleVersion");
-            cmdlib.AddConsoleCommand("global.version", this, "ConsoleVersion");
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand", "oxide.plugins");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand", "oxide.load");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand", "oxide.reload");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand", "oxide.unload");
 
-            // Add permission commands
-            cmdlib.AddConsoleCommand("oxide.group", this, "ConsoleGroup");
-            cmdlib.AddConsoleCommand("global.group", this, "ConsoleGroup");
-            cmdlib.AddConsoleCommand("oxide.usergroup", this, "ConsoleUserGroup");
-            cmdlib.AddConsoleCommand("global.usergroup", this, "ConsoleUserGroup");
-            cmdlib.AddConsoleCommand("oxide.grant", this, "ConsoleGrant");
-            cmdlib.AddConsoleCommand("global.grant", this, "ConsoleGrant");
-            cmdlib.AddConsoleCommand("oxide.revoke", this, "ConsoleRevoke");
-            cmdlib.AddConsoleCommand("global.revoke", this, "ConsoleRevoke");
-            cmdlib.AddConsoleCommand("oxide.show", this, "ConsoleShow");
-            cmdlib.AddConsoleCommand("global.show", this, "ConsoleShow");
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand", "oxide.grant");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand", "oxide.group");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand", "oxide.revoke");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand", "oxide.show");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand", "oxide.usergroup");
+
+            // Add core misc commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
 
             // Register messages for localization
             foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
@@ -166,6 +147,8 @@ namespace Oxide.Game.RustLegacy
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
         #endregion
+
+        // TODO: Move majority of hooks to RustLegacyHooks.cs
 
         #region Player Hooks
 
@@ -284,415 +267,6 @@ namespace Oxide.Game.RustLegacy
         /// <param name="netUser"></param>
         [HookMethod("IOnPlayerVoice")]
         private object IOnPlayerVoice(NetUser netUser) => (int?)Interface.Call("OnPlayerVoice", netUser, VoiceCom.playerList);
-
-        #endregion
-
-        #region Console Commands
-
-        /// <summary>
-        /// Called when the "plugins" command has been executed
-        /// </summary>
-        [HookMethod("ConsolePlugins")]
-        private void ConsolePlugins(ConsoleSystem.Arg arg)
-        {
-            if (!IsAdmin(arg)) return;
-
-            var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
-            var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
-            var unloadedPluginErrors = new Dictionary<string, string>();
-            foreach (var loader in Interface.Oxide.GetPluginLoaders())
-            {
-                foreach (var name in loader.ScanDirectory(Interface.Oxide.PluginDirectory).Except(loadedPluginNames))
-                {
-                    string msg;
-                    unloadedPluginErrors[name] = (loader.PluginErrors.TryGetValue(name, out msg)) ? msg : "Unloaded";
-                }
-            }
-
-            var totalPluginCount = loadedPlugins.Length + unloadedPluginErrors.Count;
-            if (totalPluginCount < 1)
-            {
-                arg.ReplyWith("No plugins are currently available");
-                return;
-            }
-
-            var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:";
-            var number = 1;
-            output = loadedPlugins.Aggregate(output, (current, plugin) => current + $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author}");
-            output = unloadedPluginErrors.Keys.Aggregate(output, (current, pluginName) => current + $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}");
-            arg.ReplyWith(output);
-        }
-
-        /// <summary>
-        /// Called when the "load" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleLoad")]
-        private void ConsoleLoad(ConsoleSystem.Arg arg)
-        {
-            if (arg.argUser != null && !arg.argUser.admin) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs())
-            {
-                arg.ReplyWith("Usage: load *|<pluginname>+");
-                return;
-            }
-
-            if (arg.GetString(0).Equals("*"))
-            {
-                Interface.Oxide.LoadAllPlugins();
-                return;
-            }
-
-            foreach (var name in arg.Args)
-            {
-                if (string.IsNullOrEmpty(name)) continue;
-                Interface.Oxide.LoadPlugin(name);
-                pluginManager.GetPlugin(name);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "unload" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleUnload")]
-        private void ConsoleUnload(ConsoleSystem.Arg arg)
-        {
-            if (arg.argUser != null && !arg.argUser.admin) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs())
-            {
-                arg.ReplyWith("Usage: unload *|<pluginname>+");
-                return;
-            }
-
-            if (arg.GetString(0).Equals("*"))
-            {
-                Interface.Oxide.UnloadAllPlugins();
-                return;
-            }
-
-            foreach (var name in arg.Args)
-                if (!string.IsNullOrEmpty(name)) Interface.Oxide.UnloadPlugin(name);
-        }
-
-        /// <summary>
-        /// Called when the "reload" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleReload")]
-        private void ConsoleReload(ConsoleSystem.Arg arg)
-        {
-            if (arg.argUser != null && !arg.argUser.admin) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs())
-            {
-                arg.ReplyWith("Usage: reload *|<pluginname>+");
-                return;
-            }
-
-            if (arg.GetString(0).Equals("*"))
-            {
-                Interface.Oxide.ReloadAllPlugins();
-                return;
-            }
-
-            foreach (var name in arg.Args)
-                if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
-        }
-
-        /// <summary>
-        /// Called when the "version" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleVersion")]
-        private void ConsoleVersion(ConsoleSystem.Arg arg) => arg.ReplyWith($"Oxide {OxideMod.Version} for Rust {Rust.Defines.Connection.protocol}");
-
-        /// <summary>
-        /// Called when the "group" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleGroup")]
-        private void ConsoleGroup(ConsoleSystem.Arg arg)
-        {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs(2))
-            {
-                var reply = "Syntax: group <add|set> <name> [title] [rank]";
-                reply += "Syntax: group <remove> <name>\n";
-                reply += "Syntax: group <parent> <name> <parentName>";
-                arg.ReplyWith(reply);
-                return;
-            }
-
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-            var title = arg.GetString(2);
-            var rank = arg.GetInt(3);
-
-            if (mode.Equals("add"))
-            {
-                if (permission.GroupExists(name))
-                {
-                    arg.ReplyWith("Group '" + name + "' already exist");
-                    return;
-                }
-                permission.CreateGroup(name, title, rank);
-                arg.ReplyWith("Group '" + name + "' created");
-            }
-            else if (mode.Equals("remove"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    arg.ReplyWith("Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.RemoveGroup(name);
-                arg.ReplyWith("Group '" + name + "' deleted");
-            }
-            else if (mode.Equals("set"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    arg.ReplyWith("Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.SetGroupTitle(name, title);
-                permission.SetGroupRank(name, rank);
-                arg.ReplyWith("Group '" + name + "' changed");
-            }
-        }
-
-        /// <summary>
-        /// Called when the "group" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleUserGroup")]
-        private void ConsoleUserGroup(ConsoleSystem.Arg arg)
-        {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs(3))
-            {
-                arg.ReplyWith("Usage: usergroup <add|remove> <username> <groupname>");
-                return;
-            }
-
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-            var group = arg.GetString(2);
-
-            var player = FindPlayer(name);
-            if (player == null && !permission.UserIdValid(name))
-            {
-                arg.ReplyWith("User '" + name + "' not found");
-                return;
-            }
-            var userId = name;
-            if (player != null)
-            {
-                userId = player.userID.ToString();
-                name = player.displayName;
-                permission.UpdateNickname(userId, name);
-            }
-
-            if (!permission.GroupExists(group))
-            {
-                arg.ReplyWith("Group '" + group + "' doesn't exist");
-                return;
-            }
-
-            if (mode.Equals("add"))
-            {
-                permission.AddUserGroup(userId, group);
-                if (player != null)
-                {
-                    arg.ReplyWith("User '" + player.displayName + "' assigned group: " + @group);
-                }
-            }
-            else if (mode.Equals("remove"))
-            {
-                permission.RemoveUserGroup(userId, group);
-                if (player != null)
-                {
-                    arg.ReplyWith("User '" + player.displayName + "' removed from group: " + @group);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the "grant" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleGrant")]
-        private void ConsoleGrant(ConsoleSystem.Arg arg)
-        {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs(3))
-            {
-                arg.ReplyWith("Usage: grant <group|user> <name|id> <permission>");
-                return;
-            }
-
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-            var perm = arg.GetString(2);
-
-            if (mode.Equals("group"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    arg.ReplyWith("Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.GrantGroupPermission(name, perm, null);
-                arg.ReplyWith("Group '" + name + "' granted permission: " + perm);
-            }
-            else if (mode.Equals("user"))
-            {
-                var player = FindPlayer(name);
-                if (player == null && !permission.UserIdValid(name))
-                {
-                    arg.ReplyWith("User '" + name + "' not found");
-                    return;
-                }
-                var userId = name;
-                if (player != null)
-                {
-                    userId = player.userID.ToString();
-                    name = player.displayName;
-                    permission.UpdateNickname(userId, name);
-                }
-                permission.GrantUserPermission(userId, perm, null);
-                arg.ReplyWith("User '" + name + "' granted permission: " + perm);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "grant" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleRevoke")]
-        private void ConsoleRevoke(ConsoleSystem.Arg arg)
-        {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs(3))
-            {
-                arg.ReplyWith("Usage: revoke <group|user> <name|id> <permission>");
-                return;
-            }
-
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-            var perm = arg.GetString(2);
-
-            if (mode.Equals("group"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    arg.ReplyWith("Group '" + name + "' doesn't exist");
-                    return;
-                }
-                permission.RevokeGroupPermission(name, perm);
-                arg.ReplyWith("Group '" + name + "' revoked permission: " + perm);
-            }
-            else if (mode.Equals("user"))
-            {
-                var player = FindPlayer(name);
-                if (player == null && !permission.UserIdValid(name))
-                {
-                    arg.ReplyWith("User '" + name + "' not found");
-                    return;
-                }
-                var userId = name;
-                if (player != null)
-                {
-                    userId = player.userID.ToString();
-                    name = player.displayName;
-                    permission.UpdateNickname(userId, name);
-                }
-                permission.RevokeUserPermission(userId, perm);
-                arg.ReplyWith("User '" + name + "' revoked permission: " + perm);
-            }
-        }
-
-        /// <summary>
-        /// Called when the "show" command has been executed
-        /// </summary>
-        /// <param name="arg"></param>
-        [HookMethod("ConsoleShow")]
-        private void ConsoleShow(ConsoleSystem.Arg arg)
-        {
-            if (!PermissionsLoaded(arg)) return;
-            if (!IsAdmin(arg)) return;
-            if (!arg.HasArgs())
-            {
-                var reply = "Syntax: show <group|user> <name>\n";
-                reply += "Syntax: show <groups|perms>";
-                arg.ReplyWith(reply);
-                return;
-            }
-
-            var mode = arg.GetString(0);
-            var name = arg.GetString(1);
-
-            if (mode.Equals("perms"))
-            {
-                var result = "Permissions:\n";
-                result += string.Join(", ", permission.GetPermissions());
-                arg.ReplyWith(result);
-            }
-            else if (mode.Equals("user"))
-            {
-                var player = FindPlayer(name);
-                if (player == null && !permission.UserIdValid(name))
-                {
-                    arg.ReplyWith("User '" + name + "' not found");
-                    return;
-                }
-                var userId = name;
-                if (player != null)
-                {
-                    userId = player.userID.ToString();
-                    name = player.displayName;
-                    permission.UpdateNickname(userId, name);
-                    name += $"({userId})";
-                }
-                var result = "User '" + name + "' permissions:\n";
-                result += string.Join(", ", permission.GetUserPermissions(userId));
-                result += "\nUser '" + name + "' groups:\n";
-                result += string.Join(", ", permission.GetUserGroups(userId));
-                arg.ReplyWith(result);
-            }
-            else if (mode.Equals("group"))
-            {
-                if (!permission.GroupExists(name))
-                {
-                    arg.ReplyWith("Group '" + name + "' doesn't exist");
-                    return;
-                }
-                var result = "Group '" + name + "' users:\n";
-                result += string.Join(", ", permission.GetUsersInGroup(name));
-                result += "\nGroup '" + name + "' permissions:\n";
-                result += string.Join(", ", permission.GetGroupPermissions(name));
-                var parent = permission.GetGroupParent(name);
-                while (permission.GroupExists(parent))
-                {
-                    result += "\nParent group '" + parent + "' permissions:\n";
-                    result += string.Join(", ", permission.GetGroupPermissions(parent));
-                    parent = permission.GetGroupParent(name);
-                }
-                arg.ReplyWith(result);
-            }
-            else if (mode.Equals("groups"))
-            {
-                arg.ReplyWith("Groups:\n" + string.Join(", ", permission.GetGroups()));
-            }
-        }
 
         #endregion
 
@@ -892,16 +466,18 @@ namespace Oxide.Game.RustLegacy
         #region Helpers
 
         /// <summary>
-        /// Check if player is admin
+        /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
+        /// <param name="player"></param>
         /// <returns></returns>
-        private static bool IsAdmin(ConsoleSystem.Arg arg)
+        private bool PermissionsLoaded(IPlayer player)
         {
-            if (arg.argUser == null || arg.argUser.CanAdmin()) return true;
-            arg.ReplyWith("You are not an admin.");
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
             return false;
         }
 
+        // TODO: Deprecate and remove
         public NetUser FindPlayer(string nameOrIdOrIp)
         {
             NetUser netUser;
@@ -911,8 +487,10 @@ namespace Oxide.Game.RustLegacy
             return null;
         }
 
+        // TODO: Deprecate and remove
         public static Character GetCharacter(NetUser netUser) => netUser?.playerClient?.controllable?.GetComponent<Character>();
 
+        // TODO: Deprecate and remove
         public static PlayerInventory GetInventory(NetUser netUser) => RustLegacyCore.GetCharacter(netUser)?.GetComponent<PlayerInventory>();
 
         #endregion

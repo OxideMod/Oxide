@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <!--<Compile Include="GangBeastsCommands.cs" />-->
     <Compile Include="GangBeastsCore.cs" />
     <Compile Include="GangBeastsExtension.cs" />
     <Compile Include="GangBeastsPlugin.cs" />

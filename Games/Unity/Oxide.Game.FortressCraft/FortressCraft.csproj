@@ -55,6 +55,7 @@
     <Compile Include="Libraries\Covalence\FortressCraftPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\FortressCraftServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FortressCraftCommands.cs" />
     <Compile Include="FortressCraftCore.cs" />
     <Compile Include="FortressCraftExtension.cs" />
     <Compile Include="FortressCraftPlugin.cs" />

@@ -4,12 +4,12 @@ using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 
-namespace Oxide.Game.Unturned
+namespace Oxide.Game.FortressCraft
 {
     /// <summary>
-    /// Game commands for the core Unturned plugin
+    /// Game commands for the core FortressCraft plugin
     /// </summary>
-    public partial class UnturnedCore : CSPlugin
+    public partial class FortressCraftCore : CSPlugin
     {
         #region Grant Command
 

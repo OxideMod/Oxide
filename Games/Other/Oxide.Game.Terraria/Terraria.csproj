@@ -51,6 +51,7 @@
     <Compile Include="Libraries\Covalence\TerrariaPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\TerrariaServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TerrariaCommands.cs" />
     <Compile Include="TerrariaCore.cs" />
     <Compile Include="TerrariaExtension.cs" />
     <Compile Include="TerrariaPlugin.cs" />

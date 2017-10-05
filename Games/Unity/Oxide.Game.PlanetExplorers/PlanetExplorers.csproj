@@ -55,6 +55,7 @@
     <Compile Include="Libraries\Covalence\PlanetExplorersPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\PlanetExplorersServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PlanetExplorersCommands.cs" />
     <Compile Include="PlanetExplorersCore.cs" />
     <Compile Include="PlanetExplorersExtension.cs" />
     <Compile Include="PlanetExplorersPlugin.cs" />
