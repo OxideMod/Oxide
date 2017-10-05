@@ -384,7 +384,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 61,
+            "InjectionIndex": 64,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0, a1, a5",
@@ -407,7 +407,7 @@
                 "Item"
               ]
             },
-            "MSILHash": "YuTWGPFZ2pDFoztH4EIULWAa664m/rRY+MRnfqrQN04=",
+            "MSILHash": "4S7CkUTYx2ev4ju9fBCT07P3anesqm2oZKsrcqWaY6Q=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -704,10 +704,10 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 114,
+            "InjectionIndex": 111,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0, l7",
+            "ArgumentString": "this, a0, l6",
             "HookTypeName": "Simple",
             "Name": "OnDispenserGather",
             "HookName": "OnDispenserGather",
@@ -726,7 +726,7 @@
                 "AttackEntity"
               ]
             },
-            "MSILHash": "udYblCOo+GAwI459xP9DzLYUeTKDIv4nxG9Rc95ZIUU=",
+            "MSILHash": "udDfxkKXv+FEgHwLicSJeIOI4jGtfbIROi3mrJ7HQ44=",
             "BaseHookName": null,
             "HookCategory": "Resource"
           }
@@ -805,7 +805,7 @@
                 "System.Single"
               ]
             },
-            "MSILHash": "SxdT/w2+G0toC4QaCNxnnn+BJhoBj/qpo1aSZA8dqqE=",
+            "MSILHash": "DUtnLCeVqod9c7xhI5IAT7ltmG8B8SU5Dcbl9k/4Dl0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -831,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "NTeiNBfX6iAjWBo2vj2Llb4TPdy/0sjhE9DwWe7HNTY=",
+            "MSILHash": "eIeO64+cMpCP+3rQFO1IgG7q9FXraudMjbz8dFAB08Q=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1383,7 +1383,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 12,
+            "InjectionIndex": 14,
             "ReturnBehavior": 3,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l2 => l2",
@@ -1399,7 +1399,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "f5u1AXoFxzbThXHQFyZ5EmmQObNpVA37pD2c8kG5FtI=",
+            "MSILHash": "DRyWKZc7Ww8M64tORt+WXuIrNbPwIZDm7zyZ5GDCsek=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -1785,7 +1785,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "PwRtdIlfOtA2YEuZYNU2tnU2+egSm1DhWxPtFIEf7ZM=",
+            "MSILHash": "aTk7x/TbuBhdB55oJZGmSkBXROIxdmJ8HkJVjOop7PE=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2227,7 +2227,8 @@
               "Name": "CanEquipItem",
               "ReturnType": "System.Boolean",
               "Parameters": [
-                "Item"
+                "Item",
+                "System.Int32"
               ]
             },
             "MSILHash": "FE3uNHnsFcPFlvnyO44UNBX5UvFzO8NrpULI2TswLiQ=",
@@ -2253,7 +2254,8 @@
               "Name": "CanWearItem",
               "ReturnType": "System.Boolean",
               "Parameters": [
-                "Item"
+                "Item",
+                "System.Int32"
               ]
             },
             "MSILHash": "IrM1HOygIQ15AJ5bj1QkNpqPh4TiL98qLUD/oP3/hYE=",
@@ -2264,7 +2266,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 158,
+            "InjectionIndex": 159,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 3,
             "ArgumentString": null,
@@ -2279,10 +2281,11 @@
               "Name": "CanAcceptItem",
               "ReturnType": "ItemContainer/CanAcceptResult",
               "Parameters": [
-                "Item"
+                "Item",
+                "System.Int32"
               ]
             },
-            "MSILHash": "YOIvo1rNYNSZ1dhYNVnBoKx4YqEL3VYINmolikq0r/4=",
+            "MSILHash": "uute0X0yRRn+HpSA060N8v4Ctr6G92/soo4oGNpmscY=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -2375,7 +2378,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "5cJcvk8Rf1K09PHJluDrvnkBF9lH92wVDxV9IRAsCxg=",
+            "MSILHash": "iA7K8tFW6GweluDf3va4bClwDB65fcmF39ueTkbP0wQ=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2779,7 +2782,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "Qy9VUqftJhyiACqG1I3pyNoyEhYCMGE19KrzoHds+4U=",
+            "MSILHash": "QvupeRIriz9WPyQ47NMIU0DKawiAjipu5zn7EwsU54k=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2806,7 +2809,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "7abGO6hyF1YBfDq7hof8xZEP4URAC2rr0msCXMXdvUc=",
+            "MSILHash": "tENPXRsQ+wF/0y89YkAABGwhMf0/utjnIpcbqcKVocc=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -2883,7 +2886,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "7abGO6hyF1YBfDq7hof8xZEP4URAC2rr0msCXMXdvUc=",
+            "MSILHash": "tENPXRsQ+wF/0y89YkAABGwhMf0/utjnIpcbqcKVocc=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
@@ -3497,7 +3500,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 21,
+            "InjectionIndex": 23,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0, a1, a2",
@@ -3517,7 +3520,7 @@
                 "System.Int32"
               ]
             },
-            "MSILHash": "KBziruRR5N5cLb0idL2NID8BkudLO6XB9UKb0Uzye5s=",
+            "MSILHash": "0Wwf57TLa14iziWvpZ7bSPeix8DYNmElYcLMDkfyOi0=",
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
@@ -3525,12 +3528,12 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 31,
+            "InjectionIndex": 48,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
-            "Name": "OnRefreshVendingStock",
+            "Name": "OnRefreshVendingStock [blueprint]",
             "HookName": "OnRefreshVendingStock",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "VendingMachine",
@@ -3543,7 +3546,7 @@
                 "ItemDefinition"
               ]
             },
-            "MSILHash": "VS6+ALgEyUB8TEKnIg5tSy561gWoxzbf84BP+H0PRoY=",
+            "MSILHash": "6C+Vbjb/gBX6/wL70cE/cV6v0GmI2LKyx+04ELvWv0g=",
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
@@ -3551,7 +3554,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 85,
+            "InjectionIndex": 109,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l0, l7",
@@ -3569,7 +3572,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "ZuPHRvyJ1oG227EO1TCXYtQ4yJbfhjTIxXDaoQxXOEs=",
+            "MSILHash": "M7W3HhrniKW5H8P3Tan/lURFoMt90AgJGuKtOn05qHM=",
             "BaseHookName": null,
             "HookCategory": "Vending"
           }
@@ -4062,7 +4065,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "D5a2RFwfG/dIUtp2lPaq9SiQfaORIFygJu/6Iv3ZPgc=",
+            "MSILHash": "4eOttM6jdYEpaUM9O8qi5RLc/RiMsXEVDYcH9cJl/3I=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -4374,7 +4377,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "D5a2RFwfG/dIUtp2lPaq9SiQfaORIFygJu/6Iv3ZPgc=",
+            "MSILHash": "4eOttM6jdYEpaUM9O8qi5RLc/RiMsXEVDYcH9cJl/3I=",
             "BaseHookName": "OnRecycleItem",
             "HookCategory": "_Patches"
           }
@@ -4972,8 +4975,8 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "this, a0",
+            "ArgumentBehavior": 3,
+            "ArgumentString": "",
             "HookTypeName": "Simple",
             "Name": "CanVendingAcceptItem",
             "HookName": "CanVendingAcceptItem",
@@ -4985,7 +4988,8 @@
               "Name": "CanAcceptItem",
               "ReturnType": "System.Boolean",
               "Parameters": [
-                "Item"
+                "Item",
+                "System.Int32"
               ]
             },
             "MSILHash": "YrnUbOKfHLxC386pjMYiVrshTW5tnnE5/1DWqmDyzYE=",
@@ -5447,6 +5451,32 @@
             "MSILHash": "xETaOkN8jnspGN/q8nC4I/ptHFXSyMGIxbq0h44q6Es=",
             "BaseHookName": "CanMountEntity",
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 95,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, a0",
+            "HookTypeName": "Simple",
+            "Name": "OnRefreshVendingStock [item]",
+            "HookName": "OnRefreshVendingStock",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "VendingMachine",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RefreshSellOrderStockLevel",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "ItemDefinition"
+              ]
+            },
+            "MSILHash": "6C+Vbjb/gBX6/wL70cE/cV6v0GmI2LKyx+04ELvWv0g=",
+            "BaseHookName": "OnRefreshVendingStock [blueprint]",
+            "HookCategory": "Vending"
           }
         }
       ],

@@ -11,9 +11,21 @@ namespace Oxide.Game.MedievalEngineers
     /// <summary>
     /// The core Medieval Engineers plugin
     /// </summary>
-    public class MedievalEngineersCore : CSPlugin
+    public partial class MedievalEngineersCore : CSPlugin
     {
         #region Initialization
+
+        /// <summary>
+        /// Initializes a new instance of the MedievalEngineersCore class
+        /// </summary>
+        public MedievalEngineersCore()
+        {
+            // Set plugin info attributes
+            Title = "Medieval Engineers";
+            Author = "Oxide Team";
+            var assemblyVersion = MedievalEngineersExtension.AssemblyVersion;
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+        }
 
         // Libraries
         //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -35,15 +47,15 @@ namespace Oxide.Game.MedievalEngineers
         private bool serverInitialized;
 
         /// <summary>
-        /// Initializes a new instance of the MedievalEngineersCore class
+        /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
-        public MedievalEngineersCore()
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool PermissionsLoaded(IPlayer player)
         {
-            // Set plugin info attributes
-            Title = "Medieval Engineers";
-            Author = "Oxide Team";
-            var assemblyVersion = MedievalEngineersExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            return false;
         }
 
         #endregion
@@ -59,6 +71,23 @@ namespace Oxide.Game.MedievalEngineers
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
+
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand", "oxide.plugins");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand", "oxide.load");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand", "oxide.reload");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand", "oxide.unload");
+
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand", "oxide.grant");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand", "oxide.group");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand", "oxide.revoke");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand", "oxide.show");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand", "oxide.usergroup");
+
+            // Add core misc commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
 
             // Register messages for localization
             foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);

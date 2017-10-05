@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Game.Configuration;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 
 namespace Oxide.Game.InterstellarRift
@@ -10,9 +11,21 @@ namespace Oxide.Game.InterstellarRift
     /// <summary>
     /// The core Interstellar Rift plugin
     /// </summary>
-    public class InterstellarRiftCore : CSPlugin
+    public partial class InterstellarRiftCore : CSPlugin
     {
         #region Initialization
+
+        /// <summary>
+        /// Initializes a new instance of the InterstellarRiftCore class
+        /// </summary>
+        public InterstellarRiftCore()
+        {
+            // Set plugin info attributes
+            Title = "Interstellar Rift";
+            Author = "Oxide Team";
+            var assemblyVersion = InterstellarRiftExtension.AssemblyVersion;
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+        }
 
         // Libraries
         //internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -33,18 +46,6 @@ namespace Oxide.Game.InterstellarRift
 
         private bool serverInitialized;
 
-        /// <summary>
-        /// Initializes a new instance of the InterstellarRiftCore class
-        /// </summary>
-        public InterstellarRiftCore()
-        {
-            // Set plugin info attributes
-            Title = "Interstellar Rift";
-            Author = "Oxide Team";
-            var assemblyVersion = InterstellarRiftExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-        }
-
         #endregion
 
         #region Core Hooks
@@ -58,6 +59,23 @@ namespace Oxide.Game.InterstellarRift
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Globals.Version); // TODO: Use Covalence
+
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand", "oxide.plugins");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand", "oxide.load");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand", "oxide.reload");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand", "oxide.unload");
+
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand", "oxide.grant");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand", "oxide.group");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand", "oxide.revoke");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand", "oxide.show");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand", "oxide.usergroup");
+
+            // Add core misc commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
 
             // Register messages for localization
             foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
@@ -110,6 +128,22 @@ namespace Oxide.Game.InterstellarRift
         /// </summary>
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool PermissionsLoaded(IPlayer player)
+        {
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            return false;
+        }
 
         #endregion
     }

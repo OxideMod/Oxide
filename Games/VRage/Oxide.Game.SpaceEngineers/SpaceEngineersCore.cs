@@ -20,9 +20,21 @@ namespace Oxide.Game.SpaceEngineers
     /// <summary>
     /// The core Space Engineers plugin
     /// </summary>
-    public class SpaceEngineersCore : CSPlugin
+    public partial class SpaceEngineersCore : CSPlugin
     {
         #region Initialization
+
+        /// <summary>
+        /// Initializes a new instance of the SpaceEngineersCore class
+        /// </summary>
+        public SpaceEngineersCore()
+        {
+            // Set plugin info attributes
+            Title = "Space Engineers";
+            Author = "Oxide Team";
+            var assemblyVersion = SpaceEngineersExtension.AssemblyVersion;
+            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+        }
 
         // Libraries
         internal readonly Command cmdlib = Interface.Oxide.GetLibrary<Command>();
@@ -50,59 +62,21 @@ namespace Oxide.Game.SpaceEngineers
 
         private bool serverInitialized;
 
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool PermissionsLoaded(IPlayer player)
+        {
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            return false;
+        }
+
         //private SpaceEngineersLogger logger;
 
         private int m_totalTimeInMilliseconds;
-
-        private readonly Dictionary<string, string> messages = new Dictionary<string, string>
-        {
-            {"CommandUsageLoad", "Usage: load *|<pluginname>+"},
-            {"CommandUsageGrant", "Usage: grant <group|user> <name|id> <permission>"},
-            {"CommandUsageGroup", "Usage: group <add|remove|set> <name> [title] [rank]"},
-            {"CommandUsageReload", "Usage: reload *|<pluginname>+"},
-            {"CommandUsageRevoke", "Usage: revoke <group|user> <name|id> <permission>"},
-            {"CommandUsageShow", "Usage: show <group|user> <name>\nUsage: show <groups|perms>"},
-            {"CommandUsageUnload", "Usage: unload *|<pluginname>+"},
-            {"CommandUsageUserGroup", "Usage: usergroup <add|remove> <username> <groupname>"},
-            {"GroupAlreadyExists", "Group '{0}' already exists"},
-            {"GroupChanged", "Group '{0}' changed"},
-            {"GroupCreated", "Group '{0}' created"},
-            {"GroupDeleted", "Group '{0}' deleted"},
-            {"GroupNotFound", "Group '{0}' doesn't exist"},
-            {"GroupParentChanged", "Group '{0}' parent changed to '{1}'"},
-            {"GroupParentNotChanged", "Group '{0}' parent was not changed"},
-            {"GroupParentNotFound", "Group parent '{0}' doesn't exist"},
-            {"GroupPermissionGranted", "Group '{0}' granted permission '{1}'"},
-            {"GroupPermissionRevoked", "Group '{0}' revoked permission '{1}'"},
-            {"NoPluginsFound", "No plugins are currently available"},
-            {"PermissionNotFound", "Permission '{0}' doesn't exist"},
-            {"PermissionsNotLoaded", "Unable to load permission files! Permissions will not work until resolved.\n => {0}"},
-            {"PlayerLanguage", "Player language set to {0}"},
-            {"PluginNotLoaded", "Plugin '{0}' not loaded."},
-            {"PluginReloaded", "Reloaded plugin {0} v{1} by {2}"},
-            {"PluginUnloaded", "Unloaded plugin {0} v{1} by {2}"},
-            {"ShowGroups", "Groups: {0}"},
-            {"ServerLanguage", "Server language set to {0}"},
-            {"UnknownCommand", "Unknown command: {0}"},
-            {"UserAddedToGroup", "User '{0}' added to group: {1}"},
-            {"UserNotFound", "User '{0}' not found"},
-            {"UserPermissionGranted", "User '{0}' granted permission '{1}'"},
-            {"UserPermissionRevoked", "User '{0}' revoked permission '{1}'"},
-            {"UserRemovedFromGroup", "User '{0}' removed from group '{1}'"},
-            {"YouAreNotAdmin", "You are not an admin"}
-        };
-
-        /// <summary>
-        /// Initializes a new instance of the SpaceEngineersCore class
-        /// </summary>
-        public SpaceEngineersCore()
-        {
-            // Set plugin info attributes
-            Title = "Space Engineers";
-            Author = "Oxide Team";
-            var assemblyVersion = SpaceEngineersExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
-        }
 
         /// <summary>
         /// Starts the logging
@@ -130,6 +104,23 @@ namespace Oxide.Game.SpaceEngineers
             // Configure remote logging
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
+
+            // Add core plugin commands
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand", "oxide.plugins");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand", "oxide.load");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand", "oxide.reload");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand", "oxide.unload");
+
+            // Add core permission commands
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand", "oxide.grant");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand", "oxide.group");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand", "oxide.revoke");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand", "oxide.show");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand", "oxide.usergroup");
+
+            // Add core misc commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
 
             // Register messages for localization
             foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);

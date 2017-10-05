@@ -798,6 +798,7 @@ namespace Oxide.Core.Libraries
 
             // Change and save
             if (data.Title == title) return true;
+
             data.Title = title;
             SaveGroups();
             return true;
@@ -812,12 +813,14 @@ namespace Oxide.Core.Libraries
         public bool SetGroupRank(string group, int rank)
         {
             if (!GroupExists(group)) return false;
+
             // First, get the group data
             GroupData data;
             if (!groupdata.TryGetValue(group.ToLower(), out data)) return false;
 
             // Change and save
             if (data.Rank == rank) return true;
+
             data.Rank = rank;
             SaveGroups();
             return true;

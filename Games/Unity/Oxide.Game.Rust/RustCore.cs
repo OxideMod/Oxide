@@ -78,33 +78,22 @@ namespace Oxide.Game.Rust
             RemoteLogger.SetTag("game", Title.ToLower());
             RemoteLogger.SetTag("game version", Server.Version);
 
-            // Add core general commands
-            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
-            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
-
             // Add core plugin commands
-            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand");
-            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand");
-            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand");
-            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand");
+            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand", "oxide.plugins");
+            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand", "oxide.load");
+            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand", "oxide.reload");
+            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand", "oxide.unload");
 
             // Add core permission commands
-            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand");
-            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand");
-            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand");
-            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand");
-            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand");
+            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand", "oxide.grant");
+            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand", "oxide.group");
+            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand", "oxide.revoke");
+            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand", "oxide.show");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand", "oxide.usergroup");
 
-            // Register core permissions
-            permission.RegisterPermission("oxide.plugins", this);
-            permission.RegisterPermission("oxide.load", this);
-            permission.RegisterPermission("oxide.reload", this);
-            permission.RegisterPermission("oxide.unload", this);
-            permission.RegisterPermission("oxide.grant", this);
-            permission.RegisterPermission("oxide.group", this);
-            permission.RegisterPermission("oxide.revoke", this);
-            permission.RegisterPermission("oxide.show", this);
-            permission.RegisterPermission("oxide.usergroup", this);
+            // Add core misc commands
+            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
 
             // Register messages for localization
             foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);

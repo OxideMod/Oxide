@@ -19,7 +19,7 @@ namespace Oxide.Game.Nomad
     {
         // Instances
         //internal static readonly NomadCovalenceProvider Covalence = NomadCovalenceProvider.Instance;
-        //internal static readonly IServer Server = Covalence.CreateServer();
+        //internal readonly IServer Server = Covalence.CreateServer();
 
         internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
 

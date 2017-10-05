@@ -23,11 +23,6 @@ namespace Oxide.Game.SevenDays
         private void GrantCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin && !player.HasPermission("oxide.grant"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
 
             if (args.Length < 3)
             {
@@ -92,6 +87,8 @@ namespace Oxide.Game.SevenDays
         }
 
         #endregion
+
+        // TODO: GrantAllCommand (grant all permissions from user(s)/group(s))
  
         #region Group Command
 
@@ -105,11 +102,6 @@ namespace Oxide.Game.SevenDays
         private void GroupCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin && !player.HasPermission("oxide.group"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
 
             if (args.Length < 2)
             {
@@ -211,15 +203,18 @@ namespace Oxide.Game.SevenDays
                 return;
             }
 
-            if (player.Id != "server_console")
+            if (player.IsServer)
             {
-                lang.SetLanguage(args[0], player.Id);
-                player.Reply(lang.GetMessage("PlayerLanguage", this, player.Id), args[0]);
+                // TODO: Check if langauge exists before setting, warn if not
+                lang.SetServerLanguage(args[0]);
+                player.Reply(lang.GetMessage("ServerLanguage", this, player.Id), lang.GetServerLanguage());
             }
             else
             {
-                lang.SetServerLanguage(args[0]);
-                player.Reply(lang.GetMessage("ServerLanguage", this, player.Id), lang.GetServerLanguage());
+                // TODO: Check if langauge exists before setting, warn if not
+                var languages = lang.GetLanguages(null);
+                if (languages.Contains(args[0])) lang.SetLanguage(args[0], player.Id);
+                player.Reply(lang.GetMessage("PlayerLanguage", this, player.Id), args[0]);
             }
         }
 
@@ -236,12 +231,6 @@ namespace Oxide.Game.SevenDays
         [HookMethod("LoadCommand")]
         private void LoadCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin && !player.HasPermission("oxide.load"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
-
             if (args.Length < 1)
             {
                 player.Reply(lang.GetMessage("CommandUsageLoad", this, player.Id));
@@ -275,12 +264,6 @@ namespace Oxide.Game.SevenDays
         [HookMethod("PluginsCommand")]
         private void PluginsCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin && !player.HasPermission("oxide.plugins"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
-
             var loadedPlugins = pluginManager.GetPlugins().Where(pl => !pl.IsCorePlugin).ToArray();
             var loadedPluginNames = new HashSet<string>(loadedPlugins.Select(pl => pl.Name));
             var unloadedPluginErrors = new Dictionary<string, string>();
@@ -302,8 +285,8 @@ namespace Oxide.Game.SevenDays
 
             var output = $"Listing {loadedPlugins.Length + unloadedPluginErrors.Count} plugins:"; // TODO: Localization
             var number = 1;
-            foreach (var plugin in loadedPlugins)
-                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s)";
+            foreach (var plugin in loadedPlugins.Where(p => p.Filename != null))
+                output += $"\n  {number++:00} \"{plugin.Title}\" ({plugin.Version}) by {plugin.Author} ({plugin.TotalHookTime:0.00}s) - {plugin.Filename.Basename()}";
             foreach (var pluginName in unloadedPluginErrors.Keys)
                 output += $"\n  {number++:00} {pluginName} - {unloadedPluginErrors[pluginName]}";
             player.Reply(output);
@@ -322,12 +305,6 @@ namespace Oxide.Game.SevenDays
         [HookMethod("ReloadCommand")]
         private void ReloadCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin && !player.HasPermission("oxide.reload"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
-
             if (args.Length < 1)
             {
                 player.Reply(lang.GetMessage("CommandUsageReload", this, player.Id));
@@ -358,11 +335,6 @@ namespace Oxide.Game.SevenDays
         private void RevokeCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin && !player.HasPermission("oxide.revoke"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
 
             if (args.Length < 3)
             {
@@ -424,6 +396,8 @@ namespace Oxide.Game.SevenDays
 
         #endregion
 
+        // TODO: RevokeAllCommand (revoke all permissions from user(s)/group(s))
+
         #region Show Command
 
         /// <summary>
@@ -436,15 +410,11 @@ namespace Oxide.Game.SevenDays
         private void ShowCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin && !player.HasPermission("oxide.show"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
 
             if (args.Length < 1)
             {
                 player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageShowName", this, player.Id));
                 return;
             }
 
@@ -457,15 +427,10 @@ namespace Oxide.Game.SevenDays
             }
             else if (mode.Equals("perm"))
             {
-                if (args.Length < 2)
+                if (args.Length < 2 || string.IsNullOrEmpty(name))
                 {
                     player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(name))
-                {
-                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                    player.Reply(lang.GetMessage("CommandUsageShowName", this, player.Id));
                     return;
                 }
 
@@ -479,15 +444,10 @@ namespace Oxide.Game.SevenDays
             }
             else if (mode.Equals("user"))
             {
-                if (args.Length < 2)
+                if (args.Length < 2 || string.IsNullOrEmpty(name))
                 {
                     player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(name))
-                {
-                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                    player.Reply(lang.GetMessage("CommandUsageShowName", this, player.Id));
                     return;
                 }
 
@@ -516,18 +476,13 @@ namespace Oxide.Game.SevenDays
             }
             else if (mode.Equals("group"))
             {
-                if (args.Length < 2)
+                if (args.Length < 2 || string.IsNullOrEmpty(name))
                 {
                     player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                    player.Reply(lang.GetMessage("CommandUsageShowName", this, player.Id));
                     return;
                 }
-
-                if (string.IsNullOrEmpty(name))
-                {
-                    player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
-                    return;
-                }
-
+                
                 if (!permission.GroupExists(name))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
@@ -569,12 +524,6 @@ namespace Oxide.Game.SevenDays
         [HookMethod("UnloadCommand")]
         private void UnloadCommand(IPlayer player, string command, string[] args)
         {
-            if (!player.IsAdmin && !player.HasPermission("oxide.unload"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id));
-                return;
-            }
-
             if (args.Length < 1)
             {
                 player.Reply(lang.GetMessage("CommandUsageUnload", this, player.Id));
@@ -605,11 +554,6 @@ namespace Oxide.Game.SevenDays
         private void UserGroupCommand(IPlayer player, string command, string[] args)
         {
             if (!PermissionsLoaded(player)) return;
-            if (!player.IsAdmin && !player.HasPermission("oxide.usergroup"))
-            {
-                player.Reply(lang.GetMessage("NotAllowed", this, player.Id), command);
-                return;
-            }
 
             if (args.Length < 3)
             {
@@ -657,6 +601,8 @@ namespace Oxide.Game.SevenDays
 
         #endregion
 
+        // TODO: UserGroupAllCommand (add/remove all users to/from group)
+
         #region Version Command
 
         /// <summary>
@@ -668,14 +614,16 @@ namespace Oxide.Game.SevenDays
         [HookMethod("VersionCommand")]
         private void VersionCommand(IPlayer player, string command, string[] args)
         {
-            if (player.Id != "server_console")
+            if (player.IsServer)
             {
-                var format = Covalence.FormatText("Server is running [#ffb658]Oxide {0}[/#] and [#ee715c]{1} {2}[/#]"); // TODO: Localization
-                player.Reply(format, OxideMod.Version, Covalence.GameName, Server.Version);
+                /*player.Reply($"Protocol: {Server.Protocol}\nBuild Date: {BuildInfo.Current.BuildDate}\n" +
+                $"Unity Version: {UnityEngine.Application.unityVersion}\nChangeset: {BuildInfo.Current.Scm.ChangeId}\n" +
+                $"Branch: {BuildInfo.Current.Scm.Branch}\nOxide Version: {OxideMod.Version}");*/ // TODO: Implement server version
             }
             else
             {
-                // TODO: Version info for the server reply
+                var format = Covalence.FormatText(lang.GetMessage("Version", this, player.Id));
+                player.Reply(format, OxideMod.Version, Covalence.GameName, Server.Version, Server.Protocol);
             }
         }
 
