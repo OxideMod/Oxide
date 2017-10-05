@@ -98,7 +98,6 @@
     <Compile Include="RustHooks.cs" />
     <Compile Include="RustPlugin.cs" />
     <Compile Include="RustPluginLoader.cs" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Oxide.Core\Core.csproj">
@@ -135,10 +134,10 @@
       <PatchedFiles Include="$(ProjectDir)\Patched\**\*.*" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
-    <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles-&gt;'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
-    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles-&gt;'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
   <Target Name="Deploy">
@@ -150,6 +149,6 @@
     <ItemGroup>
       <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
     </ItemGroup>
-    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles-&gt;'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>
