@@ -236,7 +236,8 @@
           },
           "MSILHash": "iiNnog5kz6DD/0ZyhXEarsh0/5XqF5QAMsq3CI0pX9w="
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "AssemblyName": "VRage.Dedicated.dll",
@@ -307,7 +308,8 @@
           }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [],
+      "Fields": []
     }
   ]
 }
