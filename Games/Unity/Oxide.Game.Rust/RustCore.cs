@@ -28,9 +28,8 @@ namespace Oxide.Game.Rust
         {
             // Set plugin info attributes
             Title = "Rust";
-            Author = "Oxide Team";
-            var assemblyVersion = RustExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = RustExtension.AssemblyAuthors;
+            Version = RustExtension.AssemblyVersion;
         }
 
         // Libraries

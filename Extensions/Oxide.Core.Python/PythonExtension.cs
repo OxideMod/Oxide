@@ -24,7 +24,10 @@ namespace Oxide.Core.Python
     /// </summary>
     public class PythonExtension : Extension
     {
-        internal static readonly Version AssemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+        internal static Assembly Assembly = Assembly.GetExecutingAssembly();
+        internal static AssemblyName AssemblyName = Assembly.GetName();
+        internal static VersionNumber AssemblyVersion = new VersionNumber(AssemblyName.Version.Major, AssemblyName.Version.Minor, AssemblyName.Version.Build);
+        internal static string AssemblyAuthors = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly, typeof(AssemblyCompanyAttribute), false)).Company;
 
         /// <summary>
         /// Gets the name of this extension
@@ -32,14 +35,14 @@ namespace Oxide.Core.Python
         public override string Name => "Python";
 
         /// <summary>
-        /// Gets the version of this extension
-        /// </summary>
-        public override VersionNumber Version => new VersionNumber(AssemblyVersion.Major, AssemblyVersion.Minor, AssemblyVersion.Build);
-
-        /// <summary>
         /// Gets the author of this extension
         /// </summary>
-        public override string Author => "Oxide Team";
+        public override string Author => AssemblyAuthors;
+
+        /// <summary>
+        /// Gets the version of this extension
+        /// </summary>
+        public override VersionNumber Version => AssemblyVersion;
 
         /// <summary>
         /// Gets the Python environment

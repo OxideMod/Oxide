@@ -22,9 +22,8 @@ namespace Oxide.Game.InterstellarRift
         {
             // Set plugin info attributes
             Title = "Interstellar Rift";
-            Author = "Oxide Team";
-            var assemblyVersion = InterstellarRiftExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = InterstellarRiftExtension.AssemblyAuthors;
+            Version = InterstellarRiftExtension.AssemblyVersion;
         }
 
         // Libraries

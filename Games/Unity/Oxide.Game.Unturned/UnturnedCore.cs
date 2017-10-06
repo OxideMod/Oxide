@@ -22,9 +22,8 @@ namespace Oxide.Game.Unturned
         {
             // Set plugin info attributes
             Title = "Unturned";
-            Author = "Oxide Team";
-            var assemblyVersion = UnturnedExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = UnturnedExtension.AssemblyAuthors;
+            Version = UnturnedExtension.AssemblyVersion;
         }
 
         // Libraries
