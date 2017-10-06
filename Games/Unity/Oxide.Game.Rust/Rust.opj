@@ -6002,6 +6002,44 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "PlayerBlueprints::UnlockAll",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "PlayerBlueprints",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "UnlockAll",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "FGSgNh4i5BwxRbhZ3Lua+vUTK4EuaTgCQXnZ2JBUYsM="
+        },
+        {
+          "Name": "PlayerBlueprints::Reset",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "PlayerBlueprints",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "Reset",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "hhXo9jfClUKcFNVBddZhXzhmPiRe2tHqBMeLKACMSX8="
         }
       ],
       "Fields": [
