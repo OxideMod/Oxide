@@ -4156,7 +4156,7 @@
             "ArgumentBehavior": 3,
             "ArgumentString": "",
             "HookTypeName": "Simple",
-            "Name": "CanCraft",
+            "Name": "CanCraft [item]",
             "HookName": "CanCraft",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "ItemCrafter",
@@ -5477,6 +5477,33 @@
             "MSILHash": "6C+Vbjb/gBX6/wL70cE/cV6v0GmI2LKyx+04ELvWv0g=",
             "BaseHookName": "OnRefreshVendingStock [blueprint]",
             "HookCategory": "Vending"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this, l0, a1",
+            "HookTypeName": "Simple",
+            "Name": "CanCraft [blueprint]",
+            "HookName": "CanCraft",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerBlueprints",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanCraft",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "System.Int32",
+                "System.Int32"
+              ]
+            },
+            "MSILHash": "z9iKY7fcpoXnbN7xqDAroFgcx6Vg3ZXw4ZAtpsmksOY=",
+            "BaseHookName": null,
+            "HookCategory": null
           }
         }
       ],
