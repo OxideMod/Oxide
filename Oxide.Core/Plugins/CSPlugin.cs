@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Oxide.Core.Libraries;
@@ -69,8 +70,16 @@ namespace Oxide.Core.Plugins
                     }
                     else
                     {
-                        if (!Parameters[n].ParameterType.IsAssignableFrom(args[n].GetType()))
-                            return false;
+                        if (args[n].GetType().IsValueType)
+                        {
+                            if (!TypeDescriptor.GetConverter(Parameters[n].ParameterType).IsValid(args[n]))
+                                return false;
+                        }
+                        else
+                        {
+                            if (!Parameters[n].ParameterType.IsInstanceOfType(args[n]))
+                                return false;
+                        }
                     }
                 }
 
@@ -212,8 +221,8 @@ namespace Oxide.Core.Plugins
             List<HookMethod> methods;
 
             if (!hooks.TryGetValue(name, out methods)) return false;
-
-            foreach (var method in methods)
+            
+            foreach (var method in methods.Except(matches.Select(x => x.Method)))
             {
                 var received = args?.Length ?? 0;
                 
@@ -245,7 +254,7 @@ namespace Oxide.Core.Plugins
                     hook_args = args;
 
                 if (!method.HasMatchingSignature(hook_args, exact)) continue;
-                
+
                 matches.Add(new HookMatch(method, hook_args));
             }
             
