@@ -294,6 +294,21 @@ namespace Oxide.Core.CSharp
             }
             AddInstruction(OpCodes.Call, module.Import(method));
 
+            //handle ref/out params
+            for (var i = 0; i < method.Parameters.Count; i++)
+            {
+                var parameter = method.Parameters[i];
+                var param = parameter.ParameterType as ByReferenceType;
+                if (param != null)
+                {
+                    AddInstruction(OpCodes.Ldarg_3);    // object[] params
+                    AddInstruction(Ldc_I4_n(i));        // param_number
+                    AddInstruction(OpCodes.Ldloc_S, paramDict[parameter]);
+                    AddInstruction(OpCodes.Box, module.Import(param.ElementType));
+                    AddInstruction(OpCodes.Stelem_Ref);
+                }
+            }
+
             if (method.ReturnType.Name != "Void")
             {
                 if (method.ReturnType.Name != "Object") AddInstruction(OpCodes.Box, module.Import(method.ReturnType));

@@ -65,7 +65,7 @@ namespace Oxide.Core.Plugins
 
                     if (exact && !IsBaseHook)
                     {
-                        if (args[n].GetType() != Parameters[n].ParameterType)
+                        if (args[n].GetType() != Parameters[n].ParameterType && args[n].GetType().MakeByRefType() != Parameters[n].ParameterType)
                             return false;
                     }
                     else
