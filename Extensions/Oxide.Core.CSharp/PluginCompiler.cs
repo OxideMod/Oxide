@@ -154,9 +154,13 @@ namespace Oxide.Plugins
                 if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay (code {statusCode})");
                 var remoteHash = response.Headers[HttpResponseHeader.ETag].Trim('"');
                 var localHash = File.Exists(filePath) ? GetHash(filePath, Algorithms.MD5) : "0";
-                Interface.Oxide.LogInfo($"Compiler remote hash: {remoteHash}");
-                Interface.Oxide.LogInfo($"Compiler remote hash: {localHash}");
-                if (remoteHash != localHash) DownloadCompiler(response);
+                Interface.Oxide.LogInfo($"Latest compiler MD5: {remoteHash}");
+                Interface.Oxide.LogInfo($"Local compiler MD5: {localHash}");
+                if (remoteHash != localHash)
+                {
+                    Interface.Oxide.LogInfo("Compiler hashes did not match, downloading latest");
+                    DownloadCompiler(response);
+                }
             }
             catch (Exception ex)
             {
