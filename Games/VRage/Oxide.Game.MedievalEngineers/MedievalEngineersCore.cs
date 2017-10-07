@@ -22,9 +22,8 @@ namespace Oxide.Game.MedievalEngineers
         {
             // Set plugin info attributes
             Title = "Medieval Engineers";
-            Author = "Oxide Team";
-            var assemblyVersion = MedievalEngineersExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = MedievalEngineersExtension.AssemblyAuthors;
+            Version = MedievalEngineersExtension.AssemblyVersion;
         }
 
         // Libraries

@@ -21,9 +21,8 @@ namespace Oxide.Game.SavageLands
         {
             // Set plugin info attributes
             Title = "Savage Lands";
-            Author = "Oxide Team";
-            var assemblyVersion = SavageLandsExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = SavageLandsExtension.AssemblyAuthors;
+            Version = SavageLandsExtension.AssemblyVersion;
         }
 
         // Libraries

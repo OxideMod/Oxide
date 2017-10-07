@@ -25,9 +25,8 @@ namespace Oxide.Game.TheForest
         {
             // Set plugin info attributes
             Title = "The Forest";
-            Author = "Oxide Team";
-            var assemblyVersion = TheForestExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = TheForestExtension.AssemblyAuthors;
+            Version = TheForestExtension.AssemblyVersion;
         }
 
         // Libraries

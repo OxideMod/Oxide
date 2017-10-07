@@ -31,9 +31,8 @@ namespace Oxide.Game.SpaceEngineers
         {
             // Set plugin info attributes
             Title = "Space Engineers";
-            Author = "Oxide Team";
-            var assemblyVersion = SpaceEngineersExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = SpaceEngineersExtension.AssemblyAuthors;
+            Version = SpaceEngineersExtension.AssemblyVersion;
         }
 
         // Libraries

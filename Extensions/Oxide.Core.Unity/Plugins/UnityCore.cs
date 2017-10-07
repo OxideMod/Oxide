@@ -17,9 +17,8 @@ namespace Oxide.Core.Unity.Plugins
         {
             // Set plugin info attributes
             Title = "Unity";
-            Author = "Oxide Team";
-            var assemblyVersion = UnityExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = UnityExtension.AssemblyAuthors;
+            Version = UnityExtension.AssemblyVersion;
         }
 
         /// <summary>

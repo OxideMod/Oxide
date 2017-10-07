@@ -26,9 +26,8 @@ namespace Oxide.Game.Hurtworld
         public HurtworldCore()
         {
             Title = "Hurtworld";
-            Author = "Oxide Team";
-            var assemblyVersion = HurtworldExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = HurtworldExtension.AssemblyAuthors;
+            Version = HurtworldExtension.AssemblyVersion;
         }
 
         // Libraries

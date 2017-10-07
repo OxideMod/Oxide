@@ -20,9 +20,8 @@ namespace Oxide.Game.Blackwake
         public BlackwakeCore()
         {
             Title = "Blackwake";
-            Author = "Oxide Team";
-            var assemblyVersion = BlackwakeExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = BlackwakeExtension.AssemblyAuthors;
+            Version = BlackwakeExtension.AssemblyVersion;
         }
 
         // Libraries

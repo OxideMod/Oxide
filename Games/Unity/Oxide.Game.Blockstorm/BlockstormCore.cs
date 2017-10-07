@@ -21,9 +21,8 @@ namespace Oxide.Game.Blockstorm
         {
             // Set plugin info attributes
             Title = "Blockstorm";
-            Author = "Oxide Team";
-            var assemblyVersion = BlockstormExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = BlockstormExtension.AssemblyAuthors;
+            Version = BlockstormExtension.AssemblyVersion;
         }
 
         // Libraries

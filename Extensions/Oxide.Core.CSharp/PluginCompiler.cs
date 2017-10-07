@@ -152,8 +152,10 @@ namespace Oxide.Plugins
                 var response = (HttpWebResponse)request.GetResponse();
                 var statusCode = (int)response.StatusCode;
                 if (statusCode != 200) Interface.Oxide.LogWarning($"Status code from download location was not okay (code {statusCode})");
-                var remoteHash = response.Headers[HttpResponseHeader.ETag];
-                var localHash = File.Exists(filePath) ? GetHash(filePath, Algorithms.SHA256) : "0";
+                var remoteHash = response.Headers[HttpResponseHeader.ETag].Trim('"');
+                var localHash = File.Exists(filePath) ? GetHash(filePath, Algorithms.MD5) : "0";
+                Interface.Oxide.LogInfo($"Compiler remote hash: {remoteHash}");
+                Interface.Oxide.LogInfo($"Compiler remote hash: {localHash}");
                 if (remoteHash != localHash) DownloadCompiler(response);
             }
             catch (Exception ex)

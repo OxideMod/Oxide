@@ -22,9 +22,8 @@ namespace Oxide.Game.Nomad
         {
             // Set plugin info attributes
             Title = "Nomad";
-            Author = "Oxide Team";
-            var assemblyVersion = NomadExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = NomadExtension.AssemblyAuthors;
+            Version = NomadExtension.AssemblyVersion;
         }
 
         // Libraries

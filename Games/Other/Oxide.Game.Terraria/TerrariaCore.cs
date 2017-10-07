@@ -24,9 +24,8 @@ namespace Oxide.Game.Terraria
         {
             // Set plugin info attributes
             Title = "Terraria";
-            Author = "Oxide Team";
-            var aVersion = TerrariaExtension.AssemblyVersion;
-            Version = new VersionNumber(aVersion.Major, aVersion.Minor, aVersion.Build);
+            Author = TerrariaExtension.AssemblyAuthors;
+            Version = TerrariaExtension.AssemblyVersion;
         }
 
         // Libraries

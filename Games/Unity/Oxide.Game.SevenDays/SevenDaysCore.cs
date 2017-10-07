@@ -22,9 +22,8 @@ namespace Oxide.Game.SevenDays
         {
             // Set attributes
             Title = "7 Days to Die";
-            Author = "Oxide Team";
-            var assemblyVersion = SevenDaysExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = SevenDaysExtension.AssemblyAuthors;
+            Version = SevenDaysExtension.AssemblyVersion;
         }
 
         // Libraries

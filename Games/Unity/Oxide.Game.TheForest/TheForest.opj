@@ -832,7 +832,7 @@
                 "SpawnCutTree"
               ]
             },
-            "MSILHash": "RnAPztgyZWjJCDpsM2zu8FZNZRysFBZNBIfXbwaZpFE=",
+            "MSILHash": "XhfSu629kKBIVEOx97fPRULDXBJti0NoDBblKXKRpjo=",
             "BaseHookName": null,
             "HookCategory": "_TESTED"
           }
@@ -1653,7 +1653,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "coukrSIw7dkSl4KMqjNoBWmHBJrSAV0o1gUDlIcy+IA=",
+            "MSILHash": "vsNM3dRRtL11cmh7yHMqzzdZTwMjBvu1WZZ5ZmckMsY=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -1708,8 +1708,54 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "t17wib608Y0FVulCPrKwzPye/0l/6FgZYB5J+DtBqpE=",
+            "MSILHash": "tAu47wKDiyajmsLNhxeq2W93cGPtSm2YvN+4WRND2xY=",
             "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 11,
+            "RemoveCount": 18,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "AllowAnyAddress [patch 1]",
+            "HookName": "AllowAnyAddress",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopDedicatedServerStarter",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CheckNetworkConfiguration",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "HAv0UU61QPJGSP3ftHfEavkLzRq15keQpmgFB3/mddY=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 14,
+            "RemoveCount": 31,
+            "Instructions": [],
+            "HookTypeName": "Modify",
+            "Name": "AllowAnyAddress [patch 2]",
+            "HookName": "AllowAnyAddress",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CoopDedicatedServerStarter",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "CheckNetworkConfiguration",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "HAv0UU61QPJGSP3ftHfEavkLzRq15keQpmgFB3/mddY=",
+            "BaseHookName": "AllowAnyAddress [patch 1]",
             "HookCategory": "_Patches"
           }
         }

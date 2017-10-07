@@ -22,9 +22,8 @@ namespace Oxide.Game.FortressCraft
         {
             // Set plugin info attributes
             Title = "FortressCraft";
-            Author = "Oxide Team";
-            var assemblyVersion = FortressCraftExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = FortressCraftExtension.AssemblyAuthors;
+            Version = FortressCraftExtension.AssemblyVersion;
         }
 
         // Libraries

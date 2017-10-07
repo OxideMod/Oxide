@@ -27,9 +27,8 @@ namespace Oxide.Game.RustLegacy
         {
             // Set attributes
             Title = "Rust Legacy";
-            Author = "Oxide Team";
-            var assemblyVersion = RustLegacyExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = RustLegacyExtension.AssemblyAuthors;
+            Version = RustLegacyExtension.AssemblyVersion;
         }
 
         // Libraries

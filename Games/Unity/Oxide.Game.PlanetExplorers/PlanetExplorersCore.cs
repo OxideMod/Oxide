@@ -22,9 +22,8 @@ namespace Oxide.Game.PlanetExplorers
         {
             // Set plugin info attributes
             Title = "Planet Explorers";
-            Author = "Oxide Team";
-            var assemblyVersion = PlanetExplorersExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = PlanetExplorersExtension.AssemblyAuthors;
+            Version = PlanetExplorersExtension.AssemblyVersion;
         }
 
         // Libraries

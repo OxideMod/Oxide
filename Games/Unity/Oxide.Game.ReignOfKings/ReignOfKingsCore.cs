@@ -27,9 +27,8 @@ namespace Oxide.Game.ReignOfKings
         {
             // Set plugin info attributes
             Title = "Reign of Kings";
-            Author = "Oxide Team";
-            var assemblyVersion = ReignOfKingsExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = ReignOfKingsExtension.AssemblyAuthors;
+            Version = ReignOfKingsExtension.AssemblyVersion;
 
             CommandManager.OnRegisterCommand += (attribute) =>
             {

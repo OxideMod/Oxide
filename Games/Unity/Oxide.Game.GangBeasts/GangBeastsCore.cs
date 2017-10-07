@@ -21,9 +21,8 @@ namespace Oxide.Game.GangBeasts
         {
             // Set plugin info attributes
             Title = "Gang Beasts";
-            Author = "Oxide Team";
-            var assemblyVersion = GangBeastsExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = GangBeastsExtension.AssemblyAuthors;
+            Version = GangBeastsExtension.AssemblyVersion;
         }
 
         // Libraries

@@ -21,9 +21,8 @@ namespace Oxide.Game.FromTheDepths
         {
             // Set plugin info attributes
             Title = "From the Depths";
-            Author = "Oxide Team";
-            var assemblyVersion = FromTheDepthsExtension.AssemblyVersion;
-            Version = new VersionNumber(assemblyVersion.Major, assemblyVersion.Minor, assemblyVersion.Build);
+            Author = FromTheDepthsExtension.AssemblyAuthors;
+            Version = FromTheDepthsExtension.AssemblyVersion;
         }
 
         // Libraries
