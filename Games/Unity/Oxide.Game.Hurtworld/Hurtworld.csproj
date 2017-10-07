@@ -70,6 +70,7 @@
     <Compile Include="HurtworldCommands.cs" />
     <Compile Include="HurtworldCore.cs" />
     <Compile Include="HurtworldExtension.cs" />
+    <Compile Include="HurtworldHooks.cs" />
     <Compile Include="HurtworldPlugin.cs" />
     <Compile Include="HurtworldPluginLoader.cs" />
   </ItemGroup>

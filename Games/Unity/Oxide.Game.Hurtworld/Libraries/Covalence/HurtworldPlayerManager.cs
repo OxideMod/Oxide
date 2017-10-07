@@ -19,57 +19,49 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             public ulong Id;
         }
 
-        private readonly IDictionary<string, PlayerRecord> playerData;
-        private readonly IDictionary<string, HurtworldPlayer> allPlayers;
-        private readonly IDictionary<string, HurtworldPlayer> connectedPlayers;
+        private IDictionary<string, PlayerRecord> playerData;
+        private IDictionary<string, HurtworldPlayer> allPlayers;
+        private IDictionary<string, HurtworldPlayer> connectedPlayers;
 
-        internal HurtworldPlayerManager()
+        internal void Initialize()
         {
-            // Load player data
             Utility.DatafileToProto<Dictionary<string, PlayerRecord>>("oxide.covalence");
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, HurtworldPlayer>();
-            foreach (var pair in playerData) allPlayers.Add(pair.Key, new HurtworldPlayer(pair.Value.Id, pair.Value.Name));
             connectedPlayers = new Dictionary<string, HurtworldPlayer>();
+
+            foreach (var pair in playerData) allPlayers.Add(pair.Key, new HurtworldPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        private void NotifyPlayerJoin(PlayerSession session)
+        internal void PlayerJoin(PlayerSession session)
         {
             var id = session.SteamId.ToString();
 
-            // Do they exist?
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                // Update
-                record.Name = session.Name;
+                record.Name = session.Identity.Name;
                 playerData[id] = record;
-
-                // Swap out Rust player
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new HurtworldPlayer(session));
             }
             else
             {
-                // Insert
-                record = new PlayerRecord { Id = (ulong)session.SteamId, Name = session.Name };
+                record = new PlayerRecord { Id = (ulong)session.SteamId, Name = session.Identity.Name };
                 playerData.Add(id, record);
-
-                // Create Rust player
                 allPlayers.Add(id, new HurtworldPlayer(session));
             }
 
-            // Save
             ProtoStorage.Save(playerData, "oxide.covalence");
         }
 
-        internal void NotifyPlayerConnect(PlayerSession session)
+        internal void PlayerConnected(PlayerSession session)
         {
-            NotifyPlayerJoin(session);
+            allPlayers[session.SteamId.ToString()] = new HurtworldPlayer(session);
             connectedPlayers[session.SteamId.ToString()] = new HurtworldPlayer(session);
         }
 
-        internal void NotifyPlayerDisconnect(PlayerSession session) => connectedPlayers.Remove(session.SteamId.ToString());
+        internal void PlayerDisconnected(PlayerSession session) => connectedPlayers.Remove(session.SteamId.ToString());
 
         #region Player Finding
 
