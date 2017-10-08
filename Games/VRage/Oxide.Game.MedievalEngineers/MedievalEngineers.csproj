@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MedievalEngineersHooks.cs" />
     <Compile Include="Libraries\Covalence\MedievalEngineersCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\MedievalEngineersCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\MedievalEngineersPlayer.cs" />

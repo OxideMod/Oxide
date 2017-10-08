@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FortressCraftHooks.cs" />
     <Compile Include="Libraries\Covalence\FortressCraftCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\FortressCraftCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\FortressCraftPlayer.cs" />

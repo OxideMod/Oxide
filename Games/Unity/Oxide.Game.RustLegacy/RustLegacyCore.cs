@@ -45,8 +45,7 @@ namespace Oxide.Game.RustLegacy
         // Commands that a plugin can't override
         internal static IEnumerable<string> RestrictedCommands => new[]
         {
-            "rcon.login",
-            "rcon.password"
+            "rcon.login", "rcon.password"
         };
 
         private bool serverInitialized;

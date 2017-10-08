@@ -45,18 +45,6 @@ namespace Oxide.Game.MedievalEngineers
 
         private bool serverInitialized;
 
-        /// <summary>
-        /// Checks if the permission system has loaded, shows an error if it failed to load
-        /// </summary>
-        /// <param name="player"></param>
-        /// <returns></returns>
-        private bool PermissionsLoaded(IPlayer player)
-        {
-            if (permission.IsLoaded) return true;
-            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
-            return false;
-        }
-
         #endregion
 
         #region Core Hooks
@@ -140,6 +128,22 @@ namespace Oxide.Game.MedievalEngineers
         /// </summary>
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
+
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Checks if the permission system has loaded, shows an error if it failed to load
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool PermissionsLoaded(IPlayer player)
+        {
+            if (permission.IsLoaded) return true;
+            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            return false;
+        }
 
         #endregion
     }

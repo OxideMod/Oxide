@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GangBeastsHooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <!--<Compile Include="GangBeastsCommands.cs" />-->
     <Compile Include="GangBeastsCore.cs" />
