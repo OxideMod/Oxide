@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FromTheDepthsHooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <!--<Compile Include="FromTheDepthsCommands.cs" />-->
     <Compile Include="FromTheDepthsCore.cs" />

@@ -52,7 +52,12 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// Creates the game-specific player manager object
         /// </summary>
         /// <returns></returns>
-        public IPlayerManager CreatePlayerManager() => PlayerManager = new HurtworldPlayerManager();
+        public IPlayerManager CreatePlayerManager()
+        {
+            PlayerManager = new HurtworldPlayerManager();
+            PlayerManager.Initialize();
+            return PlayerManager;
+        }
 
         /// <summary>
         /// Creates the game-specific command system provider object

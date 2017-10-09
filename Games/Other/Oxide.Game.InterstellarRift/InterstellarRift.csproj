@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterstellarRiftHooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <!--<Compile Include="InterstellarRiftCommands.cs" />-->
     <Compile Include="InterstellarRiftCore.cs" />

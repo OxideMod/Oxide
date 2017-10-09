@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TerrariaHooks.cs" />
     <Compile Include="Libraries\Covalence\TerrariaCommandSystem.cs" />
     <Compile Include="Libraries\Covalence\TerrariaCovalenceProvider.cs" />
     <Compile Include="Libraries\Covalence\TerrariaPlayer.cs" />

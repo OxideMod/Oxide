@@ -59,24 +59,24 @@ namespace Oxide.Game.SavageLands
             //RemoteLogger.SetTag("game version", Server.Version); // TODO: Uncomment once implemented
 
             // Add core plugin commands
-            AddCovalenceCommand(new[] { "oxide.plugins", "plugins" }, "PluginsCommand", "oxide.plugins");
-            AddCovalenceCommand(new[] { "oxide.load", "load" }, "LoadCommand", "oxide.load");
-            AddCovalenceCommand(new[] { "oxide.reload", "reload" }, "ReloadCommand", "oxide.reload");
-            AddCovalenceCommand(new[] { "oxide.unload", "unload" }, "UnloadCommand", "oxide.unload");
+            AddCovalenceCommand(new[] { "oxide.plugins", "o.plugins", "plugins" }, "PluginsCommand", "oxide.plugins");
+            AddCovalenceCommand(new[] { "oxide.load", "o.load", "plugin.load" }, "LoadCommand", "oxide.load");
+            AddCovalenceCommand(new[] { "oxide.reload", "o.reload", "plugin.reload" }, "ReloadCommand", "oxide.reload");
+            AddCovalenceCommand(new[] { "oxide.unload", "o.unload", "plugin.unload" }, "UnloadCommand", "oxide.unload");
 
             // Add core permission commands
-            AddCovalenceCommand(new[] { "oxide.grant", "grant" }, "GrantCommand", "oxide.grant");
-            AddCovalenceCommand(new[] { "oxide.group", "group" }, "GroupCommand", "oxide.group");
-            AddCovalenceCommand(new[] { "oxide.revoke", "revoke" }, "RevokeCommand", "oxide.revoke");
-            AddCovalenceCommand(new[] { "oxide.show", "show" }, "ShowCommand", "oxide.show");
-            AddCovalenceCommand(new[] { "oxide.usergroup", "usergroup" }, "UserGroupCommand", "oxide.usergroup");
+            AddCovalenceCommand(new[] { "oxide.grant", "o.grant", "perm.grant" }, "GrantCommand", "oxide.grant");
+            AddCovalenceCommand(new[] { "oxide.group", "o.group", "perm.group" }, "GroupCommand", "oxide.group");
+            AddCovalenceCommand(new[] { "oxide.revoke", "o.revoke", "perm.revoke" }, "RevokeCommand", "oxide.revoke");
+            AddCovalenceCommand(new[] { "oxide.show", "o.show", "perm.show" }, "ShowCommand", "oxide.show");
+            AddCovalenceCommand(new[] { "oxide.usergroup", "o.usergroup", "perm.usergroup" }, "UserGroupCommand", "oxide.usergroup");
 
             // Add core misc commands
-            AddCovalenceCommand(new[] { "oxide.lang", "lang" }, "LangCommand");
-            AddCovalenceCommand(new[] { "oxide.version", "version" }, "VersionCommand");
+            AddCovalenceCommand(new[] { "oxide.lang", "o.lang" }, "LangCommand");
+            AddCovalenceCommand(new[] { "oxide.version", "o.version" }, "VersionCommand");
 
             // Register messages for localization
-            foreach (var language in Core.Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
+            foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
 
             // Setup default permission groups
             if (permission.IsLoaded)

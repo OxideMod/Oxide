@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SavageLandsHooks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <!--<Compile Include="SavageLandsCommands.cs" />-->
     <Compile Include="SavageLandsCore.cs" />

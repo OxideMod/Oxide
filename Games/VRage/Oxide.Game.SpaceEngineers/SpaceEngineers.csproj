@@ -67,6 +67,7 @@
     <Compile Include="Libraries\Covalence\SpaceEngineersPlayerManager.cs" />
     <Compile Include="Libraries\Covalence\SpaceEngineersServer.cs" />
     <Compile Include="Libraries\Command.cs" />
+    <Compile Include="SpaceEngineersHooks.cs" />
     <Compile Include="Libraries\Player.cs" />
     <Compile Include="Libraries\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
