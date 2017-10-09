@@ -211,7 +211,7 @@ namespace Oxide.Core
 
             var queuedReport = QueuedReports[0];
             submittingReports = true;
-            Webrequests.EnqueuePost(Url, queuedReport.Body, (code, response) =>
+            Webrequests.Enqueue(Url, queuedReport.Body, (code, response) =>
             {
                 if (code == 200)
                 {
@@ -223,7 +223,7 @@ namespace Oxide.Core
                 {
                     Timers.Once(5f, SubmitNextReport);
                 }
-            }, null, queuedReport.Headers);
+            }, null, RequestMethod.POST, queuedReport.Headers);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

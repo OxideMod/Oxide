@@ -10,6 +10,18 @@ using Oxide.Core.Plugins;
 namespace Oxide.Core.Libraries
 {
     /// <summary>
+    /// Request methods for web requests
+    /// </summary>
+    public enum RequestMethod
+    {
+        DELETE,
+        GET,
+        PATCH,
+        POST,
+        PUT
+    };
+
+    /// <summary>
     /// The WebRequests library
     /// </summary>
     public class WebRequests : Library
@@ -329,7 +341,7 @@ namespace Oxide.Core.Libraries
         [Obsolete("EnqueueGet is deprecated, use Enqueue instead")]
         public void EnqueueGet(string url, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            Enqueue(url, null, callback, owner, "GET", headers, timeout);
+            Enqueue(url, null, callback, owner, RequestMethod.POST, headers, timeout);
         }
 
         /// <summary>
@@ -345,7 +357,7 @@ namespace Oxide.Core.Libraries
         [Obsolete("EnqueuePost is deprecated, use Enqueue instead")]
         public void EnqueuePost(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            Enqueue(url, body, callback, owner, "POST", headers, timeout);
+            Enqueue(url, body, callback, owner, RequestMethod.POST, headers, timeout);
         }
 
         /// <summary>
@@ -361,7 +373,7 @@ namespace Oxide.Core.Libraries
         [Obsolete("EnqueuePut is deprecated, use Enqueue instead")]
         public void EnqueuePut(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            Enqueue(url, body, callback, owner, "PUT", headers, timeout);
+            Enqueue(url, body, callback, owner, RequestMethod.PUT, headers, timeout);
         }
 
         /// <summary>
@@ -375,9 +387,9 @@ namespace Oxide.Core.Libraries
         /// <param name="headers"></param>
         /// <param name="timeout"></param>
         [LibraryFunction("Enqueue")]
-        public void Enqueue(string url, string body, Action<int, string> callback, Plugin owner, string method = "POST", Dictionary<string, string> headers = null, float timeout = 0f)
+        public void Enqueue(string url, string body, Action<int, string> callback, Plugin owner, RequestMethod method = RequestMethod.GET, Dictionary < string, string> headers = null, float timeout = 0f)
         {
-            var request = new WebRequest(url, callback, owner) { Method = method, RequestHeaders = headers, Timeout = timeout, Body = body };
+            var request = new WebRequest(url, callback, owner) { Method = method.ToString(), RequestHeaders = headers, Timeout = timeout, Body = body };
             lock (syncroot) queue.Enqueue(request);
             workevent.Set();
         }
