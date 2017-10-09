@@ -78,6 +78,12 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         public IEnumerable<IPlayer> Connected => connectedPlayers.Values.Cast<IPlayer>();
 
         /// <summary>
+        /// Gets all sleeping players
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IPlayer> Sleeping => null; // TODO: Implement if/when possible
+
+        /// <summary>
         /// Finds a single player given unique ID
         /// </summary>
         /// <param name="id"></param>
