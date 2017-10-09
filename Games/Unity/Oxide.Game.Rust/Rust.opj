@@ -6180,18 +6180,18 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 56,
+            "InjectionIndex": 41,
             "RemoveCount": 1,
             "Instructions": [
               {
                 "OpCode": "bge_s",
                 "OpType": "Instruction",
-                "Operand": 58
+                "Operand": 43
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "SingleCharacterCommands [patch]",
-            "HookName": "SingleCharacterCommands",
+            "Name": "SingleCharacterCmdPrefix [patch]",
+            "HookName": "SingleCharacterCmdPrefix",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem/Arg",
             "Flagged": false,
@@ -6230,6 +6230,37 @@
             "MSILHash": "NnswdOCffT0H/OPOlBFHND2jRJYXsJQKosVb25btS5E=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 56,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "bge_s",
+                "OpType": "Instruction",
+                "Operand": 58
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "SingleCharacterCmdSuffix [patch]",
+            "HookName": "SingleCharacterCmdSuffix",
+            "AssemblyName": "Facepunch.Console.dll",
+            "TypeName": "ConsoleSystem/Arg",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "BuildCommand",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "ZBnPR/eLR4tu9oaF0QvJLvFIsOB8kTtBt77fc9GBhps=",
+            "BaseHookName": "SingleCharacterCmdPrefix [patch]",
+            "HookCategory": "_Patches"
           }
         }
       ],
