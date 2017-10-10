@@ -88,8 +88,8 @@
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\Build\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" DestinationFiles="$(BundleDir)\$(GameName)\Build\Oxide.Core.dll" />
-    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" />
+    <!--<Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" DestinationFiles="$(BundleDir)\$(GameName)\Build\Oxide.Core.dll" />
+    <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.dll" />-->
     <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" DestinationFiles="$(BundleDir)\$(GameName)\Build\Oxide.Core.CSharp.dll" />
     <Delete Files="$(BundleDir)\$(GameName)\$(ManagedDir)\Oxide.Core.CSharp.dll" />
     <Copy SourceFiles="$(BundleDir)\$(GameName)\$(ManagedDir)\protobuf-net.dll" DestinationFiles="$(BundleDir)\$(GameName)\Build\protobuf-net.dll" />
