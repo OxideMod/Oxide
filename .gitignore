@@ -77,7 +77,8 @@ _ReSharper*/
 _TeamCity*
 
 # Other files
-Dependencies/
 DepotDownloader.config
 .DepotDownloader/
 .steam*
+*Patcher.exe
+*log.txt
