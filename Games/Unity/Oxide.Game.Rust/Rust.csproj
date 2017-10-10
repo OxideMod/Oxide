@@ -45,6 +45,9 @@
     <Reference Include="Facepunch.Network">
       <HintPath>Dependencies\Facepunch.Network.dll</HintPath>
     </Reference>
+    <Reference Include="Facepunch.Rcon">
+      <HintPath>Patched\Facepunch.Rcon.dll</HintPath>
+    </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>Dependencies\Facepunch.Steamworks.dll</HintPath>
     </Reference>
