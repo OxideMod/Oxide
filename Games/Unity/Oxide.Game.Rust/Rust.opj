@@ -6136,6 +6136,44 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "Item::RemoveFromWorld",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "Item",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              1
+            ],
+            "Name": "RemoveFromWorld",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "etX2so1oza6wQ7EfxNtYTQqvB+qeUzBBb3Uu4wAmqfs="
+        },
+        {
+          "Name": "Item::DoRemove",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "Item",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "DoRemove",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "pIaWNU1Qc9jKNNcsfT9nevEogMTosUmunyKZ9K20m0o="
         }
       ],
       "Fields": [
