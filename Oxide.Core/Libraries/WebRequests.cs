@@ -341,7 +341,7 @@ namespace Oxide.Core.Libraries
         [Obsolete("EnqueueGet is deprecated, use Enqueue instead")]
         public void EnqueueGet(string url, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            Enqueue(url, null, callback, owner, RequestMethod.POST, headers, timeout);
+            Enqueue(url, null, callback, owner, RequestMethod.GET, headers, timeout);
         }
 
         /// <summary>
