@@ -26,7 +26,14 @@
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'OSX'">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/2.0-api</FrameworkPathOverride>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Extensions\Oxide.Core.CSharp\CSharp.csproj">
+      <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
+      <Name>CSharp</Name>
+    </ProjectReference>
     <PackageReference Include="Oxide.Core" Version="2.*" />
+    <Reference Include="Sandbox.Common">
+      <HintPath>Sandbox.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>Sandbox.Game.dll</HintPath>
     </Reference>
@@ -39,11 +46,17 @@
     <Reference Include="VRage">
       <HintPath>VRage.dll</HintPath>
     </Reference>
+    <Reference Include="VRage.Audio">
+      <HintPath>VRage.Audio.dll</HintPath>
+    </Reference>
     <Reference Include="VRage.Dedicated">
       <HintPath>VRage.Dedicated.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Game">
       <HintPath>VRage.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="VRage.Library">
+      <HintPath>VRage.Library.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Math">
       <HintPath>VRage.Math.dll</HintPath>
