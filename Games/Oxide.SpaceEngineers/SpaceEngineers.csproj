@@ -32,42 +32,38 @@
     </ProjectReference>
     <PackageReference Include="Oxide.Core" Version="2.*" />
     <Reference Include="Sandbox.Common">
-      <HintPath>Sandbox.Common.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game">
-      <HintPath>Sandbox.Game.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Game.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Graphics">
-      <HintPath>Sandbox.Graphics.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Graphics.dll</HintPath>
     </Reference>
     <Reference Include="SteamSDK">
-      <HintPath>SteamSDK.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\SteamSDK.dll</HintPath>
     </Reference>
     <Reference Include="VRage">
-      <HintPath>VRage.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Audio">
-      <HintPath>VRage.Audio.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Audio.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Dedicated">
-      <HintPath>VRage.Dedicated.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Dedicated.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Game">
-      <HintPath>VRage.Game.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Game.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Library">
-      <HintPath>VRage.Library.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Library.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Math">
-      <HintPath>VRage.Math.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Math.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Render">
-      <HintPath>VRage.Render.dll</HintPath>
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Render.dll</HintPath>
     </Reference>
-    <None Remove="**\*_Original.dll" />
-    <None Remove="**\*Patcher.exe" />
-    <None Remove="**\*log.txt" />
-    <None Remove="**\.steamlist" />
     <None Remove="**\DepotDownloader.config" />
     <None Remove="Files\**" />
     <None Remove="Patched\**" />
@@ -82,7 +78,7 @@
   </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
-    <Exec Command="powershell -ExecutionPolicy Unrestricted $(SolutionDir)Steam.ps1 -project $(PackageId) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />
+    <Exec Command="powershell -ExecutionPolicy Unrestricted $(SolutionDir)Steam.ps1 -project $(AssemblyName) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />
   </Target>
   <Target Name="AfterBuild">
     <!-- Placeholder -->
