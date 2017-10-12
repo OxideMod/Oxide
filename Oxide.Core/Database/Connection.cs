@@ -1,10 +1,14 @@
 using System.Data.Common;
+#if NET35
 using System.Security.Permissions;
+#endif
 using Oxide.Core.Plugins;
 
 namespace Oxide.Core.Database
 {
+#if NET35
     [ReflectionPermission(SecurityAction.Deny, Flags = ReflectionPermissionFlag.AllFlags)]
+#endif
     public sealed class Connection
     {
         public string ConnectionString { get; set; }

@@ -19,9 +19,7 @@ namespace Oxide.Core.Extensions
         private IList<Extension> extensions;
 
         // The search patterns for extensions
-        private const string coreExtSearchPattern = "Oxide.Core.*.dll";
-        private const string gameExtSearchPattern = "Oxide.Game.*.dll";
-        private const string communitySearchPattern = "Oxide.Ext.*.dll";
+        private const string extSearchPattern = "Oxide.*.dll";
 
         /// <summary>
         /// Gets the logger to which this extension manager writes
@@ -159,18 +157,21 @@ namespace Oxide.Core.Extensions
         /// <param name="directory"></param>
         public void LoadAllExtensions(string directory)
         {
-            var coreExtensions = Directory.GetFiles(directory, coreExtSearchPattern);
-            var gameExtensions = Directory.GetFiles(directory, gameExtSearchPattern);
-            var communityExtensions = Directory.GetFiles(directory, communitySearchPattern);
-            var allExtensions = coreExtensions.Concat(gameExtensions).Concat(communityExtensions);
-
-            foreach (var ext in allExtensions)
+            var foundExtensions = Directory.GetFiles(directory, extSearchPattern);
+            foreach (var ext in foundExtensions.Where(e => !e.Equals("Oxide.Core.dll")))
             {
-                if (ext.Contains(".Ext.") && Array.IndexOf(coreExtensions, ext.Replace(".Ext.", ".Core.")) != -1)
+                if (ext.Contains(".Core.") && Array.IndexOf(foundExtensions, ext.Replace(".Core.", "")) != -1)
                 {
                     Cleanup.Add(ext);
                     continue;
                 }
+
+                if (ext.Contains(".Ext.") && Array.IndexOf(foundExtensions, ext.Replace(".Ext.", "")) != -1)
+                {
+                    Cleanup.Add(ext);
+                    continue;
+                }
+
                 LoadExtension(Path.Combine(directory, ext));
             }
 

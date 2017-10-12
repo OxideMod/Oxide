@@ -1,9 +1,11 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide::ProtoBuf;
 
 namespace Oxide.Game.RustLegacy.Libraries.Covalence
 {
@@ -76,6 +78,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IPlayer> Connected => connectedPlayers.Values.Cast<IPlayer>();
+
+        /// <summary>
+        /// Gets all sleeping players
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IPlayer> Sleeping => null; // TODO: Implement if/when possible
 
         /// <summary>
         /// Finds a single player given unique ID

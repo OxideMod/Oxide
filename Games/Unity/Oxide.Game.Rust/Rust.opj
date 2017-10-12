@@ -831,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "eIeO64+cMpCP+3rQFO1IgG7q9FXraudMjbz8dFAB08Q=",
+            "MSILHash": "RkQj5YRwgXakqEHfwRBEwTfLTAVKXmWDs0I/O+oj4GU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1219,7 +1219,7 @@
                 "HitInfo"
               ]
             },
-            "MSILHash": "YHHJu4GhDlxvUMtwLht4ZO1sdebJmtMekZ/YepuSxiE=",
+            "MSILHash": "LwI3zqQ7L77oT6DASv8yw4mcX2gYrtRhgVvrSCJLg9A=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -1503,7 +1503,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "//Z3TLh+6BQqKt7pypoaEeSxfOQXoS0fIWgJG2ttigE=",
+            "MSILHash": "ptqh65EQICiminGrHaqSfxsKs/1AR+CaQd6uc6al9ag=",
             "BaseHookName": null,
             "HookCategory": "Weapon"
           }
@@ -1613,7 +1613,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 122,
+            "InjectionIndex": 121,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, l14",
@@ -1629,7 +1629,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "G8gIMB9FLyBDAkoIcHzA2jtGZEMapsV1ZsZo1Mhyyqk=",
+            "MSILHash": "dVpABKTtiW4CWarHfJsb1S3l3XWAkuIPquEsDGU8utU=",
             "BaseHookName": null,
             "HookCategory": "Resource"
           }
@@ -2346,14 +2346,14 @@
                 "Operand": 81
               },
               {
-                "OpCode": "ldstr",
-                "OpType": "String",
-                "Operand": "oxide,modded,"
-              },
-              {
                 "OpCode": "ldloc_3",
                 "OpType": "None",
                 "Operand": null
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": ",oxide,modded"
               },
               {
                 "OpCode": "call",
@@ -2378,7 +2378,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "iA7K8tFW6GweluDf3va4bClwDB65fcmF39ueTkbP0wQ=",
+            "MSILHash": "TOVVZW2ZIbrxkZP/QYm6hIuGmyhdL9Y7nRoOv3JrLxw=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2730,7 +2730,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 28,
+            "InjectionIndex": 21,
             "RemoveCount": 0,
             "Instructions": [
               {
@@ -2782,7 +2782,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "QvupeRIriz9WPyQ47NMIU0DKawiAjipu5zn7EwsU54k=",
+            "MSILHash": "snquucErHXa/RfSJB+V0dN1JRnGFjG4SdyYJlE6r5AU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -3728,7 +3728,7 @@
                 "BasePlayer"
               ]
             },
-            "MSILHash": "33tdXlpUvs6jq2lFrGbC0gasvSV1ZpiWDFOhCXzOkQg=",
+            "MSILHash": "NGANQ3wIEp3BoozQDfkI2D2qslFAFv3TcvjhWOFKjr4=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -4017,7 +4017,7 @@
                 "BaseEntity/RPCMessage"
               ]
             },
-            "MSILHash": "L6WuX1N0jmwhkRj1VSPd2PTNviJU1qXBmFzDUp2irpI=",
+            "MSILHash": "9fqYwvJ+em98+jJ61fk9Gf9zEwI+m4fKM51SpUPfDvc=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -4065,7 +4065,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "4eOttM6jdYEpaUM9O8qi5RLc/RiMsXEVDYcH9cJl/3I=",
+            "MSILHash": "Zv795qGk2oJMpcm2D76qZkzTosCoOLvY+xP5/hdTX3k=",
             "BaseHookName": null,
             "HookCategory": "Entity"
           }
@@ -4377,7 +4377,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "4eOttM6jdYEpaUM9O8qi5RLc/RiMsXEVDYcH9cJl/3I=",
+            "MSILHash": "Zv795qGk2oJMpcm2D76qZkzTosCoOLvY+xP5/hdTX3k=",
             "BaseHookName": "OnRecycleItem",
             "HookCategory": "_Patches"
           }
@@ -5326,7 +5326,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 74,
+            "InjectionIndex": 78,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l2, l2.authStatus",
@@ -5344,7 +5344,7 @@
                 "EasyAntiCheat.Server.Hydra.ClientStatusUpdate`1<EasyAntiCheat.Server.Hydra.Client>"
               ]
             },
-            "MSILHash": "Lev1mGFDGD6MMktiWhbei1s1vB56JJTa+BdPh/AesXw=",
+            "MSILHash": "2kdWLvQNlRK8OEr/WP7IDPkIj83Sl8v4FqaV7KoFOXs=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -6136,6 +6136,44 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "Item::RemoveFromWorld",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "Item",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              1
+            ],
+            "Name": "RemoveFromWorld",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "etX2so1oza6wQ7EfxNtYTQqvB+qeUzBBb3Uu4wAmqfs="
+        },
+        {
+          "Name": "Item::DoRemove",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "Item",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              3
+            ],
+            "Name": "DoRemove",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "pIaWNU1Qc9jKNNcsfT9nevEogMTosUmunyKZ9K20m0o="
         }
       ],
       "Fields": [
@@ -6172,7 +6210,7 @@
                 "ConsoleSystem/Arg"
               ]
             },
-            "MSILHash": "QvvTmpFZ4Ikg7LrHmUp8OgBnAx+DUtmF1UTwizt2+q4=",
+            "MSILHash": "RXyHScb8jTz38X8XUTVM04PKMfcBwzCxeTlRVU4HrP4=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -6180,18 +6218,18 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 56,
+            "InjectionIndex": 41,
             "RemoveCount": 1,
             "Instructions": [
               {
                 "OpCode": "bge_s",
                 "OpType": "Instruction",
-                "Operand": 58
+                "Operand": 43
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "SingleCharacterCommands [patch]",
-            "HookName": "SingleCharacterCommands",
+            "Name": "SingleCharacterCmdPrefix [patch]",
+            "HookName": "SingleCharacterCmdPrefix",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem/Arg",
             "Flagged": false,
@@ -6203,7 +6241,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "ZBnPR/eLR4tu9oaF0QvJLvFIsOB8kTtBt77fc9GBhps=",
+            "MSILHash": "aUqksG/Vue+Ee9YQ02XTxPp4N3p/dzLWm2+USDGcVRQ=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -6227,9 +6265,40 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "NnswdOCffT0H/OPOlBFHND2jRJYXsJQKosVb25btS5E=",
+            "MSILHash": "6tnwpqNZCWReCMBF3W+5VhyHXaD55AaqTVukarR1Vb8=",
             "BaseHookName": null,
             "HookCategory": "Server"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 56,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "bge_s",
+                "OpType": "Instruction",
+                "Operand": 58
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "SingleCharacterCmdSuffix [patch]",
+            "HookName": "SingleCharacterCmdSuffix",
+            "AssemblyName": "Facepunch.Console.dll",
+            "TypeName": "ConsoleSystem/Arg",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 3,
+              "Name": "BuildCommand",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "aUqksG/Vue+Ee9YQ02XTxPp4N3p/dzLWm2+USDGcVRQ=",
+            "BaseHookName": "SingleCharacterCmdPrefix [patch]",
+            "HookCategory": "_Patches"
           }
         }
       ],

@@ -75,3 +75,10 @@ _ReSharper*/
 *.DotSettings.user
 ## TeamCity add-in
 _TeamCity*
+
+# Other files
+DepotDownloader.config
+.DepotDownloader/
+.steam*
+*Patcher.exe
+*log.txt

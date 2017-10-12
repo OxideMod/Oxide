@@ -10,6 +10,18 @@ using Oxide.Core.Plugins;
 namespace Oxide.Core.Libraries
 {
     /// <summary>
+    /// Request methods for web requests
+    /// </summary>
+    public enum RequestMethod
+    {
+        DELETE,
+        GET,
+        PATCH,
+        POST,
+        PUT
+    };
+
+    /// <summary>
     /// The WebRequests library
     /// </summary>
     public class WebRequests : Library
@@ -326,45 +338,10 @@ namespace Oxide.Core.Libraries
         /// <param name="headers"></param>
         /// <param name="timeout"></param>
         [LibraryFunction("EnqueueGet")]
+        [Obsolete("EnqueueGet is deprecated, use Enqueue instead")]
         public void EnqueueGet(string url, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            var request = new WebRequest(url, callback, owner) { Method = "GET", RequestHeaders = headers, Timeout = timeout };
-            lock (syncroot) queue.Enqueue(request);
-            workevent.Set();
-        }
-
-        /// <summary>
-        /// Enqueues a delete request
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="body"></param>
-        /// <param name="callback"></param>
-        /// <param name="owner"></param>
-        /// <param name="headers"></param>
-        /// <param name="timeout"></param>
-        [LibraryFunction("EnqueueDelete")]
-        public void EnqueueDelete(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
-        {
-            var request = new WebRequest(url, callback, owner) { Method = "DELETE", RequestHeaders = headers, Timeout = timeout, Body = body };
-            lock (syncroot) queue.Enqueue(request);
-            workevent.Set();
-        }
-
-        /// <summary>
-        /// Enqueues a patch request
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="body"></param>
-        /// <param name="callback"></param>
-        /// <param name="owner"></param>
-        /// <param name="headers"></param>
-        /// <param name="timeout"></param>
-        [LibraryFunction("EnqueuePatch")]
-        public void EnqueuePatch(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
-        {
-            var request = new WebRequest(url, callback, owner) { Method = "PATCH", RequestHeaders = headers, Timeout = timeout, Body = body };
-            lock (syncroot) queue.Enqueue(request);
-            workevent.Set();
+            Enqueue(url, null, callback, owner, RequestMethod.GET, headers, timeout);
         }
 
         /// <summary>
@@ -377,11 +354,10 @@ namespace Oxide.Core.Libraries
         /// <param name="headers"></param>
         /// <param name="timeout"></param>
         [LibraryFunction("EnqueuePost")]
+        [Obsolete("EnqueuePost is deprecated, use Enqueue instead")]
         public void EnqueuePost(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            var request = new WebRequest(url, callback, owner) {Method = "POST", RequestHeaders = headers, Timeout = timeout, Body = body};
-            lock (syncroot) queue.Enqueue(request);
-            workevent.Set();
+            Enqueue(url, body, callback, owner, RequestMethod.POST, headers, timeout);
         }
 
         /// <summary>
@@ -394,9 +370,26 @@ namespace Oxide.Core.Libraries
         /// <param name="headers"></param>
         /// <param name="timeout"></param>
         [LibraryFunction("EnqueuePut")]
+        [Obsolete("EnqueuePut is deprecated, use Enqueue instead")]
         public void EnqueuePut(string url, string body, Action<int, string> callback, Plugin owner, Dictionary<string, string> headers = null, float timeout = 0f)
         {
-            var request = new WebRequest(url, callback, owner) { Method = "PUT", RequestHeaders = headers, Timeout = timeout, Body = body };
+            Enqueue(url, body, callback, owner, RequestMethod.PUT, headers, timeout);
+        }
+
+        /// <summary>
+        /// Enqueues a DELETE, GET, PATCH, POST, or PUT web request
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="body"></param>
+        /// <param name="callback"></param>
+        /// <param name="owner"></param>
+        /// <param name="method"></param>
+        /// <param name="headers"></param>
+        /// <param name="timeout"></param>
+        [LibraryFunction("Enqueue")]
+        public void Enqueue(string url, string body, Action<int, string> callback, Plugin owner, RequestMethod method = RequestMethod.GET, Dictionary < string, string> headers = null, float timeout = 0f)
+        {
+            var request = new WebRequest(url, callback, owner) { Method = method.ToString(), RequestHeaders = headers, Timeout = timeout, Body = body };
             lock (syncroot) queue.Enqueue(request);
             workevent.Set();
         }

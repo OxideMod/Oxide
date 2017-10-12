@@ -45,6 +45,9 @@
     <Reference Include="Facepunch.Network">
       <HintPath>Dependencies\Facepunch.Network.dll</HintPath>
     </Reference>
+    <Reference Include="Facepunch.Rcon">
+      <HintPath>Patched\Facepunch.Rcon.dll</HintPath>
+    </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>Dependencies\Facepunch.Steamworks.dll</HintPath>
     </Reference>
@@ -116,6 +119,13 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="Clean">
     <RemoveDir Directories="$(BundleDir)\$(GameName)" />
+  </Target>
+  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
+        <Aliases>Oxide</Aliases>
+      </ReferencePath>
+    </ItemGroup>
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
