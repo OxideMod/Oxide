@@ -93,7 +93,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\$(OutputPath)\Oxide.Core.SQLite.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\Oxide.Core.Unity.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\net35\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />
       <PackageFiles Include="$(SolutionDir)\packages\**\lib\net20\*.dll; $(SolutionDir)\packages\**\lib\net35\*.dll" />
