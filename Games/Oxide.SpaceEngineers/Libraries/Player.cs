@@ -206,7 +206,6 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// <returns></returns>
         public IMyPlayer FindById(ulong steamId)
         {
-            //MyPlayerCollection.GetPlayerById(steamId);
             var players = new List<IMyPlayer>();
             MyAPIGateway.Players.GetPlayers(players, p => p.SteamUserId == steamId);
             return players.Count == 0 ? null : players[0];

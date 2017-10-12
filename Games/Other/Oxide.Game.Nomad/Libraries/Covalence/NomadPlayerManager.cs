@@ -1,10 +1,12 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
-using TNet;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide::ProtoBuf;
+using TNet;
 
 namespace Oxide.Game.Nomad.Libraries.Covalence
 {

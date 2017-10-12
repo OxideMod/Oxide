@@ -1,10 +1,12 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
-using Terraria;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide::ProtoBuf;
+using Terraria;
 
 namespace Oxide.Game.Terraria.Libraries.Covalence
 {

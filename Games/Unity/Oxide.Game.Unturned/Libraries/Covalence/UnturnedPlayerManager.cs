@@ -1,9 +1,11 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
-using ProtoBuf;
+using Oxide::ProtoBuf;
 using SDG.Unturned;
 
 namespace Oxide.Game.Unturned.Libraries.Covalence

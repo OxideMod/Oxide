@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿extern alias Oxide;
+
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Oxide.Core.Plugins;
-using ProtoBuf;
+using Oxide::ProtoBuf;
 
 namespace Oxide.Core.Libraries
 {

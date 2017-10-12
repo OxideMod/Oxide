@@ -77,6 +77,13 @@
   <Target Name="Clean">
     <RemoveDir Directories="$(BundleDir)\$(GameName)" />
   </Target>
+  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
+        <Aliases>Oxide</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
       <GameFiles Include="$(ProjectDir)\Files\**\*.*" />

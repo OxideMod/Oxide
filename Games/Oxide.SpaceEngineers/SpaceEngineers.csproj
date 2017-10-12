@@ -73,6 +73,13 @@
     <None Remove="Patched\**" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
+        <Aliases>Oxide</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
     <Exec Command="powershell -ExecutionPolicy Unrestricted $(SolutionDir)Steam.ps1 -project $(PackageId) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />

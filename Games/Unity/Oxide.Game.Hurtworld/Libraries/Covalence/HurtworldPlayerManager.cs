@@ -1,9 +1,11 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProtoBuf;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using Oxide::ProtoBuf;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {

@@ -32,6 +32,13 @@
     <Compile Remove="Commands.cs" /> <!-- Remove when ready -->
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
+        <Aliases>Oxide</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
   <Target Name="AfterBuild">
     <!-- Placeholder -->
   </Target>

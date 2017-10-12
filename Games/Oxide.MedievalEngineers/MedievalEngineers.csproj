@@ -31,6 +31,9 @@
       <Name>CSharp</Name>
     </ProjectReference>
     <PackageReference Include="Oxide.Core" Version="2.*" />
+    <Reference Include="Sandbox.Common">
+      <HintPath>Sandbox.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>Sandbox.Game.dll</HintPath>
     </Reference>
@@ -63,6 +66,13 @@
     <None Remove="Patched\**" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
+        <Aliases>Oxide</Aliases>
+      </ReferencePath>
+    </ItemGroup>
+  </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
     <Exec Command="powershell -ExecutionPolicy Unrestricted $(SolutionDir)Steam.ps1 -project $(PackageId) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />
