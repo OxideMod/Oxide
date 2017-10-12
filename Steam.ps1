@@ -1,0 +1,119 @@
+param (
+    [Parameter(Mandatory=$true)][string]$project,
+    [Parameter(Mandatory=$true)][string]$appid,
+    [Parameter(Mandatory=$true)][string]$managed,
+    [string]$branch = "public",
+    [string]$access = "anonymous"
+)
+
+Clear-Host
+$game_name = $project -Replace "Oxide."
+$depot_dir = "$PSScriptRoot\Games\$project\Dependencies\.DepotDownloader"
+New-Item $depot_dir -ItemType Directory -Force
+$patch_dir = "$PSScriptRoot\Games\$project\Dependencies\$managed"
+New-Item $patch_dir -ItemType Directory -Force
+
+function Find-Dependencies {
+    if (!(Test-Path "$game_name.csproj")) {
+        Write-Host "Could not find a .csproj file for $game_name"
+        exit 1
+    }
+
+    # Get project information from .csproj file
+    $csproj = Get-Item "$game_name.csproj"
+    $xml = [xml](Get-Content $csproj)
+    Write-Host "Getting references for $branch branch of $appid"
+    try {
+        # TODO: Exclude dependencies included in repository
+        $xml.selectNodes("//Reference") | Select-Object HintPath -ExpandProperty HintPath | Out-File "$depot_dir\.references"
+    } catch {
+        Write-Host "Failed to get references or none found in $game_name.csproj"
+        exit 1
+    }
+}
+
+function Get-Downloader {
+    # Get latest release info for DepotDownloader
+    Write-Host "Determining latest release of DepotDownloader"
+    $json = (Invoke-WebRequest "https://api.github.com/repos/SteamRE/DepotDownloader/releases" | ConvertFrom-Json)[0]
+    $version = $json.tag_name -Replace '\w+(\d+(?:\.\d+)+)', '$1'
+    $release_zip = $json.assets[0].name
+
+    if (!(Test-Path "$depot_dir\$release_zip") -or !(Test-Path "$depot_dir\DepotDownloader.exe")) {
+        # Download and extract DepotDownloader
+        Write-Host "Dowloading version $version of DepotDownloader"
+        Invoke-WebRequest $json.assets[0].browser_download_url -Out "$depot_dir\$release_zip"
+        Write-Host "Extracting DepotDownloader release files"
+        Expand-Archive "$depot_dir\$release_zip" -DestinationPath "Dependencies\.DepotDownloader" -Force
+        # TODO: Cleanup old version .zip file(s)
+        #Remove-Item "$depot_dir\depotdownloader-*.zip" -Exclude "$depot_dir\$release_zip" -Verbose –Force
+    } else {
+        Write-Host "Latest version ($version) of DepotDownloader already downloaded"
+    }
+}
+
+function Get-Dependencies {
+    if ($access.ToLower() -ne "anonymous") {
+        $steam_login = Get-Content "$PSScriptRoot\.steamlogin"
+        if ($steam_login.Length -ne 2) {
+            Write-Host "Steam username AND password not set in .steamlogin file"
+            exit 1
+        }
+
+        $login = "-username $($steam_login[0]) -password $($steam_login[1])"
+    }
+
+    try {
+        Start-Process "$depot_dir\DepotDownloader.exe" -ArgumentList "-app $appid -branch $branch $login -dir Dependencies -filelist $depot_dir\.references" -NoNewWindow -Wait
+    } catch {
+        Write-Host "Could not start or complete DepotDownloader process"
+        Write-Host $_.Exception.Message
+        exit 1
+    }
+
+    # TODO: Confirm all dependencies were downloaded (no 0kb files), else stop/retry and error with details
+
+    # TODO: Check Oxide.Core.dll version and update if needed
+    if (!(Test-Path "Dependencies\$managed\Oxide.Core.dll")) {
+        # Download latest Oxide.Core.dll build
+        $nuget_path = "C:\Users\$env:UserName\.nuget\packages\oxide.core" # TODO: Test-Path
+        $core_version = Get-ChildItem -Directory $nuget_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
+        Copy-Item "$nuget_path\$core_version\lib\net461\Oxide.Core.dll" $patch_dir -Force # TODO: .NET framework (ie. net461) should be based on game
+        # TODO: Copy websocket-csharp.dll to Dependencies\*Managed
+    }
+    # TODO: Return and error if Oxide.Core.dll still doesn't exist
+}
+
+# TODO: MD5 comparision of local OxidePatcher.exe and remote header
+function Get-Patcher {
+    if (!(Test-Path "$patch_dir\OxidePatcher.exe")) {
+        # Download latest Oxide Patcher binary
+        Write-Host "Dowloading latest build of OxidePatcher"
+        $patcher_url = "https://github.com/OxideMod/OxidePatcher/releases/download/latest/OxidePatcher.exe"
+        Invoke-WebRequest $patcher_url -Out "$patch_dir\OxidePatcher.exe"
+    } else {
+        Write-Host "Latest build of OxidePatcher already downloaded"
+    }
+}
+
+function Start-Patcher {
+    if (!(Test-Path "$patch_dir\OxidePatcher.exe")) {
+        Get-Patcher
+        return
+    }
+
+    # Patch game using OxidePatcher.exe
+    try {
+        Start-Process "$patch_dir\OxidePatcher.exe" -WorkingDirectory $patch_dir -ArgumentList "-c -p $patch_dir ..\..\$game_name.opj" -NoNewWindow -Wait
+    } catch {
+        Write-Host "Could not start or complete OxidePatcher process"
+        Write-Host $_.Exception.Message
+        exit 1
+    }
+}
+
+Find-Dependencies
+Get-Downloader
+Get-Dependencies
+Get-Patcher
+Start-Patcher
