@@ -1,6 +1,6 @@
 {
   "Name": "MedievalEngineers",
-  "TargetDirectory": "E:\\Servers\\VRage\\MedievalEngineers\\DedicatedServer64",
+  "TargetDirectory": "Dependencies\\DedicatedServer64",
   "Manifests": [
     {
       "AssemblyName": "Sandbox.Game.dll",
