@@ -109,7 +109,7 @@ function Start-Patcher {
 
     # Patch game using OxidePatcher.exe
     try {
-        $opj = "..\..\..\$project\$game_name.opj"
+        $opj = "$PSScriptRoot\Games\$project\$game_name.opj"
         Start-Process "$managed_dir\OxidePatcher.exe" -WorkingDirectory $managed_dir -ArgumentList "-c -p $managed_dir $opj" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete OxidePatcher process"
