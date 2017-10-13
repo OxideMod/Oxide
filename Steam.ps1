@@ -1,5 +1,6 @@
 param (
     [Parameter(Mandatory=$true)][string]$project,
+    [Parameter(Mandatory=$true)][string]$dotnet,
     [Parameter(Mandatory=$true)][string]$appid,
     [Parameter(Mandatory=$true)][string]$managed,
     [string]$branch = "public",
@@ -82,7 +83,7 @@ function Get-Dependencies {
         # Download latest Oxide.Core.dll build
         $nuget_path = "C:\Users\$env:UserName\.nuget\packages\oxide.core" # TODO: Test-Path
         $core_version = Get-ChildItem -Directory $nuget_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
-        Copy-Item "$nuget_path\$core_version\lib\net461\Oxide.Core.dll" $managed_dir -Force # TODO: .NET framework (ie. net461) should be based on game
+        Copy-Item "$nuget_path\$core_version\lib\$dotnet\Oxide.Core.dll" $managed_dir -Force # TODO: .NET framework (ie. net461) should be based on game
         # TODO: Copy websocket-csharp.dll to Dependencies\*Managed
     }
     # TODO: Return and error if Oxide.Core.dll still doesn't exist
