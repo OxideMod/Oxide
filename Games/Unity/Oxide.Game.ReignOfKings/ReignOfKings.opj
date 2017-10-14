@@ -145,7 +145,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "LDIgzyjAZQqE77ejCP1vd7pd66zo+FAKQd/93fW49JI=",
+            "MSILHash": "n92nfKS3pHqOdcQaal+X334r61arAY/k5Fq1h19aIHE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -171,7 +171,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "uplzRTgSVNtJmrq5GEstjC82CkO6wcpFUL8Ix9hZV/I=",
+            "MSILHash": "exG2yt1ldJB0U1QlPdUCdT9e7ysbtDOpnM7HOxqhUjQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -614,7 +614,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "uplzRTgSVNtJmrq5GEstjC82CkO6wcpFUL8Ix9hZV/I=",
+            "MSILHash": "exG2yt1ldJB0U1QlPdUCdT9e7ysbtDOpnM7HOxqhUjQ=",
             "BaseHookName": "OnPlayerChat [guild]",
             "HookCategory": "Player"
           }
@@ -1128,6 +1128,32 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 117,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnInteract",
+            "HookName": "OnInteract",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Core.Interaction.Behaviours.Networking.InteractableListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnInteract",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Engine.Core.Interaction.Behaviours.Networking.InteractEvent"
+              ]
+            },
+            "MSILHash": "mOd9r7YymlVuDu3xA2Y4h3DLDlDgpBqd0DgGP2xNa9Q=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
         }
       ],
       "Modifiers": [
@@ -1150,8 +1176,7 @@
           },
           "MSILHash": ""
         }
-      ],
-      "Fields": []
+      ]
     }
   ]
 }
