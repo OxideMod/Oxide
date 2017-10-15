@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "c4XRIhbbvQa35VcRD3K+rPyE6oMvxUTZ/3oEktrc8Hg=",
+            "MSILHash": "A3sg/l1v2TW17A8hOt4AAnLJCh/YScakcc94mwuFRLs=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -145,7 +145,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "n92nfKS3pHqOdcQaal+X334r61arAY/k5Fq1h19aIHE=",
+            "MSILHash": "fEMr9xQUlkQRHD43ikL+iJyiQK2cP3G1cqBG2V99ah0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -171,7 +171,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "exG2yt1ldJB0U1QlPdUCdT9e7ysbtDOpnM7HOxqhUjQ=",
+            "MSILHash": "4jD7lfNZxGG/57hVwvP/jDmlvEUv/aLTFjP9gtqxBwI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -614,7 +614,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "exG2yt1ldJB0U1QlPdUCdT9e7ysbtDOpnM7HOxqhUjQ=",
+            "MSILHash": "4jD7lfNZxGG/57hVwvP/jDmlvEUv/aLTFjP9gtqxBwI=",
             "BaseHookName": "OnPlayerChat [guild]",
             "HookCategory": "Player"
           }
@@ -903,7 +903,7 @@
                 "CodeHatch.Networking.Events.Entities.Objects.Gadgets.GadgetCollectEvent"
               ]
             },
-            "MSILHash": "VZNpL9HwCqtQkZHTQcHz238s8rJ35JXnqpJuuY9pOu8=",
+            "MSILHash": "fM11D3EnULrrKaJYZhbGXyTsLzJpL1porQ4zGTuQsjE=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -1132,7 +1132,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 117,
+            "InjectionIndex": 116,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
