@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "c4XRIhbbvQa35VcRD3K+rPyE6oMvxUTZ/3oEktrc8Hg=",
+            "MSILHash": "A3sg/l1v2TW17A8hOt4AAnLJCh/YScakcc94mwuFRLs=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -145,7 +145,7 @@
                 "CodeHatch.Engine.Networking.Connection"
               ]
             },
-            "MSILHash": "LDIgzyjAZQqE77ejCP1vd7pd66zo+FAKQd/93fW49JI=",
+            "MSILHash": "fEMr9xQUlkQRHD43ikL+iJyiQK2cP3G1cqBG2V99ah0=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -171,7 +171,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "uplzRTgSVNtJmrq5GEstjC82CkO6wcpFUL8Ix9hZV/I=",
+            "MSILHash": "4jD7lfNZxGG/57hVwvP/jDmlvEUv/aLTFjP9gtqxBwI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -614,7 +614,7 @@
                 "CodeHatch.Networking.Events.Players.PlayerMessageEvent"
               ]
             },
-            "MSILHash": "uplzRTgSVNtJmrq5GEstjC82CkO6wcpFUL8Ix9hZV/I=",
+            "MSILHash": "4jD7lfNZxGG/57hVwvP/jDmlvEUv/aLTFjP9gtqxBwI=",
             "BaseHookName": "OnPlayerChat [guild]",
             "HookCategory": "Player"
           }
@@ -903,7 +903,7 @@
                 "CodeHatch.Networking.Events.Entities.Objects.Gadgets.GadgetCollectEvent"
               ]
             },
-            "MSILHash": "VZNpL9HwCqtQkZHTQcHz238s8rJ35JXnqpJuuY9pOu8=",
+            "MSILHash": "fM11D3EnULrrKaJYZhbGXyTsLzJpL1porQ4zGTuQsjE=",
             "BaseHookName": null,
             "HookCategory": "Item"
           }
@@ -1128,6 +1128,32 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 116,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnInteract",
+            "HookName": "OnInteract",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Core.Interaction.Behaviours.Networking.InteractableListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnInteract",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Engine.Core.Interaction.Behaviours.Networking.InteractEvent"
+              ]
+            },
+            "MSILHash": "mOd9r7YymlVuDu3xA2Y4h3DLDlDgpBqd0DgGP2xNa9Q=",
+            "BaseHookName": null,
+            "HookCategory": "Item"
+          }
         }
       ],
       "Modifiers": [
@@ -1150,8 +1176,7 @@
           },
           "MSILHash": ""
         }
-      ],
-      "Fields": []
+      ]
     }
   ]
 }
