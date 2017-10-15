@@ -81,7 +81,7 @@ function Get-Dependencies {
     # TODO: Check Oxide.Core.dll version and update if needed
     if (!(Test-Path "Dependencies\$managed\Oxide.Core.dll")) {
         # Download latest Oxide.Core.dll build
-        $nuget_path = "C:\Users\$env:UserName\.nuget\packages\oxide.core" # TODO: Test-Path
+        $nuget_path = "../packages/oxide.core" # TODO: Test-Path
         $core_version = Get-ChildItem -Directory $nuget_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
         Copy-Item "$nuget_path\$core_version\lib\$dotnet\Oxide.Core.dll" $managed_dir -Force # TODO: .NET framework (ie. net461) should be based on game
         # TODO: Copy websocket-csharp.dll to Dependencies\*Managed
