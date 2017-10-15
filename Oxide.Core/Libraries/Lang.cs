@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using Oxide.Core.Plugins;
+using Oxide::Newtonsoft.Json;
 using Oxide::ProtoBuf;
 
 namespace Oxide.Core.Libraries

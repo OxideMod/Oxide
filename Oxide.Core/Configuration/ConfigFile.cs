@@ -1,6 +1,8 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.IO;
-using Newtonsoft.Json;
+using Oxide::Newtonsoft.Json;
 
 namespace Oxide.Core.Configuration
 {

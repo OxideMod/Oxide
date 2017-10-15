@@ -71,6 +71,9 @@
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'Newtonsoft.Json'">
+        <Aliases>Oxide</Aliases>
+      </ReferencePath>
       <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
         <Aliases>Oxide</Aliases>
       </ReferencePath>

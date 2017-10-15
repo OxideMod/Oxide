@@ -1,4 +1,6 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -7,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Newtonsoft.Json;
 using Oxide.Core.Configuration;
 using Oxide.Core.Extensions;
 using Oxide.Core.Libraries;
@@ -15,6 +16,7 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins;
 using Oxide.Core.ServerConsole;
+using Oxide::Newtonsoft.Json;
 
 using Timer = Oxide.Core.Libraries.Timer;
 

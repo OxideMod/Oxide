@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿extern alias Oxide;
+
 using System;
+using Oxide::Newtonsoft.Json;
 
 namespace Oxide.Core.RemoteConsole
 {
