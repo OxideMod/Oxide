@@ -118,7 +118,7 @@ namespace Oxide.Core.Libraries
                     request.ServicePoint.Expect100Continue = ServicePointManager.Expect100Continue;
                     request.ServicePoint.ConnectionLimit = ServicePointManager.DefaultConnectionLimit;
 
-                    // Optional request body for post requests
+                    // Optional request body for POST requests
                     var data = new byte[0];
                     if (Body != null)
                     {
@@ -193,7 +193,7 @@ namespace Oxide.Core.Libraries
                             }
                             catch (Exception)
                             {
-                                // ignored
+                                // Ignored
                             }
                             ResponseCode = (int)response.StatusCode;
                         }
