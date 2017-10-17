@@ -59,7 +59,6 @@ namespace Oxide.Game.Rust
         {
             "alphamapResolution is clamped to the range of",
             "AngryAnt Behave version",
-            "Failed to load plugin '1' (no source found)",
             "Floating point textures aren't supported on this device",
             "HDR RenderTexture format is not supported on this platform.",
             "Image Effects are not supported on this platform.",

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  <PropertyGroup>
+    <Version>2.0.0.0</Version>
+    <AssemblyName>Oxide.Rust</AssemblyName>
+    <Authors>Oxide Team and Contributors</Authors>
+    <Description>Rust extension for the Oxide modding framework</Description>
+    <RepositoryUrl>https://github.com/OxideMod/Oxide.Rust</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/OxideMod/Oxide.Rust/blob/develop/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/OxideMod/Oxide.Rust</PackageProjectUrl>
+    <PackageIconUrl>https://avatars1.githubusercontent.com/u/10712027?s=64</PackageIconUrl>
+    <Copyright>Copyright (c) 2014-$([System.DateTime]::Now.Year) $(Authors)</Copyright>
+    <PackageTags>gaming modding plugins unity unity3d</PackageTags>
+    <TargetFramework>net35</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <BundleDir>$(SolutionDir)Bundles</BundleDir>
+    <ManagedDir>RustDedicated_Data\Managed</ManagedDir>
+    <SteamAppId>258550</SteamAppId>
+    <SteamBranch>public</SteamBranch>
+    <SteamLogin>anonymous</SteamLogin>
+    <!--
+      Workaround for targeting net35 with dotnet CLI
+      https://github.com/Microsoft/msbuild/issues/1333#issuecomment-296346352
+    -->
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'Windows_NT'">C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'OSX'">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/2.0-api</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Extensions\Oxide.Core.CSharp\CSharp.csproj">
+      <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
+      <Name>CSharp</Name>
+    </ProjectReference>
+    <!--<PackageReference Include="Oxide.Core" Version="2.*" />-->
+    <PackageReference Include="Oxide.Unity" Version="2.*" />
+    <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
+      <Name>Core</Name>
+    </ProjectReference>
+    <Reference Include="Oxide.References">
+      <HintPath>..\..\Oxide.Core\bin\Release\$(TargetFramework)\Oxide.References.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.Console">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.Network">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.Rcon">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Rcon.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.Steamworks">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Steamworks.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.System">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.System.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.Unity">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Facepunch.UnityEngine">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\System.dll</HintPath>
+    </Reference>
+    <Reference Include="Rust.Data">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Rust.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Rust.Global">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Rust.Global.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <None Remove="**\DepotDownloader.config" />
+    <None Remove="Files\**" />
+    <None Remove="Patched\**" />
+  </ItemGroup>
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="BeforeBuild">
+    <!-- Currently only works on Windows due to Windows-only tools used -->
+    <Exec Command="powershell -ExecutionPolicy Unrestricted $(SolutionDir)Steam.ps1 -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />
+  </Target>
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <GameFiles Include="$(ProjectDir)Files\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\bin\$(Configuration)\Oxide.Core.CSharp.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\bin\$(Configuration)\Oxide.Core.MySql.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\bin\$(Configuration)\Oxide.Core.SQLite.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.Unity\bin\$(Configuration)\Oxide.Core.Unity.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\Release\$(TargetFramework)\Oxide.Core.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.Core\Dependencies\*.dll" />
+      <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
+      <!--<PatchedFiles Include="$(ProjectDir)Patched\**\*.*" />-->
+    </ItemGroup>
+    <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
+    <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\Rust\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\Rust\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\Rust\$(ManagedDir)\%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\Rust\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
+  </Target>
+  <Target Name="Deploy">
+    <Exec Command="start /b /wait taskkill /f /im RustDedicated.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <ReadLinesFromFile File="$(ProjectDir).deploy">
+      <Output PropertyName="DeployPath" TaskParameter="Lines" />
+    </ReadLinesFromFile>
+    <ItemGroup>
+      <DeployFiles Include="$(BundleDir)\Rust\**\*.*" />
+    </ItemGroup>
+    <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+</Project>

@@ -197,12 +197,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
-        {
-            message = Formatter.ToPlaintext(message);
-            Interface.Oxide.LogInfo(message);
-            Facepunch.RCon.Broadcast(Facepunch.RCon.LogType.Generic, message);
-        }
+        public void Message(string message) => Facepunch.RCon.Broadcast(Facepunch.RCon.LogType.Generic, Formatter.ToPlaintext(message.Trim('"')));
 
         /// <summary>
         /// Sends the specified message to the player
