@@ -1,98 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9103D682-D1AA-4A95-A499-896F551AAA62}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oxide.Core.CSharp</RootNamespace>
+    <Version>2.0.0.0</Version>
     <AssemblyName>Oxide.Core.CSharp</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Authors>Oxide Team and Contributors</Authors>
+    <Description>C# (CSharp) plugin support for the Oxide modding framework</Description>
+    <RepositoryUrl>https://github.com/OxideMod/Oxide.CSharp</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/OxideMod/Oxide.CSharp/blob/develop/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/OxideMod/Oxide.CSharp</PackageProjectUrl>
+    <PackageIconUrl>https://avatars1.githubusercontent.com/u/10712027?s=64</PackageIconUrl>
+    <Copyright>Copyright (c) 2014-$([System.DateTime]::Now.Year) $(Authors)</Copyright>
+    <PackageTags>api framework gaming modding plugins</PackageTags>
+    <TargetFrameworks>net461;net45;net40;net35</TargetFrameworks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <!--
+      Workaround for targeting net35 with dotnet CLI
+      https://github.com/Microsoft/msbuild/issues/1333#issuecomment-296346352
+    -->
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'Windows_NT'">C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'OSX'">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/2.0-api</FrameworkPathOverride>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Mono.Posix">
-      <HintPath>Dependencies\Mono.Posix.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\packages\Mono.Cecil.0.9.6.4\lib\net35\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>..\..\packages\Mono.Cecil.0.9.6.4\lib\net35\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="CompilableFile.cs" />
-    <Compile Include="Compilation.cs" />
-    <Compile Include="CSharpExtension.cs" />
-    <Compile Include="CSharpPlugin.cs" />
-    <Compile Include="CSharpPluginLoader.cs" />
-    <Compile Include="CompilablePlugin.cs" />
-    <Compile Include="CompiledAssembly.cs" />
-    <Compile Include="DirectCallMethod.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="ObjectStream\Data\CompilerData.cs" />
-    <Compile Include="ObjectStream\Data\CompilerFile.cs" />
-    <Compile Include="ObjectStream\Data\CompilerLanguageVersion.cs" />
-    <Compile Include="ObjectStream\Data\CompilerMessage.cs" />
-    <Compile Include="ObjectStream\Data\CompilerMessageType.cs" />
-    <Compile Include="ObjectStream\Data\CompilerPlatform.cs" />
-    <Compile Include="ObjectStream\Data\CompilerTarget.cs" />
-    <Compile Include="ObjectStream\IO\BindChanger.cs" />
-    <Compile Include="ObjectStream\IO\ObjectStreamWrapper.cs" />
-    <Compile Include="ObjectStream\ObjectStreamClient.cs" />
-    <Compile Include="ObjectStream\ObjectStreamConnection.cs" />
-    <Compile Include="ObjectStream\Threading\Worker.cs" />
-    <Compile Include="Covalence\Plugin.cs" />
-    <Compile Include="PluginCompiler.cs" />
-    <Compile Include="PluginTimers.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utility.cs" />
-    <None Include="Plugins\SamplePlugin.cs" />
-    <None Include="Plugins\CovalenceSamplePlugin.cs" />
-    <None Include="packages.config" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
-      <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
       <Name>Core</Name>
     </ProjectReference>
+    <Reference Include="Oxide.References">
+      <HintPath>..\..\Oxide.References\$(OutputPath)\Merged\Oxide.References.dll</HintPath>
+    </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="AfterBuild">
+    <!-- Placeholder -->
+  </Target>
 </Project>

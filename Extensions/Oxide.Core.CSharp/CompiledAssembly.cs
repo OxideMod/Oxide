@@ -9,6 +9,7 @@ using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using Oxide.Core;
 using Oxide.Core.CSharp;
+
 using MethodAttributes = Mono.Cecil.MethodAttributes;
 using MethodBody = Mono.Cecil.Cil.MethodBody;
 
