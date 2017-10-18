@@ -12,6 +12,7 @@ namespace Oxide.Core
         internal static void Run()
         {
             if (files == null) return;
+
             foreach (var file in files)
             {
                 try

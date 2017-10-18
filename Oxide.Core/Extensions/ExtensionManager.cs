@@ -160,13 +160,19 @@ namespace Oxide.Core.Extensions
             var foundExtensions = Directory.GetFiles(directory, extSearchPattern);
             foreach (var ext in foundExtensions.Where(e => !e.EndsWith("Oxide.Core.dll") && !e.EndsWith("Oxide.References.dll")))
             {
-                if (ext.Contains(".Core.") && Array.IndexOf(foundExtensions, ext.Replace(".Core.", "")) != -1)
+                if (ext.Contains("Oxide.Core.") && Array.IndexOf(foundExtensions, ext.Replace(".Core", "")) != -1)
                 {
                     Cleanup.Add(ext);
                     continue;
                 }
 
-                if (ext.Contains(".Ext.") && Array.IndexOf(foundExtensions, ext.Replace(".Ext.", "")) != -1)
+                if (ext.Contains("Oxide.Ext.") && Array.IndexOf(foundExtensions, ext.Replace(".Ext", "")) != -1)
+                {
+                    Cleanup.Add(ext);
+                    continue;
+                }
+
+                if (ext.Contains("Oxide.Game.") && Array.IndexOf(foundExtensions, ext.Replace(".Game", "")) != -1)
                 {
                     Cleanup.Add(ext);
                     continue;
