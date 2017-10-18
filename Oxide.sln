@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "Extensions\Oxide.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python", "Extensions\Oxide.Core.Python\Python.csproj", "{B05D4995-6E61-4E82-AC91-5A7B46EC9781}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite", "Extensions\Oxide.Core.SQLite\SQLite.csproj", "{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite", "Extensions\Oxide.SQLite\SQLite.csproj", "{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity", "Extensions\Oxide.Core.Unity\Unity.csproj", "{52C26C5B-23E5-48A2-B403-5FF5C898E91A}"
 EndProject
