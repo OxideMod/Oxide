@@ -70,6 +70,9 @@
     <None Remove="Patched\**" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="Clean">
+    <RemoveDir Directories="$(BundleDir)\$(GameName)" />
+  </Target>
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
@@ -84,6 +87,8 @@
   <Target Name="AfterBuild">
     <ItemGroup>
       <GameFiles Include="$(ProjectDir)Files\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Game.dll" />
+      <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Dedicated.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\bin\$(Configuration)\$(TargetFramework)\Oxide.Core.CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\bin\$(Configuration)\Oxide.Core.MySql.dll" />

@@ -92,6 +92,9 @@
     <None Remove="Patched\**" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Target Name="Clean">
+    <RemoveDir Directories="$(BundleDir)\$(GameName)" />
+  </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
     <Exec Command="powershell -ExecutionPolicy Unrestricted $(SolutionDir)Steam.ps1 -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />
@@ -99,6 +102,9 @@
   <Target Name="AfterBuild">
     <ItemGroup>
       <GameFiles Include="$(ProjectDir)Files\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll" />
+      <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Console.dll" />
+      <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Rcon.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\$(OutputPath)Oxide.Core.CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\bin\$(Configuration)\Oxide.Core.MySql.dll" />
