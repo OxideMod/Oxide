@@ -19,14 +19,14 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(PlayerSession session)
         {
-            session.Identity.Name = session.Identity.Name ?? "Unnamed";
+            session.Name = session.Name ?? "Unnamed";
             var id = session.SteamId.ToString();
             var ip = session.Player.ipAddress;
 
             Covalence.PlayerManager.PlayerJoin(session);
 
             var loginSpecific = Interface.Call("CanClientLogin", session);
-            var loginCovalence = Interface.Call("CanUserLogin", session.Identity.Name, id, ip);
+            var loginCovalence = Interface.Call("CanUserLogin", session.Name, id, ip);
             var canLogin = loginSpecific ?? loginCovalence;
 
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
@@ -36,7 +36,7 @@ namespace Oxide.Game.Hurtworld
             }
 
             var approvedSpecific = Interface.Call("OnUserApprove", session);
-            var approvedCovalence = Interface.Call("OnUserApproved", session.Identity.Name, id, ip);
+            var approvedCovalence = Interface.Call("OnUserApproved", session.Name, id, ip);
             return approvedSpecific ?? approvedCovalence;
         }
 
@@ -102,7 +102,7 @@ namespace Oxide.Game.Hurtworld
             if (permission.IsLoaded)
             {
                 var id = session.SteamId.ToString();
-                permission.UpdateNickname(id, session.Identity.Name);
+                permission.UpdateNickname(id, session.Name);
                 var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
                 if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
                 if (session.IsAdmin && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);

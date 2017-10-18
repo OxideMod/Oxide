@@ -42,14 +42,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = session.Identity.Name;
+                record.Name = session.Name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new HurtworldPlayer(session));
             }
             else
             {
-                record = new PlayerRecord { Id = (ulong)session.SteamId, Name = session.Identity.Name };
+                record = new PlayerRecord { Id = (ulong)session.SteamId, Name = session.Name };
                 playerData.Add(id, record);
                 allPlayers.Add(id, new HurtworldPlayer(session));
             }

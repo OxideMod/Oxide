@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Oxide.References">
+      <HintPath>..\..\..\Oxide.References\bin\$(Configuration)\net40\Merged\Oxide.References.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework">
       <HintPath>Dependencies\Microsoft.Xna.Framework.dll</HintPath>
     </Reference>
@@ -39,9 +42,6 @@
     <Reference Include="System.Core" />
     <Reference Include="TerrariaServer">
       <HintPath>Patched\TerrariaServer.exe</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -74,7 +74,7 @@
   </Target>
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
-      <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
+      <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
         <Aliases>Oxide</Aliases>
       </ReferencePath>
     </ItemGroup>
@@ -88,7 +88,7 @@
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\$(OutputPath)\Oxide.Core.SQLite.dll" />
       <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
+      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\net40\*.dll*" />
       <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
       <PackageFiles Include="$(SolutionDir)\packages\**\lib\net20\*.dll; $(SolutionDir)\packages\**\lib\net35\*.dll" />
       <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />

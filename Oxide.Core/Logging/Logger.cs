@@ -113,6 +113,7 @@ namespace Oxide.Core.Logging
                 Write(LogType.Error, $"{message}{Environment.NewLine}{formatted}");
                 return;
             }
+
             var outerEx = ex;
             while (ex.InnerException != null) ex = ex.InnerException;
             if (outerEx.GetType() != ex.GetType()) Write(LogType.Stacktrace, "ExType: {0}", outerEx.GetType().Name);

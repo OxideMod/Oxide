@@ -158,7 +158,7 @@ namespace Oxide.Core.Extensions
         public void LoadAllExtensions(string directory)
         {
             var foundExtensions = Directory.GetFiles(directory, extSearchPattern);
-            foreach (var ext in foundExtensions.Where(e => !e.Equals("Oxide.Core.dll")))
+            foreach (var ext in foundExtensions.Where(e => !e.EndsWith("Oxide.Core.dll") && !e.EndsWith("Oxide.References.dll")))
             {
                 if (ext.Contains(".Core.") && Array.IndexOf(foundExtensions, ext.Replace(".Core.", "")) != -1)
                 {

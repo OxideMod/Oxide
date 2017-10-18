@@ -1,8 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Oxide.Core\Core.csproj", "{67F65F5D-A62A-4752-849D-BFF30D828107}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Oxide.Core\Core.csproj", "{67F65F5D-A62A-4752-849D-BFF30D828107}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7009BBCB-8CA4-49EC-BE95-B27C07771CDF} = {7009BBCB-8CA4-49EC-BE95-B27C07771CDF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp", "Extensions\Oxide.Core.CSharp\CSharp.csproj", "{9103D682-D1AA-4A95-A499-896F551AAA62}"
 EndProject
@@ -66,7 +69,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterstellarRift", "Games\O
 		{D138493B-6F2E-4B9F-8F79-17B73422D87F} = {D138493B-6F2E-4B9F-8F79-17B73422D87F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedievalEngineers", "Games\Oxide.MedievalEngineers\MedievalEngineers.csproj", "{E7E14011-2972-4FF0-998C-90AF061425E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedievalEngineers", "Games\Oxide.MedievalEngineers\MedievalEngineers.csproj", "{E7E14011-2972-4FF0-998C-90AF061425E7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A} = {C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}
 		{D138493B-6F2E-4B9F-8F79-17B73422D87F} = {D138493B-6F2E-4B9F-8F79-17B73422D87F}
@@ -92,7 +95,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReignOfKings", "Games\Unity
 		{52C26C5B-23E5-48A2-B403-5FF5C898E91A} = {52C26C5B-23E5-48A2-B403-5FF5C898E91A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rust", "Games\Unity\Oxide.Game.Rust\Rust.csproj", "{87568E26-BF3C-4A14-A3C4-8B74616D6FA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rust", "Games\Oxide.Rust\Rust.csproj", "{87568E26-BF3C-4A14-A3C4-8B74616D6FA9}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A} = {C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}
 		{D138493B-6F2E-4B9F-8F79-17B73422D87F} = {D138493B-6F2E-4B9F-8F79-17B73422D87F}
@@ -120,7 +123,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SevenDays", "Games\Unity\Ox
 		{52C26C5B-23E5-48A2-B403-5FF5C898E91A} = {52C26C5B-23E5-48A2-B403-5FF5C898E91A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceEngineers", "Games\Oxide.SpaceEngineers\SpaceEngineers.csproj", "{DB451505-3B05-4A36-822B-EE044B49D46F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceEngineers", "Games\Oxide.SpaceEngineers\SpaceEngineers.csproj", "{DB451505-3B05-4A36-822B-EE044B49D46F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A} = {C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}
 		{D138493B-6F2E-4B9F-8F79-17B73422D87F} = {D138493B-6F2E-4B9F-8F79-17B73422D87F}
@@ -157,6 +160,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{956AB1A0-3B1D-41A8-89EB-51ED0218B4D6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VRage", "VRage", "{E9FE89D3-AD40-4604-B6FC-6BF2A0E72E0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "References", "Oxide.References\References.csproj", "{7009BBCB-8CA4-49EC-BE95-B27C07771CDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -276,6 +281,10 @@ Global
 		{04DC61C2-E138-4D67-BFA1-50208DFA6B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04DC61C2-E138-4D67-BFA1-50208DFA6B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04DC61C2-E138-4D67-BFA1-50208DFA6B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7009BBCB-8CA4-49EC-BE95-B27C07771CDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7009BBCB-8CA4-49EC-BE95-B27C07771CDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7009BBCB-8CA4-49EC-BE95-B27C07771CDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7009BBCB-8CA4-49EC-BE95-B27C07771CDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -310,5 +319,8 @@ Global
 		{939EF8DA-FF66-418A-9011-38BCDE653257} = {C4C1902A-42A0-4F81-B328-59E32B2A1F37}
 		{956AB1A0-3B1D-41A8-89EB-51ED0218B4D6} = {C4C1902A-42A0-4F81-B328-59E32B2A1F37}
 		{E9FE89D3-AD40-4604-B6FC-6BF2A0E72E0F} = {C4C1902A-42A0-4F81-B328-59E32B2A1F37}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FC745323-E34A-448B-875C-0F32CCD36B2D}
 	EndGlobalSection
 EndGlobal

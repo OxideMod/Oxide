@@ -1,12 +1,14 @@
+extern alias Oxide;
+
 using System;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries.Covalence;
-using WebSocketSharp;
-using WebSocketSharp.Net.WebSockets;
-using WebSocketSharp.Server;
+using Oxide::WebSocketSharp;
+using Oxide::WebSocketSharp.Net.WebSockets;
+using Oxide::WebSocketSharp.Server;
 
 namespace Oxide.Core.RemoteConsole
 {
