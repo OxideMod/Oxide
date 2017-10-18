@@ -13,7 +13,8 @@ RustDedicated.exe -batchmode -nographics ^
 +server.hostname "My Oxide Server" ^
 +server.identity "my_server_identity" ^
 +server.level "Procedural Map" ^
-+server.seed 12345 +server.worldsize 4000 ^
++server.seed 12345 ^
++server.worldsize 4000 ^
 +server.saveinterval 300 ^
 +server.globalchat true ^
 +server.description "Powered by Oxide" ^
