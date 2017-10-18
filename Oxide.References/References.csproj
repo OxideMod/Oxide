@@ -27,9 +27,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="protobuf-net" Version="2.3.2" />
     <PackageReference Include="WebSocketSharpFork" Version="1.0.4" />
-    <Reference Include="Mono.Posix"> <!-- Remove after net35 compatible published on nuget.org -->
-      <HintPath>Dependencies\Mono.Posix.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="AfterBuild">
@@ -45,6 +42,7 @@
       <MergeAssemblies Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net45'" Include="..\packages\protobuf-net\2.3.2\lib\net35\protobuf-net.dll" />
       <MergeAssemblies Include="..\packages\websocketsharpfork\1.0.4\lib\net35\websocket-sharp.dll" />
       <MergeAssemblies Include="Dependencies\Mono.Posix.dll" />
+      <MergeAssemblies Include="Dependencies\System.Data.dll" />
     </ItemGroup>
     <PropertyGroup>
       <OutputAssembly>$(OutputPath)Merged\Oxide.References.dll</OutputAssembly>
