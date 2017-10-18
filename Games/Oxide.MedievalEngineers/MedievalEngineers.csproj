@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Version>2.0.0.0</Version>
     <AssemblyName>Oxide.MedievalEngineers</AssemblyName>
-    <Authors>Oxide Team and Contributors</Authors>
+    <Authors>Oxide and Contributors</Authors>
     <Description>Medieval Engineers extension for the Oxide modding framework</Description>
     <RepositoryUrl>https://github.com/OxideMod/Oxide.MedievalEngineers</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/OxideMod/Oxide.MedievalEngineers/blob/develop/LICENSE.md</PackageLicenseUrl>
@@ -87,7 +87,7 @@
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\bin\$(Configuration)\Oxide.Core.SQLite.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\$(TargetFramework)\Oxide.*.dll" />
-      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.*.dll" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />

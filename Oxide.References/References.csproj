@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Version>2.0.0.0</Version>
     <AssemblyName>Oxide.References</AssemblyName>
-    <Authors>Oxide Team and Contributors</Authors>
+    <Authors>Oxide and Contributors</Authors>
     <Description>Dependency references for the Oxide modding framework</Description>
     <RepositoryUrl>https://github.com/OxideMod/Oxide.References</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/OxideMod/Oxide.References/blob/develop/LICENSE.md</PackageLicenseUrl>
@@ -42,7 +42,6 @@
       <MergeAssemblies Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net45'" Include="..\packages\protobuf-net\2.3.2\lib\net35\protobuf-net.dll" />
       <MergeAssemblies Include="..\packages\websocketsharpfork\1.0.4\lib\net35\websocket-sharp.dll" />
       <MergeAssemblies Include="Dependencies\Mono.Posix.dll" />
-      <MergeAssemblies Include="Dependencies\System.Data.dll" />
     </ItemGroup>
     <PropertyGroup>
       <OutputAssembly>$(OutputPath)Merged\Oxide.References.dll</OutputAssembly>

@@ -88,7 +88,7 @@
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.Unity\bin\$(Configuration)\Oxide.Core.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\net35\Oxide.*.dll" />
-      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.*.dll" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
       <PatchedFiles Include="$(ProjectDir)Patched\**\*.*" />
     </ItemGroup>
