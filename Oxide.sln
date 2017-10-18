@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python", "Extensions\Oxide.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite", "Extensions\Oxide.SQLite\SQLite.csproj", "{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity", "Extensions\Oxide.Core.Unity\Unity.csproj", "{52C26C5B-23E5-48A2-B403-5FF5C898E91A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity", "Extensions\Oxide.Unity\Unity.csproj", "{52C26C5B-23E5-48A2-B403-5FF5C898E91A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackwake", "Games\Unity\Oxide.Game.Blackwake\Blackwake.csproj", "{A4E170BC-7E8F-4CAE-88F8-EB28FD8C27B5}"
 	ProjectSection(ProjectDependencies) = postProject

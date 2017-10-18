@@ -97,11 +97,11 @@
       <GameFiles Include="$(ProjectDir)Files\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\bin\$(Configuration)\net35\Oxide.CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.Unity\bin\$(Configuration)\Oxide.Core.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\bin\$(Configuration)\net35\Oxide.MySql.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\bin\$(Configuration)\net35\Oxide.SQLite.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Unity\bin\$(Configuration)\net35\Oxide.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\net35\Oxide.*.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.*.dll" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
