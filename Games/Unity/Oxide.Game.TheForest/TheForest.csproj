@@ -101,19 +101,18 @@
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
-      <GameFiles Include="$(ProjectDir)\Files\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\$(OutputPath)\Oxide.Core.CSharp.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\$(OutputPath)\Oxide.Core.MySql.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\$(OutputPath)\Oxide.Core.SQLite.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\Oxide.Core.Unity.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\net35\*.dll*" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
-      <PackageFiles Include="$(SolutionDir)\packages\**\lib\net20\*.dll; $(SolutionDir)\packages\**\lib\net35\*.dll" />
-      <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />
-      <PatchedFiles Include="$(ProjectDir)\Patched\**\*.*" />
+      <GameFiles Include="$(ProjectDir)Files\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\bin\$(Configuration)\net35\Oxide.Core.CSharp.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\bin\$(Configuration)\Oxide.Core.MySql.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\bin\$(Configuration)\Oxide.Core.SQLite.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.Unity\bin\$(Configuration)\Oxide.Core.Unity.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\net35\Oxide.*.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
+      <PatchedFiles Include="$(ProjectDir)Patched\**\*.*" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />

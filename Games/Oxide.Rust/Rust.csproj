@@ -96,7 +96,7 @@
   <Target Name="AfterBuild">
     <ItemGroup>
       <GameFiles Include="$(ProjectDir)Files\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\bin\$(Configuration)\$(TargetFramework)\Oxide.Core.CSharp.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\$(OutputPath)Oxide.Core.CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.CSharp\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\bin\$(Configuration)\Oxide.Core.MySql.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.MySql\Dependencies\**\*.*" />
@@ -104,8 +104,8 @@
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.Unity\bin\$(Configuration)\Oxide.Core.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\$(TargetFramework)\Oxide.*.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
-      <!--<PatchedFiles Include="$(ProjectDir)Patched\**\*.*" />-->
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />

@@ -30,7 +30,7 @@
     </ProjectReference>
     <!--<PackageReference Include="Oxide.Core" Version="2.*" />-->
     <Reference Include="Oxide.References">
-      <HintPath>..\..\Oxide.References\$(OutputPath)\Merged\Oxide.References.dll</HintPath>
+      <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game">
       <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Game.dll</HintPath>
@@ -82,6 +82,7 @@
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\bin\$(Configuration)\Oxide.Core.SQLite.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\$(TargetFramework)\Oxide.*.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
