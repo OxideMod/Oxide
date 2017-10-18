@@ -84,6 +84,9 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.UI.dll</HintPath>
     </Reference>
+    <Reference Include="websocket-csharp">
+      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\websocket-csharp.dll</HintPath>
+    </Reference>
     <None Remove="**\DepotDownloader.config" />
     <None Remove="Files\**" />
     <None Remove="Patched\**" />
