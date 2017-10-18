@@ -89,13 +89,13 @@
       <GameFiles Include="$(ProjectDir)Files\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Game.dll" />
       <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Dedicated.dll" />
-      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\bin\$(Configuration)\$(TargetFramework)\Oxide.CSharp.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\$(OutputPath)Oxide.CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\$(TargetFramework)\Oxide.*.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\$(OutputPath)Oxide.MySql.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\$(OutputPath)Oxide.SQLite.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.Core\$(OutputPath)Oxide.*.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.*.dll" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
     </ItemGroup>
