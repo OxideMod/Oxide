@@ -1,4 +1,6 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -8,10 +10,10 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Mono.Unix.Native;
 using ObjectStream;
 using ObjectStream.Data;
 using Oxide.Core;
+using Oxide::Mono.Unix.Native;
 
 namespace Oxide.Plugins
 {

@@ -80,10 +80,10 @@ function Get-Dependencies {
 
     # TODO: Check Oxide.Core.dll version and update if needed
     if (!(Test-Path "Dependencies\$managed\Oxide.Core.dll")) {
-        # Download latest Oxide.Core.dll build
-        $nuget_path = "../packages/oxide.core" # TODO: Test-Path
-        $core_version = Get-ChildItem -Directory $nuget_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
-        Copy-Item "$nuget_path\$core_version\lib\$dotnet\Oxide.Core.dll" $managed_dir -Force # TODO: .NET framework (ie. net461) should be based on game
+        # Grab latest Oxide.Core.dll build
+        Write-Host "Grabbing latest build of Oxide.Core.dll"
+        #$core_version = Get-ChildItem -Directory $core_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
+        Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" $managed_dir -Force
         # TODO: Copy websocket-csharp.dll to Dependencies\*Managed
     }
     # TODO: Return and error if Oxide.Core.dll still doesn't exist
@@ -92,7 +92,7 @@ function Get-Dependencies {
 function Get-Patcher {
     # TODO: MD5 comparision of local OxidePatcher.exe and remote header
     if (!(Test-Path "$managed_dir\OxidePatcher.exe")) {
-        # Download latest Oxide Patcher binary
+        # Download latest Oxide Patcher build
         Write-Host "Dowloading latest build of OxidePatcher"
         $patcher_url = "https://github.com/OxideMod/OxidePatcher/releases/download/latest/OxidePatcher.exe"
         # TODO: Only download patcher once in $patch_dir, then copy to $managed_dir for each game
