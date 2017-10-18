@@ -3,15 +3,15 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
     <Version>2.0.0.0</Version>
-    <AssemblyName>Oxide.Core.CSharp</AssemblyName>
-    <Authors>Oxide Team and Contributors</Authors>
-    <Description>C# (CSharp) plugin support for the Oxide modding framework</Description>
+    <AssemblyName>Oxide.CSharp</AssemblyName>
+    <Authors>Oxide and Contributors</Authors>
+    <Description>C#/CSharp (.cs) plugin support for the Oxide modding framework</Description>
     <RepositoryUrl>https://github.com/OxideMod/Oxide.CSharp</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/OxideMod/Oxide.CSharp/blob/develop/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/OxideMod/Oxide.CSharp</PackageProjectUrl>
     <PackageIconUrl>https://avatars1.githubusercontent.com/u/10712027?s=64</PackageIconUrl>
     <Copyright>Copyright (c) 2014-$([System.DateTime]::Now.Year) $(Authors)</Copyright>
-    <PackageTags>api framework gaming modding plugins</PackageTags>
+    <PackageTags>api framework gaming modding plugins csharp c#</PackageTags>
     <TargetFrameworks>net461;net45;net40;net35</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <!--

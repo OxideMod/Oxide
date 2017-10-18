@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Oxide.Core\Core.csp
 		{7009BBCB-8CA4-49EC-BE95-B27C07771CDF} = {7009BBCB-8CA4-49EC-BE95-B27C07771CDF}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp", "Extensions\Oxide.Core.CSharp\CSharp.csproj", "{9103D682-D1AA-4A95-A499-896F551AAA62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp", "Extensions\Oxide.CSharp\CSharp.csproj", "{9103D682-D1AA-4A95-A499-896F551AAA62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScript", "Extensions\Oxide.Core.JavaScript\JavaScript.csproj", "{3A9897BD-2022-4621-BC2C-F05EA39FA4EF}"
 EndProject

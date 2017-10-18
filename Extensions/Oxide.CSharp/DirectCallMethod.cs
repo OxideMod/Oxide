@@ -51,7 +51,7 @@ namespace Oxide.Core.CSharp
             stringEquals = module.Import(typeof(string).GetMethod("Equals", new[] { typeof(string) }));
 
             // Copy method definition from base class
-            var base_assembly = AssemblyDefinition.ReadAssembly(Path.Combine(Interface.Oxide.ExtensionDirectory, "Oxide.Core.CSharp.dll"));
+            var base_assembly = AssemblyDefinition.ReadAssembly(Path.Combine(Interface.Oxide.ExtensionDirectory, "Oxide.CSharp.dll"));
             var base_module = base_assembly.MainModule;
             var base_type = module.Import(base_assembly.MainModule.GetType("Oxide.Plugins.CSharpPlugin")).Resolve();
             var base_method = module.Import(base_type.Methods.First(method => method.Name == "DirectCallHook")).Resolve();
