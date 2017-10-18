@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp", "Extensions\Oxide.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavaScript", "Extensions\Oxide.JavaScript\JavaScript.csproj", "{3A9897BD-2022-4621-BC2C-F05EA39FA4EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lua", "Extensions\Oxide.Core.Lua\Lua.csproj", "{18D00F0B-8CF3-4002-940A-4A8CA449A352}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lua", "Extensions\Oxide.Lua\Lua.csproj", "{18D00F0B-8CF3-4002-940A-4A8CA449A352}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "Extensions\Oxide.Core.MySql\MySql.csproj", "{D138493B-6F2E-4B9F-8F79-17B73422D87F}"
 EndProject
