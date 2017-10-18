@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lua", "Extensions\Oxide.Lua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySql", "Extensions\Oxide.MySql\MySql.csproj", "{D138493B-6F2E-4B9F-8F79-17B73422D87F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python", "Extensions\Oxide.Core.Python\Python.csproj", "{B05D4995-6E61-4E82-AC91-5A7B46EC9781}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python", "Extensions\Oxide.Python\Python.csproj", "{B05D4995-6E61-4E82-AC91-5A7B46EC9781}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLite", "Extensions\Oxide.SQLite\SQLite.csproj", "{C54EA613-C5FD-4ACD-8AC4-79063B08CF5A}"
 EndProject
