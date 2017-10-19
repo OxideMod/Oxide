@@ -28,9 +28,15 @@
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'OSX'">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/2.0-api</FrameworkPathOverride>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Oxide.Core" Version="2.*" />
-    <PackageReference Include="Oxide.CSharp" Version="2.*" />
-    <PackageReference Include="Oxide.Unity" Version="2.*" />
+    <ProjectReference Include="..\..\Extensions\Oxide.CSharp\CSharp.csproj">
+      <Name>CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Extensions\Oxide.Unity\Unity.csproj">
+      <Name>Unity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
+      <Name>Core</Name>
+    </ProjectReference>
     <Reference Include="Oxide.References">
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
