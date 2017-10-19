@@ -8,30 +8,34 @@
 
 A complete rewrite of the popular, original Oxide API and Lua plugin framework. Previously only available for the legacy Rust game, Oxide now supports numerous games. Oxide's focus is on modularity and extensibility. The core is highly abstracted and loosely coupled, and could be used to mod any game that uses the .NET Framework.
 
-Support for each game and plugin language is added via extensions. When loading, Oxide scans the binary folder for DLL extensions. Core extension filenames are formatted as `Oxide.Core.Name.dll` or `Oxide.Game.Name.dll`, with community extensions formatted as `Oxide.Ext.Name.dll`.
+Support for each game and plugin language is added via extensions. When loading, Oxide scans the binary folder for DLL extensions with the format `Oxide.*.dll`.
 
-## Official Core Extensions
+## Bundled Extensions
 
- * Oxide.Core.CSharp - _Allows plugins written in [CSharp](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
- * Oxide.Core.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) to be loaded_
- * Oxide.Core.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
- * Oxide.Core.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
- * Oxide.Core.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
- * Oxide.Core.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
- * Oxide.Core.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
+ * Oxide.CSharp - _Allows plugins written in [CSharp](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
+ * Oxide.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
+ * Oxide.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
+ * Oxide.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
 
-## Supported Game Extensions
- * Oxide.Game.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
- * Oxide.Game.GangBeasts - _Provides support for the [Gang Beasts](http://gangbeasts.game/) server_
- * Oxide.Game.Hurtworld - _Provides support for the [Hurtworld](http://hurtworld.com/) server_
- * Oxide.Game.Nomad - _Provides support for the [Nomad](http://playnomad.net) server_
- * Oxide.Game.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
- * Oxide.Game.Rust - _Provides support for the new [Rust](http://playrust.com/) server_
- * Oxide.Game.RustLegacy - _Provides support for the old [Rust](http://playrust.com/) Legacy server_
- * Oxide.Game.SevenDays - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
- * Oxide.Game.Terraria - _Provides support for the [Terraria](http://terraria.org/) server_
- * Oxide.Game.TheForest - _Provides support for [The Forest](http://survivetheforest.com/) server_
- * Oxide.Game.Unturned - _Provides support for the [Unturned](http://smartlydressedgames.com/) server_
+## Supported Games
+ * Oxide.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
+ * Oxide.GangBeasts - _Provides support for the [Gang Beasts](http://gangbeasts.game/) server_
+ * Oxide.Hurtworld - _Provides support for the [Hurtworld](http://hurtworld.com/) server_
+ * Oxide.MedievalEngineers - _Provides support for the [Medieval Engineers](http://www.medievalengineers.com/) server_
+ * Oxide.SpaceEngineers - _Provides support for the [Space Engineers](http://www.spaceengineersgame.com/) server_
+ * Oxide.Nomad - _Provides support for the [Nomad](http://playnomad.net) server_
+ * Oxide.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
+ * Oxide.Rust - _Provides support for the new [Rust](http://playrust.com/) server_
+ * Oxide.RustLegacy - _Provides support for the old [Rust](http://playrust.com/) Legacy server_
+ * Oxide.SevenDaysTodie - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
+ * Oxide.Terraria - _Provides support for the [Terraria](http://terraria.org/) server_
+ * Oxide.TheForest - _Provides support for [The Forest](http://survivetheforest.com/) server_
+ * Oxide.Unturned - _Provides support for the [Unturned](http://smartlydressedgames.com/) server_
+
+ ## Other Extensions
+ * Oxide.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) or [CoffeeScript](http://coffeescript.org/) to be loaded_
+ * Oxide.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
+ * Oxide.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
 
 ## Open Source
 
@@ -45,11 +49,11 @@ While we recommend using one of the [official release builds][downloads], you ca
 
  2. Clone the repo `https://github.com/OxideMod/Oxide.git` _(recommended)_ or download and extract the [latest zip](https://github.com/OxideMod/Oxide/archive/master.zip) archive.
 
- 3. Download and install [Visual Studio 2015 or 2017](https://www.visualstudio.com/downloads/) _(community is free, but any edition will work)_ if you do not have it installed already.
+ 3. Download and install [Visual Studio 2017](https://www.visualstudio.com/downloads/) _(community is free, but any edition will work)_ if you do not have it installed already.
 
- 4. Open the `Oxide.sln` solution file in Visual Studio 2015 or 2017.
+ 4. Open the `Oxide.sln` solution file in Visual Studio 2017.
 
- 5. Build the solution. If you get errors, you're likely not using the latest Visual Studio 2015 or 2017; which is required as Oxide uses some [C# 6.0](https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6) features.
+ 5. Build the solution. If you get errors, you're likely not using the latest Visual Studio 2017; which is required as Oxide uses some [C# 6.0](https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6) features.
 
  6. Copy the files from the `Bundles` directory for your game of choice to your server installation, then just start the server!
 

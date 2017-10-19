@@ -118,7 +118,7 @@ namespace Oxide.Core.Libraries
                     request.ServicePoint.Expect100Continue = ServicePointManager.Expect100Continue;
                     request.ServicePoint.ConnectionLimit = ServicePointManager.DefaultConnectionLimit;
 
-                    // Optional request body for post requests
+                    // Optional request body for POST requests
                     var data = new byte[0];
                     if (Body != null)
                     {
@@ -193,7 +193,7 @@ namespace Oxide.Core.Libraries
                             }
                             catch (Exception)
                             {
-                                // ignored
+                                // Ignored
                             }
                             ResponseCode = (int)response.StatusCode;
                         }
@@ -387,7 +387,7 @@ namespace Oxide.Core.Libraries
         /// <param name="headers"></param>
         /// <param name="timeout"></param>
         [LibraryFunction("Enqueue")]
-        public void Enqueue(string url, string body, Action<int, string> callback, Plugin owner, RequestMethod method = RequestMethod.GET, Dictionary < string, string> headers = null, float timeout = 0f)
+        public void Enqueue(string url, string body, Action<int, string> callback, Plugin owner, RequestMethod method = RequestMethod.GET, Dictionary<string, string> headers = null, float timeout = 0f)
         {
             var request = new WebRequest(url, callback, owner) { Method = method.ToString(), RequestHeaders = headers, Timeout = timeout, Body = body };
             lock (syncroot) queue.Enqueue(request);

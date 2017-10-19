@@ -19,12 +19,7 @@
         /// Gets the version of this extension
         /// </summary>
         public abstract VersionNumber Version { get; }
-
-        /// <summary>
-        /// Gets whether this extension is for a specific game
-        /// </summary>
-        public bool IsGameExtension { get; protected set; }
-
+        
         /// <summary>
         /// Gets the extension manager responsible for this extension
         /// </summary>
@@ -40,7 +35,6 @@
         public Extension(ExtensionManager manager)
         {
             Manager = manager;
-            IsGameExtension = GetType().FullName.StartsWith("Oxide.Game.");
         }
 
         /// <summary>

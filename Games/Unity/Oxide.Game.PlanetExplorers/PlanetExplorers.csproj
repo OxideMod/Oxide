@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Oxide.References">
+      <HintPath>..\..\..\Oxide.References\bin\$(Configuration)\net35\Merged\Oxide.References.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>Patched\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -43,9 +46,6 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Dependencies\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\..\Oxide.Core\Dependencies\protobuf-net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -67,7 +67,7 @@
       <Project>{67f65f5d-a62a-4752-849d-bff30d828107}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Extensions\Oxide.Core.CSharp\CSharp.csproj">
+    <ProjectReference Include="..\..\..\Extensions\Oxide.CSharp\CSharp.csproj">
       <Project>{9103d682-d1aa-4a95-a499-896f551aaa62}</Project>
       <Name>CSharp</Name>
     </ProjectReference>
@@ -78,26 +78,25 @@
   </Target>
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
-      <ReferencePath Condition="'%(FileName)' == 'protobuf-net'">
+      <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
         <Aliases>Oxide</Aliases>
       </ReferencePath>
     </ItemGroup>
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
-      <GameFiles Include="$(ProjectDir)\Files\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\$(OutputPath)\Oxide.Core.CSharp.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.CSharp\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\$(OutputPath)\Oxide.Core.MySql.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.MySql\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\$(OutputPath)\Oxide.Core.SQLite.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.SQLite\Dependencies\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)\Extensions\Oxide.Core.Unity\$(OutputPath)\Oxide.Core.Unity.dll" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\$(OutputPath)\*.dll*" />
-      <ManagedFiles Include="$(SolutionDir)\Oxide.Core\Dependencies\*.dll" />
-      <PackageFiles Include="$(SolutionDir)\packages\**\lib\net20\*.dll; $(SolutionDir)\packages\**\lib\net35\*.dll" />
-      <ManagedFiles Include="$(TargetDir)\$(AssemblyName).dll" />
-      <PatchedFiles Include="$(ProjectDir)\Patched\**\*.*" />
+      <GameFiles Include="$(ProjectDir)Files\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\bin\$(Configuration)\net35\Oxide.CSharp.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\bin\$(Configuration)\net35\Oxide.MySql.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\bin\$(Configuration)\net35\Oxide.SQLite.dll" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\Dependencies\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Unity\bin\$(Configuration)\net35\Oxide.Unity.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.Core\bin\$(Configuration)\net35\Oxide.*.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.*.dll" />
+      <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
+      <PatchedFiles Include="$(ProjectDir)Patched\**\*.*" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />

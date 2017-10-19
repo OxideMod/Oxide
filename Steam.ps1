@@ -1,5 +1,6 @@
 param (
     [Parameter(Mandatory=$true)][string]$project,
+    [Parameter(Mandatory=$true)][string]$dotnet,
     [Parameter(Mandatory=$true)][string]$appid,
     [Parameter(Mandatory=$true)][string]$managed,
     [string]$branch = "public",
@@ -57,6 +58,8 @@ function Get-Downloader {
 }
 
 function Get-Dependencies {
+    # TODO: Check for and compare Steam buildid before downloading again
+
     if ($access.ToLower() -ne "anonymous") {
         $steam_login = Get-Content "$PSScriptRoot\.steamlogin"
         if ($steam_login.Length -ne 2) {
@@ -75,14 +78,15 @@ function Get-Dependencies {
         exit 1
     }
 
+    # TODO: Store Steam buildid somewhere for comparison during next check
     # TODO: Confirm all dependencies were downloaded (no 0kb files), else stop/retry and error with details
 
     # TODO: Check Oxide.Core.dll version and update if needed
     if (!(Test-Path "Dependencies\$managed\Oxide.Core.dll")) {
-        # Download latest Oxide.Core.dll build
-        $nuget_path = "C:\Users\$env:UserName\.nuget\packages\oxide.core" # TODO: Test-Path
-        $core_version = Get-ChildItem -Directory $nuget_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
-        Copy-Item "$nuget_path\$core_version\lib\net461\Oxide.Core.dll" $managed_dir -Force # TODO: .NET framework (ie. net461) should be based on game
+        # Grab latest Oxide.Core.dll build
+        Write-Host "Grabbing latest build of Oxide.Core.dll"
+        #$core_version = Get-ChildItem -Directory $core_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
+        Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" $managed_dir -Force
         # TODO: Copy websocket-csharp.dll to Dependencies\*Managed
     }
     # TODO: Return and error if Oxide.Core.dll still doesn't exist
@@ -91,7 +95,7 @@ function Get-Dependencies {
 function Get-Patcher {
     # TODO: MD5 comparision of local OxidePatcher.exe and remote header
     if (!(Test-Path "$managed_dir\OxidePatcher.exe")) {
-        # Download latest Oxide Patcher binary
+        # Download latest Oxide Patcher build
         Write-Host "Dowloading latest build of OxidePatcher"
         $patcher_url = "https://github.com/OxideMod/OxidePatcher/releases/download/latest/OxidePatcher.exe"
         # TODO: Only download patcher once in $patch_dir, then copy to $managed_dir for each game
@@ -109,7 +113,7 @@ function Start-Patcher {
 
     # Patch game using OxidePatcher.exe
     try {
-        $opj = "..\..\..\$project\$game_name.opj"
+        $opj = "$PSScriptRoot\Games\$project\$game_name.opj"
         Start-Process "$managed_dir\OxidePatcher.exe" -WorkingDirectory $managed_dir -ArgumentList "-c -p $managed_dir $opj" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete OxidePatcher process"
