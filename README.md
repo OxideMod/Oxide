@@ -47,11 +47,11 @@ While we recommend using one of the [official release builds][downloads], you ca
 
  2. Clone the repo `https://github.com/OxideMod/Oxide.git` _(recommended)_ or download and extract the [latest zip](https://github.com/OxideMod/Oxide/archive/master.zip) archive.
 
- 3. Download and install [Visual Studio 2015 or 2017](https://www.visualstudio.com/downloads/) _(community is free, but any edition will work)_ if you do not have it installed already.
+ 3. Download and install [Visual Studio 2017](https://www.visualstudio.com/downloads/) _(community is free, but any edition will work)_ if you do not have it installed already.
 
- 4. Open the `Oxide.sln` solution file in Visual Studio 2015 or 2017.
+ 4. Open the `Oxide.sln` solution file in Visual Studio 2017.
 
- 5. Build the solution. If you get errors, you're likely not using the latest Visual Studio 2015 or 2017; which is required as Oxide uses some [C# 6.0](https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6) features.
+ 5. Build the solution. If you get errors, you're likely not using the latest Visual Studio 2017; which is required as Oxide uses some [C# 6.0](https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6) features.
 
  6. Copy the files from the `Bundles` directory for your game of choice to your server installation, then just start the server!
 
