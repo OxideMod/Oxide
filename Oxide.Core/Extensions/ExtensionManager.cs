@@ -166,12 +166,18 @@ namespace Oxide.Core.Extensions
                     continue;
                 }
 
-                if (extPath.Contains("Oxide.Ext.") || extPath.Contains("Oxide.Game."))
+                if (extPath.Contains("Oxide.Ext.") && Array.IndexOf(foundExtensions, extPath.Replace(".Ext", "")) != -1)
                 {
                     Cleanup.Add(extPath);
                     continue;
                 }
-                
+
+                if (extPath.Contains("Oxide.Game.") && Array.IndexOf(foundExtensions, extPath.Replace(".Game", "")) != -1)
+                {
+                    Cleanup.Add(extPath);
+                    continue;
+                }
+
                 LoadExtension(Path.Combine(directory, extPath));
             }
 
