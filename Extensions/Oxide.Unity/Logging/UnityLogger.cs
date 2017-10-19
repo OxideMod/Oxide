@@ -1,6 +1,7 @@
 ﻿using System.Threading;
-using Oxide.Core.Logging;
 using UnityEngine;
+
+using Logger = Oxide.Core.Logging.Logger;
 using LogType = Oxide.Core.Logging.LogType;
 
 namespace Oxide.Core.Unity.Logging

@@ -37,7 +37,4 @@
       </ReferencePath>
     </ItemGroup>
   </Target>
-  <Target Name="AfterBuild">
-    <!-- Placeholder -->
-  </Target>
 </Project>
