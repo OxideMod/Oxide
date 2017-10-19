@@ -22,8 +22,12 @@
     <SteamLogin>anonymous</SteamLogin>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Oxide.Core" Version="2.*" />
-    <PackageReference Include="Oxide.CSharp" Version="2.*" />
+    <ProjectReference Include="..\..\Extensions\Oxide.CSharp\CSharp.csproj">
+      <Name>CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
+      <Name>Core</Name>
+    </ProjectReference>
     <Reference Include="Oxide.References">
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>

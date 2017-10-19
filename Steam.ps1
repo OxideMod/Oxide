@@ -58,6 +58,8 @@ function Get-Downloader {
 }
 
 function Get-Dependencies {
+    # TODO: Check for and compare Steam buildid before downloading again
+
     if ($access.ToLower() -ne "anonymous") {
         $steam_login = Get-Content "$PSScriptRoot\.steamlogin"
         if ($steam_login.Length -ne 2) {
@@ -76,6 +78,7 @@ function Get-Dependencies {
         exit 1
     }
 
+    # TODO: Store Steam buildid somewhere for comparison during next check
     # TODO: Confirm all dependencies were downloaded (no 0kb files), else stop/retry and error with details
 
     # TODO: Check Oxide.Core.dll version and update if needed
