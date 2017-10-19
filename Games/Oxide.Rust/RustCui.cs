@@ -1,9 +1,11 @@
-﻿using System;
+﻿extern alias Oxide;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
+using Oxide::Newtonsoft.Json;
+using Oxide::Newtonsoft.Json.Converters;
+using Oxide::Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 

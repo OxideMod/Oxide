@@ -37,7 +37,7 @@
     <!--<PackageReference Include="Oxide.Core" Version="2.*" />-->
     <PackageReference Include="Oxide.Unity" Version="2.*" />
     <Reference Include="Oxide.References">
-      <HintPath>..\..\Oxide.References\$(OutputPath)\Merged\Oxide.References.dll</HintPath>
+      <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
@@ -94,6 +94,13 @@
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="Clean">
     <RemoveDir Directories="$(BundleDir)\$(GameName)" />
+  </Target>
+  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
+    <ItemGroup>
+      <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
+        <Aliases>Oxide</Aliases>
+      </ReferencePath>
+    </ItemGroup>
   </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
