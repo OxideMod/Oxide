@@ -48,10 +48,6 @@ namespace Oxide.Plugins
 
             includePath = Path.Combine(Interface.Oxide.PluginDirectory, "include");
             extensionNames = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
-            var gameExtension = Interface.Oxide.GetAllExtensions().SingleOrDefault(ext => ext.IsGameExtension);
-            gameExtensionName = gameExtension?.Name.ToUpper();
-            gameExtensionNamespace = gameExtension?.GetType().Namespace;
-            newGameExtensionNamespace = gameExtensionNamespace != null && gameExtensionNamespace.Contains(".Game.");
         }
 
         internal void Started()
