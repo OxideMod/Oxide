@@ -8,19 +8,16 @@
 
 A complete rewrite of the popular, original Oxide API and Lua plugin framework. Previously only available for the legacy Rust game, Oxide now supports numerous games. Oxide's focus is on modularity and extensibility. The core is highly abstracted and loosely coupled, and could be used to mod any game that uses the .NET Framework.
 
-Support for each game and plugin language is added via extensions. When loading, Oxide scans the binary folder for DLL extensions. Core extension filenames are formatted as `Oxide.Core.Name.dll` or `Oxide.Game.Name.dll`, with community extensions formatted as `Oxide.Ext.Name.dll`.
+Support for each game and plugin language is added via extensions. When loading, Oxide scans the binary folder for DLL extensions with the format `Oxide.*.dll`.
 
-## Official Core Extensions
+## Bundled Extensions
 
  * Oxide.CSharp - _Allows plugins written in [CSharp](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
- * Oxide.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) to be loaded_
- * Oxide.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
  * Oxide.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
- * Oxide.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
  * Oxide.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
  * Oxide.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
 
-## Supported Game Extensions
+## Supported Games
  * Oxide.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
  * Oxide.GangBeasts - _Provides support for the [Gang Beasts](http://gangbeasts.game/) server_
  * Oxide.Hurtworld - _Provides support for the [Hurtworld](http://hurtworld.com/) server_
@@ -34,6 +31,11 @@ Support for each game and plugin language is added via extensions. When loading,
  * Oxide.Terraria - _Provides support for the [Terraria](http://terraria.org/) server_
  * Oxide.TheForest - _Provides support for [The Forest](http://survivetheforest.com/) server_
  * Oxide.Unturned - _Provides support for the [Unturned](http://smartlydressedgames.com/) server_
+
+ ## Other Extensions
+ * Oxide.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) or [CoffeeScript](http://coffeescript.org/) to be loaded_
+ * Oxide.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
+ * Oxide.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
 
 ## Open Source
 
