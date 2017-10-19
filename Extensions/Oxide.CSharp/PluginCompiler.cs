@@ -106,7 +106,7 @@ namespace Oxide.Plugins
                 trace.BeginErrorReadLine();
                 trace.WaitForExit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Interface.Oxide.LogError($"Couldn't run dependency trace!"); // TODO: Fix this triggering sometimes
                 //Interface.Oxide.LogError(ex.Message);
