@@ -12,26 +12,28 @@ Support for each game and plugin language is added via extensions. When loading,
 
 ## Official Core Extensions
 
- * Oxide.Core.CSharp - _Allows plugins written in [CSharp](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
- * Oxide.Core.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) to be loaded_
- * Oxide.Core.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
- * Oxide.Core.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
- * Oxide.Core.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
- * Oxide.Core.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
- * Oxide.Core.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
+ * Oxide.CSharp - _Allows plugins written in [CSharp](http://en.wikipedia.org/wiki/C_Sharp_(programming_language)) to be loaded_
+ * Oxide.JavaScript - _Allows plugins written in [JavaScript](http://en.wikipedia.org/wiki/JavaScript) to be loaded_
+ * Oxide.Lua - _Allows plugins written in [Lua](http://www.lua.org/) to be loaded_
+ * Oxide.MySql - _Allows plugins to access a [MySQL](http://www.mysql.com/) database_
+ * Oxide.Python - _Allows plugins written in [Python](http://en.wikipedia.org/wiki/Python_(programming_language)) to be loaded_
+ * Oxide.SQLite - _Allows plugins to access a [SQLite](http://www.sqlite.org/) database_
+ * Oxide.Unity - _Provides support for [Unity](http://unity3d.com/) powered games_
 
 ## Supported Game Extensions
- * Oxide.Game.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
- * Oxide.Game.GangBeasts - _Provides support for the [Gang Beasts](http://gangbeasts.game/) server_
- * Oxide.Game.Hurtworld - _Provides support for the [Hurtworld](http://hurtworld.com/) server_
- * Oxide.Game.Nomad - _Provides support for the [Nomad](http://playnomad.net) server_
- * Oxide.Game.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
- * Oxide.Game.Rust - _Provides support for the new [Rust](http://playrust.com/) server_
- * Oxide.Game.RustLegacy - _Provides support for the old [Rust](http://playrust.com/) Legacy server_
- * Oxide.Game.SevenDays - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
- * Oxide.Game.Terraria - _Provides support for the [Terraria](http://terraria.org/) server_
- * Oxide.Game.TheForest - _Provides support for [The Forest](http://survivetheforest.com/) server_
- * Oxide.Game.Unturned - _Provides support for the [Unturned](http://smartlydressedgames.com/) server_
+ * Oxide.Blockstorm - _Provides support for the [Blockstorm](http://playblockstorm.com/) server_
+ * Oxide.GangBeasts - _Provides support for the [Gang Beasts](http://gangbeasts.game/) server_
+ * Oxide.Hurtworld - _Provides support for the [Hurtworld](http://hurtworld.com/) server_
+ * Oxide.MedievalEngineers - _Provides support for the [Medieval Engineers](http://www.medievalengineers.com/) server_
+ * Oxide.SpaceEngineers - _Provides support for the [Space Engineers](http://www.spaceengineersgame.com/) server_
+ * Oxide.Nomad - _Provides support for the [Nomad](http://playnomad.net) server_
+ * Oxide.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
+ * Oxide.Rust - _Provides support for the new [Rust](http://playrust.com/) server_
+ * Oxide.RustLegacy - _Provides support for the old [Rust](http://playrust.com/) Legacy server_
+ * Oxide.SevenDaysTodie - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
+ * Oxide.Terraria - _Provides support for the [Terraria](http://terraria.org/) server_
+ * Oxide.TheForest - _Provides support for [The Forest](http://survivetheforest.com/) server_
+ * Oxide.Unturned - _Provides support for the [Unturned](http://smartlydressedgames.com/) server_
 
 ## Open Source
 
