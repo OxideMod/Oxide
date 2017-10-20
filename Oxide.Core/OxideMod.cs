@@ -195,6 +195,9 @@ namespace Oxide.Core
             }
 
             foreach (var ext in extensionManager.GetAllExtensions()) ext.LoadPluginWatchers(PluginDirectory);
+
+            Cleanup.Run();
+
             LogInfo("Loading plugins...");
             LoadAllPlugins(true);
 
@@ -206,8 +209,6 @@ namespace Oxide.Core
             }
 
             if (CommandLine.HasVariable("nolog")) LogWarning("Usage of the 'nolog' variable will prevent logging");
-
-            Cleanup.Run();
         }
 
         /// <summary>

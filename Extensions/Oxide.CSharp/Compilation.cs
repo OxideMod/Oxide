@@ -48,6 +48,9 @@ namespace Oxide.Plugins
 
             includePath = Path.Combine(Interface.Oxide.PluginDirectory, "include");
             extensionNames = Interface.Oxide.GetAllExtensions().Select(ext => ext.Name).ToArray();
+            var gameExtension = Interface.Oxide.GetAllExtensions().SingleOrDefault(ext => ext.IsGameExtension);
+            gameExtensionName = gameExtension?.Name.ToUpper();
+            gameExtensionNamespace = gameExtension?.GetType().Namespace;
         }
 
         internal void Started()
@@ -218,7 +221,7 @@ namespace Oxide.Plugins
                 if (match.Success)
                 {
                     var result = match.Groups[1].Value;
-                    if (!newGameExtensionNamespace || !result.StartsWith(gameExtensionNamespace.Replace(".Game.", ".Ext.")))
+                    if (!result.StartsWith(gameExtensionNamespace.Replace(".Game.", ".Ext.")) && !result.StartsWith("Newtonsoft.Json"))
                         AddReference(plugin, match.Groups[1].Value);
                     else
                         Interface.Oxide.LogWarning("Ignored obsolete game extension reference '{0}' in plugin '{1}'", result, plugin.Name);

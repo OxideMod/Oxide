@@ -170,6 +170,8 @@ namespace Oxide.Core.JavaScript
         {
             foreach (var extension in Manager.GetAllExtensions())
             {
+                if (!extension.IsGameExtension) continue;
+
                 WhitelistAssemblies = extension.WhitelistAssemblies;
                 WhitelistNamespaces = extension.WhitelistNamespaces;
                 break;
