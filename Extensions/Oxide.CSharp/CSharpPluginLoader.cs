@@ -9,7 +9,7 @@ namespace Oxide.Plugins
 {
     public class CSharpPluginLoader : PluginLoader
     {
-        public static string[] DefaultReferences = { "mscorlib", "System", "System.Core", "System.Data", "Oxide.Core", "Oxide.CSharp" };
+        public static string[] DefaultReferences = { "mscorlib", "System", "System.Core", "System.Data" };
         public static HashSet<string> PluginReferences = new HashSet<string>(DefaultReferences);
         public static CSharpPluginLoader Instance;
         private static Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();
@@ -57,6 +57,7 @@ namespace Oxide.Plugins
         public override IEnumerable<string> ScanDirectory(string directory)
         {
             if (PluginCompiler.BinaryPath == null) yield break;
+
             var enumerable = base.ScanDirectory(directory);
             foreach (var file in enumerable) yield return file;
         }

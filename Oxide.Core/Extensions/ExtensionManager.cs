@@ -119,22 +119,24 @@ namespace Oxide.Core.Extensions
                 var assembly = Assembly.LoadFile(filename);
 
                 // Search for a type that derives Extension
-                var exttype = typeof(Extension);
-                Type extensiontype = null;
+                var extType = typeof(Extension);
+                Type extensionType = null;
                 foreach (var type in assembly.GetExportedTypes())
                 {
-                    if (!exttype.IsAssignableFrom(type)) continue;
-                    extensiontype = type;
+                    if (!extType.IsAssignableFrom(type)) continue;
+
+                    extensionType = type;
                     break;
                 }
-                if (extensiontype == null)
+
+                if (extensionType == null)
                 {
                     Logger.Write(LogType.Error, "Failed to load extension {0} ({1})", name, "Specified assembly does not implement an Extension class");
                     return;
                 }
 
                 // Create and register the extension
-                var extension = Activator.CreateInstance(extensiontype, this) as Extension;
+                var extension = Activator.CreateInstance(extensionType, this) as Extension;
                 if (extension != null)
                 {
                     extension.Load();
@@ -157,6 +159,20 @@ namespace Oxide.Core.Extensions
         /// <param name="directory"></param>
         public void LoadAllExtensions(string directory)
         {
+            var coreExtensions = new[]
+            {
+                "Oxide.CSharp", "Oxide.JavaScript", "Oxide.Lua", "Oxide.MySql", "Oxide.Python", "Oxide.SQLite", "Oxide.Unity"
+            };
+            var gameExtensions = new[]
+            {
+                "Oxide.Blackwake", "Oxide.Blockstorm", "Oxide.FortressCraft", "Oxide.FromTheDepths", "Oxide.GangBeasts", "Oxide.Hurtworld",
+                "Oxide.InterstellarRift", "Oxide.MedievalEngineers", "Oxide.Nomad", "Oxide.PlanetExplorers", "Oxide.ReignOfKings",  "Oxide.Rust",
+                "Oxide.RustLegacy", "Oxide.SavageLands", "Oxide.SevenDaysToDie", "Oxide.SpaceEngineers", "Oxide.TheForest", "Oxide.Terraria",
+                "Oxide.Unturned"
+            };
+            var foundCore = new List<string>();
+            var foundGame = new List<string>();
+            var foundOther = new List<string>();
             var foundExtensions = Directory.GetFiles(directory, extSearchPattern);
             foreach (var extPath in foundExtensions.Where(e => !e.EndsWith("Oxide.Core.dll") && !e.EndsWith("Oxide.References.dll")))
             {
@@ -178,8 +194,14 @@ namespace Oxide.Core.Extensions
                     continue;
                 }
 
-                LoadExtension(Path.Combine(directory, extPath));
+                if (coreExtensions.Contains(extPath.Basename())) foundCore.Add(extPath);
+                else if (gameExtensions.Contains(extPath.Basename())) foundGame.Add(extPath);
+                else foundOther.Add(extPath);
             }
+
+            foreach (var extPath in foundCore) LoadExtension(Path.Combine(directory, extPath));
+            foreach (var extPath in foundGame) LoadExtension(Path.Combine(directory, extPath));
+            foreach (var extPath in foundOther) LoadExtension(Path.Combine(directory, extPath));
 
             foreach (var ext in extensions.ToArray())
             {
