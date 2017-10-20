@@ -34,6 +34,31 @@
           "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this,a0",
+            "HookTypeName": "Simple",
+            "Name": "CanBeLooted",
+            "HookName": "CanBeLooted",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BaseEntity",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "CanBeLooted",
+              "ReturnType": "System.Boolean",
+              "Parameters": [
+                "BasePlayer"
+              ]
+            },
+            "MSILHash": "P3Mx+v3adUs95vU27ANKY5mvZxgLUs14zJrrTfI5vlw=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
