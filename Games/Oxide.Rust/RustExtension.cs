@@ -52,11 +52,11 @@ namespace Oxide.Game.Rust
         public override string[] WhitelistAssemblies => new[]
         {
             "Assembly-CSharp", "Assembly-CSharp-firstpass", "DestMath", "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine",
-            "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "Rust.Data", "Rust.Global", "System", "System.Core", "UnityEngine"
+            "mscorlib", "protobuf-net", "RustBuild", "Rust.Data", "Rust.Global", "System", "System.Core", "UnityEngine"
         };
         public override string[] WhitelistNamespaces => new[]
         {
-            "ConVar", "Dest", "Facepunch", "Network", "Oxide.Game.Rust.Cui", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections",
+            "ConVar", "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections",
             "System.Security.Cryptography", "System.Text", "UnityEngine"
         };
 

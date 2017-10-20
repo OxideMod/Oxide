@@ -42,7 +42,7 @@ namespace Oxide.Game.MedievalEngineers
 
         public override string[] WhitelistAssemblies => new[]
         {
-            "mscorlib", "Oxide.Core", "System", "System.Core"
+            "mscorlib", "System", "System.Core"
         };
         public override string[] WhitelistNamespaces => new[]
         {
