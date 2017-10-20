@@ -30,7 +30,6 @@ namespace Oxide.Plugins
         private string[] extensionNames;
         private string gameExtensionName;
         private string gameExtensionNamespace;
-        private bool newGameExtensionNamespace;
 
         internal Compilation(int id, Action<Compilation> callback, CompilablePlugin[] plugins)
         {
@@ -221,8 +220,17 @@ namespace Oxide.Plugins
                 if (match.Success)
                 {
                     var result = match.Groups[1].Value;
-                    if (!result.StartsWith(gameExtensionNamespace.Replace(".Game.", ".Ext.")) && !result.StartsWith("Newtonsoft.Json"))
-                        AddReference(plugin, match.Groups[1].Value);
+                    if (result.StartsWith("Oxide.Core."))
+                    {
+                        var newReference = result.Replace("Oxide.Core.", "Oxide.");
+                        AddReference(plugin, newReference);
+                        Interface.Oxide.LogWarning("Replaced '// Reference: {0}' in plugin '{1}' with '{2}'", result, plugin.Name, newReference);
+                    }
+                    else if (!result.StartsWith("Newtonsoft.Json") && !result.StartsWith("Rust.Workshop"))
+                    {
+                        AddReference(plugin, result);
+                        Interface.Oxide.LogInfo("Added '// Reference: {0}' in plugin '{1}'", result, plugin.Name);
+                    }
                     else
                         Interface.Oxide.LogWarning("Ignored '// Reference: {0}' in plugin '{1}'", result, plugin.Name);
                     continue;
