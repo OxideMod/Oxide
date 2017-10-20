@@ -224,7 +224,7 @@ namespace Oxide.Plugins
                     if (!result.StartsWith(gameExtensionNamespace.Replace(".Game.", ".Ext.")) && !result.StartsWith("Newtonsoft.Json"))
                         AddReference(plugin, match.Groups[1].Value);
                     else
-                        Interface.Oxide.LogWarning("Ignored obsolete game extension reference '{0}' in plugin '{1}'", result, plugin.Name);
+                        Interface.Oxide.LogWarning("Ignored '// Reference: {0}' in plugin '{1}'", result, plugin.Name);
                     continue;
                 }
 

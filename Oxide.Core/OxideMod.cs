@@ -182,6 +182,7 @@ namespace Oxide.Core
             LogInfo("Loading extensions...");
             extensionManager.LoadAllExtensions(ExtensionDirectory);
 
+            Cleanup.Run();
             covalence.Initialize();
             RemoteConsole = new RemoteConsole.RemoteConsole();
             RemoteConsole?.Initalize();
@@ -195,9 +196,6 @@ namespace Oxide.Core
             }
 
             foreach (var ext in extensionManager.GetAllExtensions()) ext.LoadPluginWatchers(PluginDirectory);
-
-            Cleanup.Run();
-
             LogInfo("Loading plugins...");
             LoadAllPlugins(true);
 
