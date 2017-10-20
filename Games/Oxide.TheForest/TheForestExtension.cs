@@ -42,7 +42,7 @@ namespace Oxide.Game.TheForest
 
         public override string[] WhitelistAssemblies => new[]
         {
-            "Assembly-CSharp", "mscorlib", "System", "System.Core", "UnityEngine"
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
         };
         public override string[] WhitelistNamespaces => new[]
         {

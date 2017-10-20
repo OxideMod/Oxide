@@ -47,7 +47,7 @@ namespace Oxide.Game.Hurtworld
 
         public override string[] WhitelistAssemblies => new[]
         {
-            "Assembly-CSharp", "mscorlib", "System", "System.Core", "UnityEngine", "uLink"
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine", "uLink"
         };
 
         public override string[] WhitelistNamespaces => new[]
