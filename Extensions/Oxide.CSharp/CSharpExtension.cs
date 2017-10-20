@@ -44,6 +44,7 @@ namespace Oxide.Plugins
         public CSharpExtension(ExtensionManager manager) : base(manager)
         {
             if (Environment.OSVersion.Platform != PlatformID.Unix) return;
+
             var extDir = Interface.Oxide.ExtensionDirectory;
             File.WriteAllText(Path.Combine(extDir, "Mono.Posix.dll.config"),
                 $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x86/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
