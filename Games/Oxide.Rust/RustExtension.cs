@@ -25,6 +25,11 @@ namespace Oxide.Game.Rust
         internal static string AssemblyAuthors = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly, typeof(AssemblyCompanyAttribute), false)).Company;
 
         /// <summary>
+        /// Gets whether this extension is for a specific game
+        /// </summary>
+        public override bool IsGameExtension => true;
+
+        /// <summary>
         /// Gets the name of this extension
         /// </summary>
         public override string Name => "Rust";
@@ -47,7 +52,7 @@ namespace Oxide.Game.Rust
         public override string[] WhitelistAssemblies => new[]
         {
             "Assembly-CSharp", "Assembly-CSharp-firstpass", "DestMath", "Facepunch.Network", "Facepunch.Steamworks", "Facepunch.System", "Facepunch.UnityEngine",
-            "mscorlib", "Oxide.Core", "Oxide.Rust", "protobuf-net", "RustBuild", "Rust.Data", "Rust.Global", "System", "System.Core", "UnityEngine"
+            "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "Rust.Data", "Rust.Global", "System", "System.Core", "UnityEngine"
         };
         public override string[] WhitelistNamespaces => new[]
         {

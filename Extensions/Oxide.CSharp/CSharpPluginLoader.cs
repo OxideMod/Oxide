@@ -45,7 +45,7 @@ namespace Oxide.Plugins
             // Include references to all loaded game extensions and any assemblies they reference
             foreach (var extension in Interface.Oxide.GetAllExtensions())
             {
-                if (extension == null) continue;
+                if (extension == null || !extension.IsGameExtension) continue;
 
                 var assembly = extension.GetType().Assembly;
                 PluginReferences.Add(assembly.GetName().Name);
@@ -57,7 +57,6 @@ namespace Oxide.Plugins
         public override IEnumerable<string> ScanDirectory(string directory)
         {
             if (PluginCompiler.BinaryPath == null) yield break;
-
             var enumerable = base.ScanDirectory(directory);
             foreach (var file in enumerable) yield return file;
         }
