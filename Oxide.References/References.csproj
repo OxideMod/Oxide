@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="ILRepack" Version="2.0.13" />
     <PackageReference Include="Mono.Cecil" Version="0.9.6.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="8.0.3" />
     <PackageReference Include="protobuf-net" Version="2.3.2" />
     <PackageReference Include="WebSocketSharpFork" Version="1.0.4" />
   </ItemGroup>
@@ -36,8 +36,8 @@
       <MergeAssemblies Condition="'$(TargetFramework)' != 'net461'" Include="..\packages\mono.cecil\0.9.6.4\lib\$(TargetFramework)\Mono.Cecil.Rocks.dll" />
       <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\mono.cecil\0.9.6.4\lib\net40\Mono.Cecil.dll" />
       <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\mono.cecil\0.9.6.4\lib\net40\Mono.Cecil.Rocks.dll" />
-      <MergeAssemblies Condition="'$(TargetFramework)' != 'net461'" Include="..\packages\newtonsoft.json\10.0.3\lib\$(TargetFramework)\Newtonsoft.Json.dll" />
-      <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\newtonsoft.json\10.0.3\lib\net40\Newtonsoft.Json.dll" /> 
+      <MergeAssemblies Condition="'$(TargetFramework)' != 'net461'" Include="..\packages\newtonsoft.json\8.0.3\lib\$(TargetFramework)\Newtonsoft.Json.dll" />
+      <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\newtonsoft.json\8.0.3\lib\net40\Newtonsoft.Json.dll" /> 
       <MergeAssemblies Condition="'$(TargetFramework)' != 'net461' And '$(TargetFramework)' != 'net45'" Include="..\packages\protobuf-net\2.3.2\lib\net35\protobuf-net.dll" />
       <MergeAssemblies Condition="'$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net45'" Include="..\packages\protobuf-net\2.3.2\lib\net35\protobuf-net.dll" />
       <MergeAssemblies Include="..\packages\websocketsharpfork\1.0.4\lib\net35\websocket-sharp.dll" />
