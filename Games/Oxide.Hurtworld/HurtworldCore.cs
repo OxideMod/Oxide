@@ -119,8 +119,8 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when the server is first initialized
         /// </summary>
-        [HookMethod("OnServerInitialized")]
-        private void OnServerInitialized()
+        [HookMethod("IOnServerInitialized")] // Internal wrapper to avoid call on each player connection
+        private void IOnServerInitialized()
         {
             if (serverInitialized) return;
 

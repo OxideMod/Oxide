@@ -1,6 +1,6 @@
 {
   "Name": "Hurtworld",
-  "TargetDirectory": "E:\\Servers\\Hurtworld\\Hurtworld_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Hurtworld-itemv2\\Hurtworld_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -218,8 +218,8 @@
             "ArgumentBehavior": 0,
             "ArgumentString": null,
             "HookTypeName": "Simple",
-            "Name": "OnServerInitialized",
-            "HookName": "OnServerInitialized",
+            "Name": "IOnServerInitialized [internal]",
+            "HookName": "IOnServerInitialized",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "SteamworksManagerClient",
             "Flagged": false,
