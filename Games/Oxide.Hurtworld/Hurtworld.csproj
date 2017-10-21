@@ -41,25 +41,28 @@
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\mscorlib.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_Core">
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Rewired_Core.dll</HintPath>
     </Reference>
     <Reference Include="System">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\System.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\System.dll</HintPath>
     </Reference>
     <Reference Include="uLink">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\uLink.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\uLink.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.UI.dll</HintPath>
     </Reference>
     <None Remove="**\DepotDownloader.config" />
     <None Remove="Files\**" />

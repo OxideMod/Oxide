@@ -41,13 +41,13 @@
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="uLink">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\uLink.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\uLink.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
     <None Remove="**\DepotDownloader.config" />
     <None Remove="Files\**" />

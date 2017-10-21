@@ -41,52 +41,52 @@
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Console">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Console.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Facepunch.Console.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Network">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Network.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Facepunch.Network.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Rcon">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Rcon.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Facepunch.Rcon.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Steamworks">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Steamworks.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Facepunch.Steamworks.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.System">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.System.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Facepunch.System.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Unity">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.Unity.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Facepunch.Unity.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.UnityEngine">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Facepunch.UnityEngine.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Facepunch.UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\mscorlib.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="System">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\System.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\System.dll</HintPath>
     </Reference>
     <Reference Include="Rust.Data">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Rust.Data.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Rust.Data.dll</HintPath>
     </Reference>
     <Reference Include="Rust.Global">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Rust.Global.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Rust.Global.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="websocket-sharp">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\websocket-sharp.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\websocket-sharp.dll</HintPath>
     </Reference>
     <None Remove="**\DepotDownloader.config" />
     <None Remove="Files\**" />

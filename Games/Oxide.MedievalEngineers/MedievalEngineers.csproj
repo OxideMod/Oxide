@@ -33,28 +33,28 @@
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Game">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Game.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Sandbox.Game.dll</HintPath>
     </Reference>
     <Reference Include="Sandbox.Graphics">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Sandbox.Graphics.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Sandbox.Graphics.dll</HintPath>
     </Reference>
     <Reference Include="SteamSDK">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\SteamSDK.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\SteamSDK.dll</HintPath>
     </Reference>
     <Reference Include="VRage">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\VRage.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Dedicated">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Dedicated.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\VRage.Dedicated.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Game">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Game.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\VRage.Game.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Math">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Math.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\VRage.Math.dll</HintPath>
     </Reference>
     <Reference Include="VRage.Render">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\VRage.Render.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\VRage.Render.dll</HintPath>
     </Reference>
     <None Remove="**\DepotDownloader.config" />
     <None Remove="Files\**" />

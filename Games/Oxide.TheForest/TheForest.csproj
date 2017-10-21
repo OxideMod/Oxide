@@ -41,34 +41,34 @@
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-UnityScript">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-UnityScript.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-UnityScript.dll</HintPath>
     </Reference>
     <Reference Include="bolt">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\bolt.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\bolt.dll</HintPath>
     </Reference>
     <Reference Include="bolt.user">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\bolt.user.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\bolt.user.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\mscorlib.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="PlayMaker">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\PlayMaker.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\PlayMaker.dll</HintPath>
     </Reference>
     <Reference Include="udpkit">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\udpkit.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\udpkit.dll</HintPath>
     </Reference>
     <Reference Include="udpkit.common">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\udpkit.common.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\udpkit.common.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\$(AssemblyName)\$(ManagedDir)\UnityEngine.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
     <None Remove="**\DepotDownloader.config" />
     <None Remove="Files\**" />
