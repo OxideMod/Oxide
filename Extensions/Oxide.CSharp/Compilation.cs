@@ -231,7 +231,7 @@ namespace Oxide.Plugins
                 }
 
                 // Include implicit references detected from using statements in script
-                match = Regex.Match(line, @"^\s*using\s+([\w]+\.(?:Core|Ext|Game)\.(?:[^\.]+))[^;]*;\s*$", RegexOptions.IgnoreCase);
+                match = Regex.Match(line, @"^\s*using\s+([\w]+\.(?:Core|Ext|Game)\.(?:[^\.]+))[^;]*;.*$", RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
                     var result = match.Groups[1].Value;
