@@ -4,6 +4,7 @@ param (
     [Parameter(Mandatory=$true)][string]$appid,
     [Parameter(Mandatory=$true)][string]$managed,
     [string]$branch = "public",
+    [string]$depot = "",
     [string]$access = "anonymous"
 )
 
@@ -12,6 +13,7 @@ $game_name = $project -Replace "Oxide."
 $depot_dir = "$PSScriptRoot\Games\Dependencies\.DepotDownloader"
 New-Item $depot_dir -ItemType Directory -Force
 $patch_dir = "$PSScriptRoot\Games\Dependencies\$project"
+if ($branch -ne "public") { $patch_dir = "$patch_dir-$branch" }
 New-Item $patch_dir -ItemType Directory -Force
 $managed_dir = "$patch_dir\$managed"
 New-Item $managed_dir -ItemType Directory -Force
@@ -28,7 +30,7 @@ function Find-Dependencies {
     Write-Host "Getting references for $branch branch of $appid"
     try {
         # TODO: Exclude dependencies included in repository
-        $hint_path = "\.\.\\Dependencies\\\$\(AssemblyName\)\\\$\(ManagedDir\)\\"
+        $hint_path = "\.\.\\Dependencies\\\$\(PackageId\)\\\$\(ManagedDir\)\\"
         ($xml.selectNodes("//Reference") | Select-Object HintPath -ExpandProperty HintPath | Out-String) -Replace $hint_path | Out-File "$patch_dir\.references"
     } catch {
         Write-Host "Failed to get references or none found in $game_name.csproj"
@@ -71,7 +73,7 @@ function Get-Dependencies {
     }
 
     try {
-        Start-Process "$depot_dir\DepotDownloader.exe" -ArgumentList "-app $appid -branch $branch $login -dir $patch_dir -filelist $patch_dir\.references" -NoNewWindow -Wait
+        Start-Process "$depot_dir\DepotDownloader.exe" -ArgumentList "$login -app $appid -branch $branch -depot $depot -dir $patch_dir -filelist $patch_dir\.references" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete DepotDownloader process"
         Write-Host $_.Exception.Message
@@ -113,8 +115,9 @@ function Start-Patcher {
 
     # Patch game using OxidePatcher.exe
     try {
-        $opj = "$PSScriptRoot\Games\$project\$game_name.opj"
-        Start-Process "$managed_dir\OxidePatcher.exe" -WorkingDirectory $managed_dir -ArgumentList "-c -p $managed_dir $opj" -NoNewWindow -Wait
+        $opj_name = "$PSScriptRoot\Games\$project\$game_name"
+        if ($branch -ne "public") { $opj_name = "$opj_name-$branch" }
+        Start-Process "$managed_dir\OxidePatcher.exe" -WorkingDirectory $managed_dir -ArgumentList "-c -p $managed_dir $opj_name.opj" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete OxidePatcher process"
         Write-Host $_.Exception.Message
