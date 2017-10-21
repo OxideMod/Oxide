@@ -74,7 +74,7 @@ function Get-Dependencies {
     }
 
     try {
-        Start-Process "$depot_dir\DepotDownloader.exe" -ArgumentList "$login -app $appid -branch $branch -depot $depot -dir $patch_dir -filelist $patch_dir\.references" -NoNewWindow -Wait
+        Start-Process "$depot_dir\DepotDownloader.exe" -ArgumentList "$login -app $appid -branch $branch $depot -dir $patch_dir -filelist $patch_dir\.references" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete DepotDownloader process"
         Write-Host $_.Exception.Message
