@@ -64,7 +64,7 @@
   </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
-    <Exec Command="powershell -ExecutionPolicy Unrestricted $(SolutionDir)Steam.ps1 -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />
+    <Exec Command="powershell -ExecutionPolicy Bypass $(SolutionDir)Steam.ps1 -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch $(SteamBranch) -managed $(ManagedDir)" />
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
