@@ -32,7 +32,7 @@ namespace Oxide.Core.Python
         /// <summary>
         /// Gets whether this extension is a core extension
         /// </summary>
-        public virtual bool IsCoreExtension { get; private set; }
+        public override bool IsCoreExtension => true;
 
         /// <summary>
         /// Gets the name of this extension
