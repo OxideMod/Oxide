@@ -19,14 +19,17 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnUserApprove")]
         private object IOnUserApprove(PlayerSession session)
         {
-            session.Name = session.Name ?? "Unnamed";
+            session.Identity.Name = session.Identity.Name ?? "Unnamed";
+#if !ITEMV2
+            session.Name = session.Identity.Name;
+#endif
             var id = session.SteamId.ToString();
             var ip = session.Player.ipAddress;
 
             Covalence.PlayerManager.PlayerJoin(session);
 
             var loginSpecific = Interface.Call("CanClientLogin", session);
-            var loginCovalence = Interface.Call("CanUserLogin", session.Name, id, ip);
+            var loginCovalence = Interface.Call("CanUserLogin", session.Identity.Name, id, ip);
             var canLogin = loginSpecific ?? loginCovalence;
 
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
@@ -36,10 +39,52 @@ namespace Oxide.Game.Hurtworld
             }
 
             var approvedSpecific = Interface.Call("OnUserApprove", session);
-            var approvedCovalence = Interface.Call("OnUserApproved", session.Name, id, ip);
+            var approvedCovalence = Interface.Call("OnUserApproved", session.Identity.Name, id, ip);
             return approvedSpecific ?? approvedCovalence;
         }
 
+#if ITEMV2
+        /// <summary>
+        /// Called when the player sends a chat message
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        [HookMethod("IOnPlayerChat")]
+        private object IOnPlayerChat(PlayerSession session, string message)
+        {
+            var chatSpecific = Interface.Call("OnPlayerChat", session, message);
+            var chatCovalence = Interface.Call("OnUserChat", session.IPlayer, message);
+            return chatSpecific ?? chatCovalence;
+        }
+
+        /// <summary>
+        /// Called when the player sends a chat command
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        [HookMethod("IOnPlayerCommand")]
+        private object IOnPlayerCommand(PlayerSession session, string command)
+        {
+            // Get the full command
+            var str = command.TrimStart('/');
+            // Parse it
+            string cmd;
+            string[] args;
+            ParseCommand(str, out cmd, out args);
+            if (cmd == null) return null;
+            // Is the command blocked?
+            var blockedSpecific = Interface.Call("OnPlayerCommand", session, cmd, args); // TODO: Deprecate OnChatCommand
+            var blockedCovalence = Interface.Call("OnUserCommand", session.IPlayer, cmd, args);
+            if (blockedSpecific != null || blockedCovalence != null) return true;
+            // Is it a covalance command?
+            if (Covalence.CommandSystem.HandleChatMessage(session.IPlayer, command)) return true;
+            // Is it a regular chat command?
+            if (!cmdlib.HandleChatCommand(session, cmd, args))
+                session.IPlayer.Reply(lang.GetMessage("UnknownCommand", this, session.IPlayer.Id), cmd);
+            return true;
+        }
+#else
         /// <summary>
         /// Called when the player sends a message
         /// </summary>
@@ -50,20 +95,17 @@ namespace Oxide.Game.Hurtworld
         {
             if (message.Trim().Length <= 1) return true;
             var str = message.Substring(0, 1);
-
-            // Get covalence player
-            var iplayer = Covalence.PlayerManager.FindPlayerById(session.SteamId.ToString());
-
+            
             // Is it a chat command?
             if (!str.Equals("/"))
             {
                 var chatSpecific = Interface.Call("OnPlayerChat", session, message);
-                var chatCovalence = iplayer != null ? Interface.Call("OnUserChat", iplayer, message) : null;
+                var chatCovalence = Interface.Call("OnUserChat", session.IPlayer, message);
                 return chatSpecific ?? chatCovalence;
             }
 
             // Is this a covalence command?
-            if (Covalence.CommandSystem.HandleChatMessage(iplayer, message)) return true;
+            if (Covalence.CommandSystem.HandleChatMessage(session.IPlayer, message)) return true;
 
             // Get the command string
             var command = message.Substring(1);
@@ -77,7 +119,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, cmd, args))
             {
-                iplayer.Reply(lang.GetMessage("UnknownCommand", this, session.SteamId.ToString()), cmd);
+                session.IPlayer.Reply(lang.GetMessage("UnknownCommand", this, session.SteamId.ToString()), cmd);
                 return true;
             }
 
@@ -86,6 +128,7 @@ namespace Oxide.Game.Hurtworld
 
             return true;
         }
+#endif
 
         /// <summary>
         /// Called when the player has connected
@@ -102,7 +145,7 @@ namespace Oxide.Game.Hurtworld
             if (permission.IsLoaded)
             {
                 var id = session.SteamId.ToString();
-                permission.UpdateNickname(id, session.Name);
+                permission.UpdateNickname(id, session.Identity.Name);
                 var defaultGroups = Interface.Oxide.Config.Options.DefaultGroups;
                 if (!permission.UserHasGroup(id, defaultGroups.Players)) permission.AddUserGroup(id, defaultGroups.Players);
                 if (session.IsAdmin && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);

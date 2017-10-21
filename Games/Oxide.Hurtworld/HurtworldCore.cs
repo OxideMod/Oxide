@@ -242,7 +242,7 @@ namespace Oxide.Game.Hurtworld
             PlayerSession session = null;
             foreach (var i in sessions)
             {
-                if (!nameOrIdOrIp.Equals(i.Value.Name, StringComparison.OrdinalIgnoreCase) &&
+                if (!nameOrIdOrIp.Equals(i.Value.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
                     !nameOrIdOrIp.Equals(i.Value.SteamId.ToString()) && !nameOrIdOrIp.Equals(i.Key.ipAddress)) continue;
                 session = i.Value;
                 break;

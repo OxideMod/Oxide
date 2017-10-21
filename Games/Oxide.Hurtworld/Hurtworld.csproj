@@ -18,8 +18,10 @@
     <GameName>Hurtworld</GameName>
     <ManagedDir>Hurtworld_Data\Managed</ManagedDir>
     <SteamAppId>405100</SteamAppId>
-    <SteamBranch>public</SteamBranch>
+    <SteamBranch>public,itemv2</SteamBranch>
+    <SteamDepot>405101</SteamDepot>
     <SteamLogin>anonymous</SteamLogin>
+    <DefineConstants Condition="!$(SteamBranch.Contains(','))">$(SteamBranch.ToUpper())</DefineConstants>
     <!--
       Workaround for targeting net35 with dotnet CLI
       https://github.com/Microsoft/msbuild/issues/1333#issuecomment-296346352
@@ -81,7 +83,7 @@
   </Target>
   <Target Name="BeforeBuild">
     <!-- Currently only works on Windows due to Windows-only tools used -->
-    <Exec Command="powershell -ExecutionPolicy Bypass $(SolutionDir)Steam.ps1 -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch $(SteamBranch.Split(',')[0]) -depot 405101 -managed $(ManagedDir)" />
+    <Exec Command="powershell -ExecutionPolicy Bypass $(SolutionDir)Steam.ps1 -project $(AssemblyName) -dotnet $(TargetFramework) -appid $(SteamAppId) -branch $(SteamBranch.Split(',')[0]) -depot $(SteamDepot) -managed $(ManagedDir)" />
   </Target>
   <Target Name="AfterBuild">
     <ItemGroup>
@@ -103,9 +105,12 @@
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <CallTarget Targets="Deploy" Condition="Exists('$(ProjectDir).deploy')" />
   </Target>
-  <Target Name="Deploy">
+  <Target Name="BuildBranch" AfterTargets="AfterBuild">
+    <Message Text="We got here for BuildBranch!" />
+    <MSBuild Condition="$(SteamBranch.Contains(','))" Projects="$(MSBuildProjectFullPath)" Targets="Clean;Build" Properties="PackageId=$(AssemblyName)-$(SteamBranch.Split(',')[1]);GameName=$(GameName)-$(SteamBranch.Split(',')[1]);SteamBranch=$(SteamBranch.Split(',')[1])" />
+  </Target>
+  <Target Name="DeployLocally" AfterTargets="AfterBuild" Condition="Exists('$(ProjectDir).deploy')">
     <Exec Command="start /b /wait taskkill /f /im Hurtworld.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <ReadLinesFromFile File="$(ProjectDir).deploy">

@@ -30,7 +30,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             Id = id.ToString();
         }
 
-        internal HurtworldPlayer(PlayerSession session) : this(session.SteamId.m_SteamID, session.Name)
+        internal HurtworldPlayer(PlayerSession session) : this(session.SteamId.m_SteamID, session.Identity.Name)
         {
             this.session = session;
             cSteamId = session.SteamId;
@@ -134,13 +134,21 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             get
             {
                 var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+#if ITEMV2
+                return stats.GetFluidEffect(EntityFluidEffectKeyDatabase.Instance.Health).GetValue();
+#else
                 return stats.GetFluidEffect(EEntityFluidEffectType.Health).GetValue();
+#endif
             }
             set
             {
                 var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+#if ITEMV2
+                var effect = stats.GetFluidEffect(EntityFluidEffectKeyDatabase.Instance.Health) as StandardEntityFluidEffect;
+#else
                 var effect = stats.GetFluidEffect(EEntityFluidEffectType.Health) as StandardEntityFluidEffect;
                 effect?.SetValue(value);
+#endif
             }
         }
 
@@ -169,13 +177,22 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             get
             {
                 var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+#if ITEMV2
+                return stats.GetFluidEffect(EntityFluidEffectKeyDatabase.Instance.Health).GetMaxValue();
+#else
                 return stats.GetFluidEffect(EEntityFluidEffectType.Health).GetMaxValue();
+#endif
             }
             set
             {
                 var stats = session.WorldPlayerEntity.GetComponent<EntityStats>();
+#if ITEMV2
+                var effect = stats.GetFluidEffect(EntityFluidEffectKeyDatabase.Instance.Health) as StandardEntityFluidEffect;
+                if (effect != null) effect.MaxValue = value;
+#else
                 var effect = stats.GetFluidEffect(EEntityFluidEffectType.Health) as StandardEntityFluidEffect;
                 effect?.MaxValue(value);
+#endif
             }
         }
 
