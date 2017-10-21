@@ -10,6 +10,7 @@ param (
 
 Clear-Host
 $game_name = $project -Replace "Oxide."
+if ($depot) { $depot = "-depot $depot" }
 $depot_dir = "$PSScriptRoot\Games\Dependencies\.DepotDownloader"
 New-Item $depot_dir -ItemType Directory -Force
 $patch_dir = "$PSScriptRoot\Games\Dependencies\$project"
