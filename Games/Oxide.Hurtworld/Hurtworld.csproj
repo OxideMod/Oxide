@@ -88,7 +88,7 @@
   <Target Name="AfterBuild">
     <ItemGroup>
       <GameFiles Include="$(ProjectDir)Files\**\*.*" />
-      <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(AssemblyName)\$(ManagedDir)\Assembly-CSharp.dll" />
+      <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\$(OutputPath)Oxide.CSharp.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\$(OutputPath)Oxide.MySql.dll" />
@@ -106,11 +106,7 @@
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <Target Name="BuildBranch" AfterTargets="AfterBuild">
-    <Message Text="We got here for BuildBranch!" />
-    <MSBuild Condition="$(SteamBranch.Contains(','))" Projects="$(MSBuildProjectFullPath)" Targets="Clean;Build" Properties="PackageId=$(AssemblyName)-$(SteamBranch.Split(',')[1]);GameName=$(GameName)-$(SteamBranch.Split(',')[1]);SteamBranch=$(SteamBranch.Split(',')[1])" />
-  </Target>
-  <Target Name="DeployLocally" AfterTargets="AfterBuild" Condition="Exists('$(ProjectDir).deploy')">
+  <Target Name="DeployLocally" AfterTargets="_PackAsBuildAfterTarget" Condition="Exists('$(ProjectDir).deploy')">
     <Exec Command="start /b /wait taskkill /f /im Hurtworld.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <ReadLinesFromFile File="$(ProjectDir).deploy">
@@ -120,5 +116,11 @@
       <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
     </ItemGroup>
     <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+  <Target Name="BuildBranch" AfterTargets="DeployLocally" Condition="$(SteamBranch.Contains(','))">
+    <PropertyGroup>
+      <SteamBranch>$(SteamBranch.Split(',')[1])</SteamBranch>
+    </PropertyGroup>
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Clean;Build" Properties="PackageId=$(AssemblyName)-$(SteamBranch);GameName=$(GameName)-$(SteamBranch);SteamBranch=$(SteamBranch)" />
   </Target>
 </Project>
