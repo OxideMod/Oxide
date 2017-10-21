@@ -45,7 +45,7 @@ namespace Oxide.Plugins
             // Include references to all loaded game extensions and any assemblies they reference
             foreach (var extension in Interface.Oxide.GetAllExtensions())
             {
-                if (extension == null || !extension.IsGameExtension) continue;
+                if (extension == null || !extension.IsCoreExtension && !extension.IsGameExtension) continue;
 
                 var assembly = extension.GetType().Assembly;
                 PluginReferences.Add(assembly.GetName().Name);

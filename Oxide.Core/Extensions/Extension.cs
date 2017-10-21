@@ -6,6 +6,11 @@
     public abstract class Extension
     {
         /// <summary>
+        /// Gets whether this extension is a core extension
+        /// </summary>
+        public virtual bool IsCoreExtension { get; private set; }
+
+        /// <summary>
         /// Gets whether this extension is for a specific game
         /// </summary>
         public virtual bool IsGameExtension { get; private set; }

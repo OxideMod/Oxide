@@ -231,11 +231,12 @@ namespace Oxide.Plugins
                 }
 
                 // Include implicit references detected from using statements in script
-                match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Core|Ext|Game)\.(?:[^\.]+))[^;]*;\s*$", RegexOptions.IgnoreCase);
+                match = Regex.Match(line, @"^\s*using\s+([\w]+\.(?:Core|Ext|Game)\.(?:[^\.]+))[^;]*;\s*$", RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
-                    var result = Regex.Replace(match.Groups[1].Value, @"Oxide\.[\w]+\.([\w]+)", "Oxide.$1");
-                    AddReference(plugin, result);
+                    var result = match.Groups[1].Value;
+                    if (result.StartsWith("Oxide.")) AddReference(plugin, Regex.Replace(result, @"Oxide\.[\w]+\.([\w]+)", "Oxide.$1"));
+                    else AddReference(plugin, result);
                     continue;
                 }
 

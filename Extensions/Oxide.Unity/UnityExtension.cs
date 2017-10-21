@@ -17,6 +17,11 @@ namespace Oxide.Core.Unity
         internal static string AssemblyAuthors = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly, typeof(AssemblyCompanyAttribute), false)).Company;
 
         /// <summary>
+        /// Gets whether this extension is a core extension
+        /// </summary>
+        public virtual bool IsCoreExtension { get; private set; }
+
+        /// <summary>
         /// Gets the name of this extension
         /// </summary>
         public override string Name => "Unity";
