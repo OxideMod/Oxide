@@ -87,19 +87,19 @@ namespace Oxide.Core.Libraries
         }
 
         /// <summary>
-        /// Gets all available languages for a single plugin
+        /// Gets all available languages or only those for a single plugin
         /// </summary>
         /// <param name="plugin"></param>
         /// <returns></returns>
         [LibraryFunction("GetLanguages")]
-        public string[] GetLanguages(Plugin plugin)
+        public string[] GetLanguages(Plugin plugin = null)
         {
             var languages = new List<string>();
-            if (plugin == null) return languages.ToArray();
-
             foreach (var directory in Directory.GetDirectories(Interface.Oxide.LangDirectory))
             {
-                if (File.Exists(Path.Combine(directory, $"{plugin.Name}.json")))
+                if (plugin != null && File.Exists(Path.Combine(directory, $"{plugin.Name}.json")))
+                    languages.Add(directory.Substring(Interface.Oxide.LangDirectory.Length + 1));
+                else
                     languages.Add(directory.Substring(Interface.Oxide.LangDirectory.Length + 1));
             }
             return languages.ToArray();
