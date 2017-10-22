@@ -128,6 +128,7 @@ namespace Oxide.Game.Hurtworld
             HurtworldExtension.ServerConsole();
             SteamGameServer.SetGameTags("oxide,modded");
 
+            Interface.Oxide.CallHook("OnServerInitialized");
             serverInitialized = true;
         }
  
