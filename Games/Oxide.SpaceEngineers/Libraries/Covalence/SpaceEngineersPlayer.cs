@@ -27,7 +27,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             steamId = id;
-            Name = name;
+            Name = name.Sanitize();
             Id = id.ToString();
         }
 

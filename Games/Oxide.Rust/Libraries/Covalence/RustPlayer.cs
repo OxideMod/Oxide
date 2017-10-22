@@ -164,11 +164,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Rename(string name)
         {
-            name = string.IsNullOrEmpty(name.Trim()) ? player.displayName : name;
-            player.net.connection.username = name;
-            player.displayName = name;
-            //player._name = name; // TODO: Remove or replace if needed
-            Name = name;
+            name = string.IsNullOrEmpty(name.Trim().Sanitize()) ? player.displayName : name.Sanitize();
+            player.net.connection.username = name.Sanitize();
+            player.displayName = name.Sanitize();
+            //player._name = name.Sanitize(); // TODO: Remove or replace if needed
+            Name = name.Sanitize();
             player.SendNetworkUpdateImmediate();
         }
 

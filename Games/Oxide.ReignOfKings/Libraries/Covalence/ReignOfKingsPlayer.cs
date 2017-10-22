@@ -28,7 +28,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         {
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            Name = name;
+            Name = name.Sanitize();
             steamId = id;
             Id = id.ToString();
         }

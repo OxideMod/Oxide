@@ -40,18 +40,19 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         internal void PlayerJoin(IMyPlayer player)
         {
             var id = player.SteamUserId.ToString();
+            var name = player.DisplayName.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = player.DisplayName;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new MedievalEngineersPlayer(player));
             }
             else
             {
-                record = new PlayerRecord { Id = player.SteamUserId, Name = player.DisplayName};
+                record = new PlayerRecord { Id = player.SteamUserId, Name = name};
                 playerData.Add(id, record);
                 allPlayers.Add(id, new MedievalEngineersPlayer(player));
             }

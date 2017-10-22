@@ -38,18 +38,19 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         internal void PlayerJoin(PlayerSession session)
         {
             var id = session.SteamId.ToString();
+            var name = session.Identity.Name.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = session.Identity.Name;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new HurtworldPlayer(session));
             }
             else
             {
-                record = new PlayerRecord { Id = (ulong)session.SteamId, Name = session.Identity.Name };
+                record = new PlayerRecord { Id = (ulong)session.SteamId, Name = name };
                 playerData.Add(id, record);
                 allPlayers.Add(id, new HurtworldPlayer(session));
             }

@@ -38,6 +38,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         internal void PlayerJoin(ulong userId, string name)
         {
             var id = userId.ToString();
+            name = name.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))

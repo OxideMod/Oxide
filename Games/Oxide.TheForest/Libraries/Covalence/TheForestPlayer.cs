@@ -25,7 +25,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            Name = name;
+            Name = name.Sanitize();
             steamId = id;
             Id = id.ToString();
         }
@@ -35,7 +35,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             steamId = entity.source.RemoteEndPoint.SteamId.Id;
             cSteamId = new CSteamID(steamId);
             Id = steamId.ToString();
-            Name = entity.GetState<IPlayerState>().name;
+            Name = entity.GetState<IPlayerState>().name.Sanitize();
             this.entity = entity;
         }
 
