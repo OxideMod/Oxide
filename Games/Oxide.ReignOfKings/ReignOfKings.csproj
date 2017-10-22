@@ -81,7 +81,7 @@
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\Dependencies\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Unity\$(OutputPath)Oxide.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.Core\$(OutputPath)Oxide.*.dll" />
-      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.*.dll; $(SolutionDir)Oxide.References\Dependencies\protobuf-net.dll" />
+      <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.Posix.dll; $(SolutionDir)Oxide.References\Dependencies\protobuf-net.dll" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
     </ItemGroup>
     <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
