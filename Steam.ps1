@@ -66,7 +66,7 @@ function Get-Downloader {
         Write-Host "Extracting DepotDownloader release files"
         Expand-Archive "$depot_dir\$release_zip" -DestinationPath $depot_dir -Force
 
-        if (!(Test-Patch "$depot_dir\DepotDownloader.exe")) {
+        if (!(Test-Path "$depot_dir\DepotDownloader.exe")) {
             Get-Downloader # TODO: Add infinite loop prevention
             return
         }
