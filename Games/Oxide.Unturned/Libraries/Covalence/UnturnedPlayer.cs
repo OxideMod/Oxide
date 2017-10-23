@@ -25,7 +25,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            Name = name;
+            Name = name.Sanitize();
             Id = id.ToString();
         }
 

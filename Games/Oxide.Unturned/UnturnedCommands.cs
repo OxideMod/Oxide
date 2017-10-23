@@ -205,14 +205,14 @@ namespace Oxide.Game.Unturned
 
             if (player.IsServer)
             {
-                // TODO: Check if langauge exists before setting, warn if not
+                // TODO: Check if language exists before setting, warn if not
                 lang.SetServerLanguage(args[0]);
                 player.Reply(lang.GetMessage("ServerLanguage", this, player.Id), lang.GetServerLanguage());
             }
             else
             {
-                // TODO: Check if langauge exists before setting, warn if not
-                var languages = lang.GetLanguages(null);
+                // TODO: Check if language exists before setting, warn if not
+                var languages = lang.GetLanguages();
                 if (languages.Contains(args[0])) lang.SetLanguage(args[0], player.Id);
                 player.Reply(lang.GetMessage("PlayerLanguage", this, player.Id), args[0]);
             }

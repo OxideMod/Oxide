@@ -1,6 +1,6 @@
 {
   "Name": "Unturned",
-  "TargetDirectory": "E:\\Servers\\Unity\\Unturned\\Unturned_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Unturned\\Unturned_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

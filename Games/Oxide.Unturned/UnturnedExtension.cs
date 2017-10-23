@@ -43,7 +43,7 @@ namespace Oxide.Game.Unturned
 
         public override string[] WhitelistAssemblies => new[]
         {
-            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
+            "Assembly-CSharp", "mscorlib", "System", "System.Core", "UnityEngine"
         };
         public override string[] WhitelistNamespaces => new[]
         {
