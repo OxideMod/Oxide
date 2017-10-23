@@ -23,6 +23,11 @@ namespace Oxide.Game.GangBeasts
         internal static string AssemblyAuthors = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly, typeof(AssemblyCompanyAttribute), false)).Company;
 
         /// <summary>
+        /// Gets whether this extension is for a specific game
+        /// </summary>
+        public override bool IsGameExtension => true;
+
+        /// <summary>
         /// Gets the name of this extension
         /// </summary>
         public override string Name => "GangBeasts";
