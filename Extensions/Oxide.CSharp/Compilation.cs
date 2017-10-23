@@ -235,8 +235,11 @@ namespace Oxide.Plugins
                 if (match.Success)
                 {
                     var result = match.Groups[1].Value;
-                    if (result.StartsWith("Oxide.")) AddReference(plugin, Regex.Replace(result, @"Oxide\.[\w]+\.([\w]+)", "Oxide.$1"));
-                    else AddReference(plugin, result);
+                    var newResult = Regex.Replace(result, @"Oxide\.[\w]+\.([\w]+)", "Oxide.$1");
+                    if (!string.IsNullOrEmpty(newResult) && File.Exists(Path.Combine(Interface.Oxide.ExtensionDirectory, result + ".dll")))
+                        AddReference(plugin, newResult);
+                    else
+                        AddReference(plugin, result);
                     continue;
                 }
 
@@ -305,7 +308,7 @@ namespace Oxide.Plugins
                 }
 
                 Interface.Oxide.LogError($"Assembly referenced by {plugin.Name} plugin does not exist: {assemblyName}.dll");
-                plugin.CompilerErrors = "Referenced assembly does not exist: " + assemblyName;
+                plugin.CompilerErrors = $"Referenced assembly does not exist: {assemblyName}";
                 RemovePlugin(plugin);
                 return;
             }
@@ -318,7 +321,7 @@ namespace Oxide.Plugins
             catch (FileNotFoundException)
             {
                 Interface.Oxide.LogError($"Assembly referenced by {plugin.Name} plugin is invalid: {assemblyName}.dll");
-                plugin.CompilerErrors = "Referenced assembly is invalid: " + assemblyName;
+                plugin.CompilerErrors = $"Referenced assembly is invalid: {assemblyName}";
                 RemovePlugin(plugin);
                 return;
             }
