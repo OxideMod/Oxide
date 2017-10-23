@@ -97,6 +97,8 @@ namespace Oxide.Core.Libraries
             var languages = new List<string>();
             foreach (var directory in Directory.GetDirectories(Interface.Oxide.LangDirectory))
             {
+                if (Directory.GetFiles(directory).Length == 0) continue;
+
                 if (plugin == null || plugin != null && File.Exists(Path.Combine(directory, $"{plugin.Name}.json")))
                     languages.Add(directory.Substring(Interface.Oxide.LangDirectory.Length + 1));
             }
