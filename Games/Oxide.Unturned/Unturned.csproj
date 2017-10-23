@@ -13,7 +13,7 @@
     <Copyright>Copyright (c) 2014-$([System.DateTime]::Now.Year) $(Authors)</Copyright>
     <PackageTags>gaming modding plugins unity unity3d</PackageTags>
     <TargetFramework>net35</TargetFramework>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <!--<GeneratePackageOnBuild>True</GeneratePackageOnBuild>-->
     <BundleDir>$(SolutionDir)Bundles</BundleDir>
     <GameName>Unturned</GameName>
     <ManagedDir>Unturned_Data\Managed</ManagedDir>
