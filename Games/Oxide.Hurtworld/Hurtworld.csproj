@@ -100,7 +100,7 @@
       <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.Posix.dll; $(SolutionDir)Oxide.References\Dependencies\protobuf-net.dll" />
       <ManagedFiles Include="$(TargetDir)$(AssemblyName).dll" />
     </ItemGroup>
-    <Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />
+    <!--<Exec Command="pdb2mdb %(ManagedFiles.Identity)" Condition="'$(Configuration)' == 'Debug' And '$(OS)' == 'Windows_NT'" IgnoreExitCode="true" />-->
     <Copy SourceFiles="@(GameFiles)" DestinationFiles="@(GameFiles->'$(BundleDir)\$(GameName)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(ManagedFiles)" DestinationFiles="@(ManagedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
