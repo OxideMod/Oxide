@@ -21,7 +21,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            Name = name;
+            Name = name.Sanitize();
             Id = id;
         }
 

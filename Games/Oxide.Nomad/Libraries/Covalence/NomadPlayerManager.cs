@@ -39,18 +39,19 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         internal void PlayerJoin(TcpPlayer player)
         {
             var id = player.id.ToString();
+            var name = player.name.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = player.name;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new NomadPlayer(player));
             }
             else
             {
-                record = new PlayerRecord {Id = id, Name = player.name};
+                record = new PlayerRecord {Id = id, Name = name};
                 playerData.Add(id, record);
                 allPlayers.Add(id, new NomadPlayer(player));
             }

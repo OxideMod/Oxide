@@ -1,6 +1,6 @@
 {
   "Name": "Nomad",
-  "TargetDirectory": "E:\\Servers\\Other\\Nomad\\Nomad Server",
+  "TargetDirectory": "E:\\Servers\\Nomad\\Nomad Server",
   "Manifests": [
     {
       "AssemblyName": "NomadServer.exe",
