@@ -5,7 +5,8 @@ param (
     [string]$appid = "0",
     [string]$branch = "public",
     [string]$depot = "",
-    [string]$access = "anonymous"
+    [string]$access = "anonymous",
+    [string]$deobf = ""
 )
 
 Clear-Host
@@ -82,7 +83,7 @@ function Get-Downloader {
 
         # TODO: Compare size and hash of .zip vs. what GitHub has via API
         Write-Host "Extracting DepotDownloader release files"
-        Expand-Archive "$depot_dir\$release_zip" -DestinationPath $depot_dir -Force
+        Expand-Archive "$depot_dir\$release_zip" -DestinationPath "$depot_dir" -Force
 
         if (!(Test-Path "$depot_dir\DepotDownloader.exe")) {
             Get-Downloader # TODO: Add infinite loop prevention
@@ -152,6 +153,61 @@ function Get-Dependencies {
     # TODO: Copy websocket-csharp.dll to Dependencies\*Managed
 }
 
+function Get-Deobfuscators {
+    # TODO: Run `de4dot -d -r c:\input` to detect obfuscation type?
+
+    # Check for which deobfuscator to get and use
+    if ($deobf.ToLower() -eq "de4dot") {
+        $de4dot_dir = "$deps_dir\.de4dot"
+        New-Item "$de4dot_dir" -ItemType Directory -Force
+
+        # Check if latest de4dot is already downloaded
+        if (!(Test-Path "$de4dot_dir\de4dot.zip") -or !(Test-Path "$de4dot_dir\de4dot.exe")) {
+            # Download and extract de4dot
+            Write-Host "Downloading version of de4dot" # TODO: Get and show version
+            try {
+                Invoke-WebRequest "https://ci.appveyor.com/api/projects/0xd4d/de4dot/artifacts/de4dot.zip" -Out "$de4dot_dir\de4dot.zip"
+            } catch {
+                Write-Host "Could not download de4dot from AppVeyor"
+                Write-Host $_.Exception.Message
+                exit 1
+            }
+
+            # TODO: Compare size and hash of .zip vs. what AppVeyor has via API
+            Write-Host "Extracting de4dot release files"
+            Expand-Archive "$de4dot_dir\de4dot.zip" -DestinationPath "$de4dot_dir" -Force
+
+            if (!(Test-Path "$de4dot_dir\de4dot.exe")) {
+                Get-Deobfuscators # TODO: Add infinite loop prevention
+                return
+            }
+        } else {
+            Write-Host "Latest version of de4dot already downloaded"
+        }
+
+        Start-Deobfuscator
+    }
+}
+
+function Start-Deobfuscator {
+    if ($deobf.ToLower() -eq "de4dot") {
+        # Attempt to deobfuscate game file(s)
+        try {
+            Start-Process "$deps_dir\.de4dot\de4dot.exe" -WorkingDirectory "$managed_dir" -ArgumentList "-r $managed_dir -ru" -NoNewWindow -Wait
+        } catch {
+            Write-Host "Could not start or complete de4dot deobufcation process"
+            Write-Host $_.Exception.Message
+            exit 1
+        }
+
+        # Remove obfuscated file(s) and replace with cleaned file(s)
+        Get-ChildItem "$managed_dir\*-cleaned.*" -Recurse | ForEach-Object {
+            Remove-Item $_.FullName.Replace("-cleaned", "")
+            Rename-Item $_ $_.Name.Replace("-cleaned", "")
+        }
+    }
+}
+
 function Get-Patcher {
     # TODO: MD5 comparision of local OxidePatcher.exe and remote header
     if (!(Test-Path "$deps_dir\OxidePatcher.exe")) {
@@ -184,8 +240,7 @@ function Start-Patcher {
 
     # Attempt to patch game using the Oxide patcher
     try {
-        $opj_name = "$root_dir\Games\$project\$game_name"
-        if ("$branch" -ne "public") { $opj_name = "$opj_name-$branch" }
+        $opj_name = if ("$branch" -ne "public") { "$root_dir\Games\$project\$game_name-$branch" } else { "$root_dir\Games\$project\$game_name" }
         Start-Process "$deps_dir\OxidePatcher.exe" -WorkingDirectory "$managed_dir" -ArgumentList "-c -p `"$managed_dir`" $opj_name.opj" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete OxidePatcher process"
@@ -195,4 +250,5 @@ function Start-Patcher {
 }
 
 Find-Dependencies
+Get-Deobfuscators
 Get-Patcher
