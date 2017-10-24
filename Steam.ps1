@@ -20,6 +20,7 @@ $deps_dir = "$root_dir\Games\Dependencies"
 $depot_dir = "$deps_dir\.DepotDownloader"
 $patch_dir = if ("$branch" -ne "public") { "$deps_dir\$project-$branch" } else { "$deps_dir\$project" }
 $managed_dir = "$patch_dir\$managed"
+$project_dir = "$root_dir\Games\$project"
 New-Item "$depot_dir", "$patch_dir", "$managed_dir" -ItemType Directory -Force
 
 function Find-Dependencies {
@@ -29,10 +30,13 @@ function Find-Dependencies {
         exit 1
     }
 
+    # Copy any local dependencies
+    if (Test-Path "$project_dir\Dependencies") {
+        Copy-Item "$project_dir\Dependencies\*" "$managed_dir" -Force
+    }
+
     # Check if Steam is used for game dependencies
-    if ($access.ToLower() -eq "nosteam") {
-        # TODO: Local dependencies handling
-    } else {
+    if ($access.ToLower() -ne "nosteam") {
         # Get project information from .csproj file
         $csproj = Get-Item "$game_name.csproj"
         $xml = [xml](Get-Content $csproj)
