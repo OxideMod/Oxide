@@ -1,6 +1,6 @@
 {
   "Name": "Blockstorm",
-  "TargetDirectory": "E:\\Servers\\Unity\\Blockstorm\\Blockstorm_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\Blockstorm\\Blockstorm_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
