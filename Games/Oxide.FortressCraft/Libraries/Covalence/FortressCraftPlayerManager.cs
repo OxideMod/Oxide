@@ -38,18 +38,19 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         internal void PlayerJoin(Player player)
         {
             var id = player.mUserID.ToString();
+            var name = player.mUserName.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = player.mUserName;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new FortressCraftPlayer(player));
             }
             else
             {
-                record = new PlayerRecord { Id = player.mUserID, Name = player.mUserName };
+                record = new PlayerRecord { Id = player.mUserID, Name = name };
                 playerData.Add(id, record);
                 allPlayers.Add(id, new FortressCraftPlayer(player));
             }
