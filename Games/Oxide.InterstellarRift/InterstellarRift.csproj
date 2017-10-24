@@ -48,7 +48,7 @@
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="Clean">
-    <RemoveDir Directories="$(BundleDir)\$(GameName)" />
+    <RemoveDir Directories="$(BundleDir)\$(GameName); $(SolutionDir)Games\Dependencies\$(PackageId)" />
   </Target>
   <Target Name="Build" Condition="('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir).steamlogin')" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">

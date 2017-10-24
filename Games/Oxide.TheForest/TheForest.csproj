@@ -76,7 +76,7 @@
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="Clean">
-    <RemoveDir Directories="$(BundleDir)\$(GameName)" />
+    <RemoveDir Directories="$(BundleDir)\$(GameName); $(SolutionDir)Games\Dependencies\$(PackageId)" />
   </Target>
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
