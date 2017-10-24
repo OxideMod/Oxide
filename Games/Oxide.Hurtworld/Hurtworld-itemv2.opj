@@ -71,7 +71,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "nONe2+OSurcCwYGW+DkgZNAppoLfc1tysSHxN0k1cqM=",
+            "MSILHash": "VTBA3TzRLub0auhdIvA1oOhSA4nUC0noltkSFisQe2w=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -229,7 +229,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "uPljS6y3xApmf1237unc2+U9xKE5d0n8LaMgCRdmULI=",
+            "MSILHash": "/xF4+wF1yoZJS0moErczIg8NQ72PbL+umrXBPKuiKoU=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -317,7 +317,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "XC5HXYwStb68NM+XC8xJlGXiVsnRDNoTYoHDg9yqDfE=",
+            "MSILHash": "q4HO67K1lmt1Ry5usR/B1knkIx0/0VJ4ASRzxE3WwrE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -369,7 +369,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "nONe2+OSurcCwYGW+DkgZNAppoLfc1tysSHxN0k1cqM=",
+            "MSILHash": "VTBA3TzRLub0auhdIvA1oOhSA4nUC0noltkSFisQe2w=",
             "BaseHookName": "OnServerCommand",
             "HookCategory": "_Patches"
           }
@@ -377,7 +377,7 @@
         {
           "Type": "Modify",
           "Hook": {
-            "InjectionIndex": 2617,
+            "InjectionIndex": 2618,
             "RemoveCount": 1,
             "Instructions": [
               {
@@ -400,7 +400,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "nONe2+OSurcCwYGW+DkgZNAppoLfc1tysSHxN0k1cqM=",
+            "MSILHash": "VTBA3TzRLub0auhdIvA1oOhSA4nUC0noltkSFisQe2w=",
             "BaseHookName": "FixDupeCommand [patch]",
             "HookCategory": "_Patches"
           }
@@ -642,7 +642,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 21,
+            "InjectionIndex": 122,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -660,7 +660,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "z+tIxeybRFlCp7G9BF96hovFkJCA9WU0D1DwWhVdFio=",
+            "MSILHash": "VhZgT6yaQ2He2CcK6LZvoiU9qS1umZUArBuQtppqVbA=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

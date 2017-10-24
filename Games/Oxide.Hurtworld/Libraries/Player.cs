@@ -185,7 +185,9 @@ namespace Oxide.Game.Hurtworld.Libraries
             if (string.IsNullOrEmpty(name.Trim())) name = "Unnamed";
 
             // Chat/display name
-            session.Identity.Name = name;
+#if !ITEMV2
+            session.Name = name;
+#endif
             session.Identity.Name = name;
             session.WorldPlayerEntity.GetComponent<HurtMonoBehavior>().RPC("UpdateName", uLink.RPCMode.All, name);
             SteamGameServer.BUpdateUserData(session.SteamId, name, 0);
