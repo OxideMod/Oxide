@@ -1,8 +1,8 @@
 param (
     [Parameter(Mandatory=$true)][string]$project,
     [Parameter(Mandatory=$true)][string]$dotnet,
-    [Parameter(Mandatory=$true)][string]$appid,
     [Parameter(Mandatory=$true)][string]$managed,
+    [string]$appid = "0",
     [string]$branch = "public",
     [string]$depot = "",
     [string]$access = "anonymous"
@@ -50,6 +50,8 @@ function Find-Dependencies {
             Write-Host $_.Exception.Message
             exit 1
         }
+
+        Get-Downloader
     }
 }
 
@@ -92,6 +94,8 @@ function Get-Downloader {
     } else {
         Write-Host "Latest version ($version) of DepotDownloader already downloaded"
     }
+
+    Get-Dependencies
 }
 
 function Get-Dependencies {
@@ -165,6 +169,8 @@ function Get-Patcher {
     } else {
         Write-Host "Latest build of OxidePatcher already downloaded"
     }
+
+    Start-Patcher
 }
 
 function Start-Patcher {
@@ -188,9 +194,5 @@ function Start-Patcher {
     }
 }
 
-# Check if game is a Steam game or not
 Find-Dependencies
-Get-Downloader
-Get-Dependencies
 Get-Patcher
-Start-Patcher
