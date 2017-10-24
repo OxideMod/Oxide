@@ -24,7 +24,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
             // Store user details
-            Name = name;
+            Name = name.Sanitize();
             steamId = id;
             Id = id.ToString();
         }
@@ -127,7 +127,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
 
         /// <summary>
         /// Heals the player's character by specified amount
-        /// </summary>
+        /// </summary>W
         /// <param name="amount"></param>
         public void Heal(float amount) => netUser.playerClient.controllable.takeDamage.health += amount;
 
@@ -136,7 +136,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         public float Health
         {
-            get { return netUser.playerClient.controllable.takeDamage.health; }
+            get { return netUser.playerClient.controllable.health; }
             set { netUser.playerClient.controllable.takeDamage.health = value; }
         }
 
@@ -178,7 +178,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// </summary>
         public float MaxHealth
         {
-            get { return netUser.playerClient.controllable.takeDamage.maxHealth; }
+            get { return netUser.playerClient.controllable.maxHealth; }
             set { netUser.playerClient.controllable.takeDamage.maxHealth = value; }
         }
 

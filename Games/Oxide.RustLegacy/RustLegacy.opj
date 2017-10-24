@@ -1,6 +1,6 @@
 {
   "Name": "Rust Legacy",
-  "TargetDirectory": "D:\\Servers\\Game\\Unity\\RustLegacy\\rust_server_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\RustLegacy\\rust_server_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
@@ -21,7 +21,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "7iVtg/bpIqwFz7+vQqcwUW6jlrzElI5du3p+Y60GSjM=",
+            "MSILHash": "tawbDz8P5PoAA96UKLYoFRdkgRDaWtJLFUbsbHWNKeE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -45,8 +45,8 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "7iVtg/bpIqwFz7+vQqcwUW6jlrzElI5du3p+Y60GSjM=",
-            "BaseHookName": null,
+            "MSILHash": "tawbDz8P5PoAA96UKLYoFRdkgRDaWtJLFUbsbHWNKeE=",
+            "BaseHookName": "InitOxide [internal]",
             "HookCategory": "Server"
           }
         },
@@ -546,7 +546,7 @@
                 "System.String"
               ]
             },
-            "MSILHash": "CRWJTnUr3SKgxShiXNVO6wrfYEnOOcVasPkgRpK2Oo4=",
+            "MSILHash": "DGU8RbsA84wz/EuQGsF2MsoHaI6v5kk7h5dZKe/EOPM=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -904,8 +904,47 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "NetUser::fLastChat",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "NetUser",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "fLastChat",
+            "FullTypeName": "System.Single NetUser::fLastChat",
+            "Parameters": []
+          },
+          "MSILHash": ""
+        },
+        {
+          "Name": "NetUser::avatar",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "NetUser",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "avatar",
+            "FullTypeName": "RustProto.Avatar NetUser::avatar",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
-      ]
+      ],
+      "Fields": []
     },
     {
       "AssemblyName": "uLink.dll",
@@ -939,7 +978,8 @@
           }
         }
       ],
-      "Modifiers": []
+      "Modifiers": [],
+      "Fields": []
     }
   ]
 }

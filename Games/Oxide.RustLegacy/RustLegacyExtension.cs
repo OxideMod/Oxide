@@ -41,7 +41,7 @@ namespace Oxide.Game.RustLegacy
 
         public override string[] WhitelistAssemblies => new[]
         {
-            "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine", "uLink"
+            "Assembly-CSharp", "DestMath", "mscorlib", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine", "uLink"
         };
         public override string[] WhitelistNamespaces => new[]
         {

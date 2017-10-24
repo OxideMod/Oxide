@@ -38,18 +38,19 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         internal void PlayerJoin(NetUser netUser)
         {
             var id = netUser.userID.ToString();
+            var name = netUser.displayName.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = netUser.displayName;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new RustLegacyPlayer(netUser));
             }
             else
             {
-                record = new PlayerRecord { Id = netUser.userID, Name = netUser.displayName };
+                record = new PlayerRecord { Id = netUser.userID, Name = name };
                 playerData.Add(id, record);
                 allPlayers.Add(id, new RustLegacyPlayer(netUser));
             }
