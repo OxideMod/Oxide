@@ -1399,32 +1399,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 5,
-            "ReturnBehavior": 0,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "a0.sender",
-            "HookTypeName": "Simple",
-            "Name": "IOnPlayerConnected [internal]",
-            "HookName": "IOnPlayerConnected",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "GameManager",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 0,
-              "Name": "RPCClientReady",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkMessageInfo"
-              ]
-            },
-            "MSILHash": "dhP9bdZhmUdhAfRkKmCLPiIhzg2XbTzakEIrc1WnyJE=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
@@ -1526,6 +1500,32 @@
             },
             "MSILHash": "kUQj4yQ9LCQx+T0zgk357cW6hbtsUnujJHRwq2WmJ/U=",
             "BaseHookName": "IOnPlayerCommand [internal]",
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 201,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "IOnPlayerConnected [internal]",
+            "HookName": "IOnPlayerConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerSpawnManager",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "RPCSpawnPlayerEntity",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayer"
+              ]
+            },
+            "MSILHash": "dqblBTANBh1PkLfuW/K6oUrV896xyR/Wrh/2YmTbPx4=",
+            "BaseHookName": null,
             "HookCategory": "Player"
           }
         }
