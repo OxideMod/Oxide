@@ -12,6 +12,7 @@
     <PackageIconUrl>https://avatars1.githubusercontent.com/u/10712027?s=64</PackageIconUrl>
     <Copyright>Copyright (c) 2014-$([System.DateTime]::Now.Year) $(Authors)</Copyright>
     <PackageTags>gaming modding plugins dotnet</PackageTags>
+    <PlatformTarget>x86</PlatformTarget>
     <TargetFramework>net45</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <BundleDir>$(SolutionDir)Bundles</BundleDir>
