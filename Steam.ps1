@@ -18,9 +18,9 @@ if ($depot) { $depot = "-depot $depot" }
 $root_dir = $PSScriptRoot
 $deps_dir = "$root_dir\Games\Dependencies"
 $depot_dir = "$deps_dir\.DepotDownloader"
-$patch_dir = if ($branch -ne "public") { "$deps_dir\$project-$branch" } else { "$deps_dir\$project" }
+$patch_dir = if ("$branch" -ne "public") { "$deps_dir\$project-$branch" } else { "$deps_dir\$project" }
 $managed_dir = "$patch_dir\$managed"
-New-Item $depot_dir $patch_dir $managed_dir -ItemType Directory -Force
+New-Item "$depot_dir", "$patch_dir", "$managed_dir" -ItemType Directory -Force
 
 function Find-Dependencies {
     # Check if project file exists for game
@@ -132,8 +132,8 @@ function Get-Dependencies {
         Write-Host "Grabbing latest build of Oxide.Core.dll"
         #$core_version = Get-ChildItem -Directory $core_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
         try {
-            Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" $deps_dir -Force
-            Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" $managed_dir -Force
+            Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" "$deps_dir" -Force
+            Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" "$managed_dir" -Force
         } catch {
             Write-Host "Could not copy Oxide.Core.dll from Dependencies\$managed"
             Write-Host $_.Exception.Message
@@ -175,8 +175,8 @@ function Start-Patcher {
     # Attempt to patch game using the Oxide patcher
     try {
         $opj_name = "$root_dir\Games\$project\$game_name"
-        if ($branch -ne "public") { $opj_name = "$opj_name-$branch" }
-        Start-Process "$deps_dir\OxidePatcher.exe" -WorkingDirectory $managed_dir -ArgumentList "-c -p $managed_dir $opj_name.opj" -NoNewWindow -Wait
+        if ("$branch" -ne "public") { $opj_name = "$opj_name-$branch" }
+        Start-Process "$deps_dir\OxidePatcher.exe" -WorkingDirectory "$managed_dir" -ArgumentList "-c -p `"$managed_dir`" $opj_name.opj" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete OxidePatcher process"
         Write-Host $_.Exception.Message
