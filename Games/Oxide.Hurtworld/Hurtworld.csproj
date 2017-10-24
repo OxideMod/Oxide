@@ -66,7 +66,7 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <None Remove="**\DepotDownloader.config" />
+    <None Remove="DepotDownloader.config" />
     <None Remove="Files\**" />
     <None Remove="Patched\**" />
   </ItemGroup>

@@ -88,7 +88,7 @@
     <Reference Include="websocket-sharp">
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\websocket-sharp.dll</HintPath>
     </Reference>
-    <None Remove="**\DepotDownloader.config" />
+    <None Remove="DepotDownloader.config" />
     <None Remove="Files\**" />
     <None Remove="Patched\**" />
   </ItemGroup>

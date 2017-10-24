@@ -56,7 +56,7 @@
     <Reference Include="VRage.Render">
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\VRage.Render.dll</HintPath>
     </Reference>
-    <None Remove="**\DepotDownloader.config" />
+    <None Remove="DepotDownloader.config" />
     <None Remove="Files\**" />
     <None Remove="Patched\**" />
   </ItemGroup>

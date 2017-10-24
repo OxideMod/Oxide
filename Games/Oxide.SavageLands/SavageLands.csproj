@@ -53,7 +53,7 @@
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.dll</HintPath>
     </Reference>
     <Compile Remove="SavageLandsCommands.cs" /> <!-- Remove when ready -->
-    <None Remove="**\DepotDownloader.config" />
+    <None Remove="DepotDownloader.config" />
     <None Remove="Files\**" />
     <None Remove="Patched\**" />
   </ItemGroup>
