@@ -32,12 +32,13 @@
       <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework">
-      <HintPath>Dependencies\Microsoft.Xna.Framework.dll</HintPath>
+      <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Microsoft.Xna.Framework.dll</HintPath>
     </Reference>
     <Reference Include="TerrariaServer">
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\TerrariaServer.exe</HintPath>
     </Reference>
     <None Remove="DepotDownloader.config" />
+    <None Remove="Dependencies\**" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="Clean">
