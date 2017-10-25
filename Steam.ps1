@@ -101,6 +101,7 @@ function Get-Downloader {
 
 function Get-Dependencies {
     # TODO: Check for and compare Steam buildid before downloading again
+    # TODO: Add handling for SteamGuard code entry/use
 
     # Check if Steam login information is required or not
     if ($access.ToLower() -ne "anonymous") {
