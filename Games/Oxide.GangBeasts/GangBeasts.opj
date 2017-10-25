@@ -1,6 +1,6 @@
 {
   "Name": "Gang Beasts",
-  "TargetDirectory": "E:\\Servers\\Unity\\GangBeasts\\game\\GangBeasts_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\GangBeasts\\game\\GangBeasts_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",
