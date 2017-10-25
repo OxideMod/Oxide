@@ -27,7 +27,7 @@ Support for each game and plugin language is added via extensions. When loading,
  * Oxide.ReignOfKings - _Provides support for the [Reign of Kings](http://www.reignofkings.net/) server_
  * Oxide.Rust - _Provides support for the new [Rust](http://playrust.com/) server_
  * Oxide.RustLegacy - _Provides support for the old [Rust](http://playrust.com/) Legacy server_
- * Oxide.SevenDaysTodie - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
+ * Oxide.SevenDaysToDie - _Provides support for the [7 Days to Die](http://7daystodie.com/) server_
  * Oxide.Terraria - _Provides support for the [Terraria](http://terraria.org/) server_
  * Oxide.TheForest - _Provides support for [The Forest](http://survivetheforest.com/) server_
  * Oxide.Unturned - _Provides support for the [Unturned](http://smartlydressedgames.com/) server_
