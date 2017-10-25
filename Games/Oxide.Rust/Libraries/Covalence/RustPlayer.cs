@@ -162,15 +162,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// Renames the player to specified name
         /// <param name="name"></param>
         /// </summary>
-        public void Rename(string name)
-        {
-            name = string.IsNullOrEmpty(name.Trim().Sanitize()) ? player.displayName : name.Sanitize();
-            player.net.connection.username = name.Sanitize();
-            player.displayName = name.Sanitize();
-            //player._name = name.Sanitize(); // TODO: Remove or replace if needed
-            Name = name.Sanitize();
-            player.SendNetworkUpdateImmediate();
-        }
+        public void Rename(string name) => Player.Rename(player, name);
 
         /// <summary>
         /// Teleports the player's character to the specified position

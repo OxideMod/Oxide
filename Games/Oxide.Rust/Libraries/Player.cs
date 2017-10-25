@@ -153,6 +153,22 @@ namespace Oxide.Game.Rust.Libraries
         public void Kill(BasePlayer player) => player.Die();
 
         /// <summary>
+        /// Renames the player to specified name
+        /// <param name="session"></param>
+        /// <param name="name"></param>
+        /// </summary>
+        public void Rename(BasePlayer player, string name)
+        {
+            name = string.IsNullOrEmpty(name.Trim()) ? player.displayName : name;
+            player.net.connection.username = name;
+            player.displayName = name;
+            //player._name = name; // TODO: Remove or replace if needed
+            player.SendNetworkUpdateImmediate();
+
+            //permission.UpdateNickname(player.UserIDString, name);
+        }
+
+        /// <summary>
         /// Teleports the player to the specified position
         /// </summary>
         /// <param name="player"></param>
