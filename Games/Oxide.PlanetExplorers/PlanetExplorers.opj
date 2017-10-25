@@ -1,6 +1,6 @@
 {
   "Name": "Planet Explorers",
-  "TargetDirectory": "E:\\Servers\\Unity\\PlanetExplorers\\Server\\PE_Server_Data\\Managed",
+  "TargetDirectory": "E:\\Servers\\PlanetExplorers\\Server\\PE_Server_Data\\Managed",
   "Manifests": [
     {
       "AssemblyName": "Assembly-CSharp.dll",

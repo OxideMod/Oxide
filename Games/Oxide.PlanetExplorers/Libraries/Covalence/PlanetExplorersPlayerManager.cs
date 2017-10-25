@@ -38,18 +38,19 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         internal void PlayerJoin(Player player)
         {
             var id = player.steamId.ToString();
+            var name = player.roleName.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
             {
-                record.Name = player.roleName;
+                record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
                 allPlayers.Add(id, new PlanetExplorersPlayer(player));
             }
             else
             {
-                record = new PlayerRecord {Id = player.steamId, Name = player.roleName };
+                record = new PlayerRecord {Id = player.steamId, Name = name };
                 playerData.Add(id, record);
                 allPlayers.Add(id, new PlanetExplorersPlayer(player));
             }
