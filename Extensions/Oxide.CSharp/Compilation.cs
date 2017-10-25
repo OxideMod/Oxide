@@ -231,12 +231,12 @@ namespace Oxide.Plugins
                 }
 
                 // Include implicit references detected from using statements in script
-                match = Regex.Match(line, @"^\s*using\s+([\w]+\.(?:Core|Ext|Game)\.(?:[^\.]+))[^;]*;.*$", RegexOptions.IgnoreCase);
+                match = Regex.Match(line, @"^\s*using\s+(Oxide\.(?:Core|Ext|Game)\.(?:[^\.]+))[^;]*;.*$", RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
                     var result = match.Groups[1].Value;
                     var newResult = Regex.Replace(result, @"Oxide\.[\w]+\.([\w]+)", "Oxide.$1");
-                    if (!string.IsNullOrEmpty(newResult) && File.Exists(Path.Combine(Interface.Oxide.ExtensionDirectory, result + ".dll")))
+                    if (!string.IsNullOrEmpty(newResult) && File.Exists(Path.Combine(Interface.Oxide.ExtensionDirectory, newResult + ".dll")))
                         AddReference(plugin, newResult);
                     else
                         AddReference(plugin, result);
@@ -331,6 +331,8 @@ namespace Oxide.Plugins
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
+                if (reference.Name.StartsWith("Newtonsoft.Json") || reference.Name.StartsWith("Rust.Workshop")) continue;
+
                 var referencePath = Path.Combine(Interface.Oxide.ExtensionDirectory, reference.Name + ".dll");
                 if (!File.Exists(referencePath))
                 {
