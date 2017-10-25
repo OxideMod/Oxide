@@ -195,6 +195,8 @@ namespace Oxide.Game.Hurtworld.Libraries
             // Overhead name // TODO: Implement when possible
             //var displayProxyName = session.WorldPlayerEntity.GetComponent<DisplayProxyName>();
             //displayProxyName.UpdateName(name);
+
+            //permission.UpdateNickname(session.Identity.SteamId, name);
         }
 
         /// <summary>
