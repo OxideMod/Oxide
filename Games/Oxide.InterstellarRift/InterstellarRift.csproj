@@ -14,7 +14,6 @@
     <PackageTags>gaming modding plugins dotnet</PackageTags>
     <PlatformTarget>x86</PlatformTarget>
     <TargetFramework>net45</TargetFramework>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <BundleDir>$(SolutionDir)Bundles</BundleDir>
     <GameName>InterstellarRift</GameName>
     <ManagedDir>Build</ManagedDir>
@@ -82,7 +81,7 @@
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <Target Name="DeployLocally" AfterTargets="_PackAsBuildAfterTarget" Condition="Exists('$(ProjectDir).deploy')">
+  <Target Name="LocalDeploy" AfterTargets="AfterBuild" Condition="Exists('$(ProjectDir).deploy')">
     <Exec Command="start /b /wait taskkill /f /im IR.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <ReadLinesFromFile File="$(ProjectDir).deploy">
@@ -92,5 +91,12 @@
       <DeployFiles Include="$(BundleDir)\$(GameName)\**\*.*" />
     </ItemGroup>
     <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+  <Target Name="NuGetPack" AfterTargets="AfterBuild">
+    <Exec Command="dotnet pack $(MSBuildProjectFile) --no-build -c $(Configuration)" />
+    <ItemGroup>
+      <NugetPackages Include="$(ProjectDir)bin\$(Configuration)\*.nupkg" />
+    </ItemGroup>
+    <Copy SourceFiles="@(NugetPackages)" DestinationFolder="$(UserProfile)\.nuget\packages\$(PackageId)\$(PackageVersion)" />
   </Target>
 </Project>

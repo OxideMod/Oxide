@@ -13,7 +13,6 @@
     <Copyright>Copyright (c) 2014-$([System.DateTime]::Now.Year) $(Authors)</Copyright>
     <PackageTags>gaming modding plugins unity unity3d</PackageTags>
     <TargetFramework>net35</TargetFramework>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <BundleDir>$(SolutionDir)Bundles</BundleDir>
     <GameName>Hurtworld</GameName>
     <ManagedDir>Hurtworld_Data\Managed</ManagedDir>
@@ -106,7 +105,7 @@
     <Copy SourceFiles="@(PackageFiles)" DestinationFiles="@(PackageFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(PatchedFiles)" DestinationFiles="@(PatchedFiles->'$(BundleDir)\$(GameName)\$(ManagedDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <Target Name="DeployLocally" AfterTargets="_PackAsBuildAfterTarget" Condition="Exists('$(ProjectDir).deploy')">
+  <Target Name="LocalDeploy" AfterTargets="AfterBuild" Condition="Exists('$(ProjectDir).deploy')">
     <Exec Command="start /b /wait taskkill /f /im Hurtworld.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <Exec Command="start /b /wait taskkill /f /im CSharpCompiler.exe /fi &quot;memusage gt 2&quot;" Condition="'$(OS)' == 'Windows_NT'" />
     <ReadLinesFromFile File="$(ProjectDir).deploy">
@@ -120,10 +119,17 @@
     </PropertyGroup>
     <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <Target Name="BuildBranch" AfterTargets="DeployLocally" Condition="$(SteamBranch.Contains(','))">
+  <Target Name="BuildBranch" AfterTargets="LocalDeploy" Condition="$(SteamBranch.Contains(','))">
     <PropertyGroup>
       <SteamBranch>$(SteamBranch.Split(',')[1])</SteamBranch>
     </PropertyGroup>
     <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Clean;Build" Properties="PackageId=$(AssemblyName)-$(SteamBranch);GameName=$(GameName)-$(SteamBranch);SteamBranch=$(SteamBranch)" />
+  </Target>
+  <Target Name="NuGetPack" AfterTargets="AfterBuild">
+    <Exec Command="dotnet pack $(MSBuildProjectFile) --no-build -c $(Configuration)" />
+    <ItemGroup>
+      <NugetPackages Include="$(ProjectDir)bin\$(Configuration)\*.nupkg" />
+    </ItemGroup>
+    <Copy SourceFiles="@(NugetPackages)" DestinationFolder="$(UserProfile)\.nuget\packages\$(PackageId)\$(PackageVersion)" />
   </Target>
 </Project>
