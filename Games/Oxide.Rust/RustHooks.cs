@@ -103,7 +103,7 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnBasePlayerAttacked")]
         private object IOnBasePlayerAttacked(BasePlayer player, HitInfo info)
         {
-            if (!serverInitialized || player == null || info == null || player.IsDead() || isPlayerTakingDamage) return null;
+            if (!serverInitialized || player == null || info == null || player.IsDead() || isPlayerTakingDamage || player is NPCPlayer) return null;
             if (Interface.Call("OnEntityTakeDamage", player, info) != null) return true;
 
             isPlayerTakingDamage = true;
