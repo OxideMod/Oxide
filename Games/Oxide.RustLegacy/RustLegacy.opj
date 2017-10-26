@@ -882,6 +882,68 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 56,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "bge_s",
+                "OpType": "Instruction",
+                "Operand": 58
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "SingleCharCmdPrefix [patch]",
+            "HookName": "SingleCharCmdPrefix",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConsoleSystem/Arg",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": ".ctor",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "z0QuVFIEOq9662HtTNmAnQZ1lFnN3/SOnQk10+nSJnY=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 76,
+            "RemoveCount": 1,
+            "Instructions": [
+              {
+                "OpCode": "bge_s",
+                "OpType": "Instruction",
+                "Operand": 78
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "SingleCharCmdSuffix [patch]",
+            "HookName": "SingleCharCmdSuffix",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConsoleSystem/Arg",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": ".ctor",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.String"
+              ]
+            },
+            "MSILHash": "z0QuVFIEOq9662HtTNmAnQZ1lFnN3/SOnQk10+nSJnY=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
         }
       ],
       "Modifiers": [

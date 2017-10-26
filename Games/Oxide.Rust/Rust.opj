@@ -6228,8 +6228,8 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "SingleCharacterCmdPrefix [patch]",
-            "HookName": "SingleCharacterCmdPrefix",
+            "Name": "SingleCharCmdPrefix [patch]",
+            "HookName": "SingleCharCmdPrefix",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem/Arg",
             "Flagged": false,
@@ -6283,8 +6283,8 @@
               }
             ],
             "HookTypeName": "Modify",
-            "Name": "SingleCharacterCmdSuffix [patch]",
-            "HookName": "SingleCharacterCmdSuffix",
+            "Name": "SingleCharCmdSuffix [patch]",
+            "HookName": "SingleCharCmdSuffix",
             "AssemblyName": "Facepunch.Console.dll",
             "TypeName": "ConsoleSystem/Arg",
             "Flagged": false,
@@ -6297,7 +6297,7 @@
               ]
             },
             "MSILHash": "aUqksG/Vue+Ee9YQ02XTxPp4N3p/dzLWm2+USDGcVRQ=",
-            "BaseHookName": "SingleCharacterCmdPrefix [patch]",
+            "BaseHookName": "SingleCharCmdPrefix [patch]",
             "HookCategory": "_Patches"
           }
         }
