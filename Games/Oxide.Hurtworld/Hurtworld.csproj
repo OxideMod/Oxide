@@ -125,7 +125,7 @@
     </PropertyGroup>
     <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Clean;Build" Properties="PackageId=$(AssemblyName)-$(SteamBranch);GameName=$(GameName)-$(SteamBranch);SteamBranch=$(SteamBranch)" />
   </Target>
-  <Target Name="NuGetPack" AfterTargets="AfterBuild" Condition="'$(env:APPVEYOR)' == 'True' Or '$(LocalDev)' == 'True'">
+  <Target Name="NuGetPack" AfterTargets="AfterBuild" Condition="'$(Appveyor)' == 'True' Or '$(LocalDev)' == 'True'">
     <Exec Command="dotnet pack $(MSBuildProjectFile) --no-build -c $(Configuration)" />
     <ItemGroup>
       <NugetPackages Include="$(ProjectDir)bin\$(Configuration)\*.nupkg" />

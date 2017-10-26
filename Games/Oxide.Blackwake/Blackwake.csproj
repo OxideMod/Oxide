@@ -19,6 +19,7 @@
     <SteamAppId>423410</SteamAppId>
     <SteamBranch>public</SteamBranch>
     <SteamLogin>anonymous</SteamLogin>
+    <DeobfuscatorTool>beebyte</DeobfuscatorTool>
     <!--
       Workaround for targeting net35 with dotnet CLI
       https://github.com/Microsoft/msbuild/issues/1333#issuecomment-296346352
@@ -97,7 +98,7 @@
     </ItemGroup>
     <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <Target Name="NuGetPack" AfterTargets="AfterBuild" Condition="'$(env:APPVEYOR)' == 'True' Or '$(LocalDev)' == 'True'">
+  <Target Name="NuGetPack" AfterTargets="AfterBuild" Condition="'$(Appveyor)' == 'True' Or '$(LocalDev)' == 'True'">
     <Exec Command="dotnet pack $(MSBuildProjectFile) --no-build -c $(Configuration)" />
     <ItemGroup>
       <NugetPackages Include="$(ProjectDir)bin\$(Configuration)\*.nupkg" />

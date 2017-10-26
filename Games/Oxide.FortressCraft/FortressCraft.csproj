@@ -101,7 +101,7 @@
     </ItemGroup>
     <Copy Condition="'$(DeployPath)' != ''" SourceFiles="@(DeployFiles)" DestinationFiles="@(DeployFiles->'$(DeployPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
-  <Target Name="NuGetPack" AfterTargets="AfterBuild" Condition="'$(env:APPVEYOR)' == 'True' Or '$(LocalDev)' == 'True'">
+  <Target Name="NuGetPack" AfterTargets="AfterBuild" Condition="'$(Appveyor)' == 'True' Or '$(LocalDev)' == 'True'">
     <Exec Command="dotnet pack $(MSBuildProjectFile) --no-build -c $(Configuration)" />
     <ItemGroup>
       <NugetPackages Include="$(ProjectDir)bin\$(Configuration)\*.nupkg" />
