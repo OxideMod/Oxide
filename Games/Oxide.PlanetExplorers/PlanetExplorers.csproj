@@ -18,7 +18,7 @@
     <ManagedDir>Server\PE_Server_Data\Managed</ManagedDir>
     <SteamAppId>237870</SteamAppId>
     <SteamBranch>public</SteamBranch>
-    <SteamLogin>required</SteamLogin>
+    <SteamLogin>disabled</SteamLogin> <!-- disabled until spare account owns -->
     <!--
       Workaround for targeting net35 with dotnet CLI
       https://github.com/Microsoft/msbuild/issues/1333#issuecomment-296346352
@@ -56,7 +56,7 @@
   <Target Name="Clean">
     <RemoveDir Directories="$(BundleDir)\$(GameName); $(SolutionDir)Games\Dependencies\$(PackageId)" />
   </Target>
-  <Target Name="Build" Condition="('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir).steamlogin')" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
+  <Target Name="Build" Condition="'$(SteamLogin)' != 'disabled' And (('$(STEAM_USERNAME)' != '' And '$(STEAM_PASSWORD)' != '') Or Exists('$(SolutionDir).steamlogin'))" DependsOnTargets="$(BuildDependsOn)" Returns="$(TargetPath)" />
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
     <ItemGroup>
       <ReferencePath Condition="'%(FileName)' == 'Oxide.References'">
