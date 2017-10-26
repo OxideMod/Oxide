@@ -3,6 +3,7 @@ using Oxide.Core.Extensions;
 using Oxide.Core.RemoteConsole;
 using Oxide.Plugins;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -38,6 +39,13 @@ namespace Oxide.Game.SevenDays
         /// Gets the version of this extension
         /// </summary>
         public override VersionNumber Version => AssemblyVersion;
+
+        /// <summary>
+        /// Default game-specific references for use in plugins
+        /// </summary>
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+        };
 
         /// <summary>
         /// List of assemblies allowed for use in plugins
