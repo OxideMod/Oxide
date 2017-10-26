@@ -19,9 +19,15 @@ if ($depot) { $depot = "-depot $depot" }
 $root_dir = $PSScriptRoot
 $deps_dir = "$root_dir\Games\Dependencies"
 $depot_dir = "$deps_dir\.DepotDownloader"
-$patch_dir = if ("$branch" -ne "public") { "$deps_dir\$project-$branch" } else { "$deps_dir\$project" }
-$managed_dir = "$patch_dir\$managed"
 $project_dir = "$root_dir\Games\$project"
+if ("$branch" -ne "public" -and (Test-Path "$project_dir\$game_name-$branch.opj")) {
+    $opj_name = "$project_dir\$game_name-$branch"
+    $patch_dir = "$deps_dir\$project-$branch"
+} else {
+    $opj_name = "$project_dir\$game_name"
+    $patch_dir = "$deps_dir\$project"
+}
+$managed_dir = "$patch_dir\$managed"
 New-Item "$depot_dir", "$patch_dir", "$managed_dir" -ItemType Directory -Force
 
 function Find-Dependencies {
@@ -241,7 +247,6 @@ function Start-Patcher {
 
     # Attempt to patch game using the Oxide patcher
     try {
-        $opj_name = if ("$branch" -ne "public") { "$root_dir\Games\$project\$game_name-$branch" } else { "$root_dir\Games\$project\$game_name" }
         Start-Process "$deps_dir\OxidePatcher.exe" -WorkingDirectory "$managed_dir" -ArgumentList "-c -p `"$managed_dir`" $opj_name.opj" -NoNewWindow -Wait
     } catch {
         Write-Host "Could not start or complete OxidePatcher process"
