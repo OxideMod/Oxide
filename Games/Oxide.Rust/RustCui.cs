@@ -1,11 +1,11 @@
 ﻿extern alias Oxide;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using Oxide::Newtonsoft.Json;
 using Oxide::Newtonsoft.Json.Converters;
 using Oxide::Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,14 +32,16 @@ namespace Oxide.Game.Rust.Cui
         public static bool AddUi(BasePlayer player, string json)
         {
             if (player?.net == null) return false;
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo { connection = player.net.connection }, null, "AddUI", new Facepunch.ObjectList(json));
+
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo { connection = player.net.connection }, null, "AddUI", json);
             return true;
         }
 
         public static bool DestroyUi(BasePlayer player, string elem)
         {
             if (player?.net == null) return false;
-            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo {connection = player.net.connection}, null, "DestroyUI", new Facepunch.ObjectList(elem));
+
+            CommunityEntity.ServerInstance.ClientRPCEx(new Network.SendInfo { connection = player.net.connection }, null, "DestroyUI", elem);
             return true;
         }
 
@@ -162,7 +164,7 @@ namespace Oxide.Game.Rust.Cui
         public float FadeOut { get; set; }
     }
 
-    [JsonConverter(typeof (ComponentConverter))]
+    [JsonConverter(typeof(ComponentConverter))]
     public interface ICuiComponent
     {
         [JsonProperty("type")]
@@ -197,7 +199,7 @@ namespace Oxide.Game.Rust.Cui
 
         //The positioning of the text reliative to its RectTransform.
         [DefaultValue(TextAnchor.UpperLeft)]
-        [JsonConverter(typeof (StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("align")]
         public TextAnchor Align { get; set; } = TextAnchor.UpperLeft;
 
@@ -222,7 +224,7 @@ namespace Oxide.Game.Rust.Cui
         public string Color { get; set; } = "1.0 1.0 1.0 1.0";
 
         [DefaultValue(Image.Type.Simple)]
-        [JsonConverter(typeof (StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("imagetype")]
         public Image.Type ImageType { get; set; } = Image.Type.Simple;
 
@@ -280,7 +282,7 @@ namespace Oxide.Game.Rust.Cui
 
         //How the Image is draw.
         [DefaultValue(Image.Type.Simple)]
-        [JsonConverter(typeof (StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("imagetype")]
         public Image.Type ImageType { get; set; } = Image.Type.Simple;
 
@@ -390,29 +392,37 @@ namespace Oxide.Game.Rust.Cui
             switch (typeName)
             {
                 case "UnityEngine.UI.Text":
-                    type = typeof (CuiTextComponent);
+                    type = typeof(CuiTextComponent);
                     break;
+
                 case "UnityEngine.UI.Image":
-                    type = typeof (CuiImageComponent);
+                    type = typeof(CuiImageComponent);
                     break;
+
                 case "UnityEngine.UI.RawImage":
-                    type = typeof (CuiRawImageComponent);
+                    type = typeof(CuiRawImageComponent);
                     break;
+
                 case "UnityEngine.UI.Button":
-                    type = typeof (CuiButtonComponent);
+                    type = typeof(CuiButtonComponent);
                     break;
+
                 case "UnityEngine.UI.Outline":
-                    type = typeof (CuiOutlineComponent);
+                    type = typeof(CuiOutlineComponent);
                     break;
+
                 case "UnityEngine.UI.InputField":
-                    type = typeof (CuiInputFieldComponent);
+                    type = typeof(CuiInputFieldComponent);
                     break;
+
                 case "NeedsCursor":
-                    type = typeof (CuiNeedsCursorComponent);
+                    type = typeof(CuiNeedsCursorComponent);
                     break;
+
                 case "RectTransform":
-                    type = typeof (CuiRectTransformComponent);
+                    type = typeof(CuiRectTransformComponent);
                     break;
+
                 default:
                     return null;
             }
@@ -421,7 +431,7 @@ namespace Oxide.Game.Rust.Cui
             return target;
         }
 
-        public override bool CanConvert(Type objectType) => objectType == typeof (ICuiComponent);
+        public override bool CanConvert(Type objectType) => objectType == typeof(ICuiComponent);
 
         public override bool CanWrite => false;
     }
