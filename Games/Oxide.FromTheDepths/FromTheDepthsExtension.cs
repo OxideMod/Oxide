@@ -118,7 +118,7 @@ namespace Oxide.Game.FromTheDepths
             HostMenuGUI.Instance.LaunchServer();
             GameLobbyGUI.Instance.StartGame();
 
-            Application.RegisterLogCallback(HandleLog);
+            Application.logMessageReceived += HandleLog;
 
             Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
