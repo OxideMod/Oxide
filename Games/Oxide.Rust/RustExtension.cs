@@ -194,34 +194,27 @@ namespace Oxide.Game.Rust
             if (type == LogType.Warning)
             {
                 color = ConsoleColor.Yellow;
-                ConVar.Server.Log("Log.Warning.txt", message);
                 remoteType = "warning";
             }
             else if (type == LogType.Error)
             {
                 color = ConsoleColor.Red;
-                ConVar.Server.Log("Log.Error.txt", message);
                 remoteType = "error";
             }
             else if (type == LogType.Exception)
             {
                 color = ConsoleColor.Red;
-                ConVar.Server.Log("Log.Exception.txt", message);
                 remoteType = "error";
             }
             else if (type == LogType.Assert)
             {
                 color = ConsoleColor.Red;
-                ConVar.Server.Log("Log.Assert.txt", message);
                 remoteType = "error";
             }
             else if (message.ToLower().StartsWith("[chat]"))
             {
-                ConVar.Server.Log("Log.Chat.txt", message);
                 remoteType = "chat";
             }
-            else
-                ConVar.Server.Log("Log.Log.txt", message);
 
             Interface.Oxide.ServerConsole.AddMessage(message, color);
             Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
