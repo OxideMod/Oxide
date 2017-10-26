@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Extensions;
+using Oxide.Core.Logging;
+using Oxide.Core.RemoteConsole;
+using Oxide.Plugins;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Oxide.Core;
-using Oxide.Core.Extensions;
-using Oxide.Core.RemoteConsole;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
-using Oxide.Core.Logging;
-using Oxide.Game.Nomad.Libraries.Covalence;
 
 namespace Oxide.Game.Nomad
 {
@@ -42,15 +41,32 @@ namespace Oxide.Game.Nomad
         /// </summary>
         public override VersionNumber Version => AssemblyVersion;
 
+        /// <summary>
+        /// Default game-specific references for use in plugins
+        /// </summary>
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+        };
+
+        /// <summary>
+        /// List of assemblies allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistAssemblies => new[]
         {
-            "mscorlib", "System", "System.Core"
+            "mscorlib", "Oxide.Core", "System", "System.Core"
         };
+
+        /// <summary>
+        /// List of namespaces allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistNamespaces => new[]
         {
             "System.Collections", "System.Security.Cryptography", "System.Text"
         };
 
+        /// <summary>
+        /// List of filter matches to apply to console output
+        /// </summary>
         public static string[] Filter =
         {
         };
@@ -87,6 +103,8 @@ namespace Oxide.Game.Nomad
         /// </summary>
         public override void OnModLoad()
         {
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
+
             if (!Interface.Oxide.EnableConsole()) return;
 
             // TODO: Add console log handling

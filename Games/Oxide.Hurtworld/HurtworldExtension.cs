@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.RemoteConsole;
 using Oxide.Plugins;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Oxide.Game.Hurtworld
@@ -40,11 +40,17 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         public override VersionNumber Version => AssemblyVersion;
 
+        /// <summary>
+        /// Default game-specific references for use in plugins
+        /// </summary>
         internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
         {
             "UnityEngine.UI"
         };
 
+        /// <summary>
+        /// List of assemblies allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistAssemblies => new[]
         {
             "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine", "uLink"
@@ -125,8 +131,10 @@ namespace Oxide.Game.Hurtworld
         /// </summary>
         public override void OnModLoad()
         {
-            Application.logMessageReceived += HandleLog;
             CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
+
+            Application.logMessageReceived += HandleLog;
+
             if (Interface.Oxide.EnableConsole()) Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
         }
 

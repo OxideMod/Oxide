@@ -220,6 +220,7 @@ namespace Oxide.Plugins
                 if (match.Success)
                 {
                     var result = match.Groups[1].Value;
+                    // TODO: Fix Oxide.References to avoid these and other dependency conflicts
                     if (!result.StartsWith("Oxide.") && !result.StartsWith("Newtonsoft.Json") && !result.StartsWith("Rust.Workshop"))
                     {
                         AddReference(plugin, result);
@@ -331,6 +332,7 @@ namespace Oxide.Plugins
             // Include references made by the referenced assembly
             foreach (var reference in assembly.GetReferencedAssemblies())
             {
+                // TODO: Fix Oxide.References to avoid these and other dependency conflicts
                 if (reference.Name.StartsWith("Newtonsoft.Json") || reference.Name.StartsWith("Rust.Workshop")) continue;
 
                 var referencePath = Path.Combine(Interface.Oxide.ExtensionDirectory, reference.Name + ".dll");

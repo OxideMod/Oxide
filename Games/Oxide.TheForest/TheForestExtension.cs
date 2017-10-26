@@ -1,11 +1,13 @@
-﻿﻿using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Bolt;
+﻿using Bolt;
 using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.RemoteConsole;
+using Oxide.Plugins;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Oxide.Game.TheForest
@@ -40,15 +42,32 @@ namespace Oxide.Game.TheForest
         /// </summary>
         public override VersionNumber Version => AssemblyVersion;
 
+        /// <summary>
+        /// Default game-specific references for use in plugins
+        /// </summary>
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+        };
+
+        /// <summary>
+        /// List of assemblies allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistAssemblies => new[]
         {
             "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
         };
+
+        /// <summary>
+        /// List of namespaces allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistNamespaces => new[]
         {
             "Bolt", "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "TheForest", "UnityEngine"
         };
 
+        /// <summary>
+        /// List of filter matches to apply to console output
+        /// </summary>
         public static string[] Filter =
         {
             "------- Rewired System Info -------",
@@ -105,6 +124,8 @@ namespace Oxide.Game.TheForest
         /// </summary>
         public override void OnModLoad()
         {
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
+
             if (!Directory.Exists("logs")) Directory.CreateDirectory("logs");
             if (File.Exists(logFileName)) File.Delete(logFileName);
             var logStream = File.AppendText(logFileName);
@@ -189,6 +210,7 @@ namespace Oxide.Game.TheForest
                 color = ConsoleColor.Red;
                 remoteType = "error";
             }
+
             Interface.Oxide.ServerConsole.AddMessage(message, color);
             Interface.Oxide.RemoteConsole.SendMessage(new RemoteMessage
             {

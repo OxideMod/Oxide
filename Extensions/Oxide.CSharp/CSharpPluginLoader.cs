@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Plugins;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Oxide.Core;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Plugins
 {
     public class CSharpPluginLoader : PluginLoader
     {
-        public static string[] DefaultReferences = { "mscorlib", "System", "System.Core", "System.Data", "Oxide.Core", "Oxide.CSharp" };
+        public static string[] DefaultReferences = { "mscorlib", "Oxide.Core", "Oxide.CSharp", "System", "System.Core", "System.Data" };
         public static HashSet<string> PluginReferences = new HashSet<string>(DefaultReferences);
         public static CSharpPluginLoader Instance;
         private static Dictionary<string, CompilablePlugin> plugins = new Dictionary<string, CompilablePlugin>();

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.RemoteConsole;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Oxide.Game.Blackwake
@@ -38,10 +39,24 @@ namespace Oxide.Game.Blackwake
         /// </summary>
         public override VersionNumber Version => AssemblyVersion;
 
+        /// <summary>
+        /// Default game-specific references for use in plugins
+        /// </summary>
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+        };
+
+        /// <summary>
+        /// List of assemblies allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistAssemblies => new[]
         {
             "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
         };
+
+        /// <summary>
+        /// List of namespaces allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistNamespaces => new[]
         {
             "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine"
@@ -105,15 +120,19 @@ namespace Oxide.Game.Blackwake
                 case 4:
                     maxPlayers = 16;
                     break;
+
                 case 2:
                     maxPlayers = 30;
                     break;
+
                 case 5:
                     maxPlayers = 32;
                     break;
+
                 case 6:
                     maxPlayers = 52;
                     break;
+
                 case 7:
                     maxPlayers = 54;
                     break;

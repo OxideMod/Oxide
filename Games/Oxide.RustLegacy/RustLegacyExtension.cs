@@ -1,10 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.RemoteConsole;
 using Oxide.Game.RustLegacy.Libraries;
+using Oxide.Plugins;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Oxide.Game.RustLegacy
@@ -39,16 +41,33 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public override VersionNumber Version => AssemblyVersion;
 
+        /// <summary>
+        /// Default game-specific references for use in plugins
+        /// </summary>
+        internal static readonly HashSet<string> DefaultReferences = new HashSet<string>
+        {
+        };
+
+        /// <summary>
+        /// List of assemblies allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistAssemblies => new[]
         {
-            "Assembly-CSharp", "DestMath", "mscorlib", "protobuf-net", "RustBuild", "System", "System.Core", "UnityEngine", "uLink"
+            "Assembly-CSharp", "DestMath", "mscorlib", "Oxide.Core", "RustBuild", "System", "System.Core", "UnityEngine", "uLink"
         };
+
+        /// <summary>
+        /// List of namespaces allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistNamespaces => new[]
         {
             "Dest", "Facepunch", "Network", "ProtoBuf", "PVT", "Rust", "Steamworks", "System.Collections", "System.Security.Cryptography",
             "System.Text", "UnityEngine", "uLink"
         };
 
+        /// <summary>
+        /// List of filter matches to apply to console output
+        /// </summary>
         public static string[] Filter =
         {
             "Server DataDir",
@@ -95,6 +114,8 @@ namespace Oxide.Game.RustLegacy
         /// </summary>
         public override void OnModLoad()
         {
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
+
             if (!Interface.Oxide.EnableConsole(true)) return;
 
             ConsoleSystem.RegisterLogCallback(HandleLog, true);

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Extensions;
 using Oxide.Core.RemoteConsole;
+using Oxide.Plugins;
+using System;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Oxide.Game.SevenDays
@@ -38,15 +39,25 @@ namespace Oxide.Game.SevenDays
         /// </summary>
         public override VersionNumber Version => AssemblyVersion;
 
+        /// <summary>
+        /// List of assemblies allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistAssemblies => new[]
         {
-            "Assembly-CSharp", "mscorlib", "System", "System.Core", "UnityEngine"
+            "Assembly-CSharp", "mscorlib", "Oxide.Core", "System", "System.Core", "UnityEngine"
         };
+
+        /// <summary>
+        /// List of namespaces allowed for use in plugins
+        /// </summary>
         public override string[] WhitelistNamespaces => new[]
         {
             "Steamworks", "System.Collections", "System.Security.Cryptography", "System.Text", "UnityEngine"
         };
 
+        /// <summary>
+        /// List of filter matches to apply to console output
+        /// </summary>
         public static string[] Filter =
         {
             "* SKY INITIALIZED",
@@ -139,6 +150,8 @@ namespace Oxide.Game.SevenDays
         /// </summary>
         public override void OnModLoad()
         {
+            CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
+
             if (!Interface.Oxide.EnableConsole()) return;
 
             Application.logMessageReceived += HandleLog;
