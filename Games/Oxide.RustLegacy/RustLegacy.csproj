@@ -75,11 +75,11 @@
       <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(PackageId)\$(ManagedDir)\Assembly-CSharp.dll; $(SolutionDir)Games\$(PackageId)\$(ManagedDir)\*_Original.dll" />
       <ManagedFiles Include="$(SolutionDir)Games\Dependencies\$(PackageId)\$(ManagedDir)\uLink.dll" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\$(OutputPath)Oxide.CSharp.dll" />
-      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\..\Dependencies\$(PackageId)\$(ManagedDir)\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.CSharp\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\$(OutputPath)Oxide.MySql.dll" />
-      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\..\Dependencies\$(PackageId)\$(ManagedDir)\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.MySql\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\$(OutputPath)Oxide.SQLite.dll" />
-      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\..\Dependencies\$(PackageId)\$(ManagedDir)\**\*.*" />
+      <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.SQLite\**\*.*" />
       <ManagedFiles Include="$(SolutionDir)Extensions\Oxide.Unity\$(OutputPath)Oxide.Unity.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.Core\$(OutputPath)Oxide.*.dll" />
       <ManagedFiles Include="$(SolutionDir)Oxide.References\Dependencies\**\*.*" Exclude="$(SolutionDir)Oxide.References\Dependencies\Mono.Posix.dll; $(SolutionDir)Oxide.References\Dependencies\protobuf-net.dll" />
