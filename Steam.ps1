@@ -101,57 +101,67 @@ function Get-Downloader {
     } else {
         Write-Host "Latest version ($version) of DepotDownloader already downloaded"
     }
-
-    Get-Dependencies
 }
 
 function Get-Dependencies {
-    # TODO: Check for and compare Steam buildid before downloading again
-    # TODO: Add handling for SteamGuard code entry/use
-
-    # Check if Steam login information is required or not
-    if ($access.ToLower() -ne "anonymous") {
-        if (Test-Path "$root_dir\.steamlogin") {
-            $steam_login = Get-Content "$root_dir\.steamlogin"
-            if ($steam_login.Length -ne 2) {
-                Write-Host "Steam username AND password not set in .steamlogin file"
-                exit 1
+    if ($access.ToLower() -ne "nosteam") {
+        # TODO: Add handling for SteamGuard code entry/use
+        # Check if Steam login information is required or not
+        if ($access.ToLower() -ne "anonymous") {
+            if (Test-Path "$root_dir\.steamlogin") {
+                $steam_login = Get-Content "$root_dir\.steamlogin"
+                if ($steam_login.Length -ne 2) {
+                    Write-Host "Steam username AND password not set in .steamlogin file"
+                    exit 1
+                } else {
+                    $login = "-username $($steam_login[0]) -password $($steam_login[1])"
+                }
+            } elseif ($env:STEAM_USERNAME -and $env:STEAM_PASSWORD) {
+                $login = "-username $env:STEAM_USERNAME -password $env:STEAM_PASSWORD"
             } else {
-                $login = "-username $($steam_login[0]) -password $($steam_login[1])"
+                Write-Host "No Steam credentials found, skipping build for $game"
+                exit 1
             }
-        } elseif ($env:STEAM_USERNAME -and $env:STEAM_PASSWORD) {
-            $login = "-username $env:STEAM_USERNAME -password $env:STEAM_PASSWORD"
-        } else {
-            Write-Host "No Steam credentials found, skipping build for $game"
+        }
+
+        # Cleanup existing game files, else they aren't always the latest
+        #Remove-Item $managed_dir -Include *.dll, *.exe -Exclude "Oxide.Core.dll" -Verbose –Force
+
+        # TODO: Check for and compare Steam buildid before downloading again
+
+        # Attempt to run DepotDownloader to get game DLLs
+        try {
+            Start-Process "$depot_dir\DepotDownloader.exe" -ArgumentList "$login -app $appid -branch $branch $depot -dir $patch_dir -filelist $patch_dir\.references" -NoNewWindow -Wait
+        } catch {
+            Write-Host "Could not start or complete DepotDownloader process"
+            Write-Host $_.Exception.Message
+            exit 1
+        }
+
+        # TODO: Store Steam buildid somewhere for comparison during next check
+        # TODO: Confirm all dependencies were downloaded (no 0kb files), else stop/retry and error with details
+    }
+
+    # TODO: Check Oxide.Core.dll version and update if needed
+    # Grab latest Oxide.Core.dll build
+    Write-Host "Copying latest build of Oxide.Core.dll for $game"
+    #$core_version = Get-ChildItem -Directory $core_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
+    if (!(Test-Path "$deps_dir\Oxide.Core.dll")) {
+        try {
+            Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" "$deps_dir" -Force
+        } catch {
+            Write-Host "Could not copy Oxide.Core.dll to $deps_dir"
+            Write-Host $_.Exception.Message
             exit 1
         }
     }
-
-    # Cleanup existing game files, else they aren't always the latest
-    #Remove-Item $managed_dir -Include *.dll, *.exe -Exclude "Oxide.Core.dll" -Verbose –Force
-
-    # Attempt to run DepotDownloader to get game DLLs
-    try {
-        Start-Process "$depot_dir\DepotDownloader.exe" -ArgumentList "$login -app $appid -branch $branch $depot -dir $patch_dir -filelist $patch_dir\.references" -NoNewWindow -Wait
-    } catch {
-        Write-Host "Could not start or complete DepotDownloader process"
-        Write-Host $_.Exception.Message
-        exit 1
-    }
-
-    # TODO: Store Steam buildid somewhere for comparison during next check
-    # TODO: Confirm all dependencies were downloaded (no 0kb files), else stop/retry and error with details
-
-    # TODO: Check Oxide.Core.dll version and update if needed
-    if (!(Test-Path "Dependencies\$managed\Oxide.Core.dll")) {
-        # Grab latest Oxide.Core.dll build
-        Write-Host "Grabbing latest build of Oxide.Core.dll"
-        #$core_version = Get-ChildItem -Directory $core_path | Where-Object { $_.PSIsContainer } | Sort-Object CreationTime -desc | Select-Object -f 1
+    Write-Host "Copying latest build of Oxide.Core.dll for OxidePatcher"
+    Write-Host $managed_dir
+    if (!(Test-Path "$managed_dir\Oxide.Core.dll")) {
         try {
-            Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" "$deps_dir" -Force
             Copy-Item "..\..\Oxide.Core\bin\Release\$dotnet\Oxide.Core.dll" "$managed_dir" -Force
         } catch {
-            Write-Host "Could not copy Oxide.Core.dll from Dependencies\$managed"
+            Write-Host "Could not copy Oxide.Core.dll to $managed_dir"
             Write-Host $_.Exception.Message
             exit 1
         }
@@ -256,5 +266,6 @@ function Start-Patcher {
 }
 
 Find-Dependencies
+Get-Dependencies
 Get-Deobfuscators
 Get-Patcher
