@@ -1,17 +1,15 @@
 ﻿extern alias Oxide;
-
+using Oxide.Core;
+using Oxide.Core.CSharp;
+using Oxide::Mono.Cecil;
+using Oxide::Mono.Cecil.Cil;
+using Oxide::Mono.Cecil.Rocks;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using Oxide.Core;
-using Oxide.Core.CSharp;
-using Oxide::Mono.Cecil;
-using Oxide::Mono.Cecil.Cil;
-using Oxide::Mono.Cecil.Rocks;
-
 using MethodAttributes = Oxide::Mono.Cecil.MethodAttributes;
 using MethodBody = Oxide::Mono.Cecil.Cil.MethodBody;
 

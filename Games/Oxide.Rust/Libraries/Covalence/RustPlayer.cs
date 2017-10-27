@@ -1,8 +1,8 @@
-﻿using System;
-using System.Globalization;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -33,7 +33,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             this.player = player;
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Objects
 
@@ -47,7 +47,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -101,7 +101,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -183,7 +183,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public void Unban() => Player.Unban(steamId);
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -211,7 +211,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -246,6 +246,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
                 case CommandType.Chat:
                     Message(message);
                     break;
+
                 case CommandType.Console:
                     Command($"echo {message}");
                     break;
@@ -259,7 +260,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="args"></param>
         public void Reply(string message, params object[] args) => Reply(string.Format(message, args));
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -301,7 +302,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
 
@@ -331,6 +332,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.RustPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

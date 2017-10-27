@@ -103,7 +103,7 @@
             return a.Patch <= b.Patch;
         }
 
-        #endregion
+        #endregion Operator Overloads
 
         /// <summary>
         /// Compares this version for equality to the specified object

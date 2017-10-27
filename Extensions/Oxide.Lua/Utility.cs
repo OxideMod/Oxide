@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NLua;
+using Oxide.Core.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
-using NLua;
-using Oxide.Core.Configuration;
 
 namespace Oxide.Core.Lua
 {
@@ -108,7 +108,7 @@ namespace Oxide.Core.Lua
             {
                 if (tbl[path[i]] != null) continue;
                 lua.NewTable("tmp");
-                var table = (LuaTable) lua["tmp"];
+                var table = (LuaTable)lua["tmp"];
                 tbl[path[i]] = table;
                 lua["tmp"] = null;
                 tbl = table;

@@ -20,7 +20,7 @@ namespace Oxide.Core.Unity
 
         private OxideMod oxideMod;
 
-        void Awake()
+        private void Awake()
         {
             oxideMod = Interface.Oxide;
 
@@ -32,7 +32,7 @@ namespace Oxide.Core.Unity
                 var logCallback = logCallbackField?.GetValue(null) as Application.LogCallback;
                 if (logCallback == null) Interface.Oxide.LogWarning("No Unity application log callback is registered");
 
-                #pragma warning disable 0618
+#pragma warning disable 0618
                 Application.RegisterLogCallback((message, stack_trace, type) =>
                 {
                     logCallback?.Invoke(message, stack_trace, type);
@@ -47,16 +47,16 @@ namespace Oxide.Core.Unity
             }
         }
 
-        void Update() => oxideMod.OnFrame(Time.deltaTime);
+        private void Update() => oxideMod.OnFrame(Time.deltaTime);
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (oxideMod.IsShuttingDown) return;
             oxideMod.LogWarning("The Oxide Unity Script was destroyed (creating a new instance)");
             oxideMod.NextTick(Create);
         }
 
-        void OnApplicationQuit()
+        private void OnApplicationQuit()
         {
             if (!oxideMod.IsShuttingDown)
             {
@@ -65,7 +65,7 @@ namespace Oxide.Core.Unity
             }
         }
 
-        void LogMessageReceived(string message, string stackTrace, LogType type)
+        private void LogMessageReceived(string message, string stackTrace, LogType type)
         {
             if (type == LogType.Exception) RemoteLogger.Exception(message, stackTrace);
         }

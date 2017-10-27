@@ -9,6 +9,6 @@ namespace Oxide.Game.InterstellarRift
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

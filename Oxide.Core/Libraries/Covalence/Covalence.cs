@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Oxide.Core.Logging;
+using Oxide.Core.Plugins;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Oxide.Core.Logging;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Core.Libraries.Covalence
 {

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.Net;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 {
@@ -94,7 +94,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -150,7 +150,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             //player.RPCOthers(EPacketType.PT_InGame_DelBlackList); // TODO: Needed?
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -173,6 +173,6 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             // TODO: Implement when possible
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

@@ -55,6 +55,6 @@ namespace Oxide.Core.Libraries.Covalence
         /// <returns></returns>
         IEnumerable<IPlayer> FindPlayers(string partialNameOrId);
 
-        #endregion
+        #endregion Player Finding
     }
 }

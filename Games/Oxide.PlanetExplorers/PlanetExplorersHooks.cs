@@ -9,6 +9,6 @@ namespace Oxide.Game.PlanetExplorers
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

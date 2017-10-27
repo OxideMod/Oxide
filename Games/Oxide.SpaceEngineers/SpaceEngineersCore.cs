@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.SpaceEngineers.Libraries;
 using Oxide.Game.SpaceEngineers.Libraries.Covalence;
-using Sandbox;
-using Sandbox.Game.Multiplayer;
-using Sandbox.Game.World;
-using Sandbox.ModAPI;
-using SteamSDK;
-using VRage.Game.ModAPI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Oxide.Game.SpaceEngineers
 {
@@ -90,7 +84,7 @@ namespace Oxide.Game.SpaceEngineers
             });
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -180,7 +174,7 @@ namespace Oxide.Game.SpaceEngineers
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Command Handling
 
@@ -259,6 +253,6 @@ namespace Oxide.Game.SpaceEngineers
             args = arglist.ToArray();
         }
 
-        #endregion
+        #endregion Command Handling
     }
 }

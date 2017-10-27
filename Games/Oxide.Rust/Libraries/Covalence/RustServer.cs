@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Facepunch;
+using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using Facepunch;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -17,7 +17,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
 
         internal readonly Server Server = new Server();
 
-        #endregion
+        #endregion Initialiation
 
         #region Information
 
@@ -98,7 +98,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             set { TOD_Sky.Instance.Cycle.DateTime = value; }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -153,7 +153,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             ServerUsers.Save();
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -170,6 +170,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => Server.Command(command, args);
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

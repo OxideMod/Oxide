@@ -1,7 +1,7 @@
 ﻿extern alias Oxide;
 
-using System;
 using Oxide::Newtonsoft.Json;
+using System;
 
 namespace Oxide.Core.RemoteConsole
 {
@@ -36,7 +36,7 @@ namespace Oxide.Core.RemoteConsole
                 return null;
             }
         }
-        
+
         internal string ToJSON() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }

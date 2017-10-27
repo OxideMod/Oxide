@@ -9,6 +9,6 @@ namespace Oxide.Game.FromTheDepths
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

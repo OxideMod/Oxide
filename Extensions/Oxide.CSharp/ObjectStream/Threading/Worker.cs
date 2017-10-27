@@ -5,7 +5,6 @@ namespace ObjectStream.Threading
 {
     internal class Worker
     {
-
         public event WorkerExceptionEventHandler Error;
 
         public Worker()
@@ -20,7 +19,7 @@ namespace ObjectStream.Threading
 
         private void DoWorkImpl(object oAction)
         {
-            var action = (Action) oAction;
+            var action = (Action)oAction;
             try
             {
                 action();

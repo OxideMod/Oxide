@@ -112,10 +112,12 @@ namespace Oxide.Core
                     case '{':
                         invar++;
                         break;
+
                     case '}':
                         invar--;
                         if (invar == 0) formatsb.Append("{0}");
                         break;
+
                     default:
                         if (invar == 0)
                             formatsb.Append(c);

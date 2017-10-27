@@ -35,6 +35,6 @@ namespace Oxide.Game.Unturned
             if (iplayer != null) Interface.Call("OnUserConnected", iplayer);
         }
 
-        #endregion
+        #endregion Player Hooks
     }
 }

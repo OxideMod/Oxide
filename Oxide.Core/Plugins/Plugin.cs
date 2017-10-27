@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Oxide.Core.Configuration;
+using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Oxide.Core.Configuration;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Core.Plugins
 {
@@ -368,7 +368,7 @@ namespace Oxide.Core.Plugins
             }
         }
 
-        #endregion
+        #endregion Config
 
         #region Lang
 
@@ -377,7 +377,7 @@ namespace Oxide.Core.Plugins
         /// </summary>
         protected virtual void LoadDefaultMessages() => CallHook("LoadDefaultMessages", null);
 
-        #endregion
+        #endregion Lang
 
         #region Covalence
 
@@ -462,6 +462,6 @@ namespace Oxide.Core.Plugins
             foreach (var pair in commandInfos) covalence.UnregisterCommand(pair.Key, this);
         }
 
-        #endregion
+        #endregion Covalence
     }
 }

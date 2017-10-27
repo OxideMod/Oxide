@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using CodeHatch.Common;
+﻿using CodeHatch.Common;
 using CodeHatch.Damaging;
 using CodeHatch.Engine.Behaviours;
 using CodeHatch.Engine.Core.Commands;
@@ -11,6 +9,8 @@ using CodeHatch.StarForge.Sleeping;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
 using UnityEngine;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
@@ -50,7 +50,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -111,7 +111,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -219,7 +219,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             Server.Unban(steamId);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -247,7 +247,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -287,7 +287,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             CommandManager.ExecuteCommand(steamId, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -329,7 +329,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
 
@@ -359,6 +359,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.ReignOfKingsPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

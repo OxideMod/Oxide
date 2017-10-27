@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.Net;
-using Oxide.Core.Libraries.Covalence;
 using TNet;
 
 namespace Oxide.Game.Nomad.Libraries.Covalence
@@ -70,7 +70,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             set { throw new NotImplementedException(); } // TODO: Implement when possible
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -119,7 +119,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             // TODO: Implement when possible
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -142,6 +142,6 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             // TODO: Implement when possible
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

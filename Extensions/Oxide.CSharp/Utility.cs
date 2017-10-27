@@ -11,7 +11,7 @@ namespace Oxide.Plugins
     /// <typeparam name="TValue"></typeparam>
     public class Hash<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        readonly IDictionary<TKey, TValue> dictionary;
+        private readonly IDictionary<TKey, TValue> dictionary;
 
         public Hash()
         {
@@ -40,7 +40,7 @@ namespace Oxide.Plugins
         }
 
         public ICollection<TKey> Keys => dictionary.Keys;
-        public ICollection<TValue> Values =>  dictionary.Values;
+        public ICollection<TValue> Values => dictionary.Values;
         public int Count => dictionary.Count;
         public bool IsReadOnly => dictionary.IsReadOnly;
 

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Oxide.Core.Plugins;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Core.Libraries
 {
@@ -168,14 +168,15 @@ namespace Oxide.Core.Libraries
 
             private void WaitForResponse()
             {
-                var result = request.BeginGetResponse(res => {
+                var result = request.BeginGetResponse(res =>
+                {
                     try
                     {
                         using (var response = (HttpWebResponse)request.EndGetResponse(res))
                         {
                             using (var stream = response.GetResponseStream())
-                                using (var reader = new StreamReader(stream))
-                                    ResponseText = reader.ReadToEnd();
+                            using (var reader = new StreamReader(stream))
+                                ResponseText = reader.ReadToEnd();
                             ResponseCode = (int)response.StatusCode;
                         }
                     }
@@ -188,8 +189,8 @@ namespace Oxide.Core.Libraries
                             try
                             {
                                 using (var stream = response.GetResponseStream())
-                                    using (var reader = new StreamReader(stream))
-                                        ResponseText = reader.ReadToEnd();
+                                using (var reader = new StreamReader(stream))
+                                    ResponseText = reader.ReadToEnd();
                             }
                             catch (Exception)
                             {

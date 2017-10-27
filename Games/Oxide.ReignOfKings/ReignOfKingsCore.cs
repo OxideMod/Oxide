@@ -1,8 +1,4 @@
-﻿﻿﻿﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using CodeHatch.Engine.Core.Commands;
+﻿using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using Oxide.Core;
 using Oxide.Core.Libraries;
@@ -10,6 +6,10 @@ using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.ReignOfKings.Libraries;
 using Oxide.Game.ReignOfKings.Libraries.Covalence;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 
 namespace Oxide.Game.ReignOfKings
 {
@@ -78,7 +78,7 @@ namespace Oxide.Game.ReignOfKings
 
         private static readonly FieldInfo FoldersField = typeof(FileCounter).GetField("_folders", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -151,7 +151,7 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Command Handling
 
@@ -249,7 +249,7 @@ namespace Oxide.Game.ReignOfKings
             return null;
         }
 
-        #endregion
+        #endregion Command Handling
 
         #region Helpers
 
@@ -265,6 +265,6 @@ namespace Oxide.Game.ReignOfKings
             return false;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using Oxide.Core.Libraries.Covalence;
 using Terraria;
 using Terraria.Localization;
 
@@ -72,7 +72,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             set { Main.time = value.Second; }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -135,7 +135,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -155,6 +155,6 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             // TODO: Implement when possible
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

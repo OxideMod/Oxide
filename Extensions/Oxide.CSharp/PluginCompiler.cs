@@ -1,5 +1,8 @@
 ﻿extern alias Oxide;
-
+using ObjectStream;
+using ObjectStream.Data;
+using Oxide.Core;
+using Oxide::Mono.Unix.Native;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,10 +13,6 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
-using ObjectStream;
-using ObjectStream.Data;
-using Oxide.Core;
-using Oxide::Mono.Unix.Native;
 
 namespace Oxide.Plugins
 {
@@ -45,6 +44,7 @@ namespace Oxide.Plugins
                     binaryPath = Path.Combine(rootDirectory, FileName);
                     UpdateCheck(); // TODO: Only check once on server startup
                     break;
+
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
                     FileName = $"CSharpCompiler.{(IntPtr.Size != 8 ? "x86" : "x86_x64")}";
@@ -113,7 +113,7 @@ namespace Oxide.Plugins
             }
             TraceRan = true;
         }
- 
+
         private static void DownloadCompiler(WebResponse response)
         {
             try
@@ -317,6 +317,7 @@ namespace Oxide.Plugins
                         });
                     }
                     break;
+
                 case CompilerMessageType.Error:
                     Interface.Oxide.LogError("Compilation error: {0}", message.Data);
                     compilations[message.Id].Completed();
@@ -331,6 +332,7 @@ namespace Oxide.Plugins
                         });
                     }
                     break;
+
                 case CompilerMessageType.Ready:
                     connection.PushMessage(message);
                     if (!ready)
@@ -379,6 +381,7 @@ namespace Oxide.Plugins
                     case PlatformID.Win32NT:
                         process.StartInfo.EnvironmentVariables["PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, "x86")}";
                         break;
+
                     case PlatformID.Unix:
                     case PlatformID.MacOSX:
                         process.StartInfo.EnvironmentVariables["LD_LIBRARY_PATH"] = $"{Path.Combine(Interface.Oxide.ExtensionDirectory, IntPtr.Size == 8 ? "x64" : "x86")}";

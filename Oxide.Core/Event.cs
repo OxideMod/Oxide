@@ -433,7 +433,6 @@ namespace Oxide.Core
             }
         }
 
-
         public Callback First;
         public Callback Last;
 

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
 {
@@ -20,9 +20,9 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <summary>
         /// Gets the player's last command type
         /// </summary>
-        public CommandType LastCommand { get { return CommandType.Console; } set { } }
+        public CommandType LastCommand { get => CommandType.Console; set { } }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -76,7 +76,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         public bool IsServer => true;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -166,7 +166,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -189,7 +189,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position() => new GenericPosition(0, 0, 0);
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -226,7 +226,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => ConsoleSystem.Run(ConsoleSystem.Option.Server, command, args);
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -276,6 +276,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Permissions
     }
 }

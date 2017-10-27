@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
+using System.Reflection;
 
 namespace Oxide.Game.Hurtworld.Libraries
 {
@@ -33,7 +33,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
-        #endregion
+        #endregion Utility
 
         #region Chat
 
@@ -54,6 +54,6 @@ namespace Oxide.Game.Hurtworld.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(PlayerSession session, string name, string message = null) => Player.Message(session, message, name);
 
-        #endregion
+        #endregion Chat
     }
 }

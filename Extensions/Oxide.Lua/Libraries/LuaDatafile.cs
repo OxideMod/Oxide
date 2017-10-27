@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using NLua;
+﻿using NLua;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries;
+using System.Collections.Generic;
 
 namespace Oxide.Core.Lua.Libraries
 {

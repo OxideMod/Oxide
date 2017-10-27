@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Oxide.Core.Plugins;
+using System;
 using System.Collections.Generic;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Core.Libraries
 {
@@ -383,7 +383,7 @@ namespace Oxide.Core.Libraries
                 }
             }
         }
-        
+
         internal TimerInstance AddTimer(int repetitions, float delay, Action callback, Plugin owner = null)
         {
             lock (Lock)

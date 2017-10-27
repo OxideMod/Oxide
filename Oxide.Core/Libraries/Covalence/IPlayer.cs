@@ -20,7 +20,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -64,7 +64,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         bool IsServer { get; }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -144,7 +144,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         void Unban();
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -162,7 +162,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <returns></returns>
         GenericPosition Position();
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -199,7 +199,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="args"></param>
         void Command(string command, params object[] args);
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -241,7 +241,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="group"></param>
         void RemoveFromGroup(string group);
 
-        #endregion
+        #endregion Permissions
     }
 
     /// <summary>
@@ -272,7 +272,7 @@ namespace Oxide.Core.Libraries.Covalence
             if (ReferenceEquals(a, b))
                 return true;
 
-            if ((object) a == null || (object) b == null)
+            if ((object)a == null || (object)b == null)
                 return false;
 
             return a.X.Equals(b.X) && a.Y.Equals(b.Y) && a.Z.Equals(b.Z);

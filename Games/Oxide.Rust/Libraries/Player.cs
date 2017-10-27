@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Libraries;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Oxide.Core.Libraries;
 using UnityEngine;
 
 namespace Oxide.Game.Rust.Libraries
@@ -13,7 +14,9 @@ namespace Oxide.Game.Rust.Libraries
 
         private static string ipPattern = @":{1}[0-9]{1}\d*";
 
-        #endregion
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+
+        #endregion Initialization
 
         #region Information
 
@@ -92,7 +95,7 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         public bool IsSleeping(BasePlayer player) => IsSleeping(player.userID);
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -220,7 +223,7 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         public void Unban(BasePlayer player) => Unban(player.userID);
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -231,7 +234,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <returns></returns>
         public Vector3 Position(BasePlayer player) => player.transform.position;
 
-        #endregion
+        #endregion Location
 
         #region Player Finding
 
@@ -291,7 +294,7 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         public List<BasePlayer> Sleepers => BasePlayer.sleepingPlayerList;
 
-        #endregion
+        #endregion Player Finding
 
         #region Chat and Commands
 
@@ -343,7 +346,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="args"></param>
         public void Reply(BasePlayer player, string message, string prefix = null, ulong userId = 0, params object[] args) => Reply(player, string.Format(message, args), prefix);
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Item Handling
 
@@ -415,7 +418,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="quantity"></param>
         public void GiveItem(BasePlayer player, global::Item item, int quantity = 1) => player.inventory.GiveItem(ItemManager.CreateByItemID(item.info.itemid, quantity));
 
-        #endregion
+        #endregion Item Handling
 
         #region Inventory Handling
 
@@ -432,6 +435,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="player"></param>
         public void ClearInventory(BasePlayer player) => Inventory(player)?.DoDestroy();
 
-        #endregion
+        #endregion Inventory Handling
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using CodeHatch.Common;
+﻿using CodeHatch.Common;
 using CodeHatch.Engine.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events.Players;
 using Oxide.Core;
 using Oxide.Core.Plugins;
+using System;
 
 namespace Oxide.Game.ReignOfKings
 {
@@ -71,7 +71,7 @@ namespace Oxide.Game.ReignOfKings
             }
         }
 
-        #endregion
+        #endregion Server Hooks
 
         #region Player Hooks
 
@@ -187,6 +187,6 @@ namespace Oxide.Game.ReignOfKings
             Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayerById(evt.Player.Id.ToString()));
         }
 
-        #endregion
+        #endregion Player Hooks
     }
 }

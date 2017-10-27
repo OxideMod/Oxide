@@ -1,12 +1,12 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.TheForest.Libraries.Covalence;
 using Steamworks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TheForest.Utils;
 
 namespace Oxide.Game.TheForest
@@ -48,7 +48,7 @@ namespace Oxide.Game.TheForest
 
         private bool serverInitialized;
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -120,7 +120,7 @@ namespace Oxide.Game.TheForest
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Command Handling
 
@@ -131,7 +131,7 @@ namespace Oxide.Game.TheForest
 
             // Get the full command
             var cmd = command.TrimStart('/');
-            var args = string.IsNullOrEmpty(data) ? new string[] {} : data.Split();
+            var args = string.IsNullOrEmpty(data) ? new string[] { } : data.Split();
 
             if (Interface.Call("OnServerCommand", cmd, args) != null) return true;
 
@@ -164,7 +164,7 @@ namespace Oxide.Game.TheForest
             return true;
         }
 
-        #endregion
+        #endregion Command Handling
 
         #region Helpers
 
@@ -180,6 +180,6 @@ namespace Oxide.Game.TheForest
             return false;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

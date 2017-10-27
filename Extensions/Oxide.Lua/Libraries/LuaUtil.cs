@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NLua;
+using Oxide.Core.Libraries;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using NLua;
-using Oxide.Core.Libraries;
 
 namespace Oxide.Core.Lua.Libraries
 {
@@ -71,7 +71,7 @@ namespace Oxide.Core.Lua.Libraries
             foreach (var key in table.Keys)
             {
                 if (key is string)
-                dict.Add((string)key, (string)table[key]);
+                    dict.Add((string)key, (string)table[key]);
             }
             return dict;
         }

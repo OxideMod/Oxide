@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Jint;
+﻿using Jint;
 using Jint.Native;
 using Jint.Native.Error;
 using Jint.Native.Object;
@@ -16,6 +13,9 @@ using Oxide.Core.JavaScript.Plugins;
 using Oxide.Core.Libraries;
 using Oxide.Core.Logging;
 using Oxide.Core.Plugins.Watchers;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Oxide.Core.JavaScript
 {

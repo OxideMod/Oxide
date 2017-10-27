@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Terraria.Libraries.Covalence;
-
+using System;
+using System.Collections.Generic;
 using Lang = Oxide.Core.Libraries.Lang;
 
 namespace Oxide.Game.Terraria
@@ -47,7 +46,7 @@ namespace Oxide.Game.Terraria
 
         private bool serverInitialized;
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -131,7 +130,7 @@ namespace Oxide.Game.Terraria
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Helpers
 
@@ -147,6 +146,6 @@ namespace Oxide.Game.Terraria
             return false;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

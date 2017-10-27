@@ -1,11 +1,11 @@
-﻿using System;
-using Jint;
+﻿using Jint;
 using Jint.Native;
 using Jint.Native.Object;
 using Jint.Runtime;
 using Jint.Runtime.Descriptors;
 using Jint.Runtime.Interop;
 using Oxide.Core.Libraries;
+using System;
 
 namespace Oxide.Core.JavaScript
 {
@@ -57,7 +57,7 @@ namespace Oxide.Core.JavaScript
             if (Properties.TryGetValue(propertyName, out x))
                 return x;
 
-            var library = (Library) Target;
+            var library = (Library)Target;
             var method = library.GetFunction(propertyName);
 
             if (method != null)

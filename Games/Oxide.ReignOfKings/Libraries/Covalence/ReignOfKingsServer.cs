@@ -1,13 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.Net;
-using CodeHatch.Build;
+﻿using CodeHatch.Build;
 using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events;
 using CodeHatch.Networking.Events.WorldEvents.TimeEvents;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
+using System.Net;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
@@ -95,7 +95,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             set { EventManager.CallEvent(new TimeSetEvent(value.Hour, GameClock.Instance.DaySpeed)); }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -144,7 +144,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             Server.Unban(ulong.Parse(id));
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -164,6 +164,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

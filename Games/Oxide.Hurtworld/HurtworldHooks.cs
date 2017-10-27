@@ -95,7 +95,7 @@ namespace Oxide.Game.Hurtworld
         {
             if (message.Trim().Length <= 1) return true;
             var str = message.Substring(0, 1);
-            
+
             // Is it a chat command?
             if (!str.Equals("/"))
             {
@@ -217,7 +217,7 @@ namespace Oxide.Game.Hurtworld
             return session != null ? Interface.Call("OnPlayerVoice", session) : null;
         }
 
-        #endregion
+        #endregion Player Hooks
 
         #region Entity Hooks
 
@@ -246,7 +246,7 @@ namespace Oxide.Game.Hurtworld
             if (session != null) Interface.CallHook("OnPlayerTakeDamage", session, source);
         }
 
-        #endregion
+        #endregion Entity Hooks
 
         #region Structure Hooks
 
@@ -295,7 +295,7 @@ namespace Oxide.Game.Hurtworld
             if (session != null) Interface.Call("OnGarageDoorUsed", door, session);
         }
 
-        #endregion
+        #endregion Structure Hooks
 
         #region Vehicle Hooks
 
@@ -349,6 +349,6 @@ namespace Oxide.Game.Hurtworld
             Interface.Call("OnExitVehicle", session, vehicle);
         }
 
-        #endregion
+        #endregion Vehicle Hooks
     }
 }

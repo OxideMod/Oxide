@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Hurtworld.Libraries;
 using Oxide.Game.Hurtworld.Libraries.Covalence;
 using Steamworks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace Oxide.Game.Hurtworld
@@ -52,7 +52,7 @@ namespace Oxide.Game.Hurtworld
         // Track 'load' chat commands
         private readonly List<string> loadingPlugins = new List<string>();
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -85,7 +85,7 @@ namespace Oxide.Game.Hurtworld
 
             // Register messages for localization
             foreach (var language in Localization.languages) lang.RegisterMessages(language.Value, this, language.Key);
-            
+
             // Setup default permission groups
             if (permission.IsLoaded)
             {
@@ -100,7 +100,7 @@ namespace Oxide.Game.Hurtworld
                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
                     return digits >= 17;
                 });
-               
+
                 permission.CleanUp();
             }
         }
@@ -131,15 +131,15 @@ namespace Oxide.Game.Hurtworld
             Interface.Call("OnServerInitialized");
             serverInitialized = true;
         }
- 
+
         /// <summary>
         /// Called when the server is shutting down
         /// </summary>
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
-        
+        #endregion Core Hooks
+
         #region Command Handling
 
         /// <summary>
@@ -216,10 +216,10 @@ namespace Oxide.Game.Hurtworld
             args = arglist.ToArray();
         }
 
-        #endregion
+        #endregion Command Handling
 
         #region Helpers
-        
+
         /// <summary>
         /// Checks if the permission system has loaded, shows an error if it failed to load
         /// </summary>
@@ -269,6 +269,6 @@ namespace Oxide.Game.Hurtworld
             return (from i in sessions where go.Equals(i.Value.WorldPlayerEntity) select i.Value).FirstOrDefault();
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

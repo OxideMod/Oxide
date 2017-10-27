@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Plugins;
 using Steamworks;
+using System.Linq;
 using TheForest.Utils;
 using UnityEngine;
 
@@ -134,6 +134,6 @@ namespace Oxide.Game.TheForest
             if (iplayer != null) Interface.Call("OnUserSpawn", iplayer);
         }
 
-        #endregion
+        #endregion Player Hooks
     }
 }

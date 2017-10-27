@@ -1,11 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using SDG.Unturned;
 using Steamworks;
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Net;
 
 namespace Oxide.Game.Unturned.Libraries.Covalence
 {
@@ -93,7 +93,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             set { LightingManager.time = (uint)(value.Second / 120); }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -150,7 +150,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             SteamBlacklist.unban(new CSteamID(ulong.Parse(id)));
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -170,6 +170,6 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             Commander.execute(CSteamID.Nil, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

@@ -56,7 +56,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         DateTime Time { get; set; }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -91,7 +91,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="id"></param>
         void Unban(string id);
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -108,6 +108,6 @@ namespace Oxide.Core.Libraries.Covalence
         /// <param name="args"></param>
         void Command(string command, params object[] args);
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

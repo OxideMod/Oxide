@@ -1,11 +1,11 @@
 ﻿extern alias Oxide;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide::ProtoBuf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 {
@@ -50,7 +50,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             }
             else
             {
-                record = new PlayerRecord {Id = player.steamId, Name = name };
+                record = new PlayerRecord { Id = player.steamId, Name = name };
                 playerData.Add(id, record);
                 allPlayers.Add(id, new PlanetExplorersPlayer(player));
             }
@@ -129,6 +129,6 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Player Finding
     }
 }

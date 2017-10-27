@@ -1,13 +1,13 @@
 ﻿extern alias Oxide;
 
+using Oxide::Newtonsoft.Json;
+using Oxide::Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Oxide::Newtonsoft.Json;
-using Oxide::Newtonsoft.Json.Linq;
 
 namespace Oxide.Core.Configuration
 {
@@ -283,7 +283,7 @@ namespace Oxide.Core.Configuration
 
         IEnumerator IEnumerable.GetEnumerator() => _keyvalues.GetEnumerator();
 
-        #endregion
+        #endregion IEnumerable
     }
 
     /// <summary>
@@ -344,6 +344,7 @@ namespace Oxide.Core.Configuration
                         case JsonToken.Null:
                             dict[propname] = reader.Value;
                             break;
+
                         case JsonToken.Integer:
                             var value = reader.Value.ToString();
                             int result;
@@ -352,12 +353,15 @@ namespace Oxide.Core.Configuration
                             else
                                 dict[propname] = value;
                             break;
+
                         case JsonToken.StartObject:
                             dict[propname] = serializer.Deserialize<Dictionary<string, object>>(reader);
                             break;
+
                         case JsonToken.StartArray:
                             dict[propname] = serializer.Deserialize<List<object>>(reader);
                             break;
+
                         default:
                             Throw("Unexpected token: " + reader.TokenType);
                             break;
@@ -386,6 +390,7 @@ namespace Oxide.Core.Configuration
                         case JsonToken.Null:
                             list.Add(reader.Value);
                             break;
+
                         case JsonToken.Integer:
                             var value = reader.Value.ToString();
                             int result;
@@ -394,12 +399,15 @@ namespace Oxide.Core.Configuration
                             else
                                 list.Add(value);
                             break;
+
                         case JsonToken.StartObject:
                             list.Add(serializer.Deserialize<Dictionary<string, object>>(reader));
                             break;
+
                         case JsonToken.StartArray:
                             list.Add(serializer.Deserialize<List<object>>(reader));
                             break;
+
                         default:
                             Throw("Unexpected token: " + reader.TokenType);
                             break;
@@ -423,7 +431,7 @@ namespace Oxide.Core.Configuration
             if (value is Dictionary<string, object>)
             {
                 // Get the dictionary to write
-                var dict = (Dictionary<string, object>) value;
+                var dict = (Dictionary<string, object>)value;
 
                 // Start object
                 writer.WriteStartObject();
@@ -441,7 +449,7 @@ namespace Oxide.Core.Configuration
             else if (value is List<object>)
             {
                 // Get the list to write
-                var list = (List<object>) value;
+                var list = (List<object>)value;
 
                 // Start array
                 writer.WriteStartArray();

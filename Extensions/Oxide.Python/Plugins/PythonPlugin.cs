@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using IronPython.Runtime;
+﻿using IronPython.Runtime;
 using IronPython.Runtime.Exceptions;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Oxide.Core.Python.Plugins
 {
@@ -101,7 +101,7 @@ namespace Oxide.Core.Python.Plugins
             base.SaveConfig();
         }
 
-        #endregion
+        #endregion Config
 
         /// <summary>
         /// Loads this plugin
@@ -143,8 +143,8 @@ namespace Oxide.Core.Python.Plugins
                 var dict = PythonEngine.Operations.GetMember<PythonDictionary>(func, "__dict__");
                 if (dict.ContainsKey("isCommand"))
                 {
-                    var names = ((IList<object>) dict["name"]).Cast<string>().ToArray();
-                    var perms = ((IList<object>) dict["permission"]).Cast<string>().ToArray();
+                    var names = ((IList<object>)dict["name"]).Cast<string>().ToArray();
+                    var perms = ((IList<object>)dict["permission"]).Cast<string>().ToArray();
                     if (names.Length == 0)
                     {
                         Interface.Oxide.LogWarning("Command is missing name: {0} from plugin: {1}! Skipping...", name, Name);
@@ -244,7 +244,7 @@ namespace Oxide.Core.Python.Plugins
             if (!Globals.TryGetValue(hookname, out func)) return null;
             try
             {
-                return PythonEngine.Operations.Invoke(func, args ?? new object[]{});
+                return PythonEngine.Operations.Invoke(func, args ?? new object[] { });
             }
             catch (Exception e)
             {

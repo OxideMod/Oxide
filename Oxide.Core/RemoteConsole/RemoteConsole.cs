@@ -1,14 +1,14 @@
 extern alias Oxide;
 
-using System;
-using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
 using Oxide.Core.Configuration;
 using Oxide.Core.Libraries.Covalence;
 using Oxide::WebSocketSharp;
 using Oxide::WebSocketSharp.Net.WebSockets;
 using Oxide::WebSocketSharp.Server;
+using System;
+using System.Linq;
+using System.Net;
+using System.Runtime.InteropServices;
 
 namespace Oxide.Core.RemoteConsole
 {
@@ -64,7 +64,7 @@ namespace Oxide.Core.RemoteConsole
             Interface.Oxide.LogInfo($"[Rcon] Service has stopped: {reason} ({code})");
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Message Handling
 
@@ -155,7 +155,7 @@ namespace Oxide.Core.RemoteConsole
             }
         }
 
-        #endregion
+        #endregion Message Handling
 
         #region Listener
 
@@ -189,6 +189,6 @@ namespace Oxide.Core.RemoteConsole
             }
         }
 
-        #endregion
+        #endregion Listener
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
+using System.IO;
 using Terraria;
 using Terraria.Localization;
 
@@ -46,7 +46,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -100,7 +100,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -224,7 +224,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -247,7 +247,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position() => new GenericPosition(player.position.X, player.position.Y, 0);
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -287,7 +287,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             // TODO: Implement when possible
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -329,7 +329,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
 
@@ -359,6 +359,6 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.TerrariaPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

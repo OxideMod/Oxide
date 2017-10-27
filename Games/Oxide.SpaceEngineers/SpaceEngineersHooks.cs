@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Plugins;
 using Sandbox;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using Sandbox.ModAPI;
 using SteamSDK;
+using System;
+using System.Linq;
+using System.Text;
 using VRage.Game.ModAPI;
 
 namespace Oxide.Game.SpaceEngineers
@@ -68,7 +68,7 @@ namespace Oxide.Game.SpaceEngineers
                 Interface.Oxide.LogError("Can't parse Steam ID...");
         }
 
-        #endregion
+        #endregion Server Hooks
 
         #region Player Hooks
 
@@ -171,6 +171,6 @@ namespace Oxide.Game.SpaceEngineers
             Interface.Oxide.ServerConsole.AddMessage($" *  {player}", ConsoleColor.Yellow);
         }
 
-        #endregion
+        #endregion Player Hooks
     }
 }

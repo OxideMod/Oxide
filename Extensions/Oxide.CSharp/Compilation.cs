@@ -1,12 +1,12 @@
-﻿using System;
+﻿using ObjectStream.Data;
+using Oxide.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
-using ObjectStream.Data;
-using Oxide.Core;
 
 namespace Oxide.Plugins
 {
@@ -374,7 +374,7 @@ namespace Oxide.Plugins
                         using (var reader = File.OpenText(plugin.ScriptPath))
                         {
                             var lines = new List<string>();
-                            while (!reader.EndOfStream)  lines.Add(reader.ReadLine());
+                            while (!reader.EndOfStream) lines.Add(reader.ReadLine());
                             if (!string.IsNullOrEmpty(gameExtensionName)) lines.Insert(0, $"#define {gameExtensionName}");
                             plugin.ScriptLines = lines.ToArray();
                             plugin.ScriptEncoding = reader.CurrentEncoding;

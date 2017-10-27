@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Oxide.Game.RustLegacy.Libraries.Covalence
 {
@@ -44,7 +44,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             return registeredCommands.TryGetValue(cmd, out callback) && callback(caller, cmd, args);
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Command Registration
 
@@ -77,7 +77,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             registeredCommands.Add(command, callback);
         }
 
-        #endregion
+        #endregion Command Registration
 
         #region Command Unregistration
 
@@ -88,7 +88,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="plugin"></param>
         public void UnregisterCommand(string command, Plugin plugin) => registeredCommands.Remove(command);
 
-        #endregion
+        #endregion Command Unregistration
 
         #region Message Handling
 
@@ -106,9 +106,9 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="player"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public bool HandleConsoleMessage(IPlayer player, string message)=> commandHandler.HandleConsoleMessage(player ?? consolePlayer, message);
+        public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player ?? consolePlayer, message);
 
-        #endregion
+        #endregion Message Handling
 
         #region Command Overriding
 
@@ -142,6 +142,6 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             return !RustLegacyCore.RestrictedCommands.Contains(command) && !RustLegacyCore.RestrictedCommands.Contains(fullname);
         }*/
 
-        #endregion
+        #endregion Command Overriding
     }
 }

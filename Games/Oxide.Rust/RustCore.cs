@@ -1,15 +1,15 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Rust.Libraries;
 using Oxide.Game.Rust.Libraries.Covalence;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using UnityEngine;
 
 namespace Oxide.Game.Rust
@@ -63,7 +63,7 @@ namespace Oxide.Game.Rust
             return false;
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -158,7 +158,7 @@ namespace Oxide.Game.Rust
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Command Handling
 
@@ -305,7 +305,7 @@ namespace Oxide.Game.Rust
             return player;
         }
 
-        #endregion
+        #endregion Command Handling
 
         #region Helpers
 
@@ -378,6 +378,6 @@ namespace Oxide.Game.Rust
             return null;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

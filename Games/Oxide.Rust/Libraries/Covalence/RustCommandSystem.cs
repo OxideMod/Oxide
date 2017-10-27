@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Oxide.Game.Rust.Libraries.Covalence
@@ -88,7 +88,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             return registeredCommands.TryGetValue(cmd, out command) && command.Callback(caller, cmd, args);
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Command Registration
 
@@ -212,7 +212,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             registeredCommands[command] = newCommand;
         }
 
-        #endregion
+        #endregion Command Registration
 
         #region Command Unregistration
 
@@ -251,7 +251,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Command Unregistration
 
         #region Message Handling
 
@@ -263,7 +263,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <returns></returns>
         public bool HandleChatMessage(IPlayer player, string message) => commandHandler.HandleChatMessage(player, message);
 
-        #endregion
+        #endregion Message Handling
 
         #region Command Overriding
 
@@ -294,7 +294,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             return !RustCore.RestrictedCommands.Contains(command) && !RustCore.RestrictedCommands.Contains(fullName);
         }
 
-        #endregion
+        #endregion Command Overriding
 
         #region Helpers
 
@@ -313,6 +313,6 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             return argsList.ToArray();
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

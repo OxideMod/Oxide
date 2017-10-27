@@ -73,6 +73,6 @@ namespace Oxide.Game.SevenDays
         [HookMethod("OnPlayerSpawn")]
         private void OnPlayerSpawn(ClientInfo client) => Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(client.playerId));
 
-        #endregion
+        #endregion Player Hooks
     }
 }

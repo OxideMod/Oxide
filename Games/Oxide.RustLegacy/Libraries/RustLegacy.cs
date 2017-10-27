@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Reflection;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
+using System.Linq;
+using System.Reflection;
 
 namespace Oxide.Game.RustLegacy.Libraries
 {
@@ -31,7 +31,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
-        #endregion
+        #endregion Utility
 
         #region Chat
 
@@ -59,7 +59,7 @@ namespace Oxide.Game.RustLegacy.Libraries
                 message != null ? $"chat.add {name.Quote()} {message.Quote()}" : $"chat.add \"Server\" {name.Quote()}");
         }
 
-        #endregion
+        #endregion Chat
 
         #region Console
 
@@ -83,7 +83,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         [LibraryFunction("BroadcastConsole")]
         public void BroadcastConsole(string format, params object[] args) => ConsoleNetworker.Broadcast($"echo {string.Format(format, args)}");
 
-        #endregion
+        #endregion Console
 
         #region Commands
 
@@ -102,7 +102,7 @@ namespace Oxide.Game.RustLegacy.Libraries
         [LibraryFunction("RunServerCommand")]
         public void RunServerCommand(string cmd) => ConsoleSystem.Run(cmd);
 
-        #endregion
+        #endregion Commands
 
         /// <summary>
         /// Finds the player by name, steam id or ip

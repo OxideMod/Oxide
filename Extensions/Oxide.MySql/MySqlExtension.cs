@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Oxide.Core.Extensions;
+using System;
 using System.Reflection;
-using Oxide.Core.Extensions;
 
 namespace Oxide.Core.MySql
 {

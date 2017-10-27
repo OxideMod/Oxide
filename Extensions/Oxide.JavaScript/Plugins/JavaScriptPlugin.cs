@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using Jint;
+﻿using Jint;
 using Jint.Native;
 using Jint.Native.Object;
 using Jint.Parser;
 using Jint.Runtime.Interop;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Oxide.Core.JavaScript.Plugins
 {
@@ -109,7 +109,7 @@ namespace Oxide.Core.JavaScript.Plugins
             base.SaveConfig();
         }
 
-        #endregion
+        #endregion Config
 
         /// <summary>
         /// Loads this plugin
@@ -131,7 +131,7 @@ namespace Oxide.Core.JavaScript.Plugins
             if (!Class.HasProperty("Version") || Class.Get("Version").ToObject() == null) throw new Exception("Plugin is missing version");
             Title = Class.Get("Title").AsString();
             Author = Class.Get("Author").AsString();
-            Version = (VersionNumber) Class.Get("Version").ToObject();
+            Version = (VersionNumber)Class.Get("Version").ToObject();
             if (Class.HasProperty("Description")) Description = Class.Get("Description").AsString();
             if (Class.HasProperty("ResourceId")) ResourceId = (int)Class.Get("ResourceId").AsNumber();
             HasConfig = Class.HasProperty("HasConfig") && Class.Get("HasConfig").AsBoolean();
@@ -241,7 +241,7 @@ namespace Oxide.Core.JavaScript.Plugins
         {
             ICallable callable;
             if (!Globals.TryGetValue(hookname, out callable)) return null;
-            return callable.Call(Class, args != null ? args.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() : new JsValue[] {}).ToObject();
+            return callable.Call(Class, args != null ? args.Select(x => JsValue.FromObject(JavaScriptEngine, x)).ToArray() : new JsValue[] { }).ToObject();
         }
     }
 }

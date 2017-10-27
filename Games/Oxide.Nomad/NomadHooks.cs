@@ -9,6 +9,6 @@ namespace Oxide.Game.Nomad
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

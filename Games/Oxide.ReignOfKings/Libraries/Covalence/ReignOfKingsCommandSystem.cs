@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using CodeHatch.Engine.Core.Commands;
+﻿using CodeHatch.Engine.Core.Commands;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
@@ -84,7 +84,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             return registeredCommands.TryGetValue(cmd, out command) && command.Callback(caller, cmd, args);
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Command Registration
 
@@ -162,7 +162,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             HandleChatMessage(iplayer, $"/{cmdInfo.Label} {string.Join(" ", cmdInfo.Args)}");
         }
 
-        #endregion
+        #endregion Command Registration
 
         #region Command Unregistration
 
@@ -189,7 +189,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
                 CommandManager.RegisteredCommands.Remove(cmd.Command);
         }
 
-        #endregion
+        #endregion Command Unregistration
 
         #region Message Handling
 
@@ -209,7 +209,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player ?? consolePlayer, message);*/
 
-        #endregion
+        #endregion Message Handling
 
         #region Command Overriding
 
@@ -233,6 +233,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             return !ReignOfKingsCore.RestrictedCommands.Contains(command);
         }
 
-        #endregion
+        #endregion Command Overriding
     }
 }

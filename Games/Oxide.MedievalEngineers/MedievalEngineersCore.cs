@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.MedievalEngineers.Libraries.Covalence;
+using System;
+using System.Collections.Generic;
 
 namespace Oxide.Game.MedievalEngineers
 {
@@ -45,7 +45,7 @@ namespace Oxide.Game.MedievalEngineers
 
         private bool serverInitialized;
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -129,7 +129,7 @@ namespace Oxide.Game.MedievalEngineers
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Helpers
 
@@ -145,6 +145,6 @@ namespace Oxide.Game.MedievalEngineers
             return false;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using IronPython.Hosting;
+﻿using IronPython.Hosting;
 using IronPython.Modules;
 using IronPython.Runtime;
 using IronPython.Runtime.Exceptions;
@@ -16,6 +10,12 @@ using Oxide.Core.Libraries;
 using Oxide.Core.Plugins.Watchers;
 using Oxide.Core.Python.Libraries;
 using Oxide.Core.Python.Plugins;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace Oxide.Core.Python
 {
@@ -66,7 +66,7 @@ namespace Oxide.Core.Python
         private List<string> _allowedTypes;
         private bool _typesInit;
 
-        delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple fromlist);
+        private delegate object ImportDelegate(CodeContext context, string moduleName, PythonDictionary globals, PythonDictionary locals, PythonTuple fromlist);
 
         /// <summary>
         /// Initializes a new instance of the PythonExtension class
@@ -222,7 +222,6 @@ namespace Oxide.Core.Python
                 if (method.ReturnType == typeof(void))
                 {
                     delegateType = Expression.GetActionType(typeArgs.ToArray());
-
                 }
                 else
                 {

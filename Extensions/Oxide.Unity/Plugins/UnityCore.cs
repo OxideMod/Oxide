@@ -56,6 +56,6 @@ namespace Oxide.Core.Unity.Plugins
         /// <param name="message"></param>
         public void PrintError(string message) => UnityEngine.Debug.LogError(message);
 
-        #endregion
+        #endregion Console/Logging
     }
 }

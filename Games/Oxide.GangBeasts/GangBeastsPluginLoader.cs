@@ -1,6 +1,5 @@
-﻿using System;
-
-using Oxide.Core.Plugins;
+﻿using Oxide.Core.Plugins;
+using System;
 
 namespace Oxide.Game.GangBeasts
 {

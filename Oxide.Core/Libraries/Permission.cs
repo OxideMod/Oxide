@@ -1,11 +1,11 @@
 ﻿extern alias Oxide;
 
+using Oxide.Core.Plugins;
+using Oxide::ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Oxide.Core.Plugins;
-using Oxide::ProtoBuf;
 
 namespace Oxide.Core.Libraries
 {
@@ -245,7 +245,7 @@ namespace Oxide.Core.Libraries
             return set.Contains(name);
         }
 
-        #endregion
+        #endregion Permission Management
 
         /// <summary>
         /// Called when a plugin has been unloaded
@@ -475,7 +475,6 @@ namespace Oxide.Core.Libraries
 
             // Call hook for plugins
             Interface.Call("OnUserGroupRemoved", id, name);
-
         }
 
         /// <summary>
@@ -559,7 +558,7 @@ namespace Oxide.Core.Libraries
             return data.Rank;
         }
 
-        #endregion
+        #endregion Querying
 
         #region User Permission
 
@@ -647,7 +646,7 @@ namespace Oxide.Core.Libraries
             Interface.Call("OnUserPermissionRevoked", id, perm);
         }
 
-        #endregion
+        #endregion User Permission
 
         #region Group Permission
 
@@ -737,7 +736,7 @@ namespace Oxide.Core.Libraries
             Interface.Call("OnGroupPermissionRevoked", name, perm);
         }
 
-        #endregion
+        #endregion Group Permission
 
         #region Group Management
 
@@ -896,6 +895,6 @@ namespace Oxide.Core.Libraries
             return false;
         }
 
-        #endregion
+        #endregion Group Management
     }
 }

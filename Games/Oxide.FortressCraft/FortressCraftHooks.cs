@@ -9,6 +9,6 @@ namespace Oxide.Game.FortressCraft
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

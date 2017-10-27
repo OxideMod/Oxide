@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Oxide.Core.Libraries;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Permissions;
 using System.Text.RegularExpressions;
-using Oxide.Core.Libraries;
 
 namespace Oxide.Core.Plugins.Watchers
 {
@@ -11,7 +11,7 @@ namespace Oxide.Core.Plugins.Watchers
     /// </summary>
     public sealed class FSWatcher : PluginChangeWatcher
     {
-        class QueuedChange
+        private class QueuedChange
         {
             internal WatcherChangeTypes type;
             internal Timer.TimerInstance timer;
@@ -98,12 +98,14 @@ namespace Oxide.Core.Plugins.Watchers
                     if (change.type != WatcherChangeTypes.Created)
                         change.type = WatcherChangeTypes.Changed;
                     break;
+
                 case WatcherChangeTypes.Created:
                     if (change.type == WatcherChangeTypes.Deleted)
                         change.type = WatcherChangeTypes.Changed;
                     else
                         change.type = WatcherChangeTypes.Created;
                     break;
+
                 case WatcherChangeTypes.Deleted:
                     if (change.type == WatcherChangeTypes.Created)
                     {
@@ -134,9 +136,11 @@ namespace Oxide.Core.Plugins.Watchers
                             else
                                 FirePluginAdded(sub_path);
                             break;
+
                         case WatcherChangeTypes.Created:
                             FirePluginAdded(sub_path);
                             break;
+
                         case WatcherChangeTypes.Deleted:
                             if (watchedPlugins.Contains(sub_path))
                                 FirePluginRemoved(sub_path);

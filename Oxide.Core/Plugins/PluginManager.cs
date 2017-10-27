@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Oxide.Core.Logging;
+using System;
 using System.Collections.Generic;
-using Oxide.Core.Logging;
 
 namespace Oxide.Core.Plugins
 {
@@ -41,7 +41,7 @@ namespace Oxide.Core.Plugins
         private readonly Dictionary<string, float> lastDeprecatedWarningAt = new Dictionary<string, float>();
 
         // Re-usable conflict list used for hook calls
-        readonly List<string> hookConflicts = new List<string>();
+        private readonly List<string> hookConflicts = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the PluginManager class

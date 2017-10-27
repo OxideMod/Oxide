@@ -1,11 +1,11 @@
 ﻿extern alias Oxide;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide::ProtoBuf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using VRage.Game.ModAPI;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
@@ -32,7 +32,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             playerData = ProtoStorage.Load<Dictionary<string, PlayerRecord>>("oxide.covalence") ?? new Dictionary<string, PlayerRecord>();
             allPlayers = new Dictionary<string, SpaceEngineersPlayer>();
             connectedPlayers = new Dictionary<string, SpaceEngineersPlayer>();
-        
+
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new SpaceEngineersPlayer(pair.Value.Id, pair.Value.Name));
         }
 
@@ -130,6 +130,6 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Player Finding
     }
 }

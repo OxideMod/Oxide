@@ -1,24 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Assets.Scripts.Core;
+﻿using Assets.Scripts.Core;
 #if !ITEMV2
 using Emotes;
 #endif
+using Oxide.Core;
 using Oxide.Core.Libraries;
 using Steamworks;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 namespace Oxide.Game.Hurtworld.Libraries
 {
     public class Player : Library
     {
+        #region Initialization
+
         // Game references
         internal static readonly BanManager BanManager = BanManager.Instance;
         internal static readonly ChatManagerServer ChatManager = ChatManagerServer.Instance;
         internal static readonly GameManager GameManager = GameManager.Instance;
         internal static readonly GlobalItemManager ItemManager = GlobalItemManager.Instance;
+
+        internal readonly Permission permission = Interface.Oxide.GetLibrary<Permission>();
+
+        #endregion Initialization
 
         #region Information
 
@@ -87,7 +94,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         public bool IsSleeping(PlayerSession session) => session.Identity.Sleeper != null; // TODO: Session is null OnUserDisconnected?
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -231,7 +238,7 @@ namespace Oxide.Game.Hurtworld.Libraries
             if (IsBanned(session)) BanManager.RemoveBan(session.SteamId.m_SteamID);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -242,7 +249,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <returns></returns>
         public Vector3 Position(PlayerSession session) => session.WorldPlayerEntity.transform.position;
 
-        #endregion
+        #endregion Location
 
         #region Player Finding
 
@@ -339,7 +346,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         public Dictionary<uLink.NetworkPlayer, PlayerSession> Sessions => GameManager.GetSessions();
 
-        #endregion
+        #endregion Player Finding
 
         #region Chat and Commands
 
@@ -398,7 +405,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="args"></param>
         public void Reply(PlayerSession session, string message, string prefix = null, params object[] args) => Reply(session, string.Format(message, args), prefix);
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Item Handling
 
@@ -464,7 +471,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         public void GiveItem(PlayerSession session, IItem item, int quantity = 1) => ItemManager.GiveItem(session.Player, item, quantity);
 #endif
 
-        #endregion
+        #endregion Item Handling
 
         #region Inventory Handling
 
@@ -485,6 +492,6 @@ namespace Oxide.Game.Hurtworld.Libraries
         public void ClearInventory(PlayerSession session) => Inventory(session)?.DestroyAll();
 #endif
 
-        #endregion
+        #endregion Inventory Handling
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using ObjectStream.IO;
+﻿using ObjectStream.IO;
 using ObjectStream.Threading;
+using System;
+using System.IO;
 
 namespace ObjectStream
 {
@@ -79,7 +79,7 @@ namespace ObjectStream
                 Error(exception);
         }
 
-        #endregion
+        #endregion Private methods
     }
 
     internal static class ObjectStreamClientFactory

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.RustLegacy.Libraries;
 using Oxide.Game.RustLegacy.Libraries.Covalence;
 using Rust;
-using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using uLink;
+using UnityEngine;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -60,7 +60,7 @@ namespace Oxide.Game.RustLegacy
         // Cache some player information
         private static readonly Dictionary<NetUser, PlayerData> playerData = new Dictionary<NetUser, PlayerData>();
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -144,7 +144,7 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         // TODO: Move majority of hooks to RustLegacyHooks.cs
 
@@ -266,7 +266,7 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("IOnPlayerVoice")]
         private object IOnPlayerVoice(NetUser netUser) => (int?)Interface.Call("OnPlayerVoice", netUser, VoiceCom.playerList);
 
-        #endregion
+        #endregion Player Hooks
 
         #region Command Handling
 
@@ -384,7 +384,7 @@ namespace Oxide.Game.RustLegacy
             args = arglist.ToArray();
         }
 
-        #endregion
+        #endregion Command Handling
 
         #region Game Fixes
 
@@ -459,7 +459,7 @@ namespace Oxide.Game.RustLegacy
             }
         }
 
-        #endregion
+        #endregion Game Fixes
 
         #region Helpers
 
@@ -491,6 +491,6 @@ namespace Oxide.Game.RustLegacy
         // TODO: Deprecate and remove
         public static PlayerInventory GetInventory(NetUser netUser) => RustLegacyCore.GetCharacter(netUser)?.GetComponent<PlayerInventory>();
 
-        #endregion
+        #endregion Helpers
     }
 }

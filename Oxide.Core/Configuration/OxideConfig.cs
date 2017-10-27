@@ -1,8 +1,8 @@
 ﻿extern alias Oxide;
 
+using Oxide::Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
-using Oxide::Newtonsoft.Json;
 
 namespace Oxide.Core.Configuration
 {

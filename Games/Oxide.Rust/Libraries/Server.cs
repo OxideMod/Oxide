@@ -33,6 +33,6 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => ConsoleSystem.Run(ConsoleSystem.Option.Server, command, args);
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

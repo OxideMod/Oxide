@@ -1,12 +1,12 @@
 ﻿extern alias Oxide;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using CodeHatch.Engine.Networking;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide::ProtoBuf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
@@ -130,6 +130,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Player Finding
     }
 }

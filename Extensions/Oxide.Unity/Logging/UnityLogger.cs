@@ -38,12 +38,15 @@ namespace Oxide.Core.Unity.Logging
                 case LogType.Debug:
                     Debug.Log(message.ConsoleMessage);
                     break;
+
                 case LogType.Warning:
                     Debug.LogWarning(message.ConsoleMessage);
                     break;
+
                 case LogType.Error:
                     Debug.LogError(message.ConsoleMessage);
                     break;
+
                 case LogType.Stacktrace:
                     if (Interface.Oxide.Config.Console.ShowStacktraces)
                         Debug.Log(message.ConsoleMessage);

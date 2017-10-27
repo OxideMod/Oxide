@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Plugins;
+using UnityEngine;
 
 namespace Oxide.Game.RustLegacy
 {
@@ -11,7 +11,7 @@ namespace Oxide.Game.RustLegacy
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 
     public class OnServerInitHook : MonoBehaviour

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Globalization;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
 using TNet;
 
 namespace Oxide.Game.Nomad.Libraries.Covalence
@@ -43,7 +43,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -97,7 +97,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -214,7 +214,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             Application.mGameServer.mBan.Remove(player.address);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -240,7 +240,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             return new GenericPosition(0, 0, 0); // TODO: Implement when possible
         }
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -284,7 +284,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             // TODO: Not possible yet?
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -326,7 +326,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
 
@@ -356,6 +356,6 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.NomadPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

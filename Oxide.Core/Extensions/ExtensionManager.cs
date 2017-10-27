@@ -104,7 +104,7 @@ namespace Oxide.Core.Extensions
         /// <returns></returns>
         public IEnumerable<PluginChangeWatcher> GetPluginChangeWatchers() => changewatchers;
 
-        #endregion
+        #endregion Registering
 
         /// <summary>
         /// Loads the extension at the specified filename

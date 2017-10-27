@@ -10,7 +10,9 @@ namespace Oxide.Core.ServerConsole
         private readonly List<string> inputHistory = new List<string>();
         private int inputHistoryIndex;
         private float nextUpdate;
+
         internal event Action<string> OnInputText;
+
         internal readonly string[] StatusTextLeft = { string.Empty, string.Empty, string.Empty, string.Empty };
         internal readonly string[] StatusTextRight = { string.Empty, string.Empty, string.Empty, string.Empty };
         internal readonly ConsoleColor[] StatusTextLeftColor = { ConsoleColor.White, ConsoleColor.White, ConsoleColor.White, ConsoleColor.White };
@@ -95,15 +97,18 @@ namespace Oxide.Core.ServerConsole
                     OnInputText?.Invoke(str);
                     RedrawInputLine();
                     return;
+
                 case ConsoleKey.Backspace:
                     if (inputString.Length < 1) return;
                     inputString = inputString.Substring(0, inputString.Length - 1);
                     RedrawInputLine();
                     return;
+
                 case ConsoleKey.Escape:
                     inputString = string.Empty;
                     RedrawInputLine();
                     return;
+
                 case ConsoleKey.UpArrow:
                     if (inputHistory.Count == 0) return;
                     if (inputHistoryIndex < 0) inputHistoryIndex = 0;
@@ -117,12 +122,14 @@ namespace Oxide.Core.ServerConsole
                     inputString = inputHistory[inputHistoryIndex++];
                     RedrawInputLine();
                     return;
+
                 case ConsoleKey.DownArrow:
                     if (inputHistory.Count == 0) return;
                     if (inputHistoryIndex >= inputHistory.Count - 1) inputHistoryIndex = inputHistory.Count - 2;
                     inputString = inputHistoryIndex < 0 ? string.Empty : inputHistory[inputHistoryIndex--];
                     RedrawInputLine();
                     return;
+
                 case ConsoleKey.Tab:
                     var results = Completion?.Invoke(inputString);
                     if (results == null || results.Length == 0) return;

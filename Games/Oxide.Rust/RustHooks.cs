@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using Network;
+﻿using Network;
 using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Core.RemoteConsole;
 using Oxide.Core.ServerConsole;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Oxide.Game.Rust
 {
@@ -90,7 +90,7 @@ namespace Oxide.Game.Rust
             return false;
         }
 
-        #endregion
+        #endregion Server Hooks
 
         #region Player Hooks
 
@@ -354,7 +354,7 @@ namespace Oxide.Game.Rust
         [HookMethod("OnPlayerTick")]
         private object OnPlayerTick(BasePlayer player) => Interface.Call("OnPlayerInput", player, player.serverInput);
 
-        #endregion
+        #endregion Player Hooks
 
         #region Entity Hooks
 
@@ -371,7 +371,7 @@ namespace Oxide.Game.Rust
             return entity is BasePlayer ? null : Interface.Call("OnEntityTakeDamage", entity, info);
         }
 
-        #endregion
+        #endregion Entity Hooks
 
         #region Item Hooks
 
@@ -393,7 +393,7 @@ namespace Oxide.Game.Rust
             return true;
         }
 
-        #endregion
+        #endregion Item Hooks
 
         #region Structure Hooks
 
@@ -415,6 +415,6 @@ namespace Oxide.Game.Rust
         [HookMethod("IOnStructureImmediateDemolish")]
         private object IOnStructureImmediateDemolish(BuildingBlock block, BasePlayer player) => Interface.Call("OnStructureDemolish", block, player, true);
 
-        #endregion
+        #endregion Structure Hooks
     }
 }

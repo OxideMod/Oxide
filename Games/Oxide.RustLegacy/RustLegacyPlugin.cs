@@ -1,9 +1,9 @@
-﻿using System;
-using System.Reflection;
-using UnityEngine;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Plugins;
 using Oxide.Game.RustLegacy.Libraries;
+using System;
+using System.Reflection;
+using UnityEngine;
 
 namespace Oxide.Plugins
 {
@@ -50,7 +50,7 @@ namespace Oxide.Plugins
                 if (attributes.Length > 0)
                 {
                     var attribute = attributes[0] as ConsoleCommandAttribute;
-                    if (attribute != null)  cmd.AddConsoleCommand(attribute.Command, this, method.Name);
+                    if (attribute != null) cmd.AddConsoleCommand(attribute.Command, this, method.Name);
                     continue;
                 }
 

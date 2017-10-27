@@ -1,11 +1,8 @@
-﻿using System;
-using System.Globalization;
-
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
-using Pathea;
-using UnityEngine;
+using System;
+using System.Globalization;
 
 namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
 {
@@ -45,7 +42,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -99,7 +96,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -213,7 +210,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             player.RPCOthers(EPacketType.PT_InGame_DelBlackList); // TODO: Needed?
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -241,7 +238,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -281,7 +278,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
             //player.RPCOthers(EPacketType., CustomData.EMsgType.ToOne, string.Format(message, args)); // TODO
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -323,7 +320,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
 
@@ -353,6 +350,6 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.PlanetExplorersPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

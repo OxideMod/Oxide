@@ -9,6 +9,6 @@ namespace Oxide.Game.Blackwake
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

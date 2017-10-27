@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Oxide.Core.Libraries.Covalence;
+﻿using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System.Collections.Generic;
 
 namespace Oxide.Game.SevenDays.Libraries.Covalence
 {
@@ -42,7 +42,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             return registeredCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Command Registration
 
@@ -69,7 +69,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             registeredCommands.Add(command, callback);
         }
 
-        #endregion
+        #endregion Command Registration
 
         #region Command Unregistration
 
@@ -80,7 +80,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// <param name="plugin"></param>
         public void UnregisterCommand(string command, Plugin plugin) => registeredCommands.Remove(command);
 
-        #endregion
+        #endregion Command Unregistration
 
         #region Message Handling
 
@@ -100,7 +100,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// <returns></returns>
         public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player ?? consolePlayer, message);*/
 
-        #endregion
+        #endregion Message Handling
 
         #region Command Overriding
 
@@ -134,6 +134,6 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             return !SevenDaysCore.RestrictedCommands.Contains(command) && !SevenDaysCore.RestrictedCommands.Contains(fullname);
         }*/
 
-        #endregion
+        #endregion Command Overriding
     }
 }

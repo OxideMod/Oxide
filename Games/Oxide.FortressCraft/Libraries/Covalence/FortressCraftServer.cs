@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.Net;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.FortressCraft.Libraries.Covalence
 {
@@ -97,7 +97,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
             set { WorldScript.instance.mWorldData.mrCurrentTimeOfDay = value.Second; }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -147,7 +147,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
             NetworkManager.instance.mBanListManager.UnbanPlayer(ulong.Parse(id));
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -175,6 +175,6 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => ServerConsole.DoServerString($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Oxide.Core.Database;
+using Oxide.Core.Libraries;
+using Oxide.Core.Plugins;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Oxide.Core.Database;
-using Oxide.Core.Libraries;
-using Oxide.Core.Plugins;
 
 namespace Oxide.Core.SQLite.Libraries
 {
@@ -77,7 +77,7 @@ namespace Oxide.Core.SQLite.Libraries
                 try
                 {
                     if (Connection == null) throw new Exception("Connection is null");
-                    _connection = (SQLiteConnection) Connection.Con;
+                    _connection = (SQLiteConnection)Connection.Con;
                     if (_connection.State == ConnectionState.Closed)
                         _connection.Open();
                     _cmd = _connection.CreateCommand();

@@ -9,6 +9,7 @@ namespace Oxide.Ext.MySql
 #if NET35
     [ReflectionPermission(SecurityAction.Deny, Flags = ReflectionPermissionFlag.AllFlags)]
 #endif
+
     public sealed class Connection
     {
         internal string ConnectionString { get; set; }

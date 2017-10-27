@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -22,14 +22,14 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
         /// <summary>
         /// Gets/sets the name for the player
         /// </summary>
-        public string Name => "Server Console";
+        public string Name { get => "Server Console"; set { } }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
@@ -76,7 +76,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public bool IsServer => true;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -166,7 +166,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -189,7 +189,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position() => new GenericPosition(0, 0, 0);
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -229,7 +229,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             ConsoleManager.Instance.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -279,6 +279,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Permissions
     }
 }

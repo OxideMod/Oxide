@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Oxide.Core.Libraries;
+﻿using Oxide.Core.Libraries;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.Multiplayer;
 using Sandbox.Game.World;
 using Sandbox.ModAPI;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using VRage.Game;
 using VRage.Game.ModAPI;
 using VRage.Network;
@@ -83,7 +83,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries
         /// </summary>
         public bool IsSleeping(IMyPlayer player) => IsSleeping(player.SteamUserId);
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -169,7 +169,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries
             if (IsBanned(player)) MyMultiplayer.Static.BanClient(player.SteamUserId, false);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -180,7 +180,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries
         /// <returns></returns>
         public Vector3D Position(IMyPlayer player) => player.GetPosition();
 
-        #endregion
+        #endregion Location
 
         #region Player Finding
 
@@ -230,7 +230,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries
             }
         }
 
-        #endregion
+        #endregion Player Finding
 
         #region Chat and Commands
 
@@ -289,18 +289,18 @@ namespace Oxide.Game.MedievalEngineers.Libraries
         /// <param name="args"></param>
         public void Reply(IMyPlayer player, string message, string prefix = null, params object[] args) => Reply(player, string.Format(message, args), prefix);
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Item Handling
 
         // TODO: Implement
 
-        #endregion
+        #endregion Item Handling
 
         #region Inventory Handling
 
         // TODO: Implement
 
-        #endregion
+        #endregion Inventory Handling
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Network;
+﻿using Network;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Oxide.Game.Rust.Libraries
 {
@@ -36,7 +36,7 @@ namespace Oxide.Game.Rust.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
-        #endregion
+        #endregion Utility
 
         #region Chat
 
@@ -59,7 +59,7 @@ namespace Oxide.Game.Rust.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(BasePlayer player, string name, string message = null, string userId = "0") => Player.Message(player, message, name, Convert.ToUInt64(userId));
 
-        #endregion
+        #endregion Chat
 
         #region Commands
 
@@ -80,7 +80,7 @@ namespace Oxide.Game.Rust.Libraries
         [LibraryFunction("RunServerCommand")]
         public void RunServerCommand(string command, params object[] args) => Server.Command(command, args);
 
-        #endregion
+        #endregion Commands
 
         /// <summary>
         /// Returns the Steam ID for the specified connection as a string

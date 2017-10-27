@@ -227,22 +227,22 @@ namespace Oxide.Core.Database
                 var t = item.GetType();
                 if (t.IsEnum)
                 {
-                    p.Value = (int) item;
+                    p.Value = (int)item;
                 }
-                else if (t == typeof (Guid))
+                else if (t == typeof(Guid))
                 {
                     p.Value = item.ToString();
                     p.DbType = DbType.String;
                     p.Size = 40;
                 }
-                else if (t == typeof (string))
+                else if (t == typeof(string))
                 {
-                    p.Size = Math.Max(((string) item).Length + 1, 4000);
+                    p.Size = Math.Max(((string)item).Length + 1, 4000);
                     p.Value = item;
                 }
-                else if (t == typeof (bool))
+                else if (t == typeof(bool))
                 {
-                    p.Value = ((bool) item) ? 1 : 0;
+                    p.Value = ((bool)item) ? 1 : 0;
                 }
                 else
                 {

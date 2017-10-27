@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.PlanetExplorers.Libraries.Covalence;
+using System;
+using System.Collections.Generic;
 
 namespace Oxide.Game.PlanetExplorers
 {
@@ -45,7 +45,7 @@ namespace Oxide.Game.PlanetExplorers
 
         private bool serverInitialized;
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -129,7 +129,7 @@ namespace Oxide.Game.PlanetExplorers
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Helpers
 
@@ -145,6 +145,6 @@ namespace Oxide.Game.PlanetExplorers
             return false;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

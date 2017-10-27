@@ -1,11 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Net;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.World;
+using System;
+using System.Globalization;
+using System.Net;
 using VRage.Game;
 
 namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
@@ -19,7 +19,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
 
         internal readonly Server Server = new Server();
 
-        #endregion
+        #endregion Initialization
 
         #region Information
 
@@ -100,7 +100,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             set { MySession.Static.InGameTime = value; }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -141,7 +141,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             if (IsBanned(id)) Server.Unban(id);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -158,6 +158,6 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => Server.Command(command, args);
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

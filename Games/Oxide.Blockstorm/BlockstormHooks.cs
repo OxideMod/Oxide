@@ -9,6 +9,6 @@ namespace Oxide.Game.Blockstorm
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Oxide.Core.Libraries;
+﻿using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using System.Collections.Generic;
 
 namespace Oxide.Core.JavaScript.Libraries
 {
@@ -18,7 +18,7 @@ namespace Oxide.Core.JavaScript.Libraries
         [LibraryFunction("EnqueueGetHook")]
         public void EnqueueGet(string url, string callback, Plugin owner, Dictionary<string, string> headers = null)
         {
-            Interface.Oxide.GetLibrary<WebRequests>("WebRequests").Enqueue(url, null, (a,b) =>
+            Interface.Oxide.GetLibrary<WebRequests>("WebRequests").Enqueue(url, null, (a, b) =>
             {
                 owner.CallHook(callback, a, b);
             }, owner, RequestMethod.GET, headers);

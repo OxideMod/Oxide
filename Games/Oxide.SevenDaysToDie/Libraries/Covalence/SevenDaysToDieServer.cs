@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.Net;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.SevenDays.Libraries.Covalence
 {
@@ -94,7 +94,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             set { GameUtils.DayTimeToWorldTime(value.Day, value.Hour, value.Minute); }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -148,7 +148,7 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             GameManager.Instance.adminTools.RemoveBan(id);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -168,6 +168,6 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             SdtdConsole.Instance.ExecuteSync($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}", null);
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

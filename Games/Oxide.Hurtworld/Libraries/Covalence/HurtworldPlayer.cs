@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Steamworks;
+using System;
+using System.Globalization;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -36,7 +36,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             cSteamId = session.SteamId;
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Objects
 
@@ -50,7 +50,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -104,7 +104,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -221,7 +221,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// </summary>
         public void Unban() => Player.Unban(session);
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -249,7 +249,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -286,7 +286,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="args"></param>
         public void Reply(string message, params object[] args) => Message(message, args);
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -328,7 +328,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
 
@@ -358,6 +358,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.HurtworldPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

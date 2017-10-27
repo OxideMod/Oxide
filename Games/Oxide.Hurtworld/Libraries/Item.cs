@@ -54,6 +54,6 @@ namespace Oxide.Game.Hurtworld.Libraries
             }
         }
 
-        #endregion
+        #endregion Object Control
     }
 }

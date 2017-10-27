@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
-using System.Text.RegularExpressions;
-using NLua;
+﻿using NLua;
+using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
-using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Oxide.Core.Lua.Plugins
 {
@@ -94,7 +94,7 @@ namespace Oxide.Core.Lua.Plugins
             base.SaveConfig();
         }
 
-        #endregion
+        #endregion Config
 
         /// <summary>
         /// Loads this plugin
@@ -107,8 +107,8 @@ namespace Oxide.Core.Lua.Plugins
             var pluginfunc = LuaEnvironment.LoadString(source, Path.GetFileName(Filename));
             if (pluginfunc == null) throw new Exception("LoadString returned null for some reason");
             LuaEnvironment.NewTable("PLUGIN");
-            Table = (LuaTable) LuaEnvironment["PLUGIN"];
-            ((LuaFunction) LuaEnvironment["setmetatable"]).Call(Table, luaExt.PluginMetatable);
+            Table = (LuaTable)LuaEnvironment["PLUGIN"];
+            ((LuaFunction)LuaEnvironment["setmetatable"]).Call(Table, luaExt.PluginMetatable);
             Table["Name"] = Name;
             pluginfunc.Call();
 
@@ -256,7 +256,7 @@ namespace Oxide.Core.Lua.Plugins
             plugin?.SaveConfig();
         }
 
-        #endregion
+        #endregion Base Methods
 
         /// <summary>
         /// Called when this plugin has been added to the specified manager

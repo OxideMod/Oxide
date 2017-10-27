@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Oxide.Core;
 using Oxide.Core.Configuration;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Oxide.Tests
 {

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Bolt;
+using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using Bolt;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 using TheForest.Utils;
 using UdpKit;
 using UnityEngine;
@@ -97,7 +97,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             set { Scene.Atmosphere.TimeOfDay = value.Minute; } // TODO: Fix this not working
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -147,7 +147,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             CoopKick.UnBanPlayer(ulong.Parse(id));
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -182,6 +182,6 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             //CoopServerInfo.Instance.ExecuteCommand
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

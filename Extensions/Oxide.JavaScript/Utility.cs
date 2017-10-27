@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Jint;
+﻿using Jint;
 using Jint.Native;
 using Jint.Native.Array;
 using Jint.Native.Object;
 using Oxide.Core.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Oxide.Core.JavaScript
 {
@@ -37,7 +37,7 @@ namespace Oxide.Core.JavaScript
         /// <returns></returns>
         public static ObjectInstance ObjectFromConfig(DynamicConfigFile config, Engine engine)
         {
-            var objInst = new ObjectInstance(engine) {Extensible = true};
+            var objInst = new ObjectInstance(engine) { Extensible = true };
             foreach (var pair in config)
             {
                 objInst.FastAddProperty(pair.Key, JsValueFromObject(pair.Value, engine), true, true, true);
@@ -50,7 +50,7 @@ namespace Oxide.Core.JavaScript
             var values = obj as List<object>;
             if (values != null)
             {
-                var array = (ArrayInstance) engine.Array.Construct(values.Select(v => JsValueFromObject(v, engine)).ToArray());
+                var array = (ArrayInstance)engine.Array.Construct(values.Select(v => JsValueFromObject(v, engine)).ToArray());
                 array.Extensible = true;
                 return array;
             }

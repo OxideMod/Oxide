@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Oxide.Core.Libraries;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Oxide.Core.Libraries;
 
 namespace Oxide.Core.Plugins
 {
@@ -55,7 +55,7 @@ namespace Oxide.Core.Plugins
             {
                 if (Parameters.Length == 0 && (args == null || args.Length == 0))
                     return true;
-                
+
                 for (var n = 0; n < args.Length; n++)
                 {
                     if (args[n] == null && !CanAssignNull(Parameters[n].ParameterType))
@@ -221,11 +221,11 @@ namespace Oxide.Core.Plugins
             List<HookMethod> methods;
 
             if (!hooks.TryGetValue(name, out methods)) return false;
-            
+
             foreach (var method in methods.Except(matches.Select(x => x.Method)))
             {
                 var received = args?.Length ?? 0;
-                
+
                 if (received != method.Parameters.Length)
                 {
                     // The call argument count is different to the declared callback methods argument count
@@ -257,7 +257,7 @@ namespace Oxide.Core.Plugins
 
                 matches.Add(new HookMatch(method, hook_args));
             }
-            
+
             return matches.Any(x => !x.Method.IsBaseHook);
         }
 

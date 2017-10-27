@@ -1,11 +1,11 @@
 ﻿extern alias Oxide;
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Oxide.Core.Plugins;
 using Oxide::Newtonsoft.Json;
 using Oxide::ProtoBuf;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Oxide.Core.Libraries
 {
@@ -37,7 +37,7 @@ namespace Oxide.Core.Libraries
             pluginRemovedFromManager = new Dictionary<Plugin, Event.Callback<Plugin, PluginManager>>();
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Library Functions
 
@@ -179,7 +179,7 @@ namespace Oxide.Core.Libraries
             SaveData();
         }
 
-        #endregion
+        #endregion Library Functions
 
         #region Lang Handling
 
@@ -299,6 +299,6 @@ namespace Oxide.Core.Libraries
             foreach (var lang in langs) langFiles.Remove($"{lang}{Path.DirectorySeparatorChar}{sender.Name}.json");
         }
 
-        #endregion
+        #endregion Lang Handling
     }
 }

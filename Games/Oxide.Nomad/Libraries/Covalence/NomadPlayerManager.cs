@@ -1,11 +1,11 @@
 ﻿extern alias Oxide;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide::ProtoBuf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TNet;
 
 namespace Oxide.Game.Nomad.Libraries.Covalence
@@ -51,7 +51,7 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             }
             else
             {
-                record = new PlayerRecord {Id = id, Name = name};
+                record = new PlayerRecord { Id = id, Name = name };
                 playerData.Add(id, record);
                 allPlayers.Add(id, new NomadPlayer(player));
             }
@@ -130,6 +130,6 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Player Finding
     }
 }

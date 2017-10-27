@@ -9,6 +9,6 @@ namespace Oxide.Game.SavageLands
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

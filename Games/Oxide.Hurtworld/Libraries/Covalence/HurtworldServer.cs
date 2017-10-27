@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.Net;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -16,7 +16,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         internal readonly Server Server = new Server();
         internal static readonly BanManager BanManager = BanManager.Instance;
 
-        #endregion
+        #endregion Initialization
 
         #region Information
 
@@ -107,7 +107,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -148,7 +148,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             if (IsBanned(id)) Server.Unban(id);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -165,6 +165,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => Server.Command(command, args);
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

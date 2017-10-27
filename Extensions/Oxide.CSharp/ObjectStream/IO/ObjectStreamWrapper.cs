@@ -90,7 +90,7 @@ namespace ObjectStream.IO
             }
         }
 
-        #endregion
+        #endregion Private stream readers
 
         public void WriteObject(TWrite obj)
         {
@@ -127,6 +127,6 @@ namespace ObjectStream.IO
             _outStream.Flush();
         }
 
-        #endregion
+        #endregion Private stream writers
     }
 }

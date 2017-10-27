@@ -9,6 +9,6 @@ namespace Oxide.Game.Terraria
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

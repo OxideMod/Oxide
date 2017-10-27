@@ -1,7 +1,7 @@
-﻿using System;
-using Oxide.Core.Libraries;
+﻿using Oxide.Core.Libraries;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
+using System;
 
 namespace Oxide.Game.MedievalEngineers.Libraries
 {
@@ -35,7 +35,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries
             if (IsBanned(id)) MyMultiplayer.Static.BanClient(Convert.ToUInt64(id), false);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -68,6 +68,6 @@ namespace Oxide.Game.MedievalEngineers.Libraries
             //ConsoleManager.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

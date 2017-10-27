@@ -9,6 +9,6 @@ namespace Oxide.Game.GangBeasts
     {
         #region Player Hooks
 
-        #endregion
+        #endregion Player Hooks
     }
 }

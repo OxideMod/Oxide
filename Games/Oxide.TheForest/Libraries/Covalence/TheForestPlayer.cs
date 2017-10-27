@@ -1,10 +1,10 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Steamworks;
+using System;
+using System.Globalization;
+using System.Linq;
 using TheForest.Utils;
 using UdpKit;
 using UnityEngine;
@@ -51,7 +51,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -114,7 +114,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -241,7 +241,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             }
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -269,7 +269,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -321,7 +321,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             adminCommand.Send();
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -363,7 +363,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
 
@@ -393,6 +393,6 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.TheForestPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

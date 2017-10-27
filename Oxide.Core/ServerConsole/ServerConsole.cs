@@ -33,26 +33,31 @@ namespace Oxide.Core.ServerConsole
             get { return input.StatusTextLeftColor[1]; }
             set { input.StatusTextLeftColor[1] = value; }
         }
+
         public ConsoleColor Status1RightColor
         {
             get { return input.StatusTextRightColor[1]; }
             set { input.StatusTextRightColor[1] = value; }
         }
+
         public ConsoleColor Status2LeftColor
         {
             get { return input.StatusTextLeftColor[2]; }
             set { input.StatusTextLeftColor[2] = value; }
         }
+
         public ConsoleColor Status2RightColor
         {
             get { return input.StatusTextRightColor[2]; }
             set { input.StatusTextRightColor[2] = value; }
         }
+
         public ConsoleColor Status3RightColor
         {
             get { return input.StatusTextRightColor[3]; }
             set { input.StatusTextRightColor[3] = value; }
         }
+
         public ConsoleColor Status3LeftColor
         {
             get { return input.StatusTextLeftColor[3]; }

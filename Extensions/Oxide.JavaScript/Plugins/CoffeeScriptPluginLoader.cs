@@ -1,9 +1,9 @@
-using System.IO;
-using System.Reflection;
 using Jint;
 using Jint.Parser;
 using Oxide.Core.Plugins;
 using Oxide.Core.Plugins.Watchers;
+using System.IO;
+using System.Reflection;
 
 namespace Oxide.Core.JavaScript.Plugins
 {
@@ -12,7 +12,7 @@ namespace Oxide.Core.JavaScript.Plugins
     /// </summary>
     public class CoffeeScriptPluginLoader : PluginLoader
     {
-        const string compilerResourcePath = "Oxide.Core.JavaScript.Resources.coffee-script.js";
+        private const string compilerResourcePath = "Oxide.Core.JavaScript.Resources.coffee-script.js";
 
         /// <summary>
         /// Gets the JavaScript engine
@@ -35,8 +35,8 @@ namespace Oxide.Core.JavaScript.Plugins
             JavaScriptEngine = engine;
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(compilerResourcePath))
-                using (var reader = new StreamReader(stream))
-                    engine.Execute(reader.ReadToEnd(), new ParserOptions { Source = "CoffeeScriptCompiler" });
+            using (var reader = new StreamReader(stream))
+                engine.Execute(reader.ReadToEnd(), new ParserOptions { Source = "CoffeeScriptCompiler" });
             engine.Execute("function __CompileScript(name){return CoffeeScript.compile(name+\"=\\n\"+__CoffeeSource.replace(/^/gm, '  '),{bare: true})}");
         }
 

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ObjectStream.IO;
+using ObjectStream.Threading;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using ObjectStream.IO;
-using ObjectStream.Threading;
 
 namespace ObjectStream
 {

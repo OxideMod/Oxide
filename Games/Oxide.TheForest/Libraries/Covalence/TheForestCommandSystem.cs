@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Oxide.Core.Libraries.Covalence;
+﻿using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System.Collections.Generic;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -36,7 +36,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             return registeredCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Command Registration
 
@@ -71,6 +71,6 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <returns></returns>
         public bool HandleChatMessage(IPlayer player, string message) => commandHandler.HandleChatMessage(player, message);
 
-        #endregion
+        #endregion Command Registration
     }
 }

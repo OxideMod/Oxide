@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Oxide.Core;
+using Oxide.Core.Libraries.Covalence;
+using System;
 using System.Globalization;
 using System.Net;
-using Oxide.Core;
-using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.RustLegacy.Libraries.Covalence
 {
@@ -90,7 +90,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             set { EnvironmentControlCenter.Singleton.SetTime(value.Hour); }
         }
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -140,7 +140,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             BanList.Remove(ulong.Parse(id));
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -161,6 +161,6 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => ConsoleSystem.Run($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

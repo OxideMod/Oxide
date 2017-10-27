@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using CodeHatch.Engine.Core.Commands;
+﻿using CodeHatch.Engine.Core.Commands;
 using CodeHatch.Engine.Networking;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
 
 namespace Oxide.Game.ReignOfKings.Libraries.Covalence
 {
@@ -24,7 +24,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -78,7 +78,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// </summary>
         public bool IsServer => true;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -168,7 +168,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -191,7 +191,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position() => new GenericPosition(0, 0, 0);
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -231,7 +231,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
             CommandManager.ExecuteCommand(Server.Instance.ServerPlayer.Id, $"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -281,6 +281,6 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Permissions
     }
 }

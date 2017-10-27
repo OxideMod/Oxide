@@ -1,5 +1,5 @@
-﻿using System;
-using Oxide.Core.Libraries;
+﻿using Oxide.Core.Libraries;
+using System;
 
 namespace Oxide.Game.Hurtworld.Libraries
 {
@@ -11,7 +11,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         internal static readonly ChatManagerServer ChatManager = ChatManagerServer.Instance;
         internal static readonly ConsoleManager ConsoleManager = ConsoleManager.Instance;
 
-        #endregion
+        #endregion Initialization
 
         #region Administration
 
@@ -41,7 +41,7 @@ namespace Oxide.Game.Hurtworld.Libraries
             if (IsBanned(id)) BanManager.RemoveBan(Convert.ToUInt64(id));
         }
 
-        #endregion
+        #endregion Administration
 
         #region Chat and Commands
 
@@ -75,6 +75,6 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => ConsoleManager.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
 
-        #endregion
+        #endregion Chat and Commands
     }
 }

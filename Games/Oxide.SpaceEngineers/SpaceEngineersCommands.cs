@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Oxide.Game.SpaceEngineers
 {
@@ -86,10 +86,10 @@ namespace Oxide.Game.SpaceEngineers
             else player.Reply(lang.GetMessage("CommandUsageGrant", this, player.Id));
         }
 
-        #endregion
+        #endregion Grant Command
 
         // TODO: GrantAllCommand (grant all permissions from user(s)/group(s))
- 
+
         #region Group Command
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Oxide.Game.SpaceEngineers
             }
         }
 
-        #endregion
+        #endregion Group Command
 
         #region Lang Command
 
@@ -218,7 +218,7 @@ namespace Oxide.Game.SpaceEngineers
             }
         }
 
-        #endregion
+        #endregion Lang Command
 
         #region Load Command
 
@@ -251,7 +251,7 @@ namespace Oxide.Game.SpaceEngineers
             }
         }
 
-        #endregion
+        #endregion Load Command
 
         #region Plugins Command
 
@@ -292,7 +292,7 @@ namespace Oxide.Game.SpaceEngineers
             player.Reply(output);
         }
 
-        #endregion
+        #endregion Plugins Command
 
         #region Reload Command
 
@@ -321,7 +321,7 @@ namespace Oxide.Game.SpaceEngineers
                 if (!string.IsNullOrEmpty(name)) Interface.Oxide.ReloadPlugin(name);
         }
 
-        #endregion
+        #endregion Reload Command
 
         #region Revoke Command
 
@@ -394,7 +394,7 @@ namespace Oxide.Game.SpaceEngineers
             else player.Reply(lang.GetMessage("CommandUsageRevoke", this, player.Id));
         }
 
-        #endregion
+        #endregion Revoke Command
 
         // TODO: RevokeAllCommand (revoke all permissions from user(s)/group(s))
 
@@ -482,7 +482,7 @@ namespace Oxide.Game.SpaceEngineers
                     player.Reply(lang.GetMessage("CommandUsageShowName", this, player.Id));
                     return;
                 }
-                
+
                 if (!permission.GroupExists(name))
                 {
                     player.Reply(lang.GetMessage("GroupNotFound", this, player.Id), name);
@@ -511,7 +511,7 @@ namespace Oxide.Game.SpaceEngineers
             else player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
         }
 
-        #endregion
+        #endregion Show Command
 
         #region Unload Command
 
@@ -540,8 +540,8 @@ namespace Oxide.Game.SpaceEngineers
                 if (!string.IsNullOrEmpty(name)) Interface.Oxide.UnloadPlugin(name);
         }
 
-        #endregion
- 
+        #endregion Unload Command
+
         #region User Group Command
 
         /// <summary>
@@ -599,7 +599,7 @@ namespace Oxide.Game.SpaceEngineers
             else player.Reply(lang.GetMessage("CommandUsageUserGroup", this, player.Id));
         }
 
-        #endregion
+        #endregion User Group Command
 
         // TODO: UserGroupAllCommand (add/remove all users to/from group)
 
@@ -627,6 +627,6 @@ namespace Oxide.Game.SpaceEngineers
             }
         }
 
-        #endregion
+        #endregion Version Command
     }
 }

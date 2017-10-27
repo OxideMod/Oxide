@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
+using System.Reflection;
 
 namespace Oxide.Game.SevenDays.Libraries
 {
@@ -30,7 +30,7 @@ namespace Oxide.Game.SevenDays.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
-        #endregion
+        #endregion Utility
 
         #region Chat
 
@@ -45,6 +45,6 @@ namespace Oxide.Game.SevenDays.Libraries
             GameManager.Instance?.GameMessageServer(null, EnumGameMessages.Chat, message, name, false, null, false);
         }
 
-        #endregion
+        #endregion Chat
     }
 }

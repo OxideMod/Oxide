@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using Bolt;
+﻿using Bolt;
 using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
+using System;
+using System.Globalization;
+using System.Linq;
 
 namespace Oxide.Game.TheForest.Libraries.Covalence
 {
@@ -24,7 +24,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get { return CommandType.Console; } set { } }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -78,7 +78,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         public bool IsServer => true;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -168,7 +168,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -191,7 +191,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position() => new GenericPosition(0, 0, 0);
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -234,7 +234,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             adminCommand.Send();
         }
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -284,6 +284,6 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
         }
 
-        #endregion
+        #endregion Permissions
     }
 }

@@ -1,5 +1,13 @@
 ﻿extern alias Oxide;
 
+using Oxide.Core.Configuration;
+using Oxide.Core.Extensions;
+using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
+using Oxide.Core.Logging;
+using Oxide.Core.Plugins;
+using Oxide.Core.ServerConsole;
+using Oxide::Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,15 +17,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Oxide.Core.Configuration;
-using Oxide.Core.Extensions;
-using Oxide.Core.Libraries;
-using Oxide.Core.Libraries.Covalence;
-using Oxide.Core.Logging;
-using Oxide.Core.Plugins;
-using Oxide.Core.ServerConsole;
-using Oxide::Newtonsoft.Json;
-
 using Timer = Oxide.Core.Libraries.Timer;
 
 namespace Oxide.Core
@@ -53,6 +52,7 @@ namespace Oxide.Core
 
         // Various directories
         public string RootDirectory { get; private set; }
+
         public string ExtensionDirectory { get; private set; }
         public string InstanceDirectory { get; private set; }
         public string PluginDirectory { get; private set; }
@@ -270,7 +270,7 @@ namespace Oxide.Core
         /// <returns></returns>
         public void LogException(string message, Exception ex) => RootLogger.WriteException(message, ex);
 
-        #endregion
+        #endregion Logging
 
         #region Plugin Management
 
@@ -472,7 +472,7 @@ namespace Oxide.Core
         /// <param name="message"></param>
         private void plugin_OnError(Plugin sender, string message) => LogError("{0} v{1}: {2}", sender.Name, sender.Version, message);
 
-        #endregion
+        #endregion Plugin Management
 
         /// <summary>
         /// Calls a hook
@@ -610,7 +610,7 @@ namespace Oxide.Core
         /// <param name="name"></param>
         private void watcher_OnPluginRemoved(string name) => UnloadPlugin(name);
 
-        #endregion
+        #endregion Plugin Change Watchers
 
         #region Library Paths
 
@@ -639,6 +639,6 @@ namespace Oxide.Core
         [DllImport("kernel32", SetLastError = true)]
         private static extern bool SetDllDirectory(string lpPathName);
 
-        #endregion
+        #endregion Library Paths
     }
 }

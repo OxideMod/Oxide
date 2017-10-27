@@ -1,13 +1,12 @@
 ﻿extern alias Oxide;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Oxide.Core.Plugins;
 using Oxide::Mono.Cecil;
 using Oxide::Mono.Cecil.Cil;
 using Oxide::Mono.Cecil.Rocks;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Oxide.Core.CSharp
 {

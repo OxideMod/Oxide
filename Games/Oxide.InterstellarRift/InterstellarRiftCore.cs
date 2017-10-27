@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Game.Configuration;
+﻿using Game.Configuration;
 using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System;
+using System.Collections.Generic;
 
 namespace Oxide.Game.InterstellarRift
 {
@@ -45,7 +45,7 @@ namespace Oxide.Game.InterstellarRift
 
         private bool serverInitialized;
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -85,7 +85,7 @@ namespace Oxide.Game.InterstellarRift
                 var rank = 0;
                 foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
- 
+
                 permission.RegisterValidate(s =>
                 {
                     ulong temp;
@@ -128,7 +128,7 @@ namespace Oxide.Game.InterstellarRift
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Helpers
 
@@ -144,6 +144,6 @@ namespace Oxide.Game.InterstellarRift
             return false;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

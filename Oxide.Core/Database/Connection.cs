@@ -9,6 +9,7 @@ namespace Oxide.Core.Database
 #if NET35
     [ReflectionPermission(SecurityAction.Deny, Flags = ReflectionPermissionFlag.AllFlags)]
 #endif
+
     public sealed class Connection
     {
         public string ConnectionString { get; set; }

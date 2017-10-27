@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Reflection;
-using CodeHatch.Common;
+﻿using CodeHatch.Common;
 using CodeHatch.Engine.Networking;
 using CodeHatch.Networking.Events;
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using System.Linq;
+using System.Reflection;
 
 namespace Oxide.Game.ReignOfKings.Libraries
 {
@@ -34,7 +34,7 @@ namespace Oxide.Game.ReignOfKings.Libraries
         [LibraryFunction("QuoteSafe")]
         public string QuoteSafe(string str) => str.Quote();
 
-        #endregion
+        #endregion Utility
 
         #region Chat
 
@@ -55,7 +55,7 @@ namespace Oxide.Game.ReignOfKings.Libraries
         [LibraryFunction("SendChatMessage")]
         public void SendChatMessage(Player player, string name, string message = null) => player.SendMessage(message != null ? $"{name}: {message}" : name);
 
-        #endregion
+        #endregion Chat
 
         /// <summary>
         /// Returns the ID for the specified player as a string

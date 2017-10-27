@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
 using Oxide.Game.Nomad.Libraries.Covalence;
+using System;
+using System.Collections.Generic;
 
 namespace Oxide.Game.Nomad
 {
@@ -45,7 +45,7 @@ namespace Oxide.Game.Nomad
 
         private bool serverInitialized;
 
-        #endregion
+        #endregion Initialization
 
         #region Core Hooks
 
@@ -81,14 +81,14 @@ namespace Oxide.Game.Nomad
                 var rank = 0;
                 foreach (var defaultGroup in Interface.Oxide.Config.Options.DefaultGroups)
                     if (!permission.GroupExists(defaultGroup)) permission.CreateGroup(defaultGroup, defaultGroup, rank++);
- 
-               permission.RegisterValidate(s =>
-                {
-                    ulong temp;
-                    if (!ulong.TryParse(s, out temp)) return false;
-                    var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
-                    return digits >= 17;
-                });
+
+                permission.RegisterValidate(s =>
+                 {
+                     ulong temp;
+                     if (!ulong.TryParse(s, out temp)) return false;
+                     var digits = temp == 0 ? 1 : (int)Math.Floor(Math.Log10(temp) + 1);
+                     return digits >= 17;
+                 });
 
                 permission.CleanUp();
             }
@@ -129,7 +129,7 @@ namespace Oxide.Game.Nomad
         [HookMethod("OnServerShutdown")]
         private void OnServerShutdown() => Interface.Oxide.OnShutdown();
 
-        #endregion
+        #endregion Core Hooks
 
         #region Helpers
 
@@ -145,6 +145,6 @@ namespace Oxide.Game.Nomad
             return false;
         }
 
-        #endregion
+        #endregion Helpers
     }
 }

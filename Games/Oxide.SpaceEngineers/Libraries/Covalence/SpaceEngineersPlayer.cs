@@ -1,9 +1,9 @@
-﻿﻿using System;
-using System.Globalization;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries;
 using Oxide.Core.Libraries.Covalence;
 using Sandbox.Game.World;
+using System;
+using System.Globalization;
 using VRage.Game.ModAPI;
 
 namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
@@ -37,7 +37,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             this.myPlayer = player as MyPlayer;
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Objects
 
@@ -51,7 +51,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         public CommandType LastCommand { get; set; }
 
-        #endregion
+        #endregion Objects
 
         #region Information
 
@@ -105,7 +105,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         public bool IsServer => false;
 
-        #endregion
+        #endregion Information
 
         #region Administration
 
@@ -190,10 +190,10 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// </summary>
         public void Unban()
         {
-            if (IsBanned) return;  Player.Unban(player);
+            if (IsBanned) return; Player.Unban(player);
         }
 
-        #endregion
+        #endregion Administration
 
         #region Location
 
@@ -221,7 +221,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
             return new GenericPosition((float)pos.X, (float)pos.Y, (float)pos.Z);
         }
 
-        #endregion
+        #endregion Location
 
         #region Chat and Commands
 
@@ -258,7 +258,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => Player.Command(player, command, args);
 
-        #endregion
+        #endregion Chat and Commands
 
         #region Permissions
 
@@ -300,9 +300,10 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <param name="group"></param>
         public void RemoveFromGroup(string group) => libPerms.RemoveUserGroup(Id, group);
 
-        #endregion
+        #endregion Permissions
 
         #region Operator Overloads
+
         /// <summary>
         /// Returns if player's unique ID is equal to another player's unique ID
         /// </summary>
@@ -329,6 +330,6 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         /// <returns></returns>
         public override string ToString() => $"Covalence.SpaceEngineersPlayer[{Id}, {Name}]";
 
-        #endregion
+        #endregion Operator Overloads
     }
 }

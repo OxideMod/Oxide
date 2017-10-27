@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Oxide.Core;
+﻿using Oxide.Core;
 using Oxide.Core.Libraries.Covalence;
 using Oxide.Core.Plugins;
+using System.Collections.Generic;
 
 namespace Oxide.Game.Hurtworld.Libraries.Covalence
 {
@@ -43,7 +43,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             return registeredCommands.TryGetValue(command, out callback) && callback(caller, command, args);
         }
 
-        #endregion
+        #endregion Initialization
 
         #region Command Registration
 
@@ -70,7 +70,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             registeredCommands.Add(command, callback);
         }
 
-        #endregion
+        #endregion Command Registration
 
         #region Command Unregistration
 
@@ -81,7 +81,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="plugin"></param>
         public void UnregisterCommand(string command, Plugin plugin) => registeredCommands.Remove(command);
 
-        #endregion
+        #endregion Command Unregistration
 
         #region Message Handling
 
@@ -101,7 +101,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <returns></returns>
         public bool HandleConsoleMessage(IPlayer player, string message) => commandHandler.HandleConsoleMessage(player, message);
 
-        #endregion
+        #endregion Message Handling
 
         #region Command Overriding
 
@@ -135,6 +135,6 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
             return !HurtworldCore.RestrictedCommands.Contains(command) && !HurtworldCore.RestrictedCommands.Contains(fullname);
         }*/
 
-        #endregion
+        #endregion Command Overriding
     }
 }

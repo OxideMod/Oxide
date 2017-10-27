@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using Oxide.Core.Database;
 using Oxide.Core.Libraries;
 using Oxide.Core.Plugins;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading;
 
 namespace Oxide.Core.MySql.Libraries
 {
@@ -76,14 +76,14 @@ namespace Oxide.Core.MySql.Libraries
                     if (Connection == null) throw new Exception("Connection is null");
                     //if (_result == null)
                     //{
-                        _connection = (MySqlConnection) Connection.Con;
-                        if (_connection.State == ConnectionState.Closed)
-                            _connection.Open();
-                        _cmd = _connection.CreateCommand();
-                        _cmd.CommandTimeout = 120;
-                        _cmd.CommandText = Sql.SQL;
-                        Sql.AddParams(_cmd, Sql.Arguments, "@");
-                        _result = NonQuery ? _cmd.BeginExecuteNonQuery() : _cmd.BeginExecuteReader();
+                    _connection = (MySqlConnection)Connection.Con;
+                    if (_connection.State == ConnectionState.Closed)
+                        _connection.Open();
+                    _cmd = _connection.CreateCommand();
+                    _cmd.CommandTimeout = 120;
+                    _cmd.CommandText = Sql.SQL;
+                    Sql.AddParams(_cmd, Sql.Arguments, "@");
+                    _result = NonQuery ? _cmd.BeginExecuteNonQuery() : _cmd.BeginExecuteReader();
                     //}
                     _result.AsyncWaitHandle.WaitOne();
                     //if (!_result.IsCompleted) return false;
@@ -276,7 +276,6 @@ namespace Oxide.Core.MySql.Libraries
             };
             lock (_syncroot) _queue.Enqueue(query);
             _workevent.Set();
-
         }
 
         [LibraryFunction("ExecuteNonQuery")]
