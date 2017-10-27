@@ -68,20 +68,25 @@ namespace Oxide.Game.Hurtworld
         {
             // Get the full command
             var str = command.TrimStart('/');
+
             // Parse it
             string cmd;
             string[] args;
             ParseCommand(str, out cmd, out args);
             if (cmd == null) return null;
+
             // Is the command blocked?
             var blockedSpecific = Interface.Call("OnPlayerCommand", session, cmd, args); // TODO: Deprecate OnChatCommand
             var blockedCovalence = Interface.Call("OnUserCommand", session.IPlayer, cmd, args);
             if (blockedSpecific != null || blockedCovalence != null) return true;
+
             // Is it a covalance command?
             if (Covalence.CommandSystem.HandleChatMessage(session.IPlayer, command)) return true;
+
             // Is it a regular chat command?
             if (!cmdlib.HandleChatCommand(session, cmd, args))
                 session.IPlayer.Reply(lang.GetMessage("UnknownCommand", this, session.IPlayer.Id), cmd);
+
             return true;
         }
 #else
