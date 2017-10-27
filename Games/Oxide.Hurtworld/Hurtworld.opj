@@ -1589,25 +1589,25 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 127,
-            "ReturnBehavior": 0,
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 2,
             "ArgumentString": null,
             "HookTypeName": "Simple",
             "Name": "IOnPlayerConnected [internal]",
             "HookName": "IOnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "PlayerSpawnManager",
+            "TypeName": "ChatManagerServer",
             "Flagged": false,
             "Signature": {
               "Exposure": 2,
-              "Name": "SyncClient",
+              "Name": "AppendConnectionNoticeAll",
               "ReturnType": "System.Void",
               "Parameters": [
-                "uLink.NetworkPlayer"
+                "System.String"
               ]
             },
-            "MSILHash": "g097Be0CO9ftL8W0Mw8oYgmkFnqq/+FgK98myZpd0+E=",
+            "MSILHash": "2R68DppiPNEOmPULPavdPC/RGdlQIcMvN5wKArivubI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }

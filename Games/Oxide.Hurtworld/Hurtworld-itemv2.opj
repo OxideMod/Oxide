@@ -1506,25 +1506,25 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 201,
+            "InjectionIndex": 5,
             "ReturnBehavior": 0,
-            "ArgumentBehavior": 2,
-            "ArgumentString": null,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.sender",
             "HookTypeName": "Simple",
             "Name": "IOnPlayerConnected [internal]",
             "HookName": "IOnPlayerConnected",
             "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "PlayerSpawnManager",
+            "TypeName": "GameManager",
             "Flagged": false,
             "Signature": {
-              "Exposure": 2,
-              "Name": "RPCSpawnPlayerEntity",
+              "Exposure": 0,
+              "Name": "RPCClientReady",
               "ReturnType": "System.Void",
               "Parameters": [
-                "uLink.NetworkPlayer"
+                "uLink.NetworkMessageInfo"
               ]
             },
-            "MSILHash": "dqblBTANBh1PkLfuW/K6oUrV896xyR/Wrh/2YmTbPx4=",
+            "MSILHash": "dhP9bdZhmUdhAfRkKmCLPiIhzg2XbTzakEIrc1WnyJE=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
