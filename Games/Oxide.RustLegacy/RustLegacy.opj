@@ -421,32 +421,6 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 65,
-            "ReturnBehavior": 1,
-            "ArgumentBehavior": 4,
-            "ArgumentString": "l0, a0, this",
-            "HookTypeName": "Simple",
-            "Name": "IOnUserApprove [internal]",
-            "HookName": "IOnUserApprove",
-            "AssemblyName": "Assembly-CSharp.dll",
-            "TypeName": "ConnectionAcceptor",
-            "Flagged": false,
-            "Signature": {
-              "Exposure": 2,
-              "Name": "uLink_OnPlayerApproval",
-              "ReturnType": "System.Void",
-              "Parameters": [
-                "uLink.NetworkPlayerApproval"
-              ]
-            },
-            "MSILHash": "CnmQP1Icge5S9Qx0Kx3afF8hshkFb7tgA0MpK5gccFw=",
-            "BaseHookName": null,
-            "HookCategory": "Player"
-          }
-        },
-        {
-          "Type": "Simple",
-          "Hook": {
             "InjectionIndex": 0,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 0,
@@ -944,6 +918,78 @@
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 69,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "l0, a0, this",
+            "HookTypeName": "Simple",
+            "Name": "IOnUserApprove [internal]",
+            "HookName": "IOnUserApprove",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConnectionAcceptor",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerApproval",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayerApproval"
+              ]
+            },
+            "MSILHash": "CnmQP1Icge5S9Qx0Kx3afF8hshkFb7tgA0MpK5gccFw=",
+            "BaseHookName": "FixAlreadyConnected [patch]",
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 49,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldloc_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|ClientConnection|UserID"
+              },
+              {
+                "OpCode": "call",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|NetUser|FindByUserID|System.UInt64"
+              },
+              {
+                "OpCode": "brtrue",
+                "OpType": "Instruction",
+                "Operand": 54
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "FixAlreadyConnected [patch]",
+            "HookName": "FixAlreadyConnected",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "ConnectionAcceptor",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "uLink_OnPlayerApproval",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "uLink.NetworkPlayerApproval"
+              ]
+            },
+            "MSILHash": "CnmQP1Icge5S9Qx0Kx3afF8hshkFb7tgA0MpK5gccFw=",
+            "BaseHookName": null,
+            "HookCategory": "_Patches"
+          }
         }
       ],
       "Modifiers": [
@@ -1006,7 +1052,15 @@
           "MSILHash": ""
         }
       ],
-      "Fields": []
+      "Fields": [
+        {
+          "Name": "IPlayer",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "NetUser",
+          "FieldType": "Oxide.Core|Oxide.Core.Libraries.Covalence.IPlayer",
+          "Flagged": false
+        }
+      ]
     },
     {
       "AssemblyName": "uLink.dll",
