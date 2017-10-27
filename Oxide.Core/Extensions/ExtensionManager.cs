@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Oxide.Core.Libraries;
+using Oxide.Core.Logging;
+using Oxide.Core.Plugins;
+using Oxide.Core.Plugins.Watchers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Oxide.Core.Libraries;
-using Oxide.Core.Logging;
-using Oxide.Core.Plugins;
-using Oxide.Core.Plugins.Watchers;
 
 namespace Oxide.Core.Extensions
 {
@@ -188,7 +188,7 @@ namespace Oxide.Core.Extensions
                     continue;
                 }
 
-                if (extPath.Contains("Oxide.Game.") && Array.IndexOf(foundExtensions, extPath.Replace(".Game", "")) != -1)
+                if (extPath.Contains("Oxide.Game."))
                 {
                     Cleanup.Add(extPath);
                     continue;
