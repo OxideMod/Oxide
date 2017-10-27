@@ -29,9 +29,9 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the name for the player
+        /// Gets/sets the name for the player
         /// </summary>
-        public string Name => "Server Console";
+        public string Name { get => "Server Console"; set { } }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)

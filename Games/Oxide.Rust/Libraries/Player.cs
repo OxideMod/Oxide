@@ -160,12 +160,14 @@ namespace Oxide.Game.Rust.Libraries
         public void Rename(BasePlayer player, string name)
         {
             name = string.IsNullOrEmpty(name.Trim()) ? player.displayName : name;
+
             player.net.connection.username = name;
             player.displayName = name;
-            //player._name = name; // TODO: Remove or replace if needed
+            player._name = name;
             player.SendNetworkUpdateImmediate();
 
-            //permission.UpdateNickname(player.UserIDString, name);
+            player.IPlayer.Name = name;
+            permission.UpdateNickname(player.UserIDString, name);
         }
 
         /// <summary>

@@ -6174,6 +6174,25 @@
             "Parameters": []
           },
           "MSILHash": "pIaWNU1Qc9jKNNcsfT9nevEogMTosUmunyKZ9K20m0o="
+        },
+        {
+          "Name": "BaseEntity::_name",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BaseEntity",
+          "Type": 0,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              1
+            ],
+            "Name": "_name",
+            "FullTypeName": "System.String BaseEntity::_name",
+            "Parameters": []
+          },
+          "MSILHash": ""
         }
       ],
       "Fields": [

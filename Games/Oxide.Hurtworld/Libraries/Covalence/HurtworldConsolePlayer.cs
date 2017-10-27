@@ -27,7 +27,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the name for the player
+        /// Gets/sets the name for the player
         /// </summary>
         public string Name => "Server Console";
 

@@ -48,9 +48,9 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         #region Information
 
         /// <summary>
-        /// Gets the name for the player
+        /// Gets/sets the name for the player
         /// </summary>
-        public string Name { get; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets the ID for the player (unique within the current game)
