@@ -133,12 +133,19 @@ namespace Oxide.Game.Hurtworld
         /// <summary>
         /// Called when the player has connected
         /// </summary>
-        /// <param name="name"></param>
+#if ITEMV2
         /// <param name="player"></param>
         [HookMethod("IOnPlayerConnected")]
         private void IOnPlayerConnected(uLink.NetworkPlayer player)
         {
             var session = Player.Find(player);
+#else
+        /// <param name="name"></param>
+        [HookMethod("IOnPlayerConnected")]
+        private void IOnPlayerConnected(string name)
+        {
+            var session = Player.Find(name);
+#endif
             if (session == null) return;
 
             // Update player's permissions group and name
