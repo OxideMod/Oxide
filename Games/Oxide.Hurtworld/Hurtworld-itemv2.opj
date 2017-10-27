@@ -229,7 +229,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "/xF4+wF1yoZJS0moErczIg8NQ72PbL+umrXBPKuiKoU=",
+            "MSILHash": "x7nBtRL/n9yhJOSqwX2shnInvw7thgQg40TrpREVtZI=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -317,7 +317,7 @@
                 "uLink.NetworkPlayer"
               ]
             },
-            "MSILHash": "q4HO67K1lmt1Ry5usR/B1knkIx0/0VJ4ASRzxE3WwrE=",
+            "MSILHash": "w1BCxmNRi6inY9TKjzs97HQUDXHEWHd5Alu4Hzr63c4=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
