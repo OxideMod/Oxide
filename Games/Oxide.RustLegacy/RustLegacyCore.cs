@@ -283,7 +283,7 @@ namespace Oxide.Game.RustLegacy
             var cmdnamefull = $"{arg.Class}.{arg.Function}";
 
             // Get the args
-            var str = arg.GetString(0);
+            var str = arg.ArgsStr;
 
             // Get the covalence player
             var iplayer = arg.argUser != null ? Covalence.PlayerManager.FindPlayerById(arg.argUser.userID.ToString()) : null;
