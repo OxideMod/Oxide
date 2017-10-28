@@ -60,7 +60,14 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("user"))
             {
-                var target = Covalence.PlayerManager.FindPlayer(name);
+                var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
+                if (foundPlayers.Length > 1)
+                {
+                    player.Reply("UsersFound", player.Id, string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray()));
+                    return;
+                }
+
+                var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
                 if (target == null && !permission.UserIdValid(name))
                 {
                     player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
@@ -367,7 +374,14 @@ namespace Oxide.Game.Rust
             }
             else if (mode.Equals("user"))
             {
-                var target = Covalence.PlayerManager.FindPlayer(name);
+                var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
+                if (foundPlayers.Length > 1)
+                {
+                    player.Reply("UsersFound", player.Id, string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray()));
+                    return;
+                }
+
+                var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
                 if (target == null && !permission.UserIdValid(name))
                 {
                     player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
@@ -452,12 +466,20 @@ namespace Oxide.Game.Rust
                     return;
                 }
 
-                var target = Covalence.PlayerManager.FindPlayer(name);
+                var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
+                if (foundPlayers.Length > 1)
+                {
+                    player.Reply("UsersFound", player.Id, string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray()));
+                    return;
+                }
+
+                var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
                 if (target == null && !permission.UserIdValid(name))
                 {
                     player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                     return;
                 }
+
                 var userId = name;
                 if (target != null)
                 {
@@ -566,12 +588,20 @@ namespace Oxide.Game.Rust
             var name = args[1];
             var group = args[2];
 
-            var target = Covalence.PlayerManager.FindPlayer(name);
+            var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
+            if (foundPlayers.Length > 1)
+            {
+                player.Reply("UsersFound", player.Id, string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray()));
+                return;
+            }
+
+            var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
             if (target == null && !permission.UserIdValid(name))
             {
                 player.Reply(lang.GetMessage("UserNotFound", this, player.Id), name);
                 return;
             }
+
             var userId = name;
             if (target != null)
             {

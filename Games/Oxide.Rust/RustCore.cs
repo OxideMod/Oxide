@@ -270,6 +270,10 @@ namespace Oxide.Game.Rust
             return null;
         }
 
+        #endregion Command Handling
+
+        #region Helpers
+
         /// <summary>
         /// Returns the BasePlayer for the specified name, ID, or IP address string
         /// </summary>
@@ -304,10 +308,6 @@ namespace Oxide.Game.Rust
             }
             return player;
         }
-
-        #endregion Command Handling
-
-        #region Helpers
 
         /// <summary>
         /// Returns the BasePlayer for the specified name string

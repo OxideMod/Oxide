@@ -48,6 +48,7 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\UnityEngine.Networking.dll</HintPath>
     </Reference>
+    <Compile Remove="GangBeastsCommands.cs" /> <!-- Remove when ready -->
     <None Remove="DepotDownloader.config" />
     <None Remove="Files\**" />
     <None Remove="Patched\**" />
