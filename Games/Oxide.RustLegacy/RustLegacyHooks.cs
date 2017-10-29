@@ -28,6 +28,14 @@ namespace Oxide.Game.RustLegacy
                 return true;
             }
 
+            // "Already connected" fix
+            var netUser = NetUser.FindByUserID(connection.UserID);
+            if (netUser != null)
+            {
+                Interface.Oxide.LogInfo($"Kicking existing {netUser.displayName} ({netUser.userID}) player (already connected fix)");
+                netUser.Kick(NetError.AlreadyConnectedToAnotherServer, false);
+            }
+
             var id = connection.UserID.ToString();
             var ip = approval.ipAddress;
 
