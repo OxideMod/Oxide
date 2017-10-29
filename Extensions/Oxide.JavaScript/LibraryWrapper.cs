@@ -16,8 +16,7 @@ namespace Oxide.Core.JavaScript
     {
         public Object Target { get; set; }
 
-        public LibraryWrapper(Engine engine, Object obj)
-            : base(engine)
+        public LibraryWrapper(Engine engine, Object obj) : base(engine)
         {
             Target = obj;
         }
@@ -26,10 +25,7 @@ namespace Oxide.Core.JavaScript
         {
             if (!CanPut(propertyName))
             {
-                if (throwOnError)
-                {
-                    throw new JavaScriptException(Engine.TypeError);
-                }
+                if (throwOnError) throw new JavaScriptException(Engine.TypeError);
 
                 return;
             }
@@ -39,13 +35,9 @@ namespace Oxide.Core.JavaScript
             if (ownDesc == null)
             {
                 if (throwOnError)
-                {
                     throw new JavaScriptException(Engine.TypeError, "Unknown member: " + propertyName);
-                }
                 else
-                {
                     return;
-                }
             }
 
             ownDesc.Value = value;
@@ -54,8 +46,7 @@ namespace Oxide.Core.JavaScript
         public override PropertyDescriptor GetOwnProperty(string propertyName)
         {
             PropertyDescriptor x;
-            if (Properties.TryGetValue(propertyName, out x))
-                return x;
+            if (Properties.TryGetValue(propertyName, out x)) return x;
 
             var library = (Library)Target;
             var method = library.GetFunction(propertyName);

@@ -39,9 +39,7 @@ namespace Oxide.Core.JavaScript
         {
             var objInst = new ObjectInstance(engine) { Extensible = true };
             foreach (var pair in config)
-            {
                 objInst.FastAddProperty(pair.Key, JsValueFromObject(pair.Value, engine), true, true, true);
-            }
             return objInst;
         }
 
@@ -59,9 +57,7 @@ namespace Oxide.Core.JavaScript
             {
                 var objInst = new ObjectInstance(engine) { Extensible = true };
                 foreach (var pair in dict)
-                {
                     objInst.FastAddProperty(pair.Key, JsValueFromObject(pair.Value, engine), true, true, true);
-                }
                 return objInst;
             }
             return JsValue.FromObject(engine, obj);
@@ -72,9 +68,6 @@ namespace Oxide.Core.JavaScript
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string GetNamespace(Type type)
-        {
-            return type.Namespace ?? string.Empty;
-        }
+        public static string GetNamespace(Type type) => type.Namespace ?? string.Empty;
     }
 }

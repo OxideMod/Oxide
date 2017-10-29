@@ -35,8 +35,10 @@ namespace Oxide.Core.JavaScript.Plugins
             JavaScriptEngine = engine;
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(compilerResourcePath))
-            using (var reader = new StreamReader(stream))
-                engine.Execute(reader.ReadToEnd(), new ParserOptions { Source = "CoffeeScriptCompiler" });
+            {
+                using (var reader = new StreamReader(stream))
+                    engine.Execute(reader.ReadToEnd(), new ParserOptions { Source = "CoffeeScriptCompiler" });
+            }
             engine.Execute("function __CompileScript(name){return CoffeeScript.compile(name+\"=\\n\"+__CoffeeSource.replace(/^/gm, '  '),{bare: true})}");
         }
 
@@ -45,9 +47,6 @@ namespace Oxide.Core.JavaScript.Plugins
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        protected override Plugin GetPlugin(string filename)
-        {
-            return new CoffeeScriptPlugin(filename, JavaScriptEngine, Watcher);
-        }
+        protected override Plugin GetPlugin(string filename) => new CoffeeScriptPlugin(filename, JavaScriptEngine, Watcher);
     }
 }

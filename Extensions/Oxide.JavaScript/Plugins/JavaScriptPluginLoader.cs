@@ -35,9 +35,6 @@ namespace Oxide.Core.JavaScript.Plugins
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        protected override Plugin GetPlugin(string filename)
-        {
-            return new JavaScriptPlugin(filename, JavaScriptEngine, Watcher);
-        }
+        protected override Plugin GetPlugin(string filename) => new JavaScriptPlugin(filename, JavaScriptEngine, Watcher);
     }
 }

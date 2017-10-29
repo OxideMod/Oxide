@@ -32,9 +32,6 @@ namespace Oxide.Core.JavaScript.Libraries
         /// </summary>
         /// <param name="message"></param>
         [LibraryFunction("print")]
-        public void Print(object message)
-        {
-            Logger.Write(LogType.Info, message?.ToString() ?? "null");
-        }
+        public void Print(object message) => Logger.Write(LogType.Info, message?.ToString() ?? "null");
     }
 }
