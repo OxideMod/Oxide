@@ -258,6 +258,7 @@ function Start-Patcher {
     # Attempt to patch game using the Oxide patcher
     try {
         Start-Process "$deps_dir\OxidePatcher.exe" -WorkingDirectory "$managed_dir" -ArgumentList "-c -p `"$managed_dir`" $opj_name.opj" -NoNewWindow -Wait
+        Get-ChildItem "$managed_dir" -Include "*_Original.dll" -Recurse | foreach ($_) { Remove-Item $_.FullName }
     } catch {
         Write-Host "Could not start or complete OxidePatcher process"
         Write-Host $_.Exception.Message
