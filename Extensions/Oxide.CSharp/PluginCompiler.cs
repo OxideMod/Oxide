@@ -52,27 +52,23 @@ namespace Oxide.Plugins
                     UpdateCheck(); // TODO: Only check once on server startup
                     try
                     {
-                        if (Syscall.access(binaryPath, AccessModes.X_OK) == -1)
-                        {
-                            try
-                            {
-                                Syscall.chmod(binaryPath, FilePermissions.S_IRWXU);
-                            }
-                            catch (Exception ex)
-                            {
-                                Interface.Oxide.LogError($"Could not set {FileName} as executable, please set manually");
-                                Interface.Oxide.LogError(ex.Message);
-                                Interface.Oxide.LogError(ex.StackTrace);
-                            }
-                            return;
-                        }
+                        if (Syscall.access(binaryPath, AccessModes.X_OK) != -1) return;
                     }
                     catch (Exception ex)
                     {
                         Interface.Oxide.LogError($"Unable to check {FileName} for executable permission");
                         Interface.Oxide.LogError(ex.Message);
                         Interface.Oxide.LogError(ex.StackTrace);
-                        return;
+                    }
+                    try
+                    {
+                        Syscall.chmod(binaryPath, FilePermissions.S_IRWXU);
+                    }
+                    catch (Exception ex)
+                    {
+                        Interface.Oxide.LogError($"Could not set {FileName} as executable, please set manually");
+                        Interface.Oxide.LogError(ex.Message);
+                        Interface.Oxide.LogError(ex.StackTrace);
                     }
                     break;
             }
