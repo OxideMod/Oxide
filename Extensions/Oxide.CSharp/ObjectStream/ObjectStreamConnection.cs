@@ -41,10 +41,7 @@ namespace ObjectStream
             _writeSignal.Set();
         }
 
-        public void Close()
-        {
-            CloseImpl();
-        }
+        public void Close() => CloseImpl();
 
         private void CloseImpl()
         {
@@ -64,8 +61,7 @@ namespace ObjectStream
             while (_streamWrapper.CanRead)
             {
                 var obj = _streamWrapper.ReadObject();
-                if (ReceiveMessage != null)
-                    ReceiveMessage(this, obj);
+                ReceiveMessage?.Invoke(this, obj);
                 if (obj != null) continue;
                 CloseImpl();
                 return;
@@ -78,9 +74,7 @@ namespace ObjectStream
             {
                 _writeSignal.WaitOne();
                 while (_writeQueue.Count > 0)
-                {
                     _streamWrapper.WriteObject(_writeQueue.Dequeue());
-                }
             }
         }
     }

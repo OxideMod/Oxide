@@ -4,10 +4,10 @@ using System.IO;
 
 namespace Oxide.Core
 {
-    internal static class Cleanup
+    public static class Cleanup
     {
         internal static HashSet<string> files = new HashSet<string>();
-        internal static void Add(string file) => files.Add(file);
+        public static void Add(string file) => files.Add(file);
 
         internal static void Run()
         {

@@ -60,16 +60,18 @@ namespace Oxide.Plugins
                             }
                             catch (Exception ex)
                             {
-                                Interface.Oxide.LogError($"Could not set {FileName} as executable; please set manually");
+                                Interface.Oxide.LogError($"Could not set {FileName} as executable, please set manually");
                                 Interface.Oxide.LogError(ex.Message);
+                                Interface.Oxide.LogError(ex.StackTrace);
                             }
                             return;
                         }
                     }
                     catch (Exception ex)
                     {
-                        Interface.Oxide.LogError($"Cannot compile .cs (C#) plugins; {FileName} is not executable");
+                        Interface.Oxide.LogError($"Unable to check {FileName} for executable permission");
                         Interface.Oxide.LogError(ex.Message);
+                        Interface.Oxide.LogError(ex.StackTrace);
                         return;
                     }
                     break;
@@ -108,7 +110,7 @@ namespace Oxide.Plugins
             }
             catch (Exception)
             {
-                //Interface.Oxide.LogError($"Couldn't run dependency trace!"); // TODO: Fix this triggering sometimes
+                //Interface.Oxide.LogError($"Couldn't run dependency trace"); // TODO: Fix this triggering sometimes
                 //Interface.Oxide.LogError(ex.Message);
             }
             TraceRan = true;
@@ -166,7 +168,7 @@ namespace Oxide.Plugins
             }
             catch (Exception ex)
             {
-                Interface.Oxide.LogError($"Couldn't check for update to {FileName}!");
+                Interface.Oxide.LogError($"Couldn't check for update to {FileName}");
                 Interface.Oxide.LogError(ex.Message);
             }
         }
@@ -417,7 +419,7 @@ namespace Oxide.Plugins
             {
                 OnCompilerFailed($"compiler v{CompilerVersion} was closed unexpectedly");
                 if (Environment.OSVersion.Platform == PlatformID.Unix)
-                    Interface.Oxide.LogWarning("User running server may not have access to all service files");
+                    Interface.Oxide.LogWarning("User running server may not have the proper permissions or install is missing files");
                 else
                     Interface.Oxide.LogWarning("Compiler may have been closed by interference from security software");
                 Shutdown();
