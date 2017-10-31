@@ -1,4 +1,5 @@
 ﻿extern alias Oxide;
+
 using Oxide.Core.Plugins;
 using Oxide::Mono.Cecil;
 using Oxide::Mono.Cecil.Cil;

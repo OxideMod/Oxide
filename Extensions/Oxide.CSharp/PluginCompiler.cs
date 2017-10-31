@@ -1,4 +1,5 @@
 ﻿extern alias Oxide;
+
 using ObjectStream;
 using ObjectStream.Data;
 using Oxide.Core;
@@ -52,7 +53,7 @@ namespace Oxide.Plugins
                     UpdateCheck(); // TODO: Only check once on server startup
                     try
                     {
-                        if (Syscall.access(binaryPath, AccessModes.X_OK) != -1) return;
+                        if (Syscall.access(binaryPath, AccessModes.X_OK) == 0) break;
                     }
                     catch (Exception ex)
                     {

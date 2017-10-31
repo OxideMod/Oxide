@@ -1,4 +1,5 @@
 ﻿extern alias Oxide;
+
 using Oxide.Core;
 using Oxide.Core.CSharp;
 using Oxide::Mono.Cecil;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+
 using MethodAttributes = Oxide::Mono.Cecil.MethodAttributes;
 using MethodBody = Oxide::Mono.Cecil.Cil.MethodBody;
 
