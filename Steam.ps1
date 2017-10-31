@@ -201,7 +201,7 @@ function Get-Deobfuscators {
             }
 
             # Cleanup downloaded .zip file
-            Remove-Item "$depot_dir\de4dot.zip"
+            Remove-Item "$de4dot_dir\de4dot.zip"
         } else {
             Write-Host "Latest version of de4dot already downloaded"
         }
