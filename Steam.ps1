@@ -30,6 +30,8 @@ if ("$branch" -ne "public" -and (Test-Path "$project_dir\$game_name-$branch.opj"
 $managed_dir = "$patch_dir\$managed"
 New-Item "$depot_dir", "$patch_dir", "$managed_dir" -ItemType Directory -Force
 
+# TODO: Add support for GitHub API tokens for higher rate limit
+
 function Find-Dependencies {
     # Check if project file exists for game
     if (!(Test-Path "$game_name.csproj")) {
@@ -63,20 +65,22 @@ function Find-Dependencies {
 }
 
 function Get-Downloader {
-    # Get latest release info for DepotDownloader
-    Write-Host "Determining latest release of DepotDownloader"
-    try {
-        $json = (Invoke-WebRequest "https://api.github.com/repos/SteamRE/DepotDownloader/releases" | ConvertFrom-Json)[0]
-        $version = $json.tag_name -Replace '\w+(\d+(?:\.\d+)+)', '$1'
-        $release_zip = $json.assets[0].name
-    } catch {
-        Write-Host "Could not get DepotDownloader information from GitHub"
-        Write-Host $_.Exception.Message
-        exit 1
-    }
+    # Check if DepotDownloader is already downloaded
+    $depot_exe = "$depot_dir\DepotDownloader.exe"
+    if (!(Test-Path "$depot_exe") -or ((Get-ChildItem "$depot_exe").CreationTime -gt (Get-Date).AddDays(-7))) {
+        # Get latest release info for DepotDownloader
+        Write-Host "Determining latest release of DepotDownloader"
+        try {
+            $json = (Invoke-WebRequest "https://api.github.com/repos/SteamRE/DepotDownloader/releases" | ConvertFrom-Json)[0]
+            # TODO: Implement auth/token handling for GitHub API
+            $version = $json.tag_name -Replace '\w+(\d+(?:\.\d+)+)', '$1'
+            $release_zip = $json.assets[0].name
+        } catch {
+            Write-Host "Could not get DepotDownloader information from GitHub"
+            Write-Host $_.Exception.Message
+            exit 1
+        }
 
-    # Check if latest DepotDownloader is already downloaded
-    if (!(Test-Path "$depot_dir\$release_zip") -or !(Test-Path "$depot_dir\DepotDownloader.exe")) {
         # Download and extract DepotDownloader
         Write-Host "Downloading version $version of DepotDownloader"
         try {
@@ -96,10 +100,10 @@ function Get-Downloader {
             return
         }
 
-        # TODO: Cleanup old version .zip file(s)
-        #Remove-Item "$depot_dir\depotdownloader-*.zip" -Exclude "$depot_dir\$release_zip" -Verbose –Force
+        # Cleanup downloaded .zip file
+        Remove-Item "$depot_dir\depotdownloader-*.zip"
     } else {
-        Write-Host "Latest version ($version) of DepotDownloader already downloaded"
+        Write-Host "Latest version of DepotDownloader already downloaded"
     }
 }
 
@@ -166,22 +170,19 @@ function Get-Dependencies {
             exit 1
         }
     }
-
-    # TODO: Copy websocket-csharp.dll to Dependencies\*Managed
 }
 
 function Get-Deobfuscators {
-    # TODO: Run `de4dot -d -r c:\input` to detect obfuscation type?
-
     # Check for which deobfuscator to get and use
     if ($deobf.ToLower() -eq "de4dot") {
         $de4dot_dir = "$deps_dir\.de4dot"
         New-Item "$de4dot_dir" -ItemType Directory -Force
 
-        # Check if latest de4dot is already downloaded
-        if (!(Test-Path "$de4dot_dir\de4dot.zip") -or !(Test-Path "$de4dot_dir\de4dot.exe")) {
+        # Check if de4dot is already downloaded
+        $de4dot_exe = "$de4dot_dir\de4dot.exe"
+        if (!(Test-Path "$de4dot_exe") -or ((Get-ChildItem "$de4dot_exe").CreationTime -gt (Get-Date).AddDays(-7))) {
             # Download and extract de4dot
-            Write-Host "Downloading version of de4dot" # TODO: Get and show version
+            Write-Host "Downloading latest version of de4dot" # TODO: Get and show version
             try {
                 Invoke-WebRequest "https://ci.appveyor.com/api/projects/0xd4d/de4dot/artifacts/de4dot.zip" -Out "$de4dot_dir\de4dot.zip"
             } catch {
@@ -194,10 +195,13 @@ function Get-Deobfuscators {
             Write-Host "Extracting de4dot release files"
             Expand-Archive "$de4dot_dir\de4dot.zip" -DestinationPath "$de4dot_dir" -Force
 
-            if (!(Test-Path "$de4dot_dir\de4dot.exe")) {
+            if (!(Test-Path "$de4dot_exe")) {
                 Get-Deobfuscators # TODO: Add infinite loop prevention
                 return
             }
+
+            # Cleanup downloaded .zip file
+            Remove-Item "$depot_dir\de4dot.zip"
         } else {
             Write-Host "Latest version of de4dot already downloaded"
         }
@@ -227,13 +231,14 @@ function Start-Deobfuscator {
 
 function Get-Patcher {
     # TODO: MD5 comparision of local OxidePatcher.exe and remote header
-    if (!(Test-Path "$deps_dir\OxidePatcher.exe")) {
+    # Check if OxidePatcher is already downloaded
+    $patcher_exe = "$deps_dir\OxidePatcher.exe"
+    if (!(Test-Path "$patcher_exe") -or (Get-ChildItem "$patcher_exe").CreationTime -lt (Get-Date).AddDays(-7)) {
         # Download latest Oxide Patcher build
         Write-Host "Downloading latest build of OxidePatcher"
         $patcher_url = "https://github.com/OxideMod/OxidePatcher/releases/download/latest/OxidePatcher.exe"
-        # TODO: Only download patcher once in $patch_dir, then copy to $managed_dir for each game
         try {
-            Invoke-WebRequest $patcher_url -Out "$deps_dir\OxidePatcher.exe"
+            Invoke-WebRequest $patcher_url -Out "$patcher_exe"
         } catch {
             Write-Host "Could not download OxidePatcher.exe from GitHub"
             Write-Host $_.Exception.Message
