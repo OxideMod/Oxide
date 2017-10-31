@@ -48,14 +48,14 @@ namespace Oxide.Plugins
         /// <param name="manager"></param>
         public CSharpExtension(ExtensionManager manager) : base(manager)
         {
-            if (Environment.OSVersion.Platform != PlatformID.Unix) return;
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                Cleanup.Add(Path.Combine(Interface.Oxide.ExtensionDirectory, "Mono.Posix.dll.config"));
 
-            Cleanup.Add(Path.Combine(Interface.Oxide.ExtensionDirectory, "Mono.Posix.dll.config"));
-
-            var extDir = Interface.Oxide.ExtensionDirectory;
-            File.WriteAllText(Path.Combine(extDir, "Oxide.References.dll.config"),
-                $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x86/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
-                $"<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x64/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
+                File.WriteAllText(Path.Combine(Interface.Oxide.ExtensionDirectory, "Oxide.References.dll.config"),
+                    $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"./x86/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
+                    $"<dllmap dll=\"MonoPosixHelper\" target=\"./x64/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
+            }
         }
 
         /// <summary>

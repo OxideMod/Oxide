@@ -78,11 +78,11 @@ namespace Oxide.Core.Lua
         {
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                var extDir = Interface.Oxide.ExtensionDirectory;
-                File.WriteAllText(Path.Combine(extDir, "KeraLua.dll.config"),
-                    $"<configuration>\n<dllmap dll=\"lua52\" target=\"{extDir}/x86/liblua52.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
-                    $"<dllmap dll=\"lua52\" target=\"{extDir}/x64/liblua52.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
+                File.WriteAllText(Path.Combine(Interface.Oxide.ExtensionDirectory, "KeraLua.dll.config"),
+                    $"<configuration>\n<dllmap dll=\"lua52\" target=\"./x86/liblua52.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
+                    $"<dllmap dll=\"lua52\" target=\"./x64/liblua52.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
             }
+
             ExceptionHandler.RegisterType(typeof(LuaScriptException), ex =>
             {
                 var luaex = (LuaScriptException)ex;
