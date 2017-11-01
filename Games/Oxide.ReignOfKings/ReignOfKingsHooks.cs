@@ -117,7 +117,7 @@ namespace Oxide.Game.ReignOfKings
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
             // Call covalence hook
-            return Interface.Call("OnUserChat", Covalence.PlayerManager.FindPlayerById(evt.PlayerId.ToString()), evt.Message);
+            return Interface.Call("OnUserChat", evt.Player.IPlayer, evt.Message);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Oxide.Game.ReignOfKings
             Interface.Call("OnPlayerDisconnected", player);
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", Covalence.PlayerManager.FindPlayerById(player.Id.ToString()), "Unknown"); // TODO: Localization
+            Interface.Call("OnUserDisconnected", player.IPlayer, "Unknown"); // TODO: Localization
             Covalence.PlayerManager.PlayerDisconnected(player);
         }
 
@@ -180,7 +180,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(evt.Player.Id.ToString()));
+            Interface.Call("OnUserSpawn", evt.Player.IPlayer);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Oxide.Game.ReignOfKings
         private void OnPlayerRespawn(PlayerRespawnEvent evt)
         {
             // Call covalence hook
-            Interface.Call("OnUserRespawn", Covalence.PlayerManager.FindPlayerById(evt.Player.Id.ToString()));
+            Interface.Call("OnUserRespawn", evt.Player.IPlayer);
         }
 
         #endregion Player Hooks

@@ -1153,7 +1153,7 @@
       ],
       "Fields": [
         {
-          "Name": "NewField",
+          "Name": "IPlayer",
           "AssemblyName": "Assembly-CSharp.dll",
           "TypeName": "CodeHatch.Engine.Networking.Player",
           "FieldType": "Oxide.Core|Oxide.Core.Libraries.Covalence.IPlayer",
