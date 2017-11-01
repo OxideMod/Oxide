@@ -20,10 +20,8 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
 
         internal RustLegacyPlayer(ulong id, string name)
         {
-            // Get perms library
             if (libPerms == null) libPerms = Interface.Oxide.GetLibrary<Permission>();
 
-            // Store user details
             Name = name.Sanitize();
             steamId = id;
             Id = id.ToString();
@@ -31,7 +29,6 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
 
         internal RustLegacyPlayer(NetUser netUser) : this(netUser.userID, netUser.displayName)
         {
-            // Store user object
             this.netUser = netUser;
         }
 

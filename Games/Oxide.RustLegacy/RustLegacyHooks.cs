@@ -39,10 +39,12 @@ namespace Oxide.Game.RustLegacy
             var id = connection.UserID.ToString();
             var ip = approval.ipAddress;
 
+            Covalence.PlayerManager.PlayerJoin(connection.UserID, connection.UserName); // TODO: Handle this automatically
+
             // Call out and see if we should reject
             var loginSpecific = Interface.Call("CanClientLogin", connection);
             var loginCovalence = Interface.Call("CanUserLogin", connection.UserName, id, ip);
-            var canLogin = loginSpecific ?? loginCovalence;
+            var canLogin = loginSpecific ?? loginCovalence; // TODO: Fix 'RustLegacyCore' hook conflict when both return
 
             // Check if player can login
             if (canLogin is string || (canLogin is bool && !(bool)canLogin))
@@ -56,7 +58,7 @@ namespace Oxide.Game.RustLegacy
             // Call the approval hooks
             var approvedSpecific = Interface.Call("OnUserApprove", connection, approval, acceptor);
             var approvedCovalence = Interface.Call("OnUserApproved", connection.UserName, id, ip);
-            return approvedSpecific ?? approvedCovalence;
+            return approvedSpecific ?? approvedCovalence; // TODO: Fix 'RustLegacyCore' hook conflict when both return
         }
 
         /// <summary>

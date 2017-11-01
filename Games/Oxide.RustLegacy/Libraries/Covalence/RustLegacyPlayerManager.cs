@@ -35,10 +35,10 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             foreach (var pair in playerData) allPlayers.Add(pair.Key, new RustLegacyPlayer(pair.Value.Id, pair.Value.Name));
         }
 
-        internal void PlayerJoin(NetUser netUser)
+        internal void PlayerJoin(ulong userId, string name)
         {
-            var id = netUser.userID.ToString();
-            var name = netUser.displayName.Sanitize();
+            var id = userId.ToString();
+            name = name.Sanitize();
 
             PlayerRecord record;
             if (playerData.TryGetValue(id, out record))
@@ -46,13 +46,13 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
                 record.Name = name;
                 playerData[id] = record;
                 allPlayers.Remove(id);
-                allPlayers.Add(id, new RustLegacyPlayer(netUser));
+                allPlayers.Add(id, new RustLegacyPlayer(userId, name));
             }
             else
             {
-                record = new PlayerRecord { Id = netUser.userID, Name = name };
+                record = new PlayerRecord { Id = userId, Name = name };
                 playerData.Add(id, record);
-                allPlayers.Add(id, new RustLegacyPlayer(netUser));
+                allPlayers.Add(id, new RustLegacyPlayer(userId, name));
             }
 
             ProtoStorage.Save(playerData, "oxide.covalence");
