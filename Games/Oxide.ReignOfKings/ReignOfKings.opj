@@ -1151,7 +1151,15 @@
           "MSILHash": ""
         }
       ],
-      "Fields": []
+      "Fields": [
+        {
+          "Name": "NewField",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "CodeHatch.Engine.Networking.Player",
+          "FieldType": "Oxide.Core|Oxide.Core.Libraries.Covalence.IPlayer",
+          "Flagged": false
+        }
+      ]
     }
   ]
 }
