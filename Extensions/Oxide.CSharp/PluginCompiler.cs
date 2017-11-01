@@ -25,6 +25,8 @@ namespace Oxide.Plugins
         public static string BinaryPath;
         public static string CompilerVersion;
 
+        private static int downloadRetries = 0;
+
         public static void CheckCompilerBinary()
         {
             BinaryPath = null;
@@ -113,7 +115,7 @@ namespace Oxide.Plugins
             TraceRan = true;
         }
 
-        private static void DownloadCompiler(WebResponse response)
+        private static void DownloadCompiler(WebResponse response, string remoteHash)
         {
             try
             {
@@ -134,6 +136,21 @@ namespace Oxide.Plugins
                 fs.Close();
                 stream.Close();
                 response.Close();
+
+                if (downloadRetries >= 3)
+                {
+                    Interface.Oxide.LogInfo($"Couldn't download {FileName}! Please download manually from: https://github.com/OxideMod/CSharpCompiler/releases/download/latest/{FileName}");
+                    return;
+                }
+
+                var localHash = File.Exists(BinaryPath) ? GetHash(BinaryPath, Algorithms.MD5) : "0";
+                if (remoteHash != localHash)
+                {
+                    Interface.Oxide.LogInfo($"Local hash did not match remote hash for {FileName}, attempting download again");
+                    CheckCompilerBinary();
+                    downloadRetries++;
+                    return;
+                }
 
                 Interface.Oxide.LogInfo($"Download of {FileName} completed successfully");
             }
@@ -160,7 +177,7 @@ namespace Oxide.Plugins
                 if (remoteHash != localHash)
                 {
                     Interface.Oxide.LogInfo("Compiler hashes did not match, downloading latest");
-                    DownloadCompiler(response);
+                    DownloadCompiler(response, remoteHash);
                 }
             }
             catch (Exception ex)
