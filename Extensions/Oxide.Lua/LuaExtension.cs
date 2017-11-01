@@ -78,8 +78,10 @@ namespace Oxide.Core.Lua
         {
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                File.WriteAllText(Path.Combine(Interface.Oxide.ExtensionDirectory, "KeraLua.dll.config"),
-                    $"<configuration>\n<dllmap dll=\"lua52\" target=\"./x86/liblua52.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
+                var configPath = Path.Combine(Interface.Oxide.ExtensionDirectory, "KeraLua.dll.config");
+                if (File.Exists(configPath)) return;
+
+                File.WriteAllText(configPath, $"<configuration>\n<dllmap dll=\"lua52\" target=\"./x86/liblua52.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
                     $"<dllmap dll=\"lua52\" target=\"./x64/liblua52.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
             }
 
