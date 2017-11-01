@@ -99,7 +99,7 @@ namespace Oxide.Game.RustLegacy
             if (netUser == null) return;
 
             // Let covalence know
-            Interface.Call("OnUserDisconnected", netUser.IPlayer), "Unknown");
+            Interface.Call("OnUserDisconnected", netUser.IPlayer, "Unknown"); // TODO: Localization
             Covalence.PlayerManager.PlayerDisconnected(netUser);
 
             // Delay removing player until OnPlayerDisconnect has fired in plugins
