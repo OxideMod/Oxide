@@ -831,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "Lc+F2RH7751m6mmQgl6iVt7FMDLVhRrD2lfLehLmCYI=",
+            "MSILHash": "6UXRGIMqBLEcC/veWEFu599e0a7gTW93JWXomJy43yU=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2378,7 +2378,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "G3JF1dUu6FHu3l7q+babL9hkBf4Pb3Hab34SFMlSOhA=",
+            "MSILHash": "Km4y8mTcK9Xvf+umIoNMqdYyw/lgESLFtByka+o8Eqw=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2782,7 +2782,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "ZiaxrhiO4rm5rrqn6PJsBzvngPRQNvXLWZeB7b/RFH0=",
+            "MSILHash": "+7cTy6n14X7Cx0tR0D7mSAOy4Qtle/uoBHmlPs55DJk=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2809,7 +2809,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "tENPXRsQ+wF/0y89YkAABGwhMf0/utjnIpcbqcKVocc=",
+            "MSILHash": "8Rl9KIW0oB6mLnzFCTjTu5YhRSSWIx8TXJB+bOrRnSE=",
             "BaseHookName": null,
             "HookCategory": "Server"
           }
@@ -2886,7 +2886,7 @@
                 "System.Boolean"
               ]
             },
-            "MSILHash": "tENPXRsQ+wF/0y89YkAABGwhMf0/utjnIpcbqcKVocc=",
+            "MSILHash": "8Rl9KIW0oB6mLnzFCTjTu5YhRSSWIx8TXJB+bOrRnSE=",
             "BaseHookName": "OnNewSave",
             "HookCategory": "Server"
           }
@@ -6193,6 +6193,25 @@
             "Parameters": []
           },
           "MSILHash": ""
+        },
+        {
+          "Name": "BuildingPrivlidge::UpdateAllPlayers",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BuildingPrivlidge",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "UpdateAllPlayers",
+            "FullTypeName": "System.Void",
+            "Parameters": []
+          },
+          "MSILHash": "fwG8/lOmmtsRXoJp6/xpgn13mJfkQKWq+3V5w29aR0k="
         }
       ],
       "Fields": [
