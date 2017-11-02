@@ -1,4 +1,5 @@
 ﻿using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Sandbox;
 using Sandbox.Engine.Multiplayer;
 using Sandbox.Game.Multiplayer;
@@ -255,6 +256,7 @@ namespace Oxide.Game.MedievalEngineers.Libraries
         {
             if (string.IsNullOrEmpty(message)) return;
 
+            message = Formatter.ToPlaintext(message);
             var msg = new ChatMsg
             {
                 Text = string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}"),

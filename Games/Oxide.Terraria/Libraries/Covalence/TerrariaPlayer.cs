@@ -255,7 +255,11 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => NetMessage.SendData(25, player.whoAmI, -1, NetworkText.FromLiteral(message));
+        public void Message(string message)
+        {
+            message = Formatter.ToTerraria(message);
+            NetMessage.SendData(25, player.whoAmI, -1, NetworkText.FromLiteral(message));
+        }
 
         /// <summary>
         /// Sends the specified message to the player

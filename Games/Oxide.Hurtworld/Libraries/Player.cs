@@ -4,6 +4,7 @@ using Emotes;
 #endif
 using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using Steamworks;
 using System;
 using System.Collections.Generic;
@@ -371,6 +372,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         {
             if (string.IsNullOrEmpty(message) && string.IsNullOrEmpty(prefix)) return;
 
+            message = Formatter.ToUnity(message);
             message = string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}");
 #if ITEMV2
             ChatManagerServer.Instance.SendChatMessage(new ServerChatMessage(message), session.Player);

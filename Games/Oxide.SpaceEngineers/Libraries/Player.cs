@@ -249,6 +249,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         {
             if (string.IsNullOrEmpty(message)) return;
 
+            message = Formatter.ToPlaintext(message);
             var msg = new ScriptedChatMsg
             {
                 Text = string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}"),

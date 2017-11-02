@@ -1,5 +1,6 @@
 ﻿using Oxide.Core;
 using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -314,6 +315,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="prefix"></param>
         public void Message(BasePlayer player, string message, string prefix = null, ulong userId = 0)
         {
+            message = Formatter.ToUnity(message);
             player.SendConsoleCommand("chat.add", userId, prefix != null ? $"{prefix} {message}" : message, 1.0);
         }
 

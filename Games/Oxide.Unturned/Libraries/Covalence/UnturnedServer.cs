@@ -158,7 +158,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => ChatManager.sendChat(EChatMode.GLOBAL, message);
+        public void Broadcast(string message)
+        {
+            message = Formatter.ToUnity(message);
+            ChatManager.sendChat(EChatMode.GLOBAL, message);
+        }
 
         /// <summary>
         /// Runs the specified server command

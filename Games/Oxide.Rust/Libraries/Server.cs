@@ -1,4 +1,5 @@
 ﻿using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Game.Rust.Libraries
 {
@@ -14,6 +15,7 @@ namespace Oxide.Game.Rust.Libraries
         /// <param name="prefix"></param>
         public void Broadcast(string message, string prefix = null, ulong userId = 0)
         {
+            message = Formatter.ToUnity(message);
             ConsoleNetwork.BroadcastToAllClients("chat.add", userId, prefix != null ? $"{prefix} {message}" : message, 1.0);
         }
 

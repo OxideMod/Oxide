@@ -273,7 +273,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => ChatManager.say(cSteamId, message, Color.white, EChatMode.LOCAL);
+        public void Message(string message)
+        {
+            message = Formatter.ToUnity(message);
+            ChatManager.say(cSteamId, message, Color.white, EChatMode.LOCAL);
+        }
 
         /// <summary>
         /// Sends the specified message to the player

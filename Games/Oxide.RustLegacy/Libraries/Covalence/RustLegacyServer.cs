@@ -150,6 +150,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
+            message = Formatter.ToRustLegacy(message);
             UnityEngine.Debug.Log($"[Broadcast] {message}");
             ConsoleNetworker.Broadcast($"chat.add Server {message.Quote()}");
         }

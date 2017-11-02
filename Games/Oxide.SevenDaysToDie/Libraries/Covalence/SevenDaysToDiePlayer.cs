@@ -264,7 +264,11 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => client.SendPackage(new NetPackageGameMessage(EnumGameMessages.Chat, message, null, false, null, false));
+        public void Message(string message)
+        {
+            message = Formatter.ToRoKAnd7DTD(message);
+            client.SendPackage(new NetPackageGameMessage(EnumGameMessages.Chat, message, null, false, null, false));
+        }
 
         /// <summary>
         /// Sends the specified message to the player

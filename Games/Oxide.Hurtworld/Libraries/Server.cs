@@ -1,4 +1,5 @@
 ﻿using Oxide.Core.Libraries;
+using Oxide.Core.Libraries.Covalence;
 using System;
 
 namespace Oxide.Game.Hurtworld.Libraries
@@ -53,6 +54,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         public void Broadcast(string message, string prefix = null)
         {
             ConsoleManager.SendLog($"[Chat] {message}");
+            message = Formatter.ToUnity(message);
 #if ITEMV2
             ChatManager.SendChatMessage(new ServerChatMessage(prefix != null ? $"{prefix} {message}" : message));
 #else

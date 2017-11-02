@@ -252,6 +252,7 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         /// <param name="message"></param>
         public void Message(string message)
         {
+            message = Formatter.ToRustLegacy(message);
             switch (LastCommand)
             {
                 case CommandType.Chat:

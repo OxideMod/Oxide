@@ -143,7 +143,11 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => NetMessage.SendData(25, -1, -1, NetworkText.FromLiteral(message), 255, 255, 0, 160);
+        public void Broadcast(string message)
+        {
+            message = Formatter.ToTerraria(message);
+            NetMessage.SendData(25, -1, -1, NetworkText.FromLiteral(message), 255, 255, 0, 160);
+        }
 
         /// <summary>
         /// Runs the specified server command

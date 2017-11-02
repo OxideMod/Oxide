@@ -152,7 +152,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => Server.BroadcastMessage(message);
+        public void Broadcast(string message)
+        {
+            message = Formatter.ToRoKAnd7DTD(message);
+            Server.BroadcastMessage(message);
+        }
 
         /// <summary>
         /// Runs the specified server command

@@ -157,6 +157,7 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
         /// <param name="message"></param>
         public void Broadcast(string message)
         {
+            message = Formatter.ToUnity(message);
             var chatLine = new ChatLine
             {
                 mPlayer = -1,

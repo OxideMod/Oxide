@@ -156,7 +156,11 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         /// Broadcasts a chat message to all users
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => GameManager.Instance.GameMessageServer(null, EnumGameMessages.Chat, message, null, false, null, false);
+        public void Broadcast(string message)
+        {
+            message = Formatter.ToRoKAnd7DTD(message);
+            GameManager.Instance.GameMessageServer(null, EnumGameMessages.Chat, message, null, false, null, false);
+        }
 
         /// <summary>
         /// Runs the specified server command

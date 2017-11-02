@@ -255,7 +255,11 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => player.SendMessage(message);
+        public void Message(string message)
+        {
+            message = Formatter.ToRoKAnd7DTD(message);
+            player.SendMessage(message);
+        }
 
         /// <summary>
         /// Sends the specified message to the player
