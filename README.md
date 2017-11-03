@@ -51,11 +51,15 @@ While we recommend using one of the [official release builds][downloads], you ca
 
  3. Download and install [Visual Studio 2017](https://www.visualstudio.com/downloads/) _(community is free, but any edition will work)_ if you do not have it installed already.
 
- 4. Open the `Oxide.sln` solution file in Visual Studio 2017.
+ 4. Update or install [PowerShell 5.x](https://www.microsoft.com/en-us/download/details.aspx?id=54616) (if it isn't already) for use with the game file downloading and patching process.
 
- 5. Build the solution. If you get errors, you're likely not using the latest Visual Studio 2017; which is required as Oxide uses some [C# 6.0](https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6) features.
+ 5. Open the `Oxide.sln` solution file in Visual Studio 2017.
 
- 6. Copy the files from the `Bundles` directory for your game of choice to your server installation, then just start the server!
+ 6. Build the solution. If you get errors, you're likely not using the latest Visual Studio 2017; which is required as Oxide uses some [C# 6.0](https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6) features.
+
+ 7. Copy the files from the `Bundles` directory for your game of choice to your server installation, then just start the server!
+
+ 7a. Alternately, create a .deploy file under the desired game extension directory (ie. Games/Oxide.Rust) with a path to automatically deploy to.
 
 ## Getting Help
 
