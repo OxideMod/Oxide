@@ -8,25 +8,27 @@ namespace Oxide.Game.Rust.Libraries
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all players
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="userId"></param>
-        /// <param name="prefix"></param>
-        public void Broadcast(string message, string prefix = null, ulong userId = 0)
-        {
-            message = Formatter.ToUnity(message);
-            ConsoleNetwork.BroadcastToAllClients("chat.add", userId, prefix != null ? $"{prefix} {message}" : message, 1.0);
-        }
-
-        /// <summary>
-        /// Broadcasts a chat message to all players
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
         /// <param name="userId"></param>
         /// <param name="prefix"></param>
         /// <param name="args"></param>
-        public void Broadcast(string message, string prefix = null, ulong userId = 0, params object[] args) => Broadcast(string.Format(message, args), prefix, userId);
+        public void Broadcast(string message, string prefix, ulong userId = 0, params object[] args)
+        {
+            message = string.Format(Formatter.ToUnity(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            ConsoleNetwork.BroadcastToAllClients("chat.add", userId, prefix != null ? $"{prefix} {formatted}" : formatted, 1.0);
+        }
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="userId"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, ulong userId = 0, params object[] args) => Broadcast(message, null, userId, args);
 
         /// <summary>
         /// Runs the specified server command

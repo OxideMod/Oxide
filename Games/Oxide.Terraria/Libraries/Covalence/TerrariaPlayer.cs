@@ -252,13 +252,16 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the player
+        /// Sends the specified message to the player and prefix
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(string message, string prefix, params object[] args)
         {
-            message = Formatter.ToTerraria(message);
-            NetMessage.SendData(25, player.whoAmI, -1, NetworkText.FromLiteral(message));
+            message = string.Format(Formatter.ToTerraria(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            NetMessage.SendData(25, player.whoAmI, -1, NetworkText.FromLiteral(formatted));
         }
 
         /// <summary>
@@ -266,20 +269,22 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+        public void Message(string message, params object[] args) => Message(message, null, args);
 
         /// <summary>
-        /// Replies to the player with the specified message
+        /// Replies to the player with the specified message and prefix
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(string message, string prefix, params object[] args) => Message(message, prefix, args);
 
         /// <summary>
         /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(message, args);
+        public void Reply(string message, params object[] args) => Message(message, null, args);
 
         /// <summary>
         /// Runs the specified console command on the player

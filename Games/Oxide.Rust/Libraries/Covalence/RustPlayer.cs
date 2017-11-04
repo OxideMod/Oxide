@@ -216,39 +216,36 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Runs the specified console command on the player
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="args"></param>
-        public void Command(string command, params object[] args) => player.SendConsoleCommand(command, args);
-
-        /// <summary>
-        /// Sends the specified message to the player
+        /// Sends the specified message and prefix to the player
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message) => Player.Message(player, message);
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(string message, string prefix, params object[] args) => Player.Message(player, prefix, message, 0, args);
 
         /// <summary>
         /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+        public void Message(string message, params object[] args) => Message(message, null, args);
 
         /// <summary>
-        /// Replies to the player with the specified message
+        /// Replies to the player with the specified message and prefix
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(string message, string prefix, params object[] args)
         {
             switch (LastCommand)
             {
                 case CommandType.Chat:
-                    Message(message);
+                    Message(message, prefix, args);
                     break;
 
                 case CommandType.Console:
-                    Command($"echo {message}");
+                    Command($"echo {string.Format(message, args)}");
                     break;
             }
         }
@@ -258,7 +255,14 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Reply(string.Format(message, args));
+        public void Reply(string message, params object[] args) => Message(message, null, args);
+
+        /// <summary>
+        /// Runs the specified console command on the player
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="args"></param>
+        public void Command(string command, params object[] args) => player.SendConsoleCommand(command, args);
 
         #endregion Chat and Commands
 

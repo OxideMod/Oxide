@@ -300,53 +300,60 @@ namespace Oxide.Game.Rust.Libraries
         #region Chat and Commands
 
         /// <summary>
+        /// Sends the specified message and prefix to the player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(BasePlayer player, string message, string prefix, ulong userId = 0, params object[] args)
+        {
+            message = string.Format(Formatter.ToUnity(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            player.SendConsoleCommand("chat.add", userId, formatted, 1.0);
+        }
+
+        /// <summary>
+        /// Sends the specified message to the player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Message(BasePlayer player, string message, ulong userId = 0, params object[] args)
+        {
+            Message(player, message, null, userId, args);
+        }
+
+        /// <summary>
+        /// Replies to the player with the specified message and prefix
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(BasePlayer player, string message, string prefix, ulong userId = 0, params object[] args)
+        {
+            Message(player, message, prefix, userId, args);
+        }
+
+        /// <summary>
+        /// Replies to the player with the specified message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Reply(BasePlayer player, string message, ulong userId = 0, params object[] args)
+        {
+            Message(player, message, null, userId, args);
+        }
+
+        /// <summary>
         /// Runs the specified player command
         /// </summary>
         /// <param name="player"></param>
         /// <param name="command"></param>
         /// <param name="args"></param>
         public void Command(BasePlayer player, string command, params object[] args) => player.SendConsoleCommand(command, args);
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        public void Message(BasePlayer player, string message, string prefix = null, ulong userId = 0)
-        {
-            message = Formatter.ToUnity(message);
-            player.SendConsoleCommand("chat.add", userId, prefix != null ? $"{prefix} {message}" : message, 1.0);
-        }
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Message(BasePlayer player, string message, string prefix = null, ulong userId = 0, params object[] args)
-        {
-            Message(player, string.Format(message, args), prefix);
-        }
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        public void Reply(BasePlayer player, string message, string prefix = null, ulong userId = 0) => Message(player, message, prefix);
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Reply(BasePlayer player, string message, string prefix = null, ulong userId = 0, params object[] args) => Reply(player, string.Format(message, args), prefix);
 
         #endregion Chat and Commands
 

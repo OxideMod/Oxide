@@ -152,22 +152,29 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all users
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, string prefix, params object[] args)
         {
-            CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = "Server";
-
-            message = Formatter.ToUnity(message);
+            CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = prefix != null ? prefix : "Server";
             var chatEvent = ChatEvent.Create(GlobalTargets.AllClients);
-            chatEvent.Message = Formatter.ToUnity(message);
+            chatEvent.Message = string.Format(Formatter.ToUnity(message), args);
             chatEvent.Sender = CoopServerInfo.Instance.entity.networkId;
             chatEvent.Send();
             //CoopServerInfo.Broadcast
 
             Debug.Log($"[Chat] {message}");
         }
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, params object[] args) => Broadcast(message, null, args);
 
         /// <summary>
         /// Runs the specified server command

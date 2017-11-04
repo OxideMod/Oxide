@@ -41,7 +41,7 @@ namespace Oxide.Game.Rust.Libraries
         #region Chat
 
         /// <summary>
-        /// Broadcasts a chat message to all players
+        /// Broadcasts the specified chat message to all players
         /// </summary>
         /// <param name="name"></param>
         /// <param name="message"></param>

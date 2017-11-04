@@ -47,35 +47,39 @@ namespace Oxide.Game.Hurtworld.Libraries
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all players
-        /// </summary>
-        /// <param name="message"></param>ServerInstance.Broadcast();
-        /// <param name="prefix"></param>
-        public void Broadcast(string message, string prefix = null)
-        {
-            ConsoleManager.SendLog($"[Chat] {message}");
-            message = Formatter.ToUnity(message);
-#if ITEMV2
-            ChatManager.SendChatMessage(new ServerChatMessage(prefix != null ? $"{prefix} {message}" : message));
-#else
-            ChatManager.RPC("RelayChat", uLink.RPCMode.Others, prefix != null ? $"{prefix} {message}" : message);
-#endif
-        }
-
-        /// <summary>
-        /// Broadcasts a chat message to all players
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
         /// <param name="args"></param>
-        public void Broadcast(string message, string prefix = null, params object[] args) => Broadcast(string.Format(message, args), prefix);
+        public void Broadcast(string message, string prefix, params object[] args)
+        {
+            message = string.Format(Formatter.ToUnity(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+#if ITEMV2
+            ChatManager.SendChatMessage(new ServerChatMessage(formatted));
+#else
+            ChatManager.RPC("RelayChat", uLink.RPCMode.Others, formatted);
+#endif
+            ConsoleManager.SendLog($"[Chat] {message}");
+        }
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, params object[] args) => Broadcast(message, null, args);
 
         /// <summary>
         /// Runs the specified server command
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
-        public void Command(string command, params object[] args) => ConsoleManager.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
+        public void Command(string command, params object[] args)
+        {
+            ConsoleManager.ExecuteCommand($"{command} {string.Join(" ", Array.ConvertAll(args, x => x.ToString()))}");
+        }
 
         #endregion Chat and Commands
     }

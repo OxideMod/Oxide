@@ -254,37 +254,41 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
+        /// Sends the specified message to the player and prefix
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(string message, string prefix, params object[] args) => Player.Message(session, message, prefix, args);
+
+        /// <summary>
+        /// Sends the specified message to the player
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Message(string message, params object[] args) => Message(message, null, args);
+
+        /// <summary>
+        /// Replies to the player with the specified message and prefix
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(string message, string prefix, params object[] args) => Message(message, prefix, args);
+
+        /// <summary>
+        /// Replies to the player with the specified message
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Reply(string message, params object[] args) => Message(message, null, args);
+
+        /// <summary>
         /// Runs the specified console command on the player
         /// </summary>
         /// <param name="command"></param>
         /// <param name="args"></param>
         public void Command(string command, params object[] args) => Player.Command(session, command, args);
-
-        /// <summary>
-        /// Sends the specified message to the player
-        /// </summary>
-        /// <param name="message"></param>
-        public void Message(string message) => Player.Message(session, message);
-
-        /// <summary>
-        /// Sends the specified message to the player
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Message(string.Format(message, args));
-
-        /// <summary>
-        /// Replies to the player with the specified message
-        /// </summary>
-        /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
-
-        /// <summary>
-        /// Replies to the player with the specified message
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(message, args);
 
         #endregion Chat and Commands
 

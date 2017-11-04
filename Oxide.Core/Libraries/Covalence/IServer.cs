@@ -96,10 +96,19 @@ namespace Oxide.Core.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all players
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
-        void Broadcast(string message);
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        void Broadcast(string message, string prefix, params object[] args);
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        void Broadcast(string message, params object[] args);
 
         /// <summary>
         /// Runs the specified server command

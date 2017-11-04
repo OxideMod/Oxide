@@ -41,7 +41,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all players
+        /// Broadcasts the specified chat message to all players
         /// </summary>
         /// <param name="message"></param>ServerInstance.Broadcast();
         /// <param name="prefix"></param>
@@ -52,7 +52,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         }
 
         /// <summary>
-        /// Broadcasts a chat message to all players
+        /// Broadcasts the specified chat message to all players
         /// </summary>
         /// <param name="message"></param>
         /// <param name="prefix"></param>

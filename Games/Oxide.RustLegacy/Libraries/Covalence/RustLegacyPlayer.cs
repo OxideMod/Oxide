@@ -247,16 +247,17 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the player
+        /// Sends the specified message with optional prefix to the player
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
+        /// <param name="prefix"></param>
+        public void Message(string message, string prefix = null)
         {
             message = Formatter.ToRustLegacy(message);
             switch (LastCommand)
             {
                 case CommandType.Chat:
-                    ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add \"Server\" {message.Quote()}");
+                    ConsoleNetworker.SendClientCommand(netUser.networkPlayer, $"chat.add \"{(string.IsNullOrEmpty(prefix) ? "Server" : prefix)}\" {message.Quote()}");
                     break;
 
                 case CommandType.Console:
@@ -273,10 +274,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
         public void Message(string message, params object[] args) => Message(string.Format(message, args));
 
         /// <summary>
-        /// Replies to the player with the specified message
+        /// Replies to the player with the specified message with optional prefix
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
+        /// <param name="prefix"></param>
+        public void Reply(string message, string prefix = null) => Message(message, prefix);
 
         /// <summary>
         /// Replies to the player with the specified message

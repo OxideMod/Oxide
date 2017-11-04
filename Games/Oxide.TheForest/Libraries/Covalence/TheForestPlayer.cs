@@ -274,15 +274,16 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the player
+        /// Sends the specified message to the player and prefix
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(string message, string prefix, params object[] args)
         {
-            CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = "Server";
-
+            CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = prefix != null ? prefix : "Server";
             var chatEvent = ChatEvent.Create(entity.source);
-            chatEvent.Message = Formatter.ToUnity(message);
+            chatEvent.Message = string.Format(Formatter.ToUnity(message), args);
             chatEvent.Sender = CoopServerInfo.Instance.entity.networkId;
             chatEvent.Send();
             //CoopAdminCommand.SendNetworkMessage
@@ -293,20 +294,22 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+        public void Message(string message, params object[] args) => Message(message, null, args);
 
         /// <summary>
-        /// Replies to the player with the specified message
+        /// Replies to the player with the specified message and prefix
         /// </summary>
         /// <param name="message"></param>
-        public void Reply(string message) => Message(message);
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(string message, string prefix, params object[] args) => Message(message, prefix, args);
 
         /// <summary>
         /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(message, args);
+        public void Reply(string message, params object[] args) => Message(message, null, args);
 
         /// <summary>
         /// Runs the specified console command on the player

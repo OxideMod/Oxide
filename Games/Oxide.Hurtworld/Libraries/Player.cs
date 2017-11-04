@@ -352,6 +352,58 @@ namespace Oxide.Game.Hurtworld.Libraries
         #region Chat and Commands
 
         /// <summary>
+        /// Sends the specified message and prefix to the player
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(PlayerSession session, string message, string prefix, params object[] args)
+        {
+            message = string.Format(Formatter.ToUnity(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+#if ITEMV2
+            ChatManagerServer.Instance.SendChatMessage(new ServerChatMessage(formatted), session.Player);
+#else
+            ChatManager.RPC("RelayChat", session.Player, formatted);
+#endif
+        }
+
+        /// <summary>
+        /// Sends the specified message to the player
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Message(PlayerSession session, string message, params object[] args)
+        {
+            Message(session, message, null, args);
+        }
+
+        /// <summary>
+        /// Replies to the player with the specified message and prefix
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(PlayerSession session, string message, string prefix, params object[] args)
+        {
+            Message(session, message, prefix, prefix);
+        }
+
+        /// <summary>
+        /// Replies to the player with the specified message
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Reply(PlayerSession session, string message, params object[] args)
+        {
+            Message(session, message, null, args);
+        }
+
+        /// <summary>
         /// Runs the specified player command
         /// </summary>
         /// <param name="session"></param>
@@ -361,51 +413,6 @@ namespace Oxide.Game.Hurtworld.Libraries
         {
             // TODO: Implement when possible
         }
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        public void Message(PlayerSession session, string message, string prefix = null)
-        {
-            if (string.IsNullOrEmpty(message) && string.IsNullOrEmpty(prefix)) return;
-
-            message = Formatter.ToUnity(message);
-            message = string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}");
-#if ITEMV2
-            ChatManagerServer.Instance.SendChatMessage(new ServerChatMessage(message), session.Player);
-#else
-            ChatManager.RPC("RelayChat", session.Player, message);
-#endif
-        }
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Message(PlayerSession session, string message, string prefix = null, params object[] args) => Message(session, string.Format(message, args), prefix);
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        public void Reply(PlayerSession session, string message, string prefix = null) => Message(session, message, prefix);
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Reply(PlayerSession session, string message, string prefix = null, params object[] args) => Reply(session, string.Format(message, args), prefix);
 
         #endregion Chat and Commands
 

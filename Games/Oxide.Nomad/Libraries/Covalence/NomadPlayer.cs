@@ -245,10 +245,12 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the player
+        /// Sends the specified message to the player and prefix
         /// </summary>
         /// <param name="message"></param>
-        public void Message(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(string message, string prefix, params object[] args)
         {
             // TODO: Not possible yet?
         }
@@ -258,21 +260,22 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Message(string.Format(message, args));
+        public void Message(string message, params object[] args) => Message(message, null, args);
+
+        /// <summary>
+        /// Replies to the player with the specified message and prefix
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(string message, string prefix, params object[] args) => Message(message, prefix, args);
 
         /// <summary>
         /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message) => Message(message);
-
-        /// <summary>
-        /// Replies to the player with the specified message
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(message, args);
+        public void Reply(string message, params object[] args) => Message(message, null, args);
 
         /// <summary>
         /// Runs the specified console command on the player
