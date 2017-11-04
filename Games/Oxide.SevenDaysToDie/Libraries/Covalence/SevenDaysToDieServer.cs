@@ -153,14 +153,24 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all users
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, string prefix, params object[] args)
         {
-            message = Formatter.ToRoKAnd7DTD(message);
-            GameManager.Instance.GameMessageServer(null, EnumGameMessages.Chat, message, null, false, null, false);
+            message = string.Format(Formatter.ToRoKAnd7DTD(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            GameManager.Instance.GameMessageServer(null, EnumGameMessages.Chat, formatted, null, false, null, false);
         }
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, params object[] args) => Broadcast(message, null, args);
 
         /// <summary>
         /// Runs the specified server command

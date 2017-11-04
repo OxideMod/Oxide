@@ -146,10 +146,19 @@ namespace Oxide.Game.SpaceEngineers.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all users
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message) => Server.Broadcast(message);
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, string prefix, params object[] args) => Server.Broadcast(message, prefix, args);
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, params object[] args) => Broadcast(message, null, args);
 
         /// <summary>
         /// Runs the specified server command

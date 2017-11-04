@@ -155,14 +155,24 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all users
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, string prefix, params object[] args)
         {
-            message = Formatter.ToUnity(message);
-            ChatManager.sendChat(EChatMode.GLOBAL, message);
+            message = string.Format(Formatter.ToUnity(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            ChatManager.sendChat(EChatMode.GLOBAL, formatted);
         }
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, params object[] args) => Broadcast(message, null, args);
 
         /// <summary>
         /// Runs the specified server command

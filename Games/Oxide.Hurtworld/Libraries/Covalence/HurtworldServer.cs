@@ -159,6 +159,7 @@ namespace Oxide.Game.Hurtworld.Libraries.Covalence
         /// <param name="prefix"></param>
         /// <param name="args"></param>
         public void Broadcast(string message, string prefix, params object[] args) => Server.Broadcast(message, prefix, args);
+
         /// <summary>
         /// Broadcasts the specified chat message to all players
         /// </summary>
