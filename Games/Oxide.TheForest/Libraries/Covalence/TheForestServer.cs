@@ -134,7 +134,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <summary>
         /// Saves the server and any related information
         /// </summary>
-        public void Save() => SteamDSConfig.SaveGame();
+        public void Save()
+        {
+            LevelSerializer.Checkpoint();
+            SteamDSConfig.SaveGame();
+        }
 
         /// <summary>
         /// Unbans the player
