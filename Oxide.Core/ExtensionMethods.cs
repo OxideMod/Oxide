@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Oxide.Core.Libraries.Covalence;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -68,6 +69,13 @@ namespace Oxide.Core
         /// Checks if a ulong is a valid 64-bit Steam ID
         /// </summary>
         public static bool IsSteamId(this ulong id) => id > 70000000000000000L;
+
+        /// <summary>
+        /// Converts a string to plain text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string Plaintext(this string text) => Formatter.ToPlaintext(text);
 
         /// <summary>
         /// Converts a string into a quote safe string
