@@ -1597,6 +1597,164 @@
             "BaseHookName": "OnItemDrop",
             "HookCategory": "_Patches"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 55,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": "",
+            "HookTypeName": "Simple",
+            "Name": "OnEntityDeploy",
+            "HookName": "OnEntityDeploy",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CharacterBuildEventHandler",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HandleEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EquipEventData"
+              ]
+            },
+            "MSILHash": "M3R7yQrx8/bjDYmnrHAeI05qBILkVqGS2WIMrMNxuR0=",
+            "BaseHookName": null,
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 73,
+            "ReturnBehavior": 0,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnEntityDeployed",
+            "HookName": "OnEntityDeployed",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CharacterBuildEventHandler",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HandleEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EquipEventData"
+              ]
+            },
+            "MSILHash": "M3R7yQrx8/bjDYmnrHAeI05qBILkVqGS2WIMrMNxuR0=",
+            "BaseHookName": "OnEntityDeploy [patch]",
+            "HookCategory": "Entity"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 67,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_1",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EquipEventData|Session"
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EquipSession|Blackboard"
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": "BuildValid"
+              },
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "box",
+                "OpType": "Type",
+                "Operand": "mscorlib|System.Boolean"
+              },
+              {
+                "OpCode": "callvirt",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|NodeCanvas.Framework.Internal.BlackboardSource|SetValue"
+              },
+              {
+                "OpCode": "pop",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldarg_1",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EquipEventData|Session"
+              },
+              {
+                "OpCode": "ldfld",
+                "OpType": "Field",
+                "Operand": "Assembly-CSharp|EquipSession|Blackboard"
+              },
+              {
+                "OpCode": "ldstr",
+                "OpType": "String",
+                "Operand": "BuildChecked"
+              },
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "box",
+                "OpType": "Type",
+                "Operand": "mscorlib|System.Boolean"
+              },
+              {
+                "OpCode": "callvirt",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|NodeCanvas.Framework.Internal.BlackboardSource|SetValue"
+              },
+              {
+                "OpCode": "pop",
+                "OpType": "None",
+                "Operand": null
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "OnEntityDeploy [patch]",
+            "HookName": "OnEntityDeploy",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CharacterBuildEventHandler",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "HandleEvent",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "EquipEventData"
+              ]
+            },
+            "MSILHash": "M3R7yQrx8/bjDYmnrHAeI05qBILkVqGS2WIMrMNxuR0=",
+            "BaseHookName": "OnEntityDeploy",
+            "HookCategory": "_Patches"
+          }
         }
       ],
       "Modifiers": [],
