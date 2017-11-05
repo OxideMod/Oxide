@@ -213,7 +213,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Message(message, null, args);
+        public void Message(string message) => Message(message, null);
 
         /// <summary>
         /// Replies to the player with the specified message and prefix
@@ -228,7 +228,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(message, null, args);
+        public void Reply(string message) => Message(message, null);
 
         /// <summary>
         /// Runs the specified console command on the player

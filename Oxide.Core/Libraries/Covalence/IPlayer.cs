@@ -167,7 +167,7 @@ namespace Oxide.Core.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message with prefix to the player
+        /// Sends the specified message and prefix to the player
         /// </summary>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
@@ -179,7 +179,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        void Message(string message, params object[] args);
+        void Message(string message);
 
         /// <summary>
         /// Replies to the player with the specified message and prefix
@@ -193,8 +193,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        void Reply(string message, params object[] args);
+        void Reply(string message);
 
         /// <summary>
         /// Runs the specified console command on the player

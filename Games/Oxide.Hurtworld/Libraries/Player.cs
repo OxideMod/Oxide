@@ -374,11 +374,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Message(PlayerSession session, string message, params object[] args)
-        {
-            Message(session, message, null, args);
-        }
+        public void Message(PlayerSession session, string message) => Message(session, message, null);
 
         /// <summary>
         /// Replies to the player with the specified message and prefix
@@ -397,11 +393,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// </summary>
         /// <param name="session"></param>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Reply(PlayerSession session, string message, params object[] args)
-        {
-            Message(session, message, null, args);
-        }
+        public void Reply(PlayerSession session, string message, params object[] args) => Message(session, message, null);
 
         /// <summary>
         /// Runs the specified player command

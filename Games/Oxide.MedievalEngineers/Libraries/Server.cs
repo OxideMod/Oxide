@@ -41,23 +41,23 @@ namespace Oxide.Game.MedievalEngineers.Libraries
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts the specified chat message to all players
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
-        /// <param name="message"></param>ServerInstance.Broadcast();
+        /// <param name="message"></param>
         /// <param name="prefix"></param>
-        public void Broadcast(string message, string prefix = null)
+        /// <param name="args"></param>
+        public void Broadcast(string message, string prefix, params object[] args)
         {
-            message = Formatter.ToPlaintext(message);
-            MyMultiplayer.Static.SendChatMessage(prefix != null ? $"{prefix} {message}" : message);
+            message = string.Format(Formatter.ToPlaintext(message), args);
+            var formatted = prefix != null ? $"{prefix} {message}" : message;
+            MyMultiplayer.Static.SendChatMessage(formatted);
         }
 
         /// <summary>
         /// Broadcasts the specified chat message to all players
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Broadcast(string message, string prefix = null, params object[] args) => Broadcast(string.Format(message, args), prefix);
+        public void Broadcast(string message) => Broadcast(message, null);
 
         /// <summary>
         /// Runs the specified server command

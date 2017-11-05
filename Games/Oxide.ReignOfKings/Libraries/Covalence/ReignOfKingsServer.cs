@@ -165,8 +165,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Broadcasts the specified chat message to all players
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Broadcast(string message, params object[] args) => Broadcast(message, null, args);
+        public void Broadcast(string message) => Broadcast(message, null);
 
         /// <summary>
         /// Runs the specified server command

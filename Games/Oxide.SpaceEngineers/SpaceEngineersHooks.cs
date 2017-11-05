@@ -112,7 +112,7 @@ namespace Oxide.Game.SpaceEngineers
             var player = Player.Find(id);
             if (!cmdlib.HandleChatCommand(player, cmd, args))
             {
-                Player.Reply(player, lang.GetMessage("UnknownCommand", this, player.SteamUserId.ToString()), cmd);
+                Player.Reply(player, string.Format(lang.GetMessage("UnknownCommand", this, player.SteamUserId.ToString()), cmd));
                 return true;
             }
 

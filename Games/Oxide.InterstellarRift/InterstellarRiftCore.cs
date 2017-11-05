@@ -140,7 +140,7 @@ namespace Oxide.Game.InterstellarRift
         private bool PermissionsLoaded(IPlayer player)
         {
             if (permission.IsLoaded) return true;
-            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            player.Reply(string.Format(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message));
             return false;
         }
 

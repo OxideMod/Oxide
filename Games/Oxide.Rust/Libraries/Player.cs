@@ -318,11 +318,8 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         /// <param name="player"></param>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Message(BasePlayer player, string message, ulong userId = 0, params object[] args)
-        {
-            Message(player, message, null, userId, args);
-        }
+        /// <param name="userId"></param>
+        public void Message(BasePlayer player, string message, ulong userId = 0) => Message(player, message, null, userId);
 
         /// <summary>
         /// Replies to the player with the specified message and prefix
@@ -341,11 +338,8 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         /// <param name="player"></param>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Reply(BasePlayer player, string message, ulong userId = 0, params object[] args)
-        {
-            Message(player, message, null, userId, args);
-        }
+        /// <param name="userId"></param>
+        public void Reply(BasePlayer player, string message, ulong userId = 0) => Message(player, message, null, userId);
 
         /// <summary>
         /// Runs the specified player command

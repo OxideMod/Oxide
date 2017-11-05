@@ -230,6 +230,49 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         #region Chat and Commands
 
         /// <summary>
+        /// Sends the specified message and prefix to the player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Message(IMyPlayer player, string message, string prefix, params object[] args)
+        {
+            message = string.Format(Formatter.ToPlaintext(message), args);
+            var msg = new ScriptedChatMsg
+            {
+                Text = prefix != null ? $"{prefix} {message}" : message,
+                Author = "server",
+                Target = player.IdentityId,
+                Font = "Green"
+            };
+            MyMultiplayerBase.SendScriptedChatMessage(ref msg);
+        }
+
+        /// <summary>
+        /// Sends the specified message to the player
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        public void Message(IMyPlayer player, string message) => Message(player, message, null);
+
+        /// <summary>
+        /// Replies to the player with the specified message and prefix
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Reply(IMyPlayer player, string message, string prefix, params object[] args) => Message(player, message, prefix, null);
+
+        /// <summary>
+        /// Replies to the player with the specified message
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="message"></param>
+        public void Reply(IMyPlayer player, string message) => Message(player, message, null);
+
+        /// <summary>
         /// Runs the specified player command
         /// </summary>
         /// <param name="player"></param>
@@ -239,53 +282,6 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         {
             // TODO: Implement when possible
         }
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        public void Message(IMyPlayer player, string message, string prefix = null)
-        {
-            if (string.IsNullOrEmpty(message)) return;
-
-            message = Formatter.ToPlaintext(message);
-            var msg = new ScriptedChatMsg
-            {
-                Text = string.IsNullOrEmpty(prefix) ? message : (string.IsNullOrEmpty(message) ? prefix : $"{prefix}: {message}"),
-                Author = "server",
-                Target = player.IdentityId,
-                Font = "Green"
-            };
-            MyMultiplayerBase.SendScriptedChatMessage(ref msg);
-        }
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Message(IMyPlayer player, string message, string prefix = null, params object[] args) => Message(player, string.Format(message, args), prefix);
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        public void Reply(IMyPlayer player, string message, string prefix = null) => Message(player, message, prefix);
-
-        /// <summary>
-        /// Sends a chat message to the player
-        /// </summary>
-        /// <param name="player"></param>
-        /// <param name="message"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Reply(IMyPlayer player, string message, string prefix = null, params object[] args) => Reply(player, string.Format(message, args), prefix);
 
         #endregion Chat and Commands
 

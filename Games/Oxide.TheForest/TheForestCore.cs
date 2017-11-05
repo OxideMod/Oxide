@@ -159,7 +159,7 @@ namespace Oxide.Game.TheForest
 
             // Is it a regular chat command?
             //if (!cmdlib.HandleChatCommand(player, cmd, args)) // TODO: Implement
-            //    iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+            //    iplayer.Reply(string.Format(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd));
 
             return true;
         }
@@ -176,7 +176,7 @@ namespace Oxide.Game.TheForest
         private bool PermissionsLoaded(IPlayer player)
         {
             if (permission.IsLoaded) return true;
-            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            player.Reply(string.Format(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message));
             return false;
         }
 

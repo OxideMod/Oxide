@@ -107,8 +107,7 @@ namespace Oxide.Core.Libraries.Covalence
         /// Broadcasts the specified chat message to all players
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        void Broadcast(string message, params object[] args);
+        void Broadcast(string message);
 
         /// <summary>
         /// Runs the specified server command

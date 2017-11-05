@@ -155,13 +155,21 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Broadcasts a chat message to all users
+        /// Broadcasts the specified chat message and prefix to all players
         /// </summary>
         /// <param name="message"></param>
-        public void Broadcast(string message)
+        /// <param name="prefix"></param>
+        /// <param name="args"></param>
+        public void Broadcast(string message, string prefix, params object[] args)
         {
             // TODO: Implement when possible
         }
+
+        /// <summary>
+        /// Broadcasts the specified chat message to all players
+        /// </summary>
+        /// <param name="message"></param>
+        public void Broadcast(string message) => Broadcast(message, null);
 
         /// <summary>
         /// Runs the specified server command

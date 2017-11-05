@@ -59,7 +59,7 @@ namespace Oxide.Game.Rust
         private bool PermissionsLoaded(IPlayer player)
         {
             if (permission.IsLoaded) return true;
-            player.Reply(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message);
+            player.Reply(string.Format(lang.GetMessage("PermissionsNotLoaded", this, player.Id), permission.LastException.Message));
             return false;
         }
 
@@ -262,7 +262,7 @@ namespace Oxide.Game.Rust
             {
                 if (!Interface.Oxide.Config.Options.Modded) return null;
 
-                iplayer.Reply(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd);
+                iplayer.Reply(string.Format(lang.GetMessage("UnknownCommand", this, iplayer.Id), cmd));
                 arg.ReplyWith(string.Empty);
                 return true;
             }

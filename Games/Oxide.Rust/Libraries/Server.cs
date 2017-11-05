@@ -18,7 +18,7 @@ namespace Oxide.Game.Rust.Libraries
         {
             message = string.Format(Formatter.ToUnity(message), args);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
-            ConsoleNetwork.BroadcastToAllClients("chat.add", userId, prefix != null ? $"{prefix} {formatted}" : formatted, 1.0);
+            ConsoleNetwork.BroadcastToAllClients("chat.add", userId, formatted, 1.0);
         }
 
         /// <summary>
@@ -26,9 +26,7 @@ namespace Oxide.Game.Rust.Libraries
         /// </summary>
         /// <param name="message"></param>
         /// <param name="userId"></param>
-        /// <param name="prefix"></param>
-        /// <param name="args"></param>
-        public void Broadcast(string message, ulong userId = 0, params object[] args) => Broadcast(message, null, userId, args);
+        public void Broadcast(string message, ulong userId = 0) => Broadcast(message, null, userId);
 
         /// <summary>
         /// Runs the specified server command

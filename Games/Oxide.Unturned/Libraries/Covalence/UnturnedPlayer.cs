@@ -270,7 +270,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         #region Chat and Commands
 
         /// <summary>
-        /// Sends the specified message to the player and prefix
+        /// Sends the specified message and prefix to the player
         /// </summary>
         /// <param name="message"></param>
         /// <param name="prefix"></param>
@@ -286,8 +286,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Sends the specified message to the player
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Message(string message, params object[] args) => Message(message, null, args);
+        public void Message(string message) => Message(message, null);
 
         /// <summary>
         /// Replies to the player with the specified message and prefix
@@ -301,8 +300,7 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
         /// Replies to the player with the specified message
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="args"></param>
-        public void Reply(string message, params object[] args) => Message(message, null, args);
+        public void Reply(string message) => Message(message, null);
 
         /// <summary>
         /// Runs the specified console command on the player

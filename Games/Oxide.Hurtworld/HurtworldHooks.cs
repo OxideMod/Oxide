@@ -85,7 +85,7 @@ namespace Oxide.Game.Hurtworld
 
             // Is it a regular chat command?
             if (!cmdlib.HandleChatCommand(session, cmd, args))
-                session.IPlayer.Reply(lang.GetMessage("UnknownCommand", this, session.IPlayer.Id), cmd);
+                session.IPlayer.Reply(string.Format(lang.GetMessage("UnknownCommand", this, session.IPlayer.Id), cmd));
 
             return true;
         }
@@ -124,7 +124,7 @@ namespace Oxide.Game.Hurtworld
             // Handle it
             if (!cmdlib.HandleChatCommand(session, cmd, args))
             {
-                session.IPlayer.Reply(lang.GetMessage("UnknownCommand", this, session.SteamId.ToString()), cmd);
+                session.IPlayer.Reply(string.Format(lang.GetMessage("UnknownCommand", this, session.SteamId.ToString()), cmd));
                 return true;
             }
 
