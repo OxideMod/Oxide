@@ -1528,6 +1528,33 @@
             "BaseHookName": null,
             "HookCategory": "Player"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "a0.ConnectedSession, a1",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerAuthorize",
+            "HookName": "OnPlayerAuthorize",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "OwnershipStakeServer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "Authorize",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "PlayerIdentity",
+                "UnityEngine.GameObject"
+              ]
+            },
+            "MSILHash": "f6OvH+kapQBKyXDzJoK45IjljsyDj+4To8dYUklE8YQ=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [],
