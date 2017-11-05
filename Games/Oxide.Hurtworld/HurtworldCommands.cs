@@ -653,7 +653,7 @@ namespace Oxide.Game.Hurtworld
             else
             {
                 var format = Covalence.FormatText(lang.GetMessage("Version", this, player.Id));
-                player.Reply(format, OxideMod.Version, Covalence.GameName, Server.Version, Server.Protocol);
+                player.Reply(string.Format(format, OxideMod.Version, Covalence.GameName, Server.Version, Server.Protocol));
             }
         }
 
