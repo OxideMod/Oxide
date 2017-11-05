@@ -642,7 +642,7 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 122,
+            "InjectionIndex": 84,
             "ReturnBehavior": 0,
             "ArgumentBehavior": 4,
             "ArgumentString": "l0",
@@ -746,13 +746,13 @@
         {
           "Type": "Simple",
           "Hook": {
-            "InjectionIndex": 56,
-            "ReturnBehavior": 0,
+            "InjectionIndex": 5,
+            "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
             "ArgumentString": "this, a0",
             "HookTypeName": "Simple",
-            "Name": "OnItemDropped",
-            "HookName": "OnItemDropped",
+            "Name": "OnItemDrop",
+            "HookName": "OnItemDrop",
             "AssemblyName": "Assembly-CSharp.dll",
             "TypeName": "Inventory",
             "Flagged": false,
@@ -1554,6 +1554,48 @@
             "MSILHash": "f6OvH+kapQBKyXDzJoK45IjljsyDj+4To8dYUklE8YQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Modify",
+          "Hook": {
+            "InjectionIndex": 22,
+            "RemoveCount": 0,
+            "Instructions": [
+              {
+                "OpCode": "ldarg_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "ldc_i4_0",
+                "OpType": "None",
+                "Operand": null
+              },
+              {
+                "OpCode": "callvirt",
+                "OpType": "Method",
+                "Operand": "Assembly-CSharp|Inventory|Invalidate"
+              }
+            ],
+            "HookTypeName": "Modify",
+            "Name": "OnItemDrop [patch]",
+            "HookName": "OnItemDrop",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "Inventory",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DropSlot",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "System.Int32",
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "76TgVbm4vQdbNV74TBgdReFXnSOHV3D8lAiqrCkOPP0=",
+            "BaseHookName": "OnItemDrop",
+            "HookCategory": "_Patches"
           }
         }
       ],
