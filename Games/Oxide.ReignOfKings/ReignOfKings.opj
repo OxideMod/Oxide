@@ -1128,6 +1128,32 @@
             "BaseHookName": null,
             "HookCategory": "Server"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 116,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 2,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerInteract",
+            "HookName": "OnPlayerInteract",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "CodeHatch.Engine.Core.Interaction.Behaviours.Networking.InteractableListener",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 0,
+              "Name": "OnInteract",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "CodeHatch.Engine.Core.Interaction.Behaviours.Networking.InteractEvent"
+              ]
+            },
+            "MSILHash": "mOd9r7YymlVuDu3xA2Y4h3DLDlDgpBqd0DgGP2xNa9Q=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [
