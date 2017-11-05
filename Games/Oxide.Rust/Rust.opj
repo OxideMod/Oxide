@@ -5555,6 +5555,56 @@
             "BaseHookName": null,
             "HookCategory": "Resource"
           }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 0,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 1,
+            "ArgumentString": null,
+            "HookTypeName": "Simple",
+            "Name": "CanDropActiveItem",
+            "HookName": "CanDropActiveItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "BasePlayer",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "ShouldDropActiveItem",
+              "ReturnType": "System.Boolean",
+              "Parameters": []
+            },
+            "MSILHash": "P3Mx+v3adUs95vU27ANKY5mvZxgLUs14zJrrTfI5vlw=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
+        },
+        {
+          "Type": "Simple",
+          "Hook": {
+            "InjectionIndex": 7,
+            "ReturnBehavior": 1,
+            "ArgumentBehavior": 4,
+            "ArgumentString": "this.player",
+            "HookTypeName": "Simple",
+            "Name": "OnPlayerDropActiveItem",
+            "HookName": "OnPlayerDropActiveItem",
+            "AssemblyName": "Assembly-CSharp.dll",
+            "TypeName": "PlayerBelt",
+            "Flagged": false,
+            "Signature": {
+              "Exposure": 2,
+              "Name": "DropActive",
+              "ReturnType": "System.Void",
+              "Parameters": [
+                "UnityEngine.Vector3"
+              ]
+            },
+            "MSILHash": "cs31idW4kqQ84re852s9Sjjdf6hI01nYVkgXrJ3AnNE=",
+            "BaseHookName": null,
+            "HookCategory": "Player"
+          }
         }
       ],
       "Modifiers": [
