@@ -199,7 +199,10 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void Teleport(float x, float y, float z) => player.Entity.GetOrCreate<CharacterTeleport>().Teleport(new Vector3(x, y, z));
+        public void Teleport(float x, float y, float z)
+        {
+            player.Entity.GetOrCreate<CharacterTeleport>().Teleport(new Vector3(x, y, z));
+        }
 
         /// <summary>
         /// Teleports the player's character to the specified generic position
@@ -231,7 +234,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="z"></param>
         public void Position(out float x, out float y, out float z)
         {
-            var pos = player.CurrentCharacter.SavedPosition;
+            var pos = player.Entity.Position;
             x = pos.x;
             y = pos.y;
             z = pos.z;
@@ -243,7 +246,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <returns></returns>
         public GenericPosition Position()
         {
-            var pos = player.CurrentCharacter.SavedPosition;
+            var pos = player.Entity.Position;
             return new GenericPosition(pos.x, pos.y, pos.z);
         }
 
