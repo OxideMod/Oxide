@@ -97,6 +97,11 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             set { Scene.Atmosphere.TimeOfDay = value.Minute; } // TODO: Fix this not working
         }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => null;
+
         #endregion Information
 
         #region Administration

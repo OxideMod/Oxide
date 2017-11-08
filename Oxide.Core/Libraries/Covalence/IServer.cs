@@ -56,6 +56,11 @@ namespace Oxide.Core.Libraries.Covalence
         /// </summary>
         DateTime Time { get; set; }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        SaveInfo SaveInfo { get; }
+
         #endregion Information
 
         #region Administration

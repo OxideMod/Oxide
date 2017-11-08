@@ -94,6 +94,11 @@ namespace Oxide.Game.SevenDays.Libraries.Covalence
             set { GameUtils.DayTimeToWorldTime(value.Day, value.Hour, value.Minute); }
         }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => null;
+
         #endregion Information
 
         #region Administration

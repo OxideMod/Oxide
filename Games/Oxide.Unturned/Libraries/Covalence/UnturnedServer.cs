@@ -93,6 +93,11 @@ namespace Oxide.Game.Unturned.Libraries.Covalence
             set { LightingManager.time = (uint)(value.Second / 120); }
         }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => null;
+
         #endregion Information
 
         #region Administration

@@ -72,6 +72,11 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
             set { Main.time = value.Second; }
         }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => null;
+
         #endregion Information
 
         #region Administration
