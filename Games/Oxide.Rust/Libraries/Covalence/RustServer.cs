@@ -16,6 +16,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         #region Initialiation
 
         internal readonly Server Server = new Server();
+        private SaveInfo SaveFile = SaveInfo.Create(SaveRestore.SaveFileName);
 
         #endregion Initialiation
 
@@ -97,6 +98,11 @@ namespace Oxide.Game.Rust.Libraries.Covalence
             get { return TOD_Sky.Instance.Cycle.DateTime; }
             set { TOD_Sky.Instance.Cycle.DateTime = value; }
         }
+
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => SaveFile;
 
         #endregion Information
 

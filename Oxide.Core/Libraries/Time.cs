@@ -22,6 +22,22 @@ namespace Oxide.Core.Libraries
         public uint GetUnixTimestamp() => (uint)DateTime.UtcNow.Subtract(Epoch).TotalSeconds;
 
         /// <summary>
+        /// Returns a Unix timestamp for the specified time
+        /// </summary>
+        /// <param name="time">DateTime</param>
+        /// <returns></returns>
+        [LibraryFunction("GetUnixTimestamp")]
+        public uint GetUnixTimestamp(DateTime time) => (uint)time.Subtract(Epoch).TotalSeconds;
+
+        /// <summary>
+        /// Returns a DateTime from a unix timestamp
+        /// </summary>
+        /// <param name="timestamp">Unix timestamp</param>
+        /// <returns></returns>
+        [LibraryFunction("GetDateTimeFromUnix")]
+        public DateTime GetDateTimeFromUnix(uint timestamp) => Epoch.AddSeconds(timestamp);
+
+        /// <summary>
         /// Returns DateTime.UtcNow
         /// </summary>
         /// <returns></returns>

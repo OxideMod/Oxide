@@ -70,6 +70,11 @@ namespace Oxide.Game.Nomad.Libraries.Covalence
             set { throw new NotImplementedException(); } // TODO: Implement when possible
         }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => null;
+
         #endregion Information
 
         #region Administration

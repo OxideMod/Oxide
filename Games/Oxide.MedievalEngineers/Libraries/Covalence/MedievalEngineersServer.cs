@@ -100,6 +100,11 @@ namespace Oxide.Game.MedievalEngineers.Libraries.Covalence
             set { MySession.Static.InGameTime = value; }
         }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => null;
+
         #endregion Information
 
         #region Administration

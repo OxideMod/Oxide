@@ -11,6 +11,12 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
     /// </summary>
     public class RustLegacyServer : IServer
     {
+        #region Initialiation
+
+        private readonly SaveInfo SaveFile = SaveInfo.Create(ServerSaveManager.autoSavePath);
+
+        #endregion
+
         #region Information
 
         /// <summary>
@@ -89,6 +95,11 @@ namespace Oxide.Game.RustLegacy.Libraries.Covalence
             get { return DateTime.Today.AddHours(EnvironmentControlCenter.Singleton.GetTime()); }
             set { EnvironmentControlCenter.Singleton.SetTime(value.Hour); }
         }
+
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => SaveFile;
 
         #endregion Information
 

@@ -97,6 +97,11 @@ namespace Oxide.Game.FortressCraft.Libraries.Covalence
             set { WorldScript.instance.mWorldData.mrCurrentTimeOfDay = value.Second; }
         }
 
+        /// <summary>
+        /// Gets information on the currently loaded save file
+        /// </summary>
+        public SaveInfo SaveInfo => null;
+
         #endregion Information
 
         #region Administration
