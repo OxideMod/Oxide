@@ -86,6 +86,7 @@ namespace Oxide.Game.ReignOfKings
             var id = player.Id.ToString();
             var ip = player.Connection.IpAddress;
 
+            // Let covalence know player is joining
             Covalence.PlayerManager.PlayerJoin(player.Id, player.Name); // TODO: Handle this automatically
 
             // Call out and see if we should reject
@@ -116,8 +117,8 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnPlayerChat")]
         private object OnPlayerChat(PlayerMessageEvent evt)
         {
-            // Call covalence hook
             return Interface.Call("OnUserChat", evt.Player.IPlayer, evt.Message);
+            // Call universal hook
         }
 
         /// <summary>
@@ -141,15 +142,19 @@ namespace Oxide.Game.ReignOfKings
                 if (player.HasPermission("admin") && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
-            // Call game hook
+            // Call game-specific hook
             Interface.Call("OnPlayerConnected", player);
 
-            // Let covalence know
+            // Let covalence know player connected
             Covalence.PlayerManager.PlayerConnected(player);
+
+            // Find covalence player
             var iplayer = Covalence.PlayerManager.FindPlayerById(player.Id.ToString());
             if (iplayer != null)
             {
                 player.IPlayer = iplayer;
+
+                // Call universal hook
                 Interface.Call("OnUserConnected", iplayer);
             }
         }
@@ -164,11 +169,13 @@ namespace Oxide.Game.ReignOfKings
             // Ignore the server player
             if (player.Id == 9999999999) return;
 
-            // Call game hook
+            // Call game-specific hook
             Interface.Call("OnPlayerDisconnected", player);
 
+            // Call universal hook
+            Interface.Call("OnUserDisconnected", player.IPlayer, lang.GetMessage("Unknown", this, player.IPlayer.Id));
+
             // Let covalence know
-            Interface.Call("OnUserDisconnected", player.IPlayer, "Unknown"); // TODO: Localization
             Covalence.PlayerManager.PlayerDisconnected(player);
         }
 
@@ -179,8 +186,8 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnPlayerSpawn")]
         private void OnPlayerSpawn(PlayerFirstSpawnEvent evt)
         {
-            // Call covalence hook
             Interface.Call("OnUserSpawn", evt.Player.IPlayer);
+            // Call universal hook
         }
 
         /// <summary>
@@ -190,8 +197,8 @@ namespace Oxide.Game.ReignOfKings
         [HookMethod("OnPlayerRespawn")]
         private void OnPlayerRespawn(PlayerRespawnEvent evt)
         {
-            // Call covalence hook
             Interface.Call("OnUserRespawn", evt.Player.IPlayer);
+            // Call universal hook
         }
 
         #endregion Player Hooks

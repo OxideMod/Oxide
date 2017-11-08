@@ -126,12 +126,12 @@ namespace Oxide.Game.TheForest
         {
             CSharpPluginLoader.PluginReferences.UnionWith(DefaultReferences);
 
+            // Setup logging for the game
             if (!Directory.Exists("logs")) Directory.CreateDirectory("logs");
             if (File.Exists(logFileName)) File.Delete(logFileName);
             var logStream = File.AppendText(logFileName);
             logStream.AutoFlush = true;
             logWriter = TextWriter.Synchronized(logStream);
-
             Application.logMessageReceived += HandleLog;
 
             if (Interface.Oxide.EnableConsole()) Interface.Oxide.ServerConsole.Input += ServerConsoleOnInput;
@@ -155,7 +155,7 @@ namespace Oxide.Game.TheForest
             Interface.Oxide.ServerConsole.Status2Left = () => $"{BoltNetwork.clients.Count()}/{SteamDSConfig.ServerPlayers} players";
             Interface.Oxide.ServerConsole.Status2Right = () =>
             {
-                if (Time.realtimeSinceStartup < 0 /*!SteamDSConfig.connectedToSteam*/) return "not connected";
+                if (Time.realtimeSinceStartup < 0) return "not connected";
 
                 double bytesReceived = 0;
                 double bytesSent = 0;

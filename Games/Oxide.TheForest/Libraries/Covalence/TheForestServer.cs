@@ -166,14 +166,13 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         /// <param name="message"></param>
         /// <param name="prefix"></param>
         /// <param name="args"></param>
-        public void Broadcast(string message, string prefix, params object[] args)
+        public void Broadcast(string message, string prefix, params object[] args) // TODO: Fix NullReferenceException
         {
-            CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = prefix != null ? prefix : "Server";
+            //CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = prefix ?? "Server";
             var chatEvent = ChatEvent.Create(GlobalTargets.AllClients);
             chatEvent.Message = string.Format(Formatter.ToUnity(message), args);
             chatEvent.Sender = CoopServerInfo.Instance.entity.networkId;
             chatEvent.Send();
-            //CoopServerInfo.Broadcast
 
             Debug.Log($"[Chat] {message}");
         }
@@ -195,7 +194,6 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
             adminCommand.Command = command;
             adminCommand.Data = string.Concat(args.Select(o => o.ToString()).ToArray());
             adminCommand.Send();
-            //CoopServerInfo.Instance.ExecuteCommand
         }
 
         #endregion Chat and Commands

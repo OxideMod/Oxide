@@ -1,4 +1,5 @@
 ﻿using Oxide.Core.Libraries;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Permissions;
@@ -60,6 +61,7 @@ namespace Oxide.Core.Plugins.Watchers
             watcher.Created += watcher_Changed;
             watcher.Deleted += watcher_Changed;
             watcher.Error += watcher_Error;
+            GC.KeepAlive(watcher);
         }
 
         /// <summary>
@@ -122,7 +124,7 @@ namespace Oxide.Core.Plugins.Watchers
                 {
                     change.timer = null;
                     changeQueue.Remove(sub_path);
-                    if (Regex.Match(sub_path, @"Include\\", RegexOptions.IgnoreCase).Success)
+                    if (Regex.Match(sub_path, @"include\\", RegexOptions.IgnoreCase).Success)
                     {
                         if (change.type == WatcherChangeTypes.Created || change.type == WatcherChangeTypes.Changed)
                             FirePluginSourceChanged(sub_path);

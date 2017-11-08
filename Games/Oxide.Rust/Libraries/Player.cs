@@ -183,6 +183,7 @@ namespace Oxide.Game.Rust.Libraries
         {
             if (player.IsSpectating()) return;
 
+            // TODO: Check destination for potential obstructions to avoid
             player.MovePosition(destination);
             player.ClientRPCPlayer(null, player, "ForcePositionTo", destination);
         }

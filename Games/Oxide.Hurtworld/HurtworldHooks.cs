@@ -163,7 +163,7 @@ namespace Oxide.Game.Hurtworld
                 if (session.IsAdmin && !permission.UserHasGroup(id, defaultGroups.Administrators)) permission.AddUserGroup(id, defaultGroups.Administrators);
             }
 
-            // Call game hook
+            // Call game-specific hook
             Interface.Call("OnPlayerConnected", session);
 
             // Let covalence know
@@ -235,7 +235,7 @@ namespace Oxide.Game.Hurtworld
         [HookMethod("IOnTakeDamage")]
         private void IOnTakeDamage(EntityEffectFluid effect, EntityStats target, EntityEffectSourceData source)
         {
-            if (effect == null || target == null || source?.Value == 0) return;
+            if (effect == null || target == null || source?.Value == 0f) return;
 
             var entity = target.GetComponent<AIEntity>();
             if (entity != null)

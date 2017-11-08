@@ -79,7 +79,7 @@ namespace Oxide.Game.TheForest
         private void OnPlayerConnected(BoltEntity entity)
         {
             var id = entity.source.RemoteEndPoint.SteamId.Id.ToString();
-            var name = entity.GetState<IPlayerState>().name;
+            var name = entity.GetState<IPlayerState>().name ?? "Unnamed";
 
             // Update player's permissions group and name
             if (permission.IsLoaded)
@@ -113,7 +113,7 @@ namespace Oxide.Game.TheForest
 
             Debug.Log($"{id}/{name} quit");
 
-            // Call game hook
+            // Call game-specific hook
             Interface.Call("OnPlayerDisconnected", entity);
 
             // Let covalence know
@@ -129,7 +129,7 @@ namespace Oxide.Game.TheForest
         [HookMethod("OnPlayerSpawn")]
         private void OnPlayerSpawn(BoltEntity entity)
         {
-            // Call covalence hook
+            // Call universal hook
             var iplayer = Covalence.PlayerManager.FindPlayerById(entity.source.RemoteEndPoint.SteamId.Id.ToString());
             if (iplayer != null) Interface.Call("OnUserSpawn", iplayer);
         }

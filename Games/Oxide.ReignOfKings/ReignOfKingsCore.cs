@@ -178,9 +178,7 @@ namespace Oxide.Game.ReignOfKings
                         inlongarg = false;
                     }
                     else
-                    {
                         inlongarg = true;
-                    }
                 }
                 else if (char.IsWhiteSpace(c) && !inlongarg)
                 {
@@ -189,9 +187,7 @@ namespace Oxide.Game.ReignOfKings
                     sb = new StringBuilder();
                 }
                 else
-                {
                     sb.Append(c);
-                }
             }
             if (sb.Length > 0)
             {

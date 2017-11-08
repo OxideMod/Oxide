@@ -188,10 +188,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// Renames the player to specified name
         /// <param name="name"></param>
         /// </summary>
-        public void Rename(string name)
-        {
-            // TODO: Implement when possible
-        }
+        public void Rename(string name) => player.CurrentCharacter.ChangeName(name);
 
         /// <summary>
         /// Teleports the player's character to the specified position

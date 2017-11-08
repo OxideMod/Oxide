@@ -297,7 +297,7 @@ namespace Oxide.Core
                         }
                         catch (Exception ex)
                         {
-                            LogException($"Failed to load core plugin {type.Name}", ex);
+                            LogException($"Could not load core plugin {type.Name}", ex);
                         }
                     }
                 }
@@ -356,13 +356,14 @@ namespace Oxide.Core
 
             if (loaders.Count == 0)
             {
-                LogError("Failed to load plugin '{0}' (no source found)", name);
+                // TODO: Fix symlinked plugins unloaded still triggering this
+                LogError("Could not load plugin '{0}' (no plugin found with that file name)", name);
                 return false;
             }
 
             if (loaders.Count > 1)
             {
-                LogError("Failed to load plugin '{0}' (multiple sources found)", name);
+                LogError("Could not load plugin '{0}' (multiple plugin with that name)", name);
                 return false;
             }
 
@@ -378,7 +379,7 @@ namespace Oxide.Core
             }
             catch (Exception ex)
             {
-                LogException($"Failed to load plugin {name}", ex);
+                LogException($"Could not load plugin {name}", ex);
                 return false;
             }
         }
@@ -406,7 +407,7 @@ namespace Oxide.Core
             catch (Exception ex)
             {
                 if (plugin.Loader != null) plugin.Loader.PluginErrors[plugin.Name] = ex.Message;
-                LogException($"Failed to initialize plugin '{plugin.Name} v{plugin.Version}'", ex);
+                LogException($"Could not initialize plugin '{plugin.Name} v{plugin.Version}'", ex);
                 return false;
             }
         }

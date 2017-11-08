@@ -116,7 +116,7 @@ namespace Oxide.Game.RustLegacy
         [HookMethod("OnPlayerSpawn")]
         private void OnPlayerSpawn(PlayerClient client)
         {
-            // Call covalence hook
+            // Call universal hook
             Interface.Call("OnUserSpawn", Covalence.PlayerManager.FindPlayerById(client.userID.ToString()));
         }
 
@@ -132,7 +132,7 @@ namespace Oxide.Game.RustLegacy
             playerData[netUser].character = client.controllable.GetComponent<Character>();
             playerData[netUser].inventory = client.controllable.GetComponent<PlayerInventory>();
 
-            // Call covalence hook
+            // Call universal hook
             Interface.Call("OnUserSpawned", client.netUser.IPlayer);
         }
 
