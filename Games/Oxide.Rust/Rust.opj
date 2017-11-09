@@ -831,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "xUopPvvH3lFslQqHh/nZhSw5TV0yhsww6HZDITGGql8=",
+            "MSILHash": "Hq5noOs2uuGQQGYZBmT4HNBlAP2ZF3VRPq1k1wa2kgQ=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2378,7 +2378,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "3uh/+GECiOMFjIO+UyPtuhhuwSHkP/48DSt73wltkbw=",
+            "MSILHash": "4SxWV/eXvXrqKUoE9j+wSXK1PkvT2UPkbcS94YKM/hY=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2782,7 +2782,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "7QJcB/YGUQLMp9FY13ol0TKO2ee29IajVYrGcIdSnmY=",
+            "MSILHash": "lKyayrjrNC9msdyZ1Ax/fPshtTUqzFFvwaLV7nAjziI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -5586,7 +5586,7 @@
             "InjectionIndex": 7,
             "ReturnBehavior": 1,
             "ArgumentBehavior": 4,
-            "ArgumentString": "this.player",
+            "ArgumentString": "this.player, l0",
             "HookTypeName": "Simple",
             "Name": "OnPlayerDropActiveItem",
             "HookName": "OnPlayerDropActiveItem",
@@ -6262,6 +6262,69 @@
             "Parameters": []
           },
           "MSILHash": "fwG8/lOmmtsRXoJp6/xpgn13mJfkQKWq+3V5w29aR0k="
+        },
+        {
+          "Name": "BuildingPrivlidge::AddSelfAuthorize",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BuildingPrivlidge",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "AddSelfAuthorize",
+            "FullTypeName": "System.Void",
+            "Parameters": [
+              "BaseEntity/RPCMessage"
+            ]
+          },
+          "MSILHash": "BmQ2zBg7zNAtuXzKSr2Bt0BaZGrt7nstDSF7Ba2t3g0="
+        },
+        {
+          "Name": "BuildingPrivlidge::ClearList",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BuildingPrivlidge",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "ClearList",
+            "FullTypeName": "System.Void",
+            "Parameters": [
+              "BaseEntity/RPCMessage"
+            ]
+          },
+          "MSILHash": "/lOR4nmLRqx2Pjo0nwWV88aI1RRI0Y1JHeZKGl2w6AI="
+        },
+        {
+          "Name": "BuildingPrivlidge::RemoveSelfAuthorize",
+          "AssemblyName": "Assembly-CSharp.dll",
+          "TypeName": "BuildingPrivlidge",
+          "Type": 1,
+          "TargetExposure": [
+            2
+          ],
+          "Flagged": false,
+          "Signature": {
+            "Exposure": [
+              0
+            ],
+            "Name": "RemoveSelfAuthorize",
+            "FullTypeName": "System.Void",
+            "Parameters": [
+              "BaseEntity/RPCMessage"
+            ]
+          },
+          "MSILHash": "kVL92pigX7ac3yT3u4K9NlX/5KUf6GPmdyvaftjepCw="
         }
       ],
       "Fields": [

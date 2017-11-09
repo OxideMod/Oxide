@@ -166,7 +166,7 @@ namespace Oxide.Plugins
                                             changedMethod = true;
                                         }
                                     }
-                                    else if (instruction.OpCode == OpCodes.Call || instruction.OpCode == OpCodes.Calli || instruction.OpCode == OpCodes.Callvirt)
+                                    else if (instruction.OpCode == OpCodes.Call || instruction.OpCode == OpCodes.Calli || instruction.OpCode == OpCodes.Callvirt || instruction.OpCode == OpCodes.Ldftn)
                                     {
                                         var methodCall = instruction.Operand as MethodReference;
                                         var fullNamespace = methodCall?.DeclaringType.FullName;
