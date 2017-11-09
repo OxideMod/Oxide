@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using Oxide.Core;
-using Oxide.Core.Libraries;
 
 namespace Oxide.Core.Libraries.Covalence
 {
@@ -21,11 +19,6 @@ namespace Oxide.Core.Libraries.Covalence
         public DateTime CreationTime { get; private set; }
 
         /// <summary>
-        /// Get the save creation time in utc time
-        /// </summary>
-        public DateTime CreationTimeUTC { get; private set; }
-
-        /// <summary>
         /// Get the save creation time in unix format
         /// </summary>
         public uint CreationTimeUnix { get; private set; }
@@ -35,8 +28,7 @@ namespace Oxide.Core.Libraries.Covalence
             if (!File.Exists(FullPath)) return;
 
             CreationTime = File.GetCreationTime(FullPath);
-            CreationTimeUTC = File.GetCreationTimeUtc(FullPath);
-            CreationTimeUnix = time.GetUnixTimestamp(CreationTime);
+            CreationTimeUnix = time.GetUnixFromDateTime(CreationTime);
         }
 
         private SaveInfo(string filepath)
@@ -54,6 +46,7 @@ namespace Oxide.Core.Libraries.Covalence
         public static SaveInfo Create(string filepath)
         {
             if (!File.Exists(filepath)) return null;
+
             return new SaveInfo(filepath);
         }
     }
