@@ -294,7 +294,7 @@ namespace Oxide.Core.Libraries
         [LibraryFunction("UpdateNickname")]
         public void UpdateNickname(string id, string nickname)
         {
-            if (UserExists(id)) GetUserData(id).LastSeenNickname = nickname;
+            if (UserExists(id)) GetUserData(id).LastSeenNickname = nickname.Sanitize();
         }
 
         /// <summary>

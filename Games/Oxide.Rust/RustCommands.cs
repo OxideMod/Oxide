@@ -32,7 +32,7 @@ namespace Oxide.Game.Rust
             }
 
             var mode = args[0];
-            var name = args[1];
+            var name = args[1].Sanitize();
             var perm = args[2];
 
             if (!permission.PermissionExists(perm))
@@ -351,7 +351,7 @@ namespace Oxide.Game.Rust
             }
 
             var mode = args[0];
-            var name = args[1];
+            var name = args[1].Sanitize();
             var perm = args[2];
 
             if (mode.Equals("group"))
@@ -434,7 +434,7 @@ namespace Oxide.Game.Rust
             }
 
             var mode = args[0];
-            var name = args.Length == 2 ? args[1] : string.Empty;
+            var name = args.Length == 2 ? args[1].Sanitize() : string.Empty;
 
             if (mode.Equals("perms"))
             {
@@ -531,7 +531,11 @@ namespace Oxide.Game.Rust
             {
                 player.Reply(string.Format(lang.GetMessage("Groups", this, player.Id) + ":\n" + string.Join(", ", permission.GetGroups())));
             }
-            else player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+            else
+            {
+                player.Reply(lang.GetMessage("CommandUsageShow", this, player.Id));
+                player.Reply(lang.GetMessage("CommandUsageShowName", this, player.Id));
+            }
         }
 
         #endregion Show Command
@@ -585,7 +589,7 @@ namespace Oxide.Game.Rust
             }
 
             var mode = args[0];
-            var name = args[1];
+            var name = args[1].Sanitize();
             var group = args[2];
 
             var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
