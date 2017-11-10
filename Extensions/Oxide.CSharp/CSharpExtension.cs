@@ -2,7 +2,6 @@
 using Oxide.Core.Extensions;
 using Oxide.Core.Plugins.Watchers;
 using System;
-using System.IO;
 using System.Reflection;
 
 namespace Oxide.Plugins
@@ -48,14 +47,6 @@ namespace Oxide.Plugins
         /// <param name="manager"></param>
         public CSharpExtension(ExtensionManager manager) : base(manager)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                Cleanup.Add(Path.Combine(Interface.Oxide.ExtensionDirectory, "Mono.Posix.dll.config"));
-
-                var configPath = Path.Combine(Interface.Oxide.ExtensionDirectory, "Oxide.References.dll.config");
-                File.WriteAllText(configPath, $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"x86/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
-                    $"<dllmap dll=\"MonoPosixHelper\" target=\"x64/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
-            }
         }
 
         /// <summary>
