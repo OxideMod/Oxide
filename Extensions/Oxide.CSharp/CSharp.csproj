@@ -22,12 +22,10 @@
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35' And '$(OS)' == 'OSX'">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono/2.0-api</FrameworkPathOverride>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Oxide.References\References.csproj">
-      <Name>References</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
       <Name>Core</Name>
     </ProjectReference>
+    <PackageReference Include="Oxide.References" Version="2.0.*" />
   </ItemGroup>
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
