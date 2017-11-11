@@ -259,7 +259,7 @@ namespace Oxide.Game.Terraria.Libraries.Covalence
         /// <param name="args"></param>
         public void Message(string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToTerraria(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToTerraria(message), args) : Formatter.ToUnity(message);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
             NetMessage.SendData(25, player.whoAmI, -1, NetworkText.FromLiteral(formatted));
         }

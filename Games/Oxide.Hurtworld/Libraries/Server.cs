@@ -54,7 +54,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="args"></param>
         public void Broadcast(string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToUnity(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToUnity(message), args) : Formatter.ToUnity(message);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
 #if ITEMV2
             ChatManager.SendChatMessage(new ServerChatMessage(formatted));

@@ -250,7 +250,7 @@ namespace Oxide.Game.PlanetExplorers.Libraries.Covalence
         /// <param name="args"></param>
         public void Message(string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToUnity(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToUnity(message), args) : Formatter.ToUnity(message);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
             player.RPCOthers(EPacketType.PT_InGame_SendMsg, CustomData.EMsgType.ToOne, formatted);
         }

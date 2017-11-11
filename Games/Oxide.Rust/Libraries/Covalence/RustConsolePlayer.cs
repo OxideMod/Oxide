@@ -201,7 +201,7 @@ namespace Oxide.Game.Rust.Libraries.Covalence
         /// <param name="args"></param>
         public void Message(string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToPlaintext(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToPlaintext(message), args) : Formatter.ToPlaintext(message);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
             Interface.Oxide.LogInfo(formatted);
         }

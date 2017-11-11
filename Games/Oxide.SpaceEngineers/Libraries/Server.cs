@@ -48,7 +48,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// <param name="args"></param>
         public void Broadcast(string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToPlaintext(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToPlaintext(message), args) : Formatter.ToPlaintext(message);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
             MyMultiplayer.Static.SendChatMessage(formatted);
         }

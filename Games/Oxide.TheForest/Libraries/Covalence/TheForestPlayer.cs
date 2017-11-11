@@ -283,7 +283,7 @@ namespace Oxide.Game.TheForest.Libraries.Covalence
         {
             CoopServerInfo.Instance.entity.GetState<IPlayerState>().name = prefix != null ? prefix : "Server";
             var chatEvent = ChatEvent.Create(entity.source);
-            chatEvent.Message = string.Format(Formatter.ToUnity(message), args);
+            chatEvent.message = args.Length > 0 ? string.Format(Formatter.ToUnity(message), args) : Formatter.ToUnity(message);
             chatEvent.Sender = CoopServerInfo.Instance.entity.networkId;
             chatEvent.Send();
         }

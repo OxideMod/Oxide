@@ -238,7 +238,7 @@ namespace Oxide.Game.SpaceEngineers.Libraries
         /// <param name="args"></param>
         public void Message(IMyPlayer player, string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToPlaintext(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToPlaintext(message), args) : Formatter.ToPlaintext(message);
             var msg = new ScriptedChatMsg
             {
                 Text = prefix != null ? $"{prefix} {message}" : message,

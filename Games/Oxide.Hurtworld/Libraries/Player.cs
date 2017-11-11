@@ -360,7 +360,7 @@ namespace Oxide.Game.Hurtworld.Libraries
         /// <param name="args"></param>
         public void Message(PlayerSession session, string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToUnity(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToUnity(message), args) : Formatter.ToUnity(message);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
 #if ITEMV2
             ChatManagerServer.Instance.SendChatMessage(new ServerChatMessage(formatted), session.Player);

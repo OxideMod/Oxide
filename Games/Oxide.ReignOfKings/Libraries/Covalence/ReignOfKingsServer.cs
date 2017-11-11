@@ -161,7 +161,7 @@ namespace Oxide.Game.ReignOfKings.Libraries.Covalence
         /// <param name="args"></param>
         public void Broadcast(string message, string prefix, params object[] args)
         {
-            message = string.Format(Formatter.ToRoKAnd7DTD(message), args);
+            message = args.Length > 0 ? string.Format(Formatter.ToRoKAnd7DTD(message), args) : Formatter.ToRoKAnd7DTD(message);
             var formatted = prefix != null ? $"{prefix} {message}" : message;
             Server.BroadcastMessage(formatted);
         }
