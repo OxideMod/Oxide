@@ -22,18 +22,18 @@
     <SteamLogin>required</SteamLogin>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Oxide.References\References.csproj">
+      <Name>References</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Extensions\Oxide.CSharp\CSharp.csproj">
       <Name>CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Extensions\Oxide.Unity\Unity.csproj">
       <Name>Unity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
-      <Name>Core</Name>
-    </ProjectReference>
-    <Reference Include="Oxide.References">
-      <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
-    </Reference>
     <Reference Include="AlunaNetFramework">
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\AlunaNetFramework.dll</HintPath>
     </Reference>

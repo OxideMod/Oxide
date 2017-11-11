@@ -36,13 +36,13 @@
       <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\mono.cecil\0.9.6.4\lib\net40\Mono.Cecil.dll" />
       <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\mono.cecil\0.9.6.4\lib\net40\Mono.Cecil.Rocks.dll" />
       <MergeAssemblies Condition="'$(TargetFramework)' != 'net461'" Include="..\packages\newtonsoft.json\8.0.3\lib\$(TargetFramework)\Newtonsoft.Json.dll" />
-      <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\newtonsoft.json\8.0.3\lib\net40\Newtonsoft.Json.dll" /> 
+      <MergeAssemblies Condition="'$(TargetFramework)' == 'net461'" Include="..\packages\newtonsoft.json\8.0.3\lib\net40\Newtonsoft.Json.dll" />
       <MergeAssemblies Include="..\packages\websocketsharpfork\1.0.4\lib\net35\websocket-sharp.dll" />
       <MergeAssemblies Include="Dependencies\Mono.Posix.dll" />
       <MergeAssemblies Include="Dependencies\protobuf-net.dll" />
     </ItemGroup>
     <PropertyGroup>
-      <OutputAssembly>$(OutputPath)Merged\Oxide.References.dll</OutputAssembly>
+      <OutputAssembly>$(OutputPath)Oxide.References.dll</OutputAssembly>
       <Merger>$(SolutionDir)packages\ILRepack\2.0.13\tools\ILRepack.exe</Merger>
     </PropertyGroup>
     <Message Text="MERGING: @(MergeAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />

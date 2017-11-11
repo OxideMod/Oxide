@@ -22,15 +22,15 @@
     <SteamLogin>required</SteamLogin>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Extensions\Oxide.CSharp\CSharp.csproj">
-      <Name>CSharp</Name>
+    <ProjectReference Include="..\..\Oxide.References\References.csproj">
+      <Name>References</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Oxide.Core\Core.csproj">
       <Name>Core</Name>
     </ProjectReference>
-    <Reference Include="Oxide.References">
-      <HintPath>..\..\Oxide.References\$(OutputPath)Merged\Oxide.References.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\Extensions\Oxide.CSharp\CSharp.csproj">
+      <Name>CSharp</Name>
+    </ProjectReference>
     <Reference Include="Microsoft.Xna.Framework">
       <HintPath>..\Dependencies\$(PackageId)\$(ManagedDir)\Microsoft.Xna.Framework.dll</HintPath>
     </Reference>
