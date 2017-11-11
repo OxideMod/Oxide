@@ -1,6 +1,7 @@
 ﻿using Oxide.Core.Extensions;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Oxide.Core.SQLite
@@ -46,7 +47,7 @@ namespace Oxide.Core.SQLite
             {
                 var extDir = Interface.Oxide.ExtensionDirectory;
                 var configPath = Path.Combine(extDir, "System.Data.SQLite.dll.config");
-                if (File.Exists(configPath)) return;
+                if (File.Exists(configPath) && !(new[] { "target=\"x64", "target=\"./x64" }.Any(File.ReadAllText(configPath).Contains))) return;
 
                 File.WriteAllText(configPath, $"<configuration>\n<dllmap dll=\"sqlite3\" target=\"{extDir}/x86/libsqlite3.so\" os=\"!windows,osx\" cpu=\"x86\" />\n" +
                     $"<dllmap dll=\"sqlite3\" target=\"{extDir}/x64/libsqlite3.so\" os=\"!windows,osx\" cpu=\"x86-64\" />\n</configuration>");

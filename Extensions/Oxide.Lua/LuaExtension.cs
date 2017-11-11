@@ -80,7 +80,7 @@ namespace Oxide.Core.Lua
             {
                 var extDir = Interface.Oxide.ExtensionDirectory;
                 var configPath = Path.Combine(extDir, "KeraLua.dll.config");
-                if (File.Exists(configPath)) return;
+                if (File.Exists(configPath) && !(new[] { "target=\"x64", "target=\"./x64" }.Any(File.ReadAllText(configPath).Contains))) return;
 
                 File.WriteAllText(configPath, $"<configuration>\n<dllmap dll=\"lua52\" target=\"{extDir}/x86/liblua52.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
                     $"<dllmap dll=\"lua52\" target=\"{extDir}/x64/liblua52.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");

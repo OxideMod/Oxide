@@ -3,6 +3,7 @@ using Oxide.Core.Extensions;
 using Oxide.Core.Plugins.Watchers;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Oxide.Plugins
@@ -54,7 +55,7 @@ namespace Oxide.Plugins
 
                 var extDir = Interface.Oxide.ExtensionDirectory;
                 var configPath = Path.Combine(extDir, "Oxide.References.dll.config");
-                if (File.Exists(configPath)) return;
+                if (File.Exists(configPath) && !(new[] { "target=\"x64", "target=\"./x64" }.Any(File.ReadAllText(configPath).Contains))) return;
 
                 File.WriteAllText(configPath, $"<configuration>\n<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x86/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
                     $"<dllmap dll=\"MonoPosixHelper\" target=\"{extDir}/x64/libMonoPosixHelper.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
