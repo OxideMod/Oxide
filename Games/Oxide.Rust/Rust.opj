@@ -831,7 +831,7 @@
                 "Network.Connection"
               ]
             },
-            "MSILHash": "Hq5noOs2uuGQQGYZBmT4HNBlAP2ZF3VRPq1k1wa2kgQ=",
+            "MSILHash": "G+8BK48hKKqGui4z5t6z9yb9J6SGyBkufD1Ng5bwEUw=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
@@ -2378,7 +2378,7 @@
               "ReturnType": "System.Void",
               "Parameters": []
             },
-            "MSILHash": "4SxWV/eXvXrqKUoE9j+wSXK1PkvT2UPkbcS94YKM/hY=",
+            "MSILHash": "3RTbCQBFwr3j+Ty+X+n3f03y5kq7+osSodPVarWAAhM=",
             "BaseHookName": null,
             "HookCategory": "_Patches"
           }
@@ -2782,7 +2782,7 @@
                 "Network.Message"
               ]
             },
-            "MSILHash": "lKyayrjrNC9msdyZ1Ax/fPshtTUqzFFvwaLV7nAjziI=",
+            "MSILHash": "T2wuNa7nPPo1lBpkAev+quLs710QqckRxqCURk/4MVI=",
             "BaseHookName": null,
             "HookCategory": "Player"
           }
