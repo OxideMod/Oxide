@@ -1,5 +1,6 @@
 ﻿using Oxide.Core.Extensions;
 using System;
+using System.IO;
 using System.Reflection;
 
 namespace Oxide.Core.SQLite
@@ -41,6 +42,15 @@ namespace Oxide.Core.SQLite
         /// </summary>
         public SQLiteExtension(ExtensionManager manager) : base(manager)
         {
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                var extDir = Interface.Oxide.ExtensionDirectory;
+                var configPath = Path.Combine(extDir, "System.Data.SQLite.dll.config");
+                if (File.Exists(configPath)) return;
+
+                File.WriteAllText(configPath, $"<configuration>\n<dllmap dll=\"sqlite3\" target=\"{extDir}/x86/libsqlite3.so\" os=\"!windows,osx\" cpu=\"x86\" />\n" +
+                    $"<dllmap dll=\"sqlite3\" target=\"{extDir}/x64/libsqlite3.so\" os=\"!windows,osx\" cpu=\"x86-64\" />\n</configuration>");
+            }
         }
 
         /// <summary>

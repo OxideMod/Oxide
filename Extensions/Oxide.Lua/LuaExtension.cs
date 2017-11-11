@@ -8,6 +8,7 @@ using Oxide.Core.Lua.Plugins;
 using Oxide.Core.Plugins.Watchers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -75,6 +76,16 @@ namespace Oxide.Core.Lua
         /// <param name="manager"></param>
         public LuaExtension(ExtensionManager manager) : base(manager)
         {
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                var extDir = Interface.Oxide.ExtensionDirectory;
+                var configPath = Path.Combine(extDir, "KeraLua.dll.config");
+                if (File.Exists(configPath)) return;
+
+                File.WriteAllText(configPath, $"<configuration>\n<dllmap dll=\"lua52\" target=\"{extDir}/x86/liblua52.so\" os=\"!windows,osx\" wordsize=\"32\" />\n" +
+                    $"<dllmap dll=\"lua52\" target=\"{extDir}/x64/liblua52.so\" os=\"!windows,osx\" wordsize=\"64\" />\n</configuration>");
+            }
+
             ExceptionHandler.RegisterType(typeof(LuaScriptException), ex =>
             {
                 var luaex = (LuaScriptException)ex;
