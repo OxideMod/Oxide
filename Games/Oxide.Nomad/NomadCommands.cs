@@ -62,14 +62,14 @@ namespace Oxide.Game.Nomad
                 var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
                 if (foundPlayers.Length > 1)
                 {
-                    player.Reply(string.Format(lang.GetMessage("UsersFound", this, player.Id), string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray())));
+                    player.Reply(string.Format(lang.GetMessage("PlayersFound", this, player.Id), string.Join(", ", foundPlayers.Select(p => p.Name).ToArray())));
                     return;
                 }
 
                 var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    player.Reply(string.Format(lang.GetMessage("UserNotFound", this, player.Id), name));
+                    player.Reply(string.Format(lang.GetMessage("PlayerNotFound", this, player.Id), name));
                     return;
                 }
 
@@ -83,12 +83,12 @@ namespace Oxide.Game.Nomad
 
                 if (permission.UserHasPermission(name, perm))
                 {
-                    player.Reply(string.Format(lang.GetMessage("UserAlreadyHasPermission", this, player.Id), userId, perm));
+                    player.Reply(string.Format(lang.GetMessage("PlayerAlreadyHasPermission", this, player.Id), userId, perm));
                     return;
                 }
 
                 permission.GrantUserPermission(userId, perm, null);
-                player.Reply(string.Format(lang.GetMessage("UserPermissionGranted", this, player.Id), $"{name} ({userId})", perm));
+                player.Reply(string.Format(lang.GetMessage("PlayerPermissionGranted", this, player.Id), $"{name} ({userId})", perm));
             }
             else player.Reply(lang.GetMessage("CommandUsageGrant", this, player.Id));
         }
@@ -376,14 +376,14 @@ namespace Oxide.Game.Nomad
                 var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
                 if (foundPlayers.Length > 1)
                 {
-                    player.Reply(string.Format(lang.GetMessage("UsersFound", this, player.Id), string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray())));
+                    player.Reply(string.Format(lang.GetMessage("PlayersFound", this, player.Id), string.Join(", ", foundPlayers.Select(p => p.Name).ToArray())));
                     return;
                 }
 
                 var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    player.Reply(string.Format(lang.GetMessage("UserNotFound", this, player.Id), name));
+                    player.Reply(string.Format(lang.GetMessage("PlayerNotFound", this, player.Id), name));
                     return;
                 }
 
@@ -398,12 +398,12 @@ namespace Oxide.Game.Nomad
                 if (!permission.UserHasPermission(userId, perm))
                 {
                     // TODO: Check if user is inheriting permission, mention
-                    player.Reply(string.Format(lang.GetMessage("UserDoesNotHavePermission", this, player.Id), name, perm));
+                    player.Reply(string.Format(lang.GetMessage("PlayerDoesNotHavePermission", this, player.Id), name, perm));
                     return;
                 }
 
                 permission.RevokeUserPermission(userId, perm);
-                player.Reply(string.Format(lang.GetMessage("UserPermissionRevoked", this, player.Id), $"{name} ({userId})", perm));
+                player.Reply(string.Format(lang.GetMessage("PlayerPermissionRevoked", this, player.Id), $"{name} ({userId})", perm));
             }
             else player.Reply(lang.GetMessage("CommandUsageRevoke", this, player.Id));
         }
@@ -450,8 +450,8 @@ namespace Oxide.Game.Nomad
 
                 var users = permission.GetPermissionUsers(name);
                 var groups = permission.GetPermissionGroups(name);
-                var result = $"{string.Format(lang.GetMessage("PermissionUsers", this, player.Id), name)}:\n";
-                result += users.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoPermissionUsers", this, player.Id);
+                var result = $"{string.Format(lang.GetMessage("PermissionPlayers", this, player.Id), name)}:\n";
+                result += users.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoPermissionPlayers", this, player.Id);
                 result += $"\n\n{string.Format(lang.GetMessage("PermissionGroups", this, player.Id), name)}:\n";
                 result += groups.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoPermissionGroups", this, player.Id);
                 player.Reply(result);
@@ -468,14 +468,14 @@ namespace Oxide.Game.Nomad
                 var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
                 if (foundPlayers.Length > 1)
                 {
-                    player.Reply(string.Format(lang.GetMessage("UsersFound", this, player.Id), string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray())));
+                    player.Reply(string.Format(lang.GetMessage("PlayersFound", this, player.Id), string.Join(", ", foundPlayers.Select(p => p.Name).ToArray())));
                     return;
                 }
 
                 var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
                 if (target == null && !permission.UserIdValid(name))
                 {
-                    player.Reply(string.Format(lang.GetMessage("UserNotFound", this, player.Id), name));
+                    player.Reply(string.Format(lang.GetMessage("PlayerNotFound", this, player.Id), name));
                     return;
                 }
 
@@ -490,10 +490,10 @@ namespace Oxide.Game.Nomad
 
                 var perms = permission.GetUserPermissions(userId);
                 var groups = permission.GetUserGroups(userId);
-                var result = $"{string.Format(lang.GetMessage("UserPermissions", this, player.Id), name)}:\n";
-                result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoUserPermissions", this, player.Id);
-                result += $"\n\n{string.Format(lang.GetMessage("UserGroups", this, player.Id), name)}:\n";
-                result += groups.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoUserGroups", this, player.Id);
+                var result = $"{string.Format(lang.GetMessage("PlayerPermissions", this, player.Id), name)}:\n";
+                result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoPlayerPermissions", this, player.Id);
+                result += $"\n\n{string.Format(lang.GetMessage("PlayerGroups", this, player.Id), name)}:\n";
+                result += groups.Length > 0 ? string.Join(", ", groups) : lang.GetMessage("NoPlayerGroups", this, player.Id);
                 player.Reply(result);
             }
             else if (mode.Equals("group"))
@@ -513,8 +513,8 @@ namespace Oxide.Game.Nomad
 
                 var users = permission.GetUsersInGroup(name);
                 var perms = permission.GetGroupPermissions(name);
-                var result = $"{string.Format(lang.GetMessage("GroupUsers", this, player.Id), name)}:\n";
-                result += users.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoUsersInGroup", this, player.Id);
+                var result = $"{string.Format(lang.GetMessage("GroupPlayers", this, player.Id), name)}:\n";
+                result += users.Length > 0 ? string.Join(", ", users) : lang.GetMessage("NoPlayersInGroup", this, player.Id);
                 result += $"\n\n{string.Format(lang.GetMessage("GroupPermissions", this, player.Id), name)}:\n";
                 result += perms.Length > 0 ? string.Join(", ", perms) : lang.GetMessage("NoGroupPermissions", this, player.Id);
                 var parent = permission.GetGroupParent(name);
@@ -594,14 +594,14 @@ namespace Oxide.Game.Nomad
             var foundPlayers = Covalence.PlayerManager.FindPlayers(name).ToArray();
             if (foundPlayers.Length > 1)
             {
-                player.Reply(string.Format(lang.GetMessage("UsersFound", this, player.Id), string.Concat(", ", foundPlayers.Select(p => p.Name).ToArray())));
+                player.Reply(string.Format(lang.GetMessage("PlayersFound", this, player.Id), string.Join(", ", foundPlayers.Select(p => p.Name).ToArray())));
                 return;
             }
 
             var target = foundPlayers.Length == 1 ? foundPlayers[0] : null;
             if (target == null && !permission.UserIdValid(name))
             {
-                player.Reply(string.Format(lang.GetMessage("UserNotFound", this, player.Id), name));
+                player.Reply(string.Format(lang.GetMessage("PlayerNotFound", this, player.Id), name));
                 return;
             }
 
@@ -623,12 +623,12 @@ namespace Oxide.Game.Nomad
             if (mode.Equals("add"))
             {
                 permission.AddUserGroup(userId, group);
-                player.Reply(string.Format(lang.GetMessage("UserAddedToGroup", this, player.Id), name, group));
+                player.Reply(string.Format(lang.GetMessage("PlayerAddedToGroup", this, player.Id), name, group));
             }
             else if (mode.Equals("remove"))
             {
                 permission.RemoveUserGroup(userId, group);
-                player.Reply(string.Format(lang.GetMessage("UserRemovedFromGroup", this, player.Id), name, group));
+                player.Reply(string.Format(lang.GetMessage("PlayerRemovedFromGroup", this, player.Id), name, group));
             }
             else player.Reply(lang.GetMessage("CommandUsageUserGroup", this, player.Id));
         }
