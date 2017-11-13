@@ -494,5 +494,34 @@ namespace Oxide.Plugins
                 return BitConverter.ToString(hash).Replace("-", string.Empty).ToLower();
             }
         }
+
+        private static bool FirewallBlocking()
+        {
+            try
+            {
+                // we can use any url below that contains a CSharp source file.
+                var request =
+                    (HttpWebRequest)WebRequest.Create(
+                        $"https://devdrop.blob.core.windows.net/downloads/FirewallTest.cs");
+                var response = (HttpWebResponse)request.GetResponse();
+                var statusCode = (int)response.StatusCode;
+                switch (statusCode)
+                {
+                    case 401:
+                        Interface.Oxide.LogWarning($"Download required proxy login (code {statusCode})");
+                        return true;
+                    case 403:
+                        Interface.Oxide.LogWarning($"Download was denied (code {statusCode})");
+                        return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Interface.Oxide.LogError($"Something went wrong when testing firewall blocking");
+                Interface.Oxide.LogError(ex.Message);
+            }
+
+            return false;
+        }
     }
 }
