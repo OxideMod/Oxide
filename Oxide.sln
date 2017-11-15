@@ -2,10 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 15.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blackwake", "Games\Oxide.Blackwake\Blackwake.csproj", "{A4E170BC-7E8F-4CAE-88F8-EB28FD8C27B5}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blockstorm", "Games\Oxide.Blockstorm\Blockstorm.csproj", "{0D3AF12E-CDD8-4691-ADE4-364D5D5A5D32}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -80,10 +76,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A4E170BC-7E8F-4CAE-88F8-EB28FD8C27B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4E170BC-7E8F-4CAE-88F8-EB28FD8C27B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4E170BC-7E8F-4CAE-88F8-EB28FD8C27B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4E170BC-7E8F-4CAE-88F8-EB28FD8C27B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D3AF12E-CDD8-4691-ADE4-364D5D5A5D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0D3AF12E-CDD8-4691-ADE4-364D5D5A5D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D3AF12E-CDD8-4691-ADE4-364D5D5A5D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -149,7 +141,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{A4E170BC-7E8F-4CAE-88F8-EB28FD8C27B5} = {939EF8DA-FF66-418A-9011-38BCDE653257}
 		{0D3AF12E-CDD8-4691-ADE4-364D5D5A5D32} = {939EF8DA-FF66-418A-9011-38BCDE653257}
 		{AB03DC01-3F9A-4D2B-B3D0-A6D68D58083F} = {939EF8DA-FF66-418A-9011-38BCDE653257}
 		{3DD2FE31-AE26-40EB-8FEC-99860C4AFF0A} = {939EF8DA-FF66-418A-9011-38BCDE653257}
